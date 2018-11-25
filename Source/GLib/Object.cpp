@@ -1,12 +1,12 @@
 #include "GLib/Object.h"
-#include "GLib/SmartPointers/GObjectPtr.h"
+#include "GLib/SmartPointers/ObjectPtr.h"
 
 /*
  * Gets this object's reference count.  Only use this for debugging.
  */
 int GLib::Object::getReferenceCount() const
 {
-    GObjectPtr<> object(getGObject());
+    ObjectPtr<> object(getGObject());
     if(object == NULL)
     {
         return 0;
@@ -51,10 +51,8 @@ GLib::Object::~Object()
  */
 bool GLib::Object::isNull() const
 {
-    GObject* object = getGObject();
-    bool result = (object == nullptr);
-    g_clear_object(&object);
-    return result;
+    ObjectPtr<> object(getGObject());
+    return object == nullptr;
 }
 
 /*
@@ -62,12 +60,9 @@ bool GLib::Object::isNull() const
  */
 bool GLib::Object::operator==(const Object& rhs) const
 {
-    GObject* thisObject = getGObject();
-    GObject* rhsObject = rhs.getGObject();
-    bool result = (thisObject == rhsObject);
-    g_clear_object(&thisObject);
-    g_clear_object(&rhsObject);
-    return result;
+    ObjectPtr<> thisObject(getGObject());
+    ObjectPtr<> rhsObject(rhs.getGObject());
+    return thisObject == rhsObject;
 }
 
 /*
@@ -75,10 +70,8 @@ bool GLib::Object::operator==(const Object& rhs) const
  */
 bool GLib::Object::operator==(GObject* rhs) const
 {
-    GObject* heldObject = getGObject();
-    bool result = (heldObject == rhs);
-    g_clear_object(&heldObject);
-    return result;
+    ObjectPtr<> heldObject(getGObject());
+    return heldObject == rhs;
 }
 
 /*
@@ -107,10 +100,7 @@ void GLib::Object::operator=(const Object& rhs)
     {
         return;
     }
-    int refCount = rhs.getReferenceCount();
     setGObject(rhs);
-    int newCount = rhs.getReferenceCount();
-    jassert(newCount = refCount +1 || newCount == 0);
 }
 
 /*
@@ -134,6 +124,7 @@ GObject* GLib::Object::getGObject() const
  */
 void GLib::Object::setGObject(GObject* toAssign)
 { 
+    juce::ScopedLock lockData(objectLock);
     if(toAssign == nullptr)
     {
         clearGObject();
@@ -143,7 +134,7 @@ void GLib::Object::setGObject(GObject* toAssign)
     {
         return;
     }
-    GObject* oldData = getGObject();
+    ObjectPtr<> oldData(getGObject());
     if(toAssign != oldData)
     {
         clearGObject();
@@ -153,7 +144,6 @@ void GLib::Object::setGObject(GObject* toAssign)
         }
         objectRef = toAssign;
     }
-    g_clear_object(&oldData);
 }
 
 /*
@@ -161,8 +151,7 @@ void GLib::Object::setGObject(GObject* toAssign)
  */
 void GLib::Object::setGObject(const Object& toCopy)
 {
-    juce::ScopedLock lockData(objectLock);
-    GObject* copiedObject = toCopy.getGObject();
+    ObjectPtr<> copiedObject(toCopy.getGObject());
     setGObject(copiedObject);
 }
 
@@ -180,13 +169,12 @@ GObject* GLib::Object::getOtherGObject(const Object& source) const
 void GLib::Object::clearGObject()
 {
     juce::ScopedLock lockData(objectLock);
-    GObject* object = getGObject();
+    ObjectPtr<> object(getGObject());
     objectRef = NULL;
     if(object != nullptr)
     {
         g_object_unref(object);
     }
-    g_clear_object(&object);
 }
 
 /*

@@ -1,6 +1,13 @@
-#include "nm-utils.h"
+#include <nm-utils.h>
 #include "Utils.h"
+#include "GLib/SmartPointers/ObjectPtr.h"
 #include "NMPPAccessPoint.h"
+
+/* Rename smart pointers for brevity: */
+typedef GLib::ObjectPtr<NMAccessPoint*> NMAccessPointPtr;
+typedef GLib::ObjectPtr<NMObject*> NMObjectPtr;
+typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
+typedef GLib::ObjectPtr<> ObjectPtr;
 
 /*
  * Create a NMPPAccessPoint sharing a GObject with an existing
@@ -27,14 +34,11 @@ NMPPAccessPoint::NMPPAccessPoint() : GLib::Object(NM_TYPE_ACCESS_POINT) { }
 const GByteArray* NMPPAccessPoint::getSSID() const
 {
     const GByteArray* ssid = nullptr;
-    callInMainContext([&ssid](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            ssid = nm_access_point_get_ssid(accessPoint);
-        }
-    });
+        ssid = nm_access_point_get_ssid(accessPoint);
+    }
     return ssid;
 }
 
@@ -45,8 +49,7 @@ const GByteArray* NMPPAccessPoint::getSSID() const
  */
 juce::String NMPPAccessPoint::getSSIDText() const
 {
-    using namespace juce;
-    String ssidText;
+    juce::String ssidText;
     const GByteArray* ssid = getSSID();
     if(ssid != nullptr)
     {
@@ -67,14 +70,11 @@ juce::String NMPPAccessPoint::getSSIDText() const
 const char* NMPPAccessPoint::getBSSID() const
 {
     const char* bssid = "";
-    callInMainContext([&bssid](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            bssid = nm_access_point_get_bssid(accessPoint);
-        }
-    });
+        bssid = nm_access_point_get_bssid(accessPoint);
+    }
     return bssid;
 }
 
@@ -84,18 +84,15 @@ const char* NMPPAccessPoint::getBSSID() const
 const char* NMPPAccessPoint::getPath() const
 {
     const char* path = "";
-    callInMainContext([&path](GObject* apObject)
+    NMObjectPtr accessPoint(NM_OBJECT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMObject* accessPoint = NM_OBJECT(apObject);
-        if(accessPoint != nullptr)
+        path = nm_object_get_path(accessPoint);
+        if(path == nullptr)
         {
-            path = nm_object_get_path(accessPoint);
-            if(path == nullptr)
-            {
-                path = "";
-            }
+            path = "";
         }
-    });
+    }
     return path;
 }
 
@@ -105,16 +102,12 @@ const char* NMPPAccessPoint::getPath() const
  */
 unsigned int NMPPAccessPoint::getFrequency() const
 {
-    unsigned int frequency = 0;
-    callInMainContext([&frequency](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            frequency = nm_access_point_get_frequency(accessPoint);
-        }
-    });
-    return frequency;
+        return nm_access_point_get_frequency(accessPoint);
+    }
+    return 0;
 }
 
 /*
@@ -122,16 +115,12 @@ unsigned int NMPPAccessPoint::getFrequency() const
  */
 unsigned int NMPPAccessPoint::getMaxBitrate() const
 {
-    unsigned int maxBitrate = 0;
-    callInMainContext([&maxBitrate](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            maxBitrate = nm_access_point_get_max_bitrate(accessPoint);
-        }
-    });
-    return maxBitrate;
+        return nm_access_point_get_max_bitrate(accessPoint);
+    }
+    return 0;
 }
 
 /*
@@ -139,16 +128,12 @@ unsigned int NMPPAccessPoint::getMaxBitrate() const
  */
 unsigned int NMPPAccessPoint::getSignalStrength() const
 {
-    unsigned int signalStrength = 0;
-    callInMainContext([&signalStrength](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            signalStrength = nm_access_point_get_strength(accessPoint);
-        }
-    });
-    return signalStrength;
+        return nm_access_point_get_strength(accessPoint);
+    }
+    return 0;
 }
 
 /*
@@ -157,22 +142,13 @@ unsigned int NMPPAccessPoint::getSignalStrength() const
  */
 bool NMPPAccessPoint::isValidConnection(const NMPPConnection& connection) const
 {
-    bool isValid = false;
-    GObject* conObj = getOtherGObject(connection);
-    if(conObj != nullptr && NM_IS_CONNECTION(conObj))
+    NMConnectionPtr nmConnection(NM_CONNECTION(getOtherGObject(connection)));
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(nmConnection == nullptr || accessPoint == nullptr)
     {
-        NMConnection* nmConn = NM_CONNECTION(conObj);
-        callInMainContext([&isValid, &connection, nmConn](GObject* apObject)
-        {
-            NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-            if(accessPoint != nullptr && nmConn != nullptr)
-            {
-                isValid = nm_access_point_connection_valid(accessPoint, nmConn);
-            }
-        });
+        return false;
     }
-    g_clear_object(&conObj);
-    return isValid;
+    return nm_access_point_connection_valid(accessPoint, nmConnection);
 }
 
 /*
@@ -180,16 +156,12 @@ bool NMPPAccessPoint::isValidConnection(const NMPPConnection& connection) const
  */
 NM80211Mode NMPPAccessPoint::getMode() const
 {
-    NM80211Mode mode = NM_802_11_MODE_UNKNOWN;
-    callInMainContext([&mode](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            mode = nm_access_point_get_mode(accessPoint);
-        }
-    });
-    return mode;
+        return nm_access_point_get_mode(accessPoint);
+    }
+    return NM_802_11_MODE_UNKNOWN;
 }
 
 /*
@@ -197,16 +169,12 @@ NM80211Mode NMPPAccessPoint::getMode() const
  */
 NM80211ApFlags NMPPAccessPoint::getFlags() const
 {
-    NM80211ApFlags flags = NM_802_11_AP_FLAGS_NONE;
-    callInMainContext([&flags](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            flags = nm_access_point_get_flags(accessPoint);
-        }
-    });
-    return flags;
+        return nm_access_point_get_flags(accessPoint);
+    }
+    return NM_802_11_AP_FLAGS_NONE;
 }
 
 /*
@@ -214,16 +182,12 @@ NM80211ApFlags NMPPAccessPoint::getFlags() const
  */
 NM80211ApSecurityFlags NMPPAccessPoint::getWPAFlags() const
 {
-    NM80211ApSecurityFlags flags = NM_802_11_AP_SEC_NONE;
-    callInMainContext([&flags](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            flags = nm_access_point_get_wpa_flags(accessPoint);
-        }
-    });
-    return flags;
+        return nm_access_point_get_wpa_flags(accessPoint);
+    }
+    return NM_802_11_AP_SEC_NONE;
 }
 
 /*
@@ -231,16 +195,12 @@ NM80211ApSecurityFlags NMPPAccessPoint::getWPAFlags() const
  */
 NM80211ApSecurityFlags NMPPAccessPoint::getRSNFlags() const
 {
-    NM80211ApSecurityFlags flags = NM_802_11_AP_SEC_NONE;
-    callInMainContext([&flags](GObject* apObject)
+    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
+    if(accessPoint != nullptr)
     {
-        NMAccessPoint* accessPoint = NM_ACCESS_POINT(apObject);
-        if(accessPoint != nullptr)
-        {
-            flags = nm_access_point_get_rsn_flags(accessPoint);
-        }
-    });
-    return flags;
+        return nm_access_point_get_rsn_flags(accessPoint);
+    }
+    return NM_802_11_AP_SEC_NONE;
 }
 
 /*
@@ -275,10 +235,9 @@ void NMPPAccessPoint::Listener::propertyChanged
  */
 void NMPPAccessPoint::addListener(NMPPAccessPoint::Listener& listener)
 {
-    GObject* apObject = getGObject();
+    ObjectPtr apObject(getGObject());
     if(apObject != nullptr)
     {
         listener.connectAllSignals(apObject);
     }
-    g_clear_object(&apObject);
 }

@@ -3,7 +3,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "JuceHeader.h"
-#include "GLib/EventLoop.h"
+#include "GLib/SmartPointers/SharedContextPtr.h"
 #include "GLib/GLib.h"
 
 
@@ -14,42 +14,83 @@
  *         loop attached to a specific GLib context.
  *
  *  The ContextCaller will not run the event loop itself, or ensure that the 
- * loop is running. That should be handled elsewhere, probably by a
- * GLib::ThreadResource object.
+ * GLib context even has an associated EventLoop. That should be handled 
+ * elsewhere, probably by a GLib::ThreadResource object.
  *
  */
 class GLib::ContextCaller
 {
 public:
     /**
-     * @brief  Initializes the ContextCaller, setting its GLib event loop.
+     * @brief  Initializes the ContextCaller, setting its GLib main context.
      *
-     * @param eventLoop  A reference to the eventLoop where the ContextCaller
-     *                   will schedule function calls.
+     * @param context  A reference to the context where the ContextCaller
+     *                 will schedule function calls.
      */
-    ContextCaller(const EventLoop& eventLoop);
+    ContextCaller(const SharedContextPtr& context);
 
     /**
      * @brief  Cancels all pending calls when the ContextCaller is destroyed.
      */
     virtual ~ContextCaller();
     
+    /**
+     * @brief  Schedules a function call to run asynchronously within the
+     *         context's event loop.
+     *
+     * @param toCall     The function that needs to run within the event loop.
+     *
+     * @param onFailure  An optional function to run if the ContextCaller is
+     *                   destroyed before the toCall function could run.
+     */
     void callAsync(std::function<void()> toCall,
             std::function<void()> onFailure = std::function<void()>());
 
+    /**
+     * @brief  Schedules a function call to run within the context's event loop,
+     *         then waits for the function to execute.
+     *
+     * @param toCall        The function that needs to run within the context's
+     *                      event loop.
+     *
+     * @param onFailure     An optional function to run if the ContextCaller is
+     *                      destroyed before the toCall function could run.
+     *
+     * @param afterAdding   An optional function to run after the pending call
+     *                      is scheduled, just before the calling thread is
+     *                      forced to wait for the function call.
+     */
     void call(std::function<void()> toCall,
             std::function<void()> onFailure = std::function<void()>(),
             std::function<void()> afterAdding = std::function<void()>());
 
 private:
 
+    /**
+     * @brief  All data needed to call a function within a GLib context's main
+     *         event loop.
+     */
     struct CallData
     {
+        /* The ContextCaller that scheduled the call, needed to delete this
+           CallData after running the function. */
         ContextCaller* caller;
+
+        /* The function that needs to be called on the event loop */
         std::function<void()> toCall;
+
+        /* A function to run if toCall could not be run.  This value can be an
+           invalid function if no onFailure call is needed. */
         std::function<void()> onFailure;
+
+        /* The GSource used to schedule the call on the GMainLoop, and to remove
+           completed calls. */
         GSource* callSource;
+
+        /* Prevents synchronous calls from running until the calling thread 
+           starts waiting. */
         std::mutex* callerMutex = nullptr;
+        /* Used to notify a waiting thread that its function call is complete.*/
         std::condition_variable* callPending = nullptr;
     };
     
@@ -57,7 +98,10 @@ private:
      * @brief  Adds a function to the GMainContext so it will execute on the 
      *         event loop.
      * 
-     * @param call         The function to run.
+     * @param call         The function to run on the event loop..
+     * 
+     * @param onFailure    The function to run if the call() function couldn't
+     *                     run.
      * 
      * @param callerMutex  If this value is non-null, the EventLoop will
      *                     lock it while running this call.
@@ -66,7 +110,8 @@ private:
      *                     use it and callerMutex to wake up the calling
      *                     thread after running the call.
      */
-    void addAndInitCall(std::function<void() > call,
+    void addAndInitCall(std::function<void()> call,
+            std::function<void()> onFailure,
             std::mutex* callerMutex = nullptr,
             std::condition_variable* callPending = nullptr);
     /**
@@ -89,6 +134,6 @@ private:
        is destroyed before a call can run. */
     juce::OwnedArray<CallData, juce::CriticalSection> pendingCalls;
 
-    /* The GLib event loop where the ContextCaller schedules calls. */
-    const EventLoop& eventLoop;
+    /* The shared context pointer used by the ContextCaller to schedule calls.*/
+    SharedContextPtr contextPtr;
 };

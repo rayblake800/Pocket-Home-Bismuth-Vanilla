@@ -9,11 +9,10 @@
 #define LIST_CONNECTIONS "ListConnections"
 
 SavedConnections::SavedConnections() :
-GPPDBusProxy(BUS_NAME, PATH, INTERFACE) 
+GLib::DBusProxy(BUS_NAME, PATH, INTERFACE) 
 { 
-    using namespace juce;
-    StringArray paths = getConnectionPaths();
-    for(const String& path : paths)
+    juce::StringArray paths = getConnectionPaths();
+    for(const juce::String& path : paths)
     {
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }
@@ -27,8 +26,7 @@ GPPDBusProxy(BUS_NAME, PATH, INTERFACE)
  */
 juce::Array<SavedConnection> SavedConnections::getWifiConnections() const
 {
-    using namespace juce;
-    Array<SavedConnection> connections;
+    juce::Array<SavedConnection> connections;
     for(const SavedConnection& con : connectionList)
     {
         if(con.isWifiConnection())

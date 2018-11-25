@@ -7,13 +7,13 @@
  * Create an empty object with no linked connection.
  */
 SavedConnection::SavedConnection() :
-GPPDBusProxy(nullptr, nullptr, nullptr) { } 
+GLib::DBusProxy(nullptr, nullptr, nullptr) { } 
 
-/**
- * Create an object from an existing DBus Connection proxy.
+/*
+ * Creates an object from an existing DBus Connection proxy.
  */
 SavedConnection::SavedConnection(const SavedConnection& toCopy) :
-GPPDBusProxy(nullptr, nullptr, nullptr),
+GLib::DBusProxy(nullptr, nullptr, nullptr),
 path(toCopy.path),
 settingNames(toCopy.settingNames),
 nmConnection(toCopy.nmConnection)
@@ -21,11 +21,11 @@ nmConnection(toCopy.nmConnection)
     setGObject(toCopy);
 }
 
-/**
- * Initialize a SavedConnection from a DBus connection path.
+/*
+ * Initializes a SavedConnection from a DBus connection path.
  */ 
 SavedConnection::SavedConnection(const char * path) :
-GPPDBusProxy(busName, path, interfaceName),
+GLib::DBusProxy(busName, path, interfaceName),
 path(path) 
 { 
     if(!isNull())
@@ -69,16 +69,15 @@ NMPPConnection SavedConnection::getNMConnection() const
  */
 juce::Time SavedConnection::lastConnectionTime() const
 { 
-    using namespace juce;
-    Time lastTime;
+    juce::Time lastTime;
     if(!isNull())
     {
         GVariant* timestamp = getSettingProp(NM_SETTING_CONNECTION_SETTING_NAME,
                 NM_SETTING_CONNECTION_TIMESTAMP);
         if(timestamp != nullptr)
         {
-	        lastTime = Time(1000 * GVariantConverter::getValue<uint64>
-	              (timestamp));
+	        lastTime = juce::Time(1000 
+                    * GVariantConverter::getValue<juce::uint64> (timestamp));
             g_variant_unref(timestamp);
         }
     }
@@ -92,11 +91,11 @@ juce::Time SavedConnection::lastConnectionTime() const
  */
 bool SavedConnection::hasSavedKey() const
 {
-    using namespace juce;
     if(isNull())
     {
         return false;
     }
+    using juce::String;
     using namespace GVariantConverter;
     GError * secretsError = nullptr;
     GVariant* secrets = callMethod(
@@ -110,7 +109,7 @@ bool SavedConnection::hasSavedKey() const
                 (secrets, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, nullptr);
         if (securitySecrets != nullptr)
         {
-            Array<const char*> keyTypes = 
+            juce::Array<const char*> keyTypes = 
             {
                 NM_SETTING_WIRELESS_SECURITY_PSK,
                 NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
@@ -180,8 +179,7 @@ bool SavedConnection::operator==(const SavedConnection& rhs) const
  */
 bool SavedConnection::operator==(NMConnection* rhs) const
 {
-    using namespace juce;
-    return path == String(nm_connection_get_path(rhs));
+    return path == juce::String(nm_connection_get_path(rhs));
 }
 
 /*
@@ -190,11 +188,11 @@ bool SavedConnection::operator==(NMConnection* rhs) const
  */
 void SavedConnection::createNMConnection()
 {
-    using namespace juce;
     if(isNull())
     {
         return;
     }
+    using juce::String;
     using namespace GVariantConverter;
     if(!settingNames.isEmpty())
     {

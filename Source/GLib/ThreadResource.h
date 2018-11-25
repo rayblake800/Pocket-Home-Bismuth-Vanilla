@@ -2,6 +2,7 @@
 #include "gio/gio.h"
 #include "WindowFocus.h"
 #include "JuceHeader.h"
+#include "GLib/SmartPointers/SharedContextPtr.h"
 #include "GLib/EventLoop.h"
 #include "GLib/ContextCaller.h"
 #include "SharedResource/ThreadResource.h"
@@ -11,15 +12,15 @@
  * 
  * @brief  Runs a GLib event loop on a shared thread resource. 
  * 
- * On creation, this starts up a GLib event thread to handle events associated
+ *  On creation, this starts up a GLib event thread to handle events associated
  * with a GMainContext provided on creation. This GMainContext will be set as
  * the thread default context. This context will be available through the 
  * getContext method, so that it can be used to add signal sources and signal
  * handlers to this thread.
  * 
- * GLib::ThreadResource also provides methods for synchronously or 
+ *  GLib::ThreadResource also provides methods for synchronously or 
  * asynchronously executing code within the thread. These should be used to 
- * handle all interactions with GLib object tied to the thread context, unless 
+ * handle all interactions with GLib objects tied to the thread context, unless 
  * those objects are explicitly guaranteed to be thread-safe.
  */
 class GLib::ThreadResource : public SharedResource::ThreadResource,
@@ -36,7 +37,8 @@ public:
      *                     thread. This will be unreferenced when the thread is 
      *                     destroyed.
      */
-    ThreadResource(const juce::Identifier& resourceKey, GMainContext* context);
+    ThreadResource(const juce::Identifier& resourceKey, 
+            const SharedContextPtr& context);
     
     virtual ~ThreadResource() { }
     
@@ -51,24 +53,39 @@ public:
     /**
      * @brief  Runs a function on this GLib event loop, waiting until the 
      *         function has finished.
-     * 
-     * @param fn  A function that needs to run on the GLib event loop.
-     */
-    void call(std::function<void()> fn);
-    
-    /**
-     * @brief  Asynchronously runs a function once on this GLib event loop.
-     * 
-     * @param fn   A function that needs to run on the GLib event loop.
-     */
-    void callAsync(std::function<void()> fn);
-    
-    /**
-     * @brief  Gets the event loop's context.
      *
-     * @return  The GMainContext* set when the EventLoop was constructed.
+     * @param toCall        The function that needs to run within the thread's 
+     *                      GLib event loop.
+     *
+     * @param onFailure     An optional function to run if the thread resource 
+     *                      is destroyed before the toCall function could run.
+     *
+     * @param afterAdding   An optional function to run after the pending call
+     *                      is scheduled, just before the calling thread is
+     *                      forced to wait for the function call.
      */
-    GMainContext* getContext();
+    void call(std::function<void()> toCall,
+            std::function<void()> onFailure = std::function<void()>(),
+            std::function<void()> afterAdding = std::function<void()>());
+    
+    /**
+     * @brief  Asynchronously runs a function once on this thread's GLib event 
+     *         loop.
+     *
+     * @param toCall     The function that needs to run within the event loop.
+     *
+     * @param onFailure  An optional function to run if the thread resource is
+     *                   destroyed before the toCall function could run.
+     */
+    void callAsync(std::function<void()> toCall,
+            std::function<void()> onFailure = std::function<void()>());
+    
+    /**
+     * @brief  Gets the thread's context.
+     *
+     * @return  The GLib context set when the EventLoop was constructed.
+     */
+    SharedContextPtr getContext();
 
     /**
      * @brief  Exits the GLib event loop before stopping the thread normally.
@@ -76,7 +93,6 @@ public:
     virtual void stopThreadResource() override;
 
 protected:
-    
     /**
      * @brief  Grants the ThreadResource access to its ThreadLock within the
      *         GLib event loop.
@@ -98,7 +114,7 @@ private:
      */
     virtual void windowFocusLost() override;
     
-    /*
+    /**
      * @brief  Resumes the event loop whenever window focus is regained.
      */
     virtual void windowFocusGained() override;
@@ -109,24 +125,24 @@ private:
      *
      * @return  True, so the ThreadResource sleeps when the EventLoop finishes. 
      */
-    virtual bool threadShouldWait() override;
+    virtual bool threadShouldWait() override { return true; }
 
     /**
-     * Starts the GLib thread, then waits until the thread is running and
-     * the thread context and main loop are initialized. This function locks the
-     * threadStateLock for writing.
-     * 
+     * @brief  Starts the GLib thread, then waits until the thread is running 
+     *         and the thread context and main loop are initialized. 
+     *
      * @return  True if the thread started successfully, false if the
      *          GLibThread is being destroyed.
      */
-    bool startGLibThread();
+    //bool startGLibThread();
+
+    /* Used to allow any function running on the thread's EventLoop to access
+       its threadLock. */
+    ThreadResource::ThreadLock* threadLock = nullptr;
     
     /* Runs the GLib event loop. */
     EventLoop eventLoop;
 
     /* Executes functions in the event loop. */
     ContextCaller contextCaller;
-
-    /* Stores the ThreadLock so it can be accessed within the event loop. */
-    SharedResource::ThreadResource::ThreadLock* threadLock = nullptr;
 };

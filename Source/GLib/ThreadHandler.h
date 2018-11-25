@@ -1,5 +1,6 @@
 #pragma once
 #include "SharedResource/Handler.h"
+#include "GLib/SmartPointers/SharedContextPtr.h"
 #include "GLib/GLib.h"
 
 class GLib::ThreadHandler : public SharedResource::Handler<ThreadResource>
@@ -16,19 +17,19 @@ public:
     virtual ~ThreadHandler() { }
 
     /**
-     * @brief  Runs a function on this GLib event loop, waiting until the 
+     * @brief  Calls a function on this GLib event loop, waiting until the 
      *         function has finished.
      * 
-     * @param toRun  A function that needs to run on the GLib event loop.
+     * @param toCall  A function that needs to be called on the GLib event loop.
      */
-    void run(const std::function<void()> toRun) const;
+    void call(const std::function<void()> toCall) const;
 
     /**
-     * @brief  Asynchronously runs a function once on this GLib event loop.
+     * @brief  Asynchronously calls a function once on this GLib event loop.
      * 
-     * @param toRun   A function that needs to run on the GLib event loop.
+     * @param toCall   A function that needs to be called on the GLib event loop.
      */
-    void runAsync(const std::function<void()> toRun) const;
+    void callAsync(const std::function<void()> toCall) const;
 
     /**
      * @brief  Checks if the thread resource is currently running.
@@ -44,7 +45,7 @@ public:
      *
      * @return  The GMainContext* set when the thread resource was constructed.
      */
-    GMainContext* getContext();
+    SharedContextPtr getContext();
     
     /**
      * @brief  Starts the thread resource if it is currently not running.
@@ -52,7 +53,7 @@ public:
     void startThread();
 
     /**
-     * @brief  Stops the thread resource without waiting for the thread to exit.
+     * @brief  Stops the thread resource, waiting for the thread to exit.
      */
     void stopThread();
 };

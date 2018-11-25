@@ -1,5 +1,4 @@
 #include "WifiStateManager.h"
-#include "GLibSignalThread.h"
 
 //ResourceManager shared object and lock;
 static juce::ScopedPointer<NetworkInterface> networkInterface;

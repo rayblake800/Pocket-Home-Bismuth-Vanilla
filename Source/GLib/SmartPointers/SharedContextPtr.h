@@ -14,89 +14,117 @@ namespace GLib
     {
     public:
         /**
-         * @brief 
+         * @brief  Creates a context pointer with a null value. 
          */
-        SharedContextPtr();
+        SharedContextPtr() { }
 
         /**
-         * @brief 
+         * @brief  Creates a context pointer with an initial context value. 
          *
-         * @param context
+         * @param context  The stored GLib context. If non-null, this should 
+         *                 have one reference added to it that the 
+         *                 SharedContextPtr will unreference on destruction or
+         *                 value change..
          */
         SharedContextPtr(GMainContext* context);
 
         /**
-         * @brief 
+         * @brief  Creates a context pointer using another context pointer's
+         *         GMainContext* value.
          *
-         * @param context
+         * @param contextPtr  Any other context pointer. If this contains a
+         *                    non-null GMainContext*, the new context pointer 
+         *                    will copy and reference it.
          */
-        SharedContextPtr(const SharedContextPtr& context);
+        SharedContextPtr(const SharedContextPtr& contextPtr);
 
         /**
-         * @brief 
+         * @brief  Unreferences the internal GMainContext* on destruction if it
+         *         holds a non-null value.
          */
         virtual ~SharedContextPtr();
 
         /**
-         * @brief 
+         * @brief  Checks if this context pointer holds a specific GMainContext. 
          *
-         * @param rhs
+         * @param rhs  A GMainContext* to compare with the SharedContextPtr's
+         *             internal GMainContext pointer. 
          *
-         * @return 
+         * @return     Whether rhs equals the context pointer's internal
+         *             GMainContext*.
          */
         bool operator==(const GMainContext* rhs) const;
 
         /**
-         * @brief 
+         * @brief  Checks if this context pointer and another hold identical
+         *         GMainContext pointers.
          *
-         * @param rhs
+         * @param rhs  Another context pointer to compare with this one.
          *
-         * @return 
+         * @return     Whether this context pointer and rhs hold identical
+         *             GMainContext* values.
          */
         bool operator==(const SharedContextPtr& rhs) const;
 
         /**
-         * @brief 
+         * @brief  Checks if this context pointer does not hold a specific
+         *         GMainContext.
          *
-         * @param rhs
+         * @param rhs  A GMainContext* to compare with the SharedContextPtr's
+         *             internal GMainContext pointer.
          *
-         * @return 
+         * @return     Whether rhs does not equal the context pointer's internal
+         *             GMainContext*.
          */
         bool operator!=(const GMainContext* rhs) const;
 
         /**
-         * @brief 
+         * @brief  Checks if this context pointer and another do not hold 
+         *         identical GMainContext pointers.
          *
-         * @param rhs
+         * @param rhs  Another context pointer to compare with this one.
          *
-         * @return 
+         * @return     Whether this context pointer and rhs do not hold 
+         *             identical GMainContext* values.
          */
         bool operator!=(const SharedContextPtr& rhs) const;
 
         /**
-         * @brief 
+         * @brief  Assigns a new GLib context pointer to this SharedContextPtr. 
          *
-         * @param rhs
+         * If this assignment replaces a non-null GMainContext*, the old 
+         * GMainContext* will be unreferenced before it is removed.
          *
-         * @return 
+         * @param rhs  A new GMainContext* for the SharedContextPtr to hold. If
+         *             non-null, rhs should have an added reference that the
+         *             SharedContextPtr will later unreference.
+         *
+         * @return     A reference to this SharedContextPtr. 
          */
-        SharedContextPtr& operator=(const GMainContext* rhs);
+        SharedContextPtr& operator=(GMainContext* const rhs);
 
         /**
-         * @brief 
+         * @brief  Assigns a new GLib context pointer to this SharedContextPtr. 
          *
-         * @param rhs
+         * If this assignment replaces a non-null GMainContext*, the old 
+         * GMainContext* will be unreferenced before it is removed.
          *
-         * @return 
+         * @param rhs  Another SharedContextPtr, holding the GMainContext* value
+         *             that will be assigned to this context pointer. If
+         *             non-null, a new reference will be added to the copied
+         *             GMainContext* that the SharedContextPtr will later 
+         *             unreference.
+         *
+         * @return     A reference to this SharedContextPtr. 
          */
         SharedContextPtr& operator=(const SharedContextPtr& rhs);
 
         /**
-         * @brief 
+         * @brief  Gets this SharedContextPtr's internal GMainContext* value. 
          *
-         * @return 
+         * @return  The stored context pointer. 
          */
-        operator GMainContext*();
+        GMainContext* operator*() const;
 
     private:
         /* The internal GLib context pointer. */

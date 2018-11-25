@@ -1,10 +1,12 @@
+#include <gio/gio.h>
 #include "GLib/EventLoop.h"
+
 
 /*
  * Creates the event loop with an initial GMainContext.
  */
-GLib::EventLoop::EventLoop(GMainContext* context) : context(context),
-    eventLoop(g_main_loop_new(context, false)) { }
+GLib::EventLoop::EventLoop(const SharedContextPtr& context) : context(context),
+    eventLoop(g_main_loop_new(*context, false)) { }
 
 /*
  * Ensures the loop has stopped before it is destroyed.
@@ -25,13 +27,13 @@ GLib::EventLoop::~EventLoop()
  */
 bool GLib::EventLoop::runningOnLoop()
 {
-    return context != nullptr && g_main_context_is_owner(context);
+    return context != nullptr && g_main_context_is_owner(*context);
 }
 
 /*
  * Gets the event loop's context.
  */
-GMainContext* GLib::EventLoop::getContext()
+GLib::SharedContextPtr GLib::EventLoop::getContext()
 {
     return context;
 }
@@ -41,11 +43,11 @@ GMainContext* GLib::EventLoop::getContext()
  */
 void GLib::EventLoop::runLoop()
 {
-    g_main_context_push_thread_default(context);
+    g_main_context_push_thread_default(*context);
     DBG("GLib::EventLoop: entering GLib main loop");
     g_main_loop_run(eventLoop);
     DBG("GLib::EventLoop: exiting GLib main loop");
-    g_main_context_pop_thread_default(context);
+    g_main_context_pop_thread_default(*context);
 }
 
 /*

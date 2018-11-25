@@ -1,4 +1,9 @@
+#include "GLib/SmartPointers/ObjectPtr.h"
 #include "NMPPActiveConnection.h"
+
+/* Rename smart pointers for brevity: */
+typedef GLib::ObjectPtr<NMActiveConnection*> NMActiveConnectionPtr;
+typedef GLib::ObjectPtr<NMObject*> NMObjectPtr;
 
 /*
  * Creates a NMPPActiveConnection sharing a GObject with an existing
@@ -25,18 +30,15 @@ GLib::Object(NM_TYPE_ACTIVE_CONNECTION) { }
 const char* NMPPActiveConnection::getPath() const
 {
     const char* path = "";
-    callInMainContext([this, &path](GObject* conObj)
+    NMObjectPtr connection(NM_OBJECT(getGObject()));
+    if(connection != nullptr)
     {
-        NMObject* connection = NM_OBJECT(conObj);
-        if(connection != nullptr)
+        path = nm_object_get_path(connection);
+        if(path == nullptr)
         {
-            path = nm_object_get_path(connection);
-            if(path == nullptr)
-            {
-                path = "";
-            }
+            path = "";
         }
-    });
+    }
     return path;
 }
     
@@ -46,18 +48,15 @@ const char* NMPPActiveConnection::getPath() const
 const char* NMPPActiveConnection::getAccessPointPath() const
 {
     const char* path = "";
-    callInMainContext([this, &path](GObject* conObj)
+    NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMActiveConnection* connection = NM_ACTIVE_CONNECTION(conObj);
-        if(connection != nullptr)
+        path = nm_active_connection_get_specific_object(connection);
+        if(path == nullptr)
         {
-            path = nm_active_connection_get_specific_object(connection);
-            if(path == nullptr)
-            {
-                path = "";
-            }
+            path = "";
         }
-    });
+    }
     return path;
 }
 
@@ -82,14 +81,11 @@ bool NMPPActiveConnection::isConnectedAccessPoint
 const char* NMPPActiveConnection::getUUID() const
 {
     const char* uuid = "";
-    callInMainContext([this, &uuid](GObject* conObj)
+    NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMActiveConnection* connection = NM_ACTIVE_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            uuid = nm_active_connection_get_uuid(connection);
-        }
-    });
+        uuid = nm_active_connection_get_uuid(connection);
+    }
     return uuid;
 }
 
@@ -99,14 +95,11 @@ const char* NMPPActiveConnection::getUUID() const
 const char* NMPPActiveConnection::getID() const
 {
     const char* conId = "";
-    callInMainContext([this, &conId](GObject* conObj)
+    NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMActiveConnection* connection = NM_ACTIVE_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            conId = nm_active_connection_get_id(connection);
-        }
-    });
+        conId = nm_active_connection_get_id(connection);
+    }
     return conId;
 }
 
@@ -116,13 +109,10 @@ const char* NMPPActiveConnection::getID() const
 NMActiveConnectionState NMPPActiveConnection::getConnectionState() const
 {
     NMActiveConnectionState state = NM_ACTIVE_CONNECTION_STATE_UNKNOWN;
-    callInMainContext([this, &state](GObject* conObj)
+    NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMActiveConnection* connection = NM_ACTIVE_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            state = nm_active_connection_get_state(connection);
-        }
-    });
+        state = nm_active_connection_get_state(connection);
+    }
     return state;
 }

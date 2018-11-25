@@ -1,5 +1,4 @@
 #include "StressTest.h"
-#include "GLibSignalThread.h"
 #include "WifiStateManager.h"
 #include "LibNMInterface.h"
 
@@ -93,13 +92,13 @@ public:
     {
         using namespace juce;
         //initialize shared resources
-        ScopedPointer<GLibSignalThread> signalThread;
+        //ScopedPointer<GLibSignalThread> signalThread;
         ScopedPointer<WifiStateManager>  wifiManager;
         beginTest("Repeated initialization/destruction test");
 
         for(int i = 0; i < resourceInitCount; i++)
         {
-            signalThread = new GLibSignalThread();
+            //signalThread = new GLibSignalThread();
             wifiManager = new WifiStateManager([]
             ()->NetworkInterface*
             {
@@ -109,7 +108,7 @@ public:
             {
 
                 wifiManager = nullptr;
-                signalThread = nullptr;
+                //signalThread = nullptr;
             }
         }
         //If we haven't segfaulted by now, that's enough to pass.
@@ -120,7 +119,7 @@ public:
         runThreads();
         listeners.clear();
         wifiManager->enableWifi();
-        signalThread = nullptr;
+        //signalThread = nullptr;
         wifiManager = nullptr;
     }
 };

@@ -4,11 +4,14 @@ GLIB_ROOT = Source/GLib
 GLIB_TEST_ROOT = Tests/GLib
 
 OBJECTS_GLIB := \
+  $(GLIB_PREFIX)ErrorPtr.o \
   $(GLIB_PREFIX)Object.o \
   $(GLIB_PREFIX)WeakRef.o \
   $(GLIB_PREFIX)ThreadResource.o \
   $(GLIB_PREFIX)ThreadHandler.o \
+  $(GLIB_PREFIX)SharedContextPtr.o \
   $(GLIB_PREFIX)EventLoop.o \
+  $(GLIB_PREFIX)ContextCaller.o \
   $(GLIB_PREFIX)SignalHandler.o \
   $(GLIB_PREFIX)VariantConverter.o \
   $(GLIB_PREFIX)DBusProxy.o  
@@ -29,6 +32,8 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_GLIB)
 glib : $(OBJECTS_GLIB)
 	@echo "Built GLib module"
 
+$(GLIB_PREFIX)ErrorPtr.o : \
+    $(GLIB_ROOT)/SmartPointers/ErrorPtr.cpp
 $(GLIB_PREFIX)Object.o : \
     $(GLIB_ROOT)/Object.cpp
 $(GLIB_PREFIX)WeakRef.o : \
@@ -37,8 +42,12 @@ $(GLIB_PREFIX)ThreadResource.o : \
     $(GLIB_ROOT)/ThreadResource.cpp
 $(GLIB_PREFIX)ThreadHandler.o : \
     $(GLIB_ROOT)/ThreadHandler.cpp
+$(GLIB_PREFIX)SharedContextPtr.o : \
+    $(GLIB_ROOT)/SmartPointers/SharedContextPtr.cpp
 $(GLIB_PREFIX)EventLoop.o : \
     $(GLIB_ROOT)/EventLoop.cpp
+$(GLIB_PREFIX)ContextCaller.o : \
+    $(GLIB_ROOT)/ContextCaller.cpp
 $(GLIB_PREFIX)SignalHandler.o : \
     $(GLIB_ROOT)/SignalHandler.cpp
 $(GLIB_PREFIX)VariantConverter.o : \

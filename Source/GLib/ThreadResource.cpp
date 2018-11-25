@@ -4,14 +4,9 @@
  * Creates the thread with an initial GMainContext.
  */
 GLib::ThreadResource::ThreadResource
-(const juce::Identifier& resourceKey, GMainContext* context) : 
+(const juce::Identifier& resourceKey, const SharedContextPtr& context) : 
 SharedResource::ThreadResource(resourceKey), 
-eventLoop(context), contextCaller(context)
-{  
-    // 
-    g_main_context_ref(context);
-    jassert(context != nullptr);
-}
+eventLoop(context), contextCaller(context) { }
 
 /*
  * Checks if this is being executed within the event loop.
@@ -25,7 +20,9 @@ bool GLib::ThreadResource::runningOnLoop()
  * Run a function on this GLib event loop, waiting until the function has 
  * finished.
  */
-void GLib::ThreadResource::call(std::function<void()> fn)
+void GLib::ThreadResource::call(std::function<void()> toCall,
+            std::function<void()> onFailure,
+            std::function<void()> afterAdding)
 {
     if(isThreadRunning())
     {
@@ -33,28 +30,28 @@ void GLib::ThreadResource::call(std::function<void()> fn)
     }
     else
     {
-        startGLibThread();
+        startThread();
     }
-    eventLoop.call(fn);
+    contextCaller.call(toCall, onFailure, afterAdding);
 }
 
 /*
  * Asynchronously run a function once on this GLib event loop.
  */
-void GLib::ThreadResource::callAsync(std::function<void()> fn)
+void GLib::ThreadResource::callAsync(std::function<void()> toCall,
+            std::function<void()> onFailure)
 {
     if(isThreadRunning())
     {
         notify();
     }
-    eventLoop.callAsync(fn);
+    contextCaller.callAsync(toCall, onFailure);
 }
 
 /*
- * Returns the thread default context that was set when this thread was
- * created.
+ * Gets the thread's GLib context.
  */
-GMainContext* GLib::ThreadResource::getContext()
+GLib::SharedContextPtr GLib::ThreadResource::getContext()
 {
     return eventLoop.getContext();
 }
@@ -64,7 +61,7 @@ GMainContext* GLib::ThreadResource::getContext()
  */
 void GLib::ThreadResource::stopThreadResource()
 {
-    eventLoop.callAsync([this]()
+    contextCaller.callAsync([this]()
         {
             eventLoop.stopLoop();
         });
@@ -85,7 +82,7 @@ GLib::ThreadResource::getThreadLock()
     return nullptr;
 }
 
-/**
+/*
  * Runs the GLib main loop.
  */
 void GLib::ThreadResource::runLoop
@@ -96,8 +93,8 @@ void GLib::ThreadResource::runLoop
     threadLock = nullptr;
 }
 
-/**
- * Pause the event loop whenever window focus is lost.
+/*
+ * Pauses the event loop whenever window focus is lost.
  */
 void GLib::ThreadResource::windowFocusLost()
 {
@@ -105,7 +102,7 @@ void GLib::ThreadResource::windowFocusLost()
 }
 
 /*
- * Resume the event loop whenever window focus is regained.
+ * Resumes the event loop whenever window focus is regained.
  */
 void GLib::ThreadResource::windowFocusGained()
 {

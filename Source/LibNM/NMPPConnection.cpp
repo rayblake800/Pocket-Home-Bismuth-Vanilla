@@ -1,4 +1,8 @@
+#include "GLib/SmartPointers/ObjectPtr.h"
 #include "NMPPConnection.h"
+
+/* Rename smart pointers for brevity: */
+typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
 
 /*
  * Create a NMPPConnection sharing a GObject with an existing
@@ -24,35 +28,18 @@ NMPPConnection::NMPPConnection() : GLib::Object(NM_TYPE_CONNECTION) { }
  */
 bool NMPPConnection::connectionMatches(const NMPPConnection& rhs) const
 {
-    if(isNull())
+    NMConnectionPtr self(NM_CONNECTION(getGObject()));
+    NMConnectionPtr toCompare(NM_CONNECTION(rhs.getGObject()));
+    if(self == toCompare)
     {
-        return rhs.isNull();
+        return true;
     }
-    else if(rhs.isNull())
+    else if(self == nullptr || toCompare == nullptr)
     {
         return false;
     }
-    bool compatible = false;
-    callInMainContext([this, &rhs, &compatible](GObject* conObj)
-    {
-        GObject* rhsObj = rhs.getGObject();
-        if(conObj == rhsObj)
-        {
-            compatible = true;
-        }
-        else
-        {
-            NMConnection* self = NM_CONNECTION(conObj);
-            NMConnection* other = NM_CONNECTION(rhsObj);
-            if(self != nullptr && other != nullptr)
-            {
-                compatible = nm_connection_compare(self, other,
-                        NM_SETTING_COMPARE_FLAG_FUZZY);
-            }
-        }
-        g_clear_object(&rhsObj);
-    });
-    return compatible;
+    return nm_connection_compare(self, toCompare,
+            NM_SETTING_COMPARE_FLAG_FUZZY);
 }
    
 
@@ -66,14 +53,9 @@ void NMPPConnection::addSetting(NMSetting* setting)
     {
         setGObject(G_OBJECT(nm_connection_new()));
     }
-    callInMainContext([this, setting](GObject* conObj)
-    {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            nm_connection_add_setting(connection, setting);
-        }
-    });
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    jassert(connection != nullptr);
+    nm_connection_add_setting(connection, setting);
 }
 
 /*
@@ -81,14 +63,11 @@ void NMPPConnection::addSetting(NMSetting* setting)
  */
 void NMPPConnection::removeSetting(GType settingType)
 {
-    callInMainContext([this, settingType](GObject* conObj)
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            nm_connection_remove_setting(connection, settingType);
-        }
-    });
+        nm_connection_remove_setting(connection, settingType);
+    }
 }
     
 /*
@@ -168,22 +147,17 @@ bool NMPPConnection::addWEPSettings(const juce::String& psk)
     return true;
 }
 
-
 /*
  * Get one of this connection's setting objects.
  */
 NMSetting* NMPPConnection::getSetting(GType settingType) const
 {
-    NMSetting* setting = nullptr;
-    callInMainContext([this, &setting, &settingType](GObject* conObj)
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            setting = nm_connection_get_setting(connection, settingType);
-        }
-    });
-    return setting;
+        return nm_connection_get_setting(connection, settingType);
+    }
+    return nullptr;
 }
 
 /*
@@ -191,16 +165,12 @@ NMSetting* NMPPConnection::getSetting(GType settingType) const
  */
 bool NMPPConnection::verify(GError** error) const
 {
-    bool isValid = false;
-    callInMainContext([this, &isValid, error](GObject* conObj)
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            isValid = nm_connection_verify(connection, error);
-        }
-    });
-    return isValid;
+        return nm_connection_verify(connection, error);
+    }
+    return false;
 }
 
 /*
@@ -213,14 +183,11 @@ void NMPPConnection::setPath(const char* path)
     {
         setGObject(G_OBJECT(nm_connection_new()));
     }
-    callInMainContext([this, path](GObject* conObj)
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            nm_connection_set_path(connection, path);
-        }
-    });
+        nm_connection_set_path(connection, path);
+    }
 }
 
 /*
@@ -229,18 +196,15 @@ void NMPPConnection::setPath(const char* path)
 const char* NMPPConnection::getPath() const
 {
     const char* path = "";
-    callInMainContext([this, &path](GObject* conObj)
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
+        path = nm_connection_get_path(connection);
+        if(path == nullptr)
         {
-            path = nm_connection_get_path(connection);
-            if(path == nullptr)
-            {
-                path = "";
-            }
+            path = "";
         }
-    });
+    }
     return path;
 }
 
@@ -250,18 +214,15 @@ const char* NMPPConnection::getPath() const
 const char* NMPPConnection::getUUID() const
 {
     const char* uuid = "";
-    callInMainContext([this, &uuid](GObject* conObj)
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
+        uuid = nm_connection_get_uuid(connection);
+        if(uuid == nullptr)
         {
-            uuid = nm_connection_get_uuid(connection);
-            if(uuid == nullptr)
-            {
-                uuid = "";
-            }
+            uuid = "";
         }
-    });
+    }
     return uuid;
 }
 
@@ -271,18 +232,15 @@ const char* NMPPConnection::getUUID() const
 const char* NMPPConnection::getID() const
 {
     const char* conId = "";
-    callInMainContext([&conId](GObject* conObj)
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
+        conId = nm_connection_get_id(connection);
+        if(conId == nullptr)
         {
-            conId = nm_connection_get_id(connection);
-            if(conId == nullptr)
-            {
-                conId = "";
-            }
+            conId = "";
         }
-    });
+    }
     return conId;
 }
 
@@ -293,14 +251,11 @@ const char* NMPPConnection::getID() const
  */
 void NMPPConnection::printDebugOutput() const
 {
-    callInMainContext([](GObject* conObj)
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
     {
-        NMConnection* connection = NM_CONNECTION(conObj);
-        if(connection != nullptr)
-        {
-            nm_connection_dump(connection);
-        }
-    });
+        nm_connection_dump(connection);
+    }
 }
 #endif
     

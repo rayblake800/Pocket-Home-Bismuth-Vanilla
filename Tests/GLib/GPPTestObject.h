@@ -1,7 +1,7 @@
 #pragma once
 #include "gtest_object.h"
 #include "GLib/Object.h"
-#include "GSignalHandler.h"
+#include "GLib/SignalHandler.h"
 /**
  * @file GPPTestObject.h
  *
@@ -64,7 +64,7 @@ public:
     /**
      * Receives property change notifications from GTestObjects.
      */
-    class Listener : private GSignalHandler
+    class Listener : private GLib::SignalHandler
     {
     public:
         friend class GPPTestObject;

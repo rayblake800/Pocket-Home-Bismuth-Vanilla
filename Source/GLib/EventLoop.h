@@ -1,7 +1,7 @@
 #pragma once
 #include <gio/gio.h>
 #include "JuceHeader.h"
-#include "GLib/SmartPointers/ContextPtr.h"
+#include "GLib/SmartPointers/SharedContextPtr.h"
 #include "GLib/SmartPointers/LoopPtr.h"
 
 /**
@@ -15,14 +15,13 @@ public:
     /**
      * @brief  Creates the event loop with an initial GMainContext.
      *
-     * @param context  The context that will be claimed by this thread. This 
-     *                 will be unreferenced when the thread is destroyed.
+     * @param context  A pointer holding the context that will be claimed by 
+     *                 this thread. 
      */
-    EventLoop(GMainContext* context);
+    EventLoop(const SharedContextPtr& context);
     
     /**
      * @brief  Ensures the loop has stopped before it is destroyed.
-
      */
     virtual ~EventLoop();    
 
@@ -37,9 +36,9 @@ public:
     /**
      * @brief  Gets the event loop's context.
      *
-     * @return  The GMainContext* set when the EventLoop was constructed.
+     * @return  The GLib context set when the EventLoop was constructed.
      */
-    GMainContext* getContext();
+    SharedContextPtr getContext();
     
     /*
      * @brief  Runs the GLib main loop. 
@@ -53,7 +52,7 @@ public:
 
 private:
     /* GLib thread/event loop context object. */
-    const ContextPtr context;
+    SharedContextPtr context;
 
     /* The GLib event loop managed by this object. */
     const LoopPtr eventLoop;
