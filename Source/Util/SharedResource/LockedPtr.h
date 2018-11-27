@@ -41,8 +41,7 @@ public:
      */
     ResourceType* operator->() const
     {
-        return static_cast<ResourceType*>
-            (this->LockedInstancePtr::operator->());
+        return static_cast<ResourceType*>(getInstance());
     }
 };
 
