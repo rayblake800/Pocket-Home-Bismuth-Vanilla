@@ -37,6 +37,12 @@ namespace GLib
     class ThreadResource;
 
     /**
+     * @brief  Schedules functions to run on a ThreadResource's EventLoop,
+     *         selected using its GMainContext.
+     */
+    class ContextCaller;
+
+    /**
      * @brief  Safely accesses a GLib event loop thread resource.
      *
      * @see  GLib/ThreadHandler.h
@@ -59,18 +65,21 @@ namespace GLib
     class DBusProxy;
 
     /**
-     * @brief  Schedules functions to run on a ThreadResource's EventLoop,
-     *         selected using its GMainContext.
-     */
-    class ContextCaller;
-
-    /**
      * @brief  Creates a GLib ThreadResource to use exclusively for DBus 
      *         signals.
      *
      * @see  GLib/DBus/DBusThread.h
      */
     class DBusThread;
+
+    /**
+     * @brief  Manages GVariant* values, fixed, strongly typed data values with
+     *         many possible types. These are used to send and receive data over
+     *         DBus
+     *
+     * @see  GLib/Variant/Variant.h
+     */
+    class Variant;
 
     /**
      * @brief  A smart pointer class used to temporarily hold gpointer values,

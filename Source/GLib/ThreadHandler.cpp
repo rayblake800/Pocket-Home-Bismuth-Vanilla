@@ -1,5 +1,5 @@
-#include "Source/GLib/ThreadResource.h"
-#include "Source/GLib/ThreadHandler.h"
+#include "GLib/ThreadResource.h"
+#include "GLib/ThreadHandler.h"
 
 /*
  * Permanently connects the ThreadHandler to a single thread resource on 
