@@ -1,33 +1,33 @@
 #include "GLib/SmartPointers/ObjectPtr.h"
-#include "NMPPActiveConnection.h"
+#include "ActiveConnection.h"
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMActiveConnection*> NMActiveConnectionPtr;
 typedef GLib::ObjectPtr<NMObject*> NMObjectPtr;
 
 /*
- * Creates a NMPPActiveConnection sharing a GObject with an existing
- * NMPPActiveConnection.
+ * Creates a ActiveConnection sharing a GObject with an existing
+ * ActiveConnection.
  */
-NMPPActiveConnection::NMPPActiveConnection(const NMPPActiveConnection& toCopy) :
+LibNM::ActiveConnection::ActiveConnection(const ActiveConnection& toCopy) :
 GLib::Object(toCopy, NM_TYPE_ACTIVE_CONNECTION) { }
  
 /*
- * Creates a NMPPActiveConnection to contain a NMActiveConnection object.
+ * Creates a ActiveConnection to contain a NMActiveConnection object.
  */
-NMPPActiveConnection::NMPPActiveConnection(NMActiveConnection* toAssign) :
+LibNM::ActiveConnection::ActiveConnection(NMActiveConnection* toAssign) :
 GLib::Object(G_OBJECT(toAssign), NM_TYPE_ACTIVE_CONNECTION) { }
     
 /**
- * Creates a null NMPPActiveConnection.
+ * Creates a null ActiveConnection.
  */
-NMPPActiveConnection::NMPPActiveConnection() :
+LibNM::ActiveConnection::ActiveConnection() :
 GLib::Object(NM_TYPE_ACTIVE_CONNECTION) { }
 
 /*
  * Get the connection path stored by this object.
  */
-const char* NMPPActiveConnection::getPath() const
+const char* LibNM::ActiveConnection::getPath() const
 {
     const char* path = "";
     NMObjectPtr connection(NM_OBJECT(getGObject()));
@@ -45,7 +45,7 @@ const char* NMPPActiveConnection::getPath() const
 /*
  * Gets the path of the access point used to activate this connection.
  */
-const char* NMPPActiveConnection::getAccessPointPath() const
+const char* LibNM::ActiveConnection::getAccessPointPath() const
 {
     const char* path = "";
     NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
@@ -63,8 +63,8 @@ const char* NMPPActiveConnection::getAccessPointPath() const
 /*
  * Checks if an access point object is linked to this active connection.
  */
-bool NMPPActiveConnection::isConnectedAccessPoint
-(const NMPPAccessPoint& accessPoint) const
+bool LibNM::ActiveConnection::isConnectedAccessPoint
+(const AccessPoint& accessPoint) const
 {
     if(isNull() || accessPoint.isNull())
     {
@@ -78,7 +78,7 @@ bool NMPPActiveConnection::isConnectedAccessPoint
 /*
  * Get a unique ID string for this connection.
  */
-const char* NMPPActiveConnection::getUUID() const
+const char* LibNM::ActiveConnection::getUUID() const
 {
     const char* uuid = "";
     NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
@@ -92,7 +92,7 @@ const char* NMPPActiveConnection::getUUID() const
 /*
  * Get the connection's NetworkManager ID string.
  */
-const char* NMPPActiveConnection::getID() const
+const char* LibNM::ActiveConnection::getID() const
 {
     const char* conId = "";
     NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
@@ -106,7 +106,7 @@ const char* NMPPActiveConnection::getID() const
 /*
  * Get this object's active connection state.
  */
-NMActiveConnectionState NMPPActiveConnection::getConnectionState() const
+NMActiveConnectionState LibNM::ActiveConnection::getConnectionState() const
 {
     NMActiveConnectionState state = NM_ACTIVE_CONNECTION_STATE_UNKNOWN;
     NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));

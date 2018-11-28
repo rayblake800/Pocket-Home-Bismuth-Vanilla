@@ -1,37 +1,38 @@
 #pragma once
 #include <nm-connection.h>
+#include "LibNM/LibNM.h"
 #include "GLib/Object.h"
 
 /**
- * @file NMPPConnection.h
+ * @file LibNM/Connection.h
  * 
  * @brief A RAII container and C++ interface for LibNM NMConnection objects.
  */
 
-class NMPPConnection : public GLib::Object
+class LibNM::Connection : public GLib::Object
 {
 public:
     /**
-     * Creates a NMPPConnection sharing a GObject with an existing
-     * NMPPConnection.
+     * Creates a Connection sharing a GObject with an existing
+     * Connection.
      * 
      * @toCopy  An existing connection object.
      */
-    NMPPConnection(const NMPPConnection& toCopy);
+    Connection(const Connection& toCopy);
     
     /**
-     * Creates a NMPPConnection to contain a NMConnection object.
+     * Creates a Connection to contain a NMConnection object.
      * 
-     * @toAssign  A valid NMConnection for this NMPPConnection to hold.
+     * @toAssign  A valid NMConnection for this Connection to hold.
      */
-    NMPPConnection(NMConnection* toAssign);
+    Connection(NMConnection* toAssign);
     
     /**
-     * Creates a null NMPPConnection.
+     * Creates a null Connection.
      */
-    NMPPConnection();
+    Connection();
     
-    virtual ~NMPPConnection() { }
+    virtual ~Connection() { }
     
     /**
      * Checks if this connection object and another could be describing the 
@@ -42,7 +43,7 @@ public:
      * @return  true iff this connection object and rhs could be describing the
      *          same network connection.
      */
-    bool connectionMatches(const NMPPConnection& rhs) const;
+    bool connectionMatches(const Connection& rhs) const;
     
     /**
      * Add a new connection setting to this connection.  If the connection is

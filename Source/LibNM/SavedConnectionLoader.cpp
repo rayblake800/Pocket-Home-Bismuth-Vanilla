@@ -1,22 +1,20 @@
-#include "SavedConnections.h"
+#include "SavedConnectionLoader.h"
 
+const constexpr char* busName = "org.freedesktop.NetworkManager";
+const constexpr char* path = "/org/freedesktop/NetworkManager/Settings";
+const constexpr char* interface = "org.freedesktop.NetworkManager.Settings";
 
-#define BUS_NAME "org.freedesktop.NetworkManager"
-#define PATH "/org/freedesktop/NetworkManager/Settings"
-#define INTERFACE "org.freedesktop.NetworkManager.Settings"
+const constexpr char* listConnectionMethod = "ListConnections";
 
-//methods
-#define LIST_CONNECTIONS "ListConnections"
-
-SavedConnections::SavedConnections() :
-GLib::DBusProxy(BUS_NAME, PATH, INTERFACE) 
+LibNM::SavedConnectionLoader::SavedConnectionLoader() :
+GLib::DBusProxy(busName, path, interface) 
 { 
     juce::StringArray paths = getConnectionPaths();
     for(const juce::String& path : paths)
     {
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }
-    DBG("SavedConnections::" << __func__  << ": Found "
+    DBG("SavedConnectionLoader::" << __func__  << ": Found "
             << connectionList.size() << " connections.");
 }
 
@@ -24,7 +22,8 @@ GLib::DBusProxy(BUS_NAME, PATH, INTERFACE)
  * Reads all connection paths from NetworkManager, and returns all the wifi
  * connections as SavedConnection objects.
  */
-juce::Array<SavedConnection> SavedConnections::getWifiConnections() const
+juce::Array<LibNM::SavedConnection> 
+LibNM::SavedConnectionLoader::getWifiConnections() const
 {
     juce::Array<SavedConnection> connections;
     for(const SavedConnection& con : connectionList)
@@ -36,12 +35,11 @@ juce::Array<SavedConnection> SavedConnections::getWifiConnections() const
     }
     return connections;
 }
-
     
 /*
  * Checks saved connection paths to see if one exists at the given path.
  */
-bool SavedConnections::connectionExists
+bool LibNM::SavedConnectionLoader::connectionExists
 (const juce::String& connectionPath) const
 {
     return connectionPaths.contains(connectionPath);
@@ -52,12 +50,12 @@ bool SavedConnections::connectionExists
  * already loaded, the saved connection list will be updated in case the
  * requested connection was recently added.
  */
-SavedConnection SavedConnections::getConnection
+LibNM::SavedConnection LibNM::SavedConnectionLoader::getConnection
 (const juce::String& connectionPath)
 {
     if(!connectionExists(connectionPath))
     {
-        updateSavedConnections();
+        updateSavedConnectionLoader();
     }
     if(connectionExists(connectionPath))
     {
@@ -77,10 +75,11 @@ SavedConnection SavedConnections::getConnection
  * Finds all saved connections that are compatible with a given wifi
  * access point.
  */
-juce::Array<SavedConnection> SavedConnections::findConnectionsForAP
-(const NMPPAccessPoint& accessPoint) const
+juce::Array<LibNM::SavedConnection> 
+LibNM::SavedConnectionLoader::findConnectionsForAP
+(const AccessPoint& accessPoint) const
 {
-    using namespace juce;
+    using juce Array;
     Array<SavedConnection> compatible;
     if(!isNull() && !accessPoint.isNull())
     {
@@ -99,11 +98,12 @@ juce::Array<SavedConnection> SavedConnections::findConnectionsForAP
 /*
  * Get the list of all available connection paths
  */
-inline juce::StringArray SavedConnections::getConnectionPaths() const
+inline juce::StringArray 
+LibNM::SavedConnectionLoader::getConnectionPaths() const
 {
-    using namespace juce;
     using namespace GVariantConverter;
-    GVariant* conArrayVar = callMethod(LIST_CONNECTIONS);
+    using juce::StringArray;
+    GVariant* conArrayVar = callMethod(listConnectionMethod);
     if(conArrayVar != nullptr)
     {
         StringArray paths = getValue<StringArray>(conArrayVar);
@@ -118,11 +118,10 @@ inline juce::StringArray SavedConnections::getConnectionPaths() const
  * Check the list of saved connections against an updated connection path
  * list, adding any new connections and removing any deleted connections.
  */
-void SavedConnections::updateSavedConnections()
+void LibNM::SavedConnectionLoader::updateSavedConnectionLoader()
 {
-    using namespace juce;
     connectionPaths = getConnectionPaths();
-    Array<SavedConnection> toRemove;
+    juce::Array<SavedConnection> toRemove;
     for(const SavedConnection& saved : connectionList)
     {
         if(!connectionPaths.contains(saved.getPath()))
@@ -138,7 +137,7 @@ void SavedConnections::updateSavedConnections()
     {
         connectionList.removeAllInstancesOf(removing);
     }
-    for(const String& path : connectionPaths)
+    for(const juce::String& path : connectionPaths)
     {
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }

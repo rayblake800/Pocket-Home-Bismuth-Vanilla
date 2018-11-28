@@ -1,6 +1,6 @@
 #include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
-#include "NMPPClient.h"
+#include "Client.h"
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMClient*> NMClientPtr;
@@ -9,31 +9,31 @@ typedef GLib::ObjectPtr<NMDevice*> NMDevicePtr;
 typedef GLib::ObjectPtr<> ObjectPtr;
 
 /*
- * Create a NMPPClient holding a new NMClient object.
+ * Create a Client holding a new NMClient object.
  */
-NMPPClient::NMPPClient() : GLib::Object(NM_TYPE_CLIENT)
+LibNM::Client::Client() : GLib::Object(NM_TYPE_CLIENT)
 { 
     setGObject(G_OBJECT(nm_client_new()));
 }
 
 /*
- * Create a NMPPClient that shares a NMClient with another NMPPClient.
+ * Create a Client that shares a NMClient with another Client.
  */
-NMPPClient::NMPPClient(const NMPPClient& toCopy) : 
+LibNM::Client::Client(const Client& toCopy) : 
 GLib::Object(toCopy, NM_TYPE_CLIENT) { }
  
 /**
- * Create a NMPPClient holding an existing NMClient object.
+ * Create a Client holding an existing NMClient object.
  */
-NMPPClient::NMPPClient(NMClient* toAssign) :
+LibNM::Client::Client(NMClient* toAssign) :
 GLib::Object(G_OBJECT(toAssign), NM_TYPE_CLIENT) { }
 
 /*
  * Get all wifi devices from Network Manager.
  */
-juce::Array<NMPPDeviceWifi> NMPPClient::getWifiDevices() const
+juce::Array<LibNM::DeviceWifi> LibNM::Client::getWifiDevices() const
 { 
-    juce::Array<NMPPDeviceWifi> devices;
+    juce::Array<DeviceWifi> devices;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
     {
@@ -44,7 +44,7 @@ juce::Array<NMPPDeviceWifi> NMPPClient::getWifiDevices() const
             if(dev != nullptr && NM_IS_DEVICE_WIFI(dev))
             {
                 g_object_ref(G_OBJECT(dev));
-                devices.add(NMPPDeviceWifi(NM_DEVICE_WIFI(dev)));
+                devices.add(DeviceWifi(NM_DEVICE_WIFI(dev)));
             }
         }  
     }
@@ -54,9 +54,10 @@ juce::Array<NMPPDeviceWifi> NMPPClient::getWifiDevices() const
 /*
  * Gets a specific wifi device using its interface name.
  */
-NMPPDeviceWifi NMPPClient::getWifiDeviceByIface(const char* interface) const
+LibNM::DeviceWifi 
+LibNM::Client::getWifiDeviceByIface(const char* interface) const
 { 
-    NMPPDeviceWifi wifiDevice;
+    DeviceWifi wifiDevice;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
     {
@@ -73,9 +74,9 @@ NMPPDeviceWifi NMPPClient::getWifiDeviceByIface(const char* interface) const
 /*
  * Gets a specific wifi device using its DBus path.
  */
-NMPPDeviceWifi NMPPClient::getWifiDeviceByPath(const char* path) const
+LibNM::DeviceWifi LibNM::Client::getWifiDeviceByPath(const char* path) const
 { 
-    NMPPDeviceWifi wifiDevice;
+    DeviceWifi wifiDevice;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
     {
@@ -92,9 +93,9 @@ NMPPDeviceWifi NMPPClient::getWifiDeviceByPath(const char* path) const
 /*
  * Gets the list of all active connections known to the network manager.
  */
-juce::Array<NMPPActiveConnection> NMPPClient::getActiveConnections() const
+juce::Array<LibNM::ActiveConnection> LibNM::Client::getActiveConnections() const
 { 
-    juce::Array<NMPPActiveConnection> connections;
+    juce::Array<ActiveConnection> connections;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
     {
@@ -105,7 +106,7 @@ juce::Array<NMPPActiveConnection> NMPPClient::getActiveConnections() const
             if(con != nullptr && NM_IS_ACTIVE_CONNECTION(con))
             {
                 g_object_ref(G_OBJECT(con));
-                connections.add(NMPPActiveConnection(con));
+                connections.add(ActiveConnection(con));
             }
         }
     }
@@ -115,9 +116,9 @@ juce::Array<NMPPActiveConnection> NMPPClient::getActiveConnections() const
 /*
  * Gets the primary active network connection.
  */
-NMPPActiveConnection NMPPClient::getPrimaryConnection() const
+LibNM::ActiveConnection LibNM::Client::getPrimaryConnection() const
 { 
-    NMPPActiveConnection primary;
+    ActiveConnection primary;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
     {
@@ -134,9 +135,9 @@ NMPPActiveConnection NMPPClient::getPrimaryConnection() const
 /*
  * Gets the connection being activated by the network manager.
  */
-NMPPActiveConnection NMPPClient::getActivatingConnection() const
+LibNM::ActiveConnection LibNM::Client::getActivatingConnection() const
 { 
-    NMPPActiveConnection activating;
+    ActiveConnection activating;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
     {
@@ -154,7 +155,7 @@ NMPPActiveConnection NMPPClient::getActivatingConnection() const
 /*
  * Deactivates an active network connection.
  */
-void NMPPClient::deactivateConnection(NMPPActiveConnection& activeCon) 
+void LibNM::Client::deactivateConnection(ActiveConnection& activeCon) 
 { 
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -174,7 +175,7 @@ void NMPPClient::deactivateConnection(NMPPActiveConnection& activeCon)
 /*
  * Checks if wireless connections are currently enabled.
  */
-bool NMPPClient::wirelessEnabled() const
+bool LibNM::Client::wirelessEnabled() const
 { 
     bool enabled = false;
     NMClientPtr client(NM_CLIENT(getGObject()));
@@ -188,7 +189,7 @@ bool NMPPClient::wirelessEnabled() const
 /*
  * Sets whether wireless connections are enabled.
  */
-void NMPPClient::setWirelessEnabled(bool enabled) 
+void LibNM::Client::setWirelessEnabled(bool enabled) 
 { 
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -202,21 +203,21 @@ void NMPPClient::setWirelessEnabled(bool enabled)
  * connection, used to create a call to openingConnection or to 
  * openingConnectionFailed.
  */
-void NMPPClient::ConnectionHandler::activateCallback(NMClient* client,
+void LibNM::Client::ConnectionHandler::activateCallback(NMClient* client,
         NMActiveConnection* connection,
         GError* error,
-        NMPPClient::ConnectionHandler* handler) 
+        Client::ConnectionHandler* handler) 
 {
     if(error != nullptr)
     {
         handler->openingConnectionFailed(
-                NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), error,
+                ActiveConnection(NM_ACTIVE_CONNECTION(connection)), error,
                 false);
     }
     else
     {
         handler->openingConnection(
-                NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), false);
+                ActiveConnection(NM_ACTIVE_CONNECTION(connection)), false);
     } 
 }
 
@@ -225,22 +226,22 @@ void NMPPClient::ConnectionHandler::activateCallback(NMClient* client,
  * a new connection, used to create a call to openingConnection or 
  * openingConnectionFailed.
  */
-void NMPPClient::ConnectionHandler::addActivateCallback(NMClient* client,
+void LibNM::Client::ConnectionHandler::addActivateCallback(NMClient* client,
         NMConnection* connection,
         const char* path,
         GError* error,
-        NMPPClient::ConnectionHandler* handler) 
+        Client::ConnectionHandler* handler) 
 {
     if(error != nullptr)
     {
         handler->openingConnectionFailed
-                (NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), error,
+                (ActiveConnection(NM_ACTIVE_CONNECTION(connection)), error,
                 true);
     }
     else
     {
         handler->openingConnection    
-                (NMPPActiveConnection(NM_ACTIVE_CONNECTION(connection)), true);
+                (ActiveConnection(NM_ACTIVE_CONNECTION(connection)), true);
     } 
 }
 
@@ -249,11 +250,11 @@ void NMPPClient::ConnectionHandler::addActivateCallback(NMClient* client,
  * Activates a wifi network connection, attempting to set it as the primary
  * network connection.
  */ 
-void NMPPClient::activateConnection(
-        const NMPPConnection& connection,
-        const NMPPDeviceWifi& wifiDevice,
-        const NMPPAccessPoint& accessPoint, 
-        NMPPClient::ConnectionHandler* handler,
+void LibNM::Client::activateConnection(
+        const Connection& connection,
+        const DeviceWifi& wifiDevice,
+        const AccessPoint& accessPoint, 
+        Client::ConnectionHandler* handler,
         bool usedSaved)
 { 
     //determine if this is a new connection attempt
@@ -272,7 +273,7 @@ void NMPPClient::activateConnection(
         {
             if(isNew)
             {
-                DBG("NMPPClient::activateConnection"
+                DBG("Client::activateConnection"
                         << ": adding new connection.");
                 nm_client_add_and_activate_connection(client,
                     connectionObject,
@@ -284,7 +285,7 @@ void NMPPClient::activateConnection(
             }
             else
             {
-                DBG("NMPPClient::activateConnection"
+                DBG("Client::activateConnection"
                         << ": activating saved connection.");
                 nm_client_activate_connection(client,
                         connectionObject,
@@ -301,7 +302,7 @@ void NMPPClient::activateConnection(
 /*
  * Subscribe to all relevant signals from a single GObject signal source.
  */
-void NMPPClient::Listener::connectAllSignals(GObject* source)
+void LibNM::Client::Listener::connectAllSignals(GObject* source)
 {
     if(source != nullptr && NM_IS_CLIENT(source))
     {
@@ -313,14 +314,14 @@ void NMPPClient::Listener::connectAllSignals(GObject* source)
  * Converts generic propertyChanged calls to class-specific 
  * wirelessStateChange calls.
  */
-void NMPPClient::Listener::propertyChanged
+void LibNM::Client::Listener::propertyChanged
 (GObject* source, juce::String property)
 { 
     if(source != nullptr && NM_IS_CLIENT(source) 
             && property == NM_CLIENT_WIRELESS_ENABLED)
     {
         g_object_ref(source);
-        NMPPClient client(NM_CLIENT(source));
+        Client client(NM_CLIENT(source));
         bool enabled = client.wirelessEnabled();
         wirelessStateChange(enabled);
     }
@@ -329,7 +330,7 @@ void NMPPClient::Listener::propertyChanged
 /*
  * Adds a listener to this network manager client.
  */
-void NMPPClient::addListener(Listener& listener)
+void LibNM::Client::addListener(Listener& listener)
 {
     ObjectPtr source(getGObject());
     if(source != nullptr)

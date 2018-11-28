@@ -1,32 +1,32 @@
+#include "LibNM/Connection.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
-#include "NMPPConnection.h"
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
 
 /*
- * Create a NMPPConnection sharing a GObject with an existing
- * NMPPConnection.
+ * Create a Connection sharing a GObject with an existing
+ * Connection.
  */
-NMPPConnection::NMPPConnection(const NMPPConnection& toCopy) :
+LibNM::Connection::Connection(const Connection& toCopy) :
 GLib::Object(toCopy, NM_TYPE_CONNECTION) { }
 
 /**
- * Create a NMPPConnection to contain a NMConnection object.
+ * Create a Connection to contain a NMConnection object.
  */
-NMPPConnection::NMPPConnection(NMConnection* toAssign) :
+LibNM::Connection::Connection(NMConnection* toAssign) :
 GLib::Object(G_OBJECT(toAssign), NM_TYPE_CONNECTION) { }
     
 /*
- * Creates a null NMPPConnection.
+ * Creates a null Connection.
  */
-NMPPConnection::NMPPConnection() : GLib::Object(NM_TYPE_CONNECTION) { }
+LibNM::Connection::Connection() : GLib::Object(NM_TYPE_CONNECTION) { }
 
 /**
  * Check if this connection object and another could be describing the 
  * same network connection.
  */
-bool NMPPConnection::connectionMatches(const NMPPConnection& rhs) const
+bool LibNM::Connection::connectionMatches(const Connection& rhs) const
 {
     NMConnectionPtr self(NM_CONNECTION(getGObject()));
     NMConnectionPtr toCompare(NM_CONNECTION(rhs.getGObject()));
@@ -47,7 +47,7 @@ bool NMPPConnection::connectionMatches(const NMPPConnection& rhs) const
  * Add a new connection setting to this connection.  If the connection is
  * null, this will create a new NMConnection object.
  */
-void NMPPConnection::addSetting(NMSetting* setting)
+void LibNM::Connection::addSetting(NMSetting* setting)
 {
     if(isNull())
     {
@@ -61,7 +61,7 @@ void NMPPConnection::addSetting(NMSetting* setting)
 /*
  * Remove one of the connection settings from this connection.
  */
-void NMPPConnection::removeSetting(GType settingType)
+void LibNM::Connection::removeSetting(GType settingType)
 {
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -75,7 +75,7 @@ void NMPPConnection::removeSetting(GType settingType)
  * connection is null, this will initialize it with a new NMConnection
  * object.
  */
-void NMPPConnection::addWifiSettings(const GByteArray* ssid, bool isHidden)
+void LibNM::Connection::addWifiSettings(const GByteArray* ssid, bool isHidden)
 {
     if(ssid != nullptr)
     {   
@@ -94,7 +94,7 @@ void NMPPConnection::addWifiSettings(const GByteArray* ssid, bool isHidden)
 /*
  * Attempts to add WPA security settings to this connection.
  */
-bool NMPPConnection::addWPASettings(const juce::String& psk)
+bool LibNM::Connection::addWPASettings(const juce::String& psk)
 {
     if(psk.length() < 8)
     {
@@ -114,7 +114,7 @@ bool NMPPConnection::addWPASettings(const juce::String& psk)
 /*
  * Attempts to add WEP security settings to this connection.
  */
-bool NMPPConnection::addWEPSettings(const juce::String& psk)
+bool LibNM::Connection::addWEPSettings(const juce::String& psk)
 {
     const char* keyType = nullptr;
     if (psk.length() == 10 || psk.length() == 26)
@@ -128,7 +128,7 @@ bool NMPPConnection::addWEPSettings(const juce::String& psk)
     }
     else
     {
-        DBG("NMPPConnection::" << __func__
+        DBG("Connection::" << __func__
                 << ": Invalid WEP Key type, "
                 << "psk.length() = " << psk.length()
                 << ", not in [5,10,13,26]");
@@ -150,7 +150,7 @@ bool NMPPConnection::addWEPSettings(const juce::String& psk)
 /*
  * Get one of this connection's setting objects.
  */
-NMSetting* NMPPConnection::getSetting(GType settingType) const
+NMSetting* LibNM::Connection::getSetting(GType settingType) const
 {
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -163,7 +163,7 @@ NMSetting* NMPPConnection::getSetting(GType settingType) const
 /*
  * Check the validity of this connection.
  */
-bool NMPPConnection::verify(GError** error) const
+bool LibNM::Connection::verify(GError** error) const
 {
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -177,7 +177,7 @@ bool NMPPConnection::verify(GError** error) const
  * Set the connection path stored by this object.  If the connection is null,
  * this will create a new NMConnection object.
  */
-void NMPPConnection::setPath(const char* path)
+void LibNM::Connection::setPath(const char* path)
 {
     if(isNull())
     {
@@ -193,7 +193,7 @@ void NMPPConnection::setPath(const char* path)
 /*
  * Get the connection path stored by this object.
  */
-const char* NMPPConnection::getPath() const
+const char* LibNM::Connection::getPath() const
 {
     const char* path = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
@@ -211,7 +211,7 @@ const char* NMPPConnection::getPath() const
 /*
  * Get a unique ID string for this connection.
  */
-const char* NMPPConnection::getUUID() const
+const char* LibNM::Connection::getUUID() const
 {
     const char* uuid = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
@@ -229,7 +229,7 @@ const char* NMPPConnection::getUUID() const
 /*
  * Get the connection's NetworkManager ID string.
  */
-const char* NMPPConnection::getID() const
+const char* LibNM::Connection::getID() const
 {
     const char* conId = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
@@ -249,7 +249,7 @@ const char* NMPPConnection::getID() const
 /*
  * Prints all stored connection data to stdout.
  */
-void NMPPConnection::printDebugOutput() const
+void LibNM::Connection::printDebugOutput() const
 {
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)

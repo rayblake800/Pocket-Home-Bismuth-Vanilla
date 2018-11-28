@@ -1,7 +1,7 @@
+#include "LibNM/AccessPoint.h"
 #include <nm-utils.h>
 #include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
-#include "NMPPAccessPoint.h"
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMAccessPoint*> NMAccessPointPtr;
@@ -10,28 +10,28 @@ typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
 typedef GLib::ObjectPtr<> ObjectPtr;
 
 /*
- * Create a NMPPAccessPoint sharing a GObject with an existing
- * NMPPAccessPoint.
+ * Create a AccessPoint sharing a GObject with an existing
+ * AccessPoint.
  */
-NMPPAccessPoint::NMPPAccessPoint(const NMPPAccessPoint& toCopy) :
+LibNM::AccessPoint::AccessPoint(const AccessPoint& toCopy) :
 GLib::Object(toCopy, NM_TYPE_ACCESS_POINT) { }
 
 /*
- * Create a NMPPAccessPoint to contain a NMAccessPoint object.
+ * Create a AccessPoint to contain a NMAccessPoint object.
  */
-NMPPAccessPoint::NMPPAccessPoint(NMAccessPoint* toAssign) :
+LibNM::AccessPoint::AccessPoint(NMAccessPoint* toAssign) :
 GLib::Object(G_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) { }
     
 /**
- * Creates a null NMPPAccessPoint.
+ * Creates a null AccessPoint.
  */
-NMPPAccessPoint::NMPPAccessPoint() : GLib::Object(NM_TYPE_ACCESS_POINT) { }
+LibNM::AccessPoint::AccessPoint() : GLib::Object(NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Gets the access point SSID as a byte array from the access point.  This 
  * may contain unprintable characters, and might not be null-terminated.
  */
-const GByteArray* NMPPAccessPoint::getSSID() const
+const GByteArray* LibNM::AccessPoint::getSSID() const
 {
     const GByteArray* ssid = nullptr;
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
@@ -47,7 +47,7 @@ const GByteArray* NMPPAccessPoint::getSSID() const
  * This value should only be used for displaying the access point name to
  * the user, or for debug output.
  */
-juce::String NMPPAccessPoint::getSSIDText() const
+juce::String LibNM::AccessPoint::getSSIDText() const
 {
     juce::String ssidText;
     const GByteArray* ssid = getSSID();
@@ -67,7 +67,7 @@ juce::String NMPPAccessPoint::getSSIDText() const
 /*
  * Gets the MAC address of the wifi access point.
  */
-const char* NMPPAccessPoint::getBSSID() const
+const char* LibNM::AccessPoint::getBSSID() const
 {
     const char* bssid = "";
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
@@ -81,7 +81,7 @@ const char* NMPPAccessPoint::getBSSID() const
 /*
  * Gets the DBus path of the wifi access point.
  */
-const char* NMPPAccessPoint::getPath() const
+const char* LibNM::AccessPoint::getPath() const
 {
     const char* path = "";
     NMObjectPtr accessPoint(NM_OBJECT(getGObject()));
@@ -100,7 +100,7 @@ const char* NMPPAccessPoint::getPath() const
  * Gets the wifi access point frequency in (TODO: what format? MHz? 
  * documentation is unclear, do some tests and figure it out.)
  */
-unsigned int NMPPAccessPoint::getFrequency() const
+unsigned int LibNM::AccessPoint::getFrequency() const
 {
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -113,7 +113,7 @@ unsigned int NMPPAccessPoint::getFrequency() const
 /*
  * Gets the access point's maximum data transfer bit rate.
  */
-unsigned int NMPPAccessPoint::getMaxBitrate() const
+unsigned int LibNM::AccessPoint::getMaxBitrate() const
 {
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -126,7 +126,7 @@ unsigned int NMPPAccessPoint::getMaxBitrate() const
 /*
  * Gets the signal strength of the wifi access point.
  */
-unsigned int NMPPAccessPoint::getSignalStrength() const
+unsigned int LibNM::AccessPoint::getSignalStrength() const
 {
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -140,7 +140,7 @@ unsigned int NMPPAccessPoint::getSignalStrength() const
  * Check the settings of a connection against the properties of this access
  * point to see if the connection could be activated with this access point.
  */
-bool NMPPAccessPoint::isValidConnection(const NMPPConnection& connection) const
+bool LibNM::AccessPoint::isValidConnection(const Connection& connection) const
 {
     NMConnectionPtr nmConnection(NM_CONNECTION(getOtherGObject(connection)));
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
@@ -154,7 +154,7 @@ bool NMPPAccessPoint::isValidConnection(const NMPPConnection& connection) const
 /*
  * Gets the device mode of this access point.
  */
-NM80211Mode NMPPAccessPoint::getMode() const
+NM80211Mode LibNM::AccessPoint::getMode() const
 {
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -167,7 +167,7 @@ NM80211Mode NMPPAccessPoint::getMode() const
 /*
  * Get access point flags for this access point.
  */
-NM80211ApFlags NMPPAccessPoint::getFlags() const
+NM80211ApFlags LibNM::AccessPoint::getFlags() const
 {
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -180,7 +180,7 @@ NM80211ApFlags NMPPAccessPoint::getFlags() const
 /*
  * Get WPA security flags for this access point.
  */
-NM80211ApSecurityFlags NMPPAccessPoint::getWPAFlags() const
+NM80211ApSecurityFlags LibNM::AccessPoint::getWPAFlags() const
 {
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -193,7 +193,7 @@ NM80211ApSecurityFlags NMPPAccessPoint::getWPAFlags() const
 /*
  * Get RSN security flags for this access point.
  */
-NM80211ApSecurityFlags NMPPAccessPoint::getRSNFlags() const
+NM80211ApSecurityFlags LibNM::AccessPoint::getRSNFlags() const
 {
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -206,7 +206,7 @@ NM80211ApSecurityFlags NMPPAccessPoint::getRSNFlags() const
 /*
  * Subscribe to signal strength signals from a single NMAccessPoint.
  */
-void NMPPAccessPoint::Listener::connectAllSignals(GObject* source)
+void LibNM::AccessPoint::Listener::connectAllSignals(GObject* source)
 {
     if(source != nullptr && NM_IS_ACCESS_POINT(source))
     {
@@ -215,16 +215,16 @@ void NMPPAccessPoint::Listener::connectAllSignals(GObject* source)
 }
 
 /*
- * Build NMPPAccessPoint::Listener::signalStrengthChanged() calls from generic 
+ * Build AccessPoint::Listener::signalStrengthChanged() calls from generic 
  * property change notifications.
  */
-void NMPPAccessPoint::Listener::propertyChanged
+void LibNM::AccessPoint::Listener::propertyChanged
 (GObject* source, juce::String property) 
 { 
     if(property == NM_ACCESS_POINT_STRENGTH && NM_IS_ACCESS_POINT(source))
     {
         g_object_ref(source);
-        NMPPAccessPoint tempAP(NM_ACCESS_POINT(source));
+        AccessPoint tempAP(NM_ACCESS_POINT(source));
         unsigned int strength = tempAP.getSignalStrength();
         signalStrengthChanged(tempAP, strength);
     }
@@ -233,7 +233,7 @@ void NMPPAccessPoint::Listener::propertyChanged
 /**
  * Add a new listener to receive updates from this access point.
  */
-void NMPPAccessPoint::addListener(NMPPAccessPoint::Listener& listener)
+void LibNM::AccessPoint::addListener(AccessPoint::Listener& listener)
 {
     ObjectPtr apObject(getGObject());
     if(apObject != nullptr)

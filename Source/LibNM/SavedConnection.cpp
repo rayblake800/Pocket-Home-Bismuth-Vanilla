@@ -1,18 +1,18 @@
 #include <nm-setting-connection.h>
 #include <nm-setting-wireless.h>
 #include <nm-setting-wireless-security.h>
-#include "SavedConnection.h"
+#include "LibNM/SavedConnection.h"
 
 /*
  * Create an empty object with no linked connection.
  */
-SavedConnection::SavedConnection() :
+LibNM::SavedConnection::SavedConnection() :
 GLib::DBusProxy(nullptr, nullptr, nullptr) { } 
 
 /*
  * Creates an object from an existing DBus Connection proxy.
  */
-SavedConnection::SavedConnection(const SavedConnection& toCopy) :
+LibNM::SavedConnection::SavedConnection(const SavedConnection& toCopy) :
 GLib::DBusProxy(nullptr, nullptr, nullptr),
 path(toCopy.path),
 settingNames(toCopy.settingNames),
@@ -24,7 +24,7 @@ nmConnection(toCopy.nmConnection)
 /*
  * Initializes a SavedConnection from a DBus connection path.
  */ 
-SavedConnection::SavedConnection(const char * path) :
+LibNM::SavedConnection::SavedConnection(const char * path) :
 GLib::DBusProxy(busName, path, interfaceName),
 path(path) 
 { 
@@ -37,7 +37,7 @@ path(path)
 /**
  * Gets the connection's DBus path.
  */
-const juce::String& SavedConnection::getPath() const
+const juce::String& LibNM::SavedConnection::getPath() const
 {
     return path;
 }
@@ -46,7 +46,7 @@ const juce::String& SavedConnection::getPath() const
 /*
  * Checks if this connection is a wifi connection.
  */
-bool SavedConnection::isWifiConnection() const
+bool LibNM::SavedConnection::isWifiConnection() const
 {
     if(isNull())
     {
@@ -59,7 +59,7 @@ bool SavedConnection::isWifiConnection() const
  * Gets the NMConnection object generated from this connection's data.
  * Only wifi connections are supported, others are not guaranteed to work.
  */
-NMPPConnection SavedConnection::getNMConnection() const
+NMPPConnection LibNM::SavedConnection::getNMConnection() const
 {
     return nmConnection;
 }
@@ -67,7 +67,7 @@ NMPPConnection SavedConnection::getNMConnection() const
 /*
  * Gets the last recorded time this saved connection was active.
  */
-juce::Time SavedConnection::lastConnectionTime() const
+juce::Time LibNM::SavedConnection::lastConnectionTime() const
 { 
     juce::Time lastTime;
     if(!isNull())
@@ -89,7 +89,7 @@ juce::Time SavedConnection::lastConnectionTime() const
 /*
  * Checks if the connection has a saved wireless security key.
  */
-bool SavedConnection::hasSavedKey() const
+bool LibNM::SavedConnection::hasSavedKey() const
 {
     if(isNull())
     {
@@ -152,7 +152,7 @@ bool SavedConnection::hasSavedKey() const
  * Deletes this connection from the list of saved connections.  This object
  * will be invalid after this method is called.
  */
-void SavedConnection::deleteConnection()
+void LibNM::SavedConnection::deleteConnection()
 {
     if(!isNull())
     {
@@ -169,7 +169,7 @@ void SavedConnection::deleteConnection()
 /**
  * Compare SavedConnections using the connection path.
  */
-bool SavedConnection::operator==(const SavedConnection& rhs) const
+bool LibNM::SavedConnection::operator==(const SavedConnection& rhs) const
 {
     return path == rhs.path;
 }
@@ -177,7 +177,7 @@ bool SavedConnection::operator==(const SavedConnection& rhs) const
 /**
  * Compare SavedConnections with NMConnections using the connection path.
  */
-bool SavedConnection::operator==(NMConnection* rhs) const
+bool LibNM::SavedConnection::operator==(NMConnection* rhs) const
 {
     return path == juce::String(nm_connection_get_path(rhs));
 }
@@ -186,7 +186,7 @@ bool SavedConnection::operator==(NMConnection* rhs) const
  * Create a NMConnection object using this saved connection's data.
  * Only wifi connections are supported, others are not guaranteed to work.
  */
-void SavedConnection::createNMConnection()
+void LibNM::SavedConnection::createNMConnection()
 {
     if(isNull())
     {
@@ -288,7 +288,7 @@ void SavedConnection::createNMConnection()
 /*
  * Returns one of this connection's settings objects.
  */
-GVariant* SavedConnection::getSetting(const char* name) const
+GVariant* LibNM::SavedConnection::getSetting(const char* name) const
 {  
     if(isNull())
     {
@@ -309,7 +309,7 @@ GVariant* SavedConnection::getSetting(const char* name) const
  * Returns the value of a specific property for a specific settings
  * object
  */
-GVariant* SavedConnection::getSettingProp(const char* settingName,
+GVariant* LibNM::SavedConnection::getSettingProp(const char* settingName,
         const char* propName) const
 {  
     if(isNull())
@@ -331,7 +331,7 @@ GVariant* SavedConnection::getSettingProp(const char* settingName,
  * Returns the value of a specific property for a specific settings
  * object
  */
-GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
+GVariant* LibNM::SavedConnection::getSettingProp(GVariant* settingsObject,
         const char* propName) const
 {
     if(isNull())
@@ -346,7 +346,7 @@ GVariant* SavedConnection::getSettingProp(GVariant* settingsObject,
 /*
  * Checks if this connection has a particular setting type.
  */
-bool SavedConnection::hasSetting(const char* settingName) const
+bool LibNM::SavedConnection::hasSetting(const char* settingName) const
 {
     using namespace juce;
     if(isNull())
@@ -362,7 +362,7 @@ bool SavedConnection::hasSetting(const char* settingName) const
  * setting, in that case it's more effective to just get the setting object
  * and check if getSettingParam returns null.
  */
-bool SavedConnection::hasSettingProperty(const char* settingName,
+bool LibNM::SavedConnection::hasSettingProperty(const char* settingName,
         const char* propName) const
 {
     if(isNull())

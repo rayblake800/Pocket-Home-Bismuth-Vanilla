@@ -1,47 +1,48 @@
 #pragma once
 #include <nm-client.h>
-#include "NMPPConnection.h"
-#include "NMPPActiveConnection.h"
-#include "NMPPDeviceWifi.h"
+#include "LibNM/LibNM.h"
+#include "LibNM/Connection.h"
+#include "LibNM/ActiveConnection.h"
+#include "LibNM/DeviceWifi.h"
 #include "GLib/SignalHandler.h"
 #include "GLib/Object.h"
 
 /**
- * #file NMPPClient.h
+ * #file LibNM/Client.h
  * 
  * @brief A RAII container and C++ interface for the LibNM NMClient class.
  */
 
-class NMPPClient : public GLib::Object
+class LibNM::Client : public GLib::Object
 {
 public:
     /**
-     * Create a NMPPClient holding a new NMClient object.
+     * Create a Client holding a new NMClient object.
      */
-    NMPPClient();
+    Client();
     
     /**
-     * Create a NMPPClient that shares a NMClient with another NMPPClient.
+     * Create a Client that shares a NMClient with another Client.
      * 
      * @param toCopy  Holds the NMClient object that will be shared with the
-     *                new NMPPClient.
+     *                new Client.
      */
-    NMPPClient(const NMPPClient& toCopy);
+    Client(const Client& toCopy);
    
     /**
-     * Create a NMPPClient holding an existing NMClient object.
+     * Create a Client holding an existing NMClient object.
      *
-     * @param toAssign  The NMClient* represented by the new NMPPClient.
+     * @param toAssign  The NMClient* represented by the new Client.
      */
-    NMPPClient(NMClient* toAssign);
+    Client(NMClient* toAssign);
 
     /**
      * Get all wifi devices from Network Manager.
      * 
      * @return  All NMDevices found that are wifi devices, packaged into an
-     *          array of NMPPDeviceWifi objects.
+     *          array of DeviceWifi objects.
      */
-    juce::Array<NMPPDeviceWifi> getWifiDevices() const;
+    juce::Array<DeviceWifi> getWifiDevices() const;
     
     /**
      * Gets a specific wifi device using its interface name.
@@ -51,7 +52,7 @@ public:
      * @return  the requested wifi device, or a null object if no valid device
      *          is found.
      */
-    NMPPDeviceWifi getWifiDeviceByIface(const char* interface) const;
+    DeviceWifi getWifiDeviceByIface(const char* interface) const;
         
     /**
      * Gets a specific wifi device using its DBus path.
@@ -61,30 +62,30 @@ public:
      * @return  the requested wifi device, or a null object if no valid device
      *          is found.
      */
-    NMPPDeviceWifi getWifiDeviceByPath(const char* path) const;
+    DeviceWifi getWifiDeviceByPath(const char* path) const;
     
     /**
      * Gets the list of all active connections known to the network manager.
      * 
      * @return  an array of all active network connections.
      */
-    juce::Array<NMPPActiveConnection> getActiveConnections() const;
+    juce::Array<ActiveConnection> getActiveConnections() const;
     
     /**
      * Gets the primary active network connection.
      * 
-     * @return  an active NMPPConnection object, or a null object if there is no
+     * @return  an active Connection object, or a null object if there is no
      *          primary connection.
      */
-    NMPPActiveConnection getPrimaryConnection() const;
+    ActiveConnection getPrimaryConnection() const;
     
     /**
      * Gets the connection being activated by the network manager.
      * 
-     * @return  the activating connection as an active NMPPConnection object,
+     * @return  the activating connection as an active Connection object,
      *          or a null object if there is no activating connection.
      */
-    NMPPActiveConnection getActivatingConnection() const;
+    ActiveConnection getActivatingConnection() const;
     
     /**
      * Deactivates an active network connection.
@@ -92,7 +93,7 @@ public:
      * @param activeCon  The network connection to deactivate.  If this 
      *                   connection is not active, nothing will happen.
      */
-    void deactivateConnection(NMPPActiveConnection& activeCon);
+    void deactivateConnection(ActiveConnection& activeCon);
     
     /**
      * Checks if wireless connections are currently enabled.
@@ -118,7 +119,7 @@ public:
     class ConnectionHandler
     {
     public:
-        friend class NMPPClient;
+        friend class Client;
         ConnectionHandler() { }
         virtual ~ConnectionHandler() { }
         
@@ -135,7 +136,7 @@ public:
          *                    network manager, false if it was a known
          *                    connection that was re-activated.
          */
-        virtual void openingConnection(NMPPActiveConnection connection,
+        virtual void openingConnection(ActiveConnection connection,
                 bool isNew) = 0;
         
         /**
@@ -152,7 +153,7 @@ public:
          * @param isNew       True iff the connection was just added to the 
          *                    network manager. 
          */
-        virtual void openingConnectionFailed(NMPPActiveConnection connection, 
+        virtual void openingConnectionFailed(ActiveConnection connection, 
                 GError* error, bool isNew) = 0;
         
         /**
@@ -173,7 +174,7 @@ public:
         static void activateCallback(NMClient* client,
                 NMActiveConnection* connection,
                 GError* error,
-                NMPPClient::ConnectionHandler* handler);
+                Client::ConnectionHandler* handler);
         
         /**
          * The NMClientAddActivateFn called by LibNM when adding and activating
@@ -196,7 +197,7 @@ public:
                 NMConnection* connection,
                 const char* path,
                 GError* error,
-                NMPPClient::ConnectionHandler* handler);
+                Client::ConnectionHandler* handler);
     };
     
     /**
@@ -220,9 +221,9 @@ public:
      *                     will be created even if an existing one is found.  
      */
     void activateConnection(
-            const NMPPConnection& connection,
-            const NMPPDeviceWifi& wifiDevice,
-            const NMPPAccessPoint& accessPoint,
+            const Connection& connection,
+            const DeviceWifi& wifiDevice,
+            const AccessPoint& accessPoint,
             ConnectionHandler* handler,
             bool useSaved = true);
     
@@ -232,7 +233,7 @@ public:
     class Listener : public GLib::SignalHandler
     {
     public:
-        friend class NMPPClient;
+        friend class Client;
         Listener() { }
         
         virtual ~Listener() { }

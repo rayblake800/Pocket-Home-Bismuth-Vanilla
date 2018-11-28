@@ -1,45 +1,45 @@
 #pragma once
 #include <nm-access-point.h>
-#include "NMPPConnection.h"
+#include "LibNM/Connection.h"
 #include "GLib/Object.h"
-#include "SignalHandler.h"
+#include "GLib/SignalHandler.h"
 
 /**
- * @file NMPPAccessPoint
+ * @file LibNM/AccessPoint.h
  * 
  * @brief A RAII container and C++ interface for NMAccessPoint objects.
  * 
- * NMPPAccessPoint holds a LibNM object representing a wifi access point.  It
- * provides access to relevant access point data, and checks NMPPConnection 
+ * AccessPoint holds a LibNM object representing a wifi access point.  It
+ * provides access to relevant access point data, and checks Connection 
  * objects for compatibility with this access point.
  * 
- * It also provides the NMPPAccessPoint::Listener class as an interface for 
+ * It also provides the AccessPoint::Listener class as an interface for 
  * receiving access point signals. After they have been added, listeners will
  * receive updates if signal strength changes or the access point is removed. 
  */
 
-class NMPPAccessPoint : public GLib::Object
+class LibNM::AccessPoint : public GLib::Object
 {
 public:
     /**
-     * Creates a NMPPAccessPoint sharing a GObject with an existing
-     * NMPPAccessPoint.
+     * Creates a AccessPoint sharing a GObject with an existing
+     * AccessPoint.
      * 
      * @toCopy  An existing connection object.
      */
-    NMPPAccessPoint(const NMPPAccessPoint& toCopy);
+    AccessPoint(const AccessPoint& toCopy);
 
     /**
-     * Creates a NMPPAccessPoint to contain a NMAccessPoint object.
+     * Creates a AccessPoint to contain a NMAccessPoint object.
      * 
-     * @toAssign  A valid NMAccessPoint for this NMPPAccessPoint to hold.
+     * @toAssign  A valid NMAccessPoint for this AccessPoint to hold.
      */
-    NMPPAccessPoint(NMAccessPoint* toAssign);
+    AccessPoint(NMAccessPoint* toAssign);
     
     /**
-     * Creates a null NMPPAccessPoint.
+     * Creates a null AccessPoint.
      */
-    NMPPAccessPoint();
+    AccessPoint();
     
     /**
      * Gets the access point SSID as a byte array from the access point.  This 
@@ -109,7 +109,7 @@ public:
      * 
      * @return true  iff this access point and connection are compatible.
      */
-    bool isValidConnection(const NMPPConnection& connection) const;
+    bool isValidConnection(const Connection& connection) const;
     
    
     /**
@@ -156,7 +156,7 @@ public:
         virtual ~Listener() { }
         
     private:   
-        friend class NMPPAccessPoint;
+        friend class AccessPoint;
         
         /**
          * Subscribe to signal strength signals from a single NMAccessPoint.
@@ -173,7 +173,7 @@ public:
          * @param newStrength  The access point's new signal strength, ranging 
          *                     from zero to 100.
          */
-        virtual void signalStrengthChanged(NMPPAccessPoint& updatedAP,
+        virtual void signalStrengthChanged(AccessPoint& updatedAP,
                 unsigned int newStrength) = 0;
         
         /**

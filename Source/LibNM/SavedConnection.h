@@ -1,15 +1,16 @@
 #pragma once
 #include "JuceHeader.h"
-#include "NMPPConnection.h"
+#include "LibNM/LibNM.h"
+#include "LibNM/Connection.h"
 #include "GLib/DBus/DBusProxy.h"
 
 /**
- * @file SavedConnection.h
+ * @file LibNM/SavedConnection.h
  * 
  * @brief Controls a NetworkManager saved connection object over DBus. 
  */
 
-class SavedConnection : public GLib::DBusProxy
+class LibNM::SavedConnection : public GLib::DBusProxy
 {
 public:
     /**
@@ -49,13 +50,13 @@ public:
     bool isWifiConnection() const;
     
     /**
-     * Gets the NMPPConnection object generated from this connection's data.
+     * Gets the Connection object generated from this connection's data.
      * Only wifi connections are supported, others are not guaranteed to work.
      * 
-     * @return the NMPPConnection object for this connection, or nullptr if the
+     * @return the Connection object for this connection, or nullptr if the
      *         connection is invalid.
      */
-    NMPPConnection getNMConnection() const;
+    Connection getNMConnection() const;
     
     /**
      * Gets the last recorded time this saved connection was active.
@@ -99,7 +100,7 @@ public:
     
 private:
     /**
-     * Create a NMPPConnection object using this saved connection's data.
+     * Create a Connection object using this saved connection's data.
      * Only wifi connections are supported, others are not guaranteed to work.
      */
     void createNMConnection();
@@ -168,7 +169,7 @@ private:
      */
     bool hasSettingProperty(const char* settingName, const char* propName) const;
     
-    NMPPConnection nmConnection;
+    Connection nmConnection;
     juce::StringArray settingNames;
     juce::String path;
     

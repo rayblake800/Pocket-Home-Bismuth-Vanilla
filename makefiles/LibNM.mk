@@ -25,16 +25,16 @@ libNM : $(OBJECTS_NM)
 	@echo "Built LibNM module"
 
 $(NM_PREFIX)Client.o : \
-    $(NM_ROOT)/NMPPClient.cpp
+    $(NM_ROOT)/Client.cpp
 $(NM_PREFIX)Connection.o : \
-    $(NM_ROOT)/NMPPConnection.cpp
+    $(NM_ROOT)/Connection.cpp
 $(NM_PREFIX)ActiveConnection.o : \
-    $(NM_ROOT)/NMPPActiveConnection.cpp
+    $(NM_ROOT)/ActiveConnection.cpp
 $(NM_PREFIX)DeviceWifi.o : \
-    $(NM_ROOT)/NMPPDeviceWifi.cpp
+    $(NM_ROOT)/DeviceWifi.cpp
 $(NM_PREFIX)AccessPoint.o : \
-    $(NM_ROOT)/NMPPAccessPoint.cpp
+    $(NM_ROOT)/AccessPoint.cpp
 $(NM_PREFIX)SavedConnection.o : \
     $(NM_ROOT)/SavedConnection.cpp
 $(NM_PREFIX)SavedConnectionLoader.o : \
-    $(NM_ROOT)/SavedConnections.cpp
+    $(NM_ROOT)/SavedConnectionLoader.cpp

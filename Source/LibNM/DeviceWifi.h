@@ -1,40 +1,41 @@
 #pragma once
 #include <nm-device-wifi.h>
-#include "NMPPAccessPoint.h"
-#include "NMPPConnection.h"
-#include "NMPPActiveConnection.h"
+#include "LibNM/LibNM.h"
+#include "AccessPoint.h"
+#include "Connection.h"
+#include "ActiveConnection.h"
 #include "GLib/Object.h"
 #include "GLib/SignalHandler.h"
 
 /**
- * @file NMPPDeviceWifi.h
+ * @file LibNM/DeviceWifi.h
  *
  * @brief A RAII container and C++ interface for LibNM NMDeviceWifi
  *        objects.
  */
-class NMPPDeviceWifi : public GLib::Object
+class LibNM::DeviceWifi : public GLib::Object
 {
 public:
     /**
-     * Creates a NMPPDeviceWifi object that shares a NMDeviceWifi*
-     * with another NMPPDeviceWifi object
+     * Creates a DeviceWifi object that shares a NMDeviceWifi*
+     * with another DeviceWifi object
      *
      * @param toCopy  This object's NMDeviceWifi* will be shared with the
      *                new object.
      */
-    NMPPDeviceWifi(const NMPPDeviceWifi& toCopy);
+    DeviceWifi(const DeviceWifi& toCopy);
     
     /**
-     * Create a NMPPDeviceWifi to contain a NMDeviceWifi object.
+     * Create a DeviceWifi to contain a NMDeviceWifi object.
      * 
-     * @toAssign  A valid NMDeviceWifi for this NMPPDeviceWifi to hold.
+     * @toAssign  A valid NMDeviceWifi for this DeviceWifi to hold.
      */
-    NMPPDeviceWifi(NMDeviceWifi* toAssign);
+    DeviceWifi(NMDeviceWifi* toAssign);
     
     /**
-     * Creates a null NMPPDeviceWifi.
+     * Creates a null DeviceWifi.
      */
-    NMPPDeviceWifi();
+    DeviceWifi();
     
     /**
      * Gets the current state of the wifi network device.
@@ -85,7 +86,7 @@ public:
      * @return  the active connection object, or a null connection object if
      *          this object is not connected or is null.
      */
-    NMPPActiveConnection getActiveConnection() const;
+    ActiveConnection getActiveConnection() const;
     
     /**
      * Gets the list of connections available to activate on this device.
@@ -94,7 +95,7 @@ public:
      * @return  The list of known connections that are compatible with this
      *          device.
      */
-    juce::Array<NMPPConnection> getAvailableConnections() const;
+    juce::Array<Connection> getAvailableConnections() const;
     
     /**
      * Finds the first available connection that is compatible with a specific
@@ -106,8 +107,8 @@ public:
      *          this access point, or a null connection if this device is null,
      *          the access point is null, or no matching connection is found. 
      */
-    NMPPConnection getAvailableConnection
-    (const NMPPAccessPoint& accessPoint) const;
+    Connection getAvailableConnection
+    (const AccessPoint& accessPoint) const;
     
     /**
      * Gets an access point object using the access point's path.
@@ -117,7 +118,7 @@ public:
      * @return  the matching access point object, or a null access point object
      *          if the access point was not found or this object is null.
      */
-    NMPPAccessPoint getAccessPoint(const char* path) const;
+    AccessPoint getAccessPoint(const char* path) const;
     
     /**
      * Gets the active connection's access point.
@@ -125,7 +126,7 @@ public:
      * @return  the active access point object, or a null access point object
      *          if this object is disconnected or null.
      */
-    NMPPAccessPoint getActiveAccessPoint() const;
+    AccessPoint getActiveAccessPoint() const;
     
     /**
      * Gets all access points visible to this device.
@@ -133,7 +134,7 @@ public:
      * @return  An array containing one access point object for each nearby
      *          wifi access point visible to the device.
      */
-    juce::Array<NMPPAccessPoint> getAccessPoints() const;
+    juce::Array<AccessPoint> getAccessPoints() const;
     
     /**
      * Checks if a specific connection is present in the list of available
@@ -144,7 +145,7 @@ public:
      * @return  true iff a matching connection is already known to this wifi
      *          device.
      */
-    bool hasConnectionAvailable(const NMPPConnection& toFind) const;
+    bool hasConnectionAvailable(const Connection& toFind) const;
     
     
     /**
@@ -160,7 +161,7 @@ public:
     class Listener : public GLib::SignalHandler
     {
     public:
-        friend class NMPPDeviceWifi;
+        friend class DeviceWifi;
         Listener() { }
         
         virtual ~Listener() { }
@@ -193,7 +194,7 @@ public:
         * 
     	* @param addedAP  The new access point detected by the wifi device.
     	*/
-        virtual void accessPointAdded(NMPPAccessPoint addedAP) = 0;
+        virtual void accessPointAdded(AccessPoint addedAP) = 0;
         
 	   /**
         * This method will be called whenever the wifi device no longer detects
@@ -202,7 +203,7 @@ public:
 	    * @param removedAP  The nearby access point that the device can no
         *                   longer detect.
 	    */
-        virtual void accessPointRemoved(NMPPAccessPoint removedAP) = 0;
+        virtual void accessPointRemoved(AccessPoint removedAP) = 0;
         
        /**
         * This method will be called whenever the device's active connection
@@ -211,7 +212,7 @@ public:
         * @param active   The new active connection.  If the device has
         *                 disconnected, this will be a null object.
         */
-        virtual void activeConnectionChanged(NMPPActiveConnection active) = 0;
+        virtual void activeConnectionChanged(ActiveConnection active) = 0;
         
        /**
         * Convert generic property change notifications into 

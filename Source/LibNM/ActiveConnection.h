@@ -1,41 +1,42 @@
 #pragma once
 #include <nm-active-connection.h>
-#include "NMPPAccessPoint.h"
-#include "NMPPConnection.h"
+#include "LibNM/LibNM.h"
+#include "LibNM/AccessPoint.h"
+#include "LibNM/Connection.h"
 #include "GLib/Object.h"
 
 /**
- * @file NMPPActiveConnection.h
+ * @file LibNM/ActiveConnection.h
  * 
  * @brief A RAII container and C++ interface for LibNM NMActiveConnection 
  *        objects.
  */
 
-class NMPPActiveConnection : public GLib::Object
+class LibNM::ActiveConnection : public GLib::Object
 {
 public:
     /**
-     * Creates a NMPPActiveConnection sharing a GObject with an existing
-     * NMPPActiveConnection.
+     * Creates a ActiveConnection sharing a GObject with an existing
+     * ActiveConnection.
      * 
      * @toCopy  An existing connection object.
      */
-    NMPPActiveConnection(const NMPPActiveConnection& toCopy);
+    ActiveConnection(const ActiveConnection& toCopy);
     
     /**
-     * Creates a NMPPActiveConnection to contain a NMActiveConnection object.
+     * Creates a ActiveConnection to contain a NMActiveConnection object.
      * 
-     * @toAssign  A valid NMActiveConnection for this NMPPActiveConnection to 
+     * @toAssign  A valid NMActiveConnection for this ActiveConnection to 
      *            hold.
      */
-    NMPPActiveConnection(NMActiveConnection* toAssign);
+    ActiveConnection(NMActiveConnection* toAssign);
     
     /**
-     * Creates a null NMPPActiveConnection.
+     * Creates a null ActiveConnection.
      */
-    NMPPActiveConnection();
+    ActiveConnection();
     
-    virtual ~NMPPActiveConnection() { }
+    virtual ~ActiveConnection() { }
     
     /**
      * Get the connection path stored by this object.
@@ -63,7 +64,7 @@ public:
      *          or the access point is null.
      *          
      */
-    bool isConnectedAccessPoint(const NMPPAccessPoint& accessPoint) const;
+    bool isConnectedAccessPoint(const AccessPoint& accessPoint) const;
 
     /**
      * Get a unique ID string for this connection.
