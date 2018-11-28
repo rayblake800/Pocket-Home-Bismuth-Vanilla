@@ -22,6 +22,21 @@
 class LibNM::APHash
 {
 public:
+    enum class Mode
+    {
+        unknown        = 0b0000000,
+        adhoc          = 0b0000001,
+        infrastructure = 0b0000010,
+        hotspot        = 0b0000100
+    };
+
+    enum class Security
+    {
+        unsecured      = 0b0001000,
+        securedWEP     = 0b0010000,
+        securedWPA     = 0b0100000,
+        securedRSN     = 0b1000000,
+    };
     /**
      * @brief  Generates a Wifi access point identifier using the access point's
      *         SSID, mode, and security settings.

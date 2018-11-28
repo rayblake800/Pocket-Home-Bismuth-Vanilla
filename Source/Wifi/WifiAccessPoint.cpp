@@ -143,6 +143,7 @@ bool WifiAccessPoint::getRequiresAuth() const
     return security != none;
 }
 
+
 /*
  * Returns a string identifying this object for debug purposes.
  */
