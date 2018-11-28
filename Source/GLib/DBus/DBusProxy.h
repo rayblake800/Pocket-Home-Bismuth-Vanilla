@@ -16,7 +16,7 @@
 #include "GLib/Object.h"
 #include "GLib/SignalHandler.h"
 
-class GLib::DBusProxy : public GLib::Object
+class GLib::DBusProxy : public GLib::Object, public GLib::ThreadHandler
 {
 protected:
     /**

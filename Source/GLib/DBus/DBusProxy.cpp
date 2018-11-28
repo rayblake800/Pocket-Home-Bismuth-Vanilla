@@ -3,39 +3,49 @@
 #include "GLib/SmartPointers/ErrorPtr.h"
 #include "GLib/SmartPointers/VariantPtr.h"
 #include "GLib/DBus/DBusProxy.h"
+#include "GLib/DBus/DBusThread.h"
 
-typedef GLib::ObjectPtr<GDBusProxy*> DBusProxyPtr;
+typedef GLib::ObjectPtr<GDBusProxy*> GDBusProxyPtr;
+typedef GLib::ObjectPtr<> GObjectPtr;
 
 GLib::DBusProxy::DBusProxy
 (const char* name, const char* path, const char* interface) :
-GLib::Object(G_TYPE_DBUS_PROXY)
+GLib::Object(G_TYPE_DBUS_PROXY),
+GLib::ThreadHandler(DBusThread::resourceKey)
 {
-    using namespace juce;
     if(name == nullptr || path == nullptr || interface == nullptr)
     {
         //creating an invalid/null interface, skip initialization
         return;
     }
 
-    ErrorPtr error([name](GError* error)
-    {
-        DBG(__func__ << "Opening DBus adapter proxy "
-                << name << " failed!");
-        DBG("Error: " << String(error->message));
-    });
-    GDBusProxy * proxy = g_dbus_proxy_new_for_bus_sync(
-            G_BUS_TYPE_SYSTEM,
-            G_DBUS_PROXY_FLAGS_NONE,
-            nullptr,
-            name,
-            path,
-            interface,
-            nullptr,
-            error.getAddress());
-    if(proxy != nullptr)
-    {
-        setGObject(G_OBJECT(proxy));
-    }
+    call([this, name, path, interface]()
+        {
+            ErrorPtr error([name](GError* error)
+            {
+                DBG(__func__ << "Opening DBus adapter proxy "
+                        << name << " failed!");
+                DBG("Error: " << juce::String(error->message));
+            });
+            GDBusProxy * proxy = g_dbus_proxy_new_for_bus_sync(
+                    G_BUS_TYPE_SYSTEM,
+                    G_DBUS_PROXY_FLAGS_NONE,
+                    nullptr,
+                    name,
+                    path,
+                    interface,
+                    nullptr,
+                    error.getAddress());
+            if(proxy != nullptr)
+            {
+                setGObject(G_OBJECT(proxy));
+            }
+        },
+        [this]()
+        {
+            DBG("GLib::DBusProxy::DBusProxy: Opening proxy failed, couldn't "
+                    << "access GLib thread.");
+        });
 }
  
 /*
@@ -95,54 +105,72 @@ void GLib::DBusProxy::DBusSignalHandler::dBusPropertyInvalidated
 GVariant* GLib::DBusProxy::callMethod
 (const char* methodName, GVariant* params, GError ** error) const
 {
-    if(params != nullptr && !g_variant_is_of_type(params, G_VARIANT_TYPE_TUPLE))
-    {
-        GVariant* tuple = g_variant_new_tuple(&params, 1);
-        params = tuple;
-    }
-    DBusProxyPtr proxy(G_DBUS_PROXY(getGObject()));
-    if(proxy == nullptr)
-    {
-        DBG("GLib::DBusProxy::" << __func__ << ": invalid DBus proxy!");
-        DBG("GLib::DBusProxy::" << __func__ 
-                << ": params will now be unreferenced if non-null.");
-        if(params != nullptr)
+    GVariant* result = nullptr;
+    call([this, &result, methodName, params, error]()
         {
-            g_variant_unref(params);
-        }
-        return nullptr;
-    }
-    ErrorPtr defaultError([methodName](GError* error)
-    {
-        DBG("DBusProxy::" << __func__ 
-                << ": calling DBus adapter proxy method "
-                << methodName << " failed!");
-        DBG("Error: " << juce::String(error->message));
-    });
-    GVariant* result = g_dbus_proxy_call_sync(
-            proxy,
-            methodName,
-            params,
-            G_DBUS_CALL_FLAGS_NONE,
-            -1,
-            nullptr,
-            (error==nullptr ? defaultError.getAddress() : error));
-    if(result != nullptr && g_variant_is_container(result))
-    {
-        gsize resultSize = g_variant_n_children(result);
-        if(resultSize == 0)
-        {
-            g_variant_unref(result);
-            result = nullptr;
-        }
-        else if(resultSize == 1)
-        {
-            GVariant* extracted = nullptr;
-            g_variant_get(result, "(*)" , &extracted);
-            g_variant_unref(result);
-            result = extracted;
-        }
-    }     
+            // DBus parameters must be packaged in a tuple, even if there's only
+            // one.
+            if(params != nullptr && !g_variant_is_of_type
+                    (params, G_VARIANT_TYPE_TUPLE))
+            {
+                GVariant* tuple = g_variant_new_tuple(&params, 1);
+                params = tuple;
+            }
+
+            GDBusProxyPtr proxy(G_DBUS_PROXY(getGObject()));
+            if(proxy == nullptr)
+            {
+                DBG("GLib::DBusProxy::" << __func__ << ": invalid DBus proxy!");
+                DBG("GLib::DBusProxy::" << __func__ 
+                        << ": params will now be unreferenced if non-null.");
+                if(params != nullptr)
+                {
+                    g_variant_unref(params);
+                }
+                return nullptr;
+            }
+
+            ErrorPtr defaultError([methodName](GError* error)
+            {
+                DBG("DBusProxy::" << __func__ 
+                        << ": calling DBus adapter proxy method "
+                        << methodName << " failed!");
+                DBG("Error: " << juce::String(error->message));
+            });
+
+            result = g_dbus_proxy_call_sync(
+                    proxy,
+                    methodName,
+                    params,
+                    G_DBUS_CALL_FLAGS_NONE,
+                    -1,
+                    nullptr,
+                    (error==nullptr ? defaultError.getAddress() : error));
+            if(result != nullptr && g_variant_is_container(result))
+            {
+                // DBus methods may return an empty container if there's no
+                // values to return. Detect and unreference these. 
+                gsize resultSize = g_variant_n_children(result);
+                if(resultSize == 0)
+                {
+                    g_variant_unref(result);
+                    result = nullptr;
+                }
+                // If the return value is a container with a single item,
+                // extract and return that item.
+                else if(resultSize == 1)
+                {
+                    GVariant* extracted = nullptr;
+                    g_variant_get(result, "(*)" , &extracted);
+                    g_variant_unref(result);
+                    result = extracted;
+                }
+            },
+            [methodName]()
+            {
+                DBG("GLib::DBusProxy::callMethod: Couldn't call method "
+                        << methodName << ", failed to access the DBus thread.");
+            });
     return result;
 }
 
@@ -152,13 +180,25 @@ GVariant* GLib::DBusProxy::callMethod
  */
 bool GLib::DBusProxy::hasProperty(const char *  propertyName) const
 {
-    DBusProxyPtr proxy(G_DBUS_PROXY(getGObject()));
-    if(proxy == nullptr)
-    {
-        return false;
-    }
-    VariantPtr property(g_dbus_proxy_get_cached_property(proxy, propertyName));
-    return property != nullptr;
+    bool hasProperty = false;
+    call[this, propertyName, &hasProperty]()
+        {
+            GDBusProxyPtr proxy(G_DBUS_PROXY(getGObject()));
+            if(proxy == nullptr)
+            {
+                return false;
+            }
+            VariantPtr property(g_dbus_proxy_get_cached_property
+                    (proxy, propertyName));
+            hasProperty = (property != nullptr);
+        },
+        [propertyName]()
+        {
+            DBG("GLib::DBusProxy::callMethod: Couldn't check property "
+                    << propertyName << ", failed to access the DBus thread.");
+
+        });
+    return hasProperty;
 }
 
 /*
@@ -167,12 +207,11 @@ bool GLib::DBusProxy::hasProperty(const char *  propertyName) const
 void GLib::DBusProxy::connectSignalHandler
 (DBusProxy::DBusSignalHandler& signalHandler)
 {
-    GObject* proxy = getGObject();
+    GObjectPtr proxy(getGObject());
     if(proxy != nullptr)
     {
         signalHandler.connectAllSignals(proxy);
     }
-    g_clear_object(&proxy);
 }
 
 /*
@@ -201,7 +240,7 @@ void GLib::DBusProxy::dBusPropertiesChanged(GDBusProxy* proxy,
 {
     using namespace GVariantConverter;
     using juce::String;
-    DBusProxy proxyWrapper(proxy);
+    GDBusProxy proxyWrapper(proxy);
     iterateDict(changedProperties,[&proxyWrapper,handler]
             (GVariant* key, GVariant* property)
     {

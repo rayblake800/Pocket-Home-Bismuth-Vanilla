@@ -1,11 +1,16 @@
 #pragma once
 #include "JuceHeader.h"
 #include "GLib/GLib.h"
-#include "GLib/DBus/BasicValueWrapper.h"
+#include "GLib/Variant/BasicValueWrapper.h"
 #include <gio/gio.h>
 #include <tuple>
 #include <map>
 
+/**
+ * @file GLib/Variant/VariantTypes.h
+ *
+ * @brief  Defines all types that may be stored in GLib::Variant objects.
+ */
 namespace GLib
 {
     namespace VariantTypes
