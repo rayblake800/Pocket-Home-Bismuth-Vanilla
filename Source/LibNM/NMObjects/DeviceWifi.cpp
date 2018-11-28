@@ -32,7 +32,7 @@ GLib::Object(NM_TYPE_DEVICE_WIFI) { }
 /*
  * Gets the current state of the wifi network device.
  */
-NMDeviceState DeviceWifi::getState() const
+NMDeviceState LibNM::DeviceWifi::getState() const
 { 
     NMDeviceState state = NM_DEVICE_STATE_UNKNOWN;
     NMDevicePtr device(NM_DEVICE(getGObject()));
@@ -46,7 +46,7 @@ NMDeviceState DeviceWifi::getState() const
 /*
  * Gets the reason for the current device state.
  */
-NMDeviceStateReason DeviceWifi::getStateReason() const
+NMDeviceStateReason LibNM::DeviceWifi::getStateReason() const
 { 
     NMDeviceStateReason reason = NM_DEVICE_STATE_REASON_UNKNOWN;
     NMDevicePtr device(NM_DEVICE(getGObject()));

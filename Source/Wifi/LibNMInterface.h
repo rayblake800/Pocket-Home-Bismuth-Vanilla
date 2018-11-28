@@ -1,7 +1,7 @@
 #pragma once
 
-#include "NMPPClient.h"
-#include "SavedConnections.h"
+#include "LibNM/NMObjects/Client.h"
+#include "LibNM/DBus/SavedConnectionLoader.h"
 #include "AccessPointState.h"
 #include "WindowFocus.h"
 #include "NetworkInterface.h"
@@ -28,7 +28,7 @@
  */
 
 class LibNMInterface : public NetworkInterface, 
-        public NMPPClient::ConnectionHandler 
+        public LibNM::Client::ConnectionHandler 
 {
 public:
     /**
@@ -172,7 +172,7 @@ private:
      *                    network manager, false if it was a known
      *                    connection that was re-activated.
      */
-    void openingConnection(NMPPActiveConnection connection,
+    void openingConnection(LibNM::ActiveConnection connection,
                 bool isNew) override;
     
     /**
@@ -187,7 +187,7 @@ private:
      * @param isNew       True iff the connection was just added to the 
      *                    network manager. 
      */
-    virtual void openingConnectionFailed(NMPPActiveConnection connection, 
+    virtual void openingConnectionFailed(LibNM::ActiveConnection connection, 
             GError* error, bool isNew) override;
     
     //################# Network Manager Client Updates #########################
@@ -220,7 +220,7 @@ private:
      * 
      * @param addedAP  The new access point detected by the wifi device.
      */
-    void accessPointAdded(NMPPAccessPoint addedAP);
+    void accessPointAdded(LibNM::AccessPoint addedAP);
 
     /**
      * This method will be called whenever the wifi device no longer detects
@@ -229,7 +229,7 @@ private:
      * @param removedAP  The nearby access point that the device can no
      *                   longer detect.
      */
-    void accessPointRemoved(NMPPAccessPoint removedAP);
+    void accessPointRemoved(LibNM::AccessPoint removedAP);
 
     /**
      * This method will be called whenever the device's active connection
@@ -240,7 +240,7 @@ private:
      *                 (TODO: will it really be null, or just not connected?
      *                 test this)
      */
-    virtual void activeConnectionChanged(NMPPActiveConnection active);
+    virtual void activeConnectionChanged(LibNM::ActiveConnection active);
     
     /**
      *#######################  Listener Classes  ###############################
@@ -248,10 +248,10 @@ private:
      * on to the LibNMInterface.  All GLib::Object Listeners share a parent class,
      * so LibNMInterface can't just inherit all Listener classes itself.
      */
-    class ClientListener : public NMPPClient::Listener
+    class ClientListener : public LibNM::Client::Listener
     {
     public:
-        ClientListener(LibNMInterface& interface, NMPPClient& client) :
+        ClientListener(LibNMInterface& interface, LibNM::Client& client) :
         interface(interface)
         {
             if(!client.isNull())
@@ -268,10 +268,10 @@ private:
         LibNMInterface& interface;
     };
     
-    class DeviceListener : public NMPPDeviceWifi::Listener
+    class DeviceListener : public LibNM::DeviceWifi::Listener
     {
     public:
-        DeviceListener(LibNMInterface& interface, NMPPDeviceWifi& device) :
+        DeviceListener(LibNMInterface& interface, LibNM::DeviceWifi& device) :
         interface(interface)
         {
             if(!device.isNull())
@@ -286,15 +286,15 @@ private:
         {
             interface.stateChanged(newState, oldState, reason);
         }
-        void accessPointAdded(NMPPAccessPoint addedAP) override
+        void accessPointAdded(LibNM::AccessPoint addedAP) override
         {
             interface.accessPointAdded(addedAP);
         }
-        void accessPointRemoved(NMPPAccessPoint removedAP) override
+        void accessPointRemoved(LibNM::AccessPoint removedAP) override
         {
             interface.accessPointRemoved(removedAP);
         }
-        void activeConnectionChanged(NMPPActiveConnection active) override
+        void activeConnectionChanged(LibNM::ActiveConnection active) override
         {
             interface.activeConnectionChanged(active);
         }
@@ -305,17 +305,17 @@ private:
     juce::ScopedPointer<DeviceListener> deviceListener;
 
     //The client used to access the network manager.
-    NMPPClient client;
+    LibNM::Client client;
     //The active wifi device.
-    NMPPDeviceWifi wifiDevice;
+    LibNM::DeviceWifi wifiDevice;
             
     //The last known state of the wifi device.
     NMDeviceState lastNMState = NM_DEVICE_STATE_UNKNOWN;
     //All connections saved with NetworkManager.
-    SavedConnections savedConnections;
+    LibNM::SavedConnectionLoader savedConnections;
     
     //The current active/activating wifi connection, or a null object.
-    NMPPActiveConnection activeConnection;
+    LibNM::ActiveConnection activeConnection;
     //The access point used by the active connection, or a null object.
     WifiAccessPoint activeAP;
     
@@ -340,7 +340,7 @@ private:
     juce::Array<WifiAccessPoint> failedConnectionAPs;
     
     //All access points visible to the wifi device.
-    juce::Array<NMPPAccessPoint> visibleAPs;
+    juce::Array<LibNM::AccessPoint> visibleAPs;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LibNMInterface)
 };

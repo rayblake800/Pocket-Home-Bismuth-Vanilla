@@ -59,7 +59,7 @@ bool LibNM::SavedConnection::isWifiConnection() const
  * Gets the NMConnection object generated from this connection's data.
  * Only wifi connections are supported, others are not guaranteed to work.
  */
-NMPPConnection LibNM::SavedConnection::getNMConnection() const
+LibNM::Connection LibNM::SavedConnection::getNMConnection() const
 {
     return nmConnection;
 }
@@ -159,7 +159,7 @@ void LibNM::SavedConnection::deleteConnection()
         callMethod(deleteConnectionMethod);
         clearGObject();
         path = "";
-        NMPPConnection emptyConnection;
+        LibNM::Connection emptyConnection;
         nmConnection = emptyConnection; 
         settingNames.clear();
     }
@@ -197,7 +197,7 @@ void LibNM::SavedConnection::createNMConnection()
     if(!settingNames.isEmpty())
     {
         settingNames.clear();
-        NMPPConnection emptyConnection;
+        LibNM::Connection emptyConnection;
         nmConnection = emptyConnection; 
     }
     nmConnection.setPath(path.toRawUTF8());

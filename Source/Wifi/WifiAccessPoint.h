@@ -1,7 +1,7 @@
 #pragma once
 #include <atomic>
 #include <NetworkManager.h>
-#include "NMPPAccessPoint.h"
+#include "LibNM/NMObjects/AccessPoint.h"
 #include "JuceHeader.h"
 
 /**
@@ -10,7 +10,7 @@
  * @brief Stores all relevant data about a single wifi access point.
  */
 
-class WifiAccessPoint : public NMPPAccessPoint::Listener
+class WifiAccessPoint : public LibNM::AccessPoint::Listener
 {
 public:
     
@@ -31,7 +31,7 @@ public:
      * 
      * @param accessPoint      A LibNM access point object.
      */
-    WifiAccessPoint(const NMPPAccessPoint& accessPoint);
+    WifiAccessPoint(const LibNM::AccessPoint& accessPoint);
 
     /**
      * Create a wifi access point from pre-generated data.  This is intended for
@@ -116,7 +116,7 @@ public:
      * @return  true iff the connection could be activated using this access
      *          point.
      */
-    bool isConnectionCompatible(const NMPPConnection& connection) const;
+    bool isConnectionCompatible(const LibNM::Connection& connection) const;
 
     /**
      * Checks if this access point and another both share a network connection.
@@ -140,7 +140,7 @@ public:
      *          or a null connection object if this access point is null or
      *          the psk was invalid.
      */
-    NMPPConnection createConnection(juce::String psk = juce::String()) const;
+    LibNM::Connection createConnection(juce::String psk = juce::String()) const;
     
     /**
      * Attempts to add wireless security settings to a connection intended for
@@ -154,7 +154,7 @@ public:
      * @return  true iff the settings were applied successfully.
      */
     bool setConnectionSecurity
-    (NMPPConnection& connection, const juce::String& psk) const;
+    (LibNM::Connection& connection, const juce::String& psk) const;
 
     /**
      * Returns the 802.11 mode of this access point.
@@ -205,13 +205,13 @@ public:
     /**
      * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
      */
-    bool operator==(const NMPPAccessPoint& rhs) const;
+    bool operator==(const LibNM::AccessPoint& rhs) const;
 
     /**
      * Returns true iff this WifiAccessPoint does not have rhs as its 
      * nmAccessPoint.
      */
-    bool operator!=(const NMPPAccessPoint& rhs) const;
+    bool operator!=(const LibNM::AccessPoint& rhs) const;
 
     /**
      * Returns true iff this access point and rhs share a nmAccessPoint.
@@ -227,7 +227,7 @@ public:
     /**
      * @return this access point's LibNM access point object 
      */
-    const NMPPAccessPoint& getNMAccessPoint() const;
+    const LibNM::AccessPoint& getNMAccessPoint() const;
    
     /**
      * Saves a path to a DBus active connection object that is using this
@@ -272,7 +272,7 @@ private:
      * @param newStrength  The access point's new signal strength, ranging 
      *                     from zero to 100.
      */
-    void signalStrengthChanged(NMPPAccessPoint& updatedAP,
+    void signalStrengthChanged(LibNM::AccessPoint& updatedAP,
             unsigned int newStrength) override;
 
     /**
@@ -316,7 +316,7 @@ private:
     NM80211ApSecurityFlags wpaFlags;
     NM80211ApSecurityFlags rsnFlags;
 
-    NMPPAccessPoint nmAccessPoint;
+    LibNM::AccessPoint nmAccessPoint;
     juce::String activeConnectionPath;
     juce::String savedConnectionPath;
 #if JUCE_DEBUG

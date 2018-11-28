@@ -55,7 +55,7 @@ LibNM::SavedConnection LibNM::SavedConnectionLoader::getConnection
 {
     if(!connectionExists(connectionPath))
     {
-        updateSavedConnectionLoader();
+        updateSavedConnections();
     }
     if(connectionExists(connectionPath))
     {
@@ -79,7 +79,7 @@ juce::Array<LibNM::SavedConnection>
 LibNM::SavedConnectionLoader::findConnectionsForAP
 (const AccessPoint& accessPoint) const
 {
-    using juce Array;
+    using juce::Array;
     Array<SavedConnection> compatible;
     if(!isNull() && !accessPoint.isNull())
     {
@@ -118,7 +118,7 @@ LibNM::SavedConnectionLoader::getConnectionPaths() const
  * Check the list of saved connections against an updated connection path
  * list, adding any new connections and removing any deleted connections.
  */
-void LibNM::SavedConnectionLoader::updateSavedConnectionLoader()
+void LibNM::SavedConnectionLoader::updateSavedConnections()
 {
     connectionPaths = getConnectionPaths();
     juce::Array<SavedConnection> toRemove;

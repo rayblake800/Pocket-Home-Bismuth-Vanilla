@@ -8,6 +8,9 @@
 typedef GLib::ObjectPtr<GDBusProxy*> GDBusProxyPtr;
 typedef GLib::ObjectPtr<> GObjectPtr;
 
+/*
+ * Opens a new DBusProxy.
+ */
 GLib::DBusProxy::DBusProxy
 (const char* name, const char* path, const char* interface) :
 GLib::Object(G_TYPE_DBUS_PROXY),
@@ -52,8 +55,16 @@ GLib::ThreadHandler(DBusThread::resourceKey)
  * Creates an object holding an existing GDBusProxy.
  */
 GLib::DBusProxy::DBusProxy(GDBusProxy * proxy) :
-GLib::Object(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
+GLib::Object(G_OBJECT(proxy), G_TYPE_DBUS_PROXY),
+GLib::ThreadHandler(DBusThread::resourceKey) { }
         
+/*
+ * Creates a DBusProxy as a copy of another DBusProxy
+ */
+GLib::DBusProxy::DBusProxy(const DBusProxy& proxy) : 
+GLib::Object(proxy, G_TYPE_DBUS_PROXY),
+GLib::ThreadHandler(DBusThread::resourceKey) { }
+
 /*
  * Subscribes to all DBus signals and property changes emitted by this
  * signal source.
@@ -106,7 +117,7 @@ GVariant* GLib::DBusProxy::callMethod
 (const char* methodName, GVariant* params, GError ** error) const
 {
     GVariant* result = nullptr;
-    call([this, &result, methodName, params, error]()
+    call([this, &result, methodName, &params, error]()
         {
             // DBus parameters must be packaged in a tuple, even if there's only
             // one.
@@ -127,7 +138,7 @@ GVariant* GLib::DBusProxy::callMethod
                 {
                     g_variant_unref(params);
                 }
-                return nullptr;
+                return;
             }
 
             ErrorPtr defaultError([methodName](GError* error)
@@ -165,12 +176,13 @@ GVariant* GLib::DBusProxy::callMethod
                     g_variant_unref(result);
                     result = extracted;
                 }
-            },
-            [methodName]()
-            {
-                DBG("GLib::DBusProxy::callMethod: Couldn't call method "
-                        << methodName << ", failed to access the DBus thread.");
-            });
+            }
+        },
+        [methodName]()
+        {
+            DBG("GLib::DBusProxy::callMethod: Couldn't call method "
+                    << methodName << ", failed to access the DBus thread.");
+        });
     return result;
 }
 
@@ -181,16 +193,15 @@ GVariant* GLib::DBusProxy::callMethod
 bool GLib::DBusProxy::hasProperty(const char *  propertyName) const
 {
     bool hasProperty = false;
-    call[this, propertyName, &hasProperty]()
+    call([this, propertyName, &hasProperty]()
         {
             GDBusProxyPtr proxy(G_DBUS_PROXY(getGObject()));
-            if(proxy == nullptr)
+            if(proxy != nullptr)
             {
-                return false;
+                VariantPtr property(g_dbus_proxy_get_cached_property
+                        (proxy, propertyName));
+                hasProperty = (property != nullptr);
             }
-            VariantPtr property(g_dbus_proxy_get_cached_property
-                    (proxy, propertyName));
-            hasProperty = (property != nullptr);
         },
         [propertyName]()
         {
@@ -240,7 +251,7 @@ void GLib::DBusProxy::dBusPropertiesChanged(GDBusProxy* proxy,
 {
     using namespace GVariantConverter;
     using juce::String;
-    GDBusProxy proxyWrapper(proxy);
+    DBusProxy proxyWrapper(proxy);
     iterateDict(changedProperties,[&proxyWrapper,handler]
             (GVariant* key, GVariant* property)
     {

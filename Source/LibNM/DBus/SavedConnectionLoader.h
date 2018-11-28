@@ -71,7 +71,7 @@ public:
      *         connection path list, adding any new connections and removing any
      *         deleted connections.
      */
-    void updateSavedConnectionLoader();
+    void updateSavedConnections();
 
 private:
     /**

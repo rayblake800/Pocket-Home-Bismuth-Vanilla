@@ -14,6 +14,7 @@
 #include "JuceHeader.h"
 #include "GVariantConverter.h"
 #include "GLib/Object.h"
+#include "GLib/ThreadHandler.h"
 #include "GLib/SignalHandler.h"
 
 class GLib::DBusProxy : public GLib::Object, public GLib::ThreadHandler
@@ -47,8 +48,7 @@ protected:
      * 
      * @param proxy  The DBusProxy object to copy.
      */
-    DBusProxy(const DBusProxy& proxy) : 
-    GLib::Object(proxy, G_TYPE_DBUS_PROXY) { }
+    DBusProxy(const DBusProxy& proxy);
     
 public:
     virtual ~DBusProxy() { }

@@ -1,6 +1,6 @@
 #pragma once
 #include <nm-access-point.h>
-#include "LibNM/Connection.h"
+#include "LibNM/NMObjects/Connection.h"
 #include "GLib/Object.h"
 #include "GLib/SignalHandler.h"
 

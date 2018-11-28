@@ -4,7 +4,7 @@
 #include "JuceHeader.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "SavedConnections.h"
+#include "LibNM/DBus/SavedConnectionLoader.h"
 #if JUCE_DEBUG
 #include "WifiDebugOutput.h"
 #endif
@@ -22,8 +22,8 @@ LibNMInterface::LibNMInterface()
     }
     else
     {
-        Array<NMPPDeviceWifi> devices = client.getWifiDevices();
-        for(const NMPPDeviceWifi& dev : devices)
+        Array<LibNM::DeviceWifi> devices = client.getWifiDevices();
+        for(const LibNM::DeviceWifi& dev : devices)
         {
             if(dev.isManaged())
             {
@@ -98,8 +98,9 @@ juce::Array<WifiAccessPoint> LibNMInterface::getVisibleAPs()
     {
         filteredAPs.add(activeAP);
     }
-    Array<SavedConnection> savedCons = savedConnections.getWifiConnections();
-    for(const NMPPAccessPoint& ap : visibleAPs)
+    Array<LibNM::SavedConnection> savedCons 
+        = savedConnections.getWifiConnections();
+    for(const LibNM::AccessPoint& ap : visibleAPs)
     {
         WifiAccessPoint packagedAP(ap);
         if(!packagedAP.isNull() && packagedAP.getSSID().isNotEmpty() 
@@ -119,7 +120,7 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
         juce::String psk)
 {
     using namespace juce;
-    const NMPPAccessPoint& nmAP = toConnect.getNMAccessPoint();
+    const LibNM::AccessPoint& nmAP = toConnect.getNMAccessPoint();
     if(nmAP.isNull())
     {
         DBG("LibNMInterface::" << __func__ 
@@ -132,12 +133,12 @@ void LibNMInterface::connectToAccessPoint(const WifiAccessPoint& toConnect,
     }
     else
     {
-        NMPPConnection toActivate;
+        LibNM::Connection toActivate;
         //Copy the saved connection, delete the original, and re-create it with
         //new security info.
         if(toConnect.getSavedConnectionPath().isNotEmpty())
         {
-            SavedConnection saved = savedConnections.getConnection
+            LibNM::SavedConnection saved = savedConnections.getConnection
                     (toConnect.getSavedConnectionPath());
             if(!saved.isNull())
             {
@@ -254,9 +255,10 @@ AccessPointState LibNMInterface::getAPState
 juce::Time LibNMInterface::lastConnectionTime
 (const WifiAccessPoint& accessPoint)
 {
-    using namespace juce;
+    using juce::Time;
+    using LibNM::SavedConnection;
     Time connectionTime;
-    Array<SavedConnection> apConnections = savedConnections
+    juce::Array<SavedConnection> apConnections = savedConnections
             .findConnectionsForAP(accessPoint.getNMAccessPoint());
     for(SavedConnection& con : apConnections)
     {
@@ -274,12 +276,13 @@ juce::Time LibNMInterface::lastConnectionTime
  */
 void LibNMInterface::setAccessPointPaths(WifiAccessPoint& accessPoint)
 {
-    using namespace juce;
+    using juce::Array;
+
     if(!accessPoint.isNull())
     {
         const char* path = "";
-        Array<NMPPActiveConnection> active = client.getActiveConnections();
-        for(const NMPPActiveConnection& con : active)
+        Array<LibNM::ActiveConnection> active = client.getActiveConnections();
+        for(const LibNM::ActiveConnection& con : active)
         {
             if(con.isConnectedAccessPoint(accessPoint.getNMAccessPoint()))
             {
@@ -289,8 +292,9 @@ void LibNMInterface::setAccessPointPaths(WifiAccessPoint& accessPoint)
         }
         accessPoint.setActiveConnectionPath(path);
         savedConnections.updateSavedConnections();
-        Array<SavedConnection> saved = savedConnections.findConnectionsForAP
-                (accessPoint.getNMAccessPoint());
+        Array<LibNM::SavedConnection> saved 
+            = savedConnections.findConnectionsForAP
+            (accessPoint.getNMAccessPoint());
         if(!saved.isEmpty())
         {
             accessPoint.setSavedConnectionPath(saved[0].getPath());
@@ -315,7 +319,7 @@ void LibNMInterface::updateAllWifiData()
     const char* apPath = activeConnection.getAccessPointPath();
     if(apPath[0] != 0)
     {
-        NMPPAccessPoint activeNMAP = wifiDevice.getAccessPoint(apPath);
+        LibNM::AccessPoint activeNMAP = wifiDevice.getAccessPoint(apPath);
         if(!activeNMAP.isNull())
         {
             WifiAccessPoint newActive(activeNMAP);
@@ -365,7 +369,7 @@ void LibNMInterface::disableWifi()
  * Notify listeners and save the connecting access point if starting to
  * connect.
  */
-void LibNMInterface::openingConnection(NMPPActiveConnection connection,
+void LibNMInterface::openingConnection(LibNM::ActiveConnection connection,
             bool isNew)
 {
     using namespace juce;
@@ -408,7 +412,7 @@ void LibNMInterface::openingConnection(NMPPActiveConnection connection,
 /*
  * Notify listeners that a connection attempt failed.
  */
-void LibNMInterface::openingConnectionFailed(NMPPActiveConnection connection, 
+void LibNMInterface::openingConnectionFailed(LibNM::ActiveConnection connection, 
         GError* error, bool isNew)
 {   
     using namespace juce;
@@ -538,10 +542,10 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
                         DBG("LibNMInterface::stateChanged"
                                 << ": Deleting failed new connection.");
                         setAccessPointPaths(activeAP);
-                        SavedConnection toDelete
+                        LibNM::SavedConnection toDelete
                                 (activeAP.getSavedConnectionPath().toRawUTF8());
                         toDelete.deleteConnection();
-                        activeConnection = NMPPActiveConnection();
+                        activeConnection = LibNM::ActiveConnection();
                         activeAP = WifiAccessPoint();
                         newConnectionAP = WifiAccessPoint();
                     }
@@ -573,7 +577,7 @@ void LibNMInterface::stateChanged(NMDeviceState newState,
  * This method will be called whenever the wifi device detects a new
  * access point.
  */
-void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
+void LibNMInterface::accessPointAdded(LibNM::AccessPoint addedAP)
 {    
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
@@ -596,7 +600,7 @@ void LibNMInterface::accessPointAdded(NMPPAccessPoint addedAP)
  * This method will be called whenever the wifi device no longer detects
  * a wifi access point.
  */
-void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
+void LibNMInterface::accessPointRemoved(LibNM::AccessPoint removedAP)
 {    
     using namespace juce;
     jassert(!removedAP.isNull());
@@ -625,7 +629,7 @@ void LibNMInterface::accessPointRemoved(NMPPAccessPoint removedAP)
  * Notifies listeners whenever the device's active connection
  * changes.
  */
-void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
+void LibNMInterface::activeConnectionChanged(LibNM::ActiveConnection active)
 {
     using namespace juce;
     //wifiLock must not be acquired in the GLib thread!
@@ -647,13 +651,13 @@ void LibNMInterface::activeConnectionChanged(NMPPActiveConnection active)
             }
             else
             {
-                NMPPAccessPoint nmAP = wifiDevice.getAccessPoint
+                LibNM::AccessPoint nmAP = wifiDevice.getAccessPoint
                         (activeConnection.getAccessPointPath());
                 activeAP = WifiAccessPoint(nmAP);
                 jassert(!activeAP.isNull());
                 activeAP.setActiveConnectionPath
                         (activeConnection.getAccessPointPath());
-                Array<SavedConnection> saved 
+                Array<LibNM::SavedConnection> saved 
                         = savedConnections.findConnectionsForAP
                         (activeAP.getNMAccessPoint());
                 if(!saved.isEmpty())

@@ -78,6 +78,7 @@ GLib::SharedContextPtr& GLib::SharedContextPtr::operator=
         g_main_context_unref(context);
     }
     context = rhs;
+    return *this;
 }
 
 /*

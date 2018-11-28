@@ -2,7 +2,7 @@
 #include "JuceHeader.h"
 #include "Utils.h"
 #include "WifiAccessPoint.h"
-#include "NMPPAccessPoint.h"
+#include "LibNM/NMObjects/AccessPoint.h"
     
 
 /*
@@ -21,7 +21,7 @@ WifiAccessPoint::WifiAccessPoint(const WifiAccessPoint& toCopy)
 /*
  * Create an access point object using LibNM access point data.
  */
-WifiAccessPoint::WifiAccessPoint(const NMPPAccessPoint& accessPoint) : 
+WifiAccessPoint::WifiAccessPoint(const LibNM::AccessPoint& accessPoint) : 
 nmAccessPoint(accessPoint)
 {
     using namespace juce;
@@ -155,7 +155,7 @@ const juce::String& WifiAccessPoint::toString() const
  * Checks if this access point is compatible with a given connection.
  */
 bool WifiAccessPoint::isConnectionCompatible
-(const NMPPConnection& connection) const
+(const LibNM::Connection& connection) const
 {
     return !isNull() && !connection.isNull()
 	    && nmAccessPoint.isValidConnection(connection);
@@ -173,13 +173,13 @@ bool WifiAccessPoint::sharesConnectionWith(const WifiAccessPoint& otherAP) const
  * Create a new connection object that could be used to connect with this
  * access point.
  */
-NMPPConnection WifiAccessPoint::createConnection(juce::String psk) const
+LibNM::Connection WifiAccessPoint::createConnection(juce::String psk) const
 {
-    NMPPConnection newConnection;
+    LibNM::Connection newConnection;
     newConnection.addWifiSettings(nmAccessPoint.getSSID());
     if(!setConnectionSecurity(newConnection, psk))
     {
-        return NMPPConnection();
+        return LibNM::Connection();
     }
     return newConnection;
 }
@@ -190,7 +190,7 @@ NMPPConnection WifiAccessPoint::createConnection(juce::String psk) const
  * the access point security type.
  */
 bool WifiAccessPoint::setConnectionSecurity
-(NMPPConnection& connection, const juce::String& psk) const
+(LibNM::Connection& connection, const juce::String& psk) const
 {
     if(security == securedWEP)
     {
@@ -298,7 +298,7 @@ WifiAccessPoint& WifiAccessPoint::operator=(const WifiAccessPoint& rhs)
 /*
  * Returns true iff this WifiAccessPoint has rhs as its nmAccessPoint.
  */
-bool WifiAccessPoint::operator==(const NMPPAccessPoint& rhs) const
+bool WifiAccessPoint::operator==(const LibNM::AccessPoint& rhs) const
 {
     return nmAccessPoint == rhs;
 }
@@ -307,7 +307,7 @@ bool WifiAccessPoint::operator==(const NMPPAccessPoint& rhs) const
  * Returns true iff this WifiAccessPoint does not have rhs as its 
  * nmAccessPoint.
  */
-bool WifiAccessPoint::operator!=(const NMPPAccessPoint& rhs) const
+bool WifiAccessPoint::operator!=(const LibNM::AccessPoint& rhs) const
 {
     return nmAccessPoint != rhs;
 }
@@ -332,7 +332,7 @@ bool WifiAccessPoint::operator!=(const WifiAccessPoint& rhs) const
 /*
  * @return this access point's LibNM access point object 
  */
-const NMPPAccessPoint& WifiAccessPoint::getNMAccessPoint() const
+const LibNM::AccessPoint& WifiAccessPoint::getNMAccessPoint() const
 {
     return nmAccessPoint;
 }
@@ -374,7 +374,7 @@ const juce::String& WifiAccessPoint::getSavedConnectionPath() const
 /*
  * Signals that the access point's signal strength has been updated.
  */
-void WifiAccessPoint::signalStrengthChanged(NMPPAccessPoint& updatedAP,
+void WifiAccessPoint::signalStrengthChanged(LibNM::AccessPoint& updatedAP,
         unsigned int newStrength)
 {
     signalStrength.store(newStrength);

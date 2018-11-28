@@ -16,6 +16,7 @@ OBJECTS_GLIB := \
   $(GLIB_PREFIX)SignalHandler.o \
   $(GLIB_PREFIX)TypeHelper.o \
   $(GLIB_PREFIX)VariantConverter.o \
+  $(GLIB_PREFIX)DBusThread.o \
   $(GLIB_PREFIX)DBusProxy.o  
 
 OBJECTS_GLIB_TEST := \
@@ -57,6 +58,8 @@ $(GLIB_PREFIX)TypeHelper.o : \
     $(GLIB_ROOT)/Variant/TypeHelper.cpp
 $(GLIB_PREFIX)VariantConverter.o : \
     $(GLIB_ROOT)/DBus/GVariantConverter.cpp
+$(GLIB_PREFIX)DBusThread.o : \
+    $(GLIB_ROOT)/DBus/DBusThread.cpp
 $(GLIB_PREFIX)DBusProxy.o : \
     $(GLIB_ROOT)/DBus/DBusProxy.cpp
 
