@@ -19,8 +19,8 @@
     input[32] |= (unsigned char) securityType;
     /* duplicate it */
     memcpy(&input[33], &input[0], 32);
-    return g_compute_checksum_for_data
-            (G_CHECKSUM_MD5, input, sizeof (input));
+    hashValue = juce::String(g_compute_checksum_for_data
+            (G_CHECKSUM_MD5, input, sizeof (input)));
 }
 
 /*
