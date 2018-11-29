@@ -1,6 +1,6 @@
+#include "LibNM/NMObjects/Client.h"
 #include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
-#include "Client.h"
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMClient*> NMClientPtr;

@@ -1,4 +1,4 @@
-#include "LibNM/DeviceWifi.h"
+#include "LibNM/NMObjects/DeviceWifi.h"
 #include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 

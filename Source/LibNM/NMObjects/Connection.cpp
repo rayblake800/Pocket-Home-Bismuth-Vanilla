@@ -1,4 +1,4 @@
-#include "LibNM/Connection.h"
+#include "LibNM/NMObjects/Connection.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointers for brevity: */

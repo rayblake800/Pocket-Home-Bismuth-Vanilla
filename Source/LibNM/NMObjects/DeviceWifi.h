@@ -1,9 +1,9 @@
 #pragma once
 #include <nm-device-wifi.h>
 #include "LibNM/LibNM.h"
-#include "AccessPoint.h"
-#include "Connection.h"
-#include "ActiveConnection.h"
+#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/NMObjects/Connection.h"
+#include "LibNM/NMObjects/ActiveConnection.h"
 #include "GLib/Object.h"
 #include "GLib/SignalHandler.h"
 

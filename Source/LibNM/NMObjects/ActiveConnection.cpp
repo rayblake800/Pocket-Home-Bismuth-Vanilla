@@ -1,5 +1,5 @@
+#include "LibNM/NMObjects/ActiveConnection.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
-#include "ActiveConnection.h"
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMActiveConnection*> NMActiveConnectionPtr;

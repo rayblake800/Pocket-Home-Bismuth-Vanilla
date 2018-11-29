@@ -1,8 +1,8 @@
 #pragma once
 #include <nm-active-connection.h>
 #include "LibNM/LibNM.h"
-#include "LibNM/AccessPoint.h"
-#include "LibNM/Connection.h"
+#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/NMObjects/Connection.h"
 #include "GLib/Object.h"
 
 /**

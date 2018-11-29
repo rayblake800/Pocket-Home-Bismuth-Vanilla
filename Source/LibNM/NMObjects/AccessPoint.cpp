@@ -1,4 +1,4 @@
-#include "LibNM/AccessPoint.h"
+#include "LibNM/NMObjects/AccessPoint.h"
 #include <nm-utils.h>
 #include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
