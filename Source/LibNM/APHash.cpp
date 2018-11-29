@@ -5,9 +5,22 @@
  * and security settings.
  */
  LibNM::APHash::APHash(const GByteArray* ssid, 
-         NM80211Mode mode, 
-         NM80211ApSecurityFlags securityFlags)
+         Mode mode, 
+         SecurityType securityType)
 {
+    unsigned char input[66];
+    memset(&input[0], 0, sizeof (input));
+    if (ssid != nullptr)
+    {
+        memcpy(input, ssid->data, ssid->len);
+    }
+    // Use mode and securityType as bitflags
+    input[32] |= (unsigned char) mode;
+    input[32] |= (unsigned char) securityType;
+    /* duplicate it */
+    memcpy(&input[33], &input[0], 32);
+    return g_compute_checksum_for_data
+            (G_CHECKSUM_MD5, input, sizeof (input));
 }
 
 /*

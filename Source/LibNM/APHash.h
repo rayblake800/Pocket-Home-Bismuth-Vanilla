@@ -30,7 +30,7 @@ public:
         hotspot        = 0b0000100
     };
 
-    enum class Security
+    enum class SecurityType
     {
         unsecured      = 0b0001000,
         securedWEP     = 0b0010000,
@@ -46,12 +46,12 @@ public:
      *
      * @param mode           The access point's mode of operation.
      *
-     * @param securityFlags  Indicates the type of security, if any, used to
+     * @param securityType   Indicates the type of security, if any, used to
      *                       restrict access to the wifi access point.
      */
     APHash(const GByteArray* ssid,
-        NM80211Mode mode,
-        NM80211ApSecurityFlags securityFlags);
+        Mode mode,
+        SecurityType securityType);
 
     /**
      * @brief  Creates an APHash as a copy of another hash value.
