@@ -3,10 +3,9 @@
 namespace LibNM
 {
     class NMThread;
-    class NMCache;
-    class APHash;
 
     // NMObjects:
+    class Object;
     class Client;
     class DeviceWifi;
     class AccessPoint;

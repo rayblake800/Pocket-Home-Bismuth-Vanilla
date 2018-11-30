@@ -1,5 +1,4 @@
 #include "LibNM/NMObjects/Client.h"
-#include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointers for brevity: */
@@ -11,7 +10,7 @@ typedef GLib::ObjectPtr<> ObjectPtr;
 /*
  * Create a Client holding a new NMClient object.
  */
-LibNM::Client::Client() : GLib::Object(NM_TYPE_CLIENT)
+LibNM::Client::Client() : LibNM::Object(NM_TYPE_CLIENT)
 { 
     setGObject(G_OBJECT(nm_client_new()));
 }
@@ -20,13 +19,13 @@ LibNM::Client::Client() : GLib::Object(NM_TYPE_CLIENT)
  * Create a Client that shares a NMClient with another Client.
  */
 LibNM::Client::Client(const Client& toCopy) : 
-GLib::Object(toCopy, NM_TYPE_CLIENT) { }
+LibNM::Object(toCopy, NM_TYPE_CLIENT) { }
  
 /**
  * Create a Client holding an existing NMClient object.
  */
 LibNM::Client::Client(NMClient* toAssign) :
-GLib::Object(G_OBJECT(toAssign), NM_TYPE_CLIENT) { }
+LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CLIENT) { }
 
 /*
  * Get all wifi devices from Network Manager.

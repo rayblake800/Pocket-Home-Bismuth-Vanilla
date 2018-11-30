@@ -10,19 +10,19 @@ typedef GLib::ObjectPtr<NMObject*> NMObjectPtr;
  * ActiveConnection.
  */
 LibNM::ActiveConnection::ActiveConnection(const ActiveConnection& toCopy) :
-GLib::Object(toCopy, NM_TYPE_ACTIVE_CONNECTION) { }
+LibNM::Object(toCopy, NM_TYPE_ACTIVE_CONNECTION) { }
  
 /*
  * Creates a ActiveConnection to contain a NMActiveConnection object.
  */
 LibNM::ActiveConnection::ActiveConnection(NMActiveConnection* toAssign) :
-GLib::Object(G_OBJECT(toAssign), NM_TYPE_ACTIVE_CONNECTION) { }
+LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACTIVE_CONNECTION) { }
     
 /**
  * Creates a null ActiveConnection.
  */
 LibNM::ActiveConnection::ActiveConnection() :
-GLib::Object(NM_TYPE_ACTIVE_CONNECTION) { }
+LibNM::Object(NM_TYPE_ACTIVE_CONNECTION) { }
 
 /*
  * Get the connection path stored by this object.

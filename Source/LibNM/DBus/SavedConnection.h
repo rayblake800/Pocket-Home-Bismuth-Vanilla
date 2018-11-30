@@ -1,7 +1,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "LibNM/LibNM.h"
-#include "LibNM/Connection.h"
+#include "LibNM/NMObjects/Connection.h"
 #include "GLib/DBus/DBusProxy.h"
 
 /**

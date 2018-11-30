@@ -1,8 +1,8 @@
 #pragma once
-#include <nm-access-point.h>
+#include "LibNM/NMObjects/Object.h"
 #include "LibNM/NMObjects/Connection.h"
-#include "GLib/Object.h"
 #include "GLib/SignalHandler.h"
+#include <nm-access-point.h>
 
 /**
  * @file LibNM/AccessPoint.h
@@ -18,7 +18,7 @@
  * receive updates if signal strength changes or the access point is removed. 
  */
 
-class LibNM::AccessPoint : public GLib::Object
+class LibNM::AccessPoint : public LibNM::Object
 {
 public:
     /**
@@ -65,14 +65,6 @@ public:
      *         is null.
      */
     const char* getBSSID() const;
-    
-    /**
-     * Gets the DBus path of the wifi access point.
-     * 
-     * @return  the access point object's DBus path, or the empty string if the 
-     *          access point is null
-     */
-    const char* getPath() const;
     
     /**
      * Gets the wifi access point frequency in (TODO: what format? MHz? 

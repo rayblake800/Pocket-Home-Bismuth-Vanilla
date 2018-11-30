@@ -1,7 +1,6 @@
 #pragma once
+#include "LibNM/NMObjects/Object.h"
 #include <nm-connection.h>
-#include "LibNM/LibNM.h"
-#include "GLib/Object.h"
 
 /**
  * @file LibNM/Connection.h
@@ -9,7 +8,7 @@
  * @brief A RAII container and C++ interface for LibNM NMConnection objects.
  */
 
-class LibNM::Connection : public GLib::Object
+class LibNM::Connection : public LibNM::Object
 {
 public:
     /**

@@ -1,9 +1,8 @@
 #pragma once
-#include <nm-active-connection.h>
-#include "LibNM/LibNM.h"
+#include "LibNM/NMObjects/Object.h"
 #include "LibNM/NMObjects/AccessPoint.h"
 #include "LibNM/NMObjects/Connection.h"
-#include "GLib/Object.h"
+#include <nm-active-connection.h>
 
 /**
  * @file LibNM/ActiveConnection.h
@@ -11,8 +10,7 @@
  * @brief A RAII container and C++ interface for LibNM NMActiveConnection 
  *        objects.
  */
-
-class LibNM::ActiveConnection : public GLib::Object
+class LibNM::ActiveConnection : public LibNM::Object
 {
 public:
     /**

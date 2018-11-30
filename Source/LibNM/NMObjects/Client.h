@@ -1,19 +1,17 @@
 #pragma once
-#include <nm-client.h>
-#include "LibNM/LibNM.h"
+#include "LibNM/NMObjects/Object.h"
 #include "LibNM/NMObjects/Connection.h"
 #include "LibNM/NMObjects/ActiveConnection.h"
 #include "LibNM/NMObjects/DeviceWifi.h"
 #include "GLib/SignalHandler.h"
-#include "GLib/Object.h"
+#include <nm-client.h>
 
 /**
- * #file LibNM/Client.h
+ * @file LibNM/Client.h
  * 
- * @brief A RAII container and C++ interface for the LibNM NMClient class.
+ * @brief  A RAII container and C++ interface for the LibNM NMClient class.
  */
-
-class LibNM::Client : public GLib::Object
+class LibNM::Client : public LibNM::Object
 {
 public:
     /**

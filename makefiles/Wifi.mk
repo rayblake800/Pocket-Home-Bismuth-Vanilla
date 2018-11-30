@@ -4,6 +4,7 @@ WIFI_ROOT = Source/Wifi
 WIFI_TEST_ROOT = Tests/Wifi
 
 OBJECTS_WIFI := \
+  $(WIFI_PREFIX)APHash.o \
   $(WIFI_PREFIX)StateManager.o \
   $(WIFI_PREFIX)AccessPoint.o \
   $(WIFI_PREFIX)NetworkInterface.o \
@@ -27,6 +28,8 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_WIFI)
 wifi : $(OBJECTS_WIFI)
 	@echo "Built Wifi module"
 
+$(WIFI_PREFIX)APHash.o : \
+    $(WIFI_ROOT)/APHash.cpp
 $(WIFI_PREFIX)StateManager.o : \
     $(WIFI_ROOT)/WifiStateManager.cpp
 $(WIFI_PREFIX)AccessPoint.o : \

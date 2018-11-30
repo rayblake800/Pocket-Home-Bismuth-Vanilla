@@ -1,7 +1,7 @@
 #include <nm-setting-connection.h>
 #include <nm-setting-wireless.h>
 #include <nm-setting-wireless-security.h>
-#include "LibNM/SavedConnection.h"
+#include "LibNM/DBus/SavedConnection.h"
 
 /*
  * Create an empty object with no linked connection.

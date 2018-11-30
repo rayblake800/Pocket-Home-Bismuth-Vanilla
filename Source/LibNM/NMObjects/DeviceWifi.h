@@ -1,11 +1,10 @@
 #pragma once
-#include <nm-device-wifi.h>
-#include "LibNM/LibNM.h"
+#include "LibNM/NMObjects/Object.h"
 #include "LibNM/NMObjects/AccessPoint.h"
 #include "LibNM/NMObjects/Connection.h"
 #include "LibNM/NMObjects/ActiveConnection.h"
-#include "GLib/Object.h"
 #include "GLib/SignalHandler.h"
+#include <nm-device-wifi.h>
 
 /**
  * @file LibNM/DeviceWifi.h
@@ -13,7 +12,7 @@
  * @brief A RAII container and C++ interface for LibNM NMDeviceWifi
  *        objects.
  */
-class LibNM::DeviceWifi : public GLib::Object
+class LibNM::DeviceWifi : public LibNM::Object
 {
 public:
     /**

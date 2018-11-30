@@ -1,5 +1,4 @@
 #include "LibNM/NMObjects/DeviceWifi.h"
-#include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointers for brevity: */
@@ -14,20 +13,20 @@ typedef GLib::ObjectPtr<> ObjectPtr;
  * DeviceWifi object
  */
 LibNM::DeviceWifi::DeviceWifi(const DeviceWifi& toCopy) :
-GLib::Object(toCopy, NM_TYPE_DEVICE_WIFI) { }
+LibNM::Object(toCopy, NM_TYPE_DEVICE_WIFI) { }
 
 /*
  * Create a DeviceWifi to contain a NMDeviceWifi object.
  */
 LibNM::DeviceWifi::DeviceWifi(NMDeviceWifi* toAssign) :
-GLib::Object(G_OBJECT(toAssign), NM_TYPE_DEVICE_WIFI) { }
+LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_DEVICE_WIFI) { }
 
     
 /*
  * Creates a null DeviceWifi.
  */
 LibNM::DeviceWifi::DeviceWifi() :
-GLib::Object(NM_TYPE_DEVICE_WIFI) { }
+LibNM::Object(NM_TYPE_DEVICE_WIFI) { }
 
 /*
  * Gets the current state of the wifi network device.

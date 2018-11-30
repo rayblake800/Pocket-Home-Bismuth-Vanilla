@@ -1,7 +1,6 @@
 #include "LibNM/NMObjects/AccessPoint.h"
-#include <nm-utils.h>
-#include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
+#include <nm-utils.h>
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMAccessPoint*> NMAccessPointPtr;
@@ -14,18 +13,18 @@ typedef GLib::ObjectPtr<> ObjectPtr;
  * AccessPoint.
  */
 LibNM::AccessPoint::AccessPoint(const AccessPoint& toCopy) :
-GLib::Object(toCopy, NM_TYPE_ACCESS_POINT) { }
+LibNM::Object(toCopy, NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Create a AccessPoint to contain a NMAccessPoint object.
  */
 LibNM::AccessPoint::AccessPoint(NMAccessPoint* toAssign) :
-GLib::Object(G_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) { }
+LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) { }
     
 /**
  * Creates a null AccessPoint.
  */
-LibNM::AccessPoint::AccessPoint() : GLib::Object(NM_TYPE_ACCESS_POINT) { }
+LibNM::AccessPoint::AccessPoint() : LibNM::Object(NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Gets the access point SSID as a byte array from the access point.  This 
@@ -76,24 +75,6 @@ const char* LibNM::AccessPoint::getBSSID() const
         bssid = nm_access_point_get_bssid(accessPoint);
     }
     return bssid;
-}
-
-/*
- * Gets the DBus path of the wifi access point.
- */
-const char* LibNM::AccessPoint::getPath() const
-{
-    const char* path = "";
-    NMObjectPtr accessPoint(NM_OBJECT(getGObject()));
-    if(accessPoint != nullptr)
-    {
-        path = nm_object_get_path(accessPoint);
-        if(path == nullptr)
-        {
-            path = "";
-        }
-    }
-    return path;
 }
 
 /*

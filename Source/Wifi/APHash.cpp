@@ -1,10 +1,10 @@
-#include "LibNM/APHash.h"
+#include "Wifi/APHash.h"
 
 /*
  * Generates a Wifi access point identifier using the access point's SSID, mode, 
  * and security settings.
  */
- LibNM::APHash::APHash(const GByteArray* ssid, 
+ APHash::APHash(const GByteArray* ssid, 
          Mode mode, 
          SecurityType securityType)
 {
@@ -26,12 +26,12 @@
 /*
  * Creates an APHash as a copy of another hash value.
  */
-LibNM::APHash::APHash(const APHash& toCopy) : hashValue(toCopy.hashValue) { }
+APHash::APHash(const APHash& toCopy) : hashValue(toCopy.hashValue) { }
 
 /*
  * Checks if another APHash is equivalent to this one.
  */
-bool LibNM::APHash::operator==(const APHash& rhs) const
+bool APHash::operator==(const APHash& rhs) const
 {
     return hashValue == rhs.hashValue;
 }
@@ -39,7 +39,7 @@ bool LibNM::APHash::operator==(const APHash& rhs) const
 /*
  * Checks if another APHash is not equivalent to this one.
  */
-bool LibNM::APHash::operator!=(const APHash& rhs) const
+bool APHash::operator!=(const APHash& rhs) const
 {
     return hashValue != rhs.hashValue;
 }
@@ -47,7 +47,7 @@ bool LibNM::APHash::operator!=(const APHash& rhs) const
 /*
  * Compares this APHash with another, so hash values can be sorted.
  */
-bool LibNM::APHash::operator<(const APHash& rhs) const
+bool APHash::operator<(const APHash& rhs) const
 {
     return hashValue < rhs.hashValue;
 }

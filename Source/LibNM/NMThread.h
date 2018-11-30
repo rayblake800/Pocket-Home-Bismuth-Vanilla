@@ -7,8 +7,9 @@
 /**
  * @file  LibNM/NMThread.h
  *
- * @brief  Runs a GLib event loop with the global default context, to be used
- *         only for interacting with LibNM.
+ * @brief  Runs the GLib event loop shared by all LibNM NMObject classes, and 
+ *         creates and allows access to the NetworkManager client and wifi
+ *         device objects within the event loop.
  */
 class LibNM::NMThread : public GLib::ThreadResource
 {
@@ -17,23 +18,29 @@ public:
     static const juce::Identifier resourceKey;
 
     /**
-     * @brief  Initializes the NMThread with the default GLib context.
+     * @brief  Initializes the NMThread with the default GLib context, and
+     *         creates the Wifi device object.
      */
     NMThread();
 
     virtual ~NMThread() { }
 
     /**
-     * @brief
+     * @brief  Gets the shared NetworkManager client object if called within
+     *         the LibNM event loop.
      *
-     * @return 
+     * @return  The client object if called within the event loop, or a null
+     *          Client if called outside of the event loop.
      */
     Client getClient();
 
     /**
-     * @brief 
+     * @brief  Gets the shared DeviceWifi object used to control the
+     *         LibNM-managed Wifi device if called within the LibNM event loop.
      *
-     * @return 
+     * @return  The wifi device object if called within the event loop, or a
+     *          null DeviceWifi if called outside of the event loop, or if no
+     *          managed wifi device was found.
      */
     DeviceWifi getWifiDevice();
 

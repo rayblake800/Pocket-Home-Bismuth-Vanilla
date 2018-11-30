@@ -9,18 +9,18 @@ typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
  * Connection.
  */
 LibNM::Connection::Connection(const Connection& toCopy) :
-GLib::Object(toCopy, NM_TYPE_CONNECTION) { }
+LibNM::Object(toCopy, NM_TYPE_CONNECTION) { }
 
 /**
  * Create a Connection to contain a NMConnection object.
  */
 LibNM::Connection::Connection(NMConnection* toAssign) :
-GLib::Object(G_OBJECT(toAssign), NM_TYPE_CONNECTION) { }
+LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CONNECTION) { }
     
 /*
  * Creates a null Connection.
  */
-LibNM::Connection::Connection() : GLib::Object(NM_TYPE_CONNECTION) { }
+LibNM::Connection::Connection() : LibNM::Object(NM_TYPE_CONNECTION) { }
 
 /**
  * Check if this connection object and another could be describing the 

@@ -1,7 +1,7 @@
 #pragma once
 #include "LibNM/LibNM.h"
-#include "LibNM/AccessPoint.h"
-#include "LibNM/SavedConnection.h"
+#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/DBus/SavedConnection.h"
 #include "GLib/DBus/DBusProxy.h"
 
 /**

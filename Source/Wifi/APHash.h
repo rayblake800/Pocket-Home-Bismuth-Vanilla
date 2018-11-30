@@ -19,7 +19,7 @@
  * for two access points to exist with the same APHash but different passwords, 
  * so this should be considered when handling connection failures.
  */
-class LibNM::APHash
+class APHash
 {
 public:
     enum class Mode
