@@ -7,178 +7,197 @@
 /**
  * @file LibNM/SavedConnection.h
  * 
- * @brief Controls a NetworkManager saved connection object over DBus. 
+ * @brief  Controls a NetworkManager saved connection object over DBus.
+ *
+ *  SavedConnection can read or delete a DBus connection object held by the
+ * NetworkManager. All saved network connections visible to NetworkManager on 
+ * the system running this application may be loaded as SavedConnection objects.
+ * SavedConnection objects are primarily meant to handle Wifi connections, and
+ * support for other connection types is incomplete.
+ *
+ *  As a GLib::DBusProxy, the SavedConnection primarily acts within the shared
+ * DBus thread resource, but it may be accessed safely within other threads.
+ * 
+ *  If the saved connection is a valid wifi connection, SavedConnection can
+ * create a Connection object that may be used with the LibNM::Client to
+ * re-open the connection. As a LibNM::Object subclass, that Connection should
+ * not be used outside of the NMThread.
  */
-
 class LibNM::SavedConnection : public GLib::DBusProxy
 {
 public:
     /**
-     * Create an empty object with no linked connection.
+     * @brief  Creates an empty object with no linked connection.
      */
     SavedConnection();
     
     /**
-     * Create an object from an existing DBus Connection proxy.
+     * @brief  Creates an object from an existing DBus Connection proxy.
      * 
-     * @param toCopy  Existing connection object to copy.
+     * @param toCopy  The existing connection object to copy.
      */
     SavedConnection(const SavedConnection& toCopy);
     
     /**
-     * Initialize a SavedConnection from a DBus connection path.
+     * @brief  Initializes a SavedConnection from a DBus connection path.
      * 
-     * @param path A valid DBus path to a NetworkManager saved connection.
+     * @param path  A valid DBus path to a NetworkManager saved connection.
      */
     SavedConnection(const char* path);
     
     virtual ~SavedConnection() { }
     
     /**
-     * Gets the connection's DBus path.
+     * @brief  Gets the connection's DBus path.
      * 
-     * @return the DBus path used to create this object, or the empty string if
-     *         the connection is not valid.
+     * @return  The DBus path used to create this object, or the empty string if
+     *          the connection is not valid.
      */
     const juce::String& getPath() const;
     
     /**
-     * Checks if this connection is a wifi connection.
+     * @brief  Checks if this connection is a wifi connection.
      * 
-     * @return true iff connection settings are for a wifi connection.
+     * @return  Whether the saved connection has wifi connection settings.
      */
     bool isWifiConnection() const;
     
     /**
-     * Gets the Connection object generated from this connection's data.
-     * Only wifi connections are supported, others are not guaranteed to work.
+     * @brief  Gets the Connection object generated from this connection's data.
+     *
+     * Only wifi connections are supported, other connection types will result
+     * in incomplete Connection objects.
      * 
-     * @return the Connection object for this connection, or nullptr if the
-     *         connection is invalid.
+     * @return  The Connection object for this connection, or nullptr if the
+     *          connection is invalid.
      */
     Connection getNMConnection() const;
     
     /**
-     * Gets the last recorded time this saved connection was active.
+     * @brief  Gets the last recorded time this saved connection was active.
      *
-     * @return  the last time the connection was active, or the Unix epoch if
+     * @return  The last time the connection was active, or the Unix epoch if
      *          the connection has no saved connection time.
      */
     juce::Time lastConnectionTime() const;
 
     /**
-     * Checks if the connection has a saved wireless security key.
+     * @brief  Checks if the connection has a saved wireless security key.
      * 
-     * @return true iff a security key value was found in this connection's
-     *         settings.
+     * @return  Whether a security key value was found in this connection's
+     *          settings.
      */
     bool hasSavedKey() const;
     
     /**
-     * Deletes this connection from the list of saved connections.  This object
-     * will be invalid after this method is called.
+     * @brief  Deletes this connection from the list of saved connections.  
+     *
+     * This object will be null after this method is called.
      */
     void deleteConnection();
     
     /**
-     * Compare SavedConnections using the connection path.
+     * @brief  Compares SavedConnections using their connection paths.
      * 
      * @param rhs  A connection to compare with this object.
      * 
-     * @return  true iff this connection and rhs share a DBus path.
+     * @return     Whether this connection and rhs share a DBus path.
      */
     bool operator==(const SavedConnection& rhs) const;
     
     /**
-     * Compare SavedConnections with NMConnections using the connection path.
+     * @brief  Compares SavedConnections with NMConnections using their 
+     *         connection paths.
      * 
      * @param rhs  A connection to compare with this object.
      * 
-     * @return  true iff this connection and rhs share a DBus path.
+     * @return     Whether this connection and rhs share a DBus path.
      */
     bool operator==(NMConnection* rhs) const;
     
 private:
     /**
-     * Create a Connection object using this saved connection's data.
-     * Only wifi connections are supported, others are not guaranteed to work.
+     * @brief  Creates a Connection object using this saved connection's data.
+     *
+     * Only wifi connections are supported, other connection types will result
+     * in incomplete Connection objects.
      */
     void createNMConnection();
     
     /**
-     * Returns one of this connection's settings objects.
+     * @brief  Returns one of this connection's settings objects.
      * 
      * @param name  The name of the connection setting to find.
      * 
-     * @return the setting with the matching name, if found. If this value is
-     *         non-null, it will need to be freed with g_variant_unref. 
+     * @return      The setting with the matching name, if found. If this value 
+     *              is non-null, it will need to be freed with g_variant_unref. 
      */
     GVariant* getSetting(const char* name) const;
     
     /**
-     * Returns the value of a specific property for a specific settings
-     * object
+     * @brief  Returns the value of a specific settings object property.
      * 
      * @param settingName  The name of the connection setting to search.
      * 
      * @param propName     The name of the property to search for in the
      *                     settings object.
      * 
-     * @return the matching property, if found. If this value is
-     *         non-null, it will need to be freed with g_variant_unref. 
+     * @return             The matching property, if found. If this value is
+     *                     non-null, it will need to be freed with 
+     *                     g_variant_unref. 
      */
-    GVariant* getSettingProp(const char* settingName,
-            const char* propName) const;
+    GVariant* getSettingProp(const char* settingName, const char* propName) 
+        const;
         
     /**
-     * Returns the value of a specific property for a specific settings
-     * object
+     * @brief  Returns the value of a specific settings object property.
      * 
      * @param settingsObject  A settings object extracted from this connection.
      * 
      * @param propName        The name of the property to search for in the
      *                        settings object.
      * 
-     * @return the matching property, if found. If this value is
-     *         non-null, it will need to be freed with g_variant_unref. 
+     * @return                The matching property, if found. If this value is
+     *                        non-null, it will need to be freed with 
+     *                        g_variant_unref. 
      */
-    GVariant* getSettingProp(GVariant* settingsObject,
-            const char* propName) const;
+    GVariant* getSettingProp(GVariant* settingsObject, const char* propName) 
+        const;
     
     /**
-     * Checks if this connection has a particular setting type.
+     * @brief  Checks if this connection has a particular setting type.
      * 
      * @param settingName  The name of a connection settings object to find.
      * 
-     * @return true iff a settings object named settingName exists 
+     * @return             Whether a settings object named settingName exists.
      */
     bool hasSetting(const char* settingName) const;
         
     /**
-     * Checks if this connection has a specific settings property in a specific 
-     * settings type. Don't use this if you actually need any data from the 
-     * setting, in that case it's more effective to just get the setting object
-     * and check if getSettingParam returns null.
+     * @brief  Checks if this connection has a specific setting type, and if 
+     *         that settings object as a specific property.
+     * 
+     *  Don't use this if you actually need any data from the setting, in that 
+     * case it's more effective to just get the setting object and check if 
+     * getSettingParam returns null.
      * 
      * @param settingName  The name of a connection settings object to find.
      * 
      * @param propName     The name of a settings property to check for.
      * 
-     * @return true iff a settings object named settingName exists and contains
-     *         a property called propName.
+     * @return             Whether a settings object named settingName exists 
+     *                     and contains a property called propName.
      */
-    bool hasSettingProperty(const char* settingName, const char* propName) const;
+    bool hasSettingProperty(const char* settingName, const char* propName) 
+        const;
     
+    /* A LibNM::Connection object created from the saved settings data */
     Connection nmConnection;
-    juce::StringArray settingNames;
-    juce::String path;
-    
-    static const constexpr char * busName = "org.freedesktop.NetworkManager";
-    static const constexpr char * interfaceName 
-            = "org.freedesktop.NetworkManager.Settings.Connection";
 
-    static const constexpr char * getSettingsMethod = "GetSettings";
-    static const constexpr char * getSecretsMethod = "GetSecrets";
-    static const constexpr char * deleteConnectionMethod = "Delete";
-    static const constexpr char * updateMethod = "Update";
+    /* Holds the names of all settings objects associated with this 
+       SavedConnection. */
+    juce::StringArray settingNames;
+
+    /* The SavedConnection's DBus path: */
+    juce::String path;
 };

@@ -10,6 +10,11 @@
  * @brief  Runs the GLib event loop shared by all LibNM NMObject classes, and 
  *         creates and allows access to the NetworkManager client and wifi
  *         device objects within the event loop.
+ *
+ *  All interaction with LibNM::Object subclasses should occur within the
+ * NMThread, using its call and callAsync methods. The Client and DeviceWifi
+ * objects provided by the NMThread should be requested as needed, and not
+ * saved for future use.
  */
 class LibNM::NMThread : public GLib::ThreadResource
 {
@@ -50,5 +55,4 @@ private:
 
     /* Interacts with the LibNM-managed wifi device. */
     DeviceWifi wifiDevice;
-
 };

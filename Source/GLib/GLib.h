@@ -3,7 +3,8 @@
 /**
  * @file  GLib/GLib.h
  *
- * @brief  Provides a C++ object interface for GLib's C-based object system. 
+ * @brief  Provides a C++ object interface and RAII memory management for GLib's 
+ *         C-based object system. 
  */
 namespace GLib
 {
@@ -46,7 +47,11 @@ namespace GLib
      * @brief  Safely accesses a GLib event loop thread resource.
      *
      * @see  GLib/ThreadHandler.h
+     *
+     * @tparam GLibThreadType  The GLib::ThreadResource instance subclass 
+     *                         the ThreadHandler will access.
      */
+    template<class GLibThreadType>
     class ThreadHandler;
 
     /**

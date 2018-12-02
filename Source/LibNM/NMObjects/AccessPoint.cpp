@@ -13,15 +13,21 @@ typedef GLib::ObjectPtr<> ObjectPtr;
  * AccessPoint.
  */
 LibNM::AccessPoint::AccessPoint(const AccessPoint& toCopy) :
-LibNM::Object(toCopy, NM_TYPE_ACCESS_POINT) { }
+LibNM::Object(toCopy, NM_TYPE_ACCESS_POINT) 
+{
+    ASSERT_CORRECT_CONTEXT;
+}
 
 /*
  * Create a AccessPoint to contain a NMAccessPoint object.
  */
 LibNM::AccessPoint::AccessPoint(NMAccessPoint* toAssign) :
-LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) { }
+LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) 
+{
+    ASSERT_CORRECT_CONTEXT;
+}
     
-/**
+/*
  * Creates a null AccessPoint.
  */
 LibNM::AccessPoint::AccessPoint() : LibNM::Object(NM_TYPE_ACCESS_POINT) { }
@@ -32,6 +38,7 @@ LibNM::AccessPoint::AccessPoint() : LibNM::Object(NM_TYPE_ACCESS_POINT) { }
  */
 const GByteArray* LibNM::AccessPoint::getSSID() const
 {
+    ASSERT_CORRECT_CONTEXT;
     const GByteArray* ssid = nullptr;
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -48,6 +55,7 @@ const GByteArray* LibNM::AccessPoint::getSSID() const
  */
 juce::String LibNM::AccessPoint::getSSIDText() const
 {
+    ASSERT_CORRECT_CONTEXT;
     juce::String ssidText;
     const GByteArray* ssid = getSSID();
     if(ssid != nullptr)
@@ -68,6 +76,7 @@ juce::String LibNM::AccessPoint::getSSIDText() const
  */
 const char* LibNM::AccessPoint::getBSSID() const
 {
+    ASSERT_CORRECT_CONTEXT;
     const char* bssid = "";
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
@@ -78,37 +87,11 @@ const char* LibNM::AccessPoint::getBSSID() const
 }
 
 /*
- * Gets the wifi access point frequency in (TODO: what format? MHz? 
- * documentation is unclear, do some tests and figure it out.)
- */
-unsigned int LibNM::AccessPoint::getFrequency() const
-{
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
-    {
-        return nm_access_point_get_frequency(accessPoint);
-    }
-    return 0;
-}
-
-/*
- * Gets the access point's maximum data transfer bit rate.
- */
-unsigned int LibNM::AccessPoint::getMaxBitrate() const
-{
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
-    {
-        return nm_access_point_get_max_bitrate(accessPoint);
-    }
-    return 0;
-}
-
-/*
  * Gets the signal strength of the wifi access point.
  */
 unsigned int LibNM::AccessPoint::getSignalStrength() const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
     {
@@ -118,11 +101,11 @@ unsigned int LibNM::AccessPoint::getSignalStrength() const
 }
 
 /*
- * Check the settings of a connection against the properties of this access
- * point to see if the connection could be activated with this access point.
+ * Checks if a connection could potentially be activated with this access point.
  */
 bool LibNM::AccessPoint::isValidConnection(const Connection& connection) const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMConnectionPtr nmConnection(NM_CONNECTION(getOtherGObject(connection)));
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(nmConnection == nullptr || accessPoint == nullptr)
@@ -137,6 +120,7 @@ bool LibNM::AccessPoint::isValidConnection(const Connection& connection) const
  */
 NM80211Mode LibNM::AccessPoint::getMode() const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
     {
@@ -146,10 +130,11 @@ NM80211Mode LibNM::AccessPoint::getMode() const
 }
 
 /*
- * Get access point flags for this access point.
+ * Gets access point flags for this access point.
  */
 NM80211ApFlags LibNM::AccessPoint::getFlags() const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
     {
@@ -159,10 +144,11 @@ NM80211ApFlags LibNM::AccessPoint::getFlags() const
 }
 
 /*
- * Get WPA security flags for this access point.
+ * Gets WPA security flags for this access point.
  */
 NM80211ApSecurityFlags LibNM::AccessPoint::getWPAFlags() const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
     {
@@ -172,10 +158,11 @@ NM80211ApSecurityFlags LibNM::AccessPoint::getWPAFlags() const
 }
 
 /*
- * Get RSN security flags for this access point.
+ * Gets RSN security flags for this access point.
  */
 NM80211ApSecurityFlags LibNM::AccessPoint::getRSNFlags() const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
     if(accessPoint != nullptr)
     {
@@ -185,10 +172,11 @@ NM80211ApSecurityFlags LibNM::AccessPoint::getRSNFlags() const
 }
 
 /*
- * Subscribe to signal strength signals from a single NMAccessPoint.
+ * Subscribes to signal strength signals from a single NMAccessPoint.
  */
 void LibNM::AccessPoint::Listener::connectAllSignals(GObject* source)
 {
+    ASSERT_CORRECT_CONTEXT;
     if(source != nullptr && NM_IS_ACCESS_POINT(source))
     {
         connectNotifySignal(source, NM_ACCESS_POINT_STRENGTH);
@@ -196,12 +184,13 @@ void LibNM::AccessPoint::Listener::connectAllSignals(GObject* source)
 }
 
 /*
- * Build AccessPoint::Listener::signalStrengthChanged() calls from generic 
- * property change notifications.
+ * Builds signalStrengthChanged() calls from generic property change 
+ * notifications.
  */
 void LibNM::AccessPoint::Listener::propertyChanged
 (GObject* source, juce::String property) 
 { 
+    ASSERT_CORRECT_CONTEXT;
     if(property == NM_ACCESS_POINT_STRENGTH && NM_IS_ACCESS_POINT(source))
     {
         g_object_ref(source);
@@ -211,11 +200,12 @@ void LibNM::AccessPoint::Listener::propertyChanged
     }
 }
  
-/**
- * Add a new listener to receive updates from this access point.
+/*
+ * Adds a new listener to receive updates from this access point.
  */
 void LibNM::AccessPoint::addListener(AccessPoint::Listener& listener)
 {
+    ASSERT_CORRECT_CONTEXT;
     ObjectPtr apObject(getGObject());
     if(apObject != nullptr)
     {

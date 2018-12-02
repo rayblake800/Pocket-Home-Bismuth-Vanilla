@@ -1,7 +1,6 @@
 #pragma once
-#include "FileResource.h"
+#include "Config/FileResource.h"
 #include "SharedResource/Handler.h"
-#include "Config.h"
 
 /**
  * @file FileHandler.h
@@ -10,10 +9,15 @@
  *         and writing to a single JSON configuration file.
  *
  * @tparam ResourceType  The FileResource subclass this FileHandler will access.
- *                         Required class members:
- *                         
- *                         static const juce::Identifier resourceKey;
- *                         (holding the SharedResource object key)
+ * 
+ *  All access to Config::FileResource objects should occur through FileHandler
+ * objects. FileHandler objects for a FileResource may be created at any point, 
+ * and all of them will safely share access to the same file and JSON data. 
+ * 
+ *  FileHandlers can safely read and write values with basic data types within
+ * their ThreadResource. Accessing array and object data types requires a 
+ * FileHandler subclass with new methods for handling the JSON file's custom
+ * data types.
  */
 template<class ResourceType>
 class Config::FileHandler : public SharedResource::Handler<ResourceType>

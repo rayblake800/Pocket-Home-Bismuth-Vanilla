@@ -7,6 +7,9 @@
 #include "AppMenu/ConfigFile.h"
 #include "HomePage.h"
 
+/*
+ * Initializes all page components and creates the AppMenu.
+ */
 HomePage::HomePage() :
 PageComponent("HomePage"),
 frame(ComponentConfigKeys::menuFrameKey, 0,
@@ -51,9 +54,7 @@ settingsButton(ComponentConfigKeys::settingsButtonKey)
 }
 
 /*
- * Tracks page background and menu type changes. Only the MainConfigFile 
- * should be calling this.  Depending on the key provided, this will update
- * the page background or recreate the AppMenu.
+ * Tracks page background changes.
  */
 void HomePage::configValueChanged(const juce::Identifier& key)
 {
@@ -75,6 +76,11 @@ void HomePage::configValueChanged(const juce::Identifier& key)
         {
             setBackgroundImage(AssetFiles::loadImageAsset(background));
         }
+    }
+    else
+    {
+        //invalid key!
+        jassertfalse;
     }
 }
 

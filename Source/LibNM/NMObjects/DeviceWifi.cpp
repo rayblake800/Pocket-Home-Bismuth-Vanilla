@@ -7,6 +7,13 @@ typedef GLib::ObjectPtr<NMDevice*> NMDevicePtr;
 typedef GLib::ObjectPtr<NMDeviceWifi*> NMDeviceWifiPtr;
 typedef GLib::ObjectPtr<> ObjectPtr;
 
+/* Object property keys: */
+static const constexpr char * activeConnectionProperty = "active-connection";
+
+/* Object signal keys: */
+static const constexpr char * stateChangeSignal = "state-changed";
+static const constexpr char * addedAPSignal     = "access-point-added";
+static const constexpr char * removedAPSignal   = "access-point-removed";
 
 /*
  * Creates a DeviceWifi object that shares a NMDeviceWifi* with another 
@@ -19,9 +26,11 @@ LibNM::Object(toCopy, NM_TYPE_DEVICE_WIFI) { }
  * Create a DeviceWifi to contain a NMDeviceWifi object.
  */
 LibNM::DeviceWifi::DeviceWifi(NMDeviceWifi* toAssign) :
-LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_DEVICE_WIFI) { }
+LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_DEVICE_WIFI) 
+{ 
+    ASSERT_CORRECT_CONTEXT;
+}
 
-    
 /*
  * Creates a null DeviceWifi.
  */
@@ -33,6 +42,7 @@ LibNM::Object(NM_TYPE_DEVICE_WIFI) { }
  */
 NMDeviceState LibNM::DeviceWifi::getState() const
 { 
+    ASSERT_CORRECT_CONTEXT;
     NMDeviceState state = NM_DEVICE_STATE_UNKNOWN;
     NMDevicePtr device(NM_DEVICE(getGObject()));
     if(device != nullptr)
@@ -47,6 +57,7 @@ NMDeviceState LibNM::DeviceWifi::getState() const
  */
 NMDeviceStateReason LibNM::DeviceWifi::getStateReason() const
 { 
+    ASSERT_CORRECT_CONTEXT;
     NMDeviceStateReason reason = NM_DEVICE_STATE_REASON_UNKNOWN;
     NMDevicePtr device(NM_DEVICE(getGObject()));
     if(device != nullptr)
@@ -61,6 +72,7 @@ NMDeviceStateReason LibNM::DeviceWifi::getStateReason() const
  */
 bool LibNM::DeviceWifi::isManaged() const
 { 
+    ASSERT_CORRECT_CONTEXT;
     NMDevicePtr device(NM_DEVICE(getGObject()));
     if(device != nullptr)
     {
@@ -74,6 +86,7 @@ bool LibNM::DeviceWifi::isManaged() const
  */
 const char* LibNM::DeviceWifi::getInterface() const
 { 
+    ASSERT_CORRECT_CONTEXT;
     const char* iface = "";
     NMDevicePtr device(NM_DEVICE(getGObject()));
     if(device != nullptr)
@@ -88,29 +101,11 @@ const char* LibNM::DeviceWifi::getInterface() const
 }
 
 /*
- * Gets the DBus path of this wifi device.
- */
-const char* LibNM::DeviceWifi::getPath() const
-{ 
-    const char* path = "";
-    NMObjectPtr device(NM_OBJECT(getGObject()));
-    if(device != nullptr)
-    {
-        path = nm_object_get_path(device);
-        if(path == nullptr)
-        {
-            path = "";
-        }
-    }
-    return path;
-}
-
-/*
- * Disconnects any connection that is active on this wifi device.  If there
- * is no active connection, or the object is null, nothing will happen.
+ * Disconnects any connection that is active on this wifi device.
  */
 void LibNM::DeviceWifi::disconnect() 
 { 
+    ASSERT_CORRECT_CONTEXT;
     NMDevicePtr device(NM_DEVICE(getGObject()));
     if(device != nullptr)
     {
@@ -123,6 +118,7 @@ void LibNM::DeviceWifi::disconnect()
  */
 LibNM::ActiveConnection LibNM::DeviceWifi::getActiveConnection() const
 { 
+    ASSERT_CORRECT_CONTEXT;
     NMDevicePtr device(NM_DEVICE(getGObject()));
     if(device != nullptr)
     {
@@ -138,12 +134,12 @@ LibNM::ActiveConnection LibNM::DeviceWifi::getActiveConnection() const
   
 /*
  * Gets the list of connections available to activate on this device.
- * This might not load all saved connections.
  */
 juce::Array<LibNM::Connection> 
 LibNM::DeviceWifi::getAvailableConnections() const
 { 
-    juce::Array<Connection> available;
+    ASSERT_CORRECT_CONTEXT;
+    juce::Array<Connection> availableConnections;
     NMDevicePtr device(NM_DEVICE(getGObject()));
     if(device != nullptr)
     {
@@ -154,15 +150,13 @@ LibNM::DeviceWifi::getAvailableConnections() const
             if(connection != nullptr)
             {
                 g_object_ref(G_OBJECT(connection));
-                available.add(Connection(connection));
+                availableConnections.add(Connection(connection));
             }
         }
     }
-    return available;
+    return availableConnections;
 }
 
-
-    
 /*
  * Finds the first available connection that is compatible with a specific wifi 
  * access point.
@@ -170,6 +164,7 @@ LibNM::DeviceWifi::getAvailableConnections() const
 LibNM::Connection LibNM::DeviceWifi::getAvailableConnection
 (const AccessPoint& accessPoint) const
 {
+    ASSERT_CORRECT_CONTEXT;
     if(!accessPoint.isNull())
     {
         juce::Array<Connection> available = getAvailableConnections();
@@ -189,6 +184,7 @@ LibNM::Connection LibNM::DeviceWifi::getAvailableConnection
  */
 LibNM::AccessPoint LibNM::DeviceWifi::getAccessPoint(const char* path) const
 { 
+    ASSERT_CORRECT_CONTEXT;
     NMDeviceWifiPtr device(NM_DEVICE_WIFI(getGObject()));
     if(device != nullptr)
     {
@@ -208,6 +204,7 @@ LibNM::AccessPoint LibNM::DeviceWifi::getAccessPoint(const char* path) const
  */
 LibNM::AccessPoint LibNM::DeviceWifi::getActiveAccessPoint() const
 { 
+    ASSERT_CORRECT_CONTEXT;
     NMDeviceWifiPtr device(NM_DEVICE_WIFI(getGObject()));
     if(device != nullptr)
     {
@@ -227,6 +224,7 @@ LibNM::AccessPoint LibNM::DeviceWifi::getActiveAccessPoint() const
  */
 juce::Array<LibNM::AccessPoint> LibNM::DeviceWifi::getAccessPoints() const
 { 
+    ASSERT_CORRECT_CONTEXT;
     juce::Array<AccessPoint> accessPoints;
     NMDeviceWifiPtr device(NM_DEVICE_WIFI(getGObject()));
     if(device != nullptr)
@@ -251,6 +249,7 @@ juce::Array<LibNM::AccessPoint> LibNM::DeviceWifi::getAccessPoints() const
  */
 bool LibNM::DeviceWifi::hasConnectionAvailable(const Connection& toFind) const
 {
+    ASSERT_CORRECT_CONTEXT;
     if(toFind.isNull())
     {
         return false;
@@ -263,6 +262,7 @@ bool LibNM::DeviceWifi::hasConnectionAvailable(const Connection& toFind) const
  */
 void LibNM::DeviceWifi::requestScan() 
 { 
+    ASSERT_CORRECT_CONTEXT;
     NMDeviceWifiPtr device(NM_DEVICE_WIFI(getGObject()));
     if(device != nullptr)
     {
@@ -271,31 +271,32 @@ void LibNM::DeviceWifi::requestScan()
 }
 
 /*
- * Subscribe to all relevant signals from a single GObject signal source.
- * 
+ * Subscribes to all relevant signals from a single GObject signal source.
  */
 void LibNM::DeviceWifi::Listener::connectAllSignals(GObject* source) 
 {
+    ASSERT_CORRECT_CONTEXT;
     if(source != nullptr && NM_IS_DEVICE_WIFI(source))
     {
-        connectSignal(source, "state-changed",
+        connectSignal(source, stateChangeSignal, 
                 G_CALLBACK(stateChangeCallback));
-        connectSignal(source, "access-point-added", 
+        connectSignal(source, addedAPSignal, 
                 G_CALLBACK(apAddedCallback));
-        connectSignal(source, "access-point-removed",
+        connectSignal(source, removedAPSignal,
                 G_CALLBACK(apRemovedCallback));
-        connectNotifySignal(source, "active-connection");
+        connectNotifySignal(source, activeConnectionProperty);
     }
 }
  
 /*
- * Convert generic property change notifications into 
- * activeConnectionChanged calls.
+ * Converts generic property change notifications into activeConnectionChanged 
+ * calls.
  */
 void LibNM::DeviceWifi::Listener::propertyChanged(GObject* source,
         juce::String property)
 {
-    jassert(property == "active-connection");
+    ASSERT_CORRECT_CONTEXT;
+    jassert(property == activeConnectionProperty);
     if(source != nullptr && NM_IS_DEVICE_WIFI(source)) 
     {
         DeviceWifi device(NM_DEVICE_WIFI(source));
@@ -317,8 +318,7 @@ void LibNM::DeviceWifi::addListener(DeviceWifi::Listener& listener)
 
 /*
  * The GCallback method called directly by LibNM code when sending state-changed 
- * signals.  This will use the signal data to call the listener object's 
- * stateChanged method.
+ * signals.
  */
 void LibNM::DeviceWifi::stateChangeCallback(
         NMDevice* device,
@@ -327,27 +327,28 @@ void LibNM::DeviceWifi::stateChangeCallback(
         NMDeviceStateReason reason,
         Listener* listener) 
 { 
+    ASSERT_CORRECT_CONTEXT;
     listener->stateChanged(newState, oldState, reason);
 }
 
 /*
  * The GCallback method called directly by LibNM code when sending 
- * access-point-added signals.  This will use the signal data to call the
- * listener object's accessPointAdded method.
+ * access-point-added signals.
  */
 void LibNM::DeviceWifi::apAddedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
         Listener* listener) 
 { 
+    ASSERT_CORRECT_CONTEXT;
     listener->accessPointAdded(AccessPoint(ap));
 }
 
 /*
  * The GCallback method called directly by LibNM code when sending 
- * access-point-removed signals.  This will use the signal data to call the
- * listener object's accessPointRemoved method.
+ * access-point-removed signals.
  */
 void LibNM::DeviceWifi::apRemovedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
         Listener* listener) 
 { 
+    ASSERT_CORRECT_CONTEXT;
     listener->accessPointRemoved(AccessPoint(ap));
 }

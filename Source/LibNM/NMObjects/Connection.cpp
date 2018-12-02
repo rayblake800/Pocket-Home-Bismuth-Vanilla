@@ -5,29 +5,35 @@
 typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
 
 /*
- * Create a Connection sharing a GObject with an existing
- * Connection.
+ * Creates a Connection sharing a GObject with an existing Connection.
  */
 LibNM::Connection::Connection(const Connection& toCopy) :
-LibNM::Object(toCopy, NM_TYPE_CONNECTION) { }
+LibNM::Object(toCopy, NM_TYPE_CONNECTION) 
+{
+    ASSERT_CORRECT_CONTEXT;
+}
 
-/**
- * Create a Connection to contain a NMConnection object.
+/*
+ * Creates a Connection to contain a NMConnection object.
  */
 LibNM::Connection::Connection(NMConnection* toAssign) :
-LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CONNECTION) { }
+LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CONNECTION) 
+{ 
+    ASSERT_CORRECT_CONTEXT;
+}
     
 /*
  * Creates a null Connection.
  */
 LibNM::Connection::Connection() : LibNM::Object(NM_TYPE_CONNECTION) { }
 
-/**
- * Check if this connection object and another could be describing the 
- * same network connection.
+/*
+ * Checks if this connection object and another could be describing the same 
+ * network connection.
  */
 bool LibNM::Connection::connectionMatches(const Connection& rhs) const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMConnectionPtr self(NM_CONNECTION(getGObject()));
     NMConnectionPtr toCompare(NM_CONNECTION(rhs.getGObject()));
     if(self == toCompare)
@@ -44,11 +50,11 @@ bool LibNM::Connection::connectionMatches(const Connection& rhs) const
    
 
 /*
- * Add a new connection setting to this connection.  If the connection is
- * null, this will create a new NMConnection object.
+ * Adds a new connection setting to this connection.
  */
 void LibNM::Connection::addSetting(NMSetting* setting)
 {
+    ASSERT_CORRECT_CONTEXT;
     if(isNull())
     {
         setGObject(G_OBJECT(nm_connection_new()));
@@ -59,10 +65,11 @@ void LibNM::Connection::addSetting(NMSetting* setting)
 }
 
 /*
- * Remove one of the connection settings from this connection.
+ * Removes one of the connection settings from this connection.
  */
 void LibNM::Connection::removeSetting(GType settingType)
 {
+    ASSERT_CORRECT_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -71,12 +78,11 @@ void LibNM::Connection::removeSetting(GType settingType)
 }
     
 /*
- * Adds new wireless connection settings to this connection.  If this
- * connection is null, this will initialize it with a new NMConnection
- * object.
+ * Adds new wireless connection settings to this connection.
  */
 void LibNM::Connection::addWifiSettings(const GByteArray* ssid, bool isHidden)
 {
+    ASSERT_CORRECT_CONTEXT;
     if(ssid != nullptr)
     {   
         NMSettingWireless* wifiSettings
@@ -96,6 +102,7 @@ void LibNM::Connection::addWifiSettings(const GByteArray* ssid, bool isHidden)
  */
 bool LibNM::Connection::addWPASettings(const juce::String& psk)
 {
+    ASSERT_CORRECT_CONTEXT;
     if(psk.length() < 8)
     {
         return false;
@@ -116,6 +123,7 @@ bool LibNM::Connection::addWPASettings(const juce::String& psk)
  */
 bool LibNM::Connection::addWEPSettings(const juce::String& psk)
 {
+    ASSERT_CORRECT_CONTEXT;
     const char* keyType = nullptr;
     if (psk.length() == 10 || psk.length() == 26)
     {
@@ -136,22 +144,26 @@ bool LibNM::Connection::addWEPSettings(const juce::String& psk)
     }
     NMSettingWirelessSecurity* securitySettings
             = (NMSettingWirelessSecurity*) nm_setting_wireless_security_new();
+
     g_object_set(G_OBJECT(securitySettings),
             NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
             keyType,
             NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
             NM_SETTING_SECRET_FLAG_NONE,  nullptr);
+
     nm_setting_wireless_security_set_wep_key
             (securitySettings, 0, psk.toRawUTF8());
+
     addSetting(NM_SETTING(securitySettings));
     return true;
 }
 
 /*
- * Get one of this connection's setting objects.
+ * Gets one of this connection's setting objects.
  */
 NMSetting* LibNM::Connection::getSetting(GType settingType) const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -161,10 +173,11 @@ NMSetting* LibNM::Connection::getSetting(GType settingType) const
 }
 
 /*
- * Check the validity of this connection.
+ * Checks the validity of this connection.
  */
 bool LibNM::Connection::verify(GError** error) const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -174,11 +187,11 @@ bool LibNM::Connection::verify(GError** error) const
 }
 
 /*
- * Set the connection path stored by this object.  If the connection is null,
- * this will create a new NMConnection object.
+ * Sets the connection path stored by this object.
  */
 void LibNM::Connection::setPath(const char* path)
 {
+    ASSERT_CORRECT_CONTEXT;
     if(isNull())
     {
         setGObject(G_OBJECT(nm_connection_new()));
@@ -191,10 +204,11 @@ void LibNM::Connection::setPath(const char* path)
 }
 
 /*
- * Get the connection path stored by this object.
+ * Gets the connection path stored by this object.
  */
 const char* LibNM::Connection::getPath() const
 {
+    ASSERT_CORRECT_CONTEXT;
     const char* path = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -209,10 +223,11 @@ const char* LibNM::Connection::getPath() const
 }
 
 /*
- * Get a unique ID string for this connection.
+ * Gets a unique ID string for this connection.
  */
 const char* LibNM::Connection::getUUID() const
 {
+    ASSERT_CORRECT_CONTEXT;
     const char* uuid = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -227,10 +242,11 @@ const char* LibNM::Connection::getUUID() const
 }
 
 /*
- * Get the connection's NetworkManager ID string.
+ * Gets the connection's NetworkManager ID string.
  */
 const char* LibNM::Connection::getID() const
 {
+    ASSERT_CORRECT_CONTEXT;
     const char* conId = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -251,6 +267,7 @@ const char* LibNM::Connection::getID() const
  */
 void LibNM::Connection::printDebugOutput() const
 {
+    ASSERT_CORRECT_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -258,4 +275,3 @@ void LibNM::Connection::printDebugOutput() const
     }
 }
 #endif
-    

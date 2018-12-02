@@ -17,7 +17,8 @@
 #include "GLib/ThreadHandler.h"
 #include "GLib/SignalHandler.h"
 
-class GLib::DBusProxy : public GLib::Object, public GLib::ThreadHandler
+class GLib::DBusProxy : public GLib::Object,
+    public GLib::ThreadHandler<DBusThread>
 {
 protected:
     /**

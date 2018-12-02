@@ -7,6 +7,13 @@
  * @file  LibNM/NMObjects/Object.h
  *
  * @brief  The base class for all LibNM GObject classes.
+ *
+ *  LibNM::Object classes each contain a different subtype of libnm-glib's
+ * base NMObject type. NMObject* values each represent a different connection
+ * to a NetworkManager interface over DBus. Because libnm-glib is not guaranteed
+ * to be threadsafe, all interaction with LibNM::Object and its subclasses
+ * should occur on the GLib global default context loop, which runs on the
+ * NMThread SharedResource object.
  */
 class LibNM::Object : public GLib::Object
 {
@@ -33,7 +40,7 @@ protected:
      *
      * @param toAssign  An NMObject* that the new Object will manage.
      *
-     * @param nmType  The new object's specific LibNM object type
+     * @param nmType    The new object's specific LibNM object type.
      */
     Object(const NMObject* toAssign, const GType nmType);
 
@@ -46,3 +53,21 @@ public:
      */
     const char* getPath() const;
 };
+
+/**
+ * @brief  A debugging macro used to find inappropriate LibNM::Object 
+ *         access outside of the global default main context. In release builds,
+ *         these checks will be removed.
+ * 
+ * LibNM::Object classes should call this at the beginning of most methods.
+ */
+#ifdef JUCE_DEBUG
+#define ASSERT_CORRECT_CONTEXT                                \
+    if(!g_main_context_is_owner(g_main_context_default()))    \
+    {                                                         \
+        DBG("LibNM: Accessed NMObject outside of NMThread!"); \
+        jassertfalse;                                         \
+    }
+#else
+#define ASSERT_CORRECT_CONTEXT
+#endif

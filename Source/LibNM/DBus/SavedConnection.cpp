@@ -1,10 +1,27 @@
+#include "LibNM/DBus/SavedConnection.h"
+#include "LibNM/NMThreadHandler.h"
 #include <nm-setting-connection.h>
 #include <nm-setting-wireless.h>
 #include <nm-setting-wireless-security.h>
-#include "LibNM/DBus/SavedConnection.h"
+
+/* The NetworkManager's DBus path: */
+static const constexpr char * busName = "org.freedesktop.NetworkManager";
+/* SavedConnection's DBus interface name: */
+static const constexpr char * interfaceName 
+        = "org.freedesktop.NetworkManager.Settings.Connection";
+
+/* DBus getSettings method key: */
+static const constexpr char * getSettingsMethod = "GetSettings";
+/* DBus getSecrets method key: */
+static const constexpr char * getSecretsMethod = "GetSecrets";
+
+/* DBus delete method key: */
+static const constexpr char * deleteConnectionMethod = "Delete";
+/* DBus update method key: */
+static const constexpr char * updateMethod = "Update";
 
 /*
- * Create an empty object with no linked connection.
+ * Creates an empty object with no linked connection.
  */
 LibNM::SavedConnection::SavedConnection() :
 GLib::DBusProxy(nullptr, nullptr, nullptr) { } 
@@ -15,10 +32,17 @@ GLib::DBusProxy(nullptr, nullptr, nullptr) { }
 LibNM::SavedConnection::SavedConnection(const SavedConnection& toCopy) :
 GLib::DBusProxy(nullptr, nullptr, nullptr),
 path(toCopy.path),
-settingNames(toCopy.settingNames),
-nmConnection(toCopy.nmConnection)
+settingNames(toCopy.settingNames)
 {
     setGObject(toCopy);
+    if(!toCopy.nmConnection.isNull())
+    {
+        NMThreadHandler threadHandler;
+        threadHandler.call([this, &toCopy]()
+        {
+            nmConnection = toCopy.nmConnection;
+        });
+    }
 }
 
 /*
@@ -34,14 +58,13 @@ path(path)
     }
 }
 
-/**
+/*
  * Gets the connection's DBus path.
  */
 const juce::String& LibNM::SavedConnection::getPath() const
 {
     return path;
 }
-
 
 /*
  * Checks if this connection is a wifi connection.
@@ -57,7 +80,6 @@ bool LibNM::SavedConnection::isWifiConnection() const
 
 /*
  * Gets the NMConnection object generated from this connection's data.
- * Only wifi connections are supported, others are not guaranteed to work.
  */
 LibNM::Connection LibNM::SavedConnection::getNMConnection() const
 {
@@ -83,8 +105,6 @@ juce::Time LibNM::SavedConnection::lastConnectionTime() const
     }
     return lastTime;
 }
-
-
 
 /*
  * Checks if the connection has a saved wireless security key.
@@ -148,9 +168,8 @@ bool LibNM::SavedConnection::hasSavedKey() const
     return keyFound;
 }
 
-/**
- * Deletes this connection from the list of saved connections.  This object
- * will be invalid after this method is called.
+/*
+ * Deletes this connection from the list of saved connections.
  */
 void LibNM::SavedConnection::deleteConnection()
 {
@@ -159,23 +178,22 @@ void LibNM::SavedConnection::deleteConnection()
         callMethod(deleteConnectionMethod);
         clearGObject();
         path = "";
-        LibNM::Connection emptyConnection;
-        nmConnection = emptyConnection; 
+        nmConnection = LibNM::Connection(); 
         settingNames.clear();
     }
 }
 
     
-/**
- * Compare SavedConnections using the connection path.
+/*
+ * Compares SavedConnections using their connection paths.
  */
 bool LibNM::SavedConnection::operator==(const SavedConnection& rhs) const
 {
     return path == rhs.path;
 }
 
-/**
- * Compare SavedConnections with NMConnections using the connection path.
+/*
+ * Compares SavedConnections with NMConnections using their connection paths.
  */
 bool LibNM::SavedConnection::operator==(NMConnection* rhs) const
 {
@@ -183,8 +201,7 @@ bool LibNM::SavedConnection::operator==(NMConnection* rhs) const
 }
 
 /*
- * Create a NMConnection object using this saved connection's data.
- * Only wifi connections are supported, others are not guaranteed to work.
+ * Creates a Connection object using this saved connection's data.
  */
 void LibNM::SavedConnection::createNMConnection()
 {
@@ -192,97 +209,101 @@ void LibNM::SavedConnection::createNMConnection()
     {
         return;
     }
-    using juce::String;
-    using namespace GVariantConverter;
-    if(!settingNames.isEmpty())
+    NMThreadHandler threadHandler;
+    threadHandler.call([this]()
     {
-        settingNames.clear();
-        LibNM::Connection emptyConnection;
-        nmConnection = emptyConnection; 
-    }
-    nmConnection.setPath(path.toRawUTF8());
-    GVariant* settings = callMethod(getSettingsMethod);
-    if (settings != nullptr)
-    {
-        NMSetting* setting = nullptr;
-        std::function<void(GVariant*, GVariant*) > copyDict = [this, &setting]
-                (GVariant* key, GVariant * val)
+        using juce::String;
+        using namespace GVariantConverter;
+        if(!settingNames.isEmpty())
         {
-            String keyStr = getValue<String>(key);
-            if (keyStr.isNotEmpty())
-            {
-		//GObject refuses to accept byte arrays packaged in GValues
-                if(getGType(val) == G_TYPE_BYTE_ARRAY)
-                {
-                    GByteArray* byteArray = getValue<GByteArray*>(val);
-                    g_object_set(G_OBJECT(setting),
-                            keyStr.toRawUTF8(),
-                            byteArray,
-                            nullptr);
-                }
-                else
-                {
-                    GValue propValue = getGValue(val);
-                    g_object_set_property(G_OBJECT(setting), keyStr.toRawUTF8(),
-                            &propValue);
-                }
-            }
-        };
-        iterateDict(settings, [this, &setting, &copyDict]
-                (GVariant* key, GVariant * val)
+            settingNames.clear();
+            LibNM::Connection emptyConnection;
+            nmConnection = emptyConnection; 
+        }
+        nmConnection.setPath(path.toRawUTF8());
+        GVariant* settings = callMethod(getSettingsMethod);
+        if (settings != nullptr)
         {
-            String keyStr = getValue<String>(key);
-            settingNames.add(keyStr);
-            if (keyStr == NM_SETTING_CONNECTION_SETTING_NAME)
+            NMSetting* setting = nullptr;
+            std::function<void(GVariant*, GVariant*) > copyDict 
+            = [this, &setting](GVariant* key, GVariant * val)
             {
-                setting = nm_setting_connection_new();
-            }
-            else if (keyStr == NM_SETTING_WIRELESS_SETTING_NAME)
-            {
-                setting = nm_setting_wireless_new();
-            }
-            else if (keyStr == NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
-            {
-                setting = nm_setting_wireless_security_new();
-            }
-            if (setting != nullptr)
-            {
-                iterateDict(val, copyDict);
-                if (keyStr == NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
+                String keyStr = getValue<String>(key);
+                if (keyStr.isNotEmpty())
                 {
-                    GError * secretsError = nullptr;
-                    GVariant* secrets = callMethod(getSecretsMethod,
-                            g_variant_new_string
-                            (NM_SETTING_WIRELESS_SECURITY_SETTING_NAME),
-                            &secretsError);
-                    if (secrets != nullptr)
+                    //GObject refuses to accept byte arrays packaged in GValues
+                    if(getGType(val) == G_TYPE_BYTE_ARRAY)
                     {
-                        GVariant* securitySecrets = g_variant_lookup_value
-                                (secrets,
-                                NM_SETTING_WIRELESS_SECURITY_SETTING_NAME,
+                        GByteArray* byteArray = getValue<GByteArray*>(val);
+                        g_object_set(G_OBJECT(setting),
+                                keyStr.toRawUTF8(),
+                                byteArray,
                                 nullptr);
-                        if (securitySecrets != nullptr)
-                        {
-                            iterateDict(securitySecrets, copyDict);
-                            g_variant_unref(securitySecrets);
-                            securitySecrets = nullptr;
-                        }
-                        g_variant_unref(secrets);
-                        secrets = nullptr;
                     }
-                    if(secretsError != nullptr)
+                    else
                     {
-                        DBG("SavedConnection::" << __func__ 
-                                << ": Reading secrets failed, error="
-                                << secretsError->message);
-                        g_clear_error(&secretsError);
+                        GValue propValue = getGValue(val);
+                        g_object_set_property(G_OBJECT(setting), 
+                                keyStr.toRawUTF8(), &propValue);
                     }
                 }
-                nmConnection.addSetting(setting);
-                setting = nullptr;
-            }
-        });
-    }
+            };
+            iterateDict(settings, [this, &setting, &copyDict]
+            (GVariant* key, GVariant * val)
+            {
+                String keyStr = getValue<String>(key);
+                settingNames.add(keyStr);
+                if (keyStr == NM_SETTING_CONNECTION_SETTING_NAME)
+                {
+                    setting = nm_setting_connection_new();
+                }
+                else if (keyStr == NM_SETTING_WIRELESS_SETTING_NAME)
+                {
+                    setting = nm_setting_wireless_new();
+                }
+                else if (keyStr == NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
+                {
+                    setting = nm_setting_wireless_security_new();
+                }
+                if (setting != nullptr)
+                {
+                    iterateDict(val, copyDict);
+                    if (keyStr == NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
+                    {
+                        GError * secretsError = nullptr;
+                        GVariant* secrets = callMethod(getSecretsMethod,
+                                g_variant_new_string
+                                (NM_SETTING_WIRELESS_SECURITY_SETTING_NAME),
+                                &secretsError);
+                        if (secrets != nullptr)
+                        {
+                            GVariant* securitySecrets = g_variant_lookup_value
+                                    (secrets,
+                                    NM_SETTING_WIRELESS_SECURITY_SETTING_NAME,
+                                    nullptr);
+                            if (securitySecrets != nullptr)
+                            {
+                                iterateDict(securitySecrets, copyDict);
+                                g_variant_unref(securitySecrets);
+                                securitySecrets = nullptr;
+                            }
+                            g_variant_unref(secrets);
+                            secrets = nullptr;
+                        }
+                        if(secretsError != nullptr)
+                        {
+                            DBG("SavedConnection::" << __func__ 
+                                    << ": Reading secrets failed, error="
+                                    << secretsError->message);
+                            g_clear_error(&secretsError);
+                        }
+                    }
+                    nmConnection.addSetting(setting);
+                    setting = nullptr;
+                }
+            });
+        }
+    });
 }
 
 /*
@@ -306,8 +327,7 @@ GVariant* LibNM::SavedConnection::getSetting(const char* name) const
 }
 
 /*
- * Returns the value of a specific property for a specific settings
- * object
+ * Returns the value of a specific settings object property.
  */
 GVariant* LibNM::SavedConnection::getSettingProp(const char* settingName,
         const char* propName) const
@@ -328,8 +348,7 @@ GVariant* LibNM::SavedConnection::getSettingProp(const char* settingName,
 }
 
 /*
- * Returns the value of a specific property for a specific settings
- * object
+ * Returns the value of a specific settings object property.
  */
 GVariant* LibNM::SavedConnection::getSettingProp(GVariant* settingsObject,
         const char* propName) const
@@ -358,9 +377,7 @@ bool LibNM::SavedConnection::hasSetting(const char* settingName) const
 
 /*
  * Checks if this connection has a specific settings property in a specific 
- * settings type. Don't use this if you actually need any data from the 
- * setting, in that case it's more effective to just get the setting object
- * and check if getSettingParam returns null.
+ * settings type.
  */
 bool LibNM::SavedConnection::hasSettingProperty(const char* settingName,
         const char* propName) const

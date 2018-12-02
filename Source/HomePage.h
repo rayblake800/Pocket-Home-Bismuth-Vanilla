@@ -1,8 +1,7 @@
 #pragma once
-
 #include "OverlaySpinner.h"
 #include "DesktopEntry/Loader.h"
-#include "IconLoader.h"
+#include "Icon/IconLoader.h"
 #include "PageComponent.h"
 #include "ComponentConfigFile.h"
 #include "Config/MainFile.h"
@@ -11,44 +10,45 @@
 #include "WifiIcon.h"
 #include "BatteryIcon.h"
 #include "SystemCommands.h"
-#include "AppMenu.h"
+#include "AppMenu/AppMenu.h"
 
 /**
- * @file HomePage.h
+ * @file  HomePage.h
  * 
- * @brief The main page of the application. 
+ * @brief  The application's main Page Component.
  *
- * It displays the app launch menu, assorted system information, and navigation
- * controls to access power and settings pages.
+ *  HomePage displays the application menu, time, battery percentage, and Wifi
+ * connection state. HomePage also provides navigation buttons used to access 
+ * the power and settings pages.
+ *
+ *  HomePage is Pocket-Home's base page component, and the first page shown,
+ * except perhaps the login page. The HomePage will continue to exist as long as
+ * Pocket-Home is running.
  */
-
-/**
- * TODO:
- *  -Add configurable key shortcuts
- *  -Complete documentation
- */
-
 class HomePage : public PageComponent, public Config::MainFile::Listener
 {
 public:
+    /**
+     * @brief  Initializes all page components and creates the AppMenu.
+     */
     HomePage();
     
     virtual ~HomePage() { }
 protected:
     /**
-     * @brief  Tracks page background and menu type changes. 
+     * @brief  Tracks page background changes. 
      *
-     * Only the MainConfigFile should be calling this.  Depending on the key 
-     * provided, this will update the page background or recreate the AppMenu.
+     *  Only the MainConfigFile should be call this method. This will update the
+     * page background. 
      * 
-     * @param key     This should be the background key or the menu type key.
+     * @param key  The page background key.
      */
     virtual void configValueChanged(const juce::Identifier& key) override;
 
 private:
     /**
-     * @brief  Opens the power page or the settings page, depending on which 
-     *         button was clicked.
+     * @brief  Opens the power page or the quick settings page, depending on 
+     *         which button was clicked.
      * 
      * @param button  The page button that was clicked.
      */
@@ -79,8 +79,8 @@ private:
     /* Displays the time. */
     ClockLabel clock;
    
-    /* The application menu.  This is recreated whenever the menu type 
-       preference changes in MainConfigFile. */
+    /* The application menu. This is automatically updated whenever the menu 
+       type preference changes in MainConfigFile. */
     std::unique_ptr<juce::Component> appMenu;
     
     /* Displays the current battery status. */
@@ -95,7 +95,7 @@ private:
     /* Opens the settings page when clicked. */
     ConfigurableImageButton settingsButton;
 
-    /* Page frame image.  This component is entirely decorative. */
+    /* Page frame image. This component is entirely decorative. */
     ConfigurableImageComponent frame;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);

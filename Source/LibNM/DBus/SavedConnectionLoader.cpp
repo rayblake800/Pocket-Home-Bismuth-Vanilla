@@ -1,11 +1,18 @@
-#include "SavedConnectionLoader.h"
+#include "LibNM/DBus/SavedConnectionLoader.h"
 
+/* The NetworkManager's DBus path: */
 const constexpr char* busName = "org.freedesktop.NetworkManager";
-const constexpr char* path = "/org/freedesktop/NetworkManager/Settings";
+/* SavedConnectionLoader's DBus interface name: */
 const constexpr char* interface = "org.freedesktop.NetworkManager.Settings";
+/* SavedConnectionLoader's DBus interface path: */
+const constexpr char* path = "/org/freedesktop/NetworkManager/Settings";
 
+/* DBus listConnections method key: */
 const constexpr char* listConnectionMethod = "ListConnections";
 
+/*
+ * Connects to NetworkManager over DBus to initialize the saved connection list.
+ */
 LibNM::SavedConnectionLoader::SavedConnectionLoader() :
 GLib::DBusProxy(busName, path, interface) 
 { 
@@ -46,9 +53,7 @@ bool LibNM::SavedConnectionLoader::connectionExists
 }
  
 /*
- * Finds a saved connection from its path.  If no matching connection is
- * already loaded, the saved connection list will be updated in case the
- * requested connection was recently added.
+ * Finds a saved connection from its DBus path.
  */
 LibNM::SavedConnection LibNM::SavedConnectionLoader::getConnection
 (const juce::String& connectionPath)
@@ -72,8 +77,8 @@ LibNM::SavedConnection LibNM::SavedConnectionLoader::getConnection
 }
   
 /*
- * Finds all saved connections that are compatible with a given wifi
- * access point.
+ * Finds all saved connections that are compatible with a given wifi access 
+ * point.
  */
 juce::Array<LibNM::SavedConnection> 
 LibNM::SavedConnectionLoader::findConnectionsForAP
@@ -115,7 +120,7 @@ LibNM::SavedConnectionLoader::getConnectionPaths() const
 }
 
 /*
- * Check the list of saved connections against an updated connection path
+ * Checks the list of saved connections against an updated connection path
  * list, adding any new connections and removing any deleted connections.
  */
 void LibNM::SavedConnectionLoader::updateSavedConnections()
@@ -142,4 +147,3 @@ void LibNM::SavedConnectionLoader::updateSavedConnections()
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }
 }
-

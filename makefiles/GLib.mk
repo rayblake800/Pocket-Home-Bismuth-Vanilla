@@ -9,7 +9,6 @@ OBJECTS_GLIB := \
   $(GLIB_PREFIX)Object.o \
   $(GLIB_PREFIX)WeakRef.o \
   $(GLIB_PREFIX)ThreadResource.o \
-  $(GLIB_PREFIX)ThreadHandler.o \
   $(GLIB_PREFIX)SharedContextPtr.o \
   $(GLIB_PREFIX)EventLoop.o \
   $(GLIB_PREFIX)ContextCaller.o \
@@ -44,8 +43,6 @@ $(GLIB_PREFIX)WeakRef.o : \
     $(GLIB_ROOT)/WeakRef.cpp
 $(GLIB_PREFIX)ThreadResource.o : \
     $(GLIB_ROOT)/ThreadResource.cpp
-$(GLIB_PREFIX)ThreadHandler.o : \
-    $(GLIB_ROOT)/ThreadHandler.cpp
 $(GLIB_PREFIX)SharedContextPtr.o : \
     $(GLIB_ROOT)/SmartPointers/SharedContextPtr.cpp
 $(GLIB_PREFIX)EventLoop.o : \

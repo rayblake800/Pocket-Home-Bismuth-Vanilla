@@ -8,15 +8,25 @@
  * @file LibNM/SavedConnectionLoader.h
  * 
  * @brief Connects to NetworkManager to read saved network connections.
- * 
- *  Only wifi connections are supported at this time. The only role of this
- * class is to read in saved connections as SavedConnection objects, and return
- * all wifi connections.
+ *
+ *  SavedConnectionLoader reads all saved network connections from
+ * NetworkManager over DBus, creating SavedConnection objects for each Wifi
+ * connection it finds. It then caches the SavedConnections, updating and
+ * sharing them on request.
+ *
+ *  SavedConnectionLoader may be used to request all saved Wifi connections, or
+ * a single saved connection specified by DBus path. It can also check the
+ * validity of connection DBus paths, and find all saved connections compatible
+ * with a LibNM::AccessPoint object.
  */
 
 class LibNM::SavedConnectionLoader : public GLib::DBusProxy
 {
 public:
+    /**
+     * @brief  Connects to NetworkManager over DBus to initialize the saved
+     *         connection list.
+     */
     SavedConnectionLoader();
     
     virtual ~SavedConnectionLoader() { }
@@ -41,9 +51,9 @@ public:
     bool connectionExists(const juce::String& connectionPath) const;
     
     /**
-     * @brief  Finds a saved connection from its path.  
+     * @brief  Finds a saved connection from its DBus path.  
      *  
-     *  If no matching connection is already loaded, the saved connection list 
+     * If no matching connection is already loaded, the saved connection list 
      * will be updated in case the requested connection was recently added.
      * 
      * @param connectionPath  The DBus path of a saved network connection.
