@@ -78,7 +78,7 @@ X /Source/Config/FileHandler
 /Source/GLib/DBus/Variant
 /Source/GLib/EventLoop
 /Source/GLib/GLib
-/Source/GLib/Object
+X /Source/GLib/Object
 /Source/GLib/SignalHandler
 /Source/GLib/SmartPointers/ContextPtr
 /Source/GLib/SmartPointers/ErrorPtr
