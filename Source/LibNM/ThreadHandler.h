@@ -2,15 +2,16 @@
 #include "LibNM/LibNM.h"
 #include "GLib/ThreadHandler.h"
 
-class LibNM::NMThreadHandler : public GLib::ThreadHandler<NMThread>
+class LibNM::ThreadHandler : public GLib::ThreadHandler<ThreadResource>
 {
 public:
     /**
-     * @brief  Creates the shared NMThread resource if it doesn't already exist.
+     * @brief  Creates the shared LibNM::ThreadResource if it doesn't already 
+     *         exist.
      */
-    NMThreadHandler();
+    ThreadHandler();
 
-    virtual ~NMThreadHandler() { }
+    virtual ~ThreadHandler() { }
     
     /**
      * @brief  Gets the shared NetworkManager client object if called within

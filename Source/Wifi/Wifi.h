@@ -8,6 +8,28 @@
  */
 namespace Wifi
 {
+    /* ###################  Wifi Component Classes: ############################
+     * These classes create UI Components that allow the user to view or control
+     * Wifi status.
+     */
+
+    /**
+     * @brief  Shows the signal strength of the active Wifi connection.
+     */
+    class Icon;
+
+    /**
+     * @brief  Enables or disables Wifi, shows the active connection, and opens
+     *         the wifi settings page.
+     */
+    class ControlWidget;
+
+    /**
+     * @brief  Shows all visible Wifi access points, and allows the user to
+     *         control the Wifi connection.
+     */
+    class SettingsPage;
+
     /* #####################  Wifi Control Classes: ############################
      * These classes are used to control the Wifi device and the current Wifi
      * connection.
@@ -50,12 +72,12 @@ namespace Wifi
     /**
      * @brief  Tracks the active Wifi connection state.
      */
-    class ConnectionStateManager;
+    class ConnectionTracker;
     
     /**
      * @brief  Tracks the current state of the Wifi device.
      */
-    class DeviceStateManager;
+    class DeviceTracker;
 
     /* ######################## Wifi Listeners: ###############################
      * These classes receive notifications when Wifi data updates.

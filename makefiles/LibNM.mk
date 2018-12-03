@@ -3,6 +3,8 @@ NM_PREFIX := $(JUCE_OBJDIR)/LibNM_
 NM_ROOT = Source/LibNM
 
 OBJECTS_NM := \
+  $(NM_PREFIX)ThreadResource.o \
+  $(NM_PREFIX)ThreadHandler.o \
   $(NM_PREFIX)Object.o \
   $(NM_PREFIX)Client.o \
   $(NM_PREFIX)Connection.o \
@@ -25,6 +27,10 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_NM)
 libNM : $(OBJECTS_NM)
 	@echo "Built LibNM module"
 
+$(NM_PREFIX)ThreadResource.o : \
+    $(NM_ROOT)/ThreadResource.cpp
+$(NM_PREFIX)ThreadHandler.o : \
+    $(NM_ROOT)/ThreadHandler.cpp
 $(NM_PREFIX)Object.o : \
     $(NM_ROOT)/NMObjects/Object.cpp
 $(NM_PREFIX)Client.o : \

@@ -1,15 +1,16 @@
-#include "LibNM/NMThread.h"
+#include "LibNM/ThreadResource.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
 
 /* Unique SharedResource object instance key: */
-const juce::Identifier LibNM::NMThread::resourceKey = "LibNM::NMThread";
+const juce::Identifier LibNM::ThreadResource::resourceKey 
+        = "LibNM::ThreadResource";
 
 /*
  * Initializes the NMThread with the default GLib context, and creates the Wifi 
  * device object.
  */
-LibNM::NMThread::NMThread() :
+LibNM::ThreadResource::ThreadResource() :
 GLib::ThreadResource(resourceKey, GLib::SharedContextPtr(nullptr)) 
 { 
     call([this]()
@@ -38,7 +39,7 @@ GLib::ThreadResource(resourceKey, GLib::SharedContextPtr(nullptr))
         }
         if(wifiDevice.isNull())
         {
-            DBG("LibNM::NMThread::NMThread: "
+            DBG("LibNM::ThreadResource::ThreadResource: "
                     << "Couldn't find managed wifi device.");
         }
     });
@@ -48,12 +49,12 @@ GLib::ThreadResource(resourceKey, GLib::SharedContextPtr(nullptr))
  * Gets the shared NetworkManager client object if called within the LibNM event
  * loop.
  */
-LibNM::Client LibNM::NMThread::getClient()
+LibNM::Client LibNM::ThreadResource::getClient()
 {
     GLib::SharedContextPtr nmContext = getContext();
     if(!g_main_context_is_owner(*nmContext))
     {
-        DBG("LibNM::NMThread::" << __func__ << 
+        DBG("LibNM::ThreadResource::" << __func__ << 
                 ": Tried to get Client outside of the LibNM event loop!");
         jassertfalse;
         return Client(nullptr);
@@ -65,12 +66,12 @@ LibNM::Client LibNM::NMThread::getClient()
  * Gets the shared DeviceWifi object used to control the LibNM-managed Wifi 
  * device if called within the LibNM event loop.
  */
-LibNM::DeviceWifi LibNM::NMThread::getWifiDevice()
+LibNM::DeviceWifi LibNM::ThreadResource::getWifiDevice()
 {
     GLib::SharedContextPtr nmContext = getContext();
     if(!g_main_context_is_owner(*nmContext))
     {
-        DBG("LibNM::NMThread::" << __func__ << 
+        DBG("LibNM::ThreadResource::" << __func__ << 
                 ": Tried to get DeviceWifi outside of the LibNM event loop!");
         jassertfalse;
         return DeviceWifi();

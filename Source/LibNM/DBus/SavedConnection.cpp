@@ -1,5 +1,5 @@
 #include "LibNM/DBus/SavedConnection.h"
-#include "LibNM/NMThreadHandler.h"
+#include "LibNM/ThreadHandler.h"
 #include <nm-setting-connection.h>
 #include <nm-setting-wireless.h>
 #include <nm-setting-wireless-security.h>
@@ -209,7 +209,7 @@ void LibNM::SavedConnection::createNMConnection()
     {
         return;
     }
-    NMThreadHandler threadHandler;
+    ThreadHandler threadHandler;
     threadHandler.call([this]()
     {
         using juce::String;

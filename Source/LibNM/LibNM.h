@@ -32,16 +32,16 @@ namespace LibNM
      *         where all interaction with LibNM::Object subclasses should take
      *         place.
      *
-     * @see  LibNM/NMThread.h
+     * @see  LibNM/ThreadResource.h
      */
-    class NMThread;
+    class ThreadResource;
 
     /**
-     * @brief  Provides threadsafe access to the NMThread.
+     * @brief  Provides threadsafe access to the LibNM Thread.
      *
-     * @see  LibNM/NMThreadHandler.h
+     * @see  LibNM/ThreadHandler.h
      */
-    class NMThreadHandler;
+    class ThreadHandler;
 
     /* NMObjects: */
     /**

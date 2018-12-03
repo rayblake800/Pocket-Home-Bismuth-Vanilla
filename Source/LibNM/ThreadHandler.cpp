@@ -1,19 +1,19 @@
-#include "LibNM/NMThreadHandler.h"
-#include "LibNM/NMThread.h"
+#include "LibNM/ThreadHandler.h"
+#include "LibNM/ThreadResource.h"
     
 /*
- * Creates the shared NMThread resource if it doesn't already exist.
+ * Creates the shared LibNM::ThreadResource if it doesn't already exist.
  */
-LibNM::NMThreadHandler::NMThreadHandler() :
-GLib::ThreadHandler<NMThread>() { }
+LibNM::ThreadHandler::ThreadHandler() :
+GLib::ThreadHandler<ThreadResource>() { }
 
 /*
  * Gets the shared NetworkManager client object if called within the LibNM event
  * loop.
  */
-LibNM::Client LibNM::NMThreadHandler::getClient()
+LibNM::Client LibNM::ThreadHandler::getClient()
 {
-    SharedResource::LockedPtr<NMThread> nmThread
+    SharedResource::LockedPtr<ThreadResource> nmThread
         = getReadLockedResource();
     return nmThread->getClient();
 }
