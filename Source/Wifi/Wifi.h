@@ -55,11 +55,6 @@ namespace Wifi
     class AccessPoint;
 
     /**
-     * @brief  A unique identifier for Wifi connections.
-     */
-    class APHash;
-
-    /**
      * @brief  Caches and updates all visible access points.
      */
     class APList;

@@ -1,61 +1,42 @@
 #pragma once
 #include "Wifi/Wifi.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/NMObjects/Client.h"
+#include "JuceHeader.h"
 
 /**
- * @file
+ * @file  Wifi/Control/ConnectionHandler.h
  *
- * @brief
+ * @brief  Connects to and disconnects from wireless networks, and clears saved
+ *         connections.
  */
 class Wifi::ConnectionManager
 {
 public:
-    /**
-     * @brief 
-     */
-    ConnectionManager();
+    ConnectionManager() { }
 
-    virtual ~ConnectionManager();
+    virtual ~ConnectionManager() { }
+
+    void connectToAccessPoint(const AccessPoint toConnect,
+            juce::String securityKey = juce::String()) const;
+
+    void disconnect() const;
+
+    void forgetConnection(const AccessPoint toForget) const;
 
 private:
-    /**
-     * @brief 
-     */
-    class ConnectionListener : public LibNM::DeviceWifi::Listener
+    class ConnectionHandler : public LibNM::Client::ConnectionHandler
     {
     public:
-        /**
-         * @brief 
-         *
-         * @param manager
-         */
-        ConnectionListener(ConnectionManager& manager);
+        ConnectionHandler() { }
 
-        virtual ~ConnectionListener() { }
+        virtual ~ConnectionHandler() { }
 
     private:
-        /**
-         * @brief 
-         *
-         * @param newState
-         * @param oldState
-         * @param reason
-         */
-        virtual void stateChanged(
-                NMDeviceState newState,
-                NMDeviceState oldState,
-                NMDeviceStateReason reason) override;
+        virtual void openingConnection(LibNM::ActiveConnection connection,
+                bool isNew) override;
 
-        /**
-         * @brief 
-         *
-         * @param activeConnection
-         *
-         * @return 
-         */
-        virtual void activeConnectionChanged
-        (LibNM::ActiveConnection activeConnection) override;
-
+        virtual void openingConnectionFailed(LibNM::ActiveConnection connection,
+                GError* error, bool isNew) override;
     };
-
+    ConnectionHandler connectionHandler;
 };

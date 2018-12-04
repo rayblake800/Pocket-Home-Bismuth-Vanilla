@@ -8,5 +8,5 @@
  */
 namespace Wifi
 {
-
+    class APData;
 };
