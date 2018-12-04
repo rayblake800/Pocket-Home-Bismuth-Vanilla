@@ -5,7 +5,9 @@ WIFI_TEST_ROOT = Tests/Wifi
 
 SAVED_STATE_ROOT := $(WIFI_ROOT)/SavedState
 OBJECTS_WIFI_SAVED_STATE := \
-  $(WIFI_PREFIX)DeviceTracker.o
+  $(WIFI_PREFIX)DeviceTracker.o \
+  $(WIFI_PREFIX)APData.o \
+  $(WIFI_PREFIX)AccessPoint.o
 
 CONTROL_ROOT := $(WIFI_ROOT)/Control
 OBJECTS_WIFI_CONTROL := \
@@ -42,6 +44,10 @@ wifi : $(OBJECTS_WIFI)
 
 $(WIFI_PREFIX)DeviceTracker.o : \
     $(SAVED_STATE_ROOT)/DeviceTracker.cpp
+$(WIFI_PREFIX)APData.o : \
+    $(SAVED_STATE_ROOT)/APData.cpp
+$(WIFI_PREFIX)AccessPoint.o : \
+    $(SAVED_STATE_ROOT)/AccessPoint.cpp
 
 $(WIFI_PREFIX)Controller.o : \
     $(CONTROL_ROOT)/Controller.cpp
