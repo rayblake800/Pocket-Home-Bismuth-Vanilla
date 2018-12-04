@@ -1,3 +1,4 @@
+#define LIB_NM_THREAD_IMPLEMENTATION
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/ThreadResource.h"
     

@@ -41,6 +41,24 @@ public:
      * @brief  Creates a null AccessPoint.
      */
     AccessPoint();
+
+    /**
+     * @brief  Gets the access point's basic security type.
+     *
+     * @return  The appropriate access point security type, or 
+     *          SecurityType::unsecured if the access point is null.
+     */
+    SecurityType getSecurityType() const;
+
+    /**
+     * @brief  Gets a hash value that may be used to identify and compare 
+     *         access points, treating access points with shared connections as
+     *         equivalent.
+     *
+     * @return  The access point hash value.  This will not be valid if the
+     *          AccessPoint is null.
+     */
+    APHash generateHash() const;
     
     /**
      * @brief  Gets the access point SSID as a byte array from the access point.  

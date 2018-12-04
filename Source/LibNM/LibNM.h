@@ -43,6 +43,29 @@ namespace LibNM
      */
     class ThreadHandler;
 
+    /**
+     * @brief  A hash value used to sort, compare, and identify access points,
+     *         treating access points with identical connection settings as
+     *         equivalent.
+     *
+     * @see  LibNM/APData/APHash.h
+     */
+    class APHash;
+
+    /**
+     * @brief  Enumerates all Wifi access point types.
+     *
+     * @see  LibNM/APData/APMode.h
+     */
+    enum class APMode;
+
+    /**
+     * @brief  Enumerates all basic Wifi security types.
+     *
+     * @see LibNM/APData/SecurityType.h
+     */
+    enum class SecurityType;
+
     /* NMObjects: */
     /**
      * @brief  The basis for all classes managing LibNM's NMObject* types. This

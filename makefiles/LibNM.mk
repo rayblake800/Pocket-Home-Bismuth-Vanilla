@@ -11,6 +11,7 @@ OBJECTS_NM := \
   $(NM_PREFIX)ActiveConnection.o \
   $(NM_PREFIX)DeviceWifi.o \
   $(NM_PREFIX)AccessPoint.o \
+  $(NM_PREFIX)APHash.o \
   $(NM_PREFIX)SavedConnection.o \
   $(NM_PREFIX)SavedConnectionLoader.o  
 
@@ -43,6 +44,8 @@ $(NM_PREFIX)DeviceWifi.o : \
     $(NM_ROOT)/NMObjects/DeviceWifi.cpp
 $(NM_PREFIX)AccessPoint.o : \
     $(NM_ROOT)/NMObjects/AccessPoint.cpp
+$(NM_PREFIX)APHash.o : \
+    $(NM_ROOT)/APData/APHash.cpp
 $(NM_PREFIX)SavedConnection.o : \
     $(NM_ROOT)/DBus/SavedConnection.cpp
 $(NM_PREFIX)SavedConnectionLoader.o : \

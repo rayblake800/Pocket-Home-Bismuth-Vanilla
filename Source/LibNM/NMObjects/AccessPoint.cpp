@@ -1,4 +1,7 @@
 #include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/APData/APHash.h"
+#include "LibNM/APData/APMode.h"
+#include "LibNM/APData/SecurityType.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 #include <nm-utils.h>
 
@@ -31,6 +34,50 @@ LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACCESS_POINT)
  * Creates a null AccessPoint.
  */
 LibNM::AccessPoint::AccessPoint() : LibNM::Object(NM_TYPE_ACCESS_POINT) { }
+
+
+/*
+ * Gets the access point's basic security type.
+ */
+LibNM::SecurityType LibNM::AccessPoint::getSecurityType() const
+{
+    ASSERT_CORRECT_CONTEXT;
+    if (getRSNFlags() != NM_802_11_AP_SEC_NONE)
+    {
+        return SecurityType::securedRSN;
+    }
+    if (getWPAFlags() != NM_802_11_AP_SEC_NONE)
+    {
+        return SecurityType::securedWPA;
+    }
+    return (getFlags() == NM_802_11_AP_FLAGS_NONE) ?
+            SecurityType::unsecured : SecurityType::securedWEP;
+}
+
+/*
+ * Gets a hash value that may be used to identify and compare access points, 
+ * treating access points with shared connections as equivalent.
+ */
+LibNM::APHash LibNM::AccessPoint::generateHash() const
+{
+    ASSERT_CORRECT_CONTEXT;
+    APMode mode;
+    switch(getMode())
+    {
+        case NM_802_11_MODE_UNKNOWN:
+            mode = APMode::unknown;
+            break;
+        case NM_802_11_MODE_ADHOC:
+            mode = APMode::adhoc;
+            break;
+        case NM_802_11_MODE_INFRA:
+            mode = APMode::infrastructure;
+            break;
+        case NM_802_11_MODE_AP:
+            mode = APMode::hotspot;
+    }
+    return APHash(getSSID(), mode, getSecurityType());
+}
 
 /*
  * Gets the access point SSID as a byte array from the access point.  This 

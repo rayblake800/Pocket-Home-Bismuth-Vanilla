@@ -1,3 +1,6 @@
+/* Don't include this outside of LibNM/ThreadHandler.cpp */
+#ifdef LIB_NM_THREAD_IMPLEMENTATION
+
 #pragma once
 #include "LibNM/LibNM.h"
 #include "GLib/ThreadResource.h"
@@ -56,3 +59,6 @@ private:
     /* Interacts with the LibNM-managed wifi device. */
     DeviceWifi wifiDevice;
 };
+
+/* Don't include this outside of LibNM/ThreadHandler.cpp. */
+#endif
