@@ -1,3 +1,4 @@
+#define DBUS_THREAD_IMPLEMENTATION
 #include "Utils.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 #include "GLib/SmartPointers/ErrorPtr.h"

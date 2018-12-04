@@ -1,3 +1,6 @@
+/* Don't include this outside of GLib/DBusProxy.cpp */
+#ifdef DBUS_THREAD_IMPLEMENTATION
+
 #pragma once
 #include "GLib/DBus/DBusProxy.h"
 #include "GLib/ThreadResource.h"
@@ -21,3 +24,6 @@ public:
 
     virtual ~DBusThread() { }
 };
+
+/* Don't include this outside of GLib/DBusProxy.cpp */
+#endif
