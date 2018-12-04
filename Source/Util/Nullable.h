@@ -21,7 +21,7 @@
  * fixed.
  *
  * @tparam PtrType  The type of data pointer held by the Nullable object.
- *                  This may be a normal pointer, an std::unique_ptr,
+ *                  This may be a normal pointer, an std::shared_ptr,
  *                  a juce::ReferenceCountedObjectPtr, or any sort of 
  *                  similar value that might equal nullptr.
  */
