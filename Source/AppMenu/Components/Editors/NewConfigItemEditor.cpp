@@ -1,6 +1,6 @@
-#define APPMENU_IMPLEMENTATION_ONLY
-#include "AppMenu/Data/JSON/MenuFile.h"
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Components/Editors/NewConfigItemEditor.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 
 /* NewConfigItemEditor shares a localized object class key inherited from
    AppMenu::PopupEditor. */

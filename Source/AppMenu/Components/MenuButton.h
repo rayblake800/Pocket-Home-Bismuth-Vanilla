@@ -1,21 +1,26 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+  #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "IconLoader.h"
-#include "AppMenu/Data/MenuItem.h"
-
 /**
  * @file  AppMenu/Components/MenuButton.h
  *
  * @brief  Represents a single menu item as a juce::Button component.
- *
- * The MenuButton is responsible for displaying a MenuItem's data to the user.
+ */
+
+#include "IconLoader.h"
+#include "AppMenu/Data/MenuItem.h"
+
+namespace AppMenu { class MenuButton; }
+
+/**
+ *  The MenuButton is responsible for displaying a MenuItem's data to the user.
  * It draws the menu item's icon, prints its title, and draws itself differently
- * depending on whether it is the selected menu item in its folder.  The 
+ * depending on whether it is the selected menu item in its folder. The 
  * MenuButton tracks changes to its MenuItem, automatically updating itself
  * when relevant menu data changes.
  *
- * MenuButton is an abstract class.  Each AppMenu Format should have its own
+ *  MenuButton is an abstract class. Each AppMenu Format should have its own
  * MenuButton implementation that defines how the button's title and icon are
  * placed, when the background or outline should be drawn, and optionally 
  * updates the size of the button's font.
@@ -245,6 +250,3 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuButton)
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

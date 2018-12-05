@@ -1,24 +1,29 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+  #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "AppMenu/Components/MenuButton.h"
-#include "AppMenu/Implementation.h"
-
 /**
  * @file  AppMenu/Components/FolderComponent.h
  *
  * @brief  Creates and displays menu item components for all items in a single
  *         application menu folder.
- *
- * The FolderComponent is assigned a folder MenuItem on construction.  It is
+ */
+
+#include "AppMenu/Components/MenuButton.h"
+#include "AppMenu/Data/MenuItem.h"
+
+namespace AppMenu { class FolderComponent; }
+
+/**
+ *  The FolderComponent is assigned a folder MenuItem on construction. It is
  * responsible for creating MenuButton components for each of that MenuItem's 
  * child menu items, holding those MenuButtons as child components, and setting 
- * how they are arranged within its bounds.  It listens for changes to its
- * MenuItem, updating its child items whenever its menu data changes.  It also
+ * how they are arranged within its bounds. It listens for changes to its
+ * MenuItem, updating its child items whenever its menu data changes. It also
  * tracks which one of its MenuButtons, if any, is currently selected by the
  * user.
  *
- * FolderComponent is an abstract base class.  Each AppMenu Format should have
+ *  FolderComponent is an abstract base class. Each AppMenu Format should have
  * a FolderComponent implementation that defines how that format arranges 
  * menu buttons within its folders.
  */
@@ -166,6 +171,3 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FolderComponent)
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

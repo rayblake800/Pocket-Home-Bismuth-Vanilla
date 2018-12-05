@@ -1,6 +1,6 @@
 #pragma once
+#include "JuceHeader.h"
 #include <map>
-#include "DesktopEntry/DesktopEntry.h"
 
 /* 
  * @file  DesktopEntry/EntryFile.h
@@ -20,6 +20,7 @@
  * Although .directory files are part of the desktop entry standard, they are
  * not relevant to this module and will be ignored.
  */
+namespace DesktopEntry { class EntryFile; }
 
 class DesktopEntry::EntryFile
 {

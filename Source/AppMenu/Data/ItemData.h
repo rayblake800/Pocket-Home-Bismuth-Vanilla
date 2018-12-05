@@ -1,9 +1,9 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
 
 #pragma once
 #include "JuceHeader.h"
-#include "AppMenu/Implementation.h"
 
 /**
  * @file  ItemData.h
@@ -18,6 +18,8 @@
  * not be handled outside of the Juce message thread.
  * 
  */
+namespace AppMenu { class ItemData; }
+
 class AppMenu::ItemData : public juce::ReferenceCountedObject
 {
 public:
@@ -397,6 +399,3 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ItemData)
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

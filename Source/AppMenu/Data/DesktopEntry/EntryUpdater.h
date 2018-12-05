@@ -1,10 +1,9 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
-#include "DesktopEntry/Loader.h"
 #include "DesktopEntry/UpdateListener.h"
-#include "AppMenu/Data/DesktopEntry/EntryActions.h"
-#include "AppMenu/AppMenu.h"
 
 /**
  * @file  EntryUpdater.h
@@ -25,6 +24,8 @@
  * removed, the updater removes all menu items created from those entries from
  * all folders.
  */
+namespace AppMenu { class EntryUpdater; }
+
 class AppMenu::EntryUpdater : public DesktopEntry::UpdateListener
 {         
 public:
@@ -58,5 +59,3 @@ private:
      */
     virtual void entriesUpdated(const juce::StringArray entryFileIDs) override;
 };
-/* Only include this file directly in the AppMenu implementation! */
-#endif

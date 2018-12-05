@@ -1,7 +1,8 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
-#include "AppMenu/Implementation.h"
 #include "DesktopEntry/DesktopEntry.h"
 
 /**
@@ -14,6 +15,9 @@
  * file objects with matching categories, and add them to the folder as child
  * menu items.
  */
+namespace AppMenu { class EntryLoader; }
+namespace AppMenu { class MenuItem; }
+
 class AppMenu::EntryLoader
 {         
 public:
@@ -43,5 +47,3 @@ private:
        load entry files. */
     DesktopEntry::CallbackID initialLoadingID = 0;
 };
-/* Only include this file directly in the AppMenu implementation! */
-#endif

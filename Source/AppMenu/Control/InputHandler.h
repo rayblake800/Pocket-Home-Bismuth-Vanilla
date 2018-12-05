@@ -1,14 +1,12 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
 
 #pragma once
-#include "JuceHeader.h"
-#include "WindowFocus.h"
-#include "AppMenu/AppMenu.h"
-#include "AppMenu/Components/MenuButton.h"
-#include "AppMenu/Components/FolderComponent.h"
-#include "AppMenu/Components/MenuComponent.h"
 #include "AppMenu/Control/Controller.h"
+#include "AppMenu/Components/MenuComponent.h"
+#include "WindowFocus.h"
+#include "JuceHeader.h"
 
 
 /**
@@ -40,6 +38,9 @@
  * on the assumption that whatever action it was waiting for was probably the
  * action that caused the window to lose focus.
  */
+namespace AppMenu { class InputHandler; }
+namespace AppMenu { class FolderComponent; }
+
 class AppMenu::InputHandler : public juce::MouseListener,
     public juce::KeyListener, private WindowFocus::Listener
 {
@@ -176,6 +177,3 @@ private:
     /* Used by the InputHandler to control the menu's behavior. */
     Controller* const controller;
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

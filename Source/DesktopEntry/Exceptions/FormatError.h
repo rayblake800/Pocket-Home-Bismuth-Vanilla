@@ -1,7 +1,6 @@
 #pragma once
 #include <exception>
 #include "JuceHeader.h"
-#include "DesktopEntry/DesktopEntry.h"
 
 /**
  * @file  DesktopEntry/FormatError.h
@@ -9,7 +8,9 @@
  * @brief  Signals that an attempt was made to add invalid data to a
  *         DesktopEntry object.
  */
- struct DesktopEntry::FormatError : public std::exception
+namespace DesktopEntry { struct FormatError; }
+
+struct DesktopEntry::FormatError : public std::exception
 {
 public:
     /**

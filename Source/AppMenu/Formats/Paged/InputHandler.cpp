@@ -1,4 +1,4 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "NavButton.h"
 #include "TransitionAnimator.h"
 #include "AppMenu/AppMenu.h"

@@ -1,17 +1,22 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
-
+#ifndef APPMENU_IMPLEMENTATION
+  #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "AppMenu/Components/Editors/PopupEditor.h"
-
 /** 
- * @file  NewConfigItemEditor.h
+ * @file  AppMenu/Components/Editors/NewConfigItemEditor.h
  * 
  * @brief  Creates a pop-up editor component that allows the user to add a new 
  *         item to the AppMenu, saved in the AppMenu JSON configuration file.
- * 
- * On construction, the editor is set to create either an application shortcut,
- * or a menu folder.  After entering data and pressing the confirm button, the 
+ */ 
+
+#include "AppMenu/Components/Editors/PopupEditor.h"
+#include "AppMenu/Data/MenuItem.h"
+
+namespace AppMenu{ class NewConfigItemEditor; }
+
+/**
+ *  On construction, the editor is set to create either an application shortcut,
+ * or a menu folder. After entering data and pressing the confirm button, the 
  * new menu item is added to the menu, and saved by AppMenu::ConfigFile.
  */
 class AppMenu::NewConfigItemEditor : public PopupEditor 
@@ -52,5 +57,3 @@ private:
     /* Index in the folder where the new menu item will be inserted. */
     int insertIndex;
 };
-/* Only include this file directly in the AppMenu implementation! */
-#endif

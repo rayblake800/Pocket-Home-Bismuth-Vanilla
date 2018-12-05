@@ -1,5 +1,9 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Data/JSON/MenuFile.h"
+#include "AppMenu/Data/JSON/MenuJSON.h"
+
+AppMenu::MenuFile::MenuFile() { }
+
 /*
  * Gets a menu item representing the root folder of the application menu.
  */

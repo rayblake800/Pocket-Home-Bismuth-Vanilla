@@ -1,5 +1,7 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
 #include "AppMenu/AppMenu.h"
 #include "AppMenu/Data/MenuItem.h"
@@ -81,5 +83,3 @@ namespace AppMenu
         juce::Array<MenuItem> getDesktopEntryItems(const MenuItem folder);
     }
 }
-/* Only include this file directly in the AppMenu implementation! */
-#endif

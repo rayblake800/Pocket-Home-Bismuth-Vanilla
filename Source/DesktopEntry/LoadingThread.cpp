@@ -1,9 +1,9 @@
-#define DESKTOP_ENTRY_IMPLEMENTATION_ONLY
-#include "XDGDirectories.h"
-#include "DesktopEntry/FileError.h"
-#include "DesktopEntry/FormatError.h"
-#include "DesktopEntry/UpdateInterface.h"
+#define DESKTOP_ENTRY_IMPLEMENTATION
 #include "DesktopEntry/LoadingThread.h"
+#include "DesktopEntry/Exceptions/FileError.h"
+#include "DesktopEntry/Exceptions/FormatError.h"
+#include "DesktopEntry/UpdateInterface.h"
+#include "Util/Files/XDGDirectories.h"
 
 /* SharedResource object class key */ 
 const juce::Identifier DesktopEntry::LoadingThread::resourceKey

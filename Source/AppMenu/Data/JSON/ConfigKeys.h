@@ -1,6 +1,7 @@
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
 
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
 #pragma once
 #include <map>
 #include "JuceHeader.h"
@@ -55,6 +56,3 @@ namespace AppMenu
         };
     }
 }
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

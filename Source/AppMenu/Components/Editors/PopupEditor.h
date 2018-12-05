@@ -1,27 +1,30 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
-
+#ifndef APPMENU_IMPLEMENTATION
+  #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "Locale/TextUser.h"
-#include "FileSelectTextEditor.h"
-#include "PopupEditorComponent.h"
-#include "SwitchComponent.h"
-#include "IconLoader.h"
-#include "AppMenu/Components/Editors/CategoryEditor.h"
-#include "AppMenu/Implementation.h"
-
 /**
- * @file  PopupEditor.h
+ * @file  AppMenu/Components/PopupEditor.h
  * 
  * @brief  A pop-up editor component that provides a user interface for creating
  *         and editing application menu items.
+ */
+
+#include "Locale/TextUser.h"
+#include "Widgets/FileSelectTextEditor.h"
+#include "Widgets/PopupEditorComponent.h"
+#include "Widgets/SwitchComponent.h"
+#include "Icon/IconLoader.h"
+#include "AppMenu/Components/Editors/CategoryEditor.h"
+
+namespace AppMenu { class PopupEditor; }
+
+/**
+ *  The PopupEditor provides editor components for setting all relevant menu 
+ * item properties of a new or existing menu item. The user may edit any of 
+ * these data fields, then press the cancel button to discard all changes, or 
+ * the confirm button to save changes.
  *
- * The PopupEditor provides editor components for setting all relevant menu item
- * properties of a new or existing menu item. The user may edit any of these
- * data fields, then press the cancel button to discard all changes, or the 
- * confirm button to save changes.
- *
- * All saved changes are applied by the abstract commitEdits function, which
+ *  All saved changes are applied by the abstract commitEdits function, which
  * subclasses should implement to create or edit whatever types of menu items
  * they handle.
  */
@@ -184,5 +187,3 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopupEditor)
 };
-/* Only include this file directly in the AppMenu implementation! */
-#endif

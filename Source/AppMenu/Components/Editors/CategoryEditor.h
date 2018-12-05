@@ -1,18 +1,22 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+  #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "PopupEditorComponent.h"
-#include "ListEditor.h"
-#include "Locale/TextUser.h"
-#include "AppMenu/Implementation.h"
-
 /**
- * @file CategoryEditor.h
+ * @file AppMenu/Components/Editors/CategoryEditor.h
  * 
  * @brief  Provides a user interface for editing a list of application category 
  *         strings.
- *
- * The CategoryEditor appears above other components when the user chooses the
+ */
+
+#include "Widgets/PopupEditorComponent.h"
+#include "Widgets/ListEditor.h"
+#include "Locale/TextUser.h"
+
+namespace AppMenu { class CategoryEditor; }
+
+/**
+ *  The CategoryEditor appears above other components when the user chooses the
  * "Edit Categories" option in a PopupEditor, and it allows the user to add,
  * delete, or edit a menu item's list of categories.  Double-clicking on items
  * in the list makes them editable, clicking the 'X' button to the right of a
@@ -46,6 +50,3 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CategoryEditor)
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

@@ -1,13 +1,17 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "AppMenu/Control/Initializer.h"
-
 /**
  * @file  AppMenu/Formats/Paged/Initializer.h
  *
  * @brief  Initializes a paged AppMenu's objects.
  */
+
+#include "AppMenu/Control/Initializer.h"
+
+namespace AppMenu{ namespace Paged{ struct Initializer; } }
+
 struct AppMenu::Paged::Initializer : public AppMenu::Initializer
 {
     /**
@@ -38,6 +42,3 @@ struct AppMenu::Paged::Initializer : public AppMenu::Initializer
             AppMenu::MenuComponent* const menuComponent,
             AppMenu::Controller* const controller) const final override;
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

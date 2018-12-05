@@ -1,13 +1,14 @@
 #pragma once
-#include <exception>
 #include "JuceHeader.h"
-#include "DesktopEntry/DesktopEntry.h"
+#include <exception>
 
 /**
  * @file  DesktopEntry/FileError.h
  *
  * @brief  Signals that a desktop entry file is invalid.
  */
+namespace DesktopEntry { struct FileError; }
+
 struct DesktopEntry::FileError : public std::exception
 {
 public:

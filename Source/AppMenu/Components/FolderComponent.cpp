@@ -1,6 +1,6 @@
-#define APPMENU_IMPLEMENTATION_ONLY
-#include "DesktopEntry/Loader.h"
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Components/FolderComponent.h"
+#include "DesktopEntry/Loader.h"
 
 /*
  * Creates a new folder component.

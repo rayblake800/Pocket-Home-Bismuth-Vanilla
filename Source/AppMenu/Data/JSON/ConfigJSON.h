@@ -1,5 +1,7 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
@@ -28,6 +30,3 @@ private:
     virtual const std::vector<Config::DataKey>& getConfigKeys() const final 
         override;
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

@@ -1,17 +1,16 @@
 #pragma once
-#include <map>
-#include <set>
-#include <functional>
 #include "SharedResource/Handler.h"
-#include "DesktopEntry/EntryFile.h"
-#include "DesktopEntry/DesktopEntry.h"
-#include "DesktopEntry/Implementation.h"
+#include "DesktopEntry/Types/CallbackID.h"
 
 /** 
  * @file  DesktopEntry/Loader.h
  *
  * @brief  Finds and caches all desktop entry file data.
  */
+namespace DesktopEntry { class Loader; }
+namespace DesktopEntry { class LoadingThread; }
+namespace DesktopEntry { class EntryFile; }
+
 class DesktopEntry::Loader : public SharedResource::Handler<LoadingThread>
 {
 public:

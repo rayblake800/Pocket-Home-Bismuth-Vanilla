@@ -1,30 +1,34 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
-
+#ifndef APPMENU_IMPLEMENTATION
+  #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "JuceHeader.h"
-#include "OverlaySpinner.h"
-#include "AppLauncher.h"
-#include "Locale/TextUser.h"
-#include "AppMenu/AppMenu.h"
-#include "AppMenu/Data/MenuItem.h"
-#include "AppMenu/Data/DesktopEntry/EntryLoader.h"
-#include "AppMenu/Components/MenuComponent.h"
-#include "AppMenu/Components/Editors/PopupEditor.h"
-
 /**
  * @file  Controller.h
  *
  * @brief  Implements core menu functionality, opening and closing folders,
  *         creating menu editors, handling popup context menus, and launching 
  *         application shortcuts.
- *
- *  The controller is responsible for implementing all menu functionality not
- *  related to menu display or input handling.  The controller defines the
+ */
+
+#include "Locale/TextUser.h"
+#include "AppMenu/Components/MenuComponent.h"
+#include "AppMenu/Data/DesktopEntry/EntryLoader.h"
+#include "OverlaySpinner.h"
+#include "AppLauncher.h"
+#include "JuceHeader.h"
+
+namespace AppMenu { class Controller; }
+namespace AppMenu { class MenuItem; }
+namespace AppMenu { class PopupEditor; }
+
+/**
+ *   The Controller is responsible for implementing all menu functionality not
+ *  related to menu display or input handling. The controller defines the
  *  behavior of activated menu items, launches applications, opens or closes
  *  menu folders, creates and handles popup context menus, and creates 
  *  appropriate popup editors when necessary.
  */
+
 class AppMenu::Controller : public Locale::TextUser
 {
 public:
@@ -198,6 +202,3 @@ private:
     /* Updates desktop entry folder items after changing folder categories */
     EntryLoader entryLoader;
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

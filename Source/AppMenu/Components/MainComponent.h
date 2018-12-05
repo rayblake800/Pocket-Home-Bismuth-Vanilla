@@ -1,27 +1,34 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "JuceHeader.h"
-#include "OverlaySpinner.h"
-#include "AppMenu/Data/DesktopEntry/EntryUpdater.h"
-#include "Icon/IconLoader.h"
-#include "AppMenu/Control/Initializer.h"
-#include "AppMenu/Components/MenuComponent.h"
-#include "AppMenu/Control/Controller.h"
-#include "AppMenu/ConfigFile.h"
-#include "AppMenu/Data/JSON/MenuFile.h"
-#include "AppMenu/Implementation.h"
 /**
  * @file  AppMenu/Components/MainComponent.h
  *
  * @brief  Creates and shows an AppMenu of any format.
- *
- * The MainComponent is a container component that holds the AppMenu's menu
+ */
+
+#include "AppMenu/Format.h"
+#include "AppMenu/ConfigFile.h"
+#include "AppMenu/Control/InputHandler.h"
+#include "AppMenu/Components/MenuComponent.h"
+#include "AppMenu/Data/DesktopEntry/EntryUpdater.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
+#include "AppMenu/Control/Controller.h"
+#include "OverlaySpinner.h"
+#include "Icon/IconLoader.h"
+#include "JuceHeader.h"
+
+namespace AppMenu { class MainComponent; }
+namespace AppMenu { class Initializer; }
+
+/**
+ *  The MainComponent is a container component that holds the AppMenu's menu
  * component, along with the menu's loading spinner. When the menu is created 
  * by AppMenu::createAppMenu, the generic juce::Component pointer returned by
  * that function is actually an AppMenu::MainComponent.
  *
- * The MainComponent's main responsibility is to initialize the menu component
+ *  The MainComponent's main responsibility is to initialize the menu component
  * in a particular AppMenu format, and automatically update the menu whenever
  * a new menu format is selected. 
  */
@@ -122,6 +129,3 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

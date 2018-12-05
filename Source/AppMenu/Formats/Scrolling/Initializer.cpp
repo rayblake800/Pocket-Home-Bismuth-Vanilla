@@ -1,4 +1,4 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Formats/Scrolling/Initializer.h"
 #include "AppMenu/Formats/Scrolling/MenuComponent.h"
 #include "AppMenu/Formats/Scrolling/InputHandler.h"

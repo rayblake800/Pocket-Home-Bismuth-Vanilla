@@ -1,10 +1,12 @@
-// Only include when implementing the DesktopEntry module!
-#ifdef DESKTOP_ENTRY_IMPLEMENTATION_ONLY
-#include <map>
+#ifndef DESKTOP_ENTRY_IMPLEMENTATION
+#error __file__ included outside of DesktopEntry implementation.
+#endif
+
+#pragma once
 #include "SharedResource/ThreadResource.h"
-#include "DesktopEntry/DesktopEntry.h"
 #include "DesktopEntry/EntryFile.h"
-#include "DesktopEntry/Implementation.h"
+#include "DesktopEntry/Types/CallbackID.h"
+#include <map>
 
 /**
  * @file  DesktopEntry/LoadingThread.h
@@ -24,6 +26,8 @@
  * all desktop entry file directories for changes, and sharing these changes 
  * with all DesktopEntry::UpdateListener objects.
  */
+namespace DesktopEntry { class LoadingThread; }
+
 class DesktopEntry::LoadingThread : public SharedResource::ThreadResource
 {
 public:
@@ -155,7 +159,6 @@ private:
      */
     virtual bool threadShouldWait() override;
     
-
     /**
      * @brief  Generates a unique callback ID the thread can assign to a 
      *         callback function.
@@ -211,5 +214,3 @@ private:
        during the last update scan. */
     juce::StringArray lastRemovedIDs;
 };
-// Only include when implementing the DesktopEntry module!
-#endif

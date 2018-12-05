@@ -44,20 +44,6 @@ namespace AppMenu
     /* ## All outside interaction with the AppMenu module should be    ## */
     /* ## through these functions.                                     ## */
     /* ################################################################## */
-    /**
-     * @brief  Defines the available menu implementations.  Each one (besides
-     *         Invalid) has a namespace of the same name within the AppMenu 
-     *         namespace where all of its classes are declared.
-     */
-    enum class Format
-    {
-        /* Displays the menu as vertical scrolling menu folder panels: */
-        Scrolling,
-        /* Displays the menu as pages of menu item grids: */
-        Paged,
-        /* The Format value returned if the menu is somehow null or invalid: */
-        Invalid
-    };
     
     /**
      * @brief  Creates an AppMenu::MainComponent, initialized with the menu

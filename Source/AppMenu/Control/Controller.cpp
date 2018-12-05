@@ -1,12 +1,11 @@
-#define APPMENU_IMPLEMENTATION_ONLY
-#include "Utils.h"
-#include "Config/MainFile.h"
-#include "Config/MainKeys.h"
-#include "AppMenu/Data/JSON/MenuFile.h"
+#define APPMENU_IMPLEMENTATION
+#include "AppMenu/Control/Controller.h"
 #include "AppMenu/Components/Editors/ExistingItemEditor.h"
 #include "AppMenu/Components/Editors/NewConfigItemEditor.h"
 #include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
-#include "AppMenu/Control/Controller.h"
+#include "Config/MainFile.h"
+#include "Config/MainKeys.h"
+#include "Utils.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey        = "AppMenu::Controller";

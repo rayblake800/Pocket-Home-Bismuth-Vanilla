@@ -1,10 +1,9 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
 #include "Config/FileHandler.h"
-#include "AppMenu/Data/MenuItem.h"
-#include "AppMenu/Data/JSON/MenuJSON.h"
-#include "AppMenu/AppMenu.h"
 
 /**
  * @file MenuFile.h
@@ -25,10 +24,14 @@
  *       AppMenu/Data/JSON/MenuKeys.h
  *       AppMenu/Data/JSON/MenuJSON.h
  */
+namespace AppMenu { class MenuFile; }
+namespace AppMenu { class MenuJSON; }
+namespace AppMenu { class MenuItem; }
+
 class AppMenu::MenuFile : public Config::FileHandler<AppMenu::MenuJSON>
 {
 public:
-    MenuFile() { }
+    MenuFile();
 
     virtual ~MenuFile() { }
     
@@ -76,6 +79,3 @@ public:
             MenuItem& parentFolder,
             const int index);
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

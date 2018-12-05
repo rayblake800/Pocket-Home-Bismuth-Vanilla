@@ -1,5 +1,7 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
 #include "AppMenu/Control/Initializer.h"
 
@@ -36,6 +38,3 @@ struct AppMenu::Scrolling::Initializer : public AppMenu::Initializer
             AppMenu::MenuComponent* const menuComponent,
             AppMenu::Controller* const controller) const final override;
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

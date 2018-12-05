@@ -1,10 +1,9 @@
-#define APPMENU_IMPLEMENTATION_ONLY
-#include "DesktopEntry/FormatError.h"
-#include "DesktopEntry/FileError.h"
+#define APPMENU_IMPLEMENTATION
+#include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
 #include "DesktopEntry/EntryFile.h"
 #include "DesktopEntry/Loader.h"
-#include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
-
+#include "DesktopEntry/Exceptions/FileError.h"
+#include "DesktopEntry/Exceptions/FormatError.h"
 
 /* NewConfigItemEditor shares a localized object class key inherited from
    AppMenu::PopupEditor. */

@@ -1,5 +1,6 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
 
 #pragma once
 #include "AppMenu/Control/InputHandler.h"
@@ -67,6 +68,3 @@ private:
      */
     Paged::FolderComponent* getActivePagedFolderComponent();
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

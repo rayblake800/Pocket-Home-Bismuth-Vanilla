@@ -1,5 +1,7 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
@@ -26,6 +28,8 @@
  * @see AppMenu/Data/JSON/ConfigKeys.h 
  *      AppMenu/Data/JSON/ConfigFile.h 
  */
+namespace AppMenu { class MenuJSON; }
+
 class AppMenu::MenuJSON : public Config::FileResource
 {
 public:
@@ -161,6 +165,3 @@ private:
         };
     };
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

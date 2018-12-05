@@ -1,4 +1,4 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Components/Editors/CategoryEditor.h"
 
 /* Localized object class key: */
@@ -6,6 +6,7 @@ static const juce::Identifier localeClassKey = "AppMenu::CategoryEditor";
 
 /* Localized text value key: */
 static const juce::Identifier editCategoryTitleKey = "editCategoryTitle";
+
 /*
  * Creates a new category editor, setting the initial categories and the 
  * confirmation callback function.

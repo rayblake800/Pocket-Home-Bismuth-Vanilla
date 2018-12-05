@@ -1,17 +1,21 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+  #error __file__ included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "AppMenu/Components/FolderComponent.h"
-#include "AppMenu/Data/MenuItem.h"
-#include "AppMenu/Components/Editors/PopupEditor.h"
-#include "JuceHeader.h"
-
 /**
  * @file AppMenu/Components/MenuComponent.h
  *
  * @brief  Creates and arranges application menu folder components.
- *
- * The MenuComponent provides the interface used by AppMenu::Controller
+ */
+
+#include "AppMenu/Components/FolderComponent.h"
+#include "AppMenu/Components/Editors/PopupEditor.h"
+
+namespace AppMenu { class MenuComponent; }
+namespace AppMenu { class MenuItem; }
+
+/**
+ *  The MenuComponent provides the interface used by AppMenu::Controller
  * and AppMenu::InputHandler to interact with menu components. It opens,
  * closes, and positions child FolderComponent objects when folder MenuItem
  * objects are opened, closed, or otherwise adjusted. It allows other objects
@@ -21,7 +25,7 @@
  * those as well, adding them as child components, and keeping them centered
  * within its bounds.
  *
- * MenuComponent is an abstract class.  Each AppMenu format should have its own
+ *  MenuComponent is an abstract class. Each AppMenu format should have its own
  * MenuComponent implementation that defines exactly where child folders should
  * be placed when the component layout is updated.
  */
@@ -190,6 +194,3 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuComponent)
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

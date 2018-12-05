@@ -1,10 +1,11 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
-#include "IconThread.h"
 #include "DesktopEntry/EntryFile.h"
-#include "Locale/TextUser.h"
 #include "AppMenu/Data/ItemData.h"
+#include "Locale/TextUser.h"
 
 /**
  * @file EntryData.h 
@@ -18,8 +19,10 @@
  * will be visible in other applications for the current user, but will not 
  * affect other users.
  */
+namespace AppMenu { class EntryData; }
 
-class AppMenu::EntryData : public ItemData, public Locale::TextUser{
+class AppMenu::EntryData : public ItemData, public Locale::TextUser
+{
 public:
     /**
      * @brief  Creates menu item data from a desktop entry. 
@@ -178,6 +181,3 @@ private:
     /* Application data source, set on construction. */
     DesktopEntry::EntryFile desktopEntry;
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

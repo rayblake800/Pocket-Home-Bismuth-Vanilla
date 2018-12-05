@@ -1,4 +1,4 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Data/JSON/MenuKeys.h"
 #include "AppMenu/Data/JSON/ConfigData.h"
 

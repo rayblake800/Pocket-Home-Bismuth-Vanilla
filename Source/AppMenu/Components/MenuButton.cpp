@@ -1,7 +1,7 @@
-#define APPMENU_IMPLEMENTATION_ONLY
-#include "AssetFiles.h"
-#include "ComponentConfigFile.h"
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Components/MenuButton.h"
+#include "ComponentConfigFile.h"
+#include "AssetFiles.h"
 
 /* Extra characters applied when calculating title width, defining title padding
    space relative to the font size. */
@@ -207,6 +207,6 @@ void AppMenu::MenuButton::paintButton
     {
         g.setColour(findColour(borderColourId));
         g.drawRoundedRectangle(border.toFloat(), border.getHeight() / 6, 2);
-        //g.drawRect(border, 2);
+        g.drawRect(border, 2);
     }
 }

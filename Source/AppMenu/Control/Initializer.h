@@ -1,8 +1,5 @@
 #pragma once
-#include "AppMenu/Components/MenuComponent.h"
-#include "AppMenu/Control/Controller.h"
-#include "AppMenu/Control/InputHandler.h"
-#include "AppMenu/AppMenu.h"
+#include "AppMenu/Format.h"
 
 /**
  * @file  AppMenu/Control/Initializer.h
@@ -15,6 +12,10 @@
  * switch statement within the createInitializer function in 
  * AppMenu/AppMenu.cpp.
  */
+namespace AppMenu { struct Initializer; }
+namespace AppMenu { class MenuComponent; }
+namespace AppMenu { class Controller; }
+namespace AppMenu { class InputHandler; }
 struct AppMenu::Initializer
 {
     /**

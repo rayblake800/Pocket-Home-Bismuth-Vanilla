@@ -1,9 +1,9 @@
-#define APPMENU_IMPLEMENTATION_ONLY
-#include "Utils.h"
-#include "DesktopEntry/FormatError.h"
-#include "DesktopEntry/FileError.h"
-#include "DesktopEntry/Loader.h"
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Data/DesktopEntry/EntryData.h"
+#include "DesktopEntry/Loader.h"
+#include "DesktopEntry/Exceptions/FormatError.h"
+#include "DesktopEntry/Exceptions/FileError.h"
+#include "Utils.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::EntryData";

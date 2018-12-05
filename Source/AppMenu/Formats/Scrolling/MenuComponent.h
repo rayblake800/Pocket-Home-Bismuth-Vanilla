@@ -1,5 +1,7 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
 #include "ConfigurableComponent.h"
 #include "AppMenu/ConfigFile.h"
@@ -18,6 +20,9 @@
  * fully print the titles of all MenuButtons, and tall enough to fit the number
  * of rows specified by the AppMenu config file.
  */
+namespace AppMenu { namespace Scrolling { class MenuComponent; } }
+
+
 class AppMenu::Scrolling::MenuComponent : public AppMenu::MenuComponent,
     public ConfigurableComponent, public ConfigFile::Listener
 {
@@ -113,6 +118,3 @@ private:
     /* Holds the number of visible button rows to fit on the screen: */
     int maxRows;
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

@@ -1,5 +1,7 @@
-// Only include when implementing the DesktopEntry module!
-#ifdef DESKTOP_ENTRY_IMPLEMENTATION_ONLY
+#ifndef DESKTOP_ENTRY_IMPLEMENTATION
+#error __file__ included outside of DesktopEntry implementation.
+#endif
+
 #pragma once
 #include "JuceHeader.h"
 
@@ -275,5 +277,3 @@ namespace DesktopEntry
     }
 }
 
-// Only include when implementing the DesktopEntry module!
-#endif

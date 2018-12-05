@@ -1,4 +1,4 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "ComponentConfigKeys.h"
 #include "AppMenu/Data/JSON/ConfigKeys.h"
 #include "AppMenu/Formats/Paged/FolderComponent.h"

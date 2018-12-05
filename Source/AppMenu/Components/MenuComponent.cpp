@@ -1,7 +1,7 @@
-#define APPMENU_IMPLEMENTATION_ONLY
-#include "Utils.h"
-#include "TransitionAnimator.h"
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Components/MenuComponent.h"
+#include "TransitionAnimator.h"
+#include "Utils.h"
 
 /*
  * Gets the MenuItem for the current active folder component.

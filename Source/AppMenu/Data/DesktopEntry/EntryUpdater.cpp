@@ -1,4 +1,4 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "DesktopEntry/Loader.h"
 #include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Data/MenuItem.h"

@@ -1,18 +1,22 @@
-
-/* Only include this file directly in the AppMenu implementation! */
 #pragma once
-#include "Config/FileHandler.h"
-#include "AppMenu/AppMenu.h"
-
 /**
- * @file MenuFile.h
+ * @file  AppMenu/MenuFile.h
  * 
  * @brief  Reads and edits the selected AppMenu format and menu layout 
  *         preferences.
- * 
- * The menuOptions.json file holds the selected AppMenu::Format, along with
- * other menu format options, as defined in AppMenu::ConfigKeys.  
- * AppMenu::MenuFile provides convenient methods to read and write these values.
+ */ 
+
+#include "Config/FileHandler.h"
+
+namespace AppMenu { class ConfigFile; }
+namespace AppMenu { class ConfigJSON; }
+namespace AppMenu { enum class Format; }
+
+/**
+ *  AppMenu::ConfigFile provides convenient methods to read and write values
+ * defined in the menuOptions.json file. This file holds the selected 
+ * AppMenu::Format, along with other menu format options, as defined in 
+ * AppMenu::ConfigKeys.  
  * 
  * @see  AppMenu/AppMenu.h
  *       AppMenu/Data/JSON/ConfigKeys.h

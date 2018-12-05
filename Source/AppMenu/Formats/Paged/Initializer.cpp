@@ -1,4 +1,4 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "AppMenu/Formats/Paged/MenuComponent.h"
 #include "AppMenu/Formats/Paged/InputHandler.h"
 #include "AppMenu/Formats/Paged/Initializer.h"

@@ -1,5 +1,7 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
+
 #pragma once
 #include "IconThread.h"
 #include "Nullable.h"
@@ -25,6 +27,7 @@
  * no controls used to prevent concurrent access errors.  All AppMenu classes
  * are not threadsafe, and should only be used within the Juce message thread.
  */
+namespace AppMenu { class MenuItem; }
 
 class AppMenu::MenuItem : public Nullable<AppMenu::ItemData::Ptr>
 {
@@ -367,6 +370,3 @@ public:
      */
     void removeListener(Listener* toRemove);
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

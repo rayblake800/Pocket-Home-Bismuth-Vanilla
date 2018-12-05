@@ -1,5 +1,6 @@
-/* Only include this file directly in the AppMenu implementation! */
-#ifdef APPMENU_IMPLEMENTATION_ONLY
+#ifndef APPMENU_IMPLEMENTATION
+    #error __file__ included outside of AppMenu implementation.
+#endif
 
 #pragma once
 #include "AppMenu/Components/MenuButton.h"
@@ -63,6 +64,3 @@ private:
      */
     virtual juce::Justification getTextJustification() const final override;
 };
-
-/* Only include this file directly in the AppMenu implementation! */
-#endif

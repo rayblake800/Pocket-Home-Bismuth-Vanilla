@@ -1,4 +1,4 @@
-#define APPMENU_IMPLEMENTATION_ONLY
+#define APPMENU_IMPLEMENTATION
 #include "Utils.h"
 #include "ComponentConfigFile.h"
 #include "AppMenu/Components/Editors/PopupEditor.h"
@@ -232,4 +232,3 @@ void AppMenu::PopupEditor::editorButtonClicked(juce::Button* button)
         addAndMakeVisible(categoryEditor);
     }
 }
-
