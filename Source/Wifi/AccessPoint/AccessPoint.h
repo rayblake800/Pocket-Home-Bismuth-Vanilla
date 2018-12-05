@@ -19,12 +19,9 @@
  */
 
 namespace Wifi { class APData; }
-
-namespace LibNM 
-{ 
-    class AccessPoint; 
-    enum class SecurityType;
-}
+namespace LibNM { class AccessPoint; }
+namespace LibNM { class APHash; }
+namespace LibNM { enum class SecurityType; }
 
 class Wifi::AccessPoint : 
     public Nullable<juce::ReferenceCountedObjectPtr<APData>>
@@ -113,6 +110,13 @@ public:
      * @return  The type of security, if any, protecting the access point. 
      */
     LibNM::SecurityType getSecurityType() const;
+
+    /**
+     * @brief  Gets the hash value used to identify and sort the access point.
+     *
+     * @return  The access point's APHash value. 
+     */
+    LibNM::APHash getHashValue() const;
 
 private:
     /**

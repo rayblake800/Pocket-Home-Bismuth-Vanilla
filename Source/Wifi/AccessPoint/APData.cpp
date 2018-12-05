@@ -75,6 +75,14 @@ LibNM::SecurityType Wifi::APData::getSecurityType() const
 }
 
 /*
+ * Gets the hash value used to identify and sort the access point.
+ */
+LibNM::APHash Wifi::APData::getHashValue() const
+{
+    return hash;
+}
+
+/*
  * Updates the access point's signal strength.
  */
 void Wifi::APData::setSignalStrength(const unsigned int newStrength)

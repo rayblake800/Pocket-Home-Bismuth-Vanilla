@@ -82,6 +82,13 @@ public:
     LibNM::SecurityType getSecurityType() const;
 
     /**
+     * @brief  Gets the hash value used to identify and sort the access point.
+     *
+     * @return  The access point's APHash value. 
+     */
+    LibNM::APHash getHashValue() const;
+
+    /**
      * @brief  Updates the access point's signal strength.
      *
      * @param newStrength  The new signal strength, as a percentage value

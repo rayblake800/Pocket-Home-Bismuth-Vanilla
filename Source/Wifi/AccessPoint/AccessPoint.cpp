@@ -1,6 +1,8 @@
 #include "Wifi/SavedState/AccessPoint.h"
 #include "Wifi/SavedState/APData.h"
 #include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/APData/APHash.h"
+#include "LibNM/APData/APMode.h"
 #include "LibNM/APData/SecurityType.h"
 #include "LibNM/ThreadHandler.h"
 
@@ -109,6 +111,19 @@ LibNM::SecurityType Wifi::AccessPoint::getSecurityType() const
         return LibNM::SecurityType::unsecured;
     }
     return getData()->getSecurityType();
+}
+
+/*
+ * Gets the hash value used to identify and sort the access point.
+ */
+LibNM::APHash Wifi::AccessPoint::getHashValue() const
+{
+    if(isNull())
+    {
+        return LibNM::APHash(nullptr, LibNM::APMode::unknown,
+                LibNM::SecurityType::unsecured); 
+    }
+    return getData()->getHashValue();
 }
 
 /*
