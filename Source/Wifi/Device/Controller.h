@@ -1,11 +1,13 @@
 #pragma once
-#include "Wifi/Wifi.h"
-
 /**
  * @file  Wifi/Control/Controller.h
  *
  * @brief  Sends basic commands to the Wifi device.
- *
+ */
+
+namespace Wifi { class Controller; }
+
+/**
  *  Controller objects are used to turn Wifi on and off, and to make the Wifi
  * device rescan visible access points. 
  */

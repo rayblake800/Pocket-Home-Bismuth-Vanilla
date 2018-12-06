@@ -1,9 +1,9 @@
 #pragma once
-#include "Wifi/Listeners/UpdateInterfaces/APUpdateInterface.h"
+#include "Wifi/AccessPointList/APUpdateInterface.h"
 #include "SharedResource/Handler.h"
 
-namespace Wifi { class APList; }
 namespace Wifi { class VisibleAPListener; }
+namespace Wifi { class APList; }
 
 class Wifi::VisibleAPListener : public APUpdateInterface,
     public SharedResource::Handler<APList>

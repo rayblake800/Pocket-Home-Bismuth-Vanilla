@@ -1,5 +1,5 @@
 #pragma once
-#include "Wifi/Listeners/UpdateInterfaces/DeviceUpdateInterface.h"
+#include "Wifi/Device/DeviceUpdateInterface.h"
 #include "SharedResource/Handler.h"
 
 /**

@@ -1,15 +1,18 @@
 #pragma once
-#include "Wifi/Wifi.h"
-#include "SharedResource/Resource.h"
-#include "LibNM/NMObjects/Client.h"
-#include "WindowFocus/WindowFocus.h"
-
 /**
  * @file  Wifi/State/DeviceTracker.h
  *
  * @brief  Tracks whether the Wifi device is enabled, notifying listeners
  *         whenever Wifi is enabled or disabled. 
- *
+ */
+
+#include "SharedResource/Resource.h"
+#include "LibNM/NMObjects/Client.h"
+#include "WindowFocus/WindowFocus.h"
+
+namespace Wifi { class DeviceTracker; }
+
+/**
  *  DeviceTracker tracks whether a Wifi device managed by NetworkManager is
  * known to exist, and whether it is currently enabled. Whenever this status
  * changes, the DeviceTracker notifies all DeviceListeners of the change. 

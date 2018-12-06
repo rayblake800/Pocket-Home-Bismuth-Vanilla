@@ -1,5 +1,4 @@
 #pragma once
-
 /**
  * @file Wifi/Listeners/UpdateInterfaces/APUpdateInterface.h
  *

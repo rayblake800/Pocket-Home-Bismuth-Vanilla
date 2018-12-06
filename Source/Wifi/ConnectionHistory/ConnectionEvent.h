@@ -1,5 +1,5 @@
 #pragma once
-#include "Wifi/SavedState/AccessPoint.h"
+#include "Wifi/AccessPoint/AccessPoint.h"
 
 namespace Wifi { class ConnectionEvent; }
 namespace Wifi { enum class EventType; }

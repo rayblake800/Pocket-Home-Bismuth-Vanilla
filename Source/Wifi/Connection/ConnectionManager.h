@@ -1,14 +1,17 @@
 #pragma once
-#include "Wifi/Wifi.h"
-#include "LibNM/NMObjects/Client.h"
-#include "JuceHeader.h"
-
 /**
  * @file  Wifi/Control/ConnectionHandler.h
  *
  * @brief  Connects to and disconnects from wireless networks, and clears saved
  *         connections.
  */
+
+#include "LibNM/NMObjects/Client.h"
+#include "JuceHeader.h"
+
+namespace Wifi { class ConnectionManager; }
+namespace Wifi { class AccessPoint; }
+
 class Wifi::ConnectionManager
 {
 public:

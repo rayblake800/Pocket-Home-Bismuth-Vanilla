@@ -1,16 +1,21 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included outside of Wifi module implementation.
+#endif
 #pragma once
-#include "Wifi/SavedState/AccessPoint.h"
-#include "LibNM/APData/APHash.h"
-#include "LibNM/NMObjects/AccessPoint.h"
-#include "SharedResource/Resource.h"
-#include <set>
-
 /**
  * @file  Wifi/SavedState/APList.h
  *
  * @brief  Tracks all visible Wifi access points, using NetworkManager signals
  *         and data to construct and update Wifi::AccessPoint objects.
  */
+
+#include "Wifi/AccessPoint/AccessPoint.h"
+#include "LibNM/APData/APHash.h"
+#include "LibNM/NMObjects/AccessPoint.h"
+#include "SharedResource/Resource.h"
+
+namespace Wifi { class APList; }
+
 class Wifi::APList : public SharedResource::Resource
 {
 public:

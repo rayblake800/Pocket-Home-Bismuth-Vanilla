@@ -1,4 +1,5 @@
-#include "Wifi/SavedState/APData.h"
+#define WIFI_IMPLEMENTATION
+#include "Wifi/AccessPoint/APData.h"
 #include "LibNM/NMObjects/AccessPoint.h"
 #include "LibNM/ThreadHandler.h"
 

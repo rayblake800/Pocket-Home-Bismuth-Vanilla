@@ -1,13 +1,18 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included outside of Wifi module implementation.
+#endif
 #pragma once
-#include "Wifi/Implementation.h"
-#include "LibNM/APData/APHash.h"
-#include "JuceHeader.h"
 
 /**
  * @file  Wifi/SavedState/APData.h
  *
  * @brief  Holds data describing a Wifi access point.
  */
+
+#include "LibNM/APData/APHash.h"
+#include "JuceHeader.h"
+
+namespace Wifi { class APData; }
 class Wifi::APData : public juce::ReferenceCountedObject
 {
 public:

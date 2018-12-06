@@ -1,5 +1,5 @@
 #pragma once
-#include "Wifi/Listeners/UpdateInterfaces/ConnectionUpdateInterface.h"
+#include "Wifi/Connection/ConnectionUpdateInterface.h"
 #include "SharedResource/Handler.h"
 
 namespace Wifi { class ConnectionListener; }

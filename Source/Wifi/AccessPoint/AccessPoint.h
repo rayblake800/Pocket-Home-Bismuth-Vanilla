@@ -1,13 +1,20 @@
 #pragma once
-#include "Wifi/Wifi.h"
-#include "Util/Nullable.h"
-#include "JuceHeader.h"
-
 /**
  * @file  Wifi/SavedState/AccessPoint
  *
  * @brief  Holds shared data describing a wifi access point.
- *
+ */
+
+#include "Wifi/Wifi.h"
+#include "Util/Nullable.h"
+#include "JuceHeader.h"
+
+namespace Wifi { class APData; }
+namespace LibNM { class AccessPoint; }
+namespace LibNM { class APHash; }
+namespace LibNM { enum class SecurityType; }
+
+/**
  *  Wifi::AccessPoint represents a LibNM::AccessPoint, which in turn represents
  * a Wifi access point found by NetworkManager through the network device. 
  * Wifi::AccessPoint objects hold shared, reference counted data. This allows
@@ -17,12 +24,6 @@
  *  AccessPoint data is mostly immutable. Only the signal strength may be 
  * updated, and only the APList may update it.
  */
-
-namespace Wifi { class APData; }
-namespace LibNM { class AccessPoint; }
-namespace LibNM { class APHash; }
-namespace LibNM { enum class SecurityType; }
-
 class Wifi::AccessPoint : 
     public Nullable<juce::ReferenceCountedObjectPtr<APData>>
 {
@@ -127,5 +128,3 @@ private:
      */
     void setSignalStrength(const unsigned int newStrength);
 };
-
-
