@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION
 #include "JuceHeader.h"
 #include "AppMenu/Control/Controller.h"
 

@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION
 #include "JuceHeader.h"
 
 class PagedMenuTest : public juce::UnitTest

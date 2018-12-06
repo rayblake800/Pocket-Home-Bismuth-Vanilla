@@ -1,3 +1,4 @@
+#define APPMENU_IMPLEMENTATION
 #include "JuceHeader.h"
 
 class ScrollingMenuTest : public juce::UnitTest

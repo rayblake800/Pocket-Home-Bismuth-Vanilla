@@ -1,10 +1,11 @@
+#include "AppMenu/AppMenu.h"
+#include "AppMenu/Format.h"
+#include "AppMenu/ConfigFile.h"
 #include "JuceHeader.h"
 #include "Icon/IconLoader.h"
 #include "DesktopEntry/Loader.h"
 #include "TestWindow.h"
 #include "DelayUtils.h"
-#include "AppMenu/ConfigFile.h"
-#include "AppMenu/AppMenu.h"
 
 /* Test window bounds: */
 static const constexpr int winX = 5;
