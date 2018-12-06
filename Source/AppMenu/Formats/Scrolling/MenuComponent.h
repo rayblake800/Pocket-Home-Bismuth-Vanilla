@@ -1,28 +1,28 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "ConfigurableComponent.h"
-#include "AppMenu/ConfigFile.h"
-#include "AppMenu/Components/MenuComponent.h"
-
 /**
  * @file  MenuFormats/Scrolling/MenuComponent.h
  *
  * @brief  Creates and arranges application menu folder components for the
  *         Scrolling AppMenu format.
- *
- * The Scrolling::MenuComponent arranges open FolderComponent objects from left
+ */
+
+#include "AppMenu/Components/MenuComponent.h"
+#include "AppMenu/ConfigFile.h"
+#include "ConfigurableComponent.h"
+
+namespace AppMenu { namespace Scrolling { class MenuComponent; } }
+
+/**
+ *  The Scrolling::MenuComponent arranges open FolderComponent objects from left
  * to right. It attempts to keep the selected menu item in the active folder
  * as centered as possible, only moving off-center when doing so would keep more
- * of the menu visible.  It ensures each FolderComponent is wide enough to
+ * of the menu visible. It ensures each FolderComponent is wide enough to
  * fully print the titles of all MenuButtons, and tall enough to fit the number
  * of rows specified by the AppMenu config file.
  */
-namespace AppMenu { namespace Scrolling { class MenuComponent; } }
-
-
 class AppMenu::Scrolling::MenuComponent : public AppMenu::MenuComponent,
     public ConfigurableComponent, public ConfigFile::Listener
 {

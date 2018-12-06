@@ -1,27 +1,30 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "ConfigurableComponent.h"
-#include "AppMenu/ConfigFile.h"
-#include "NavButton.h"
-#include "AppMenu/Components/MenuComponent.h"
-
 /**
  * @file  MenuFormats/Paged/MenuComponent.h
  *
  * @brief  Creates and arranges application menu folder components for the
  *         paged AppMenu format.
- *
- * In the Paged::MenuComponent, only the active page of the last opened 
- * FolderComponent is visible.  The MenuComponent is responsible for ensuring
+ */
+
+#include "AppMenu/Components/MenuComponent.h"
+#include "ConfigurableComponent.h"
+#include "AppMenu/ConfigFile.h"
+#include "NavButton.h"
+
+namespace AppMenu { namespace Paged { class MenuComponent; } }
+
+/**
+ *  In the Paged::MenuComponent, only the active page of the last opened 
+ * FolderComponent is visible. The MenuComponent is responsible for ensuring
  * each folder page is the same size as the MenuComponent, and the correct page
  * is currently showing.  The MenuComponent also listens for changes to the
  * paged menu grid dimensions, re-positioning its folder components if the
  * grid dimensions change.
  * 
- * The Paged::MenuComponent also creates, shows, and holds the navigation
+ *  The Paged::MenuComponent also creates, shows, and holds the navigation
  * buttons used to change the selected folder page.
  */
 class AppMenu::Paged::MenuComponent : public AppMenu::MenuComponent,

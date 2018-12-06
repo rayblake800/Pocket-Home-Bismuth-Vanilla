@@ -18,7 +18,6 @@ Config::FileResource(resourceKey, jsonFilename)
     loadJSONData(); 
 }
 
-
 /*
  * Gets all parameters with basic data types tracked by this ConfigFile.
  */

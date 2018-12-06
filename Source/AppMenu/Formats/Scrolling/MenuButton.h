@@ -1,16 +1,19 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "AppMenu/Components/MenuButton.h"
-
 /**
  * @file  Scrolling/MenuButton.h
  *
  * @brief  Creates a MenuButton suitable for a scrolling AppMenu.
- *
- * The Scrolling::MenuButton displays the icon on the left side of the button,
+ */
+
+#include "AppMenu/Components/MenuButton.h"
+
+namespace AppMenu { namespace Scrolling { class MenuButton; } }
+
+/**
+ *  The Scrolling::MenuButton displays the icon on the left side of the button,
  * with the title printed directly to the right of the icon.  The button's
  * background and outline are always drawn.
  */
@@ -42,6 +45,7 @@ private:
      * @return  A square area on the left side of the button.
      */
     virtual juce::Rectangle<float> findIconBounds() const final override;
+
     /**
      * @brief  Checks if this button will draw an outline around its border.
      *

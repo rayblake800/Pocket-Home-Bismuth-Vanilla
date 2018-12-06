@@ -1,8 +1,8 @@
 #define APPMENU_IMPLEMENTATION
-#include "ComponentConfigKeys.h"
-#include "AppMenu/Data/JSON/ConfigKeys.h"
-#include "AppMenu/Formats/Paged/FolderComponent.h"
 #include "AppMenu/Formats/Paged/MenuComponent.h"
+#include "AppMenu/Formats/Paged/FolderComponent.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
+#include "ComponentConfigKeys.h"
 
 /* Animation duration in milliseconds: */
 static const constexpr int animationMS = 300;

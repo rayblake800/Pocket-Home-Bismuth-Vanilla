@@ -1,35 +1,31 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
+/**
+ * @file AppMenu/Data/JSON/MenuJSON.h
+ *
+ * @brief  Reads from and writes to the menu tree defined in the appMenu.json 
+ *         configuration file
+ */
+
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
 #include "AppMenu/Data/DesktopEntry/EntryLoader.h"
 #include "AppMenu/Data/MenuItem.h"
 #include "AppMenu/Data/JSON/ConfigData.h"
-/**
- * @file MenuJSON.h
- *
- * @brief  Reads application menu settings from the apps.json configuration 
- *         file.
- *
- * MenuJSON defines the class of the singleton SharedResource object that
- * accesses apps.json, the configuration file where application menu settings
- * are stored.  Only AppMenu::ConfigFile objects are allowed to access the 
- * MenuJSON object.
- *
- * MenuJSON reads in the JSON data used to create AppMenu::MenuItem objects,
- * and writes any changes to those objects back to apps.json as JSON data. 
- * 
- * MenuJSON also reads and writes the selected menu format, along with a few
- * other simple configurable menu properties listed in ConfigKeys.h.
- *
- * @see AppMenu/Data/JSON/ConfigKeys.h 
- *      AppMenu/Data/JSON/ConfigFile.h 
- */
+
 namespace AppMenu { class MenuJSON; }
 
+/**
+ *  MenuJSON is the class of the singleton SharedResource object that accesses 
+ * appMenu.json, the configuration file where the application menu structure is
+ * defined. Only AppMenu::ConfigFile objects are allowed to directly access the 
+ * MenuJSON object.
+ *
+ *  MenuJSON reads in the JSON data used to create AppMenu::MenuItem objects,
+ * and writes any changes to those objects back to appMenu.json as JSON data. 
+ */
 class AppMenu::MenuJSON : public Config::FileResource
 {
 public:

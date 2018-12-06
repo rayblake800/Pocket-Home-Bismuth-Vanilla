@@ -1,9 +1,6 @@
 #define APPMENU_IMPLEMENTATION
-#include "AppMenu/Implementation.h"
-#include "AppMenu/Components/MainComponent.h"
-#include "AppMenu/Data/JSON/MenuFile.h"
-#include "AppMenu/Data/JSON/MenuKeys.h"
 #include "AppMenu/AppMenu.h"
+#include "AppMenu/Components/MainComponent.h"
 
 /*
  * Creates an AppMenu::MainComponent, initialized with the menu format saved 

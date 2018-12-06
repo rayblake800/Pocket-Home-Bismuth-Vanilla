@@ -1,16 +1,21 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "AppMenu/Control/InputHandler.h"
-
 /**
  * @file  InputHandler.h
  *
  * @brief  Handles input events for a paged AppMenu.
- *
- * The Paged::InputHandler's primary task is handling key events, determining
+ */
+
+#include "AppMenu/Control/InputHandler.h"
+
+namespace AppMenu { namespace Paged { class InputHandler; } }
+namespace AppMenu { namespace Paged { class MenuComponent; } }
+namespace AppMenu { namespace Paged { class FolderComponent; } }
+
+/*/
+ *  The Paged::InputHandler's primary task is handling key events, determining
  * what index to select next based on the active folder page, the dimensions of
  * the folder page grid, and the position of the current selected menu item.  
  * It also handles button events from the Paged::MenuComponent's navigation

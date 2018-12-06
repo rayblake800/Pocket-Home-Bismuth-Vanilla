@@ -1,8 +1,8 @@
 #define APPMENU_IMPLEMENTATION
+#include "AppMenu/Components/MainComponent.h"
 #include "AppMenu/Data/JSON/ConfigKeys.h"
 #include "AppMenu/Formats/Paged/Initializer.h"
 #include "AppMenu/Formats/Scrolling/Initializer.h"
-#include "AppMenu/Components/MainComponent.h"
     
 /*
  * Creates and initializes the application menu.
@@ -80,10 +80,8 @@ void AppMenu::MainComponent::resized()
 }
 
 /*
- * @brief  Initializes the updater, tracking the format key and saving
- *         a pointer to the MainComponent it updates.
- *
- * @param mainComponent  The MainComponent that holds this updater.
+ * Initializes the updater, tracking the format key and saving a pointer to the 
+ * MainComponent it updates.
  */
 AppMenu::MainComponent::FormatUpdater::FormatUpdater
 (MainComponent* mainComponent) : mainComponent(mainComponent)
@@ -91,9 +89,8 @@ AppMenu::MainComponent::FormatUpdater::FormatUpdater
     addTrackedKey(ConfigKeys::menuFormatKey);
 }
 
-/**
- * @brief  Applies the selected menu format to the updater's 
- *         MainComponent.
+/*
+ * Applies the selected menu format to the updater's MainComponent.
  */
 void AppMenu::MainComponent::FormatUpdater::applySelectedFormat()
 {

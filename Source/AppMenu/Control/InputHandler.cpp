@@ -1,8 +1,8 @@
 #define APPMENU_IMPLEMENTATION
-#include <map>
+#include "AppMenu/Control/InputHandler.h"
 #include "AppMenu/Data/JSON/MenuFile.h"
 #include "DesktopEntry/Loader.h"
-#include "AppMenu/Control/InputHandler.h"
+#include <map>
 
 /*
  * Initializes the InputHandler, setting it to handle the menu component's input
@@ -85,7 +85,7 @@ AppMenu::Controller* AppMenu::InputHandler::getController()
 }
 
 /*
- * Convert generic mouse events into calls to InputHandler clicked methods.
+ * Converts generic mouse events into calls to InputHandler clicked methods.
  */
 void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event) 
 {
@@ -140,7 +140,7 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
 }
 
 /*
- * Convert generic key events into calls to the InputHandler's protected 
+ * Converts generic key events into calls to the InputHandler's protected 
  * keyPress method.
  */
 bool AppMenu::InputHandler::keyPressed(const juce::KeyPress& keyPress,

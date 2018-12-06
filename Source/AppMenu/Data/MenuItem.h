@@ -1,34 +1,35 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "IconThread.h"
-#include "Nullable.h"
-#include "AppMenu/Data/ItemData.h"
-
 /**
  * @file  MenuItem.h
  * 
  * @brief  Defines an item in the application menu.
- *
- * MenuItem is a nullable interface for AppMenu::ItemData objects of any type.  
+ */
+
+#include "IconThread.h"
+#include "Nullable.h"
+#include "AppMenu/Data/ItemData.h"
+
+namespace AppMenu { class MenuItem; }
+
+/**
+ *  MenuItem is a nullable interface for AppMenu::ItemData objects of any type.  
  * MenuItems mirror the ItemData interface, allowing them to be used 
  * interchangably no matter what type of ItemData they contain.
  *
- * MenuItem also takes care of memory management issues with ItemData objects.
+ *  MenuItem also takes care of memory management issues with ItemData objects.
  * All MenuItem methods check if their ItemData is null before dereferencing it,
  * returning an appropriate default value instead if it does turn out to be
  * null. ItemData objects are automatically deleted when the 
  * AppMenu::JSONResource object and every MenuItem referencing them have been
  * destroyed.
  *
- * Multiple MenuItem objects may hold the same ItemData object, but there are
+ *  Multiple MenuItem objects may hold the same ItemData object, but there are
  * no controls used to prevent concurrent access errors.  All AppMenu classes
  * are not threadsafe, and should only be used within the Juce message thread.
  */
-namespace AppMenu { class MenuItem; }
-
 class AppMenu::MenuItem : public Nullable<AppMenu::ItemData::Ptr>
 {
 public:
@@ -338,7 +339,7 @@ public:
 
     /**
      * @brief  A wrapper for the ItemData::Listener class, used to track menu
-     *         data without directly interacting with ItemData objects.  Each
+     *         data without directly interacting with ItemData objects. Each
      *         listener may only track a single ItemData object.
      */
     class Listener : protected ItemData::Listener

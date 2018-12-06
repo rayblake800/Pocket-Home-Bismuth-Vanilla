@@ -1,17 +1,20 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "AppMenu/Components/FolderComponent.h"
-
 /**
  * @file   FolderComponent.h
  *
  * @brief  Manages the folder buttons in a scrolling AppMenu folder.
- *
- * The Scrolling::FolderComponent arranges its menu buttons in a simple
- * vertical list.  To assist the Scrolling::MenuComponent in creating the folder
+ */
+
+#include "AppMenu/Components/FolderComponent.h"
+
+namespace AppMenu { namespace Scrolling { class FolderComponent; } }
+
+/**
+ *  The Scrolling::FolderComponent arranges its menu buttons in a simple
+ * vertical list. To assist the Scrolling::MenuComponent in creating the folder
  * layout, it also shares how wide it needs to be to fit the widest menu item
  * title, and the pixel offset of the current selected menu item.
  */

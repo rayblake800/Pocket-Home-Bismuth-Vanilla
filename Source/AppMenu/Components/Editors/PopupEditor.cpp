@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION
-#include "Utils.h"
-#include "ComponentConfigFile.h"
 #include "AppMenu/Components/Editors/PopupEditor.h"
+#include "ComponentConfigFile.h"
+#include "Utils.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::PopupEditor";
@@ -48,7 +48,8 @@ terminalCheckboxLabel("runInTermLabel", localeText(runInTermTextKey))
 
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+    LayoutManager::Layout layout(
+    {
         Row(10,
         {
             RowItem(&nameLabel, 20),
@@ -92,7 +93,7 @@ terminalCheckboxLabel("runInTermLabel", localeText(runInTermTextKey))
 
 
 /*
- * Cancel any pending icon request.
+ * Cancels any pending icon request.
  */
 AppMenu::PopupEditor::~PopupEditor()
 {
@@ -202,10 +203,10 @@ void AppMenu::PopupEditor::loadIconPreview()
     }
     iconRequestID = iconThread.loadIcon(iconName, iconPreview.getWidth(), 
         [this](Image iconImg)
-        {
-            iconRequestID = 0;
-            iconPreview.setImage(iconImg);
-        });
+    {
+        iconRequestID = 0;
+        iconPreview.setImage(iconImg);
+    });
 }
 
 /*
@@ -224,11 +225,11 @@ void AppMenu::PopupEditor::editorButtonClicked(juce::Button* button)
     using juce::StringArray;
     if (button == &categoryEditButton)
     {
-        categoryEditor = new CategoryEditor(categories,
+        categoryEditor = new CategoryEditor(categories, 
                 [this](StringArray newCategories)
-                {
-                    categories = newCategories;
-                });
+        {
+            categories = newCategories;
+        });
         addAndMakeVisible(categoryEditor);
     }
 }

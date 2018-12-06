@@ -1,17 +1,16 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "JuceHeader.h"
-#include "AppMenu/AppMenu.h"
-
 /**
  * @file   MenuKeys.h
  *
- * @brief  Defines the data keys used to store menu item data in the apps.json
- *         configuration data.
+ * @brief  Defines the data keys used to store menu item data in the 
+ *         appMenu.json configuration file.
  */
+
+#include "JuceHeader.h"
+
 namespace AppMenu
 {
     namespace MenuKeys

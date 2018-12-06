@@ -1,10 +1,10 @@
 #define APPMENU_IMPLEMENTATION
-#include "DesktopEntry/Loader.h"
-#include "AppMenu/Data/JSON/MenuFile.h"
-#include "AppMenu/Data/MenuItem.h"
+#include "AppMenu/Data/DesktopEntry/EntryLoader.h"
 #include "AppMenu/Data/DesktopEntry/EntryData.h"
 #include "AppMenu/Data/DesktopEntry/EntryActions.h"
-#include "AppMenu/Data/DesktopEntry/EntryLoader.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
+#include "AppMenu/Data/MenuItem.h"
+#include "DesktopEntry/Loader.h"
 
 /*
  * Cancels any pending DesktopEntry::Loader callbacks the loader created.
@@ -45,9 +45,9 @@ void AppMenu::EntryLoader::loadFolderEntries(MenuItem folderItem)
         juce::Array<DesktopEntry::EntryFile> allEntries 
             = entryLoader.getAllEntries();
         EntryActions::recursiveFolderAction(folderItem, [this, &allEntries]
-        (MenuItem folder)
+            (MenuItem folder)
         {
-        EntryActions::addEntryItems(folder, allEntries);
+            EntryActions::addEntryItems(folder, allEntries);
         });
     });
 }

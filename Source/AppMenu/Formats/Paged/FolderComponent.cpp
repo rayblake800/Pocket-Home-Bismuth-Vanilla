@@ -1,8 +1,7 @@
 #define APPMENU_IMPLEMENTATION
-#include "AppMenu/AppMenu.h"
-#include "AppMenu/ConfigFile.h"
-#include "AppMenu/Formats/Paged/MenuButton.h"
 #include "AppMenu/Formats/Paged/FolderComponent.h"
+#include "AppMenu/Formats/Paged/MenuButton.h"
+#include "AppMenu/ConfigFile.h"
 
 /* Amount of empty space to leave on the left and right sides of each folder
    page, as a fraction of the page's width. */

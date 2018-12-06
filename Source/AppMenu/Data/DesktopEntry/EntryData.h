@@ -1,26 +1,27 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "DesktopEntry/EntryFile.h"
-#include "AppMenu/Data/ItemData.h"
-#include "Locale/TextUser.h"
-
 /**
- * @file EntryData.h 
+ * @file AppMenu/Data/DesktopEntry/EntryData.h 
  * 
  * @brief  An AppMenuItem that gets its data from a DesktopEntry::EntryFile
  *         object, loaded from a .desktop file. It represents a shortcut to an 
  *         installed application located in the application menu.
- *
- * Editing desktop entries works by updating or creating .desktop files in the
+ */
+
+#include "DesktopEntry/EntryFile.h"
+#include "AppMenu/Data/ItemData.h"
+#include "Locale/TextUser.h"
+
+namespace AppMenu { class EntryData; }
+
+/**
+ *  Editing desktop entries works by updating or creating .desktop files in the
  * user's local directory. Changes to desktop entries through this interface 
  * will be visible in other applications for the current user, but will not 
  * affect other users.
  */
-namespace AppMenu { class EntryData; }
-
 class AppMenu::EntryData : public ItemData, public Locale::TextUser
 {
 public:

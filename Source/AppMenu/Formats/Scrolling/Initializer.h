@@ -1,13 +1,17 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "AppMenu/Control/Initializer.h"
-
 /**
+ * @file  AppMenu/Scrolling/Initializer.h
+ *
  * @brief  Initializes a scrolling AppMenu's objects.
  */
+
+#include "AppMenu/Control/Initializer.h"
+
+namespace AppMenu { namespace Scrolling { struct Initializer; } }
+
 struct AppMenu::Scrolling::Initializer : public AppMenu::Initializer
 {
     /**

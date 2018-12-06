@@ -1,10 +1,10 @@
 #define APPMENU_IMPLEMENTATION
-#include "DesktopEntry/Loader.h"
-#include "AppMenu/Data/JSON/MenuFile.h"
-#include "AppMenu/Data/MenuItem.h"
+#include "AppMenu/Data/DesktopEntry/EntryUpdater.h"
 #include "AppMenu/Data/DesktopEntry/EntryData.h"
 #include "AppMenu/Data/DesktopEntry/EntryActions.h"
-#include "AppMenu/Data/DesktopEntry/EntryUpdater.h"
+#include "AppMenu/Data/MenuItem.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
+#include "DesktopEntry/Loader.h"
 
 /**
  * @brief  Loads a list of DesktopEntry::EntryFile objects from their desktop

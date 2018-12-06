@@ -1,9 +1,9 @@
 #define APPMENU_IMPLEMENTATION
-#include "Utils.h"
-#include "AppMenu/ConfigFile.h"
-#include "AppMenu/Data/JSON/ConfigKeys.h"
-#include "AppMenu/Formats/Scrolling/MenuButton.h"
 #include "AppMenu/Formats/Scrolling/FolderComponent.h"
+#include "AppMenu/Formats/Scrolling/MenuButton.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
+#include "AppMenu/ConfigFile.h"
+#include "Utils.h"
 
 /*
  * Creates a new scrolling folder component.

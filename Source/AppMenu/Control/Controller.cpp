@@ -3,6 +3,7 @@
 #include "AppMenu/Components/Editors/ExistingItemEditor.h"
 #include "AppMenu/Components/Editors/NewConfigItemEditor.h"
 #include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
+#include "AppMenu/Data/JSON/MenuFile.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
 #include "Utils.h"

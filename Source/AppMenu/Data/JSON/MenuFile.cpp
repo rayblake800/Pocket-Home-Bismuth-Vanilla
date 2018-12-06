@@ -2,6 +2,9 @@
 #include "AppMenu/Data/JSON/MenuFile.h"
 #include "AppMenu/Data/JSON/MenuJSON.h"
 
+/*
+ * Creates the MenuJSON resource on construction if necessary.
+ */
 AppMenu::MenuFile::MenuFile() { }
 
 /*
@@ -9,8 +12,7 @@ AppMenu::MenuFile::MenuFile() { }
  */
 AppMenu::MenuItem AppMenu::MenuFile::getRootFolderItem()
 {
-    using namespace juce;
-    auto appJSON = getReadLockedResource();
+    SharedResource::LockedPtr<MenuJSON> appJSON = getReadLockedResource();
     return appJSON->getRootFolderItem();
 }
 

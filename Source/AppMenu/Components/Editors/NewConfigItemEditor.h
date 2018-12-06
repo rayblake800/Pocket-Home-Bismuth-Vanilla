@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
 #pragma once
 /** 

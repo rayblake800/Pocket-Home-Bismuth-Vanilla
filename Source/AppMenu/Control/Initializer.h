@@ -1,21 +1,26 @@
+#ifndef APPMENU_IMPLEMENTATION
+  #error File included outside of AppMenu implementation.
+#endif
 #pragma once
-#include "AppMenu/Format.h"
-
 /**
  * @file  AppMenu/Control/Initializer.h
  *
  * @brief  Provides methods needed for initializing an AppMenu with a specific
  *         menu format.
- *
- * Each AppMenu format must provide its own implementation of 
- * AppMenu::Initializer.  Each format's initializer will need to be added to the
- * switch statement within the createInitializer function in 
- * AppMenu/AppMenu.cpp.
  */
+
+#include "AppMenu/Format.h"
+
 namespace AppMenu { struct Initializer; }
 namespace AppMenu { class MenuComponent; }
 namespace AppMenu { class Controller; }
 namespace AppMenu { class InputHandler; }
+
+/**
+ *  Each AppMenu format must provide its own implementation of 
+ * AppMenu::Initializer.  Each format's initializer will need to be added to the
+ * switch statement within the createInitializer function in AppMenu.cpp.
+ */
 struct AppMenu::Initializer
 {
     /**

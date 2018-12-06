@@ -1,11 +1,11 @@
 #define APPMENU_IMPLEMENTATION
-#include "Utils.h"
-#include "TempTimer.h"
-#include "ComponentConfigKeys.h"
-#include "TransitionAnimator.h"
-#include "AppMenu/Data/JSON/ConfigKeys.h"
-#include "AppMenu/Formats/Scrolling/FolderComponent.h"
 #include "AppMenu/Formats/Scrolling/MenuComponent.h"
+#include "AppMenu/Formats/Scrolling/FolderComponent.h"
+#include "AppMenu/Data/JSON/ConfigKeys.h"
+#include "TransitionAnimator.h"
+#include "ComponentConfigKeys.h"
+#include "TempTimer.h"
+#include "Utils.h"
 
 /* Animation duration in milliseconds: */
 static const constexpr int animationMS = 300;

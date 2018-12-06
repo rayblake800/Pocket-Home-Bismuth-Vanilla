@@ -1,22 +1,26 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
 
 #pragma once
-#include "DesktopEntry/UpdateListener.h"
-
 /**
- * @file  EntryUpdater.h
+ * @file  AppMenu/Data/DesktopEntry/EntryUpdater.h
  *
  * @brief  Listens for changes to desktop entries, copying all changes over to 
  *         the menu.
- *
- * Whenever the desktop entry loading thread checks for updates to desktop entry
- * files, it sends each DesktopEntry::UpdateListener lists of all desktop file
- * IDs that were added, updated, or removed. The EntryUpdater applies these
+ */
+
+#include "DesktopEntry/UpdateListener.h"
+
+namespace AppMenu { class EntryUpdater; }
+
+/**
+ *  Whenever the desktop entry loading thread checks for updates to desktop 
+ * entry files, it sends each DesktopEntry::UpdateListener lists of all desktop 
+ * file IDs that were added, updated, or removed. The EntryUpdater applies these
  * changes to the AppMenu::MenuItem menu tree. 
  *
- * When new entries are found, the updater adds them as menu items to all 
+ *  When new entries are found, the updater adds them as menu items to all 
  * folders that share application categories with the new entry. When existing 
  * entries are changed, the updater copies those changes to all menu items 
  * created from those entries, potentially adding or removing the items from 
@@ -24,8 +28,6 @@
  * removed, the updater removes all menu items created from those entries from
  * all folders.
  */
-namespace AppMenu { class EntryUpdater; }
-
 class AppMenu::EntryUpdater : public DesktopEntry::UpdateListener
 {         
 public:

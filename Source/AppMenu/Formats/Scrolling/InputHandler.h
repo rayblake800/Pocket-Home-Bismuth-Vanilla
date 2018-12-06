@@ -1,18 +1,21 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "AppMenu/Control/InputHandler.h"
-
 /**
  * @file  InputHandler.h
  *
  * @brief  Handles input events for a scrolling AppMenu.
- *
- * The Scrolling::InputHandler processes key events for the Scrolling menu,
+ */
+
+#include "AppMenu/Control/InputHandler.h"
+
+namespace AppMenu { namespace Scrolling { class InputHandler; } }
+
+/**
+ *  The Scrolling::InputHandler processes key events for the Scrolling menu,
  * using them to scroll through the active folder component, close the folder,
- * or activate menu items.  The InputHandler also slightly changes the behavior
+ * or activate menu items. The InputHandler also slightly changes the behavior
  * of clicked menu items, only activating them if they are currently selected.
  */
 class AppMenu::Scrolling::InputHandler : public AppMenu::InputHandler
@@ -46,7 +49,7 @@ private:
     /**
      * @brief  Handles clicks to menu item buttons.
      *
-     * The scrolling menu handles menu button click events exactly like the
+     *  The scrolling menu handles menu button click events exactly like the
      * standard InputHandler, except that only selected buttons are activated
      * when they are clicked.
      *

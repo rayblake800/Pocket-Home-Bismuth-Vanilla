@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION
-#include "AppMenu/Data/JSON/MenuKeys.h"
 #include "AppMenu/Data/JSON/MenuJSON.h"
+#include "AppMenu/Data/JSON/MenuKeys.h"
 
 /* SharedResource object key */
 const juce::Identifier AppMenu::MenuJSON::resourceKey 

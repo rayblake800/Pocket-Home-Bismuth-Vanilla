@@ -1,6 +1,8 @@
 #define APPMENU_IMPLEMENTATION
-#include "AppMenu/Data/DesktopEntry/EntryData.h"
 #include "AppMenu/Data/DesktopEntry/EntryActions.h"
+#include "AppMenu/Data/DesktopEntry/EntryData.h"
+#include "AppMenu/Data/MenuItem.h"
+#include "DesktopEntry/EntryFile.h"
 
 /*
  * Recursively applies a function to a menu folder and all its subfolders.

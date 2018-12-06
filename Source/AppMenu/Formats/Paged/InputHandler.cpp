@@ -1,10 +1,9 @@
 #define APPMENU_IMPLEMENTATION
-#include "NavButton.h"
-#include "TransitionAnimator.h"
-#include "AppMenu/AppMenu.h"
+#include "AppMenu/Formats/Paged/InputHandler.h"
 #include "AppMenu/Formats/Paged/MenuComponent.h"
 #include "AppMenu/Formats/Paged/FolderComponent.h"
-#include "AppMenu/Formats/Paged/InputHandler.h"
+#include "TransitionAnimator.h"
+#include "NavButton.h"
 
 /*
  * Initializes the InputHandler, setting it to handle the menu component's input

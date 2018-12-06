@@ -1,27 +1,30 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "AppMenu/Components/FolderComponent.h"
-
 /**
- * @file   FolderComponent.h
+ * @file   AppMenu/Formats/Paged/FolderComponent.h
  *
  * @brief  Manages the folder buttons in a paged AppMenu folder.
- *
- * The Paged::FolderComponent divides its menu items over several folder pages,
- * only one of which may be visible at a time.  The visible folder page is
+ */
+
+#include "AppMenu/Components/FolderComponent.h"
+
+namespace AppMenu { namespace Paged { class FolderComponent; } }
+
+/**
+ *  The Paged::FolderComponent divides its menu items over several folder pages,
+ * only one of which may be visible at a time. The visible folder page is
  * usually the one containing the selected menu item, but any folder page may
- * be set as visible if no menu item is selected.  The Paged::MenuComponent
+ * be set as visible if no menu item is selected. The Paged::MenuComponent
  * is responsible for positioning the FolderComponent so that its active folder
  * page is visible.
  *
- * Menu items within each folder page are arranged in a grid.  The dimensions of
+ *  Menu items within each folder page are arranged in a grid. The dimensions of
  * this grid are defined in the apps.json file, accessable through 
- * AppMenu/Settings.  Paged::FolderComponent provides several methods for 
+ * AppMenu/Settings. Paged::FolderComponent provides several methods for 
  * finding a menu item's position in its page grid, and of finding the index
- * of a menu item at a specific position on the page.  These are supplied so
+ * of a menu item at a specific position on the page. These are supplied so
  * that the Paged::InputHandler can more easily provide navigational controls.
  */
 class AppMenu::Paged::FolderComponent : public AppMenu::FolderComponent

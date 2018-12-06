@@ -1,23 +1,24 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "DesktopEntry/DesktopEntry.h"
-
 /**
  * @file  AppMenu/Data/DesktopEntry/EntryLoader.h 
  *
  * @brief  Finds and adds desktop entry menu items to menu folders.
- *
- * Each menu folder may contain a list of application categories. When a menu
+ */
+
+#include "DesktopEntry/Types/CallbackID.h"
+
+namespace AppMenu { class EntryLoader; }
+namespace AppMenu { class MenuItem; }
+
+/**
+ *  Each menu folder may contain a list of application categories. When a menu
  * folder is initialized, an EntryLoader is used to find all desktop entry
  * file objects with matching categories, and add them to the folder as child
  * menu items.
  */
-namespace AppMenu { class EntryLoader; }
-namespace AppMenu { class MenuItem; }
-
 class AppMenu::EntryLoader
 {         
 public:

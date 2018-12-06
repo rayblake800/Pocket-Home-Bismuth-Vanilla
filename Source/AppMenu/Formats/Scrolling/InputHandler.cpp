@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION
+#include "AppMenu/Formats/Scrolling/InputHandler.h"
 #include "AppMenu/Formats/Scrolling/FolderComponent.h"
 #include "AppMenu/Formats/Scrolling/MenuComponent.h"
-#include "AppMenu/Formats/Scrolling/InputHandler.h"
 
 /*
  * Initializes the InputHandler, setting it to handle the menu component's input
@@ -106,9 +106,6 @@ bool AppMenu::Scrolling::InputHandler::keyPressed
 
 /*
  * Handles clicks to menu item buttons.
- * The scrolling menu handles menu button click events exactly like the
- * standard InputHandler, except that only selected buttons are activated
- * when they are clicked.
  */
 void AppMenu::Scrolling::InputHandler::menuItemClicked
 (const AppMenu::MenuButton* clickedButton, const bool rightClicked) 

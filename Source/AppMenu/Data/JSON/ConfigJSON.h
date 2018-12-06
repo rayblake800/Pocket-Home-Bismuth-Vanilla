@@ -1,12 +1,23 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
+/**
+ * @file AppMenu/Data/JSON/ConfigJSON.h
+ *
+ * @brief  Reads from and writes to the JSON file that sets the AppMenu's format
+ *         and the number of items the menu shows on screen at once.
+ */
+
 #include "Config/FileResource.h"
 #include "Config/FileHandler.h"
 #include "AppMenu/AppMenu.h"
 
+/**
+ *  ConfigJSON is a SharedResource class, used to create the single object
+ * instance that accesses the menuOptions.json file. ConfigJSON should only be 
+ * used directly by AppMenu::ConfigFile objects.
+ */
 class AppMenu::ConfigJSON : public Config::FileResource
 {
 public:

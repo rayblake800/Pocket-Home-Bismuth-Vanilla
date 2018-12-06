@@ -1,36 +1,40 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "Config/FileHandler.h"
-
 /**
  * @file MenuFile.h
  * 
  * @brief  Reads and edits the tree of pinned application shortcuts and folders 
- *         displayed in the AppMenu, and loads AppMenu layout preferences.
- *
- * The appMenu.json file defines a tree of menu items.  Each menu item can hold 
+ *         displayed in the AppMenu.
+ */
+
+#include "Config/FileHandler.h"
+
+namespace AppMenu { class MenuFile; }
+namespace AppMenu { class MenuJSON; }
+namespace AppMenu { class MenuItem; }
+
+/**
+ *  The appMenu.json file defines a tree of menu items. Each menu item can hold 
  * either an application launch command, or a list of other menu items and
  * application categories to show in a new menu folder.  All menu items have a
  * displayed title and icon.
  *
- * AppMenu::MenuFile uses this JSON menu data to construct the 
- * AppMenu::MenuItem objects used to build the AppMenuComponent, and it provides 
- * an interface for adding new menu items to the JSON file.  
+ *  AppMenu::MenuFile uses this JSON menu data to construct the 
+ * AppMenu::MenuItem objects used to build the AppMenu, and it provides an 
+ * interface for adding new menu items to the JSON file.  
  * 
  * @see  AppMenu/Implementation.h
  *       AppMenu/Data/JSON/MenuKeys.h
  *       AppMenu/Data/JSON/MenuJSON.h
  */
-namespace AppMenu { class MenuFile; }
-namespace AppMenu { class MenuJSON; }
-namespace AppMenu { class MenuItem; }
-
 class AppMenu::MenuFile : public Config::FileHandler<AppMenu::MenuJSON>
 {
 public:
+    /**
+     * @brief  Creates the MenuJSON resource on construction if necessary.
+     */
     MenuFile();
 
     virtual ~MenuFile() { }

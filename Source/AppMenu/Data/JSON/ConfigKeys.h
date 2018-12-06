@@ -1,19 +1,19 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include <map>
-#include "JuceHeader.h"
-#include "Config/DataKey.h"
-#include "AppMenu/AppMenu.h"
-
 /**
  * @file   ConfigKeys.h
  *
  * @brief  Defines the data keys used to store the selected menu format and all
  *         other menu layout options.
  */
+
+#include "AppMenu/Format.h"
+#include "Config/DataKey.h"
+#include "JuceHeader.h"
+#include <map>
+
 namespace AppMenu
 {
     namespace ConfigKeys

@@ -1,28 +1,29 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "Locale/TextUser.h"
-#include "AppMenu/Data/ItemData.h"
-
 /**
- * @file  ConfigData.h
+ * @file  AppMenu/Data/JSON/ConfigData.h
  *
  * @brief  An ItemData subclass that handles menu data read from the JSON 
  *         configuration file.
- * 
- * ConfigData menu items are defined within the apps.json configuration file.
- * These menu items may represent either a menu folder, or an application
- * shortcut.  Changes to ConfigData objects are written directly back to the
+ */
+
+#include "Locale/TextUser.h"
+#include "AppMenu/Data/ItemData.h"
+
+/** 
+ *  ConfigData menu items are defined within the appMenu.json configuration 
+ * file. These menu items may represent either a menu folder, or an application
+ * shortcut. Changes to ConfigData objects are written directly back to the
  * source JSON file.
  *
- * To prevent circular dependencies, the methods for writing changes back to
+ *  To prevent circular dependencies, the methods for writing changes back to
  * the JSON file are left abstract, and should be implemented in a ConfigData
  * subclass by the Config::FileResource subclass responsible for managing the
  * JSON menu data.
  *
- * @see  JsonResource.h
+ * @see  AppMenu/Data/JSON/ConfigJSON.h
  */
 namespace AppMenu { class ConfigData; }
 

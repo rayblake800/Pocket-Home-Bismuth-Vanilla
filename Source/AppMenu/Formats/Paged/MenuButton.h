@@ -1,18 +1,21 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "AppMenu/Components/MenuButton.h"
-
 /**
  * @file  Paged/MenuButton.h
  *
  * @brief  Creates a MenuButton suitable for a paged AppMenu.
- *
- * The Paged::MenuButton prints the menu item title at the bottom of the button,
- * with the menu item's icon centered above it.  The button's background and 
- * outline are only drawn if the button is currently selected.
+ */
+
+#include "AppMenu/Components/MenuButton.h"
+
+namespace AppMenu { namespace Paged { class MenuButton; } }
+
+/**
+ *  The Paged::MenuButton prints the menu item title at the bottom of the 
+ * button, with the menu item's icon centered above it. The button's background 
+ * and outline are only drawn if the button is currently selected.
  */
 class AppMenu::Paged::MenuButton : public AppMenu::MenuButton
 {

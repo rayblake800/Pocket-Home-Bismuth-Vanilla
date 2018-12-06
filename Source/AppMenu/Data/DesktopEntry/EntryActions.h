@@ -1,12 +1,7 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "AppMenu/AppMenu.h"
-#include "AppMenu/Data/MenuItem.h"
-#include "DesktopEntry/Loader.h"
-
 /**
  * @file  AppMenu/Data/DesktopEntry/EntryActions.h
  *
@@ -14,6 +9,12 @@
  *         the AppMenu, shared by AppMenu::EntryLoader and 
  *         AppMenu::EntryUpdater.
  */
+
+#include "JuceHeader.h"
+
+namespace AppMenu { class MenuItem; }
+namespace DesktopEntry { class EntryFile; }
+
 namespace AppMenu
 {
     namespace EntryActions

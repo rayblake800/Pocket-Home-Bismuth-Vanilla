@@ -1,12 +1,12 @@
 #pragma once
-
 /**
  * @file  AppMenu/Format.h
  *
- * @brief  Defines the available menu implementations.  Each one (besides
+ * @brief   Defines the available menu implementations. Each one (besides 
  *         Invalid) has a namespace of the same name within the AppMenu 
  *         namespace where all of its classes are declared.
  */
+
 namespace AppMenu{ enum class Format; }
 
 enum class AppMenu::Format

@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -11,15 +11,15 @@
 #include "AppMenu/Components/Editors/PopupEditor.h"
 #include "AppMenu/Data/MenuItem.h"
 
+namespace AppMenu { class ExistingItemEditor; }
+namespace AppMenu { class MenuItem; }
+
 /** 
  *  All editable properties of an existing menu item may be changed through this 
  * component. The PopupEditor's category list editor, command field, and launch 
  * in terminal checkbox will be automatically hidden if their respective data 
  * values cannot be edited.
  */
-namespace AppMenu { class ExistingItemEditor; }
-namespace AppMenu { class MenuItem; }
-
 class AppMenu::ExistingItemEditor : public PopupEditor
 {
 public:

@@ -1,25 +1,26 @@
 #ifndef APPMENU_IMPLEMENTATION
-    #error __file__ included outside of AppMenu implementation.
+  #error File included outside of AppMenu implementation.
 #endif
-
 #pragma once
-#include "JuceHeader.h"
-
 /**
- * @file  ItemData.h
+ * @file  AppMenu/Data/JSON/ItemData.h
  *
  * @brief  Reads and writes properties of a menu item in the application menu. 
- *
- * All menu items have a title string and an icon name or path.  Menu items
+ */
+
+#include "JuceHeader.h"
+
+namespace AppMenu { class ItemData; }
+
+/**
+ *  All menu items have a title string and an icon name or path. Menu items
  * define either an application to launch or a folder of other menu items.
  * 
- * Menu item data is stored through shared, referenced-counted objects.  Like
+ *  Menu item data is stored through shared, referenced-counted objects. Like
  * other UI elements, menu item data is absolutely not threadsafe, and should
  * not be handled outside of the Juce message thread.
  * 
  */
-namespace AppMenu { class ItemData; }
-
 class AppMenu::ItemData : public juce::ReferenceCountedObject
 {
 public:
@@ -276,13 +277,13 @@ public:
     /**
      * @brief  Receives updates when tracked menu items change. 
      *
-     * Listeners connected to a menu item through its addListener method
+     *  Listeners connected to a menu item through its addListener method
      * are notified whenever the menu item's data changes, whenever the menu
      * item is removed from the menu, and whenever the menu item's child 
      * folder items are added, removed, or swapped.  Each Listener may only
      * connect to one ItemData at a time.
      *
-     * Listeners automatically disconnect from their tracked ItemData source
+     *  Listeners automatically disconnect from their tracked ItemData source
      * when they are destroyed.  ItemData is also automatically disconnected
      * from all listeners when it is removed from the menu, after calling
      * dataRemoved on each listener.
