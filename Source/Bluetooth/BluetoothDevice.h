@@ -1,13 +1,17 @@
 #pragma once
+/**
+ * @file  Bluetooth/BluetoothDevice.h
+ *
+ * @brief  Represents a visible bluetooth device.
+ */
+
 #include "JuceHeader.h"
 
 class BluetoothDevice
 {
 public:
-    juce::String name;
-    juce::String macAddress;
-    bool connected;
-    bool paired;
+    BluetoothDevice() { }
+    virtual ~BluetoothDevice() { }
     
     bool isNull() const
     {
@@ -29,4 +33,9 @@ public:
         return name;
     }
 
+private:
+    juce::String name;
+    juce::String macAddress;
+    bool connected;
+    bool paired;
 };
