@@ -1,13 +1,13 @@
 #pragma once
-#include "Config/FileResource.h"
-#include "Config/DataKey.h"
-#include "ComponentSettings.h"
-
 /**
  * @file ComponentJSON
  *
  * @brief Reads and writes component settings in the components.json file.
  */
+
+#include "Config/FileResource.h"
+#include "ComponentSettings.h"
+
 class ComponentJSON : public Config::FileResource
 {
 public:

@@ -1,7 +1,11 @@
 #include "ComponentConfigFile.h"
 #include "ComponentConfigKeys.h"
+#include "ComponentJSON.h"
+#include "ComponentSettings.h"
 #include "AssetFiles.h"
 #include "Utils.h"
+
+ComponentConfigFile::ComponentConfigFile() { }
 
 /*
  * Gets configured component settings from shared JSON file data.
@@ -9,7 +13,7 @@
 ComponentSettings ComponentConfigFile::getComponentSettings
 (const juce::Identifier& componentKey)
 {
-    auto config = getReadLockedResource();
+    SharedResource::LockedPtr<ComponentJSON> config = getReadLockedResource();
     return config->getComponentSettings(componentKey);
 }
 
@@ -19,8 +23,7 @@ ComponentSettings ComponentConfigFile::getComponentSettings
 int ComponentConfigFile::getFontHeight
 (juce::Rectangle <int> textBounds, juce::String text)
 {
-    using namespace juce;
-    auto config = getReadLockedResource();
+    SharedResource::LockedPtr<ComponentJSON> config = getReadLockedResource();
 
     int numLines = 1;
     for (int i = 0; i < text.length(); i++)
@@ -32,7 +35,7 @@ int ComponentConfigFile::getFontHeight
     }
 
     int height = textBounds.getHeight() / numLines;
-    Font defaultFont(height);
+    juce::Font defaultFont(height);
     int width = defaultFont.getStringWidth(text);
     if (width > textBounds.getWidth())
     {
@@ -61,10 +64,10 @@ int ComponentConfigFile::getFontHeight
  */
 int ComponentConfigFile::getFontHeight(TextSize sizeType)
 {
-    using namespace juce;
     using namespace ComponentConfigKeys;
-    const Identifier& key = (sizeType == smallText ? smallTextKey:
-        (sizeType == mediumText ? mediumTextKey : largeTextKey));
+    const juce::Identifier& key
+        = (sizeType == smallText ? smallTextKey:
+                (sizeType == mediumText ? mediumTextKey : largeTextKey));
     double size = getReadLockedResource()->getConfigValue<double>(key);
     if(size > 1)
     {

@@ -1,5 +1,5 @@
 #pragma once
-#include "DataKey.h"
+#include "Config/DataKey.h"
 
 /**
  * @file   ComponentDataKeys.h
@@ -9,14 +9,13 @@
  */
 namespace ComponentConfigKeys
 {
-    using Config::DataKey;
     //######################### Text Size Keys #################################
-    static const DataKey smallTextKey
-        ("small text", DataKey::doubleType);
-    static const DataKey mediumTextKey
-        ("medium text", DataKey::doubleType);
-    static const DataKey largeTextKey
-        ("large text", DataKey::doubleType);
+    static const Config::DataKey smallTextKey
+        ("small text", Config::DataKey::doubleType);
+    static const Config::DataKey mediumTextKey
+        ("medium text", Config::DataKey::doubleType);
+    static const Config::DataKey largeTextKey
+        ("large text", Config::DataKey::doubleType);
 
     //######################### UI Component Data ##############################
     //Defines all component types managed in the config file
@@ -53,7 +52,7 @@ namespace ComponentConfigKeys
     static const juce::Identifier spinnerKey
             ("loading spinner");
     
-    static const std::vector<DataKey>& basicKeys =
+    static const std::vector<Config::DataKey>& basicKeys =
     {
         smallTextKey,
         mediumTextKey,

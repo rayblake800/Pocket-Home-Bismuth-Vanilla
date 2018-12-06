@@ -1,5 +1,6 @@
 #pragma once
 #include "ComponentConfigFile.h"
+#include "ComponentSettings.h"
 
 /**
  * @file ConfigurableComponent.h
