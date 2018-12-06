@@ -1,36 +1,42 @@
 #pragma once
-#include <map>
+/**
+ * @file  Config/FileResource.h
+ * 
+ * @brief Reads and writes data from a JSON configuration file. 
+ */
+
+#include "Config/Implementation/ListenerInterface.h"
 #include "SharedResource/Resource.h"
 #include "SharedResource/Handler.h"
 #include "JSONFile.h"
 #include "DataKey.h"
 #include "JuceHeader.h"
+#include <map>
+
+namespace Config { class FileResource; }
+namespace Config { struct DataKey; }
 
 /**
- * @file FileResource.h
- * 
- * @brief Reads and writes data from a JSON configuration file. 
- * 
  *  FileResource provides an abstract base for classes that read and write JSON 
- * configuration files.  Each FileResource subclass is responsible for a single
- * JSON file containing data that can be altered by the user.  Along with 
+ * configuration files. Each FileResource subclass is responsible for a single
+ * JSON file containing data that can be altered by the user. Along with 
  * reading and writing data, FileResource allows objects to be defined as 
  * listener objects, which will receive notifications whenever data keys they 
  * select are changed.
  * 
- * As an implementation of the SharedResource class, each FileResource subclass
+ *  As an implementation of the SharedResource class, each FileResource subclass
  * will have only one object instance at a time, to prevent concurrent access
- * to the JSON file, and limit the amount of file I/O necessary.  Each
+ * to the JSON file, and limit the amount of file I/O necessary. Each
  * FileResource subclass should be accessed only through a ConfigFile subclass
  * specific to that FileResource.
  *
- * A default version of each FileResource's JSON resource file should be placed 
- * in the configuration subdirectory of the asset folder.  Any missing or 
+ *  A default version of each FileResource's JSON resource file should be placed 
+ * in the configuration subdirectory of the asset folder. Any missing or 
  * invalid parameters in config files will be replaced with values from the 
  * default file.
  *
- * FileResource reads from each JSON file only once per program instance, so any 
- * external changes to the file that occur while the program is running will
+ *  FileResource reads from each JSON file only once per program instance, so 
+ * any external changes to the file that occur while the program is running will
  * most likely be ignored and may be overwritten.
  */
 class Config::FileResource : public SharedResource::Resource
@@ -130,7 +136,14 @@ public:
         if(updateProperty<ValueType>(key, newValue))
         {
             configJson.writeChanges();
-            notifyListeners(key);
+            foreachHandler<ListenerInterface>(
+                [this, &key] (ListenerInterface* listener)
+            {
+                if(listener->isKeyTracked(key))
+                {
+                    listener->configValueChanged(key);
+                }
+            });
             return true;
         }
         return false;
@@ -186,115 +199,12 @@ public:
     private:
         const juce::Identifier& invalidKey;
     };
- 
-/**
- * Receives updates whenever tracked key values are updated in a JSON
- *        configuration file.
- */
-class Listener : public SharedResource::Handler<FileResource>
-{
-public:
-    //Allow the FileResource class access to the list of tracked keys.
-    friend FileResource;
-    
-    /**
-     * @brief Initialize a new listener to track FileResource properties.
-     *
-     * @param resourceKey      SharedResource object key for the Listener's
-     *                         FileResource subclass.
-     *
-     * @param createResource   A function that creates the listener's 
-     *                         FileResource object if necessary.
-     */
-    Listener(const juce::Identifier& resourceKey,
-            const std::function<FileResource*()> createResource) : 
-    SharedResource::Handler<FileResource>(resourceKey, createResource) { }
-
-    virtual ~Listener() { }
 
 protected:
-    /**
-     * @brief Calls configValueChanged() for every key tracked by this listener.
-     */
-    virtual void loadAllConfigProperties();
-
-    /**
-     * @brief Adds a key to the list of keys tracked by this listener.
-     *
-     * @param keyToTrack  Whenever a value with this key is updated, the
-     *                    Listener will be notified.
-     */
-    void addTrackedKey(const juce::Identifier& keyToTrack);
-
-    /**
-     * @brief Unsubscribes from updates to a FileResource value.
-     *
-     * @param keyToRemove  This listener will no longer receive updates when
-     *                     the value with this key is updated.
-     */
-    void removeTrackedKey(const juce::Identifier& keyToRemove);
-    
-
-    /**
-     * @brief  Requests a stored value directly from this Listener's 
-     *         FileResource.
-     *
-     * @tparam ValueType        The type of value requested.
-     *
-     * @param key               The key to the requested value.
-     *
-     * @throws BadKeyException  If the key does not map to a value with the 
-     *                          correct type.
-     *
-     * @return                  The requested value.
-     */
-    template<typename ValueType>
-    ValueType getConfigValue(const juce::Identifier& key)
-    {
-        SharedResource::LockedPtr<FileResource> configFile
-            = getReadLockedResource();
-        return configFile->getConfigValue<ValueType>(key);
-    }
-
-private:
-    /**
-     * @brief  This method will be called whenever a key tracked by this 
-     *         listener changes in the config file.
-     * 
-     * @param propertyKey   Passes in the updated value's key.
-     */
-    virtual void configValueChanged
-    (const juce::Identifier& propertyKey) = 0;
-
-
-    /* Tracks all keys this listener follows. */
-    juce::Array<juce::Identifier, juce::CriticalSection> subscribedKeys;
-};
-
-protected:
-    /**
-     * @brief  Announces a changed configuration value to each Listener object.
-     * 
-     * @param key  The key of an updated configuration value. 
-     */
-    void notifyListeners(const juce::Identifier& key);
-    
-    /**
-     * @brief  Checks if a single handler object is a Listener tracking updates
-     *         of a single key value, and if so, notifies it that the tracked
-     *         value has updated.
-     *
-     * @param listener   A Listener that might be tracking the updated value.
-     *
-     * @param key        The key to an updated configuration value.
-     */
-    virtual void notifyListener(Listener* listener,
-            const juce::Identifier& key);  
-
     /**
      * @brief  Loads all initial configuration data from the JSON config file. 
      *
-     * This checks for all expected data keys, and replaces any missing or 
+     *  This checks for all expected data keys, and replaces any missing or 
      * invalid values with ones from the default config file. FileResource 
      * subclasses should call this once, after they load any custom object or 
      * array data.
@@ -306,7 +216,7 @@ protected:
      * 
      * @param key  A key string value to check.
      * 
-     * @return  True iff the key is valid for this file.
+     * @return     Whether the key is valid for this file.
      */
     virtual bool isValidKey(const juce::Identifier& key) const;
     
@@ -320,9 +230,10 @@ protected:
 
     
     /**
-     * Checks for an expected property value in the JSON config data.  If the
-     * value is not found or has an invalid type, the property will be copied
-     * from the default config file.
+     * @brief  Checks for an expected property value in the JSON config data.  
+     *
+     *  If the value is not found or has an invalid type, the property will be 
+     * copied from the default config file.
      * 
      * @param key  The key string of a parameter that should be defined in this
      *             config file.
@@ -373,8 +284,10 @@ protected:
     }
     
     /**
-     * Updates a property in the JSON config file.  This will not check
-     * key validity, immediately write any changes, or notify listeners.
+     * @brief  Updates a property in the JSON config file.  
+     *
+     * This will not check key validity, immediately write any changes, or 
+     * notify listeners.
      * 
      * @param key        The key string that maps to the value being updated.
      * 
@@ -405,11 +318,8 @@ protected:
     }
 
     /**
-     * Re-writes all data back to the config file, as long as there are
-     * changes to write.
-     * 
-     * @pre Any code calling this function is expected to have already
-     *      acquired the FileResource's lock
+     * @brief  Re-writes all data back to the config file, as long as there are
+     *         changes to write.
      */
     void writeChanges();
 

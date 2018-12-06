@@ -1,12 +1,15 @@
 #pragma once
-#include "MainKeys.h"
-#include "FileResource.h"
-
 /**
- * @file  MainResource.h
+ * @file  Config/Implementation/MainResource.h
  *
  * @brief  Loads general application settings from the config.json file.
  */
+
+#include "Config/FileResource.h"
+#include "JuceHeader.h"
+
+namespace Config { class MainResource; }
+
 class Config::MainResource : public FileResource
 {
 public:
@@ -25,8 +28,5 @@ private:
      * @return  The keys to all variables tracked in this config file.
      */
     virtual const std::vector<Config::DataKey>& getConfigKeys() 
-        const final override
-    {
-        return MainKeys::allKeys;
-    }
+        const final override;
 };

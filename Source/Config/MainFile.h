@@ -1,24 +1,20 @@
 #pragma once
-#include "FileHandler.h"
-#include "MainResource.h"
-
 /**
- * @file MainFile.h
+ * @file Config/MainFile.h
  * 
  * @brief Loads general application settings from the config.json file.
  */
+
+#include "Config/FileHandler.h"
+#include "Config/Listener.h"
+
+namespace Config { class MainFile; }
+namespace Config { class MainResource; }
+namespace Config { class MainListener; }
+
 class Config::MainFile : public Config::FileHandler<MainResource>
 {
 public:
-    MainFile() { }
+    MainFile();
     virtual ~MainFile() { }
-
-    class Listener : public Config::FileResource::Listener
-    {
-    public:
-        Listener() : Config::FileResource::Listener(MainResource::resourceKey,
-                []()->FileResource* { return new MainResource(); }) { }
-        
-        virtual ~Listener() { }
-    };
 };

@@ -1,14 +1,17 @@
 #pragma once
-#include "Locale/TextUser.h"
-#include "Config.h"
-#include "JuceHeader.h"
-
 /**
- * @file AlertWindow.h
+ * @file  Config/Implementation/AlertWindow.h
  * 
  * @brief Displays pop-up error messages when something goes wrong with reading
  *        or writing JSON configuration files.
- * 
+ */
+
+#include "Locale/TextUser.h"
+#include "JuceHeader.h"
+
+namespace Config { class AlertWindow; }
+
+/** 
  * TODO: Localized error messages for:
  *      -Bad permissions on config files
  *      -Inability to create new files

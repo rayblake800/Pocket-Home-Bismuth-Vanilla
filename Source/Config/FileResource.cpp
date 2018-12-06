@@ -1,5 +1,5 @@
+#include "Config/FileResource.h"
 #include "AssetFiles.h"
-#include "FileResource.h"
     
 /* The directory where all config files will be located. */
 static const constexpr char* configPath = "~/.pocket-home/";
@@ -62,69 +62,6 @@ void Config::FileResource::restoreDefaultValues()
         restoreDefaultValue(key);
     }
     writeChanges();
-}
-/*
- * Calls configValueChanged() for every key tracked by this listener.
- */
-void Config::FileResource::Listener::loadAllConfigProperties()
-{
-    using namespace juce;
-    Array<Identifier> notifyKeys;
-    {
-        const ScopedLock updateLock(subscribedKeys.getLock());
-        notifyKeys.addArray(subscribedKeys);
-    }
-    for (const Identifier& key : notifyKeys)
-    {
-       configValueChanged(key);
-    }
-}
-
-/*
- * Adds a key to the list of keys tracked by this listener.
- */
-void Config::FileResource::Listener::addTrackedKey
-(const juce::Identifier& keyToTrack)
-{
-    const juce::ScopedLock keyListLock(subscribedKeys.getLock());
-    subscribedKeys.add(keyToTrack);
-}
-
-/*
- * Unsubscribes from updates to a FileResource value.
- */
-void Config::FileResource::Listener::removeTrackedKey
-(const juce::Identifier& keyToRemove)
-{
-    const juce::ScopedLock keyListLock(subscribedKeys.getLock());
-    subscribedKeys.removeAllInstancesOf(keyToRemove);
-}
-
-/*
- * Announces a changed configuration value to each Listener object.
- */
-void Config::FileResource::notifyListeners(const juce::Identifier& key)
-{
-    using namespace juce;
-    foreachHandler<Listener>([this, &key](Listener* listener)
-    {
-        notifyListener(listener, key);
-    });
-}
-    
-/**
- * Checks if a single handler object is a Listener tracking updates of a single
- * key value, and if so, notifies it that the tracked value has updated.
- */
-void Config::FileResource::notifyListener
-(FileResource::Listener* listener, const juce::Identifier& key)
-{
-    using namespace juce;
-    const ScopedLock trackedKeyLock(listener->subscribedKeys.getLock());
-    if(listener->subscribedKeys.contains(key))
-    {
-        listener->configValueChanged(key);
-    };
 }
 
 /*
@@ -211,7 +148,7 @@ void Config::FileResource::writeChanges()
     }
 }
 
-/**
+/*
  * Sets a configuration data value back to its default setting, notifying 
  * listeners if the value changes.
  */

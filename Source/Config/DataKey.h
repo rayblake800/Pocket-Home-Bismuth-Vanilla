@@ -1,19 +1,20 @@
 #pragma once
-#include "Config/Config.h"
 #include "JuceHeader.h"
-
 /**
  * @file  Config/DataKey.h
  *
  * @brief  Holds the key string and data type of a value in a JSON configuration
  *         file.
- * 
+ */
+
+namespace Config { struct DataKey; }
+
+/**
  *  DataKey defines the key and expected value type of a value stored in a
  * Config::FileResource's JSON file. DataKeys are immutable objects, as the keys
  * and types of basic data values in configuration files should not change.
  * DataKeys may represent string, integer, boolean, and double values.
  */
-
 struct Config::DataKey
 {
     /**
