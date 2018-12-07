@@ -1,4 +1,13 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included outside of Wifi module implementation.
+#endif
 #pragma once
+/**
+ * @file Wifi/ConnectionHistory/ConnectionHistory.h
+ *
+ * @brief  Tracks all major Wifi connection events.
+ */
+
 #include "SharedResource/Resource.h"
 #include "Wifi/ConnectionHistory/ConnectionEvent.h"
 
@@ -8,6 +17,7 @@ namespace Wifi { class AccessPoint; }
 class Wifi::ConnectionTracker : public SharedResource::Resource
 {
 public:
+    /* SharedResource object instance key: */
     static const juce::Identifier resourceKey;
 
     ConnectionTracker();

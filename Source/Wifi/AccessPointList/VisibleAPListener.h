@@ -9,7 +9,7 @@ class Wifi::VisibleAPListener : public APUpdateInterface,
     public SharedResource::Handler<APList>
 {
 public:
-    VisibleAPListener() { }
+    VisibleAPListener();
 
     virtual ~VisibleAPListener() { }
 

@@ -1,5 +1,5 @@
-#include "Wifi/SavedState/AccessPoint.h"
-#include "Wifi/SavedState/APData.h"
+#include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi/AccessPoint/APData.h"
 #include "LibNM/NMObjects/AccessPoint.h"
 #include "LibNM/APData/APHash.h"
 #include "LibNM/APData/APMode.h"

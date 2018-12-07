@@ -24,7 +24,7 @@ public:
      * @brief  Creates a SignalStrengthListener tracking all visible access 
      *         point signal strengths.
      */
-    SignalStrengthListener() { }
+    SignalStrengthListener();
     
     /**
      * @brief  Creates a SignalStrengthListener tracking a specific access
