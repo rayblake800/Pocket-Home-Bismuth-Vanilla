@@ -53,7 +53,7 @@ public:
 
     /**
      * @brief  Creates a null ConnectionEvent object that does not represent
-     *         a real ConnectionEvent.
+     *         a real connection event.
      */
     ConnectionEvent();
 
@@ -121,6 +121,12 @@ public:
      */
     bool operator<(const ConnectionEvent& rhs) const;
 
+    /**
+     * @brief  Checks if this ConnectionEvent object is null.
+     *
+     * @return  Whether this ConnectionEvent is a null object that does not
+     *          represent an event.
+     */
     bool isNull() const;
 
 private:

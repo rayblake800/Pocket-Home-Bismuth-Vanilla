@@ -1,23 +1,25 @@
 #pragma once
 /**
- * @file  Wifi/Control/ConnectionHandler.h
+ * @file  Wifi/Control/ConnectionResource.h
  *
  * @brief  Connects to and disconnects from wireless networks, and clears saved
  *         connections.
  */
 
+#include "Wifi/Connection/History/ConnectionHistory.h"
 #include "LibNM/NMObjects/Client.h"
+#include "SharedResource/Resource.h"
 #include "JuceHeader.h"
 
-namespace Wifi { class ConnectionManager; }
+namespace Wifi { class ConnectionResource; }
 namespace Wifi { class AccessPoint; }
 
-class Wifi::ConnectionManager : public LibNM::Client::ConnectionHandler
+class Wifi::ConnectionResource : public LibNM::Client::ConnectionHandler
 {
 public:
-    ConnectionManager() { }
+    ConnectionResource() { }
 
-    virtual ~ConnectionManager() { }
+    virtual ~ConnectionResource() { }
 
     /**
      * @brief  Attempts to open a Wifi network connection using a nearby access
@@ -45,6 +47,18 @@ public:
      */
     void forgetConnection(const AccessPoint toForget) const;
 
+    bool isConnected() const;
+
+    bool isConnecting() const;
+
+    AccessPoint getConnectedAP() const;
+
+    AccessPoint getConnectingAP() const;
+
+    bool hasSavedConnection(const AccessPoint& toCheck);
+
+    juce::Time lastConnectionTime(const AccessPoint& toCheck) const;
+
 private:
     /**
      * @brief  Signals that a connection is being opened.
@@ -67,4 +81,7 @@ private:
      */
     virtual void openingConnectionFailed(LibNM::ActiveConnection connection,
             GError* error, bool isNew) override;
+
+    /* Tracks all connection events. */
+    ConnectionHistory connectionHistory;
 };
