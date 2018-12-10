@@ -2,11 +2,10 @@
 /**
  * @file  Wifi/Control/ConnectionResource.h
  *
- * @brief  Connects to and disconnects from wireless networks, and clears saved
+ * @brief  Views, updates, adds, and removes both current and saved Wifi 
  *         connections.
  */
 
-#include "Wifi/Connection/History/ConnectionHistory.h"
 #include "LibNM/NMObjects/Client.h"
 #include "SharedResource/Resource.h"
 #include "JuceHeader.h"
@@ -47,16 +46,52 @@ public:
      */
     void forgetConnection(const AccessPoint toForget) const;
 
-    bool isConnected() const;
+    /**
+     * @brief  Checks if Wifi is currently connected.
+     *
+     * @return  Whether an active Wifi internet connection exists.
+     */
+    bool isWifiConnected() const;
 
+    /**
+     * @brief  Checks if Wifi is currently connecting.
+     *
+     * @return   Whether an active Wifi connection is being established.
+     */
     bool isConnecting() const;
 
-    AccessPoint getConnectedAP() const;
+    /**
+     * @brief  Gets the access point used by the current active or activating
+     *         connection.
+     *
+     * @return  The access point in use, or a null AccessPoint if Wifi is not
+     *          connected or connecting.
+     */
+    AccessPoint getActiveAP() const;
 
-    AccessPoint getConnectingAP() const;
-
+    /**
+     * @brief  Checks if a saved network connection exists for a particular 
+     *         access point.
+     *
+     * @param toCheck  A non-null AccessPoint representing a visible Wifi access
+     *                 point.
+     *
+     * @return         Whether NetworkManager has a saved network connection
+     *                 that is compatible with the given access point.
+     */
     bool hasSavedConnection(const AccessPoint& toCheck);
 
+    /**
+     * @brief  Finds the last time the system was connected with a given access
+     *         point.
+     *
+     * @param toCheck  An access point that is compatible with a saved Wifi
+     *                 connection.
+     *
+     * @return         The last time a connection compatible with access point
+     *                 toCheck was active, or the Unix epoch if no matching 
+     *                 connection was found.
+     */
     juce::Time lastConnectionTime(const AccessPoint& toCheck) const;
 
 private:
@@ -81,7 +116,4 @@ private:
      */
     virtual void openingConnectionFailed(LibNM::ActiveConnection connection,
             GError* error, bool isNew) override;
-
-    /* Tracks all connection events. */
-    ConnectionHistory connectionHistory;
 };
