@@ -37,6 +37,11 @@ if(!defined($ARGV[0]) || !defined($ARGV[1]))
 my $inFileName  = $ARGV[0];
 my $outFileName = $ARGV[1];
 
+# A regular expression matching a valid identifier, including the namespace.
+# This will also match invalid identifiers with misplaced ':' characters, but
+# these shouldn't occur in valid header files anyway.
+my $nameMatch = qr/[A-Za-z_][A-Za-z_0-9:]*/;
+
 if(index($inFileName, INCLUDE_DIR) != 0)
 {
     die "Header does not start in #include directory!\n";
@@ -56,6 +61,9 @@ if(-e $outFileName)
 }
 
 my $headerFile = read_file($inFileName);
+
+# As the header file is processed, the resulting cpp file text will be placed
+# in this variable.
 my $cppOutput = "";
 
 # Comments are only copied if they directly precede a function. Store formatted
@@ -73,9 +81,6 @@ sub initialClean
     #remove any section between two semicolons that does not
     #contain parentheses or curly brackets
     $headerFile =~ s/;[^;()\{\}]*;/;/g;
-
-    #remove pure virtual functions
-    $headerFile =~ s/;[^;]*\s*=\s*0\s*;/;/g;
 
     #remove include statements and other misc preprocessor commands
     $headerFile =~ s/(^|\n+\s*)#[^\v]+//gs;
@@ -345,8 +350,14 @@ sub formatFunction
     # Try putting the entire parameter list on one line:
     if($paramLength < MAX_LINE_LENGTH)
     {
-        # Put param list on a new line if needed
-        if(($paramLength + $lastLineLength->()) >= MAX_LINE_LENGTH)
+        # Put param list on a new line if needed, or if it would allow params
+        # and post-parameter text to fit on one line:
+        my $lineLength = $paramLength + $lastLineLength->();
+        if(length($postParamTxt) > 0)
+        {
+            $lineLength += length($postParamTxt) + 1;
+        }
+        if($lineLength >= MAX_LINE_LENGTH)
         {
             $formattedFunction = $formattedFunction."\n";
         }
@@ -365,11 +376,9 @@ sub formatFunction
     # Couldn't fit parameters on one line, try to spread them between two lines:
     else
     {
-        my $remainingLength = $lastLineLength->() + $paramLength;
-
+        $formattedFunction = $formattedFunction.'(';
         my $functionBackup = $formattedFunction;
         my $numLines = 1;
-        $formattedFunction = $formattedFunction.'(';
         foreach my $param(@params)
         {
             # Find the length of the parameter, the space before the parameter 
@@ -398,7 +407,7 @@ sub formatFunction
         }
 
         # Can't fit the parameters within two lines, use one line per param.
-        if($numLines >= 9)
+        if($numLines >= 2)
         {
             $formattedFunction = $functionBackup;
             foreach my $param(@params)
@@ -510,6 +519,25 @@ sub processBlock
         }
         while($recurseIndex < $blockEndIdx)
         {
+            # Look for type declarations within the namespace, but before
+            # the next block.
+            my ($nextBlockType, $nextBlockIdx) = BlockSearch::findBlock
+            ($headerFile, $recurseIndex, $searchTypes);
+            if($nextBlockIdx < $blockEndIdx)
+            {
+                my $blockContent = substr($headerFile, $recurseIndex, 
+                        $nextBlockIdx - $recurseIndex);
+                my @types = ($blockContent =~ 
+                        /(class|struct|enum)\s+([A-Za-z_][A-Za-z_0-9:]*)/g);
+                my @typedefs = ($blockContent =~
+                        /typedef.*?([A-Za-z_][A-Za-z_0-9:]*);/g);
+                push(@types, @typedefs);
+                foreach my $type(@types)
+                {
+
+                }
+            }
+
             $recurseIndex 
                 = processBlock($recurseIndex, $blockEndIdx, $recurseNamespace);
         }
@@ -521,17 +549,27 @@ sub processBlock
     {
         # Remove any extra lines caught in the pre-block text:
         $preBlock =~ s/.*;\n*//gs;
+
         # Ignore functions defined in the header.
         my $nextBraceIdx = index($headerFile, '{', $blockEndIdx);
         my $nextSemicolonIdx = index($headerFile, ';', $blockEndIdx);
         if((($nextBraceIdx < $nextSemicolonIdx) && ($nextBraceIdx >= 0))
                 || ($nextSemicolonIdx < 0))
         {
+            $pendingCommentBlock = "";
             return $blockIndex + $blockLength;
         }
 
+
+        # Ignore pure virtual functions.
         chomp(my $postParams = substr($headerFile, $blockEndIdx,
                 ($nextSemicolonIdx - $blockEndIdx)));
+        if($postParams =~ /=\s*0/)
+        {
+            $pendingCommentBlock = "";
+            return $nextSemicolonIdx;
+        }
+
         my $formattedFunction = formatFunction($preBlock, $blockText,
                 $postParams, $namespace);
 

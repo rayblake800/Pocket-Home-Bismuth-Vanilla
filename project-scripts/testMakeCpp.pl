@@ -29,6 +29,8 @@ sub findModules
 }
 find(\&findModules,$sourceDir);
 
+system("rm -r $testDir");
+system("mkdir $testDir");
 foreach my $command(@commands)
 {
     system($command);
