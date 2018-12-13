@@ -37,10 +37,12 @@ if(!defined($ARGV[0]) || !defined($ARGV[1]))
 my $inFileName  = $ARGV[0];
 my $outFileName = $ARGV[1];
 
-# A regular expression matching a valid identifier, including the namespace.
-# This will also match invalid identifiers with misplaced ':' characters, but
-# these shouldn't occur in valid header files anyway.
-my $nameMatch = qr/[A-Za-z_][A-Za-z_0-9:]*/;
+# A regular expression matching a valid identifier
+my $idMatch = qr/[A-Za-z_][A-Za-z_0-9]*/;
+
+# A regular expression matching a valid identifier, including an optional
+# namespace.
+my $fullIDMatch = qr/(?:$idMatch\:\:)*$idMatch/;
 
 if(index($inFileName, INCLUDE_DIR) != 0)
 {
@@ -88,12 +90,6 @@ sub initialClean
     #remove virtual, static, final, and override keywords
     $headerFile =~ s/virtual|static|final|override//g;
 
-    #remove friend class declarations
-    $headerFile =~ s/friend.*?\n/\n/g;
-
-    #remove type definitions
-    $headerFile =~ s/typedef.*?\n/\n/g;
-
     #remove using specifiers
     $headerFile =~ s/using.*?\n/\n/g;
 
@@ -102,6 +98,18 @@ sub initialClean
 
 }
 initialClean();
+
+################################################################################
+# sub saveNamespaceID($identifier, $namespace)                                 #
+#------------------------------------------------------------------------------#
+# Saves an identifier's namespace name.                                        #
+################################################################################
+
+################################################################################
+# sub findNamespace($identifier)                                               #
+#------------------------------------------------------------------------------#
+# Finds an identifier's saved namespace name.                                  #
+################################################################################
 
 ################################################################################
 # sub formatComments($commentBlock)                                            #
