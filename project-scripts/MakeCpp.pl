@@ -17,6 +17,9 @@ use List::Util qw[max];
 use lib './project-scripts';
 use BlockSearch;
 
+use constant FALSE => 0;
+use constant TRUE  => 1;
+
 # Base #include directory::
 use constant INCLUDE_DIR  => "Source/";
 
@@ -26,90 +29,46 @@ use constant MAX_LINE_LENGTH => 80;
 # Number of spaces per indent:
 use constant INDENT_WIDTH => 4;
 
-use constant FALSE => 0;
-use constant TRUE  => 1;
+###### Useful regular expressions: ######
+# Matches a valid identifier
+my $idMatch = qr/[A-Za-z_][A-Za-z_0-9]*/;
+
+# Matches a valid identifier, including an optional namespace.
+my $fullIDMatch = qr/(?:$idMatch\:\:)*$idMatch/;
+
+# Matches the name of any type of code block that has its own namespace.
+my $namedBlockTypeMatch = qr/class|namespace|struct/;
 
 if(!defined($ARGV[0]) || !defined($ARGV[1]))
 {
     die "usage: perl cpp_from_h.pl  [input file] [output file]\n";
 }
 
-my $inFileName  = $ARGV[0];
-my $outFileName = $ARGV[1];
-
-# A regular expression matching a valid identifier
-my $idMatch = qr/[A-Za-z_][A-Za-z_0-9]*/;
-
-# A regular expression matching a valid identifier, including an optional
-# namespace.
-my $fullIDMatch = qr/(?:$idMatch\:\:)*$idMatch/;
-
-if(index($inFileName, INCLUDE_DIR) != 0)
-{
-    die "Header does not start in #include directory!\n";
-}
-if(-e $outFileName)
-{
-    my $input = "";
-    while($input ne "Y\n")
-    {
-        print "Replace existing file $outFileName?(Y/n):";
-        $input = <STDIN>;
-        if($input ne "Y\n")
-        {
-            die "Cancelled.\n";
-        }
-    }
-}
-
-my $headerFile = read_file($inFileName);
-
-# As the header file is processed, the resulting cpp file text will be placed
-# in this variable.
-my $cppOutput = "";
-
 # Comments are only copied if they directly precede a function. Store formatted
 # comments here while waiting to see if they're followed by a valid function.
 my $pendingCommentBlock = "";
 
-sub initialClean
+# Tracks types that are declared within a particular namespace, by mapping type
+# names to their namespace names.
+my %typeNamespaces;
+
+################################################################################
+# sub trim($string)                                                            #
+#------------------------------------------------------------------------------#
+# Trims leading and trailing whitespace from a string.                         #
+#------------------------------------------------------------------------------#
+# Parameters:                                                                  #
+#   $string: A string to trim.                                                 #
+#------------------------------------------------------------------------------#
+# Returns: The same string, with all leading and trailing whitespace removed.  #
+################################################################################
+sub trim
 {
-    #remove excess indentation
-    $headerFile =~ s/\n\s+/\n/gs;
-
-    #remove access specifiers
-    $headerFile =~ s/\n+(public|private|protected)+:\s*\n+//g;
-
-    #remove any section between two semicolons that does not
-    #contain parentheses or curly brackets
-    $headerFile =~ s/;[^;()\{\}]*;/;/g;
-
-    #remove include statements and other misc preprocessor commands
-    $headerFile =~ s/(^|\n+\s*)#[^\v]+//gs;
-
-    #remove virtual, static, final, and override keywords
-    $headerFile =~ s/virtual|static|final|override//g;
-
-    #remove using specifiers
-    $headerFile =~ s/using.*?\n/\n/g;
-
-    #remove repeated newlines
-    $headerFile =~ s/\v\v+/\n/gs;
-
+    my $string = shift;
+    $string =~ s/^\s+//;
+    $string =~ s/\s+$//;
+    return $string;
 }
-initialClean();
-
-################################################################################
-# sub saveNamespaceID($identifier, $namespace)                                 #
-#------------------------------------------------------------------------------#
-# Saves an identifier's namespace name.                                        #
-################################################################################
-
-################################################################################
-# sub findNamespace($identifier)                                               #
-#------------------------------------------------------------------------------#
-# Finds an identifier's saved namespace name.                                  #
-################################################################################
 
 ################################################################################
 # sub formatComments($commentBlock)                                            #
@@ -143,8 +102,7 @@ sub formatComments
     $commentBlock =~ s/\v\s*\*\s*/ /g; # Remove comment block asterisks
     $commentBlock =~ s/\v/ /g;         # Remove any remaining newlines
     $commentBlock =~ s/\s\s+/ /g;      # Remove repeated whitespace
-    $commentBlock =~ s/^\s+//g;        # Trim leading whitespace
-    $commentBlock =~ s/\s+$//g;        # Trim trailing whitespace
+    $commentBlock = trim($commentBlock);
 
     # If no content remains, return the empty string.
     if($commentBlock =~ /^\s*$/)
@@ -270,8 +228,7 @@ sub splitParams
         }
 
         my $paramStr = substr($paramListStr, $paramStart, $paramLength);
-        $paramStr =~ s/^\s*//;
-        $paramStr =~ s/\s*$//;
+        $paramStr = trim($paramStr);
         $paramStart = $paramEnd + 1;
         if(length($paramStr) > 0)
         {
@@ -301,19 +258,43 @@ sub formatFunction
     my $functionType;
     my $functionName;
 
-    $functionStart =~ s/.*;//gs;    # Trim extra captured code lines
+    $functionStart =~ s/.*;//gs;    # Remove extra captured code lines
     $functionStart =~ s/\v/ /g;     # Remove all line breaks
-    $functionStart =~ s/^\s*//g;    # Trim leading whitespace
-    $functionStart =~ s/\s\s+/ /g;  # Trim repeated spaces
+    $functionStart =~ s/\s\s+/ /g;  # Remove repeated spaces
+    $functionStart =~ trim($functionStart);
 
     # If this is a valid function, $functionStart should contain type and name.
-    if($functionStart =~ /(^.*)\s+([A-Za-z_][A-Za-z_0-9]*)\s*$/s)
+    if($functionStart =~ /(^.+)\h+($fullIDMatch)\h*$/s)
     {
-        $functionType = $1;
-        $functionName = $2;
+        $functionType = trim($1);
+        $functionName = trim($2);
+
+        # Check if the type belongs in a namespace:
+        my @typeWords = split(/\s+/, $functionType);
+        foreach my $typeWord(@typeWords)
+        {
+            if(exists $typeNamespaces{$typeWord})
+            {
+                $typeWord = $typeNamespaces{$typeWord}.'::'.$typeWord;
+                $functionType = join(' ', @typeWords);
+                last;
+            }
+        }
     }
-    else # No type and title found, this isn't actually a function declaration.
+    else 
     {
+        # Check if this is a constructor or destructor:
+        ($functionName) = ($functionStart =~ /(~?$fullIDMatch)\h*$/);
+        my ($localNamespace) = ($namespace =~ /($idMatch)$/);
+        if(defined($functionName) && defined($localNamespace)
+                && $functionName =~ /$localNamespace$/)
+        {
+            $functionType = "";
+        }
+    }
+    if(!defined($functionType) || !defined($functionName))
+    {
+        # Missing type or title, this isn't actually a function declaration.
         return "";
     }
 
@@ -328,14 +309,18 @@ sub formatFunction
     my @params = splitParams($paramStr);
 
     # Put function back together, adding newlines and indentation where needed.
-    my $formattedFunction = "\n$functionType";
-    if((length($functionType) + length($functionName) + 1) > MAX_LINE_LENGTH)
+    my $formattedFunction;
+    if(length($functionType) == 0)
     {
-        $formattedFunction = $formattedFunction."\n".$functionName;
+        $formattedFunction = "\n$functionName";
+    }
+    elsif((length($functionType) + length($functionName) + 1) > MAX_LINE_LENGTH)
+    {
+        $formattedFunction = "\n$functionType\n$functionName";
     }
     else
     {
-        $formattedFunction = $formattedFunction." ".$functionName;
+        $formattedFunction = "\n$functionType $functionName";
     }
     my $paramLength = 0;
     foreach my $param(@params)
@@ -449,6 +434,60 @@ sub formatFunction
     return $formattedFunction;
 }
 
+my $inFileName  = $ARGV[0];
+my $outFileName = $ARGV[1];
+
+if(index($inFileName, INCLUDE_DIR) != 0)
+{
+    die "Header does not start in #include directory!\n";
+}
+if(-e $outFileName)
+{
+    my $input = "";
+    while($input ne "Y\n")
+    {
+        print "Replace existing file $outFileName?(Y/n):";
+        $input = <STDIN>;
+        if($input ne "Y\n")
+        {
+            die "Cancelled.\n";
+        }
+    }
+}
+
+my $headerFile = read_file($inFileName);
+
+sub initialClean
+{
+    #remove excess indentation
+    $headerFile =~ s/\n\s+/\n/gs;
+
+    #remove access specifiers
+    $headerFile =~ s/\n+(public|private|protected)+:\s*\n+//g;
+
+    #remove any section between two semicolons that does not
+    #contain parentheses or curly brackets
+    $headerFile =~ s/;[^;()\{\}]*;/;/g;
+
+    #remove include statements and other misc preprocessor commands
+    $headerFile =~ s/(^|\n+\s*)#[^\v]+//gs;
+
+    #remove virtual, static, final, and override keywords
+    $headerFile =~ s/virtual|static|final|override//g;
+
+    #remove using specifiers
+    $headerFile =~ s/using.*?\n/\n/g;
+
+    #remove repeated newlines
+    $headerFile =~ s/\v\v+/\n/gs;
+
+}
+initialClean();
+
+# As the header file is processed, the resulting cpp file text will be placed
+# in this variable.
+my $cppOutput = "";
+
 ################################################################################
 # sub processBlock                                                             #
 # ($startIndex = 0, $endIndex = length($headerFile), $namespace = "")          #
@@ -513,36 +552,39 @@ sub processBlock
         $pendingCommentBlock = "";
         my $recurseIndex = $blockIndex + 1;
         my $recurseNamespace = "";
-        if($preBlock =~ / 
-            (class|namespace|struct|enum|enum\sclass)  #capture block type
-            \s+ ([A-Za-z_][A-Za-z_0-9:]*)\s            #capture block name
-        /xs)                         
+        if($preBlock =~ /($namedBlockTypeMatch|enum class|enum)\s+($fullIDMatch)/)
         {
             if(length($namespace) > 0)
             {
                 $recurseNamespace = $namespace.'::';
             }
             $recurseNamespace = $recurseNamespace.$2;
-            print "Found $1 $recurseNamespace\n";
+            #print "Found namespace $recurseNamespace\n";
         }
         while($recurseIndex < $blockEndIdx)
         {
-            # Look for type declarations within the namespace, but before
-            # the next block.
-            my ($nextBlockType, $nextBlockIdx) = BlockSearch::findBlock
-            ($headerFile, $recurseIndex, $searchTypes);
-            if($nextBlockIdx < $blockEndIdx)
+            # Look for type declarations within the namespace, but outside of
+            # nested blocks.
+            if(length($recurseNamespace) > 0)
             {
+                my ($nextBlockType, $nextBlockIdx) = BlockSearch::findBlock
+                ($blockText, $recurseIndex, $searchTypes);
+
+                if(!defined($nextBlockIdx) || $nextBlockIdx > $blockEndIdx)
+                {
+                    $nextBlockIdx = $blockEndIdx;
+                }
                 my $blockContent = substr($headerFile, $recurseIndex, 
                         $nextBlockIdx - $recurseIndex);
                 my @types = ($blockContent =~ 
-                        /(class|struct|enum)\s+([A-Za-z_][A-Za-z_0-9:]*)/g);
+                        /(?:$namedBlockTypeMatch|enum)\s+($fullIDMatch)/g);
                 my @typedefs = ($blockContent =~
-                        /typedef.*?([A-Za-z_][A-Za-z_0-9:]*);/g);
+                        /typedef[^\v]*?($fullIDMatch);/g);
                 push(@types, @typedefs);
                 foreach my $type(@types)
                 {
-
+                    #print "Found type $type in namespace $recurseNamespace\n";
+                    $typeNamespaces{$type} = $recurseNamespace;
                 }
             }
 
