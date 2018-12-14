@@ -9,12 +9,12 @@
  *         and data to construct and update Wifi::AccessPoint objects.
  */
 
-#include "Wifi/AccessPoint/AccessPoint.h"
-#include "LibNM/APData/APHash.h"
-#include "LibNM/NMObjects/AccessPoint.h"
 #include "SharedResource/Resource.h"
 
+namespace Wifi { class AccessPoint; }
 namespace Wifi { class APList; }
+namespace LibNM { class APHash; }
+namespace LibNM { class AccessPoint; }
 
 class Wifi::APList : public SharedResource::Resource
 {
@@ -51,6 +51,9 @@ public:
      * @brief  Gets the strongest visible LibNM::AccessPoint that matches a
      *         Wifi::AccessPoint.
      *
+     * Like all methods that get or set LibNM::Object objects, this should only 
+     * be called within the LibNM::ThreadHandler's call or callAsync methods.
+     *
      * @param accessPoint  A Wifi::AccessPoint describing one or more 
      *                     LibNM::AccessPoints. 
      *
@@ -63,8 +66,28 @@ public:
         const;
 
     /**
+     * @brief  Gets LibNM::AccessPoint objects for all access point devices
+     *         visible through the Wifi device.
+     *
+     * Like all methods that get or set LibNM::Object objects, this should only 
+     * be called within the LibNM::ThreadHandler's call or callAsync methods.
+     *
+     * Like all methods that share LibNM::Object objects, this should only be
+     * called within the LibNM::ThreadHandler's call or callAsync methods.
+     *
+     * @return             All distinct, non-null LibNM::AccessPoint objects.
+     */
+    juce::Array<LibNM::AccessPoint> getNMAccessPoints() const;
+
+    /**
      * @brief  Gets all LibNM::AccessPoint objects described by a 
      *         Wifi::AccessPoint.
+     *
+     * Like all methods that get or set LibNM::Object objects, this should only 
+     * be called within the LibNM::ThreadHandler's call or callAsync methods.
+     *
+     * Like all methods that share LibNM::Object objects, this should only be
+     * called within the LibNM::ThreadHandler's call or callAsync methods.
      *
      * @param accessPoint  A Wifi::AccessPoint describing one or more
      *                     LibNM::AccessPoints.
@@ -79,6 +102,9 @@ public:
      * @brief  Adds a new LibNM::AccessPoint to the list, constructing a
      *         matching Wifi::AccessPoint if one does not yet exist.
      *
+     * Like all methods that get or set LibNM::Object objects, this should only 
+     * be called within the LibNM::ThreadHandler's call or callAsync methods.
+     *
      * @param addedAP  A new LibNM::AccessPoint discovered by NetworkManager.
      */
     void addAccessPoint(const LibNM::AccessPoint addedAP);
@@ -87,6 +113,9 @@ public:
      * @brief  Removes a LibNM::AccessPoint from the list, removing the matching
      *         Wifi::AccessPoint if it no longer has any matching 
      *         LibNM::AccessPoints.
+     *
+     * Like all methods that get or set LibNM::Object objects, this should only 
+     * be called within the LibNM::ThreadHandler's call or callAsync methods.
      *
      * @param removedAP  The LibNM::AccessPoint that NetworkManager can no
      *                   longer find.
@@ -111,11 +140,4 @@ public:
      *         Wifi::AccessPoints as necessary.
      */
     void updateAllAccessPoints();
-
-private:
-    /* All visible Wifi::AccessPoint objects, mapped by hash value. */
-    std::map<LibNM::APHash, AccessPoint> wifiAccessPoints;
-    
-    /* All visible LibNM::AccessPoint objects, mapped by hash value. */
-    std::map<LibNM::APHash, juce::Array<LibNM::AccessPoint>> nmAccessPoints;
 };

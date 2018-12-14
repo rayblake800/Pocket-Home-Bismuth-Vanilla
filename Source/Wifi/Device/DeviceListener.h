@@ -1,13 +1,17 @@
 #pragma once
-#include "Wifi/Device/DeviceUpdateInterface.h"
-#include "SharedResource/Handler.h"
-
 /**
  * @file Wifi/Listeners/DeviceListener.h
  *
  * @brief  Checks if a Wifi device is present and enabled, and receives signals
  *         whenever Wifi is enabled or disabled.
  */
+
+#include "Wifi/Device/DeviceUpdateInterface.h"
+#include "SharedResource/Handler.h"
+
+namespace Wifi { class DeviceListener; }
+namespace Wifi { class DeviceTracker; }
+
 class Wifi::DeviceListener : public SharedResource::Handler<DeviceTracker>,
     public DeviceUpdateInterface
 {

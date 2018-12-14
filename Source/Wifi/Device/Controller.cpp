@@ -1,4 +1,4 @@
-#include "Wifi/Control/Controller.h"
+#include "Wifi/Device/Controller.h"
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/NMObjects/Client.h"
 #include "LibNM/NMObjects/DeviceWifi.h"

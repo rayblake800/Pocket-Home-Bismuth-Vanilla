@@ -1,5 +1,5 @@
-#include "Wifi/Listeners/DeviceListener.h"
-#include "Wifi/SavedState/DeviceTracker.h"
+#include "Wifi/Device/DeviceListener.h"
+#include "Wifi/Device/DeviceTracker.h"
 
 /*
  * Checks if a Wifi device managed by NetworkManager exists.
