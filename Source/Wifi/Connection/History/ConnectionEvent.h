@@ -26,6 +26,8 @@ enum class Wifi::EventType
     connected,
     /* The active connection was closed or lost. */
     disconnected,
+    /* The ConnectionEvent does not represent a connection event. */
+    invalid
 };
 
 class Wifi::ConnectionEvent

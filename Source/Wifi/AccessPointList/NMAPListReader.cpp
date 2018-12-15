@@ -1,8 +1,9 @@
 #include "Wifi/AccessPointList/NMAPListReader.h"
+#include "Wifi/AccessPointList/APList.h"
+#include "Wifi/AccessPoint/AccessPoint.h"
+#include "LibNM/NMObjects/AccessPoint.h"
 
-Wifi::NMAPListReader::NMAPListReader()
-{
-}
+Wifi::NMAPListReader::NMAPListReader() { }
 
 /*
  * Gets the strongest visible LibNM::AccessPoint that matches a
@@ -11,6 +12,9 @@ Wifi::NMAPListReader::NMAPListReader()
 LibNM::AccessPoint Wifi::NMAPListReader::getStrongestNMAccessPoint
 (const AccessPoint accessPoint) const
 {
+    SharedResource::LockedPtr<APList> apList = getReadLockedResource();
+    return apList->getStrongestNMAccessPoint(accessPoint);
+
 }
 
 /*
@@ -19,4 +23,6 @@ LibNM::AccessPoint Wifi::NMAPListReader::getStrongestNMAccessPoint
 juce::Array<LibNM::AccessPoint> Wifi::NMAPListReader::getNMAccessPoints
 (const AccessPoint accessPoint) const
 {
+    SharedResource::LockedPtr<APList> apList = getReadLockedResource();
+    return apList->getNMAccessPoints();
 }
