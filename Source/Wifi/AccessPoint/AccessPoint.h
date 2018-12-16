@@ -11,6 +11,7 @@
 namespace Wifi { class AccessPoint; }
 namespace Wifi { class APData; }
 namespace LibNM { class AccessPoint; }
+namespace LibNM { class Connection; }
 namespace LibNM { class APHash; }
 namespace LibNM { enum class SecurityType; }
 
@@ -37,6 +38,13 @@ public:
      * @param nmAccessPoint  The LibNM access point the data should represent.
      */
     AccessPoint(const LibNM::AccessPoint nmAccessPoint);
+
+    /**
+     * @brief  Creates new access point data from a LibNM connection object.
+     *
+     * @param connection  A valid wifi connection with saved access point data.
+     */
+    AccessPoint(const LibNM::Connection connection);
 
     /**
      * @brief  Initializes the AccessPoint with another AccessPoint's data.

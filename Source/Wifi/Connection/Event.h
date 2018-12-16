@@ -7,13 +7,15 @@
  */
 #include "Wifi/AccessPoint/AccessPoint.h"
 
-namespace Wifi { class ConnectionEvent; }
-namespace Wifi { enum class EventType; }
+namespace Wifi { namespace Connection { class Event; } }
+namespace Wifi { namespace Connection { enum class EventType; } }
+
+namespace WifiConnect = Wifi::Connection;
 
 /**
  * @brief  All types of event tracked using ConnectionEvent.
  */
-enum class Wifi::EventType
+enum class WifiConnect::EventType
 {
     /* A new connection was requested through the Wifi::ConnectionManager. */
     connectionRequested,
@@ -30,7 +32,7 @@ enum class Wifi::EventType
     invalid
 };
 
-class Wifi::ConnectionEvent
+class WifiConnect::Event
 {
 public:
     /**
@@ -43,7 +45,7 @@ public:
      * @param eventTime  The time when the event occurred. If omitted, this
      *                   uses the current time by default.
      */
-    ConnectionEvent(const AccessPoint eventAP, const EventType eventType,
+    Event(const AccessPoint eventAP, const EventType eventType,
             const juce::Time eventTime = juce::Time::getCurrentTime());
 
     /**
@@ -51,15 +53,15 @@ public:
      *
      * @param rhs  The other connection event to copy.
      */
-    ConnectionEvent(const ConnectionEvent& rhs);
+    Event(const Event& rhs);
 
     /**
-     * @brief  Creates a null ConnectionEvent object that does not represent
-     *         a real connection event.
+     * @brief  Creates a null Event object that does not represent a real 
+     *         connection event.
      */
-    ConnectionEvent();
+    Event();
 
-    virtual ~ConnectionEvent() { }
+    virtual ~Event() { }
 
     /**
      * @brief  Gets the access point involved in the event.
@@ -90,44 +92,44 @@ public:
      *
      * @return     This ConnectionEvent object.
      */
-    ConnectionEvent& operator=(const ConnectionEvent& rhs);
+    Event& operator=(const Event& rhs);
 
     /**
      * @brief  Checks if two connection events are equivalent.
      *
-     * @param rhs  Another saved ConnectionEvent.
+     * @param rhs  Another saved Event.
      *
-     * @return     Whether both ConnectionEvents have identical AccessPoint
+     * @return     Whether both Event objectss have identical AccessPoint
      *             objects, event times, and event types.
      */
-    bool operator==(const ConnectionEvent& rhs) const;
+    bool operator==(const Event& rhs) const;
 
 
     /**
      * @brief  Checks if two connection events are not equivalent.
      *
-     * @param rhs  Another saved ConnectionEvent.
+     * @param rhs  Another saved Event object.
      *
-     * @return     Whether the ConnectionEvents have different AccessPoint
+     * @return     Whether the Event objectss have different AccessPoint
      *             objects, event times, or event types.
      */
-    bool operator!=(const ConnectionEvent& rhs) const;
+    bool operator!=(const Event& rhs) const;
 
     /**
-     * @brief  Compares two ConnectionEvent objects using their event times.
+     * @brief  Compares two connection Event objects using their event times.
      *
-     * @param rhs  Another saved ConnectionEvent.
+     * @param rhs  Another saved Event.
      *
      * @return     Whether this connection event happened before the rhs
-     *             ConnectionEvent.
+     *             Event.
      */
-    bool operator<(const ConnectionEvent& rhs) const;
+    bool operator<(const Event& rhs) const;
 
     /**
-     * @brief  Checks if this ConnectionEvent object is null.
+     * @brief  Checks if this Event object is null.
      *
-     * @return  Whether this ConnectionEvent is a null object that does not
-     *          represent an event.
+     * @return  Whether this Event is a null object that does not represent an 
+     *          actual connection event.
      */
     bool isNull() const;
 
