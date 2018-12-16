@@ -37,7 +37,7 @@ settingNames(toCopy.settingNames)
     setGObject(toCopy);
     if(!toCopy.nmConnection.isNull())
     {
-        NMThreadHandler threadHandler;
+        ThreadHandler threadHandler;
         threadHandler.call([this, &toCopy]()
         {
             nmConnection = toCopy.nmConnection;

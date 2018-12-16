@@ -24,14 +24,15 @@ public:
      * @brief  Creates a Connection sharing a GObject with an existing 
      *         Connection.
      * 
-     * @toCopy  An existing connection object.
+     * @toCopy  Another Connection object to copy.
      */
     Connection(const Connection& toCopy);
     
     /**
-     * @brief  Creates a Connection to contain a NMConnection object.
+     * @brief  Creates a Connection to contain NMConnection data.
      * 
-     * @toAssign  A valid NMConnection for this Connection to hold.
+     * @toAssign  A valid NMConnection pointer for this Connection to hold, or
+     *            nullptr to create a null Connection object.
      */
     Connection(NMConnection* toAssign);
     
