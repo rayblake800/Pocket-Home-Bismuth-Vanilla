@@ -5,7 +5,7 @@
  * @brief  Holds wireless network connection settings.
  */
 
-#include "NMObjects/Settings.h";
+#include "LibNM/NMObjects/Settings.h";
 #include <nm-setting-wireless.h>
 #include <nm-access-point.h>
 
@@ -39,6 +39,8 @@ public:
      *         wireless settings object.
      */
     WifiSettings();
+
+    virtual ~WifiSettings() { }
 
     /**
      * @brief  Gets the SSID saved to the wireless connection settings.

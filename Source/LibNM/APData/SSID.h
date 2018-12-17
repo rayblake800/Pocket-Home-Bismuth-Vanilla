@@ -5,7 +5,6 @@
  * @brief  Stores a Wifi access point's ID.
  */
 
-#include "Util/Nullable.h"
 #include "JuceHeader.h"
 #include <glib.h>
 
