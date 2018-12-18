@@ -31,8 +31,8 @@ public:
     virtual ~LockedPtr() { }
 
     /* LockedPtr objects should only be created and used internally by 
-       Handler<ResourceType> objects. */
-    friend class Handler<ResourceType>;
+       Handler objects. */
+    template <class LockType> friend class Handler;
 
     /**
      * @brief  Accesses the locked resource's methods or data.

@@ -74,11 +74,17 @@ protected:
      * Handlers should use this to access their Resource whenever they need to 
      * read data from it without changing it.
      *
+     * @tparam LockedType  Optionally specifies a different class pointer type
+     *                     that the LockedPtr should use to represent the
+     *                     resource. This type must be a valid class of the
+     *                     resource object instance.
+     *
      * @return  A read-locked pointer to the class Resource instance.
      */
-    LockedPtr<ResourceType> getReadLockedResource() const
+    template <class LockedType = ResourceType>
+    LockedPtr<LockedType> getReadLockedResource() const
     {
-        return LockedPtr<ResourceType>(resourceKey, LockType::read);
+        return LockedPtr<LockedType>(resourceKey, LockType::read);
     }
 
     /**
@@ -87,11 +93,17 @@ protected:
      * Handlers should use this to access their Resource whenever they need to 
      * write to (or otherwise change) the resource.
      *
+     * @tparam LockedType  Optionally specifies a different class pointer type
+     *                     that the LockedPtr should use to represent the
+     *                     resource. This type must be a valid class of the
+     *                     resource object instance.
+     *
      * @return  A write-locked pointer to the class Resource instance.
      */
-    LockedPtr<ResourceType> getWriteLockedResource() const
+    template <class LockedType = ResourceType>
+    LockedPtr<LockedType> getWriteLockedResource() const
     {
-        return LockedPtr<ResourceType>(resourceKey, LockType::write);
+        return LockedPtr<LockedType>(resourceKey, LockType::write);
     }
 
 private:
