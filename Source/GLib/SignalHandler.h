@@ -1,14 +1,16 @@
 #pragma once
-#include <glib-object.h>
-#include <map>
-#include "GLib/WeakRef.h"
-#include "JuceHeader.h"
-
 /**
  * @file  GLib/SignalHandler.h
  * 
  * @brief Responds to signals emitted by GLib objects.
  */
+
+#include "GLib/WeakRef.h"
+#include "JuceHeader.h"
+#include <glib-object.h>
+
+namespace GLib { class SignalHandler; }
+
 class GLib::SignalHandler
 {      
 public:
@@ -89,7 +91,6 @@ protected:
      */
     void shareSignalSources(const SignalHandler& otherHandler);
 
-        
     /**
      * @brief  A callback function for handling property change notification 
      *         signals.

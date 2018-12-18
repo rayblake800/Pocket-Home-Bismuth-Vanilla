@@ -1,17 +1,21 @@
 #pragma once
-#include "gio/gio.h"
+/**
+ * @file GLib/ThreadResource.h
+ * 
+ * @brief  Runs a GLib event loop on a shared thread resource. 
+ */
+
+#include "SharedResource/ThreadResource.h"
 #include "WindowFocus.h"
 #include "JuceHeader.h"
 #include "GLib/SmartPointers/SharedContextPtr.h"
 #include "GLib/EventLoop.h"
 #include "GLib/ContextCaller.h"
-#include "SharedResource/ThreadResource.h"
+#include <gio/gio.h>
+
+namespace GLib { class ThreadResource; }
 
 /**
- * @file GLib/ThreadResource.h
- * 
- * @brief  Runs a GLib event loop on a shared thread resource. 
- * 
  *  On creation, this starts up a GLib event thread to handle events associated
  * with a GMainContext provided on creation. This GMainContext will be set as
  * the thread default context. This context will be available through the 

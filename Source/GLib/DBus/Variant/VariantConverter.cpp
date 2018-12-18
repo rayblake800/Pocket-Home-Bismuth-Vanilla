@@ -1,7 +1,7 @@
-#include "GVariantConverter.h"
+#include "GLib/DBus/Variant/VariantConverter.h"
 #include "JuceHeader.h"
 
-namespace GVariantConverter
+namespace VariantConverter
 {
 
     /**
@@ -178,7 +178,7 @@ namespace GVariantConverter
     /**
      * Get the VariantType enum value that best describes a variant.
      */
-    GVariantConverter::VariantType getType(GVariant* variant)
+    VariantType getType(GVariant* variant)
     {
         if (g_variant_is_of_type(variant, G_VARIANT_TYPE_BOOLEAN))
         {

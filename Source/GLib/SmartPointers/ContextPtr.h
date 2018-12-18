@@ -1,12 +1,13 @@
 #pragma once
-#include <gio/gio.h>
-#include "GLib/SmartPointers/ScopedGPointer.h"
-
 /**
  * @file  GLib/SmartPointers/ContextPtr.h
  *
  * @brief  Defines a ScopedGPointer that holds a GMainContext*. 
  */
+
+#include <gio/gio.h>
+#include "GLib/SmartPointers/ScopedGPointer.h"
+
 namespace GLib
 {
     /**

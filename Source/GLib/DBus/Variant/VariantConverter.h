@@ -1,5 +1,6 @@
+#pragma once
 /**
- * @file GVariantConverter
+ * @file  GLib/DBus/Variant/VariantConverter.h
  * 
  * @brief Provides convenience methods for working with GIO GVariant data.
  * 
@@ -8,13 +9,10 @@
  * needed for this project will be supported.
  */
 
-#pragma once
-#include <functional>
-#include <map>
-#include "gio/gio.h"
 #include "JuceHeader.h"
+#include <gio/gio.h>
 
-namespace GVariantConverter
+namespace VariantConverter
 {
     enum VariantType{
         booleanType = 0,

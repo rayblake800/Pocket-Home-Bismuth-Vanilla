@@ -1,4 +1,4 @@
-#include "GLib/Variant/TypeHelper.h"
+#include "GLib/DBus/Variant/TypeHelper.h"
 
 /* Use templates to define simple TypeHelper specialization methods and avoid
  * excess repetition: */

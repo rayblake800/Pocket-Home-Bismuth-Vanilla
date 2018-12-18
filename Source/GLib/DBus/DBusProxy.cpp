@@ -1,10 +1,10 @@
 #define DBUS_THREAD_IMPLEMENTATION
-#include "Utils.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
-#include "GLib/SmartPointers/ErrorPtr.h"
-#include "GLib/SmartPointers/VariantPtr.h"
 #include "GLib/DBus/DBusProxy.h"
 #include "GLib/DBus/DBusThread.h"
+#include "GLib/SmartPointers/VariantPtr.h"
+#include "GLib/SmartPointers/ErrorPtr.h"
+#include "GLib/SmartPointers/ObjectPtr.h"
+#include "Utils.h"
 
 typedef GLib::ObjectPtr<GDBusProxy*> GDBusProxyPtr;
 typedef GLib::ObjectPtr<> GObjectPtr;
@@ -250,7 +250,7 @@ void GLib::DBusProxy::dBusPropertiesChanged(GDBusProxy* proxy,
         GStrv invalidatedProperties,
         DBusSignalHandler* handler)
 {
-    using namespace GVariantConverter;
+    using namespace VariantConverter;
     using juce::String;
     DBusProxy proxyWrapper(proxy);
     iterateDict(changedProperties,[&proxyWrapper,handler]

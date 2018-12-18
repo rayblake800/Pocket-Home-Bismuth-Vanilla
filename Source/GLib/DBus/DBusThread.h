@@ -1,15 +1,18 @@
-/* Don't include this outside of GLib/DBusProxy.cpp */
-#ifdef DBUS_THREAD_IMPLEMENTATION
-
+#ifndef DBUS_THREAD_IMPLEMENTATION
+  #error File included outside of DBusProxy implementation.
+#endif
 #pragma once
-#include "GLib/DBus/DBusProxy.h"
-#include "GLib/ThreadResource.h"
-
 /**
  * @file GLib/DBus/DBusThread.h
  *
  * @brief  Runs the GLib event loop thread used for DBus communication.
  */
+
+#include "GLib/DBus/DBusProxy.h"
+#include "GLib/ThreadResource.h"
+
+namespace GLib { class DBusThread; }
+
 class GLib::DBusThread : public ThreadResource
 {
 public:
@@ -24,6 +27,3 @@ public:
 
     virtual ~DBusThread() { }
 };
-
-/* Don't include this outside of GLib/DBusProxy.cpp */
-#endif

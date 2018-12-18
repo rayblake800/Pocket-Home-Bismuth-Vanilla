@@ -1,22 +1,24 @@
-/* Since the main UI/message thread isn't a Juce thread, standard C++ thread
-   libraries need to be used to wait/notify. */
-#include <mutex>
-#include <condition_variable>
-#include "JuceHeader.h"
-#include "GLib/SmartPointers/SharedContextPtr.h"
-#include "GLib/GLib.h"
-
-
+#pragma once
 /**
  * @file  GLib/ContextCaller.h
  *
  * @brief  Runs functions synchronously and asynchronously within a GLib event
  *         loop attached to a specific GLib context.
- *
+ */
+
+#include "GLib/SmartPointers/SharedContextPtr.h"
+/* Since the main UI/message thread isn't a Juce thread, standard C++ thread
+   libraries need to be used to wait/notify. */
+#include <mutex>
+#include <condition_variable>
+#include "JuceHeader.h"
+
+namespace GLib { class ContextCaller; }
+
+/**
  *  The ContextCaller will not run the event loop itself, or ensure that the 
  * GLib context even has an associated EventLoop. That should be handled 
  * elsewhere, probably by a GLib::ThreadResource object.
- *
  */
 class GLib::ContextCaller
 {

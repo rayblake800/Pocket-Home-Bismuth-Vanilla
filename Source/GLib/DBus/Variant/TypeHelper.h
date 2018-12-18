@@ -1,6 +1,5 @@
 #pragma once
-#include "GLib/GLib.h"
-#include "GLib/Variant/VariantTypes.h"
+#include "GLib/DBus/Variant/VariantTypes.h"
 
 namespace GLib
 {
@@ -91,6 +90,6 @@ namespace GLib
     };
 
     // Array types:
-#include "GLib/Variant/TypeHelper_Array.inc"
+#include "GLib/DBus/Variant/TypeHelper_Array.inc"
 
 }

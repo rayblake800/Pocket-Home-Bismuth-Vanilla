@@ -1,13 +1,15 @@
 #pragma once
-#include <glib-object.h>
-#include "JuceHeader.h"
-#include "GLib/GLib.h"
-
 /**
  * @file  GLib/WeakRef.h
  *
  * @brief  A RAII object wrapper for GLib GWeakRef structures. 
  */
+
+#include <glib-object.h>
+#include "JuceHeader.h"
+
+namespace GLib { class WeakRef; }
+
 class GLib::WeakRef
 {
 public:

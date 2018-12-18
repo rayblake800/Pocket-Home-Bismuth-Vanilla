@@ -1,22 +1,27 @@
+#pragma once
 /**
  * @file  GLib/DBus/DBusProxy.h
  * 
  * @brief  Provides an interface for easier access to a GDBusProxy.
- * 
- * This object connects to a DBus interface on construction. Once connected,
- * it can get and set properties on that interface, and call interface methods.
- * 
- * DBusProxy objects are not meant to be interacted with directly. Instead, each 
- * interface type should be implemented as a class inheriting DBusProxy.
  */
-#pragma once
-#include "gio/gio.h"
-#include "JuceHeader.h"
-#include "GVariantConverter.h"
+
 #include "GLib/Object.h"
 #include "GLib/ThreadHandler.h"
 #include "GLib/SignalHandler.h"
+#include "GLib/DBus/Variant/VariantConverter.h"
+#include "JuceHeader.h"
+#include <gio/gio.h>
 
+namespace GLib { class DBusProxy; }
+namespace GLib { class DBusThread; }
+
+/**
+ *  This object connects to a DBus interface on construction. Once connected,
+ * it can get and set properties on that interface, and call interface methods.
+ * 
+ *  DBusProxy objects are not meant to be interacted with directly. Instead, 
+ * each interface type should be implemented as a class inheriting DBusProxy.
+ */
 class GLib::DBusProxy : public GLib::Object,
     public GLib::ThreadHandler<DBusThread>
 {
@@ -169,7 +174,7 @@ protected:
         {
             return T();
         }
-        T propertyVal = GVariantConverter::getValue<T>(property);
+        T propertyVal = VariantConverter::getValue<T>(property);
         g_variant_unref(property);
         return propertyVal;
     }
@@ -193,7 +198,7 @@ protected:
         GDBusProxy * proxy = G_DBUS_PROXY(getGObject());
         if(proxy != nullptr)
         {
-            GVariant* property = GVariantConverter::getVariant<T>(newVal);
+            GVariant* property = VariantConverter::getVariant<T>(newVal);
             g_dbus_proxy_set_cached_property
                     (proxy, propertyName, property);
             g_object_unref(G_OBJECT(proxy));

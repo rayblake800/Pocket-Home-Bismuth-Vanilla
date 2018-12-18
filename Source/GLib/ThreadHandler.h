@@ -1,13 +1,16 @@
 #pragma once
-#include "GLib/ThreadResource.h"
-#include "SharedResource/Handler.h"
-
 /**
  * @file  Glib/ThreadHandler.h
  *
  * @brief  Provides access to a GLib thread resource.
  */
-template<class GLibThreadType>
+
+#include "GLib/ThreadResource.h"
+#include "SharedResource/Handler.h"
+
+namespace GLib { template <class GLibThreadType> class ThreadHandler; }
+
+template <class GLibThreadType>
 class GLib::ThreadHandler : public SharedResource::Handler<GLibThreadType>
 {
 public:

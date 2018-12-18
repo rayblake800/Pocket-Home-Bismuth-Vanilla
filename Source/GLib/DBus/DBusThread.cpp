@@ -1,3 +1,4 @@
+#define DBUS_THREAD_IMPLEMENTATION
 #include "GLib/DBus/DBusThread.h"
 
 const juce::Identifier GLib::DBusThread::resourceKey = "GLib::DBusThread";

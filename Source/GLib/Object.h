@@ -1,14 +1,17 @@
 #pragma once
-#include "GLib/GLib.h"
-#include "GLib/WeakRef.h"
-#include "JuceHeader.h"
-#include <glib-object.h>
-
 /**
  * @file  GLib/Object.h
  * 
  * @brief  A C++ interface and RAII container for GLib GObject data.
- * 
+ */
+
+#include "GLib/WeakRef.h"
+#include "JuceHeader.h"
+#include <glib-object.h>
+
+namespace GLib { class Object; }
+
+/**
  *  GLib::Object holds a GObject*, providing methods for setting and getting 
  * object properties, and adding and removing object signal handlers. 
  * GLib::Object classes allow code to access GLib libraries through thread-safe,

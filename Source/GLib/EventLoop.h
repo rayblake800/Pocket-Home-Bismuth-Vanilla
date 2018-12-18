@@ -1,14 +1,17 @@
 #pragma once
-#include <gio/gio.h>
-#include "JuceHeader.h"
-#include "GLib/SmartPointers/SharedContextPtr.h"
-#include "GLib/SmartPointers/LoopPtr.h"
-
 /**
  * @file  GLib/EventLoop.h
  * 
  * @brief  Manages a GMainLoop* GLib event loop.
  */
+
+#include "GLib/SmartPointers/SharedContextPtr.h"
+#include "GLib/SmartPointers/LoopPtr.h"
+#include "JuceHeader.h"
+#include <gio/gio.h>
+
+namespace GLib { class EventLoop; }
+
 class GLib::EventLoop 
 {
 public:
