@@ -22,8 +22,7 @@ namespace GLib { class DBusThread; }
  *  DBusProxy objects are not meant to be interacted with directly. Instead, 
  * each interface type should be implemented as a class inheriting DBusProxy.
  */
-class GLib::DBusProxy : public GLib::Object,
-    public GLib::ThreadHandler<DBusThread>
+class GLib::DBusProxy : public GLib::Object, public GLib::ThreadHandler
 {
 protected:
     /**

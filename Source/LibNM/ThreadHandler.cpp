@@ -3,12 +3,13 @@
 #include "LibNM/ThreadResource.h"
 #include "LibNM/NMObjects/Client.h"
 #include "LibNM/NMObjects/DeviceWifi.h"
-    
+
 /*
  * Creates the shared LibNM::ThreadResource if it doesn't already exist.
  */
 LibNM::ThreadHandler::ThreadHandler() :
-GLib::ThreadHandler<ThreadResource>() { }
+GLib::ThreadHandler(ThreadResource::resourceKey, 
+        []()->GLib::ThreadResource* { return new ThreadResource(); } ) { }
 
 /*
  * Gets the shared NetworkManager client object if called within the LibNM event
@@ -17,7 +18,7 @@ GLib::ThreadHandler<ThreadResource>() { }
 LibNM::Client LibNM::ThreadHandler::getClient()
 {
     SharedResource::LockedPtr<ThreadResource> nmThread
-        = getReadLockedResource();
+        = getReadLockedResource<ThreadResource>();
     return nmThread->getClient();
 }
 
@@ -28,6 +29,6 @@ LibNM::Client LibNM::ThreadHandler::getClient()
 LibNM::DeviceWifi LibNM::ThreadHandler::getWifiDevice()
 {
     SharedResource::LockedPtr<ThreadResource> nmThread
-        = getReadLockedResource();
+        = getReadLockedResource<ThreadResource>();
     return nmThread->getWifiDevice();
 }

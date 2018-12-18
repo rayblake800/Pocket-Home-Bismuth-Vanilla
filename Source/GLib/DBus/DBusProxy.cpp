@@ -15,7 +15,8 @@ typedef GLib::ObjectPtr<> GObjectPtr;
 GLib::DBusProxy::DBusProxy
 (const char* name, const char* path, const char* interface) :
 GLib::Object(G_TYPE_DBUS_PROXY),
-GLib::ThreadHandler<DBusThread>()
+GLib::ThreadHandler(DBusThread::resourceKey,
+        []()->ThreadResource* { return new DBusThread(); })
 {
     if(name == nullptr || path == nullptr || interface == nullptr)
     {
@@ -57,14 +58,16 @@ GLib::ThreadHandler<DBusThread>()
  */
 GLib::DBusProxy::DBusProxy(GDBusProxy * proxy) :
 GLib::Object(G_OBJECT(proxy), G_TYPE_DBUS_PROXY),
-GLib::ThreadHandler<DBusThread>() { }
+GLib::ThreadHandler(DBusThread::resourceKey,
+        []()->ThreadResource* { return new DBusThread(); }) { }
         
 /*
  * Creates a DBusProxy as a copy of another DBusProxy
  */
 GLib::DBusProxy::DBusProxy(const DBusProxy& proxy) : 
 GLib::Object(proxy, G_TYPE_DBUS_PROXY),
-GLib::ThreadHandler<DBusThread>() { }
+GLib::ThreadHandler(DBusThread::resourceKey,
+        []()->ThreadResource* { return new DBusThread(); }) { }
 
 /*
  * Subscribes to all DBus signals and property changes emitted by this

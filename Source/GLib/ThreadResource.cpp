@@ -1,4 +1,5 @@
 #include "GLib/ThreadResource.h"
+#include "GLib/SmartPointers/SharedContextPtr.h"
 
 /*
  * Creates the thread with an initial GMainContext.

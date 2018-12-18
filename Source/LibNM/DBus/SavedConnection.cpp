@@ -31,14 +31,14 @@ GLib::DBusProxy(nullptr, nullptr, nullptr) { }
  * Creates an object from an existing DBus Connection proxy.
  */
 LibNM::SavedConnection::SavedConnection(const SavedConnection& toCopy) :
-GLib::DBusProxy(nullptr, nullptr, nullptr),
+GLib::DBusProxy(toCopy),
 path(toCopy.path),
 settingNames(toCopy.settingNames)
 {
     setGObject(toCopy);
     if(!toCopy.nmConnection.isNull())
     {
-        ThreadHandler threadHandler;
+        LibNM::ThreadHandler threadHandler;
         threadHandler.call([this, &toCopy]()
         {
             nmConnection = toCopy.nmConnection;
@@ -210,7 +210,7 @@ void LibNM::SavedConnection::createNMConnection()
     {
         return;
     }
-    ThreadHandler threadHandler;
+    LibNM::ThreadHandler threadHandler;
     threadHandler.call([this]()
     {
         using juce::String;
@@ -397,4 +397,3 @@ bool LibNM::SavedConnection::hasSettingProperty(const char* settingName,
     }
     return false;
 }
-

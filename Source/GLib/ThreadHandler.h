@@ -5,24 +5,26 @@
  * @brief  Provides access to a GLib thread resource.
  */
 
-#include "GLib/ThreadResource.h"
 #include "SharedResource/Handler.h"
 
-namespace GLib { template <class GLibThreadType> class ThreadHandler; }
+namespace GLib { class ThreadHandler; }
+namespace GLib { class ThreadResource; }
+namespace GLib { class SharedContextPtr; }
 
-template <class GLibThreadType>
-class GLib::ThreadHandler : public SharedResource::Handler<GLibThreadType>
+class GLib::ThreadHandler : public SharedResource::Handler<ThreadResource>
 {
 public:
     /**
      * @brief  Permanently connects the ThreadHandler to a single thread
      *         resource on construction.
+     *
+     * @param resourceKey     The ThreadResource's unique SharedResource key.
+     *
+     * @param createResource  A function that may be used to create the
+     *                        ThreadResource if necessary.
      */
-    ThreadHandler() :
-    SharedResource::Handler<GLibThreadType>(GLibThreadType::resourceKey, []()
-    {
-        return new GLibThreadType();
-    }) { }
+    ThreadHandler(const juce::Identifier& resourceKey, 
+            const std::function<ThreadResource*()> createResource);
 
     virtual ~ThreadHandler() { }
 
@@ -38,13 +40,7 @@ public:
      */
     void call(const std::function<void()> toCall, 
             const std::function<void()> onFailure 
-                = std::function<void()>()) const
-    {
-        SharedResource::LockedPtr<GLibThreadType> threadResource
-            = SharedResource::Handler<GLibThreadType>::getWriteLockedResource();
-        threadResource->call(toCall, onFailure, [&threadResource]() 
-                { threadResource.unlock(); });
-    }
+                = std::function<void()>()) const;
 
     /**
      * @brief  Asynchronously calls a function once on this GLib event loop.
@@ -56,12 +52,7 @@ public:
      */
     void callAsync(const std::function<void()> toCall,
             const std::function<void()> onFailure 
-                = std::function<void()>()) const
-    {
-        SharedResource::LockedPtr<GLibThreadType> threadResource
-            = SharedResource::Handler<GLibThreadType>::getWriteLockedResource();
-        threadResource->callAsync(toCall, onFailure);
-    }
+                = std::function<void()>()) const;
 
     /**
      * @brief  Checks if the thread resource is currently running.
@@ -70,42 +61,22 @@ public:
      *          even if the thread is waiting and not running the GLib event 
      *          loop.
      */
-    bool isThreadRunning() const
-    {
-        SharedResource::LockedPtr<ThreadResource> threadResource
-            = SharedResource::Handler<GLibThreadType>::getReadLockedResource();
-        return threadResource->isThreadRunning();
-    }
+    bool isThreadRunning() const;
     
     /**
      * @brief  Gets the GLib event thread's context.
      *
      * @return  The GMainContext* set when the thread resource was constructed.
      */
-    SharedContextPtr getContext()
-    {
-        SharedResource::LockedPtr<ThreadResource> threadResource
-            = SharedResource::Handler<GLibThreadType>::getReadLockedResource();
-        return threadResource->getContext();
-    }
+    SharedContextPtr getContext();
     
     /**
      * @brief  Starts the thread resource if it is currently not running.
      */
-    void startThread()
-    {
-        SharedResource::LockedPtr<ThreadResource> threadResource
-            = SharedResource::Handler<GLibThreadType>::getWriteLockedResource();
-        threadResource->startThread();
-    }
+    void startThread();
 
     /**
      * @brief  Stops the thread resource, waiting for the thread to exit.
      */
-    void stopThread()
-    {
-        SharedResource::LockedPtr<ThreadResource> threadResource
-            = SharedResource::Handler<GLibThreadType>::getWriteLockedResource();
-        threadResource->stopThreadResource();
-    }
+    void stopThread();
 };

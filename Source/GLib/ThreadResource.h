@@ -8,12 +8,12 @@
 #include "SharedResource/ThreadResource.h"
 #include "WindowFocus.h"
 #include "JuceHeader.h"
-#include "GLib/SmartPointers/SharedContextPtr.h"
 #include "GLib/EventLoop.h"
 #include "GLib/ContextCaller.h"
 #include <gio/gio.h>
 
 namespace GLib { class ThreadResource; }
+namespace GLib { class SharedContextPtr; }
 
 /**
  *  On creation, this starts up a GLib event thread to handle events associated
@@ -130,15 +130,6 @@ private:
      * @return  True, so the ThreadResource sleeps when the EventLoop finishes. 
      */
     virtual bool threadShouldWait() override { return true; }
-
-    /**
-     * @brief  Starts the GLib thread, then waits until the thread is running 
-     *         and the thread context and main loop are initialized. 
-     *
-     * @return  True if the thread started successfully, false if the
-     *          GLibThread is being destroyed.
-     */
-    //bool startGLibThread();
 
     /* Used to allow any function running on the thread's EventLoop to access
        its threadLock. */

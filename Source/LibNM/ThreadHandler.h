@@ -13,7 +13,7 @@ namespace LibNM { class ThreadResource; }
 namespace LibNM { class Client; }
 namespace LibNM { class DeviceWifi; }
 
-class LibNM::ThreadHandler : public GLib::ThreadHandler<ThreadResource>
+class LibNM::ThreadHandler : public GLib::ThreadHandler
 {
 public:
     /**
