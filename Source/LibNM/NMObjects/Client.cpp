@@ -1,4 +1,5 @@
 #include "LibNM/NMObjects/Client.h"
+#include "LibNM/NMObjects/AccessPoint.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointers for brevity: */

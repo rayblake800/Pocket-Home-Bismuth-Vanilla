@@ -1,16 +1,21 @@
 #pragma once
-#include "LibNM/NMObjects/AccessPoint.h"
-#include "LibNM/NMObjects/Connection.h"
-#include "LibNM/NMObjects/ActiveConnection.h"
-#include "GLib/SignalHandler.h"
-#include <nm-device-wifi.h>
-
 /**
  * @file LibNM/DeviceWifi.h
  *
  * @brief A RAII container and C++ interface for LibNM NMDeviceWifi
  *        objects.
- *
+ */
+
+#include "LibNM/NMObjects/Object.h"
+#include "GLib/SignalHandler.h"
+#include <nm-device-wifi.h>
+
+namespace LibNM { class DeviceWifi; }
+namespace LibNM { class AccessPoint; }
+namespace LibNM { class Connection; }
+namespace LibNM { class ActiveConnection; }
+
+/**
  *  DeviceWifi represents a system Wifi device recognized by NetworkManager. It
  * provides information about the Wifi device's state, loads AccessPoint objects
  * representing access points visible to the device, and provides limited

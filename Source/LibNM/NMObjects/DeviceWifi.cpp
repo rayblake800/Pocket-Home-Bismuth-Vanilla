@@ -1,4 +1,7 @@
 #include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/NMObjects/Connection.h"
+#include "LibNM/NMObjects/ActiveConnection.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointers for brevity: */

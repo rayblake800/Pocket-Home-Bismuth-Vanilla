@@ -1,8 +1,14 @@
 #include "LibNM/NMObjects/Connection.h"
+#include "LibNM/NMObjects/ConnectionSettings.h"
+#include "LibNM/NMObjects/WifiSettings.h"
+#include "LibNM/NMObjects/WifiSecuritySettings.h"
+#include "LibNM/Data/SSID.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
+typedef GLib::ObjectPtr<NMSetting*> NMSettingPtr;
+typedef GLib::ObjectPtr<GObject*> GObjectPtr;
 
 /*
  * Creates a Connection sharing a GObject with an existing Connection.
@@ -47,12 +53,12 @@ bool LibNM::Connection::connectionMatches(const Connection& rhs) const
     return nm_connection_compare(self, toCompare,
             NM_SETTING_COMPARE_FLAG_FUZZY);
 }
-   
 
 /*
- * Adds a new connection setting to this connection.
+ * Adds a new set of settings to this connection, creating new connection data 
+ * if this object is null.
  */
-void LibNM::Connection::addSetting(NMSetting* setting)
+void LibNM::Connection::addSettings(Settings addedSettings)
 {
     ASSERT_CORRECT_CONTEXT;
     if(isNull())
@@ -61,13 +67,17 @@ void LibNM::Connection::addSetting(NMSetting* setting)
     }
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     jassert(connection != nullptr);
-    nm_connection_add_setting(connection, setting);
+    NMSettingPtr settingsObject = NM_SETTING(getOtherGObject(addedSettings));
+    if(settingsObject != nullptr)
+    {
+        nm_connection_add_setting(connection, settingsObject);
+    }
 }
 
 /*
  * Removes one of the connection settings from this connection.
  */
-void LibNM::Connection::removeSetting(GType settingType)
+void LibNM::Connection::removeSettings(GType settingType)
 {
     ASSERT_CORRECT_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
@@ -80,20 +90,15 @@ void LibNM::Connection::removeSetting(GType settingType)
 /*
  * Adds new wireless connection settings to this connection.
  */
-void LibNM::Connection::addWifiSettings(const GByteArray* ssid, bool isHidden)
+void LibNM::Connection::addWifiSettings(SSID ssid, bool isHidden)
 {
     ASSERT_CORRECT_CONTEXT;
-    if(ssid != nullptr)
+    if(ssid.getByteArray() != nullptr)
     {   
-        NMSettingWireless* wifiSettings
-                = (NMSettingWireless*) nm_setting_wireless_new();
-        g_object_set(wifiSettings,
-                NM_SETTING_WIRELESS_SSID,
-                ssid,
-                NM_SETTING_WIRELESS_HIDDEN,
-                isHidden,
-                nullptr);
-        addSetting(NM_SETTING(wifiSettings));
+        WifiSettings newSettings;
+        newSettings.setSSID(ssid);
+        newSettings.setHidden(isHidden);
+        addSettings(newSettings);
     }
 }
 
@@ -103,19 +108,13 @@ void LibNM::Connection::addWifiSettings(const GByteArray* ssid, bool isHidden)
 bool LibNM::Connection::addWPASettings(const juce::String& psk)
 {
     ASSERT_CORRECT_CONTEXT;
-    if(psk.length() < 8)
+    WifiSecuritySettings newSettings;
+    bool wpaSet = newSettings.addWPASettings(psk);
+    if(wpaSet)
     {
-        return false;
+        addSettings(newSettings);
     }
-    NMSettingWirelessSecurity* securitySettings
-            = (NMSettingWirelessSecurity*) nm_setting_wireless_security_new();
-    g_object_set(G_OBJECT(securitySettings),
-            NM_SETTING_WIRELESS_SECURITY_PSK,
-            psk.toRawUTF8(),
-            NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
-            NM_SETTING_SECRET_FLAG_NONE, nullptr);
-    addSetting(NM_SETTING(securitySettings));
-    return true;
+    return wpaSet;
 }
 
 /*
@@ -124,52 +123,71 @@ bool LibNM::Connection::addWPASettings(const juce::String& psk)
 bool LibNM::Connection::addWEPSettings(const juce::String& psk)
 {
     ASSERT_CORRECT_CONTEXT;
-    const char* keyType = nullptr;
-    if (psk.length() == 10 || psk.length() == 26)
+    WifiSecuritySettings newSettings;
+    bool wepSet = newSettings.addWEPSettings(psk);
+    if(wepSet)
     {
-        keyType = (const char*) NM_WEP_KEY_TYPE_KEY;
+        addSettings(newSettings);
     }
-    //valid passphrase format: length 5 or length 14
-    else if (psk.length() == 5 || psk.length() == 13)
-    {
-        keyType = (const char*) NM_WEP_KEY_TYPE_PASSPHRASE;
-    }
-    else
-    {
-        DBG("Connection::" << __func__
-                << ": Invalid WEP Key type, "
-                << "psk.length() = " << psk.length()
-                << ", not in [5,10,13,26]");
-        return false;
-    }
-    NMSettingWirelessSecurity* securitySettings
-            = (NMSettingWirelessSecurity*) nm_setting_wireless_security_new();
-
-    g_object_set(G_OBJECT(securitySettings),
-            NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
-            keyType,
-            NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
-            NM_SETTING_SECRET_FLAG_NONE,  nullptr);
-
-    nm_setting_wireless_security_set_wep_key
-            (securitySettings, 0, psk.toRawUTF8());
-
-    addSetting(NM_SETTING(securitySettings));
-    return true;
+    return wepSet;
 }
 
 /*
- * Gets one of this connection's setting objects.
+ * Gets this connection's basic settings.
  */
-NMSetting* LibNM::Connection::getSetting(GType settingType) const
+LibNM::ConnectionSettings LibNM::Connection::getConnectionSettings() const
 {
     ASSERT_CORRECT_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
-        return nm_connection_get_setting(connection, settingType);
+        NMSetting* connectionSettings = getSetting(NM_TYPE_SETTING_CONNECTION);
+        if(connectionSettings != nullptr)
+        {
+            return ConnectionSettings
+                (NM_SETTING_CONNECTION(connectionSettings));
+        }
     }
-    return nullptr;
+    return ConnectionSettings(nullptr);
+}
+
+/*
+ * Gets this connection's wireless network settings.
+ */
+LibNM::WifiSettings LibNM::Connection::getWirelessSettings() const
+{
+    ASSERT_CORRECT_CONTEXT;
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
+    {
+        NMSetting* wifiSettings = getSetting(NM_TYPE_SETTING_WIRELESS);
+        if(wifiSettings != nullptr)
+        {
+            return WifiSettings
+                (NM_SETTING_WIRELESS(wifiSettings));
+        }
+    }
+    return WifiSettings(nullptr);
+}
+
+/*
+ * Gets this connection's wireless network security settings.
+ */
+LibNM::WifiSecuritySettings LibNM::Connection::getSecuritySettings() const
+{
+    ASSERT_CORRECT_CONTEXT;
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
+    {
+        NMSetting* securitySettings 
+            = getSetting(NM_TYPE_SETTING_WIRELESS_SECURITY);
+        if(securitySettings != nullptr)
+        {
+            return WifiSecuritySettings
+                (NM_SETTING_WIRELESS_SECURITY(securitySettings));
+        }
+    }
+    return WifiSecuritySettings(nullptr);
 }
 
 /*
@@ -275,3 +293,18 @@ void LibNM::Connection::printDebugOutput() const
     }
 }
 #endif
+
+
+/*
+ * Gets one of this connection's setting objects.
+ */
+NMSetting* LibNM::Connection::getSetting(GType settingType) const
+{
+    ASSERT_CORRECT_CONTEXT;
+    NMConnectionPtr connection(NM_CONNECTION(getGObject()));
+    if(connection != nullptr)
+    {
+        return nm_connection_get_setting(connection, settingType);
+    }
+    return nullptr;
+}

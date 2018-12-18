@@ -7,23 +7,20 @@
  */
 
 #include "LibNM/NMObjects/Object.h"
+#include <nm-connection.h>
 
 namespace LibNM { class Settings; }
-struct NMSetting;
 
 class LibNM::Settings : public LibNM::Object
 {
-protected:
+public:
     /**
      * @brief  Creates a Settings object sharing data with another Settings
      *         object.
      *
      * @param toCopy       Another Settings object to copy.
-     * 
-     * @param settingType  The subtype of NM_TYPE_SETTING this Settings object
-     *                     will hold.
      */
-    Settings(const Settings& toCopy, const GType settingType);
+    Settings(const Settings& toCopy);
 
     /**
      * @brief  Creates a Settings object to contain NMSetting data.
@@ -44,7 +41,6 @@ protected:
      */
     Settings(const GType settingType);
 
-public:
     virtual ~Settings() { }
 };
 

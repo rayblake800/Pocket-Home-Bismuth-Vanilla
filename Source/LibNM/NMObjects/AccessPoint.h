@@ -1,14 +1,21 @@
 #pragma once
+/**
+ * @file LibNM/AccessPoint.h
+ * 
+ * @brief A RAII container and C++ interface for NMAccessPoint objects.
+ */
+
 #include "LibNM/NMObjects/Object.h"
 #include "LibNM/NMObjects/Connection.h"
 #include "GLib/SignalHandler.h"
 #include <nm-access-point.h>
 
+namespace LibNM { class AccessPoint; }
+namespace LibNM { class APHash; }
+namespace LibNM { enum class APMode; }
+namespace LibNM { enum class SecurityType; }
+
 /**
- * @file LibNM/AccessPoint.h
- * 
- * @brief A RAII container and C++ interface for NMAccessPoint objects.
- * 
  *  AccessPoint holds a LibNM object representing a wifi access point.  It
  * provides access to relevant access point data, and checks Connection 
  * objects for compatibility with this access point.

@@ -1,13 +1,16 @@
 #pragma once
-#include "LibNM/LibNM.h"
-#include "GLib/Object.h"
-#include <nm-object.h>
-
 /**
  * @file  LibNM/NMObjects/Object.h
  *
  * @brief  The base class for all LibNM GObject classes.
- *
+ */
+
+#include "GLib/Object.h"
+#include <nm-object.h>
+
+namespace LibNM { class Object; }
+
+/**
  *  LibNM::Object classes each contain a different subtype of libnm-glib's
  * base NMObject type. NMObject* values each represent a different connection
  * to a NetworkManager interface over DBus. Because libnm-glib is not guaranteed

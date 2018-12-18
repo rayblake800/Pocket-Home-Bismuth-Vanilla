@@ -1,4 +1,10 @@
 #pragma once
+/**
+ * @file LibNM/Client.h
+ * 
+ * @brief  A RAII container and C++ interface for the LibNM NMClient class.
+ */
+
 #include "LibNM/NMObjects/Object.h"
 #include "LibNM/NMObjects/Connection.h"
 #include "LibNM/NMObjects/ActiveConnection.h"
@@ -6,11 +12,9 @@
 #include "GLib/SignalHandler.h"
 #include <nm-client.h>
 
+namespace LibNM { class Client; }
+
 /**
- * @file LibNM/Client.h
- * 
- * @brief  A RAII container and C++ interface for the LibNM NMClient class.
- *
  *  The LibNM Client provides the main interface used to access and control
  * the NetworkManager. It is responsible for creating network device objects,
  * opening new connections, and enabling or disabling wireless networks. 

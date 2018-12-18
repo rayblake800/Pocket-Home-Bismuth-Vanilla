@@ -1,15 +1,18 @@
 #pragma once
-#include "LibNM/NMObjects/Object.h"
-#include "LibNM/NMObjects/AccessPoint.h"
-#include "LibNM/NMObjects/Connection.h"
-#include <nm-active-connection.h>
-
 /**
  * @file LibNM/ActiveConnection.h
  * 
  * @brief A RAII container and C++ interface for LibNM NMActiveConnection 
  *        objects.
- *
+ */
+
+#include "LibNM/NMObjects/Object.h"
+#include <nm-active-connection.h>
+
+namespace LibNM { class ActiveConnection; }
+namespace LibNM { class AccessPoint; }
+
+/**
  *  ActiveConnection manages a NMActiveConnection object, used to represent an
  * active network connection. ActiveConnection provides information about the
  * connection's status, its properties, and the access point used to activate

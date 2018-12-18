@@ -4,8 +4,8 @@
 /*
  * Creates a Settings object sharing data with another Settings object.
  */
-LibNM::Settings::Settings(const Settings& toCopy, const GType settingType) :
-LibNM::Object(toCopy, settingType) { }
+LibNM::Settings::Settings(const Settings& toCopy) :
+LibNM::Object(toCopy, toCopy.getType()) { }
 
 /*
  * Creates a Settings object to contain NMSetting data.

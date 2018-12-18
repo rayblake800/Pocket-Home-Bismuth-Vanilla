@@ -1,19 +1,22 @@
-/* Don't include this outside of LibNM/ThreadHandler.cpp */
-#ifdef LIB_NM_THREAD_IMPLEMENTATION
-
+#ifndef LIB_NM_THREAD_IMPLEMENTATION
+  #error File included outside of LibNM Thread implementation.
+#endif
 #pragma once
-#include "LibNM/LibNM.h"
-#include "GLib/ThreadResource.h"
-#include "LibNM/NMObjects/Client.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
-
 /**
  * @file  LibNM/ThreadResource.h
  *
  * @brief  Runs the GLib event loop shared by all LibNM NMObject classes, and 
  *         creates and allows access to the NetworkManager client and wifi
  *         device objects within the event loop.
- *
+ */
+
+#include "GLib/ThreadResource.h"
+#include "LibNM/NMObjects/Client.h"
+#include "LibNM/NMObjects/DeviceWifi.h"
+
+namespace LibNM { class ThreadResource; }
+
+/**
  *  All interaction with LibNM::Object subclasses should occur within the
  * LibNM::ThreadResource thread, using its call and callAsync methods. The 
  * Client and DeviceWifi objects provided by the thread should be requested as 
@@ -59,6 +62,3 @@ private:
     /* Interacts with the LibNM-managed wifi device. */
     DeviceWifi wifiDevice;
 };
-
-/* Don't include this outside of LibNM/ThreadHandler.cpp. */
-#endif

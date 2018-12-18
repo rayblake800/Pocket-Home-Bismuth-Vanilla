@@ -1,14 +1,17 @@
 #pragma once
-#include "JuceHeader.h"
-#include "LibNM/LibNM.h"
-#include "LibNM/NMObjects/Connection.h"
-#include "GLib/DBus/DBusProxy.h"
-
 /**
  * @file LibNM/SavedConnection.h
  * 
  * @brief  Controls a NetworkManager saved connection object over DBus.
- *
+ */
+
+#include "GLib/DBus/DBusProxy.h"
+#include "LibNM/NMObjects/Connection.h"
+#include "JuceHeader.h"
+
+namespace LibNM { class SavedConnection; }
+
+/**
  *  SavedConnection can read or delete a DBus connection object held by the
  * NetworkManager. All saved network connections visible to NetworkManager on 
  * the system running this application may be loaded as SavedConnection objects.

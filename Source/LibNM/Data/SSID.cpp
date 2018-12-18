@@ -1,4 +1,4 @@
-#include "LibNM/APData/SSID.h"
+#include "LibNM/Data/SSID.h"
 #include <nm-utils.h>
 
 /*
@@ -12,7 +12,7 @@ LibNM::SSID::SSID(const SSID& toCopy)
 /*
  * Creates this SSID from a SSID byte string.
  */
-LibNM::SSID::SSID(GByteArray* toCopy)
+LibNM::SSID::SSID(const GByteArray* toCopy)
 {
     *this = toCopy;
 }

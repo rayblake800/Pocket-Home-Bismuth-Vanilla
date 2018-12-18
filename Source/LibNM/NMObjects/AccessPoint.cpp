@@ -1,7 +1,7 @@
 #include "LibNM/NMObjects/AccessPoint.h"
-#include "LibNM/APData/APHash.h"
-#include "LibNM/APData/APMode.h"
-#include "LibNM/APData/SecurityType.h"
+#include "LibNM/Data/APHash.h"
+#include "LibNM/Data/APMode.h"
+#include "LibNM/Data/SecurityType.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 #include <nm-utils.h>
 

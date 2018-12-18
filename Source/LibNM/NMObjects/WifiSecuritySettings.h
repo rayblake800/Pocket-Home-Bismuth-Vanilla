@@ -45,15 +45,19 @@ public:
      *
      * @param psk  The WPA key or passphrase used to secure this object's
      *             connection.
+     *
+     * @return     Whether the new settings were successfully added.
      */
-    void addWPASettings(const juce::String psk);
+    bool addWPASettings(const juce::String psk);
 
     /**
      * @brief  Adds WEP security settings to this settings object.
      *
      * @param psk  The WEP key used to secure this object's connection.
+     *
+     * @return     Whether the new settings were successfully added.
      */
-    void addWEPSettings(const juce::String psk);
+    bool addWEPSettings(const juce::String psk);
 
     /**
      * @brief  Gets the basic security type defined by this settings object.

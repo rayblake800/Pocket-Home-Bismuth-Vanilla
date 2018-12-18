@@ -1,6 +1,8 @@
+#define LIB_NM_THREAD_IMPLEMENTATION
 #include "LibNM/ThreadResource.h"
+#include "LibNM/NMObjects/Client.h"
+#include "LibNM/NMObjects/DeviceWifi.h"
 #include "Config/MainFile.h"
-#include "Config/MainKeys.h"
 
 /* Unique SharedResource object instance key: */
 const juce::Identifier LibNM::ThreadResource::resourceKey 
@@ -18,8 +20,7 @@ GLib::ThreadResource(resourceKey, GLib::SharedContextPtr(nullptr))
         using juce::String;
         using juce::Array;
         Config::MainFile config;
-        String wifiInterface = config.getConfigValue<String>
-            (Config::MainKeys::wifiInterfaceKey);
+        String wifiInterface = config.getWifiInterface();
         if(wifiInterface.isNotEmpty())
         {
             wifiDevice = networkClient.getWifiDeviceByIface
@@ -78,4 +79,3 @@ LibNM::DeviceWifi LibNM::ThreadResource::getWifiDevice()
     }
     return wifiDevice;
 }
-

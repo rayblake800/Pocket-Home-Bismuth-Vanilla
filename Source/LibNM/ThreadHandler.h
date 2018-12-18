@@ -1,6 +1,17 @@
 #pragma once
-#include "LibNM/LibNM.h"
+/**
+ * @file  LibNM/ThreadHandler.h
+ *
+ * @brief  Provides access to the GLib event loop thread used when accessing
+ *         any LibNM::NMObject objects.
+ */
+
 #include "GLib/ThreadHandler.h"
+
+namespace LibNM { class ThreadHandler; }
+namespace LibNM { class ThreadResource; }
+namespace LibNM { class Client; }
+namespace LibNM { class DeviceWifi; }
 
 class LibNM::ThreadHandler : public GLib::ThreadHandler<ThreadResource>
 {

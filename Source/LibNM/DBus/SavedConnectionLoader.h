@@ -1,14 +1,17 @@
 #pragma once
-#include "LibNM/LibNM.h"
-#include "LibNM/NMObjects/AccessPoint.h"
-#include "LibNM/DBus/SavedConnection.h"
-#include "GLib/DBus/DBusProxy.h"
-
 /**
  * @file LibNM/SavedConnectionLoader.h
  * 
  * @brief Connects to NetworkManager to read saved network connections.
- *
+ */
+
+#include "GLib/DBus/DBusProxy.h"
+#include "LibNM/DBus/SavedConnection.h"
+
+namespace LibNM { class SavedConnectionLoader; }
+namespace LibNM { class AccessPoint; }
+
+/**
  *  SavedConnectionLoader reads all saved network connections from
  * NetworkManager over DBus, creating SavedConnection objects for each Wifi
  * connection it finds. It then caches the SavedConnections, updating and

@@ -1,4 +1,5 @@
 #include "LibNM/DBus/SavedConnectionLoader.h"
+#include "LibNM/NMObjects/AccessPoint.h"
 
 /* The NetworkManager's DBus path: */
 const constexpr char* busName = "org.freedesktop.NetworkManager";
@@ -106,7 +107,7 @@ LibNM::SavedConnectionLoader::findConnectionsForAP
 inline juce::StringArray 
 LibNM::SavedConnectionLoader::getConnectionPaths() const
 {
-    using namespace GVariantConverter;
+    using namespace VariantConverter;
     using juce::StringArray;
     GVariant* conArrayVar = callMethod(listConnectionMethod);
     if(conArrayVar != nullptr)

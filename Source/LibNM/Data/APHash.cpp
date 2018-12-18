@@ -1,6 +1,6 @@
-#include "LibNM/APData/APHash.h"
-#include "LibNM/APData/APMode.h"
-#include "LibNM/APData/SecurityType.h"
+#include "LibNM/Data/APHash.h"
+#include "LibNM/Data/APMode.h"
+#include "LibNM/Data/SecurityType.h"
 
 /*
  * Generates a Wifi access point identifier using the access point's SSID, mode, 

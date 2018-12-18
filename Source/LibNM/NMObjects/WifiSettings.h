@@ -5,7 +5,7 @@
  * @brief  Holds wireless network connection settings.
  */
 
-#include "LibNM/NMObjects/Settings.h";
+#include "LibNM/NMObjects/Settings.h"
 #include <nm-setting-wireless.h>
 #include <nm-access-point.h>
 

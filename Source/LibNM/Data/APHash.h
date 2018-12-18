@@ -1,13 +1,20 @@
 #pragma once
+/**
+ * @file  LibNM/Data/APHash.h
+ *
+ * @brief  Generates and holds a unique value to identify a Wifi connection 
+ *         point. 
+ */
+
 #include "JuceHeader.h"
-#include "LibNM/LibNM.h"
 #include <gio/gio.h>
 #include <NetworkManager.h>
 
-/**
- * @brief  Generates and holds a unique value to identify a Wifi connection 
- *         point. 
- *
+namespace LibNM { class APHash; }
+namespace LibNM { enum class APMode; }
+namespace LibNM { enum class SecurityType; }
+
+/** 
  *  Access points will share an APHash if and only if both have the same SSID,
  * access point mode, and security settings. APHash values are immutable, and
  * should be used to compare and sort access point objects.

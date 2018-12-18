@@ -25,7 +25,7 @@ public:
      *
      * @param toCopy  The SSID byte string this object will copy.
      */
-    SSID(GByteArray* toCopy);
+    SSID(const GByteArray* toCopy = nullptr);
 
     /**
      * @brief  Frees all SSID data on destruction.

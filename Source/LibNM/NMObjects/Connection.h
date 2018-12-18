@@ -1,12 +1,21 @@
 #pragma once
+/**
+ * @file  LibNM/NMObjects/Connection.h
+ * 
+ * @brief  A RAII container and C++ interface for LibNM NMConnection objects.
+ */
+
 #include "LibNM/NMObjects/Object.h"
 #include <nm-connection.h>
 
+namespace LibNM { class Connection; }
+namespace LibNM { class SSID; }
+namespace LibNM { class Settings; }
+namespace LibNM { class ConnectionSettings; }
+namespace LibNM { class WifiSettings; }
+namespace LibNM { class WifiSecuritySettings; }
+
 /**
- * @file  LibNM/Connection.h
- * 
- * @brief  A RAII container and C++ interface for LibNM NMConnection objects.
- *
  *  Connection objects represent a potential network connection tracked by the
  * NetworkManager. Connection objects hold all settings used by NetworkManager
  * when attempting to add an active connection. Connections are not guaranteed
@@ -16,7 +25,6 @@
  * connection properties. To actually activate a Connection, use the 
  * LibNM::Client object held by the NMThread.
  */
-
 class LibNM::Connection : public LibNM::Object
 {
 public:
@@ -53,17 +61,14 @@ public:
      *             the same network connection.
      */
     bool connectionMatches(const Connection& rhs) const;
-    
+
     /**
-     * @brief  Adds a new connection setting to this connection. 
+     * @brief  Adds a new set of settings to this connection, creating new
+     *         connection data if this object is null.
      *
-     * If the connection is null, this will initialize it with a new 
-     * NMConnection object.
-     * 
-     * @param setting  A valid NMSetting object. Ownership of this setting
-     *                 will be transferred to the NMConnection object.
+     * @param addedSettings  The new settings object to add.
      */
-    void addSetting(NMSetting* setting);
+    void addSettings(Settings addedSettings);
     
     /**
      * @brief  Removes one of the connection settings from this connection.
@@ -72,7 +77,7 @@ public:
      *                     matching NMSetting object is found, it will be
      *                     removed and unreferenced.
      */
-    void removeSetting(GType settingType);
+    void removeSettings(GType settingType);
     
     /**
      * @brief  Adds new wireless connection settings to this connection.  
@@ -85,7 +90,7 @@ public:
      * @param isHidden  Sets if this connection is a hidden connection.
      *                  TODO: research and support hidden connections properly.
      */
-    void addWifiSettings(const GByteArray* ssid, bool isHidden = false);
+    void addWifiSettings(const SSID ssid, bool isHidden = false);
     
     /**
      * @brief  Attempts to add WPA security settings to this connection.
@@ -114,16 +119,31 @@ public:
     bool addWEPSettings(const juce::String& psk);
     
     /**
-     * @brief  Gets one of this connection's setting objects.
-     * 
-     * @param settingType  A setting type to search for in the connection.
-     * 
-     * @return             The requested NMSetting object if one is stored with 
-     *                     this type, or nullptr if no matching setting is 
-     *                     found.
+     * @brief  Gets this connection's basic settings.
+     *
+     * @return  Generic connection settings associated with this Connection, or
+     *          a null settings object if this connection is null.
      */
-    NMSetting* getSetting(GType settingType) const;
-    
+    ConnectionSettings getConnectionSettings() const;
+
+    /**
+     * @brief  Gets this connection's wireless network settings.
+     *
+     * @return  The connection's saved wireless network properties, or a null
+     *          settings object if this connection is null or not a wireless
+     *          connection.
+     */
+    WifiSettings getWirelessSettings() const;
+
+    /**
+     * @brief  Gets this connection's wireless network security settings.
+     *
+     * @return  The connection's saved wireless security settings, or a null
+     *          settings object if this connection is null or missing security
+     *          settings.
+     */
+    WifiSecuritySettings getSecuritySettings() const;
+
     /**
      * @brief Checks the validity of this connection.
      * 
@@ -178,4 +198,16 @@ public:
      */
     void printDebugOutput() const;
 #endif
+
+private:
+    /*
+     * @brief  Gets one of this connection's setting objects.
+     *
+     * @param settingType  The LibNM setting object type.
+     *
+     * @return             The connection's NMSetting object with the given
+     *                     type, or nullptr if the connection has no setting
+     *                     with the given type.
+     */
+    NMSetting* getSetting(GType settingType) const;
 };

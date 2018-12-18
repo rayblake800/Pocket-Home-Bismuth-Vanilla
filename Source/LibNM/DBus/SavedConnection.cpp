@@ -1,4 +1,5 @@
 #include "LibNM/DBus/SavedConnection.h"
+#include "LibNM/NMObjects/Settings.h"
 #include "LibNM/ThreadHandler.h"
 #include <nm-setting-connection.h>
 #include <nm-setting-wireless.h>
@@ -99,7 +100,7 @@ juce::Time LibNM::SavedConnection::lastConnectionTime() const
         if(timestamp != nullptr)
         {
 	        lastTime = juce::Time(1000 
-                    * GVariantConverter::getValue<juce::uint64> (timestamp));
+                    * VariantConverter::getValue<juce::uint64> (timestamp));
             g_variant_unref(timestamp);
         }
     }
@@ -116,7 +117,7 @@ bool LibNM::SavedConnection::hasSavedKey() const
         return false;
     }
     using juce::String;
-    using namespace GVariantConverter;
+    using namespace VariantConverter;
     GError * secretsError = nullptr;
     GVariant* secrets = callMethod(
             getSecretsMethod,
@@ -213,7 +214,7 @@ void LibNM::SavedConnection::createNMConnection()
     threadHandler.call([this]()
     {
         using juce::String;
-        using namespace GVariantConverter;
+        using namespace VariantConverter;
         if(!settingNames.isEmpty())
         {
             settingNames.clear();
@@ -298,7 +299,8 @@ void LibNM::SavedConnection::createNMConnection()
                             g_clear_error(&secretsError);
                         }
                     }
-                    nmConnection.addSetting(setting);
+                    nmConnection.addSettings
+                        (Settings(setting, NM_TYPE_SETTING));
                     setting = nullptr;
                 }
             });
