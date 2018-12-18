@@ -18,7 +18,7 @@
  * objects are able to access their own resource locks to prevent handlers 
  * from modifying their data.
  */
-class SharedResource::ThreadResource : public Resource, public juce::Thread
+class SharedResource::ThreadResource : public Resource, protected juce::Thread
 {
 public:
     /**
@@ -35,10 +35,22 @@ public:
     virtual ~ThreadResource();
 
     /**
+     * @brief  Starts the ThreadResource's thread if it isn't already running.
+     */
+    virtual void startThreadResource();
+
+    /**
      * @brief  Performs all necessary steps to stop the thread, and waits for
      *         the thread to exit.
      */
     virtual void stopThreadResource();
+
+    /**
+     * @brief  Checks if the ThreadResource's thread is running.
+     *
+     * @return  Whether the resource's thread is currently running. 
+     */
+    bool isThreadResourceRunning() const;
 
 protected:
     /**

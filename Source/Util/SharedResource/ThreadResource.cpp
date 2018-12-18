@@ -19,6 +19,14 @@ SharedResource::ThreadResource::~ThreadResource()
 }
 
 /*
+ * Starts the ThreadResource's thread if it isn't already running.
+ */
+void SharedResource::ThreadResource::startThreadResource()
+{
+    startThread();
+}
+
+/*
  * Performs all necessary steps to stop the thread, and waits for the thread to 
  * exit.
  */
@@ -34,6 +42,14 @@ void SharedResource::ThreadResource::stopThreadResource()
                 << "\" is stopping.");
         stopThread(timeoutMilliseconds);
     }
+}
+
+/*
+ * Checks if the ThreadResource's thread is running.
+ */
+bool SharedResource::ThreadResource::isThreadResourceRunning() const
+{
+    return isThreadRunning();
 }
 
 /*
