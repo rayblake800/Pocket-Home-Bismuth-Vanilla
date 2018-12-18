@@ -8,6 +8,7 @@ OBJECTS_CONFIG := \
   $(CONFIG_PREFIX)DataKey.o \
   $(CONFIG_PREFIX)AlertWindow.o \
   $(CONFIG_PREFIX)MainResource.o \
+  $(CONFIG_PREFIX)MainFile.o \
   $(CONFIG_PREFIX)MainListener.o
 
 
@@ -34,6 +35,8 @@ $(CONFIG_PREFIX)AlertWindow.o: \
     $(CONFIG_ROOT)/Implementation/AlertWindow.cpp
 $(CONFIG_PREFIX)MainResource.o: \
     $(CONFIG_ROOT)/Implementation/MainResource.cpp
+$(CONFIG_PREFIX)MainFile.o: \
+    $(CONFIG_ROOT)/MainFile.cpp
 $(CONFIG_PREFIX)MainListener.o: \
     $(CONFIG_ROOT)/MainListener.cpp
 

@@ -19,9 +19,6 @@ namespace Config
 
         
         //####################### String value keys: ###########################
-        /* Selects the Locale used when loading displayed text. */
-        static const DataKey localeKey
-            ("locale", DataKey::stringType);
         /* Sets the HomePage background color or image. */
         static const DataKey backgroundKey
             ("background", DataKey::stringType);
@@ -48,7 +45,6 @@ namespace Config
         static const std::vector<DataKey> allKeys
         {
             wifiScanFreqKey,
-            localeKey,
             backgroundKey,
             termLaunchCommandKey,
             wifiInterfaceKey,
