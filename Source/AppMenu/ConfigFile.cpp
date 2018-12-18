@@ -6,9 +6,7 @@
 
 AppMenu::ConfigFile::ConfigFile() { }
 
-AppMenu::ConfigFile::Listener::Listener() : 
-    Config::FileResource::Listener(ConfigJSON::resourceKey, 
-            []()->Config::FileResource* { return new ConfigJSON(); }) { }
+AppMenu::ConfigFile::Listener::Listener() { } 
 
 /*
  * Gets the selected menu format.

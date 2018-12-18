@@ -7,6 +7,7 @@
  */ 
 
 #include "Config/FileHandler.h"
+#include "Config/Listener.h"
 
 namespace AppMenu { class ConfigFile; }
 namespace AppMenu { class ConfigJSON; }
@@ -120,7 +121,7 @@ public:
     void setScrollingMenuRows(const int numRows);
     
     /* Listens for changes to AppMenu::MenuFile's basic data values */
-    class Listener : public Config::FileResource::Listener
+    class Listener : public Config::Listener<ConfigJSON>
     {
     public:
         Listener();

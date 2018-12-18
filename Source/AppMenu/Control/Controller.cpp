@@ -5,7 +5,6 @@
 #include "AppMenu/Components/Editors/NewDesktopAppEditor.h"
 #include "AppMenu/Data/JSON/MenuFile.h"
 #include "Config/MainFile.h"
-#include "Config/MainKeys.h"
 #include "Utils.h"
 
 /* Localized object class key: */
@@ -242,8 +241,7 @@ void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
     if(toLaunch.getLaunchedInTerm())
     {
         Config::MainFile mainConfig;
-        String termPrefix = mainConfig.getConfigValue<String>
-            (Config::MainKeys::termLaunchCommandKey);
+        String termPrefix = mainConfig.getTermLaunchPrefix();
         command = termPrefix + " " + command;
     }
     setLoadingState(true);

@@ -13,6 +13,8 @@
 #include "Config/FileHandler.h"
 #include "AppMenu/AppMenu.h"
 
+namespace AppMenu { class ConfigJSON; }
+
 /**
  *  ConfigJSON is a SharedResource class, used to create the single object
  * instance that accesses the menuOptions.json file. ConfigJSON should only be 
