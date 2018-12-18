@@ -26,6 +26,7 @@ OBJECTS_GLIB := \
   $(GLIB_PREFIX)Object.o \
   $(GLIB_PREFIX)SignalHandler.o \
   $(GLIB_PREFIX)ThreadResource.o \
+  $(GLIB_PREFIX)ThreadHandler.o \
   $(GLIB_PREFIX)EventLoop.o \
   $(GLIB_PREFIX)ContextCaller.o \
   $(OBJECTS_GLIB_DBUS) \
@@ -57,6 +58,8 @@ $(GLIB_PREFIX)SignalHandler.o : \
     $(GLIB_ROOT)/SignalHandler.cpp
 $(GLIB_PREFIX)ThreadResource.o : \
     $(GLIB_ROOT)/ThreadResource.cpp
+$(GLIB_PREFIX)ThreadHandler.o : \
+    $(GLIB_ROOT)/ThreadHandler.cpp
 $(GLIB_PREFIX)EventLoop.o : \
     $(GLIB_ROOT)/EventLoop.cpp
 $(GLIB_PREFIX)ContextCaller.o : \

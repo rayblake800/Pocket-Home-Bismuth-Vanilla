@@ -1,9 +1,10 @@
+#define WIFI_IMPLEMENTATION
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/AccessPoint/APData.h"
 #include "LibNM/NMObjects/AccessPoint.h"
-#include "LibNM/APData/APHash.h"
-#include "LibNM/APData/APMode.h"
-#include "LibNM/APData/SecurityType.h"
+#include "LibNM/Data/APHash.h"
+#include "LibNM/Data/APMode.h"
+#include "LibNM/Data/SecurityType.h"
 #include "LibNM/ThreadHandler.h"
 
 

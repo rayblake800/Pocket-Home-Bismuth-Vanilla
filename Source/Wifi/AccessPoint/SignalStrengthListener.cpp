@@ -1,3 +1,4 @@
+#define WIFI_IMPLEMENTATION
 #include "Wifi/AccessPoint/SignalStrengthListener.h"
 #include "Wifi/AccessPointList/APList.h"
 

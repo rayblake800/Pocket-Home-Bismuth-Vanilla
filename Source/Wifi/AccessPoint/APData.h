@@ -9,10 +9,11 @@
  * @brief  Holds data describing a Wifi access point.
  */
 
-#include "LibNM/APData/APHash.h"
+#include "LibNM/Data/APHash.h"
 #include "JuceHeader.h"
 
 namespace Wifi { class APData; }
+namespace LibNM { class AccessPoint; }
 class Wifi::APData : public juce::ReferenceCountedObject
 {
 public:
