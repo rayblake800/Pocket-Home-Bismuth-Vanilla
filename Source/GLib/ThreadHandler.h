@@ -19,11 +19,10 @@ public:
      *         resource on construction.
      */
     ThreadHandler() :
-    SharedResource::Handler<GLibThreadType>(GLibThreadType::resourceKey,
-        []()
-        {
-            return new GLibThreadType();
-        }) { }
+    SharedResource::Handler<GLibThreadType>(GLibThreadType::resourceKey, []()
+    {
+        return new GLibThreadType();
+    }) { }
 
     virtual ~ThreadHandler() { }
 

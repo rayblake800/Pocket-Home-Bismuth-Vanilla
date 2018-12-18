@@ -2,6 +2,8 @@
 #include "gtest_object.h"
 #include "GLib/Object.h"
 #include "GLib/SignalHandler.h"
+#include <map>
+
 /**
  * @file GPPTestObject.h
  *
