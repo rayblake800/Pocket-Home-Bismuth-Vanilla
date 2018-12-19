@@ -31,7 +31,7 @@ public:
      * @return  The client object if called within the event loop, or a null
      *          Client if called outside of the event loop.
      */
-    Client getClient();
+    Client getClient() const;
 
     /**
      * @brief  Gets the shared DeviceWifi object used to control the
@@ -41,5 +41,5 @@ public:
      *          null DeviceWifi if called outside of the event loop, or if no
      *          managed wifi device was found.
      */
-    DeviceWifi getWifiDevice();
+    DeviceWifi getWifiDevice() const;
 };

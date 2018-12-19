@@ -15,7 +15,7 @@ GLib::ThreadHandler(ThreadResource::resourceKey,
  * Gets the shared NetworkManager client object if called within the LibNM event
  * loop.
  */
-LibNM::Client LibNM::ThreadHandler::getClient()
+LibNM::Client LibNM::ThreadHandler::getClient() const
 {
     SharedResource::LockedPtr<ThreadResource> nmThread
         = getReadLockedResource<ThreadResource>();
@@ -26,7 +26,7 @@ LibNM::Client LibNM::ThreadHandler::getClient()
  * Gets the shared DeviceWifi object used to control the LibNM-managed Wifi 
  * device if called within the LibNM event loop.
  */
-LibNM::DeviceWifi LibNM::ThreadHandler::getWifiDevice()
+LibNM::DeviceWifi LibNM::ThreadHandler::getWifiDevice() const
 {
     SharedResource::LockedPtr<ThreadResource> nmThread
         = getReadLockedResource<ThreadResource>();
