@@ -32,8 +32,8 @@ public:
      *
      * @param toTrack  The access point this Listener will track.
      */
-    SignalStrengthListener(const AccessPoint toTrack) { }
-
+    SignalStrengthListener(const AccessPoint toTrack);
+    
     /**
      * @brief  Sets a single AccessPoint this Listener will track.
      *
@@ -75,8 +75,11 @@ private:
         final override;
     
     /* If non-null, selects a specific access point this listener will track. */
-    juce::Atomic<AccessPoint> trackedAP;
+    AccessPoint trackedAP;
 
     /* If false, all signal strength updates will be ignored. */
-    juce::Atomic<bool> handleUpdates;
+    bool handleUpdates;
+
+    /* Prevent concurrent access when updating or changing update options. */
+    const juce::CriticalSection updateGuard;
 };

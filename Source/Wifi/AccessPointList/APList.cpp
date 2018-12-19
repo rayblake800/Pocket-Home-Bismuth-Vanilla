@@ -7,6 +7,7 @@
 #include "LibNM/NMObjects/AccessPoint.h"
 #include "LibNM/NMObjects/DeviceWifi.h"
 #include "LibNM/ThreadHandler.h"
+#include <map>
 
 /* SharedResource object instance key: */
 const juce::Identifier Wifi::APList::resourceKey = "Wifi::APList";

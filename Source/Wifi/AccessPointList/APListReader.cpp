@@ -1,7 +1,8 @@
+#define WIFI_IMPLEMENTATION
 #include "Wifi/AccessPointList/APListReader.h"
 #include "Wifi/AccessPointList/APList.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
-#include "LibNM/APData/APHash.h"
+#include "LibNM/Data/APHash.h"
 
 Wifi::APListReader::APListReader() { }
 

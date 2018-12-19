@@ -1,3 +1,4 @@
+#define WIFI_IMPLEMENTATION
 #include "Wifi/AccessPointList/VisibleAPListener.h"
 #include "Wifi/AccessPointList/APList.h"
 #include "Wifi/AccessPoint/AccessPoint.h"

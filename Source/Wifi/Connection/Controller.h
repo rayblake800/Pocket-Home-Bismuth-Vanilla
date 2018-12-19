@@ -2,23 +2,24 @@
 /**
  * @file  Wifi/Connection/Controller.h
  *
- * @brief  Views, updates, adds, and removes both current and saved Wifi 
- *         connections.
+ * @brief  Updates, adds, and removes both current and saved Wifi connections.
  */
 
 #include "LibNM/NMObjects/Client.h"
 #include "SharedResource/Resource.h"
 #include "JuceHeader.h"
 
-namespace Wifi { class ConnectionResource; }
 namespace Wifi { class AccessPoint; }
+namespace Wifi { namespace Connection { class Controller; } }
 
-class Wifi::ConnectionResource : public LibNM::Client::ConnectionHandler
+namespace WifiConnect = Wifi::Connection;
+
+class WifiConnect::Controller : public LibNM::Client::ConnectionHandler
 {
 public:
-    ConnectionResource() { }
+    Controller() { }
 
-    virtual ~ConnectionResource() { }
+    virtual ~Controller() { }
 
     /**
      * @brief  Attempts to open a Wifi network connection using a nearby access
@@ -45,54 +46,6 @@ public:
      * @param toForget  The Wifi access point to remove from saved connections. 
      */
     void forgetConnection(const AccessPoint toForget) const;
-
-    /**
-     * @brief  Checks if Wifi is currently connected.
-     *
-     * @return  Whether an active Wifi internet connection exists.
-     */
-    bool isWifiConnected() const;
-
-    /**
-     * @brief  Checks if Wifi is currently connecting.
-     *
-     * @return   Whether an active Wifi connection is being established.
-     */
-    bool isConnecting() const;
-
-    /**
-     * @brief  Gets the access point used by the current active or activating
-     *         connection.
-     *
-     * @return  The access point in use, or a null AccessPoint if Wifi is not
-     *          connected or connecting.
-     */
-    AccessPoint getActiveAP() const;
-
-    /**
-     * @brief  Checks if a saved network connection exists for a particular 
-     *         access point.
-     *
-     * @param toCheck  A non-null AccessPoint representing a visible Wifi access
-     *                 point.
-     *
-     * @return         Whether NetworkManager has a saved network connection
-     *                 that is compatible with the given access point.
-     */
-    bool hasSavedConnection(const AccessPoint& toCheck);
-
-    /**
-     * @brief  Finds the last time the system was connected with a given access
-     *         point.
-     *
-     * @param toCheck  An access point that is compatible with a saved Wifi
-     *                 connection.
-     *
-     * @return         The last time a connection compatible with access point
-     *                 toCheck was active, or the Unix epoch if no matching 
-     *                 connection was found.
-     */
-    juce::Time lastConnectionTime(const AccessPoint& toCheck) const;
 
 private:
     /**

@@ -10,13 +10,21 @@ Wifi::SignalStrengthListener::SignalStrengthListener() :
     trackedAP(AccessPoint()), handleUpdates(true) { }
 
 /*
+ * Creates a SignalStrengthListener tracking a specific access point's signal 
+ * strength.
+ */
+Wifi::SignalStrengthListener::SignalStrengthListener
+(const AccessPoint toTrack) : trackedAP(toTrack), handleUpdates(true) { }
+
+/*
  * Sets a single AccessPoint this Listener will track.
  */
 void Wifi::SignalStrengthListener::setTrackedAccessPoint
 (const AccessPoint toTrack)
 {
-    trackedAP.set(toTrack);
-    handleUpdates.set(true);
+    const juce::ScopedLock updateLock(updateGuard);
+    trackedAP = toTrack;
+    handleUpdates = true;
 }
 
 /*
@@ -25,8 +33,9 @@ void Wifi::SignalStrengthListener::setTrackedAccessPoint
  */
 void Wifi::SignalStrengthListener::trackAllAccessPoints()
 {
-    trackedAP.set(AccessPoint());
-    handleUpdates.set(true);
+    const juce::ScopedLock updateLock(updateGuard);
+    trackedAP = AccessPoint();
+    handleUpdates = true;
 }
 
 /*
@@ -34,9 +43,9 @@ void Wifi::SignalStrengthListener::trackAllAccessPoints()
  */
 void Wifi::SignalStrengthListener::ignoreAllUpdates()
 {
-    trackedAP.set(AccessPoint());
-    handleUpdates.set(false);
-
+    const juce::ScopedLock updateLock(updateGuard);
+    trackedAP = AccessPoint();
+    handleUpdates = false;
 }
 
 /*
@@ -47,10 +56,10 @@ void Wifi::SignalStrengthListener::ignoreAllUpdates()
 void Wifi::SignalStrengthListener::signalStrengthChanged
 (const AccessPoint updatedAP)
 {
-    if(handleUpdates.get())
+    const juce::ScopedLock updateLock(updateGuard);
+    if(handleUpdates)
     {
-        AccessPoint tracked = trackedAP.get();
-        if(tracked.isNull() || tracked == updatedAP)
+        if(trackedAP.isNull() || trackedAP == updatedAP)
         {
             signalStrengthUpdate(updatedAP);
         }

@@ -1,8 +1,10 @@
+#define WIFI_IMPLEMENTATION
 #include "Wifi/Connection/RecordResource.h"
 #include "Wifi/Connection/Event.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/AccessPointList/APListReader.h"
 #include "Wifi/AccessPointList/NMAPListReader.h"
+#include "LibNM/NMObjects/AccessPoint.h"
 #include "LibNM/ThreadHandler.h"
 
 namespace WifiConnect = Wifi::Connection;
@@ -75,6 +77,23 @@ Wifi::AccessPoint WifiConnect::RecordResource::getActiveAP() const
 }
 
 /*
+ * Gets all saved connections compatible with a particular AccessPoint object.
+ */
+juce::Array<LibNM::SavedConnection> 
+WifiConnect::RecordResource::getMatchingConnections
+(const Wifi::AccessPoint toMatch) const
+{
+    NMAPListReader nmList;
+    LibNM::AccessPoint nmAccessPoint 
+            = nmList.getStrongestNMAccessPoint(toMatch);
+    if(nmAccessPoint.isNull())
+    {
+        return juce::Array<LibNM::SavedConnection>();
+    }
+    return savedConnections.findConnectionsForAP(nmAccessPoint);
+}
+
+/*
  * Checks if NetworkManager has a saved connection that is compatible with an 
  * access point.
  */
@@ -85,23 +104,40 @@ bool WifiConnect::RecordResource::hasSavedConnection
     LibNM::ThreadHandler nmThread;
     nmThread.call([this, &toCheck, &matchFound]()
     {
-        NMAPListReader nmList;
-        LibNM::AccessPoint nmAccessPoint 
-                = nmList.getStrongestNMAccessPoint(toCheck);
-        if(nmAccessPoint.isNull())
-        {
-            return;
-        }
-        matchFound = !savedConnections.findConnectionsForAP(nmAccessPoint)
-                        .isEmpty();
+        matchFound = !getMatchingConnections(toCheck).isEmpty();
     });
     return matchFound;
 }
 
 /*
+ * Finds the last time the system was fully connected to a particular wifi 
+ * access point's connection.
+ */
+juce::Time WifiConnect::RecordResource::lastConnectionTime
+(const AccessPoint connectionAP) const
+{
+    juce::Time connectionTime;
+    LibNM::ThreadHandler nmThread;
+    nmThread.call([this, &connectionAP, &connectionTime]()
+    {
+        juce::Array<LibNM::SavedConnection> matchingConnections
+                = getMatchingConnections(connectionAP);
+        for(const LibNM::SavedConnection& connection : matchingConnections)
+        {
+            juce::Time timestamp = connection.lastConnectionTime();
+            if(timestamp.toMilliseconds() > connectionTime.toMilliseconds())
+            {
+                connectionTime = timestamp;
+            }
+        }
+    });
+    return connectionTime;
+}
+
+/*
  * Adds a new event to the list of saved events.
  */
-void WifiConnect::RecordResource::addConnectionEvent(const Event newEvent)
+void WifiConnect::RecordResource::addEvent(const Event newEvent)
 {
     if(!newEvent.isNull())
     {
@@ -170,16 +206,16 @@ WifiConnect::Event WifiConnect::RecordResource::getLastEvent
 {
     if(eventAP.isNull())
     {
-        return ConnectionEvent();
+        return Event();
     }
-    for(ConnectionEvent& event : connectionEvents)
+    for(Event& event : connectionEvents)
     {
         if(event.getEventAP() == eventAP)
         {
             return event;
         }
     }
-    return ConnectionEvent();
+    return Event();
 }
 
 /*
@@ -190,16 +226,16 @@ WifiConnect::Event WifiConnect::RecordResource::getLastEvent
 {
     if(eventType == EventType::invalid)
     {
-        return ConnectionEvent();
+        return Event();
     }
-    for(ConnectionEvent& event : connectionEvents)
+    for(Event& event : connectionEvents)
     {
         if(event.getEventType() == eventType)
         {
             return event;
         }
     }
-    return ConnectionEvent();
+    return Event();
 }
 
 /*
@@ -211,14 +247,14 @@ WifiConnect::Event WifiConnect::RecordResource::getLastEvent
 {
     if(eventAP.isNull() || eventType == EventType::invalid)
     {
-        return ConnectionEvent();
+        return Event();
     }
-    for(ConnectionEvent& event : connectionEvents)
+    for(Event& event : connectionEvents)
     {
         if(event.getEventAP() == eventAP && event.getEventType() == eventType)
         {
             return event;
         }
     }
-    return ConnectionEvent();
+    return Event();
 }

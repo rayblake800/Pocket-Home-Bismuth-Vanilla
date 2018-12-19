@@ -5,11 +5,11 @@
  * @brief  Holds shared data describing a wifi access point.
  */
 
+#include "Wifi/AccessPoint/APData.h"
 #include "Util/Nullable.h"
 #include "JuceHeader.h"
 
 namespace Wifi { class AccessPoint; }
-namespace Wifi { class APData; }
 namespace LibNM { class AccessPoint; }
 namespace LibNM { class Connection; }
 namespace LibNM { class APHash; }
