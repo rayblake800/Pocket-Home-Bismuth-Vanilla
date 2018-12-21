@@ -170,7 +170,7 @@ public:
          * 
          * @param source  A NMAccessPoint accessed as a GObject pointer.
          */
-        virtual void connectAllSignals(GObject* source) override;
+        virtual void connectAllSignals(GObject* source) final override;
         
         /**
          * @brief  Signals that the access point's signal strength has been 
