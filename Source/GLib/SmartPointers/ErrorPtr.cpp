@@ -3,8 +3,13 @@
 /*
  * Creates an error pointer, optionally setting a custom error handling method.
  */
- GLib::ErrorPtr::ErrorPtr(std::function<void(GError*)> errorHandler) :
+GLib::ErrorPtr::ErrorPtr(std::function<void(GError*)> errorHandler) :
      errorHandler(errorHandler) { }
+
+/*
+ * Creates an error pointer to manage an existing error value.
+ */
+GLib::ErrorPtr::ErrorPtr(GError* error) : error(error) { }
 
 /*
  * Handles and frees the stored error structure if it is non-null.

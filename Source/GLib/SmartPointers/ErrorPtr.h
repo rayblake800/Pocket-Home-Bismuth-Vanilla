@@ -39,6 +39,14 @@ namespace GLib
                 });
 
         /**
+         * @brief  Creates an error pointer to manage an existing error value.
+         *
+         * @param error  A GError value that will be freed (if non-null) when
+         *               the ErrorPtr is destroyed.
+         */
+        ErrorPtr(GError* error);
+
+        /**
          * @brief  Handles and frees the stored error structure if it is 
          *         non-null.
          */
