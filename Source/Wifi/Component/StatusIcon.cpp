@@ -1,94 +1,86 @@
-#include "Utils.h"
-#include "WifiIcon.h"
+#define WIFI_IMPLEMENTATION
+#include "Wifi/Component/StatusIcon.h"
 #include "ComponentConfigKeys.h"
+#include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi/Connection/RecordResource.h"
+#include "Wifi/Device/DeviceViewer.h"
 
-/* Timer frequency in milliseconds. */
-static const constexpr int frequency = 2000;
-
-WifiIcon::WifiIcon() :
-WindowFocusedTimer("WifiIcon"),
+Wifi::StatusIcon::StatusIcon() :
 ConfigurableImageComponent(ComponentConfigKeys::wifiIconKey)
 {
 #    if JUCE_DEBUG
-    setName("WifiIcon");
+    setName("Wifi::StatusIcon");
 #    endif
-    startTimer(100);
+    const Connection::RecordResource connectionRecords;
+    if(connectionRecords.isConnected())
+    {
+        AccessPoint connectedAP = connectionRecords.getActiveAP();
+        setTrackedAccessPoint(connectedAP);
+        signalStrengthUpdate(connectedAP);
+        return;
+    }
+
+    const DeviceViewer deviceViewer;
+    setIcon(deviceViewer.wifiDeviceEnabled() ? 
+            APIcon::wifiStrength0 : APIcon::wifiOff);
 }
 
 /*
- * Sets the timer to go off after a very short delay so that the icon will 
- * update to match the new connection state.
+ * Sets the displayed WiFi connection icon.
  */
-void WifiIcon::wifiStateChanged(const WifiState state)
+void Wifi::StatusIcon::setIcon(const APIcon selectedIcon)
 {
-    startTimer(100);
+    setImageAssetIndex((int) selectedIcon);
+}
+
+
+/*
+ * Updates the selected icon when the active connection's signal strength 
+ * changes.
+ */
+void Wifi::StatusIcon::signalStrengthUpdate(const AccessPoint updatedAP) 
+{
+    const int minStrengthIdx = (int) APIcon::wifiStrength0;
+    const int maxStrengthIdx = (int) APIcon::wifiStrength3;
+    const int range = maxStrengthIdx - minStrengthIdx;
+    const int strengthLevel = updatedAP.getSignalStrength() * range / 100;
+    setImageAssetIndex(minStrengthIdx + strengthLevel);
 }
 
 /*
- * Sets the WiFi connection status image.
+ * Changes the tracked AccessPoint and selected status icon when a new Wifi 
+ * connection is activated.
  */
-void WifiIcon::setStatus(const WifiIconImage wifiState)
+void Wifi::StatusIcon::connected(const AccessPoint connectedAP)
 {
-    setImageAssetIndex((int) wifiState);
+    setTrackedAccessPoint(connectedAP);
+    signalStrengthUpdate(connectedAP);
 }
 
 /*
- * Enables or disables the WiFi checking timer based on component visibility.
+ * Stops tracking signal strength changes and updates the status icon when the 
+ * Wifi connection is lost.
  */
-void WifiIcon::visibilityChanged()
+void Wifi::StatusIcon::disconnected(const AccessPoint disconnectedAP)
 {
-    if (isVisible())
-    {
-        if (!isTimerRunning())
-        {
-            startTimer(10);
-        }
-    }
-    else
-    {
-        stopTimer();
-    }
+    ignoreAllUpdates();
+    setIcon(APIcon::wifiStrength0);
 }
 
 /*
- * Checks the current WiFi connection state, and updates the WiFi icon.
+ * Updates the selected icon when Wifi is turned on.
  */
-void WifiIcon::timerCallback()
+void Wifi::StatusIcon::wirelessEnabled()
 {
-    WifiStateManager wifiManager;
-    switch (wifiManager.getWifiState())
-    {
-            //wifi disabled
-        case WifiState::missingNetworkDevice:
-        case WifiState::disabled:
-        case WifiState::turningOn:
-            stopTimer();
-            setStatus(wifiOff);
-            return;
+    setIcon(APIcon::wifiStrength0);
+}
 
-            //wifi disconnected
-        case WifiState::enabled:
-        case WifiState::turningOff:
-        case WifiState::connecting:
-            stopTimer();
-            setStatus(wifiStrength0);
-            return;
-    }
-    //wifi connected
-    WifiAccessPoint accessPoint = wifiManager.getActiveAP();
-    WifiIconImage wifiState = wifiOff;
-    if (!accessPoint.isNull())
-    {
-        // 0 to 100
-        float sigStrength =
-                median<float>(0, accessPoint.getSignalStrength(), 99);
-        wifiState = (WifiIconImage) (2 + (int) (sigStrength * 3 / 100));
-    }
-    else
-    {
-        // wifi off
-        wifiState = wifiStrength0;
-    }    
-    setStatus(wifiState);
-    startTimer(frequency);
+/*
+ * Updates the selected icon and stops tracking signal strength when Wifi is 
+ * turned off.
+ */
+void Wifi::StatusIcon::wirelessDisabled()
+{
+    ignoreAllUpdates();
+    setIcon(APIcon::wifiOff);
 }

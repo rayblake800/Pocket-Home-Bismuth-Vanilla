@@ -1,189 +1,174 @@
-#include "PocketHomeApplication.h"
-#include "WifiSettingsComponent.h"
-
+#define WIFI_IMPLEMENTATION
+#include "Wifi/Component/ControlWidget.h"
+#include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi/Device/DeviceViewer.h"
+#include "Wifi/Device/Controller.h"
+#include "Wifi/Connection/RecordReader.h"
+#include "Wifi/Connection/Event.h"
 
 /* Localized object class key: */
-static const juce::Identifier localeClassKey = "WifiSettingsComponent";
+static const juce::Identifier localeClassKey = "Wifi::ControlWidget";
 
 /* Localized text keys: */
 static const juce::Identifier wifiNotFoundTextKey      = "wifiNotFound";
 static const juce::Identifier wifiDisabledTextKey      = "wifiDisabled";
-static const juce::Identifier turningOnTextKey         = "turningOn";
 static const juce::Identifier notConnectedTextKey      = "notConnected";
-static const juce::Identifier turningOffTextKey        = "turningOff";
 static const juce::Identifier connectingAPTextKey      = "connectingAP";
-static const juce::Identifier connectingUnknownTextKey = "connectingUnknown";   
 static const juce::Identifier missingPSKTextKey        = "missingPSK";
 static const juce::Identifier disconnectingTextKey     = "disconnecting";
     
-WifiSettingsComponent::WifiSettingsComponent
-(std::function<void() > openWifiPage) :
-ConnectionSettingsComponent(openWifiPage, "wifi"),
+Wifi::ControlWidget::ControlWidget(std::function<void() > openWifiPage) :
+ConnectionSettingsComponent(openWifiPage, localeClassKey.toString()),
 Locale::TextUser(localeClassKey)
 {
-#    if JUCE_DEBUG
-    setName("WifiSettingsComponent");
-#    endif
     refresh();
 }
 
 /*
  * Checks if wifi is currently turned on.
  */
-bool WifiSettingsComponent::connectionEnabled()
+bool Wifi::ControlWidget::connectionEnabled()
 {
-    WifiStateManager wifiManager;
-    switch (wifiManager.getWifiState())
-    {
-        case WifiState::turningOn:
-        case WifiState::enabled:
-        case WifiState::connecting:
-        case WifiState::missingPassword:
-        case WifiState::connected:
-        case WifiState::disconnecting:
-            return true;
-        default:
-            return false;
-    }
-    return false;
+    const DeviceViewer wifiDevice;
+    return wifiDevice.wifiDeviceEnabled();
 }
 
 /*
  * Determines if the loading spinner should be shown.
  */
-bool WifiSettingsComponent::shouldShowSpinner() 
+bool Wifi::ControlWidget::shouldShowSpinner() 
 {
-    WifiStateManager wifiManager;
-    switch (wifiManager.getWifiState())
-    {
-        case WifiState::turningOn:
-        case WifiState::turningOff:
-        case WifiState::connecting:
-        case WifiState::disconnecting:
-        case WifiState::missingPassword:
-            return true;
-        default:
-            return false;
-    }
-    return false;
+    const Connection::RecordReader connectionRecords;
+    const DeviceViewer deviceViewer; 
+    return connectionRecords.isConnecting()
+            && !deviceViewer.isDeviceStateChanging();
 }
 
 /*
  * Determines if the connection switch should be enabled.
  */
-bool WifiSettingsComponent::allowConnectionToggle()
+bool Wifi::ControlWidget::allowConnectionToggle()
 {
-    WifiStateManager wifiManager;
-    switch (wifiManager.getWifiState())
-    {
-        case WifiState::turningOn:
-        case WifiState::turningOff:
-            return false;
-        default:
-            return true;
-    }
-    return true;
+    const DeviceViewer deviceViewer;
+    return deviceViewer.wifiDeviceExists() 
+        && !deviceViewer.isDeviceStateChanging();
 }
 
 /*
  * Determines if the connection page should be accessible.
  */
-bool WifiSettingsComponent::connectionPageAvailable() 
+bool Wifi::ControlWidget::connectionPageAvailable() 
 {
-    WifiStateManager wifiManager;
-    switch (wifiManager.getWifiState())
-    {
-        case WifiState::turningOn:
-        case WifiState::turningOff:
-        case WifiState::missingNetworkDevice:
-        case WifiState::disabled:
-            return false;
-        default:
-            return true;
-    }
-    return true;
+    const DeviceViewer deviceViewer;
+    const Connection::RecordReader connectionRecords;
+    return deviceViewer.wifiDeviceEnabled()
+        && !deviceViewer.isDeviceStateChanging()
+        && !connectionRecords.isConnecting();
 }
 
 
 /*
  * Gets the wifi icon path.
  */
-juce::String WifiSettingsComponent::getIconAsset()
+juce::String Wifi::ControlWidget::getIconAsset()
 {
+    //TODO: define in JSON file
     return "wifiIcon.svg";
 }
 
 /**
  * Enable or disable the wifi radio.
  */
-void WifiSettingsComponent::enabledStateChanged(bool enabled)
+void Wifi::ControlWidget::enabledStateChanged(bool enabled)
 {
-    WifiStateManager wifiManager;
-    if (enabled)
-    {
-        wifiManager.enableWifi();
-    }
-    else
-    {
-        wifiManager.disableWifi();
-    }
+    Controller deviceController;
+    deviceController.setEnabled(enabled);
 }
 
 /**
  * Sets the wifi button text based on the current wifi state.
  */
-juce::String WifiSettingsComponent::updateButtonText()
+juce::String Wifi::ControlWidget::updateButtonText()
 {
-    using namespace juce;
-    WifiStateManager wifiManager;
-    switch (wifiManager.getWifiState())
+    const DeviceViewer deviceViewer;
+    if(!deviceViewer.wifiDeviceExists())
     {
-        case WifiState::missingNetworkDevice:
-            return localeText(wifiNotFoundTextKey);
-        case WifiState::disabled:
-            return localeText(wifiDisabledTextKey);
-        case WifiState::turningOn:
-            return localeText(turningOnTextKey);
-        case WifiState::enabled:
-            return localeText(notConnectedTextKey);
-        case WifiState::turningOff:
-            return localeText(turningOffTextKey);
-        case WifiState::connecting:
-        {
-            WifiAccessPoint ap = wifiManager.getActiveAP();
-            if (ap.isNull())
-            {
-                DBG("WifiSettingsComponent::" << __func__ << ": wifi is "
-                        << "connecting, but can't get the connecting AP.");
-                return localeText(connectingUnknownTextKey);
-            }
-            return String(localeText(connectingAPTextKey)) + ap.getSSID();
-        }
-        case WifiState::missingPassword:
-            return localeText(missingPSKTextKey);
-        case WifiState::connected:
-        {
-            WifiAccessPoint ap = wifiManager.getActiveAP();
-            if(ap.isNull())
-            {
-                return "Error: connected AP missing!";
-            }
-            return ap.getSSID();
-        }
-        case WifiState::disconnecting:
-            return localeText(disconnectingTextKey);
-        default:
-            return "Unknown State";
+        return localeText(wifiNotFoundTextKey);
     }
+    if(!deviceViewer.wifiDeviceEnabled())
+    {
+        return localeText(wifiDisabledTextKey);
+    }
+
+    const Connection::RecordReader connectionRecords;
+    if(connectionRecords.getLastEvent().getEventType()
+            == Connection::EventType::connectionAuthFailed)
+    {
+        return localeText(missingPSKTextKey);
+    }
+
+    const bool isConnected = connectionRecords.isConnected();
+    const bool isConnecting = isConnected ? 
+        false : connectionRecords.isConnecting();
+    if(isConnected || isConnecting)
+    {
+        juce::String apName 
+                = connectionRecords.getActiveAP().getSSID().toString();
+        jassert(apName.isNotEmpty());
+        return isConnected ? apName :
+            (localeText(connectingAPTextKey) + apName);
+    }
+
+    return localeText(notConnectedTextKey);
 }
 
-/**
- * Use wifi status updates to keep the component updated.
+/*
+ * Updates the widget whenever wireless networking is enabled.
  */
-void WifiSettingsComponent::wifiStateChanged(const WifiState state)
+void Wifi::ControlWidget::wirelessEnabled()
 {
-    using namespace juce;
-    DBG("Wifi state change");
     refresh();
 }
 
+/*
+ * Updates the widget whenever wireless networking is disabled.
+ */
+void Wifi::ControlWidget::wirelessDisabled()
+{
+    refresh();
+}
+
+/*
+ * Shows the loading spinner and updates connection text when a new connection 
+ * starts.
+ */
+void Wifi::ControlWidget::startedConnecting(const AccessPoint connectingAP)
+{
+    refresh();
+}
+
+/*
+ * Signals that a new Wifi connection was opened successfully.
+ */
+void Wifi::ControlWidget::connected(const AccessPoint connectedAP)
+{
+    refresh();
+}
+
+/*
+ * Updates the widget when a connection disconnects, stopping the loading 
+ * spinner and updating the connection text.
+ */
+void Wifi::ControlWidget::disconnected(const AccessPoint disconnectedAP)
+{
+    refresh();
+}
+
+/*
+ * Updates the widget when a connection fails, stopping the loading spinner and
+ * updating the connection text.
+ */
+void Wifi::ControlWidget::connectionAuthFailed(const AccessPoint connectingAP)
+{
+    refresh();
+}

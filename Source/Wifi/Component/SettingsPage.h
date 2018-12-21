@@ -1,44 +1,45 @@
 #pragma once
-#include "WifiStateManager.h"
-#include "Locale/TextUser.h"
-#include "Spinner.h"
-#include "ScalingLabel.h"
-#include "SwitchComponent.h"
-#include "DrawableImageComponent.h"
-#include "DrawableImageButton.h"
-#include "PageComponent.h"
-#include "PageStackComponent.h"
-#include "FocusingListPage.h"
-#include "WindowFocusedTimer.h"
-
 /**
- * @file WifiSettingsPage.h
+ * @file Wifi/Component/SettingsPage.h
  * 
  * @brief Shows information on all visible Wifi access points, and provides 
  *        controls for connecting to or disconnecting from those access points.
  */
 
+#include "FocusingListPage.h"
+#include "Wifi/AccessPoint/SignalStrengthListener.h"
+#include "Wifi/AccessPointList/VisibleAPListener.h"
+#include "Wifi/Connection/Listener.h"
+#include "Locale/TextUser.h"
+#include "Spinner.h"
+#include "ScalingLabel.h"
+#include "DrawableImageComponent.h"
 
-class WifiSettingsPage : public FocusingListPage,
-        public WifiStateManager::Listener, public juce::TextEditor::Listener,
-        public Locale::TextUser, private WindowFocusedTimer
+namespace Wifi { class SettingsPage; }
+
+class Wifi::SettingsPage : public FocusingListPage,
+        public Wifi::VisibleAPListener,
+        public Wifi::SignalStrengthListener,
+        public Wifi::Connection::Listener,
+        public juce::TextEditor::Listener,
+        public Locale::TextUser
 {
 public:
-    WifiSettingsPage();
+    SettingsPage();
 
-    virtual ~WifiSettingsPage() { }
+    virtual ~SettingsPage() { }
     
 protected:
     /**
-     * Sets the number of items in the list to match the number of visible
-     * Wifi access points.
+     * @brief  Sets the number of items in the list to match the number of 
+     *         visible Wifi access points.
      * 
      * @return  The number of WifiAccessPoint objects available. 
      */
-    virtual unsigned int getListSize() override;
+    virtual unsigned int getListSize() final override;
     
     /**
-     * Creates or updates the layout of one access point on the list.
+     * @brief  Creates or updates the layout of one access point on the list.
      * 
      * @param layout  A layout object to update.  Components will be added or
      *                updated in this layout to match a particular Wifi access
@@ -49,106 +50,138 @@ protected:
      *                list of access points.
      */
     virtual void updateListItemLayout(LayoutManager::Layout& layout,
-            const unsigned int index) override;
+            const unsigned int index) final override;
     
     /**
-     * Creates or updates the access point control/information panel that
-     * appears when an access point in the list is selected.
+     * @brief  Creates or updates the access point control/information panel 
+     *         that appears when an access point in the list is selected.
      * 
      * @param layout   The control layout object, to be updated to match the 
      *                 current selected access point.
      */
     virtual void updateSelectedItemLayout(LayoutManager::Layout& layout) 
-    override;
+            final override;
 
 private:
     /**
-     * @brief  Periodically triggers a new scan for Wifi AP updates.
-     */
-    void timerCallback() override;
-
-    /**
-     * Reloads the list of wifi access points within range of the wifi device,
-     * and updates the access point list.
+     * @brief  Reloads the list of wifi access points within range of the wifi 
+     *         device, and updates the access point list.
      */
     void loadAccessPoints();
     
     /**
-     * Removes any lost access points, sorts the access point list, and
-     * refreshes the access point list component.
+     * @brief  Removes any lost access points, sorts the access point list, and
+     *         refreshes the access point list component.
      */
     void updateAPList();
 
     /**
-     * Attempts to connect to a Wifi access point.  This will close any
-     * connections to other access points.
+     * @brief  Attempts to connect to a Wifi access point. This will close any
+     *         connections to other access points.
      *
      *  @param accessPoint  The wifi device will attempt to find and connect
      *                      to this access point.
      */
-    void connect(const WifiAccessPoint& accessPoint);
+    void connect(const AccessPoint accessPoint);
 
     /**
-     * Tries to disconnect from a specific wifi access point.
+     * @brief  Tries to disconnect from a specific wifi access point.
      * 
      * @param accessPoint   If the system is currently connected to this
      *                      access point, this method closes that connection.
      */
-    void disconnect(const WifiAccessPoint& accessPoint);
+    void disconnect(const AccessPoint accessPoint);
 
     /**
-     * Attempts to connect or disconnect from the current selected access point
-     * when the connection button is clicked.
+     * @brief  Attempts to connect or disconnect from the current selected 
+     *         access point when the connection button is clicked.
      * 
      * @param button  This should always be the connection button.
      */
-    virtual void listPageButtonClicked(juce::Button* button) override;
+    virtual void listPageButtonClicked(juce::Button* button) final override;
 
     /**
-     * Keeps the page updated when wifi state changes.
-     * 
-     * @param state  The new wifi connection state.
-     */
-    void wifiStateChanged(WifiState state) override;
-   
-    /**
-     * Adds all newly detected access points to the access point list.
+     * @brief  Updates the list when access point signal strength changes.
      *
-     * @param addedAP  The newly detected access point object.
+     * @param updatedAP  The AccessPoint with a new signal strength value.
      */
-    void accessPointAdded(const WifiAccessPoint& addedAP) override;
+    virtual void signalStrengthUpdate(const AccessPoint updatedAP) 
+        final override;
 
     /**
-     * Removes all missing access points from the access point list.
+     * @brief  Adds a newly discovered access point to the list.
+     *
+     * @param newAP  The new Wifi::AccessPoint object.
+     */
+    virtual void accessPointAdded(const AccessPoint newAP) override;
+
+    /**
+     * @brief  Removes an access point from the list when it is no longer
+     *         visible.
      *
      * @param removedAP  The access point that is no longer visible.
      */
-    void accessPointRemoved(const WifiAccessPoint& removedAP) override;
+    virtual void accessPointRemoved(const AccessPoint removedAP) override;
 
     /**
-     * Attempts to connect if return is pressed after entering a password.
+     * @brief  Updates access point connection controls when a connection starts
+     *         to activate.
+     *
+     * @param connectingAP  The Wifi access point the system is trying to 
+     *                      connect to.
+     */
+    virtual void startedConnecting(const AccessPoint connectingAP) override;
+
+    /**
+     * @brief  Updates access point connection controls and prints an error
+     *         message when connection authentication fails.
+     *
+     * @param connectingAP  The Wifi access point that failed to connect.
+     */
+    virtual void connectionAuthFailed(const AccessPoint connectingAP) override;
+
+    /**
+     * @brief  Updates the access point list and connection controls when an 
+     *         access point connects.
+     *
+     * @param connectedAP  The access point used to open the connection.
+     */
+    virtual void connected(const AccessPoint connectedAP) override; 
+
+    /**
+     * @brief  Updates the access point list and connection controls when an 
+     *         access point disconnects.
+     *
+     * @param disconnectedAP  The access point that was being used by the closed
+     *                        connection.
+     */
+    virtual void disconnected(const AccessPoint disconnectedAP) override; 
+
+    /**
+     * @brief  Attempts to connect if return is pressed after entering a 
+     *         password.
      * 
      * @param editor  This should always be the password field.
      */
     void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
 
     /**
-     * Gets the asset name for the icon that best represents accessPoint's 
-     * signal strength.
+     * @brief  Gets the asset name for the icon that best represents an access
+     *         point's signal strength.
      * 
-     * @param accessPoint
+     * @param accessPoint  The access point used to select an icon.
      */
-    static juce::String getWifiAssetName(const WifiAccessPoint& accessPoint);
+    static juce::String getWifiAssetName(const AccessPoint accessPoint);
     
-    //All visible access points.
-    juce::Array<WifiAccessPoint> visibleAPs;
+    /* All visible access points. */
+    juce::Array<AccessPoint> visibleAPs;
 
-    //Holds recycled list item components
+    /* Recycled list item components: */
     juce::OwnedArray<ScalingLabel> apLabels;
     juce::OwnedArray<DrawableImageComponent> apIcons;
     juce::OwnedArray<DrawableImageComponent> lockIcons;
     
-    //Wifi icon paths for all signal strengths
+    /* Wifi icon paths for all signal strengths: */
     static const juce::StringArray wifiImageFiles;
     
     /**
@@ -163,38 +196,41 @@ private:
         virtual ~ConnectionButton() { }
       
         /**
-         * Show or hide the spinner, ensuring the button is enabled when
-         * text is visible and disabled when the spinner is visible.
+         * @brief  Shows or hide the spinner, ensuring the button is enabled 
+         *         when text is visible and disabled when the spinner is 
+         *         visible.
          * 
          * @param showSpinner  True to show the spinner, false to show the
          *                     button text.
          */
         void setSpinnerVisible(bool showSpinner);
+
     private:
         /**
-         * Ensures spinner bounds are updated with connection button bounds.
+         * @brief  Ensures the spinner bounds are updated with connection button 
+         *         bounds.
          */
         virtual void resized() override;
         
+        /* The loading spinner component: */
         Spinner spinner;
-        //Holds the button text while the spinner is enabled.
+
+        /* Holds the button text while the spinner is enabled. */
         juce::String savedText;
     };
     
-    WifiAccessPoint lastConnecting;
-    //Displays the last connection time of access points with saved connections.
+    /* Displays an access point's last connection time if applicable. */
     ScalingLabel lastConnectionLabel;
-    //Used for entering a password for a secured access point.
+
+    /* Used for entering a password for a secured access point. */
     ScalingLabel passwordLabel;
     juce::TextEditor passwordEditor;
-    //clicked to connect or disconnect
+
+    /* Clicked to connect or disconnect: */
     ConnectionButton connectionButton;
-    //prints an error if the connection fails
+
+    /* Shows an error message if the connection fails. */
     ScalingLabel errorLabel;
-    //displays over the connection button while connecting to indicate that
-    //wifi is busy
-    Spinner spinner;
-     
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WifiSettingsPage)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsPage)
 };

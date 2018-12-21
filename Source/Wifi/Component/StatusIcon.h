@@ -1,38 +1,35 @@
 #pragma once
-#include "WindowFocusedTimer.h"
-#include "WifiStateManager.h"
-#include "ConfigurableImageComponent.h"
-
 /**
- * @file  WifiIcon.h
+ * @file  Wifi/Component/StatusIcon.h
  * 
- * @brief  Tracks WiFi status and displays an image indicating connection
- *         state.
+ * @brief  Displays an icon indicating Wifi connection signal strength.
  */
 
-class WifiIcon : public ConfigurableImageComponent, private WindowFocusedTimer,
-private WifiStateManager::Listener
+#include "Configurable/ConfigurableImageComponent.h"
+#include "Wifi/Device/DeviceListener.h"
+#include "Wifi/AccessPoint/SignalStrengthListener.h"
+#include "Wifi/Connection/Listener.h"
+
+namespace Wifi { class StatusIcon; }
+
+
+class Wifi::StatusIcon : 
+    public ConfigurableImageComponent, 
+    public SignalStrengthListener, 
+    public Connection::Listener,
+    public DeviceListener
 {
 public:
-    WifiIcon();
-    
-    virtual ~WifiIcon() { }
+    StatusIcon();
+
+    virtual ~StatusIcon() { }
 
 private:
-
-    /**
-     * @brief  Sets the timer to go off after a very short delay so that the 
-     *         icon will update to match the new connection state.
-     * 
-     * @param state  The new wifi connection state sent.
-     */
-    virtual void wifiStateChanged(const WifiState state) override;
-
     /**
      * All wifi state icons.  Each should correspond to an image asset file 
      * defined in components.json
      */
-    enum WifiIconImage
+    enum class APIcon
     {
         wifiOff,
         wifiStrength0,
@@ -42,23 +39,46 @@ private:
     };
 
     /**
-     * @brief  Sets the WiFi connection status image.
+     * @brief  Sets the displayed WiFi connection icon.
      * 
-     * @param wifiState  The wifi icon that matches the current connection
-     *                   state.
+     * @param selectedIcon  The wifi icon that matches the current connection
+     *                      state.
      */
-    void setStatus(const WifiIconImage wifiState);
-
-    /**
-     * @brief  Enables or disables the WiFi checking timer based on component 
-     *         visibility.
-     */
-    void visibilityChanged() override;
-
-    /**
-     * @brief  Checks the current WiFi connection state, and updates the WiFi 
-     *         icon.
-     */
-    virtual void timerCallback() override;
+    void setIcon(const APIcon selectedIcon);
     
+    /**
+     * @brief  Updates the selected icon when the active connection's signal
+     *         strength changes.
+     *
+     * @param updatedAP  The active connection's AccessPoint.
+     */
+    virtual void signalStrengthUpdate(const AccessPoint updatedAP) 
+        final override;
+
+    /**
+     * @brief  Changes the tracked AccessPoint and selected status icon when a
+     *         new Wifi connection is activated.
+     *
+     * @param connectedAP  The new connection's access point object.
+     */
+    virtual void connected(const AccessPoint connectedAP) final override; 
+
+    /**
+     * @brief  Stops tracking signal strength changes and updates the status
+     *         icon when the Wifi connection is lost.
+     *
+     * @param disconnectedAP  The disconnected access point object.
+     */
+    virtual void disconnected(const AccessPoint disconnectedAP) final override;
+
+    /**
+     * @brief  Updates the selected icon when Wifi is turned on.
+     */
+    virtual void wirelessEnabled() final override;
+
+    /**
+     * @brief  Updates the selected icon and stops tracking signal strength when
+     *         Wifi is turned off.
+     */
+    virtual void wirelessDisabled() final override;
 };

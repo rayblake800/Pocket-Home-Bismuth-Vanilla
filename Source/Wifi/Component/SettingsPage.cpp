@@ -1,28 +1,31 @@
-#include "Utils.h"
+#include "Wifi/Component/SettingsPage.h"
+#include "Wifi/Connection/RecordReader.h"
+#include "Wifi/Connection/Event.h"
+#include "LibNM/Data/SecurityType.h"
 #include "Locale/Time.h"
-#include "Config/MainFile.h"
-#include "Config/MainKeys.h"
-#include "WifiSettingsPage.h"
 
-//Wifi signal strength icon asset files
-const juce::StringArray WifiSettingsPage::wifiImageFiles
-        = {
-           "component assets/WifiIcon/wifiStrength0.svg",
-           "component assets/WifiIcon/wifiStrength1.svg",
-           "component assets/WifiIcon/wifiStrength2.svg",
-           "component assets/WifiIcon/wifiStrength3.svg"
+/* Wifi signal strength icon asset files: */
+// TODO: load these assets from a JSON file!
+const juce::StringArray Wifi::SettingsPage::wifiImageFiles = 
+{
+    "component assets/WifiIcon/wifiStrength0.svg",
+    "component assets/WifiIcon/wifiStrength1.svg",
+    "component assets/WifiIcon/wifiStrength2.svg",
+    "component assets/WifiIcon/wifiStrength3.svg"
 };
-//Access point lock icon file
+
+/* Access point lock icon file: */
+// TODO: load this from a JSON file!
 static const constexpr char* lockFile = "component assets/WifiIcon/lock.svg";
 
 //===================== List item Layout values ================================
-//Horizontal weights for components in each individual access point list item:
+/* Horizontal weights for components in each access point list item: */
 static const constexpr unsigned int labelWeight = 8;
 static const constexpr unsigned int iconWeight = 1;
-//Vertical weight values:
+/* Vertical weight values: */
 static const constexpr unsigned int baseRowWeight = 3;
 static const constexpr unsigned int errorMsgRowWeight = 2;
-//Margin and Padding fractions:
+/* Margin and Padding fractions: */
 static const constexpr float xMarginFraction = 0.03;
 static const constexpr float yMarginFraction = 0.1;
 static const constexpr float xPaddingFraction = 0.04;
@@ -46,25 +49,28 @@ static class
 {
 public:
     /**
-     * Compares wifi access points, in order to sort the access point list.
-     * The connected access point will always come before all others, and
-     * saved access points will come before new ones.  Otherwise, access points
+     * @brief  Compares wifi access points in order to sort the access point 
+     *         list.
+     *
+     *  The connected access point will always come before all others, and
+     * saved access points will come before new ones. Otherwise, access points
      * are sorted by signal strength.
      * 
      * @param first    Some access point in the list.
      * 
      * @param second   Some other access point in the list.
      * 
-     * @return  a negative number if first should come before second, zero if 
-     *          the two connection points are equal, or a positive number if
-     *          second should come before first.
+     * @return         A negative number if first should come before second, 
+     *                 zero if the two connection points are equal, or a 
+     *                 positive number if second should come before first.
      */
-    static int compareElements
-    (const WifiAccessPoint& first, const WifiAccessPoint& second)
+    static int compareElements(const Wifi::AccessPoint& first, 
+            const Wifi::AccessPoint& second)
     {
+        using namespace Wifi;
         jassert(!first.isNull() && !second.isNull());
-        WifiStateManager wifiManager;
-        WifiAccessPoint activeAP = wifiManager.getActiveAP();
+        const Connection::RecordReader recordReader;
+        AccessPoint activeAP = recordReader.getActiveAP();
         if (!activeAP.isNull())
         {
             if (first == activeAP)
@@ -76,8 +82,8 @@ public:
                 return 1;
             }
         }
-        bool firstSaved = first.getSavedConnectionPath().isNotEmpty();
-        bool secondSaved = second.getSavedConnectionPath().isNotEmpty();
+        bool firstSaved = recordReader.hasSavedConnection(first);
+        bool secondSaved = recordReader.hasSavedConnection(second);
         if (firstSaved && !secondSaved)
         {
             return -1;
@@ -90,12 +96,10 @@ public:
     }
 } apComparator;
 
-WifiSettingsPage::WifiSettingsPage() :
+Wifi::SettingsPage::SettingsPage() :
 passwordLabel("passwordLabel", localeText(passwordTextKey)),
-Locale::TextUser(localeClassKey),
-WindowFocusedTimer("WifiSettingsPage")    
+Locale::TextUser(localeClassKey)
 {
-    using namespace Config::MainKeys;
 #    if JUCE_DEBUG
     setName("WifiSettingsPage");
 #    endif
@@ -107,35 +111,28 @@ WindowFocusedTimer("WifiSettingsPage")
     connectionButton.addListener(this);
     errorLabel.setJustificationType(juce::Justification::centred);
     loadAccessPoints();
-
-    Config::MainFile mainConfig;
-    int scanFreq = mainConfig.getConfigValue<int>(wifiScanFreqKey);
-    if(scanFreq > 0)
-    {
-        startTimer(scanFreq);
-    }
 }
 
 /*
  * Sets the number of items in the list to match the number of visible
  * Wifi access points. 
  */
-unsigned int WifiSettingsPage::getListSize()
+unsigned int Wifi::SettingsPage::getListSize()
 {
     return visibleAPs.size();
 }
 
 /**
- * Given a list of recycled components, return the first one on the list that is
- * currently unused.  If no list items are unused, a new item will be created,
- * added to the list, and returned.
+ * @brief  Given a list of recycled components, return the first one on the list 
+ *         that is currently unused. If no list items are unused, a new item 
+ *         will be created, added to the list, and returned.
  * 
  * @tparam ComponentType  Any subclass of juce::Component.
  * 
  * @param   recycleList  A list of Component objects to re-use.
  * 
- * @return  The first list item found with no parent component, or a new list
- *          item if all old list items are in use.
+ * @return               The first list item found with no parent component, or 
+ *                       a new list item if all old list items are in use.
  */
 template<class ComponentType>
 static ComponentType * getFirstUnused
@@ -156,11 +153,11 @@ static ComponentType * getFirstUnused
 /*
  * Creates or updates the layout of one access point on the list.
  */
-void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
+void Wifi::SettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
         const unsigned int index)
 {
     jassert(index < visibleAPs.size());
-    const WifiAccessPoint& wifiAP = visibleAPs[index];
+    const AccessPoint& wifiAP = visibleAPs[index];
     ScalingLabel* apLabel = nullptr;
     DrawableImageComponent * apIcon = nullptr;
     DrawableImageComponent * lockIcon = nullptr;
@@ -175,22 +172,26 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
         apIcon = dynamic_cast<DrawableImageComponent*>
                 (labelRow.getRowItem(2).getComponent());
     }
-    else
+    if(apLabel == nullptr)
     {
         apLabel = getFirstUnused(apLabels);
+    }
+    if(apIcon == nullptr)
+    {
         apIcon = getFirstUnused(apIcons);
     }
-    if (wifiAP.getRequiresAuth())
+
+    if (wifiAP.getSecurityType() != LibNM::SecurityType::unsecured)
     {
-       if (lockIcon == nullptr)
+        if (lockIcon == nullptr)
         {
             lockIcon = getFirstUnused(lockIcons);
-            if(lockIcon->isEmpty())
-            {
-                lockIcon->setImage(lockFile);
-                lockIcon->setColour(DrawableImageComponent::imageColour0Id,
-                        findColour(juce::Label::ColourIds::textColourId));
-            }
+        }
+        if(lockIcon->isEmpty())
+        {
+            lockIcon->setImage(lockFile);
+            lockIcon->setColour(DrawableImageComponent::imageColour0Id,
+                    findColour(juce::Label::ColourIds::textColourId));
         }
     }
     else
@@ -198,7 +199,8 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
         lockIcon = nullptr;
     }
 
-    layout = LayoutManager::Layout({
+    layout = LayoutManager::Layout(
+    {
         LayoutManager::Row(baseRowWeight,
         {
             LayoutManager::RowItem(apLabel, labelWeight),
@@ -212,11 +214,12 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
 
     jassert(apLabel != nullptr);
     jassert(apIcon != nullptr);
-    jassert(lockIcon == nullptr || wifiAP.getRequiresAuth());
+    jassert(lockIcon == nullptr || wifiAP.getSecurityType() 
+            == LibNM::SecurityType::unsecured);
     jassert(!visibleAPs[index].isNull());
-    jassert(visibleAPs[index].getSSID().isNotEmpty());
+    jassert(visibleAPs[index].getSSID().toString().isNotEmpty());
 
-    apLabel->setText(visibleAPs[index].getSSID(),
+    apLabel->setText(visibleAPs[index].getSSID().toString(),
             juce::NotificationType::dontSendNotification);
     apLabel->setJustificationType(juce::Justification::centred);
     apLabel->setInterceptsMouseClicks(false, false);
@@ -229,11 +232,11 @@ void WifiSettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
  * Creates or updates the access point control/information panel that
  * appears when an access point in the list is selected.
  */
-void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
+void Wifi::SettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
 {
     using juce::String;
     jassert(getSelectedIndex() >= 0 && !layout.isEmpty());
-    const WifiAccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
+    const AccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
     using Row = LayoutManager::Row;
     using RowItem = LayoutManager::RowItem;
     if (layout.rowCount() == 1)
@@ -260,10 +263,11 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
     bool showButtonSpinner = false;
     bool showPasswordEntry = false;
     String errorMessage = "";
-    WifiStateManager wifiManager;
-    if (selectedAP.getSavedConnectionPath().isNotEmpty())
+
+    const Connection::RecordReader connectionRecord;
+    if(connectionRecord.hasSavedConnection(selectedAP))
     {
-        Locale::Time connTime(wifiManager.lastConnectionTime(selectedAP));
+        Locale::Time connTime(connectionRecord.lastConnectionTime(selectedAP));
         lastConnectionLabel.setText(localeText(lastConnectedTextKey)
                 + connTime.approxTimePassed(),
                 juce::NotificationType::dontSendNotification);
@@ -273,38 +277,41 @@ void WifiSettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
         lastConnectionLabel.setText(String(),
                 juce::NotificationType::dontSendNotification);
     }
-    DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
-            " AP " << selectedAP.getSSID() << " with state "
-            << apStateString(wifiManager.getAPState(selectedAP)));
-    switch (wifiManager.getAPState(selectedAP))
-    {
-        case AccessPointState::nullAP:
-            DBG("WifiSettingsPage::" << __func__
-                    << ": AP is suddenly null!");
-            return;
-        case AccessPointState::connectingAP:
-        case AccessPointState::disconnectingAP:
-            connectionBtnText = "";
-            showButtonSpinner = true;
-            break;
-        case AccessPointState::connectedAP:
-            connectionBtnText = localeText(disconnectTextKey);
-            break;
-        case AccessPointState::disconnectedAP:
-            showPasswordEntry = selectedAP.getRequiresAuth() &&
-                    selectedAP.getSavedConnectionPath().isEmpty();
-            if(lastConnecting == selectedAP)
-            {
-                errorMessage = localeText(connectionFailedTextKey);
-            }
-            break;
-        case AccessPointState::invalidSecurityAP:
-            showPasswordEntry = selectedAP.getRequiresAuth();
-            errorMessage = localeText(wrongPasswordTextKey);
-            break;
-        case AccessPointState::missingAP:
-            errorMessage = localeText(lostAPTextKey);
 
+    DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
+            " AP " << selectedAP.getSSID().toString());
+    const bool requiresAuth = selectedAP.getSecurityType() 
+            != LibNM::SecurityType::unsecured;
+    const bool hasSavedConnection 
+            = connectionRecord.hasSavedConnection(selectedAP);
+    const bool isActiveAP
+            = connectionRecord.getActiveAP() == selectedAP;
+
+    if(isActiveAP && connectionRecord.isConnecting())
+    {
+        connectionBtnText = "";
+        showButtonSpinner = true;
+    }
+    else if(isActiveAP && connectionRecord.isConnected())
+    {
+        connectionBtnText = localeText(disconnectTextKey);
+    }
+
+    else
+    {
+        const Connection::EventType lastEventType 
+                 = connectionRecord.getLastEvent(selectedAP).getEventType();
+        showPasswordEntry = requiresAuth && !hasSavedConnection;
+        if(lastEventType == Connection::EventType::connectionFailed)
+        {
+            errorMessage = localeText(connectionFailedTextKey);
+        }
+        else if(lastEventType == Connection::EventType::connectionAuthFailed)
+        {
+            jassert(requiresAuth);
+            showPasswordEntry = true;
+            errorMessage = localeText(wrongPasswordTextKey);
+        }
     }
     if (showPasswordEntry)
     {
