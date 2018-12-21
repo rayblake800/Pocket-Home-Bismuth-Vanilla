@@ -74,13 +74,11 @@
         "lostAP"           : "Access point lost.",
         "lastConnected"    : "Last connected:"
     },
-    "WifiSettingsComponent":
+    "Wifi::ControlWidget":
     {
         "wifiNotFound"      : "WiFi Not Found",
         "wifiDisabled"      : "WiFi Disabled",
-        "turningOn"         : "WiFi Turning On...",
         "notConnected"      : "Not Connected",
-        "turningOff"        : "WiFi Turning Off...",
         "connectingAP"      : "Connecting to ",
         "missingPSK"        : "Incorrect Password",
         "connectingUnknown" : "Connecting...",
