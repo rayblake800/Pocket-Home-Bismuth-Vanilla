@@ -9,7 +9,7 @@
 /**
  * @file  ConnectionSettingsComponent.h
  * 
- * @brief  Awidget that provides a connection status icon, a toggle switch for 
+ * @brief  A widget that provides a connection status icon, a toggle switch for 
  *         enabling/disabling the connection, and a button that shows a 
  *         connection status string. The button will also open a connection page
  *         when clicked while the switch is enabled.
