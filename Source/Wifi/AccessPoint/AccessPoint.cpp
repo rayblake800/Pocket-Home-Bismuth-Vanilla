@@ -69,11 +69,11 @@ bool Wifi::AccessPoint::operator<(const AccessPoint& rhs) const
 /*
  * Gets the access point's primary identifier.
  */
-juce::String Wifi::AccessPoint::getSSID() const
+LibNM::SSID Wifi::AccessPoint::getSSID() const
 {
     if(isNull())
     {
-        return juce::String();
+        return LibNM::SSID();
     }
     return getData()->getSSID();
 }

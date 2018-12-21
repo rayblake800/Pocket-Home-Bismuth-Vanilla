@@ -12,7 +12,7 @@ Wifi::APData::APData(const LibNM::AccessPoint nmAccessPoint,
     LibNM::ThreadHandler nmThread;
     nmThread.call([this, &nmAccessPoint]()
     {
-        ssid = nmAccessPoint.getSSIDText();
+        ssid = nmAccessPoint.getSSID();
         bssid = nmAccessPoint.getBSSID();
         securityType = nmAccessPoint.getSecurityType();
         signalStrength.set(nmAccessPoint.getSignalStrength());
@@ -46,7 +46,7 @@ bool Wifi::APData::operator<(const APData& rhs) const
 /*
  * Gets the access point's primary identifier.
  */
-juce::String Wifi::APData::getSSID() const
+LibNM::SSID Wifi::APData::getSSID() const
 {
     return ssid;
 }

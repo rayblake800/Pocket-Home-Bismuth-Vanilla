@@ -12,7 +12,6 @@
 namespace Wifi { class AccessPoint; }
 namespace LibNM { class AccessPoint; }
 namespace LibNM { class Connection; }
-namespace LibNM { class APHash; }
 namespace LibNM { enum class SecurityType; }
 
 /**
@@ -93,9 +92,9 @@ public:
     /**
      * @brief  Gets the access point's primary identifier.
      *
-     * @return  The access point's SSID value, as a printable string.
+     * @return  The access point's SSID value.
      */
-    juce::String getSSID() const;
+    LibNM::SSID getSSID() const;
 
     /**
      * @brief  Gets the access point's hardware identifier.

@@ -10,6 +10,7 @@
  */
 
 #include "LibNM/Data/APHash.h"
+#include "LibNM/Data/SSID.h"
 #include "JuceHeader.h"
 
 namespace Wifi { class APData; }
@@ -60,9 +61,9 @@ public:
     /**
      * @brief  Gets the access point's primary identifier.
      *
-     * @return  The access point's SSID value, as a printable string.
+     * @return  The access point's SSID value.
      */
-    juce::String getSSID() const;
+    LibNM::SSID getSSID() const;
 
     /**
      * @brief  Gets the access point's hardware identifier.
@@ -108,7 +109,7 @@ private:
     LibNM::APHash hash;
 
     /* The access point's displayed name and primary ID. */
-    juce::String ssid;
+    LibNM::SSID ssid;
 
     /* The access point's base hardware ID. */
     juce::String bssid;
