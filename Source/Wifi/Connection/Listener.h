@@ -1,30 +1,30 @@
 #pragma once
 /**
- * @file  Wifi/Connection/ConnectionListener.h
+ * @file  Wifi/Connection/Listener.h
  *
  * @brief  Receives notifications whenever the Wifi network connection's state
  *         changes.
  */
 
-#include "Wifi/Connection/ConnectionUpdateInterface.h"
+#include "Wifi/Connection/UpdateInterface.h"
 #include "SharedResource/Handler.h"
 
-namespace Wifi { class ConnectionListener; }
-namespace Wifi { class ConnectionTracker; }
+namespace Wifi { namespace Connection { class Listener; } }
+namespace Wifi { namespace Connection { class RecordResource; } }
 
 /**
- *  ConnectionListener's methods will be called by the ConnectionTracker to 
- * notify the Listener of new connection events.  All of these methods do
- * nothing by default. ConnectionListener subclasses should override these
- * methods to handle the connection events as necessary.
+ *  Connection::Listener object methods will be called by the 
+ * Connection::RecordResource to notify the Listener of new connection events.  
+ * All of these methods do nothing by default; Listener subclasses should 
+ * override these methods to handle the connection events as necessary.
  */
-class Wifi::ConnectionListener : public ConnectionUpdateInterface,
-    public SharedResource::Handler<ConnectionTracker>
+class Wifi::Connection::Listener : public UpdateInterface,
+    public SharedResource::Handler<RecordResource>
 {
 public:
-    ConnectionListener() { };
+    Listener();
 
-    virtual ~ConnectionListener();
+    virtual ~Listener();
 
 private:
     /**

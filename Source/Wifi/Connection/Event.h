@@ -15,7 +15,7 @@ namespace WifiConnect = Wifi::Connection;
 /**
  * @brief  All types of event tracked using ConnectionEvent.
  */
-enum class WifiConnect::EventType
+enum class Wifi::Connection::EventType
 {
     /* A new connection was requested through the Wifi::ConnectionManager. */
     connectionRequested,
@@ -24,6 +24,8 @@ enum class WifiConnect::EventType
     /* A connection attempt was stopped due to an incorrect or missing network
        key. */
     connectionAuthFailed,
+    /* A connection event failed for some other reason. */
+    connectionFailed,
     /* A new connection opened successfully. */
     connected,
     /* The active connection was closed or lost. */

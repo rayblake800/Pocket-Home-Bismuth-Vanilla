@@ -36,6 +36,13 @@ public:
     virtual ~DeviceTracker() { }
 
     /**
+     * @brief  Checks if a Wifi device managed by NetworkManager exists.
+     *
+     * @return  Whether a managed Wifi device was found. 
+     */
+    bool wifiDeviceExists() const;
+
+    /**
      * @brief  Checks if the wifi device is enabled. 
      *
      * @return  Whether a Wifi device managed by NetworkManager is enabled. 
@@ -43,11 +50,11 @@ public:
     bool wifiDeviceEnabled() const;
 
     /**
-     * @brief  Checks if a Wifi device managed by NetworkManager exists.
+     * @brief  Checks if wifi is currently being enabled or disabled.
      *
-     * @return  Whether a managed Wifi device was found. 
+     * @return  Whether the wifi device is changing its enabled state. 
      */
-    bool wifiDeviceExists() const;
+    bool isDeviceStateChanging() const;
 
     /**
      * @brief  Connects to NetworkManager to update the Wifi device state,
@@ -65,10 +72,19 @@ public:
      */
     void updateDeviceState(const bool exists, const bool enabled);
 
+    /**
+     * @brief  Notifies the device tracker that Wifi is about to be enabled or
+     *         disabled.
+     */
+    void signalDeviceStateChanging();
+
 private:
     /* Tracks whether a managed Wifi device was found.  */
-    bool deviceExists;
+    bool deviceExists = false;
 
     /* Tracks whether the Wifi device is enabled. */
-    bool deviceEnabled;
+    bool deviceEnabled = false;
+
+    /* Tracks whether Wifi is being enabled or disabled. */
+    bool stateChanging = false;
 };

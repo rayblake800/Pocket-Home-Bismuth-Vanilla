@@ -1,10 +1,13 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi/Connection/RecordResource.h"
 #include "Wifi/Connection/Event.h"
+#include "Wifi/Connection/UpdateInterface.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/AccessPointList/APListReader.h"
 #include "Wifi/AccessPointList/NMAPListReader.h"
 #include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/NMObjects/Client.h"
 #include "LibNM/ThreadHandler.h"
 
 namespace WifiConnect = Wifi::Connection;
@@ -36,9 +39,9 @@ public:
 /*
  * Reads NetworkManager data to build the initial set of connection records.
  */
-WifiConnect::RecordResource::RecordResource() 
+WifiConnect::RecordResource::RecordResource() : 
+SharedResource::Resource(resourceKey)
 {
-    connectionEvents.clear();
     savedConnections.updateSavedConnections();
     updateRecords();
 }
@@ -137,11 +140,35 @@ juce::Time WifiConnect::RecordResource::lastConnectionTime
 /*
  * Adds a new event to the list of saved events.
  */
-void WifiConnect::RecordResource::addEvent(const Event newEvent)
+void WifiConnect::RecordResource::addConnectionEvent(const Event newEvent)
 {
     if(!newEvent.isNull())
     {
         connectionEvents.addSorted(eventSorter, newEvent);
+        foreachHandler<UpdateInterface>([this, &newEvent]
+                (UpdateInterface* listener)
+        {
+            switch(newEvent.getEventType())
+            {
+                case EventType::connectionRequested:
+                case EventType::startedConnecting:
+                    listener->startedConnecting(newEvent.getEventAP());
+                    break;
+                case EventType::connectionAuthFailed:
+                    listener->connectionAuthFailed(newEvent.getEventAP());
+                    break;
+                case EventType::connected:
+                    listener->connected(newEvent.getEventAP());
+                    break;
+                case EventType::connectionFailed:
+                case EventType::disconnected:
+                    listener->disconnected(newEvent.getEventAP());
+                    break;
+                case EventType::invalid:
+                    // Invalid events shouldn't be added!
+                    jassertfalse;
+            }
+        });
     }
 }
 
@@ -175,18 +202,42 @@ void WifiConnect::RecordResource::removeSavedConnection
  */
 void WifiConnect::RecordResource::updateRecords()
 {
+    connectionEvents.clear();
     const LibNM::ThreadHandler nmThread;
-    nmThread.call([this]()
+    nmThread.call([this, &nmThread]()
     {
-        APListReader apList;
-        NMAPListReader nmList;
-        juce::Array<AccessPoint> visibleAPs = apList.getAccessPoints();
-        for(const AccessPoint& ap : visibleAPs)
+        const LibNM::DeviceWifi wifiDevice = nmThread.getWifiDevice();
+        const LibNM::Client networkClient = nmThread.getClient();
+        
+        LibNM::ActiveConnection connection 
+                = networkClient.getActivatingConnection();
+        const bool isConnecting = !connection.isNull();
+        if(!isConnecting)
         {
-            
+            connection = networkClient.getPrimaryConnection();
         }
+
+        if(connection.isNull())
+        {
+            return;
+        }
+
+        const LibNM::AccessPoint nmAP = wifiDevice.getAccessPoint
+                (connection.getAccessPointPath());
+        if(nmAP.isNull())
+        {
+            return;
+        }
+
+        const APListReader accessPointList;
+        AccessPoint activeAP = accessPointList.getAccessPoint
+                (nmAP.generateHash());
+        jassert(!activeAP.isNull());
+
+        Event initialEvent(activeAP, isConnecting ?
+                EventType::startedConnecting : EventType::connected);
+        connectionEvents.addSorted(eventSorter, initialEvent);
     });
-    
 }
 
 /*

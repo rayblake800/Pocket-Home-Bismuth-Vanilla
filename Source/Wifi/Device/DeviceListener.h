@@ -16,7 +16,7 @@ class Wifi::DeviceListener : public SharedResource::Handler<DeviceTracker>,
     public DeviceUpdateInterface
 {
 public:
-    DeviceListener() { }
+    DeviceListener();
 
     virtual ~DeviceListener() { }
 

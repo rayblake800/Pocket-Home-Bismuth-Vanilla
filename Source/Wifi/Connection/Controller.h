@@ -12,9 +12,7 @@
 namespace Wifi { class AccessPoint; }
 namespace Wifi { namespace Connection { class Controller; } }
 
-namespace WifiConnect = Wifi::Connection;
-
-class WifiConnect::Controller : public LibNM::Client::ConnectionHandler
+class Wifi::Connection::Controller : public LibNM::Client::ConnectionHandler
 {
 public:
     Controller() { }
@@ -43,9 +41,9 @@ public:
     /**
      * @brief  Discards all saved connection data linked to an access point.
      *
-     * @param toForget  The Wifi access point to remove from saved connections. 
+     * @param toRemove  The Wifi access point to remove from saved connections. 
      */
-    void forgetConnection(const AccessPoint toForget) const;
+    void removeSavedConnection(const AccessPoint toRemove) const;
 
 private:
     /**

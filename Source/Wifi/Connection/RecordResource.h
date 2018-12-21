@@ -7,8 +7,9 @@
  *
  * @brief  Tracks all major Wifi connection events.
  */
-#include "JuceHeader.h"
+#include "SharedResource/Resource.h"
 #include "LibNM/DBus/SavedConnectionLoader.h"
+#include "JuceHeader.h"
 
 namespace Wifi { namespace Connection { class RecordResource; }  }
 namespace Wifi { namespace Connection { class Event; }  }
@@ -22,7 +23,7 @@ namespace Wifi { class AccessPoint; }
  * to NetworkManager. RecordResource finds and shares events with the most
  * recent stored time, optionally sorting by access point or event type.
  */
-class Wifi::Connection::RecordResource
+class Wifi::Connection::RecordResource : public SharedResource::Resource
 {
 public:
     /* SharedResource object instance key: */

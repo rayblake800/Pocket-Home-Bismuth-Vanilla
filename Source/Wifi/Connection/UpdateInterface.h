@@ -1,23 +1,26 @@
 #pragma once
 /**
- * @file  Wifi/Connection/ConnectionUpdateInterface.h
+ * @file  Wifi/Connection/UpdateInterface.h
  *
- * @brief  The interface used by the Wifi::ConnectionTracker to notify all
- *         Wifi::ConnectionListener objects of new Wifi network connection 
- *         events.
+ * @brief  The interface used by the Wifi::Connection::RecordResource instance
+ *         to notify all Wifi::Connection::Listener objects of new Wifi network 
+ *         connection events.
  */
 
-namespace Wifi { class ConnectionUpdateInterface; }
+namespace Wifi { namespace Connection { class UpdateInterface; } }
+namespace Wifi { namespace Connection { class RecordResource; } }
 namespace Wifi { class AccessPoint; }
 
-class Wifi::ConnectionUpdateInterface
+class Wifi::Connection::UpdateInterface
 {
 public:
-    ConnectionUpdateInterface() { }
+    UpdateInterface() { }
 
-    virtual ~ConnectionUpdateInterface() { }
+    virtual ~UpdateInterface() { }
 
 private:
+    friend class Wifi::Connection::RecordResource;
+
     /**
      * @brief  Signals that a new active Wifi connection is being opened.
      *

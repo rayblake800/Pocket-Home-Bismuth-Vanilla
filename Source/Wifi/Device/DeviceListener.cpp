@@ -1,6 +1,8 @@
 #include "Wifi/Device/DeviceListener.h"
 #include "Wifi/Device/DeviceTracker.h"
 
+Wifi::DeviceListener::DeviceListener() { }
+
 /*
  * Checks if a Wifi device managed by NetworkManager exists.
  */

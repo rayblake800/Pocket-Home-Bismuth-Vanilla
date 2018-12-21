@@ -13,9 +13,9 @@ namespace Wifi { namespace Connection { class Event; } }
 namespace Wifi { namespace Connection { enum class EventType; } }
 namespace Wifi { class AccessPoint; }
 
-namespace WifiConnect = Wifi::Connection;
 
-class WifiConnect::RecordReader : public SharedResource::Handler<RecordResource>
+class Wifi::Connection::RecordReader : 
+    public SharedResource::Handler<RecordResource>
 {
 public:
     /**

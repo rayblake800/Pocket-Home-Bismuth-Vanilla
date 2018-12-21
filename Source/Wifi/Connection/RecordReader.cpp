@@ -4,6 +4,8 @@
 #include "Wifi/Connection/Event.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
 
+namespace WifiConnect = Wifi::Connection;
+
 /*
  * Initializes the RecordResource if necessary.
  */

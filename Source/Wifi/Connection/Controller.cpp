@@ -2,11 +2,19 @@
 #include "Wifi/Connection/Controller.h"
 #include "Wifi/Connection/RecordReader.h"
 #include "Wifi/Connection/RecordWriter.h"
+#include "Wifi/Connection/Event.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi/AccessPointList/APListReader.h"
 #include "Wifi/AccessPointList/NMAPListReader.h"
 #include "LibNM/ThreadHandler.h"
+#include "LibNM/Data/SSID.h"
+#include "LibNM/Data/SecurityType.h"
 #include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/NMObjects/Connection.h"
 #include "LibNM/NMObjects/DeviceWifi.h"
+#include "GLib/SmartPointers/ErrorPtr.h"
+
+namespace WifiConnect = Wifi::Connection;
 
 /*
  * Attempts to open a Wifi network connection point.
@@ -32,6 +40,7 @@ void WifiConnect::Controller::connectToAccessPoint
     nmThread.call([this, &nmThread, &toConnect, &securityKey]()
     {
         const NMAPListReader nmAPReader;
+        const RecordReader connectionRecord;
         const LibNM::AccessPoint& nmAccessPoint 
                 = nmAPReader.getStrongestNMAccessPoint(toConnect);
         if(nmAccessPoint.isNull())
@@ -48,11 +57,46 @@ void WifiConnect::Controller::connectToAccessPoint
             return;
         }
 
+        // Create connection object:
+        LibNM::Connection newConnection;
+        newConnection.addWifiSettings(toConnect.getSSID());
+        const bool foundSavedConnection = connectionRecord.hasSavedConnection
+            (toConnect);
+
+        // Add security settings if necessary:
+        using WifiSecurity = LibNM::SecurityType;
+        LibNM::SecurityType securityType = toConnect.getSecurityType();
+        if(securityKey.isNotEmpty() 
+                && !foundSavedConnection
+                && securityType != WifiSecurity::unsecured)
+        {
+            bool pskAdded = (securityType == WifiSecurity::securedWEP) ?
+                newConnection.addWEPSettings(securityKey) :
+                newConnection.addWPASettings(securityKey);
+            if(!pskAdded)
+            {
+                DBG("WifiConnect::Controller::connectToAccessPoint: "
+                        << "Invalid PSK, couldn't set security settings.");
+                RecordWriter connectionRecordWriter;
+                connectionRecordWriter.addConnectionEvent(
+                        Event(toConnect, EventType::connectionAuthFailed));
+                return;
+            }
+        }
+
+        // Signal that a connection attempt is about to happen:
+        RecordWriter connectionRecordWriter;
+        connectionRecordWriter.addConnectionEvent(
+                Event(toConnect, EventType::connectionRequested));
+
+        // Have the Client activate the connection:
         LibNM::Client networkClient = nmThread.getClient();
-        // Look for saved connections
-        // Get connection object
-        // Add psk to connection object if needed
-        // Activate connection with client
+        networkClient.activateConnection(
+                newConnection,
+                wifiDevice,
+                nmAccessPoint,
+                (LibNM::Client::ConnectionHandler*) this,
+                foundSavedConnection);
     });
 }
 
@@ -76,9 +120,46 @@ void WifiConnect::Controller::disconnect() const
 /*
  * Discards all saved connection data linked to an access point.
  */
-void WifiConnect::Controller::forgetConnection
-(const AccessPoint toForget) const
+void WifiConnect::Controller::removeSavedConnection
+(const AccessPoint toRemove) const
 {
+    const RecordWriter connectionRecordWriter;
+    connectionRecordWriter.removeSavedConnection(toRemove);
+}
+
+/**
+ * @brief  Gets the LibNM::AccessPoint object used to establish an active 
+ *         connection.
+ *
+ * @param connection  An active connection object.
+ *
+ * @return            The LibNM access point used to activate the connection, or
+ *                    a null access point if the connection is null.
+ */
+static LibNM::AccessPoint getActiveConnectionNMAP
+(const LibNM::ActiveConnection connection)
+{
+    ASSERT_CORRECT_CONTEXT;
+    const LibNM::ThreadHandler nmThread;
+    const LibNM::DeviceWifi wifiDevice = nmThread.getWifiDevice();
+    return wifiDevice.getAccessPoint(connection.getAccessPointPath());
+}
+
+/**
+ * @brief  Gets the Wifi::AccessPoint object used to establish an active 
+ *         connection.
+ *
+ * @param connection  An active connection object.
+ *
+ * @return            The access point used to activate the connection, or a 
+ *                    null access point if the connection is null.
+ */
+static Wifi::AccessPoint getActiveConnectionAP
+(const LibNM::ActiveConnection connection)
+{
+    const LibNM::AccessPoint nmAP = getActiveConnectionNMAP(connection);
+    const Wifi::APListReader apListReader;
+    return apListReader.getAccessPoint(nmAP.generateHash());
 }
 
 /*
@@ -87,6 +168,24 @@ void WifiConnect::Controller::forgetConnection
 void WifiConnect::Controller::openingConnection
 (LibNM::ActiveConnection connection, bool isNew)
 {
+    ASSERT_CORRECT_CONTEXT;
+    const AccessPoint connectionAP = getActiveConnectionAP(connection);
+    const RecordReader connectionRecordReader;
+    Event latestEvent = connectionRecordReader.getLastEvent();
+    if(latestEvent.getEventAP() == connectionAP
+            && latestEvent.getEventType() == EventType::startedConnecting)
+    {
+        DBG("Wifi::Connection::Controller::openingConnection: "
+                << "NDeviceSignalHandler already logged connection attempt");
+    }
+    else
+    {
+        DBG("Wifi::Connection::Controller::openingConnection: "
+                << "Logging new connection attempt.");
+        const RecordWriter connectionRecordWriter;
+        connectionRecordWriter.addConnectionEvent(Event(connectionAP, 
+                    EventType::startedConnecting));
+    }
 }
 
 /*
@@ -95,4 +194,37 @@ void WifiConnect::Controller::openingConnection
 void WifiConnect::Controller::openingConnectionFailed
 (LibNM::ActiveConnection connection, GError* error, bool isNew)
 {
+    ASSERT_CORRECT_CONTEXT;
+    GLib::ErrorPtr connectionError(error);
+    DBG("WifiConnect::Controller::openingConnectionFailed" << ": Error "
+                << error->code << ":" << error->message);
+
+    const RecordWriter connectionRecordWriter;
+    const AccessPoint connectionAP = getActiveConnectionAP(connection);
+    if(isNew)
+    {
+        DBG("WifiConnect::Controller::openingConnectionFailed" 
+                << ": Deleting new saved connection " << connection.getID());
+        connectionRecordWriter.removeSavedConnection(connectionAP);
+    }
+    else
+    {
+       DBG("WifiConnect::Controller::openingConnectionFailed" 
+               << ": Previously established connection " << connection.getID()
+               << " failed to activate fully.");
+
+       //TODO: Try other compatible LibNM::AccessPoint objects
+    }
+
+    EventType connectionEvent;
+    if(connectionAP.getSecurityType() == LibNM::SecurityType::unsecured)
+    {
+        connectionEvent = EventType::connectionAuthFailed;
+    }
+    else
+    {
+        connectionEvent = EventType::disconnected;
+    }
+    connectionRecordWriter.addConnectionEvent(Event(connectionAP,
+                connectionEvent));
 }

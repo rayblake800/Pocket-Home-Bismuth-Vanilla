@@ -1,4 +1,5 @@
 #include "Wifi/Device/Controller.h"
+#include "Wifi/Device/DeviceTracker.h"
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/NMObjects/Client.h"
 #include "LibNM/NMObjects/DeviceWifi.h"
@@ -8,11 +9,26 @@
  */
 void Wifi::Controller::setEnabled(const bool enableWifi)
 {
-    LibNM::ThreadHandler wifiThread;
-    wifiThread.call([this, &wifiThread, enableWifi]()
+    const LibNM::ThreadHandler nmThreadHandler;
+    nmThreadHandler.call([this, &nmThreadHandler, enableWifi]()
     {
-        LibNM::Client client = wifiThread.getClient();
-        client.setWirelessEnabled(enableWifi);
+        SharedResource::LockedPtr<DeviceTracker> deviceTracker =
+                getWriteLockedResource();
+        if(deviceTracker->wifiDeviceExists())
+        {
+            if(enableWifi != deviceTracker->wifiDeviceEnabled())
+            {
+                deviceTracker->signalDeviceStateChanging();
+            }
+            LibNM::Client client = nmThreadHandler.getClient();
+            client.setWirelessEnabled(enableWifi);
+        }
+        else
+        {
+            DBG("Wifi::Controller::setEnabled: Couldn't " 
+                    << (enableWifi ? "enable" : "disable")
+                    << " Wifi, no Wifi device found.");
+        }
     });
 }
 
@@ -21,10 +37,11 @@ void Wifi::Controller::setEnabled(const bool enableWifi)
  */
 void Wifi::Controller::scanAccessPoints()
 {
-    LibNM::ThreadHandler wifiThread;
-    wifiThread.call([&wifiThread]()
+    const LibNM::ThreadHandler nmThreadHandler;
+    nmThreadHandler.call([]()
     {
-        LibNM::DeviceWifi wifiDevice = wifiThread.getWifiDevice();
+        const LibNM::ThreadHandler nmThreadHandler;
+        LibNM::DeviceWifi wifiDevice = nmThreadHandler.getWifiDevice();
         wifiDevice.requestScan();
     });
 }

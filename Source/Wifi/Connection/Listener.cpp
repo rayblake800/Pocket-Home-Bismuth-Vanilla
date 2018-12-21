@@ -1,36 +1,31 @@
-#include "Wifi/Connection/ConnectionListener.h"
+#define WIFI_IMPLEMENTATION
+#include "Wifi/Connection/Listener.h"
+#include "Wifi/Connection/RecordResource.h"
+#include "Wifi/AccessPoint/AccessPoint.h"
 
-Wifi::ConnectionListener::~ConnectionListener()
-{
-}
+namespace WifiConnect = Wifi::Connection;
+
+WifiConnect::Listener::Listener() { }
 
 /*
  * Signals that a new active Wifi connection is being opened.
  */
-void Wifi::ConnectionListener::startedConnecting
-(const AccessPoint connectingAP)
-{
-}
+void WifiConnect::Listener::startedConnecting
+(const AccessPoint connectingAP) { }
 
 /*
  * Signals that an attempt to open a Wifi connection failed due to improper
  * authentication, usually because of an incorrect Wifi password.
  */
-void Wifi::ConnectionListener::connectionAuthFailed
-(const AccessPoint connectingAP)
-{
-}
+void WifiConnect::Listener::connectionAuthFailed
+(const AccessPoint connectingAP) { }
 
 /*
  * Signals that a new Wifi connection was opened successfully.
  */
-void Wifi::ConnectionListener::connected(const AccessPoint connectedAP)
-{
-}
+void WifiConnect::Listener::connected(const AccessPoint connectedAP) { }
 
 /*
  * Signals that an active Wifi connection was closed.
  */
-void Wifi::ConnectionListener::disconnected(const AccessPoint disconnectedAP)
-{
-}
+void WifiConnect::Listener::disconnected(const AccessPoint disconnectedAP) { }

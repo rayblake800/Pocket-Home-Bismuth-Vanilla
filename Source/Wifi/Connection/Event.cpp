@@ -1,4 +1,7 @@
+#define WIFI_IMPLEMENTATION
 #include "Wifi/Connection/Event.h"
+
+namespace WifiConnect = Wifi::Connection;
 
 /*
  * Creates a new connection event with initial connection data.
