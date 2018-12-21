@@ -15,6 +15,7 @@ OBJECTS_WIFI_ACCESS_POINT_LIST := \
   $(WIFI_PREFIX)APList.o \
   $(WIFI_PREFIX)APListReader.o \
   $(WIFI_PREFIX)NMAPListReader.o \
+  $(WIFI_PREFIX)APListWriter.o \
   $(WIFI_PREFIX)VisibleAPListener.o
 
 WIFI_CONNECTION_ROOT := $(WIFI_ROOT)/Connection
@@ -23,6 +24,8 @@ OBJECTS_WIFI_CONNECTION := \
   $(WIFI_CONNECTION_PREFIX)Controller.o \
   $(WIFI_CONNECTION_PREFIX)Event.o \
   $(WIFI_CONNECTION_PREFIX)RecordResource.o \
+  $(WIFI_CONNECTION_PREFIX)RecordReader.o \
+  $(WIFI_CONNECTION_PREFIX)RecordWriter.o \
   $(WIFI_CONNECTION_PREFIX)Listener.o \
 
 WIFI_DEVICE_ROOT := $(WIFI_ROOT)/Device
@@ -31,13 +34,14 @@ OBJECTS_WIFI_DEVICE := \
   $(WIFI_DEVICE_PREFIX)Controller.o \
   $(WIFI_DEVICE_PREFIX)DeviceListener.o \
   $(WIFI_DEVICE_PREFIX)DeviceTracker.o \
+  $(WIFI_DEVICE_PREFIX)DeviceViewer.o
 
 WIFI_SIGNAL_HANDLER_ROOT := $(WIFI_ROOT)/NMSignalHandlers
 WIFI_SIGNAL_HANDLER_PREFIX := $(WIFI_PREFIX)Signal_Handler_
 OBJECTS_WIFI_SIGNAL_HANDLER := \
   $(WIFI_SIGNAL_HANDLER_PREFIX)AccessPoint.o \
   $(WIFI_SIGNAL_HANDLER_PREFIX)Client.o \
-  $(WIFI_SIGNAL_HANDLER_PREFIX)Device.o \
+  $(WIFI_SIGNAL_HANDLER_PREFIX)Device.o
 
 WIFI_COMPONENT_ROOT := $(WIFI_ROOT)/Component
 OBJECTS_WIFI_COMPONENT := \
@@ -79,17 +83,23 @@ $(WIFI_PREFIX)APListReader.o : \
     $(WIFI_AP_LIST_ROOT)/APListReader.cpp
 $(WIFI_PREFIX)NMAPListReader.o : \
     $(WIFI_AP_LIST_ROOT)/NMAPListReader.cpp
+$(WIFI_PREFIX)APListWriter.o : \
+    $(WIFI_AP_LIST_ROOT)/APListWriter.cpp
 $(WIFI_PREFIX)VisibleAPListener.o : \
     $(WIFI_AP_LIST_ROOT)/VisibleAPListener.cpp
 
 $(WIFI_CONNECTION_PREFIX)Controller.o : \
     $(WIFI_CONNECTION_ROOT)/Controller.cpp
 $(WIFI_CONNECTION_PREFIX)Event.o : \
-    $(WIFI_CONNECTION_ROOT)/EventController.cpp
+    $(WIFI_CONNECTION_ROOT)/Event.cpp
 $(WIFI_CONNECTION_PREFIX)Listener.o : \
     $(WIFI_CONNECTION_ROOT)/Listener.cpp
 $(WIFI_CONNECTION_PREFIX)RecordResource.o : \
     $(WIFI_CONNECTION_ROOT)/RecordResource.cpp
+$(WIFI_CONNECTION_PREFIX)RecordReader.o : \
+    $(WIFI_CONNECTION_ROOT)/RecordReader.cpp
+$(WIFI_CONNECTION_PREFIX)RecordWriter.o : \
+    $(WIFI_CONNECTION_ROOT)/RecordWriter.cpp
 
 $(WIFI_DEVICE_PREFIX)Controller.o : \
     $(WIFI_DEVICE_ROOT)/Controller.cpp
@@ -97,6 +107,8 @@ $(WIFI_DEVICE_PREFIX)DeviceListener.o : \
     $(WIFI_DEVICE_ROOT)/DeviceListener.cpp
 $(WIFI_DEVICE_PREFIX)DeviceTracker.o : \
     $(WIFI_DEVICE_ROOT)/DeviceTracker.cpp
+$(WIFI_DEVICE_PREFIX)DeviceViewer.o : \
+    $(WIFI_DEVICE_ROOT)/DeviceViewer.cpp
 
 $(WIFI_SIGNAL_HANDLER_PREFIX)AccessPoint.o : \
     $(WIFI_SIGNAL_HANDLER_ROOT)/APSignalHandler.cpp
