@@ -9,6 +9,7 @@
 #include <nm-connection.h>
 
 namespace LibNM { class Connection; }
+namespace LibNM { class AccessPoint; }
 namespace LibNM { class SSID; }
 namespace LibNM { class Settings; }
 namespace LibNM { class ConnectionSettings; }
@@ -62,6 +63,18 @@ public:
      */
     bool connectionMatches(const Connection& rhs) const;
 
+    /**
+     * @brief  Checks if this connection could potentially be activated with an 
+     *         access point.
+     * 
+     * @param accessPoint  An access point object to check for compatibility 
+     *                     with this connection.
+     * 
+     * @return             Whether the access point and this connection are
+     *                     potentially compatible.
+     */
+    bool isCompatibleAccessPoint(const AccessPoint& accessPoint) const;
+   
     /**
      * @brief  Adds a new set of settings to this connection, creating new
      *         connection data if this object is null.

@@ -1,7 +1,8 @@
-#include "LibNM/NMObjects/WifiSettings.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
+#include "LibNM/Settings/WifiSettings.h"
 #include "LibNM/Data/SSID.h"
 #include "LibNM/Data/APMode.h"
+#include "LibNM/ContextTest.h"
+#include "GLib/SmartPointers/ObjectPtr.h"
 
 typedef GLib::ObjectPtr<GObject*> GObjectPtr;
 typedef GLib::ObjectPtr<NMSettingWireless*> NMSettingWirelessPtr;
@@ -12,7 +13,7 @@ typedef GLib::ObjectPtr<NMSettingWireless*> NMSettingWirelessPtr;
  */
 LibNM::WifiSettings::WifiSettings(const WifiSettings& toCopy) : Settings(toCopy)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -21,7 +22,7 @@ LibNM::WifiSettings::WifiSettings(const WifiSettings& toCopy) : Settings(toCopy)
 LibNM::WifiSettings::WifiSettings(NMSettingWireless* toAssign) :
 Settings(NM_SETTING(toAssign), NM_TYPE_SETTING_WIRELESS) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -31,7 +32,7 @@ Settings(NM_SETTING(toAssign), NM_TYPE_SETTING_WIRELESS)
 LibNM::WifiSettings::WifiSettings() :
 Settings(NM_SETTING(nm_setting_wireless_new()), NM_TYPE_SETTING_WIRELESS) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -39,7 +40,7 @@ Settings(NM_SETTING(nm_setting_wireless_new()), NM_TYPE_SETTING_WIRELESS)
  */
 LibNM::SSID LibNM::WifiSettings::getSSID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMSettingWirelessPtr wifiSettings = NM_SETTING_WIRELESS(getGObject());
     if(wifiSettings != nullptr)
     {
@@ -53,7 +54,7 @@ LibNM::SSID LibNM::WifiSettings::getSSID() const
  */
 LibNM::APMode LibNM::WifiSettings::getMode() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMSettingWirelessPtr wifiSettings = NM_SETTING_WIRELESS(getGObject());
     if(wifiSettings != nullptr)
     {
@@ -80,7 +81,7 @@ LibNM::APMode LibNM::WifiSettings::getMode() const
  */
 juce::StringArray LibNM::WifiSettings::getSeenBSSIDs() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     juce::StringArray seenBSSIDs;
     NMSettingWirelessPtr wifiSettings = NM_SETTING_WIRELESS(getGObject());
     if(wifiSettings != nullptr)
@@ -101,7 +102,7 @@ juce::StringArray LibNM::WifiSettings::getSeenBSSIDs() const
  */
 bool LibNM::WifiSettings::isHidden() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMSettingWirelessPtr wifiSettings = NM_SETTING_WIRELESS(getGObject());
     if(wifiSettings != nullptr)
     {
@@ -115,7 +116,7 @@ bool LibNM::WifiSettings::isHidden() const
  */
 void LibNM::WifiSettings::setSSID(const SSID newSSID)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     GObjectPtr settings = getGObject();
     if(settings != nullptr)
     {
@@ -131,7 +132,7 @@ void LibNM::WifiSettings::setSSID(const SSID newSSID)
  */
 void LibNM::WifiSettings::setMode(const APMode newMode)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     GObjectPtr settings = getGObject();
     if(settings != nullptr)
     {
@@ -161,7 +162,7 @@ void LibNM::WifiSettings::setMode(const APMode newMode)
  */
 void LibNM::WifiSettings::setHidden(const bool isHidden)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     GObjectPtr settings = getGObject();
     if(settings != nullptr)
     {

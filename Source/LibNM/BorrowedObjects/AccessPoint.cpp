@@ -1,7 +1,8 @@
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/AccessPoint.h"
 #include "LibNM/Data/APHash.h"
 #include "LibNM/Data/APMode.h"
 #include "LibNM/Data/SecurityType.h"
+#include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 #include <nm-utils.h>
 
@@ -15,33 +16,32 @@ typedef GLib::ObjectPtr<> ObjectPtr;
  * Create a AccessPoint sharing a GObject with an existing
  * AccessPoint.
  */
-LibNM::AccessPoint::AccessPoint(const AccessPoint& toCopy) :
-LibNM::Object(toCopy, NM_TYPE_ACCESS_POINT) 
+LibNM::AccessPoint::AccessPoint(const AccessPoint& toCopy) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
+    getDataReference() = toCopy.getData();
 }
 
 /*
  * Create a AccessPoint to contain a NMAccessPoint object.
  */
-LibNM::AccessPoint::AccessPoint(NMAccessPoint* toAssign) :
-LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACCESS_POINT) 
-{
-    ASSERT_CORRECT_CONTEXT;
+LibNM::AccessPoint::AccessPoint(NMAccessPoint* toAssign) 
+{ 
+    ASSERT_NM_CONTEXT;
+    getDataReference() = toAssign;
 }
     
 /*
  * Creates a null AccessPoint.
  */
-LibNM::AccessPoint::AccessPoint() : LibNM::Object(NM_TYPE_ACCESS_POINT) { }
-
+LibNM::AccessPoint::AccessPoint() { }
 
 /*
  * Gets the access point's basic security type.
  */
 LibNM::SecurityType LibNM::AccessPoint::getSecurityType() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if (getRSNFlags() != NM_802_11_AP_SEC_NONE)
     {
         return SecurityType::securedRSN;
@@ -60,7 +60,7 @@ LibNM::SecurityType LibNM::AccessPoint::getSecurityType() const
  */
 LibNM::APHash LibNM::AccessPoint::generateHash() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     APMode mode;
     switch(getMode())
     {
@@ -85,12 +85,11 @@ LibNM::APHash LibNM::AccessPoint::generateHash() const
  */
 const GByteArray* LibNM::AccessPoint::getSSID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const GByteArray* ssid = nullptr;
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
+    if(!isNull())
     {
-        ssid = nm_access_point_get_ssid(accessPoint);
+        ssid = nm_access_point_get_ssid(getData());
     }
     return ssid;
 }
@@ -102,7 +101,7 @@ const GByteArray* LibNM::AccessPoint::getSSID() const
  */
 juce::String LibNM::AccessPoint::getSSIDText() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     juce::String ssidText;
     const GByteArray* ssid = getSSID();
     if(ssid != nullptr)
@@ -123,12 +122,11 @@ juce::String LibNM::AccessPoint::getSSIDText() const
  */
 const char* LibNM::AccessPoint::getBSSID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* bssid = "";
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
+    if(!isNull())
     {
-        bssid = nm_access_point_get_bssid(accessPoint);
+        bssid = nm_access_point_get_bssid(getData());
     }
     return bssid;
 }
@@ -138,28 +136,12 @@ const char* LibNM::AccessPoint::getBSSID() const
  */
 unsigned int LibNM::AccessPoint::getSignalStrength() const
 {
-    ASSERT_CORRECT_CONTEXT;
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
+    ASSERT_NM_CONTEXT;
+    if(!isNull())
     {
-        return nm_access_point_get_strength(accessPoint);
+        return nm_access_point_get_strength(getData());
     }
     return 0;
-}
-
-/*
- * Checks if a connection could potentially be activated with this access point.
- */
-bool LibNM::AccessPoint::isValidConnection(const Connection& connection) const
-{
-    ASSERT_CORRECT_CONTEXT;
-    NMConnectionPtr nmConnection(NM_CONNECTION(getOtherGObject(connection)));
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(nmConnection == nullptr || accessPoint == nullptr)
-    {
-        return false;
-    }
-    return nm_access_point_connection_valid(accessPoint, nmConnection);
 }
 
 /*
@@ -167,11 +149,10 @@ bool LibNM::AccessPoint::isValidConnection(const Connection& connection) const
  */
 NM80211Mode LibNM::AccessPoint::getMode() const
 {
-    ASSERT_CORRECT_CONTEXT;
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
+    ASSERT_NM_CONTEXT;
+    if(!isNull())
     {
-        return nm_access_point_get_mode(accessPoint);
+        return nm_access_point_get_mode(getData());
     }
     return NM_802_11_MODE_UNKNOWN;
 }
@@ -181,11 +162,10 @@ NM80211Mode LibNM::AccessPoint::getMode() const
  */
 NM80211ApFlags LibNM::AccessPoint::getFlags() const
 {
-    ASSERT_CORRECT_CONTEXT;
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
+    ASSERT_NM_CONTEXT;
+    if(!isNull())
     {
-        return nm_access_point_get_flags(accessPoint);
+        return nm_access_point_get_flags(getData());
     }
     return NM_802_11_AP_FLAGS_NONE;
 }
@@ -195,11 +175,10 @@ NM80211ApFlags LibNM::AccessPoint::getFlags() const
  */
 NM80211ApSecurityFlags LibNM::AccessPoint::getWPAFlags() const
 {
-    ASSERT_CORRECT_CONTEXT;
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
+    ASSERT_NM_CONTEXT;
+    if(!isNull())
     {
-        return nm_access_point_get_wpa_flags(accessPoint);
+        return nm_access_point_get_wpa_flags(getData());
     }
     return NM_802_11_AP_SEC_NONE;
 }
@@ -209,13 +188,38 @@ NM80211ApSecurityFlags LibNM::AccessPoint::getWPAFlags() const
  */
 NM80211ApSecurityFlags LibNM::AccessPoint::getRSNFlags() const
 {
-    ASSERT_CORRECT_CONTEXT;
-    NMAccessPointPtr accessPoint(NM_ACCESS_POINT(getGObject()));
-    if(accessPoint != nullptr)
+    ASSERT_NM_CONTEXT;
+    if(!isNull())
     {
-        return nm_access_point_get_rsn_flags(accessPoint);
+        return nm_access_point_get_rsn_flags(getData());
     }
     return NM_802_11_AP_SEC_NONE;
+}
+
+/*
+ * Directly accesses the AccessPoint object's stored data object.
+ */
+NMAccessPoint* LibNM::AccessPoint::getNMData() const
+{
+    return getData();
+}
+
+/*
+ * Gets the Object's DBus path.
+ */
+const char* LibNM::AccessPoint::getPath() const
+{ 
+    ASSERT_NM_CONTEXT;
+    const char* path = "";
+    if(!isNull())
+    {
+        path = nm_object_get_path(NM_OBJECT(getData()));
+        if(path == nullptr)
+        {
+            path = "";
+        }
+    }
+    return path;
 }
 
 /*
@@ -223,7 +227,7 @@ NM80211ApSecurityFlags LibNM::AccessPoint::getRSNFlags() const
  */
 void LibNM::AccessPoint::Listener::connectAllSignals(GObject* source)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(source != nullptr && NM_IS_ACCESS_POINT(source))
     {
         connectNotifySignal(source, NM_ACCESS_POINT_STRENGTH);
@@ -237,7 +241,7 @@ void LibNM::AccessPoint::Listener::connectAllSignals(GObject* source)
 void LibNM::AccessPoint::Listener::propertyChanged
 (GObject* source, juce::String property) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(property == NM_ACCESS_POINT_STRENGTH && NM_IS_ACCESS_POINT(source))
     {
         g_object_ref(source);
@@ -252,10 +256,9 @@ void LibNM::AccessPoint::Listener::propertyChanged
  */
 void LibNM::AccessPoint::addListener(AccessPoint::Listener& listener)
 {
-    ASSERT_CORRECT_CONTEXT;
-    ObjectPtr apObject(getGObject());
-    if(apObject != nullptr)
+    ASSERT_NM_CONTEXT;
+    if(!isNull())
     {
-        listener.connectAllSignals(apObject);
+        listener.connectAllSignals(G_OBJECT(getData()));
     }
 }

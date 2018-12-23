@@ -1,11 +1,11 @@
 #pragma once
 /**
- * @file  LibNM/NMObjects/ConnectionSettings.h
+ * @file  LibNM/Settings/ConnectionSettings.h
  *
  * @brief  Holds basic network connection settings.
  */
 
-#include "LibNM/NMObjects/Settings.h"
+#include "LibNM/Settings/Settings.h"
 #include <nm-setting-connection.h>
 
 namespace LibNM { class ConnectionSettings; }

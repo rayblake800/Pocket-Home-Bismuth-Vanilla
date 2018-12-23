@@ -1,11 +1,11 @@
 #pragma once
 /**
- * @file  LibNM/NMObjects/WifiSettings.h
+ * @file  LibNM/Settings/WifiSettings.h
  *
  * @brief  Holds wireless network connection settings.
  */
 
-#include "LibNM/NMObjects/Settings.h"
+#include "LibNM/Settings/Settings.h"
 #include <nm-setting-wireless.h>
 #include <nm-access-point.h>
 

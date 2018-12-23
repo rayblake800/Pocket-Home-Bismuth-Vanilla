@@ -1,13 +1,14 @@
 #include "LibNM/NMObjects/Connection.h"
-#include "LibNM/NMObjects/ConnectionSettings.h"
-#include "LibNM/NMObjects/WifiSettings.h"
-#include "LibNM/NMObjects/WifiSecuritySettings.h"
+#include "LibNM/Settings/ConnectionSettings.h"
+#include "LibNM/Settings/WifiSettings.h"
+#include "LibNM/Settings/WifiSecuritySettings.h"
 #include "LibNM/Data/SSID.h"
+#include "LibNM/AccessPoint.h"
+#include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointers for brevity: */
 typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
-typedef GLib::ObjectPtr<NMSetting*> NMSettingPtr;
 typedef GLib::ObjectPtr<GObject*> GObjectPtr;
 
 /*
@@ -16,7 +17,7 @@ typedef GLib::ObjectPtr<GObject*> GObjectPtr;
 LibNM::Connection::Connection(const Connection& toCopy) :
 LibNM::Object(toCopy, NM_TYPE_CONNECTION) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -25,7 +26,7 @@ LibNM::Object(toCopy, NM_TYPE_CONNECTION)
 LibNM::Connection::Connection(NMConnection* toAssign) :
 LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CONNECTION) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
     
 /*
@@ -39,7 +40,7 @@ LibNM::Connection::Connection() : LibNM::Object(NM_TYPE_CONNECTION) { }
  */
 bool LibNM::Connection::connectionMatches(const Connection& rhs) const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMConnectionPtr self(NM_CONNECTION(getGObject()));
     NMConnectionPtr toCompare(NM_CONNECTION(rhs.getGObject()));
     if(self == toCompare)
@@ -55,19 +56,39 @@ bool LibNM::Connection::connectionMatches(const Connection& rhs) const
 }
 
 /*
+ * Checks if this connection could potentially be activated with an access 
+ * point.
+ */
+bool LibNM::Connection::isCompatibleAccessPoint
+(const AccessPoint& accessPoint) const
+{
+    ASSERT_NM_CONTEXT;
+    NMConnectionPtr nmConnection(NM_CONNECTION((getGObject())));
+    NMAccessPoint* nmAP = accessPoint.getNMData();
+    if(nmConnection == nullptr || nmAP == nullptr)
+    {
+        return false;
+    }
+    return nm_access_point_connection_valid(nmAP, nmConnection);
+}
+
+/*
  * Adds a new set of settings to this connection, creating new connection data 
  * if this object is null.
  */
 void LibNM::Connection::addSettings(Settings addedSettings)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(isNull())
     {
         setGObject(G_OBJECT(nm_connection_new()));
     }
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     jassert(connection != nullptr);
-    NMSettingPtr settingsObject = NM_SETTING(getOtherGObject(addedSettings));
+
+    // Don't use smart pointers for NMSettings, the NMConnection is going to
+    // claim the reference that the smart pointer would clear.
+    NMSetting* settingsObject = NM_SETTING(getOtherGObject(addedSettings));
     if(settingsObject != nullptr)
     {
         nm_connection_add_setting(connection, settingsObject);
@@ -79,7 +100,7 @@ void LibNM::Connection::addSettings(Settings addedSettings)
  */
 void LibNM::Connection::removeSettings(GType settingType)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -92,7 +113,7 @@ void LibNM::Connection::removeSettings(GType settingType)
  */
 void LibNM::Connection::addWifiSettings(SSID ssid, bool isHidden)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(ssid.getByteArray() != nullptr)
     {   
         WifiSettings newSettings;
@@ -107,7 +128,7 @@ void LibNM::Connection::addWifiSettings(SSID ssid, bool isHidden)
  */
 bool LibNM::Connection::addWPASettings(const juce::String& psk)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     WifiSecuritySettings newSettings;
     bool wpaSet = newSettings.addWPASettings(psk);
     if(wpaSet)
@@ -122,7 +143,7 @@ bool LibNM::Connection::addWPASettings(const juce::String& psk)
  */
 bool LibNM::Connection::addWEPSettings(const juce::String& psk)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     WifiSecuritySettings newSettings;
     bool wepSet = newSettings.addWEPSettings(psk);
     if(wepSet)
@@ -137,7 +158,7 @@ bool LibNM::Connection::addWEPSettings(const juce::String& psk)
  */
 LibNM::ConnectionSettings LibNM::Connection::getConnectionSettings() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -156,7 +177,7 @@ LibNM::ConnectionSettings LibNM::Connection::getConnectionSettings() const
  */
 LibNM::WifiSettings LibNM::Connection::getWirelessSettings() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -175,7 +196,7 @@ LibNM::WifiSettings LibNM::Connection::getWirelessSettings() const
  */
 LibNM::WifiSecuritySettings LibNM::Connection::getSecuritySettings() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -195,7 +216,7 @@ LibNM::WifiSecuritySettings LibNM::Connection::getSecuritySettings() const
  */
 bool LibNM::Connection::verify(GError** error) const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -209,7 +230,7 @@ bool LibNM::Connection::verify(GError** error) const
  */
 void LibNM::Connection::setPath(const char* path)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(isNull())
     {
         setGObject(G_OBJECT(nm_connection_new()));
@@ -226,7 +247,7 @@ void LibNM::Connection::setPath(const char* path)
  */
 const char* LibNM::Connection::getPath() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* path = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -245,7 +266,7 @@ const char* LibNM::Connection::getPath() const
  */
 const char* LibNM::Connection::getUUID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* uuid = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -264,7 +285,7 @@ const char* LibNM::Connection::getUUID() const
  */
 const char* LibNM::Connection::getID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* conId = "";
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -285,7 +306,7 @@ const char* LibNM::Connection::getID() const
  */
 void LibNM::Connection::printDebugOutput() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {
@@ -300,7 +321,7 @@ void LibNM::Connection::printDebugOutput() const
  */
 NMSetting* LibNM::Connection::getSetting(GType settingType) const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMConnectionPtr connection(NM_CONNECTION(getGObject()));
     if(connection != nullptr)
     {

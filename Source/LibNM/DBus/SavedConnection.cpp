@@ -1,5 +1,5 @@
 #include "LibNM/DBus/SavedConnection.h"
-#include "LibNM/NMObjects/Settings.h"
+#include "LibNM/Settings/Settings.h"
 #include "LibNM/ThreadHandler.h"
 #include <nm-setting-connection.h>
 #include <nm-setting-wireless.h>
@@ -218,16 +218,15 @@ void LibNM::SavedConnection::createNMConnection()
         if(!settingNames.isEmpty())
         {
             settingNames.clear();
-            LibNM::Connection emptyConnection;
-            nmConnection = emptyConnection; 
+            nmConnection = nm_connection_new(); 
         }
         nmConnection.setPath(path.toRawUTF8());
         GVariant* settings = callMethod(getSettingsMethod);
         if (settings != nullptr)
         {
-            NMSetting* setting = nullptr;
+            NMSetting* nmSetting = nullptr;
             std::function<void(GVariant*, GVariant*) > copyDict 
-            = [this, &setting](GVariant* key, GVariant * val)
+            = [this, &nmSetting](GVariant* key, GVariant * val)
             {
                 String keyStr = getValue<String>(key);
                 if (keyStr.isNotEmpty())
@@ -236,7 +235,7 @@ void LibNM::SavedConnection::createNMConnection()
                     if(getGType(val) == G_TYPE_BYTE_ARRAY)
                     {
                         GByteArray* byteArray = getValue<GByteArray*>(val);
-                        g_object_set(G_OBJECT(setting),
+                        g_object_set(G_OBJECT(nmSetting),
                                 keyStr.toRawUTF8(),
                                 byteArray,
                                 nullptr);
@@ -244,29 +243,30 @@ void LibNM::SavedConnection::createNMConnection()
                     else
                     {
                         GValue propValue = getGValue(val);
-                        g_object_set_property(G_OBJECT(setting), 
+                        g_object_set_property(G_OBJECT(nmSetting), 
                                 keyStr.toRawUTF8(), &propValue);
                     }
                 }
             };
-            iterateDict(settings, [this, &setting, &copyDict]
-            (GVariant* key, GVariant * val)
+
+            std::function<void(GVariant*, GVariant*) > copySetting 
+            = [this, &nmSetting, &copyDict](GVariant* key, GVariant * val)
             {
                 String keyStr = getValue<String>(key);
                 settingNames.add(keyStr);
                 if (keyStr == NM_SETTING_CONNECTION_SETTING_NAME)
                 {
-                    setting = nm_setting_connection_new();
+                    nmSetting = nm_setting_connection_new();
                 }
                 else if (keyStr == NM_SETTING_WIRELESS_SETTING_NAME)
                 {
-                    setting = nm_setting_wireless_new();
+                    nmSetting = nm_setting_wireless_new();
                 }
                 else if (keyStr == NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
                 {
-                    setting = nm_setting_wireless_security_new();
+                    nmSetting = nm_setting_wireless_security_new();
                 }
-                if (setting != nullptr)
+                if (nmSetting != nullptr)
                 {
                     iterateDict(val, copyDict);
                     if (keyStr == NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
@@ -300,10 +300,11 @@ void LibNM::SavedConnection::createNMConnection()
                         }
                     }
                     nmConnection.addSettings
-                        (Settings(setting, NM_TYPE_SETTING));
-                    setting = nullptr;
+                        (Settings(nmSetting, NM_TYPE_SETTING));
+                    nmSetting = nullptr;
                 }
-            });
+            };
+            iterateDict(settings, copySetting);
         }
     });
 }

@@ -1,5 +1,6 @@
 #include "LibNM/NMObjects/ActiveConnection.h"
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/AccessPoint.h"
+#include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointer for brevity: */
@@ -12,7 +13,7 @@ typedef GLib::ObjectPtr<NMActiveConnection*> NMActiveConnectionPtr;
 LibNM::ActiveConnection::ActiveConnection(const ActiveConnection& toCopy) :
 LibNM::Object(toCopy, NM_TYPE_ACTIVE_CONNECTION)
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
  
 /*
@@ -21,7 +22,7 @@ LibNM::Object(toCopy, NM_TYPE_ACTIVE_CONNECTION)
 LibNM::ActiveConnection::ActiveConnection(NMActiveConnection* toAssign) :
 LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACTIVE_CONNECTION) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
     
 /*
@@ -35,7 +36,7 @@ LibNM::Object(NM_TYPE_ACTIVE_CONNECTION) { }
  */
 const char* LibNM::ActiveConnection::getAccessPointPath() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* path = "";
     NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -55,7 +56,7 @@ const char* LibNM::ActiveConnection::getAccessPointPath() const
 bool LibNM::ActiveConnection::isConnectedAccessPoint
 (const AccessPoint& accessPoint) const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(isNull() || accessPoint.isNull())
     {
         return false;
@@ -70,7 +71,7 @@ bool LibNM::ActiveConnection::isConnectedAccessPoint
  */
 const char* LibNM::ActiveConnection::getUUID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* uuid = "";
     NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -85,7 +86,7 @@ const char* LibNM::ActiveConnection::getUUID() const
  */
 const char* LibNM::ActiveConnection::getID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* conId = "";
     NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
     if(connection != nullptr)
@@ -100,7 +101,7 @@ const char* LibNM::ActiveConnection::getID() const
  */
 NMActiveConnectionState LibNM::ActiveConnection::getConnectionState() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMActiveConnectionState state = NM_ACTIVE_CONNECTION_STATE_UNKNOWN;
     NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
     if(connection != nullptr)

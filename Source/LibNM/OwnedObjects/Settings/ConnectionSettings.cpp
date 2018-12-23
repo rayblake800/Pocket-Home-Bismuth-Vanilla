@@ -1,4 +1,5 @@
-#include "LibNM/NMObjects/ConnectionSettings.h"
+#include "LibNM/Settings/ConnectionSettings.h"
+#include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 typedef GLib::ObjectPtr<NMSettingConnection*> NMSettingConnectionPtr;
@@ -10,7 +11,7 @@ typedef GLib::ObjectPtr<NMSettingConnection*> NMSettingConnectionPtr;
 LibNM::ConnectionSettings::ConnectionSettings
 (const ConnectionSettings& toCopy) : Settings(toCopy) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -20,7 +21,7 @@ LibNM::ConnectionSettings::ConnectionSettings
 LibNM::ConnectionSettings::ConnectionSettings(NMSettingConnection* toAssign) :
 Settings(NM_SETTING(toAssign), NM_TYPE_SETTING_CONNECTION) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -29,7 +30,7 @@ Settings(NM_SETTING(toAssign), NM_TYPE_SETTING_CONNECTION)
 LibNM::ConnectionSettings::ConnectionSettings() : 
 Settings(NM_TYPE_SETTING_CONNECTION) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -37,7 +38,7 @@ Settings(NM_TYPE_SETTING_CONNECTION)
  */
 juce::String LibNM::ConnectionSettings::getID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMSettingConnectionPtr settings = NM_SETTING_CONNECTION(getGObject());
     if(settings != nullptr)
     {
@@ -51,7 +52,7 @@ juce::String LibNM::ConnectionSettings::getID() const
  */
 juce::String LibNM::ConnectionSettings::getUUID() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMSettingConnectionPtr settings = NM_SETTING_CONNECTION(getGObject());
     if(settings != nullptr)
     {
@@ -65,7 +66,7 @@ juce::String LibNM::ConnectionSettings::getUUID() const
  */
 juce::String LibNM::ConnectionSettings::getConnectionInterface() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMSettingConnectionPtr settings = NM_SETTING_CONNECTION(getGObject());
     if(settings != nullptr)
     {
@@ -79,7 +80,7 @@ juce::String LibNM::ConnectionSettings::getConnectionInterface() const
  */
 juce::Time LibNM::ConnectionSettings::getTimestamp() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMSettingConnectionPtr settings = NM_SETTING_CONNECTION(getGObject());
     if(settings != nullptr)
     {

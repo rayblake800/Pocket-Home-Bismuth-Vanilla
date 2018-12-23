@@ -1,5 +1,6 @@
-#include "LibNM/NMObjects/WifiSecuritySettings.h"
+#include "LibNM/Settings/WifiSecuritySettings.h"
 #include "LibNM/Data/SecurityType.h"
+#include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename scoped GObject pointers for brevity: */
@@ -21,7 +22,7 @@ static const constexpr char* wpaEnterpriseTypeKey = "wpa-eap";
 LibNM::WifiSecuritySettings::WifiSecuritySettings
 (const WifiSecuritySettings& toCopy) : Settings(toCopy) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -31,7 +32,7 @@ LibNM::WifiSecuritySettings::WifiSecuritySettings
 (NMSettingWirelessSecurity* toAssign) : 
 Settings(NM_SETTING(toAssign), NM_TYPE_SETTING_WIRELESS_SECURITY) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -42,7 +43,7 @@ LibNM::WifiSecuritySettings::WifiSecuritySettings() :
 Settings(NM_SETTING(nm_setting_wireless_security_new()),
         NM_TYPE_SETTING_WIRELESS_SECURITY) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -50,7 +51,7 @@ Settings(NM_SETTING(nm_setting_wireless_security_new()),
  */
 bool LibNM::WifiSecuritySettings::addWPASettings(const juce::String psk)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(psk.length() >= 8)
     {
         GObjectPtr settings = getGObject();
@@ -76,7 +77,7 @@ bool LibNM::WifiSecuritySettings::addWPASettings(const juce::String psk)
  */
 bool LibNM::WifiSecuritySettings::addWEPSettings(const juce::String psk)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* keyType = nullptr;
     if (psk.length() == 10 || psk.length() == 26)
     {
@@ -119,7 +120,7 @@ bool LibNM::WifiSecuritySettings::addWEPSettings(const juce::String psk)
  */
 LibNM::SecurityType LibNM::WifiSecuritySettings::getSecurityType() const
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMSettingWirelessSecurityPtr settings 
         = NM_SETTING_WIRELESS_SECURITY(getGObject());
     if(settings != nullptr)

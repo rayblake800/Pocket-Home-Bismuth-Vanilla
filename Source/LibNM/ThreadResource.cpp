@@ -2,48 +2,25 @@
 #include "LibNM/ThreadResource.h"
 #include "LibNM/NMObjects/Client.h"
 #include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/ContextTest.h"
 #include "Config/MainFile.h"
 
 /* Unique SharedResource object instance key: */
 const juce::Identifier LibNM::ThreadResource::resourceKey 
         = "LibNM::ThreadResource";
 
+/* Tracks if no Wifi device exists, to make sure the thread doesn't waste time
+   trying to find it every single time getWifiDevice() is called. */
+static bool missingWifiDevice = false;
+
 /*
  * Initializes the NMThread with the default GLib context, and creates the Wifi 
  * device object.
  */
-LibNM::ThreadResource::ThreadResource() :
-GLib::ThreadResource(resourceKey, GLib::SharedContextPtr(nullptr)) 
+LibNM::ThreadResource::ThreadResource() : GLib::ThreadResource(resourceKey,
+        GLib::SharedContextPtr(g_main_context_default())) 
 { 
-    call([this]()
-    {
-        using juce::String;
-        using juce::Array;
-        Config::MainFile config;
-        String wifiInterface = config.getWifiInterface();
-        if(wifiInterface.isNotEmpty())
-        {
-            wifiDevice = networkClient.getWifiDeviceByIface
-                (wifiInterface.toRawUTF8());
-        }
-        if(wifiDevice.isNull() || !wifiDevice.isManaged())
-        {
-            Array<LibNM::DeviceWifi> devices = networkClient.getWifiDevices();
-            for(const DeviceWifi& device : devices)
-            {
-                if(device.isManaged())
-                {
-                    wifiDevice = device;
-                    break;
-                }
-            }
-        }
-        if(wifiDevice.isNull())
-        {
-            DBG("LibNM::ThreadResource::ThreadResource: "
-                    << "Couldn't find managed wifi device.");
-        }
-    });
+    startThread();
 }
         
 /*
@@ -60,6 +37,7 @@ LibNM::Client LibNM::ThreadResource::getClient()
         jassertfalse;
         return Client(nullptr);
     }
+    initClient();
     return networkClient;
 }
 
@@ -77,5 +55,67 @@ LibNM::DeviceWifi LibNM::ThreadResource::getWifiDevice()
         jassertfalse;
         return DeviceWifi();
     }
+    initWifiDevice();
     return wifiDevice;
+}
+
+/*
+ * Initializes the thread's LibNM client object if necessary.
+ */
+void LibNM::ThreadResource::initClient()
+{
+    ASSERT_NM_CONTEXT;
+    if(networkClient.isNull())
+    {
+        networkClient.initClient();
+    }
+}
+
+/*
+ * Initializes the thread's LibNM DeviceWifi object if necessary.
+ */
+void LibNM::ThreadResource::initWifiDevice()
+{
+    ASSERT_NM_CONTEXT;
+    if(missingWifiDevice || !wifiDevice.isNull())
+    {
+        return;
+    }
+
+    initClient();
+    using juce::String;
+    using juce::Array;
+    Config::MainFile config;
+    String wifiInterface = config.getWifiInterface();
+    if(wifiInterface.isNotEmpty())
+    {
+        wifiDevice = networkClient.getWifiDeviceByIface
+            (wifiInterface.toRawUTF8());
+    }
+    if(wifiDevice.isNull() || !wifiDevice.isManaged())
+    {
+        Array<LibNM::DeviceWifi> devices = networkClient.getWifiDevices();
+        for(const DeviceWifi& device : devices)
+        {
+            if(device.isManaged())
+            {
+                wifiDevice = device;
+                break;
+            }
+        }
+    }
+    if(wifiDevice.isNull())
+    {
+        DBG("LibNM::ThreadResource::ThreadResource: "
+                << "Couldn't find managed wifi device.");
+        missingWifiDevice = true;
+    }
+    else
+    {
+        DBG("LibNM::ThreadResource::ThreadResource: "
+                << "Initialized Wifi device with interface "
+                << wifiDevice.getInterface() << ", path="
+                << wifiDevice.getPath());
+        wifiDevice.requestScan();
+    }
 }

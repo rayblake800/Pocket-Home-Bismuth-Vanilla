@@ -1,5 +1,5 @@
 #include "LibNM/DBus/SavedConnectionLoader.h"
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/AccessPoint.h"
 
 /* The NetworkManager's DBus path: */
 const constexpr char* busName = "org.freedesktop.NetworkManager";
@@ -92,7 +92,7 @@ LibNM::SavedConnectionLoader::findConnectionsForAP
         Array<SavedConnection> wifiCons = getWifiConnections();
         for(const SavedConnection& con : wifiCons)
         {
-            if(accessPoint.isValidConnection(con.getNMConnection()))
+            if(con.getNMConnection().isCompatibleAccessPoint(accessPoint))
             {
                 compatible.add(con);
             }

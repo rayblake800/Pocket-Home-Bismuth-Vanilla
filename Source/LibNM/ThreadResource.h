@@ -56,6 +56,16 @@ public:
     DeviceWifi getWifiDevice();
 
 private:
+    /**
+     * @brief  Initializes the thread's LibNM client object if necessary.
+     */
+    void initClient();
+
+    /**
+     * @brief  Initializes the thread's LibNM DeviceWifi object if necessary.
+     */
+    void initWifiDevice();
+
     /* The main NetworkManager client object. */
     Client networkClient;
 

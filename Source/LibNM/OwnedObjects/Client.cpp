@@ -1,5 +1,7 @@
 #include "LibNM/NMObjects/Client.h"
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/AccessPoint.h"
+#include "LibNM/ThreadHandler.h"
+#include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 /* Rename smart pointers for brevity: */
@@ -9,13 +11,9 @@ typedef GLib::ObjectPtr<NMDevice*> NMDevicePtr;
 typedef GLib::ObjectPtr<> ObjectPtr;
 
 /*
- * Creates a Client holding a new NMClient object.
+ * Creates a null Client object.
  */
-LibNM::Client::Client() : LibNM::Object(NM_TYPE_CLIENT)
-{ 
-    ASSERT_CORRECT_CONTEXT;
-    setGObject(G_OBJECT(nm_client_new()));
-}
+LibNM::Client::Client() : LibNM::Object(NM_TYPE_CLIENT) { }
 
 /*
  * Creates a Client that shares a NMClient with another Client.
@@ -23,7 +21,7 @@ LibNM::Client::Client() : LibNM::Object(NM_TYPE_CLIENT)
 LibNM::Client::Client(const Client& toCopy) : 
 LibNM::Object(toCopy, NM_TYPE_CLIENT)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
  
 /*
@@ -32,7 +30,16 @@ LibNM::Object(toCopy, NM_TYPE_CLIENT)
 LibNM::Client::Client(NMClient* toAssign) :
 LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CLIENT) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
+}
+
+/*
+ * Initializes a null Client object with new NMClient data.
+ */
+void LibNM::Client::initClient()
+{
+    ASSERT_NM_CONTEXT;
+    setGObject(G_OBJECT(nm_client_new()));
 }
 
 /*
@@ -40,7 +47,7 @@ LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CLIENT)
  */
 juce::Array<LibNM::DeviceWifi> LibNM::Client::getWifiDevices() const
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     juce::Array<DeviceWifi> devices;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -65,7 +72,7 @@ juce::Array<LibNM::DeviceWifi> LibNM::Client::getWifiDevices() const
 LibNM::DeviceWifi 
 LibNM::Client::getWifiDeviceByIface(const char* interface) const
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     DeviceWifi wifiDevice;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -85,7 +92,7 @@ LibNM::Client::getWifiDeviceByIface(const char* interface) const
  */
 LibNM::DeviceWifi LibNM::Client::getWifiDeviceByPath(const char* path) const
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     DeviceWifi wifiDevice;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -105,7 +112,7 @@ LibNM::DeviceWifi LibNM::Client::getWifiDeviceByPath(const char* path) const
  */
 juce::Array<LibNM::ActiveConnection> LibNM::Client::getActiveConnections() const
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     juce::Array<ActiveConnection> connections;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -129,7 +136,7 @@ juce::Array<LibNM::ActiveConnection> LibNM::Client::getActiveConnections() const
  */
 LibNM::ActiveConnection LibNM::Client::getPrimaryConnection() const
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     ActiveConnection primary;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -149,7 +156,7 @@ LibNM::ActiveConnection LibNM::Client::getPrimaryConnection() const
  */
 LibNM::ActiveConnection LibNM::Client::getActivatingConnection() const
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     ActiveConnection activating;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -170,7 +177,7 @@ LibNM::ActiveConnection LibNM::Client::getActivatingConnection() const
  */
 void LibNM::Client::deactivateConnection(ActiveConnection& activeCon) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
     {
@@ -191,7 +198,7 @@ void LibNM::Client::deactivateConnection(ActiveConnection& activeCon)
  */
 bool LibNM::Client::wirelessEnabled() const
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     bool enabled = false;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
@@ -206,7 +213,7 @@ bool LibNM::Client::wirelessEnabled() const
  */
 void LibNM::Client::setWirelessEnabled(bool enabled) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     NMClientPtr client(NM_CLIENT(getGObject()));
     if(client != nullptr)
     {
@@ -224,7 +231,7 @@ void LibNM::Client::ConnectionHandler::activateCallback(NMClient* client,
         GError* error,
         Client::ConnectionHandler* handler) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(error != nullptr)
     {
         handler->openingConnectionFailed(
@@ -249,7 +256,7 @@ void LibNM::Client::ConnectionHandler::addActivateCallback(NMClient* client,
         GError* error,
         Client::ConnectionHandler* handler) 
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(error != nullptr)
     {
         handler->openingConnectionFailed
@@ -275,7 +282,7 @@ void LibNM::Client::activateConnection(
         Client::ConnectionHandler* handler,
         bool usedSaved)
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     //determine if this is a new connection attempt
     bool isNew = !usedSaved || !wifiDevice.hasConnectionAvailable(connection);
     NMClientPtr client(NM_CLIENT(getGObject()));
@@ -323,7 +330,7 @@ void LibNM::Client::activateConnection(
  */
 void LibNM::Client::Listener::connectAllSignals(GObject* source)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(source != nullptr && NM_IS_CLIENT(source))
     {
         connectNotifySignal(source, NM_CLIENT_WIRELESS_ENABLED);
@@ -337,7 +344,7 @@ void LibNM::Client::Listener::connectAllSignals(GObject* source)
 void LibNM::Client::Listener::propertyChanged
 (GObject* source, juce::String property)
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     if(source != nullptr && NM_IS_CLIENT(source) 
             && property == NM_CLIENT_WIRELESS_ENABLED)
     {
@@ -353,7 +360,7 @@ void LibNM::Client::Listener::propertyChanged
  */
 void LibNM::Client::addListener(Listener& listener)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     ObjectPtr source(getGObject());
     if(source != nullptr)
     {

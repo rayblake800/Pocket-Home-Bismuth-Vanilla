@@ -6,7 +6,7 @@
  */
 LibNM::SSID::SSID(const SSID& toCopy)
 {
-    *this = toCopy.getByteArray();
+    copyByteArray(toCopy.getByteArray());
 }
 
 /*
@@ -14,7 +14,7 @@ LibNM::SSID::SSID(const SSID& toCopy)
  */
 LibNM::SSID::SSID(const GByteArray* toCopy)
 {
-    *this = toCopy;
+    copyByteArray(toCopy);
 }
 
 /*
@@ -22,7 +22,7 @@ LibNM::SSID::SSID(const GByteArray* toCopy)
  */
 LibNM::SSID::~SSID()
 {
-    *this = nullptr;
+    clearByteArray();
 }
 
 /*
@@ -57,7 +57,8 @@ GByteArray* LibNM::SSID::getByteArray() const
  */
 LibNM::SSID& LibNM::SSID::operator=(const SSID& toCopy)
 {
-    return *this = toCopy.getByteArray();
+    copyByteArray(toCopy.getByteArray());
+    return *this;
 }
 
 /*
@@ -65,17 +66,8 @@ LibNM::SSID& LibNM::SSID::operator=(const SSID& toCopy)
  */
 LibNM::SSID& LibNM::SSID::operator=(GByteArray* toAssign)
 {
-    if(ssidBytes != nullptr)
-    {
-        g_byte_array_unref(ssidBytes);
-        ssidBytes = nullptr;
-    }
-
-    if(toAssign != nullptr)
-    {
-        ssidBytes = g_byte_array_sized_new(toAssign->len);
-        g_byte_array_append(ssidBytes, toAssign->data, toAssign->len);
-    }
+    copyByteArray(toAssign);
+    return *this;
 }
 
 /*
@@ -152,4 +144,29 @@ bool LibNM::SSID::operator==(GByteArray* rhs) const
 bool LibNM::SSID::operator!=(GByteArray* rhs) const
 {
     return !(*this == rhs);
+}
+    
+/*
+ * Copies a SSID byte string, storing it in this object.
+ */
+void LibNM::SSID::copyByteArray(const GByteArray* toCopy)
+{
+    clearByteArray();
+    if(toCopy != nullptr)
+    {
+        ssidBytes = g_byte_array_sized_new(toCopy->len);
+        g_byte_array_append(ssidBytes, toCopy->data, toCopy->len);
+    }
+}
+
+/*
+ * Frees any non-null SSID byte string stored in this object.
+ */
+void LibNM::SSID::clearByteArray()
+{
+    if(ssidBytes != nullptr)
+    {
+        g_byte_array_unref(ssidBytes);
+        ssidBytes = nullptr;
+    }
 }

@@ -114,6 +114,19 @@ public:
     bool operator!=(GByteArray* rhs) const;
 
 private:
+    /**
+     * @brief  Copies a SSID byte string, storing it in this object.
+     *
+     * @param toCopy  An SSID byte string to copy, or nullptr to set this object
+     *                to a null value.
+     */
+    void copyByteArray(const GByteArray* ssidBytes);
+    
+    /**
+     * @brief  Frees any non-null SSID byte string stored in this object.
+     */
+    void clearByteArray();
+
     /* Stores the SSID value as a byte string. */
     GByteArray* ssidBytes = nullptr;
 };

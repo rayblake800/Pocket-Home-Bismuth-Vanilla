@@ -1,4 +1,5 @@
 #include "LibNM/NMObjects/Object.h"
+#include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
 typedef GLib::ObjectPtr<NMObject*> NMObjectPtr;
@@ -6,11 +7,7 @@ typedef GLib::ObjectPtr<NMObject*> NMObjectPtr;
 /*
  * Creates a null LibNM object.
  */
-LibNM::Object::Object(const GType nmType) :
-GLib::Object(nmType) 
-{ 
-    ASSERT_CORRECT_CONTEXT;
-}
+LibNM::Object::Object(const GType nmType) : GLib::Object(nmType) { }
 
 /*
  * Creates a LibNM object sharing data with an existing LibNM object.
@@ -18,7 +15,7 @@ GLib::Object(nmType)
 LibNM::Object::Object(const Object& toCopy, const GType nmType) :
 GLib::Object(toCopy, nmType) 
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -27,7 +24,7 @@ GLib::Object(toCopy, nmType)
 LibNM::Object::Object(const NMObject* toAssign, const GType nmType) :
 GLib::Object(G_OBJECT(toAssign), nmType)
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
 }
 
 /*
@@ -35,12 +32,12 @@ GLib::Object(G_OBJECT(toAssign), nmType)
  */
 const char* LibNM::Object::getPath() const
 { 
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const char* path = "";
-    NMObjectPtr device(NM_OBJECT(getGObject()));
-    if(device != nullptr)
+    NMObjectPtr object(NM_OBJECT(getGObject()));
+    if(object != nullptr)
     {
-        path = nm_object_get_path(device);
+        path = nm_object_get_path(object);
         if(path == nullptr)
         {
             path = "";

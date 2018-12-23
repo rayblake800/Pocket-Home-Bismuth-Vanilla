@@ -26,7 +26,7 @@ class LibNM::Client : public LibNM::Object
 {
 public:
     /**
-     * @brief  Creates a Client holding a new NMClient object.
+     * @brief  Creates a null Client object.
      */
     Client();
     
@@ -44,6 +44,11 @@ public:
      * @param toAssign  The NMClient* represented by the new Client.
      */
     Client(NMClient* toAssign);
+
+    /**
+     * @brief  Initializes a null Client object with new NMClient data.
+     */
+    void initClient();
 
     /**
      * @brief  Gets all wifi devices from the network manager.

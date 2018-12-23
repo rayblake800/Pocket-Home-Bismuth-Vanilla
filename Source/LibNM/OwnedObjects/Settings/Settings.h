@@ -1,17 +1,17 @@
 #pragma once
 /**
- * @file  LibNM/NMObjects/Settings.h
+ * @file  LibNM/Settings/Settings.h
  *
  * @brief  Stores a set of related network connection settings associated with a
  *         LibNM::Connection.
  */
 
-#include "LibNM/NMObjects/Object.h"
+#include "GLib/Object.h"
 #include <nm-connection.h>
 
 namespace LibNM { class Settings; }
 
-class LibNM::Settings : public LibNM::Object
+class LibNM::Settings : public GLib::Object
 {
 public:
     /**
@@ -43,4 +43,3 @@ public:
 
     virtual ~Settings() { }
 };
-

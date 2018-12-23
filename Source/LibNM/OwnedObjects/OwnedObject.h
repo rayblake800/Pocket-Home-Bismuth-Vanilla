@@ -56,21 +56,3 @@ public:
      */
     const char* getPath() const;
 };
-
-/**
- * @brief  A debugging macro used to find inappropriate LibNM::Object 
- *         access outside of the global default main context. In release builds,
- *         these checks will be removed.
- * 
- * LibNM::Object classes should call this at the beginning of most methods.
- */
-#ifdef JUCE_DEBUG
-#define ASSERT_CORRECT_CONTEXT                                \
-    if(!g_main_context_is_owner(g_main_context_default()))    \
-    {                                                         \
-        DBG("LibNM: Accessed NMObject outside of NMThread!"); \
-        jassertfalse;                                         \
-    }
-#else
-#define ASSERT_CORRECT_CONTEXT
-#endif

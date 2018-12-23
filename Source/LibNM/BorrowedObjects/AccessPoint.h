@@ -5,6 +5,7 @@
  * @brief A RAII container and C++ interface for NMAccessPoint objects.
  */
 
+#include "Nullable.h"
 #include "LibNM/NMObjects/Object.h"
 #include "LibNM/NMObjects/Connection.h"
 #include "GLib/SignalHandler.h"
@@ -12,6 +13,7 @@
 
 namespace LibNM { class AccessPoint; }
 namespace LibNM { class APHash; }
+namespace LibNM { class SSID; }
 namespace LibNM { enum class APMode; }
 namespace LibNM { enum class SecurityType; }
 
@@ -24,9 +26,12 @@ namespace LibNM { enum class SecurityType; }
  * for receiving access point signals. After they have been added, listeners 
  * will receive updates if signal strength changes or the access point is 
  * removed. 
+ *
+ *  TODO: NMAccessPoints tend to segfault when accessed through GWeakRef.
+ *        Trying a different implementation that's more hands-off.
  */
 
-class LibNM::AccessPoint : public LibNM::Object
+class LibNM::AccessPoint : public Nullable<NMAccessPoint*>
 {
 public:
     /**
@@ -106,19 +111,6 @@ public:
     unsigned int getSignalStrength() const;
     
     /**
-     * @brief  Checks if a connection could potentially be activated with this 
-     *         access point.
-     * 
-     * @param connection  A connection object to check for compatibility with
-     *                    this access point.
-     * 
-     * @return            Whether this access point and the connection are
-     *                    potentially compatible.
-     */
-    bool isValidConnection(const Connection& connection) const;
-    
-   
-    /**
      * @brief  Gets the device mode of this access point.
      * 
      * @return  The access point's mode, or NM_802_11_MODE_UNKNOWN if the access
@@ -149,6 +141,21 @@ public:
      *          NM_802_11_AP_SEC_NONE if the access point is null. 
      */
     NM80211ApSecurityFlags getRSNFlags() const;
+
+    /**
+     * @brief  Directly accesses the AccessPoint object's stored data object.
+     *
+     * @return  The AccessPoint object's NMAccessPoint data.
+     */
+    NMAccessPoint* getNMData() const;
+    
+    /**
+     * @brief  Gets the AccessPoint object's DBus path.
+     *
+     * @return  The DBus path to the objects's underlying NetworkManager DBus
+     *          object, or the empty string if the object is null.
+     */
+    const char* getPath() const;
     
     /**
      * @brief  Listener objects can subscribe to receive updates when the access 
