@@ -6,50 +6,60 @@
  *         and shouldn't be modified.
  */
 
-#include "Nullable.h"
-#include "JuceHeader.h"
-#include <nm-object.h>
+#include "LibNM/BorrowedObjects/NMContainer.h"
 
-namespace LibNM { class BorrowedObject; }
-namespace LibNM { class InnerObject; }
+namespace LibNM { template<class NMCreator, typename NMType>
+    class BorrowedObject; }
 
 
-class LibNM::BorrowedObject : public Nullable<InnerObject*>
+/**
+ *  BorrowedObject defines a container class for LibNM data pointers owned by 
+ * NetworkManager. BorrowedObjects should only be used within the LibNM thread.
+ * If NetworkManager destroys or invalidates the data pointer accessed through
+ * the BorrowedObject, the BorrowedObject's held data will be set to null.
+ *
+ *  Only the BorrowedObject's designated NMCreator class objects may create
+ * a BorrowedObject holding new LibNM data. Borrowed objects may be freely 
+ * copied, reassigned, or created as null.
+ *
+ * @tparam NMCreator  The class responsible for creating and managing a 
+ *                    BorrowedObject type.
+ *
+ * @tparam NMType     The LibNM data type stored in the BorrowedObject.
+ */
+template<class NMCreator, typename NMType>
+class LibNM::BorrowedObject : 
+public Nullable<typename NMContainer<NMCreator, NMType>::Ptr>
 {
+private:
+    /* The specific BorrowedObject type, renamed for brevity. */
+    typedef typename Nullable<NMContainer<NMCreator, NMType>>::Ptr NullableType;
+
 public:
-    BorrowedObject();
+    /**
+     * @brief  Creates a null BorrowedObject.
+     */
+    BorrowedObject() { }
+    
+    BorrowedObject(const BorrowedObject& toCopy) : 
+        NullableType(toCopy.getData()) { }
 
-    BorrowedObject(NMObject* nmObject);
+    operator NMType*()
+    {
+        return (NullableType::isNull() ? nullptr :
+                NullableType::getData()->getNMData());
+    }
 
-    operator NMObject*() const;
-
-    juce::String getPath();
-
-    bool operator==(const BorrowedObject& rhs) const;
-
-    bool operator==(const NMObject* rhs) const;
-
-    bool operator!=(const BorrowedObject& rhs) const;
-
-    bool operator!=(const NMObject* rhs) const;
-
-    BorrowedObject& operator=(const BorrowedObject& rhs);
-
-protected:
-    void removeNMData();
-};
-
-class LibNM::InnerObject : public Nullable<NMObject*>
-{
-public:
-    virtual ~InnerObject() { }
+    BorrowedObject& operator=(const BorrowedObject& rhs)
+    {
+        NullableType::getDataReference() = rhs.getData();
+    }
 
 private:
-    friend class BorrowedObject;
+    /* Only the NMCreator may create BorrowedObjects with a new NMContainer or
+       remove the NMContainer's LibNM data. */
+    friend NMCreator;
 
-    InnerObject();
-
-    InnerObject(NMObject* nmObject);
-
-    operator NMObject*() const;
+    BorrowedObject(typename NMContainer<NMCreator, NMType>::Ptr newData) :
+        NullableType(newData) { }
 };
