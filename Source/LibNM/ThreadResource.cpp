@@ -1,7 +1,7 @@
 #define LIB_NM_THREAD_IMPLEMENTATION
 #include "LibNM/ThreadResource.h"
-#include "LibNM/NMObjects/Client.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/OwnedObjects/Client.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/ContextTest.h"
 #include "Config/MainFile.h"
 

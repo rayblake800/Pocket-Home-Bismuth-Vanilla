@@ -1,11 +1,11 @@
 #pragma once
 /**
- * @file  Source/LibNM/Settings/WifiSecuritySettings.h
+ * @file  LibNM/OwnedObjects/Settings/WifiSecuritySettings.h
  *
  * @brief  Holds wireless network connection security settings.
  */
 
-#include "LibNM/Settings/Settings.h"
+#include "LibNM/OwnedObjects/Settings/Settings.h"
 #include <nm-setting-wireless-security.h>
 
 namespace LibNM { class WifiSecuritySettings; }

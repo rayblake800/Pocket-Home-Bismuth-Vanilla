@@ -1,4 +1,4 @@
-#include "LibNM/Settings/Settings.h"
+#include "LibNM/OwnedObjects/Settings/Settings.h"
 #include <nm-connection.h>
 
 /*

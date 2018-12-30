@@ -1,9 +1,9 @@
-#include "LibNM/NMObjects/Connection.h"
-#include "LibNM/Settings/ConnectionSettings.h"
-#include "LibNM/Settings/WifiSettings.h"
-#include "LibNM/Settings/WifiSecuritySettings.h"
+#include "LibNM/OwnedObjects/Connection.h"
+#include "LibNM/OwnedObjects/Settings/ConnectionSettings.h"
+#include "LibNM/OwnedObjects/Settings/WifiSettings.h"
+#include "LibNM/OwnedObjects/Settings/WifiSecuritySettings.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/Data/SSID.h"
-#include "LibNM/AccessPoint.h"
 #include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
@@ -15,7 +15,7 @@ typedef GLib::ObjectPtr<GObject*> GObjectPtr;
  * Creates a Connection sharing a GObject with an existing Connection.
  */
 LibNM::Connection::Connection(const Connection& toCopy) :
-LibNM::Object(toCopy, NM_TYPE_CONNECTION) 
+LibNM::OwnedObject(toCopy, NM_TYPE_CONNECTION) 
 {
     ASSERT_NM_CONTEXT;
 }
@@ -24,7 +24,7 @@ LibNM::Object(toCopy, NM_TYPE_CONNECTION)
  * Creates a Connection to contain a NMConnection object.
  */
 LibNM::Connection::Connection(NMConnection* toAssign) :
-LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CONNECTION) 
+LibNM::OwnedObject(NM_OBJECT(toAssign), NM_TYPE_CONNECTION) 
 { 
     ASSERT_NM_CONTEXT;
 }
@@ -32,7 +32,7 @@ LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_CONNECTION)
 /*
  * Creates a null Connection.
  */
-LibNM::Connection::Connection() : LibNM::Object(NM_TYPE_CONNECTION) { }
+LibNM::Connection::Connection() : LibNM::OwnedObject(NM_TYPE_CONNECTION) { }
 
 /*
  * Checks if this connection object and another could be describing the same 

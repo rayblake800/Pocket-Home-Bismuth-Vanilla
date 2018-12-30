@@ -1,4 +1,4 @@
-#include "LibNM/Settings/WifiSettings.h"
+#include "LibNM/OwnedObjects/Settings/WifiSettings.h"
 #include "LibNM/Data/SSID.h"
 #include "LibNM/Data/APMode.h"
 #include "LibNM/ContextTest.h"

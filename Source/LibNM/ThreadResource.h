@@ -11,8 +11,8 @@
  */
 
 #include "GLib/ThreadResource.h"
-#include "LibNM/NMObjects/Client.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/OwnedObjects/Client.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
 
 namespace LibNM { class ThreadResource; }
 
@@ -69,6 +69,6 @@ private:
     /* The main NetworkManager client object. */
     Client networkClient;
 
-    /* Interacts with the LibNM-managed wifi device. */
+    /* The managed Wifi device object. */
     DeviceWifi wifiDevice;
 };

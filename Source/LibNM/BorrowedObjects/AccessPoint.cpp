@@ -1,4 +1,4 @@
-#include "LibNM/AccessPoint.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/Data/APHash.h"
 #include "LibNM/Data/APMode.h"
 #include "LibNM/Data/SecurityType.h"
@@ -13,22 +13,12 @@ typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
 typedef GLib::ObjectPtr<> ObjectPtr;
 
 /*
- * Create a AccessPoint sharing a GObject with an existing
- * AccessPoint.
- */
-LibNM::AccessPoint::AccessPoint(const AccessPoint& toCopy) 
-{
-    ASSERT_NM_CONTEXT;
-    getDataReference() = toCopy.getData();
-}
-
-/*
  * Create a AccessPoint to contain a NMAccessPoint object.
  */
-LibNM::AccessPoint::AccessPoint(NMAccessPoint* toAssign) 
+LibNM::AccessPoint::AccessPoint(BorrowedObject<NMAccessPoint> toAssign) :
+    BorrowedObjectInterface<NMAccessPoint>(toAssign)
 { 
     ASSERT_NM_CONTEXT;
-    getDataReference() = toAssign;
 }
     
 /*
@@ -89,7 +79,7 @@ const GByteArray* LibNM::AccessPoint::getSSID() const
     const GByteArray* ssid = nullptr;
     if(!isNull())
     {
-        ssid = nm_access_point_get_ssid(getData());
+        ssid = nm_access_point_get_ssid(getNMData());
     }
     return ssid;
 }
@@ -126,7 +116,7 @@ const char* LibNM::AccessPoint::getBSSID() const
     const char* bssid = "";
     if(!isNull())
     {
-        bssid = nm_access_point_get_bssid(getData());
+        bssid = nm_access_point_get_bssid(getNMData());
     }
     return bssid;
 }
@@ -139,7 +129,7 @@ unsigned int LibNM::AccessPoint::getSignalStrength() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_strength(getData());
+        return nm_access_point_get_strength(getNMData());
     }
     return 0;
 }
@@ -152,7 +142,7 @@ NM80211Mode LibNM::AccessPoint::getMode() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_mode(getData());
+        return nm_access_point_get_mode(getNMData());
     }
     return NM_802_11_MODE_UNKNOWN;
 }
@@ -165,7 +155,7 @@ NM80211ApFlags LibNM::AccessPoint::getFlags() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_flags(getData());
+        return nm_access_point_get_flags(getNMData());
     }
     return NM_802_11_AP_FLAGS_NONE;
 }
@@ -178,7 +168,7 @@ NM80211ApSecurityFlags LibNM::AccessPoint::getWPAFlags() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_wpa_flags(getData());
+        return nm_access_point_get_wpa_flags(getNMData());
     }
     return NM_802_11_AP_SEC_NONE;
 }
@@ -191,17 +181,9 @@ NM80211ApSecurityFlags LibNM::AccessPoint::getRSNFlags() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_rsn_flags(getData());
+        return nm_access_point_get_rsn_flags(getNMData());
     }
     return NM_802_11_AP_SEC_NONE;
-}
-
-/*
- * Directly accesses the AccessPoint object's stored data object.
- */
-NMAccessPoint* LibNM::AccessPoint::getNMData() const
-{
-    return getData();
 }
 
 /*
@@ -213,7 +195,7 @@ const char* LibNM::AccessPoint::getPath() const
     const char* path = "";
     if(!isNull())
     {
-        path = nm_object_get_path(NM_OBJECT(getData()));
+        path = nm_object_get_path(NM_OBJECT(getNMData()));
         if(path == nullptr)
         {
             path = "";
@@ -245,7 +227,11 @@ void LibNM::AccessPoint::Listener::propertyChanged
     if(property == NM_ACCESS_POINT_STRENGTH && NM_IS_ACCESS_POINT(source))
     {
         g_object_ref(source);
-        AccessPoint tempAP(NM_ACCESS_POINT(source));
+        //PLACEHOLDER:
+        AccessPoint tempAP;
+        //TODO: get WifiDevice from ThreadResource,
+        //      get AccessPoint from WifiDevice
+        //AccessPoint tempAP(NM_ACCESS_POINT(source));
         unsigned int strength = tempAP.getSignalStrength();
         signalStrengthChanged(tempAP, strength);
     }
@@ -259,6 +245,6 @@ void LibNM::AccessPoint::addListener(AccessPoint::Listener& listener)
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        listener.connectAllSignals(G_OBJECT(getData()));
+        listener.connectAllSignals(G_OBJECT(getNMData()));
     }
 }

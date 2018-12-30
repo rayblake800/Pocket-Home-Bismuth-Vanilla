@@ -1,8 +1,6 @@
 #define LIB_NM_THREAD_IMPLEMENTATION
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/ThreadResource.h"
-#include "LibNM/NMObjects/Client.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
 
 /*
  * Creates the shared LibNM::ThreadResource if it doesn't already exist.

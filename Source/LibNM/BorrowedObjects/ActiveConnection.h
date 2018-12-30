@@ -6,7 +6,7 @@
  *        objects.
  */
 
-#include "LibNM/NMObjects/Object.h"
+#include "LibNM/BorrowedObjects/BorrowedObject.h"
 #include <nm-active-connection.h>
 
 namespace LibNM { class ActiveConnection; }
@@ -18,7 +18,8 @@ namespace LibNM { class AccessPoint; }
  * connection's status, its properties, and the access point used to activate
  * the connection.
  */
-class LibNM::ActiveConnection : public LibNM::Object
+class LibNM::ActiveConnection : 
+public BorrowedObjectInterface<NMActiveConnection>
 {
 public:
     /**
@@ -36,7 +37,7 @@ public:
      * @toAssign  A valid NMActiveConnection for this ActiveConnection to 
      *            hold.
      */
-    ActiveConnection(NMActiveConnection* toAssign);
+    ActiveConnection(BorrowedObject<NMActiveConnection> toAssign);
     
     /**
      * @brief  Creates a null ActiveConnection.
@@ -46,7 +47,8 @@ public:
     virtual ~ActiveConnection() { }
     
     /**
-     * @brief  Gets the path of the access point used to activate this connection.
+     * @brief  Gets the path of the access point used to activate this
+     *         connection.
      * 
      * @return  The DBus path of a NMAccessPoint object, or the empty string if
      *          this object is null.

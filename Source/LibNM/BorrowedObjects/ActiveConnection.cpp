@@ -1,26 +1,13 @@
-#include "LibNM/NMObjects/ActiveConnection.h"
-#include "LibNM/AccessPoint.h"
+#include "LibNM/BorrowedObjects/ActiveConnection.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/ContextTest.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
-
-/* Rename smart pointer for brevity: */
-typedef GLib::ObjectPtr<NMActiveConnection*> NMActiveConnectionPtr;
-
-/*
- * Creates a ActiveConnection sharing a GObject with an existing
- * ActiveConnection.
- */
-LibNM::ActiveConnection::ActiveConnection(const ActiveConnection& toCopy) :
-LibNM::Object(toCopy, NM_TYPE_ACTIVE_CONNECTION)
-{ 
-    ASSERT_NM_CONTEXT;
-}
  
 /*
  * Creates a ActiveConnection to contain a NMActiveConnection object.
  */
-LibNM::ActiveConnection::ActiveConnection(NMActiveConnection* toAssign) :
-LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACTIVE_CONNECTION) 
+LibNM::ActiveConnection::ActiveConnection
+(BorrowedObject<NMActiveConnection> toAssign) :
+BorrowedObjectInterface<NMActiveConnection>(toAssign)
 { 
     ASSERT_NM_CONTEXT;
 }
@@ -28,8 +15,7 @@ LibNM::Object(NM_OBJECT(toAssign), NM_TYPE_ACTIVE_CONNECTION)
 /*
  * Creates a null ActiveConnection.
  */
-LibNM::ActiveConnection::ActiveConnection() :
-LibNM::Object(NM_TYPE_ACTIVE_CONNECTION) { }
+LibNM::ActiveConnection::ActiveConnection() { }
     
 /*
  * Gets the path of the access point used to activate this connection.
@@ -38,10 +24,9 @@ const char* LibNM::ActiveConnection::getAccessPointPath() const
 {
     ASSERT_NM_CONTEXT;
     const char* path = "";
-    NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
-    if(connection != nullptr)
+    if(!isNull())
     {
-        path = nm_active_connection_get_specific_object(connection);
+        path = nm_active_connection_get_specific_object(getNMData());
         if(path == nullptr)
         {
             path = "";
@@ -57,7 +42,7 @@ bool LibNM::ActiveConnection::isConnectedAccessPoint
 (const AccessPoint& accessPoint) const
 {
     ASSERT_NM_CONTEXT;
-    if(isNull() || accessPoint.isNull())
+    if(!isNull() || accessPoint.isNull())
     {
         return false;
     }
@@ -73,10 +58,9 @@ const char* LibNM::ActiveConnection::getUUID() const
 {
     ASSERT_NM_CONTEXT;
     const char* uuid = "";
-    NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
-    if(connection != nullptr)
+    if(!isNull())
     {
-        uuid = nm_active_connection_get_uuid(connection);
+        uuid = nm_active_connection_get_uuid(getNMData());
     }
     return uuid;
 }
@@ -88,10 +72,9 @@ const char* LibNM::ActiveConnection::getID() const
 {
     ASSERT_NM_CONTEXT;
     const char* conId = "";
-    NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
-    if(connection != nullptr)
+    if(!isNull())
     {
-        conId = nm_active_connection_get_id(connection);
+        conId = nm_active_connection_get_id(getNMData());
     }
     return conId;
 }
@@ -103,10 +86,9 @@ NMActiveConnectionState LibNM::ActiveConnection::getConnectionState() const
 {
     ASSERT_NM_CONTEXT;
     NMActiveConnectionState state = NM_ACTIVE_CONNECTION_STATE_UNKNOWN;
-    NMActiveConnectionPtr connection(NM_ACTIVE_CONNECTION(getGObject()));
-    if(connection != nullptr)
+    if(!isNull())
     {
-        state = nm_active_connection_get_state(connection);
+        state = nm_active_connection_get_state(getNMData());
     }
     return state;
 }

@@ -1,5 +1,5 @@
 #include "LibNM/DBus/SavedConnection.h"
-#include "LibNM/Settings/Settings.h"
+#include "LibNM/OwnedObjects/Settings/Settings.h"
 #include "LibNM/ThreadHandler.h"
 #include <nm-setting-connection.h>
 #include <nm-setting-wireless.h>

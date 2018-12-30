@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  LibNM/Settings/Settings.h
+ * @file  LibNM/OwnedObjects/Settings/Settings.h
  *
  * @brief  Stores a set of related network connection settings associated with a
  *         LibNM::Connection.

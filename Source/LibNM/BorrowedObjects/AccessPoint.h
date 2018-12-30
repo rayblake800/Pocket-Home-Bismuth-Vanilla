@@ -2,12 +2,10 @@
 /**
  * @file LibNM/AccessPoint.h
  * 
- * @brief A RAII container and C++ interface for NMAccessPoint objects.
+ * @brief A C++ interface for NMAccessPoint objects owned by LibNM.
  */
 
-#include "Nullable.h"
-#include "LibNM/NMObjects/Object.h"
-#include "LibNM/NMObjects/Connection.h"
+#include "LibNM/BorrowedObjects/BorrowedObject.h"
 #include "GLib/SignalHandler.h"
 #include <nm-access-point.h>
 
@@ -26,28 +24,17 @@ namespace LibNM { enum class SecurityType; }
  * for receiving access point signals. After they have been added, listeners 
  * will receive updates if signal strength changes or the access point is 
  * removed. 
- *
- *  TODO: NMAccessPoints tend to segfault when accessed through GWeakRef.
- *        Trying a different implementation that's more hands-off.
  */
 
-class LibNM::AccessPoint : public Nullable<NMAccessPoint*>
+class LibNM::AccessPoint : public BorrowedObjectInterface<NMAccessPoint>
 {
 public:
     /**
-     * @brief  Creates a AccessPoint sharing a GObject with an existing 
-     *         AccessPoint.
-     * 
-     * @toCopy  An existing connection object.
-     */
-    AccessPoint(const AccessPoint& toCopy);
-
-    /**
      * @brief  Creates a AccessPoint to contain a NMAccessPoint object.
      * 
-     * @toAssign  A valid NMAccessPoint for this AccessPoint to hold.
+     * @toAssign  A NMAccessPoint container for this AccessPoint to hold.
      */
-    AccessPoint(NMAccessPoint* toAssign);
+    AccessPoint(BorrowedObject<NMAccessPoint> toAssign);
     
     /**
      * @brief  Creates a null AccessPoint.
@@ -141,13 +128,6 @@ public:
      *          NM_802_11_AP_SEC_NONE if the access point is null. 
      */
     NM80211ApSecurityFlags getRSNFlags() const;
-
-    /**
-     * @brief  Directly accesses the AccessPoint object's stored data object.
-     *
-     * @return  The AccessPoint object's NMAccessPoint data.
-     */
-    NMAccessPoint* getNMData() const;
     
     /**
      * @brief  Gets the AccessPoint object's DBus path.

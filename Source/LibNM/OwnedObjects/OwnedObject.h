@@ -1,14 +1,14 @@
 #pragma once
 /**
- * @file  LibNM/NMObjects/Object.h
+ * @file  LibNM/OwnedObjects/OwnedObject.h
  *
- * @brief  The base class for all LibNM GObject classes.
+ * @brief  A base class for managing owned LibNM GObject data pointers.
  */
 
 #include "GLib/Object.h"
 #include <nm-object.h>
 
-namespace LibNM { class Object; }
+namespace LibNM { class OwnedObject; }
 
 /**
  *  LibNM::Object classes each contain a different subtype of libnm-glib's
@@ -18,7 +18,7 @@ namespace LibNM { class Object; }
  * should occur on the GLib global default context loop, which runs on the
  * NMThread SharedResource object.
  */
-class LibNM::Object : public GLib::Object
+class LibNM::OwnedObject : public GLib::Object
 {
 protected:
     /**
@@ -26,7 +26,7 @@ protected:
      *
      * @param nmType  The new object's specific LibNM object type.
      */
-    Object(const GType nmType);
+    OwnedObject(const GType nmType);
 
     /**
      * @brief  Creates a LibNM object sharing data with an existing LibNM
@@ -36,7 +36,7 @@ protected:
      *
      * @param nmType  The new object's specific LibNM object type.
      */
-    Object(const Object& toCopy, const GType nmType);
+    OwnedObject(const OwnedObject& toCopy, const GType nmType);
 
     /**
      * @brief  Creates a LibNM object to hold a NMObject pointer.
@@ -45,7 +45,7 @@ protected:
      *
      * @param nmType    The new object's specific LibNM object type.
      */
-    Object(const NMObject* toAssign, const GType nmType);
+    OwnedObject(const NMObject* toAssign, const GType nmType);
 
 public:
     /**

@@ -2,11 +2,10 @@
 /**
  * @file LibNM/DeviceWifi.h
  *
- * @brief A RAII container and C++ interface for LibNM NMDeviceWifi
- *        objects.
+ * @brief A C++ interface for LibNM NMDeviceWifi objects.
  */
 
-#include "LibNM/NMObjects/Object.h"
+#include "LibNM/BorrowedObjects/BorrowedObject.h"
 #include "GLib/SignalHandler.h"
 #include <nm-device-wifi.h>
 
@@ -30,24 +29,15 @@ namespace LibNM { class ActiveConnection; }
  * track NMDeviceWifi signals. Listeners are notified when the active connection
  * changes, access points are discovered or lost, or the device's state changes. 
  */
-class LibNM::DeviceWifi : public LibNM::Object
+class LibNM::DeviceWifi : public BorrowedObjectInterface<NMDeviceWifi>
 {
 public:
-    /**
-     * @brief  Creates a DeviceWifi object that shares a NMDeviceWifi* with 
-     *         another DeviceWifi object
-     *
-     * @param toCopy  This object's NMDeviceWifi* will be shared with the
-     *                new object.
-     */
-    DeviceWifi(const DeviceWifi& toCopy);
-    
     /**
      * @brief  Creates a DeviceWifi to contain a NMDeviceWifi object.
      * 
      * @toAssign  A valid NMDeviceWifi for this DeviceWifi to hold.
      */
-    DeviceWifi(NMDeviceWifi* toAssign);
+    DeviceWifi(BorrowedObject<NMDeviceWifi> toAssign);
     
     /**
      * @brief  Creates a null DeviceWifi.
@@ -98,32 +88,7 @@ public:
      * @return  The active connection object, or a null connection object if
      *          this object is not connected or is null.
      */
-    ActiveConnection getActiveConnection() const;
-    
-    /**
-     * @brief  Gets the list of connections available to activate on this 
-     *         device.
-     *
-     * This might not load all saved connections.
-     * 
-     * @return  The list of known connections that are compatible with this
-     *          device.
-     */
-    juce::Array<Connection> getAvailableConnections() const;
-    
-    /**
-     * @brief  Finds the first available connection that is compatible with a 
-     *         specific wifi access point.
-     * 
-     * @param accessPoint  A wifi access point object.
-     * 
-     * @return             The first available connection that could be used to 
-     *                     activate this access point, or a null connection if 
-     *                     this device is null, the access point is null, or no 
-     *                     matching connection is found. 
-     */
-    Connection getAvailableConnection
-    (const AccessPoint& accessPoint) const;
+    ActiveConnection getActiveConnection();
     
     /**
      * @brief  Gets an access point object using the access point's path.
@@ -133,7 +98,7 @@ public:
      * @return      The matching access point object, or a null access point 
      *              if the access point was not found or this object is null.
      */
-    AccessPoint getAccessPoint(const char* path) const;
+    AccessPoint getAccessPoint(const char* path);
     
     /**
      * @brief  Gets the active connection's access point.
@@ -141,7 +106,7 @@ public:
      * @return  The active access point object, or a null access point object
      *          if this object is disconnected or null.
      */
-    AccessPoint getActiveAccessPoint() const;
+    AccessPoint getActiveAccessPoint();
     
     /**
      * @brief  Gets all access points visible to this device.
@@ -149,25 +114,14 @@ public:
      * @return  An array containing one access point object for each nearby
      *          wifi access point visible to the device.
      */
-    juce::Array<AccessPoint> getAccessPoints() const;
-    
-    /**
-     * @brief  Checks if a specific connection is present in the list of 
-     *         available device connections.
-     * 
-     * @param toFind  A connection object to find.
-     * 
-     * @return        Whether a matching connection is already known to this 
-     *                wifi device.
-     */
-    bool hasConnectionAvailable(const Connection& toFind) const;
+    juce::Array<AccessPoint> getAccessPoints();
     
     /**
      * @brief  Sends a request to the wifi device asking it to scan visible 
      *         access points.
      */
     void requestScan();
-    
+
     /**
      * @brief  Listeners receive notifications when the wifi device changes, a 
      *         new access point object is added, or an access point is removed.
@@ -215,11 +169,8 @@ public:
 	   /**
         * @brief  This method will be called whenever the wifi device no longer
         *         detects a wifi access point.
-        * 
-	    * @param removedAP  The nearby access point that the device can no
-        *                   longer detect.
 	    */
-        virtual void accessPointRemoved(AccessPoint removedAP) = 0;
+        virtual void accessPointRemoved() = 0;
         
        /**
         * @brief  This method will be called whenever the device's active 
@@ -311,4 +262,10 @@ private:
      */
     static void apRemovedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
             Listener* listener);
+
+    /* Holds LibNM AccessPoint objects managed by the Wifi device. */
+    BorrowedObjectSet<NMAccessPoint> accessPointSet;
+
+    /* Holds LibNM ActiveConnection objects managed by the Wifi device. */
+    BorrowedObjectSet<NMActiveConnection> activeConnections;
 };

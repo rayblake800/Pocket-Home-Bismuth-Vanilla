@@ -6,7 +6,7 @@
  */
 
 #include "GLib/DBus/DBusProxy.h"
-#include "LibNM/NMObjects/Connection.h"
+#include "LibNM/OwnedObjects/Connection.h"
 #include "JuceHeader.h"
 
 namespace LibNM { class SavedConnection; }

@@ -1,5 +1,5 @@
 #include "LibNM/DBus/SavedConnectionLoader.h"
-#include "LibNM/AccessPoint.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
 
 /* The NetworkManager's DBus path: */
 const constexpr char* busName = "org.freedesktop.NetworkManager";

@@ -1,14 +1,13 @@
 #pragma once
 /**
- * @file LibNM/Client.h
+ * @file LibNM/OwnedObjects/Client.h
  * 
  * @brief  A RAII container and C++ interface for the LibNM NMClient class.
  */
 
-#include "LibNM/NMObjects/Object.h"
-#include "LibNM/NMObjects/Connection.h"
-#include "LibNM/NMObjects/ActiveConnection.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/OwnedObjects/OwnedObject.h"
+#include "LibNM/BorrowedObjects/ActiveConnection.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "GLib/SignalHandler.h"
 #include <nm-client.h>
 
@@ -22,7 +21,7 @@ namespace LibNM { class Client; }
  *  Client provides a Listener interface, which may be used to receive
  * notifications when wireless networking is enabled or disabled.
  */
-class LibNM::Client : public LibNM::Object
+class LibNM::Client : public LibNM::OwnedObject
 {
 public:
     /**
@@ -56,7 +55,7 @@ public:
      * @return  All NMDevices found that are wifi devices, packaged into an
      *          array of DeviceWifi objects.
      */
-    juce::Array<DeviceWifi> getWifiDevices() const;
+    juce::Array<DeviceWifi> getWifiDevices();
     
     /**
      * @brief  Gets a specific wifi device using its interface name.
@@ -66,7 +65,7 @@ public:
      * @return           The requested wifi device, or a null object if no valid
      *                   device is found.
      */
-    DeviceWifi getWifiDeviceByIface(const char* interface) const;
+    DeviceWifi getWifiDeviceByIface(const char* interface);
         
     /**
      * @brief  Gets a specific wifi device using its DBus path.
@@ -76,7 +75,7 @@ public:
      * @return      The requested wifi device, or a null object if no valid 
      *              device is found.
      */
-    DeviceWifi getWifiDeviceByPath(const char* path) const;
+    DeviceWifi getWifiDeviceByPath(const char* path);
     
     /**
      * @brief  Gets the list of all active connections known to the network 
@@ -84,7 +83,7 @@ public:
      * 
      * @return  An array of all active network connections.
      */
-    juce::Array<ActiveConnection> getActiveConnections() const;
+    juce::Array<ActiveConnection> getActiveConnections();
     
     /**
      * @brief  Gets the primary active network connection.
@@ -92,7 +91,7 @@ public:
      * @return  An active Connection object, or a null object if there is no
      *          primary connection.
      */
-    ActiveConnection getPrimaryConnection() const;
+    ActiveConnection getPrimaryConnection();
     
     /**
      * @brief  Gets the connection being activated by the network manager.
@@ -100,7 +99,7 @@ public:
      * @return  The activating connection as an ActiveConnection object, or a 
      *          null object if there is no activating connection.
      */
-    ActiveConnection getActivatingConnection() const;
+    ActiveConnection getActivatingConnection();
     
     /**
      * @brief  Deactivates an active network connection.
@@ -149,30 +148,21 @@ public:
          * @param connection  A new active connection object representing the 
          *                    added connection. This connection object might not
          *                    be completely connected yet.
-         * 
-         * @param isNew       True if the connection was just added to the
-         *                    network manager, false if it was a known
-         *                    connection that was re-activated.
          */
-        virtual void openingConnection(ActiveConnection connection,
-                bool isNew) = 0;
+        virtual void openingConnection(ActiveConnection connection) = 0;
         
         /**
          * @brief  This function will be called whenever starting to activate a
          *         connection fails.
          * 
-         * #param connection  The connection that failed to activate.  This
-         *                    may be a null connection.
+         * @param connection  The connection that failed to activate. This may 
+         *                    be a null connection.
          * 
-         * @param error       A GError object describing the problem.  This 
-         *                    error object must be freed by the 
-         *                    ConnectionHandler
-         * 
-         * @param isNew       Whether the connection was just added to the 
-         *                    network manager. 
+         * @param error       A GError object describing the problem. This error
+         *                    object must be freed by the ConnectionHandler.
          */
         virtual void openingConnectionFailed(ActiveConnection connection, 
-                GError* error, bool isNew) = 0;
+                GError* error) = 0;
         
         /**
          * @brief  The NMClientActivateFn called by LibNM when activating an 
@@ -297,4 +287,12 @@ public:
      *                  enabled or disabled.
      */
     void addListener(Listener& listener);
+
+private:
+    /* Holds the list of wifi device object pointers owned by NetworkManager. */
+    BorrowedObjectSet<NMDeviceWifi> wifiDevices;
+
+    /* Holds the list of active connection object pointers owned by 
+       NetworkManager. */
+    BorrowedObjectSet<NMActiveConnection> activeConnections;
 };

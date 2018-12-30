@@ -1,4 +1,4 @@
-#include "LibNM/Settings/ConnectionSettings.h"
+#include "LibNM/OwnedObjects/Settings/ConnectionSettings.h"
 #include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
