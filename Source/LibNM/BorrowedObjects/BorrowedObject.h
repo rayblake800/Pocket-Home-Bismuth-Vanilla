@@ -11,7 +11,6 @@
 #include <map>
 
 namespace LibNM { template<typename NMType> class BorrowedObjectInterface; }
-namespace LibNM { template<typename NMType> class BorrowedObjectSet; }
 namespace LibNM { template<typename NMType> class BorrowedObject; }
 namespace LibNM { template<typename NMType> class InnerContainer; } 
 
