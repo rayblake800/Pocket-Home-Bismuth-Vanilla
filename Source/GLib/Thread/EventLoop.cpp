@@ -1,6 +1,4 @@
-#include <gio/gio.h>
-#include "GLib/EventLoop.h"
-
+#include "GLib/Thread/EventLoop.h"
 
 /*
  * Creates the event loop with an initial GMainContext.

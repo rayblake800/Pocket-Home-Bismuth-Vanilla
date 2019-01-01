@@ -1,5 +1,5 @@
-#include "GLib/ThreadHandler.h"
-#include "GLib/ThreadResource.h"
+#include "GLib/Thread/ThreadHandler.h"
+#include "GLib/Thread/ThreadResource.h"
 #include "GLib/SmartPointers/SharedContextPtr.h"
 /*
  * Permanently connects the ThreadHandler to a single thread resource on
@@ -18,7 +18,14 @@ void GLib::ThreadHandler::call(const std::function<void()> toCall,
 {
     SharedResource::LockedPtr<ThreadResource> glibThread
         = getWriteLockedResource();
-    glibThread->call(toCall, onFailure);
+    // The resource lock must be unlocked before the call can be made,
+    // just in case the called function also needs to access the glibThread
+    // to ensure code is running within the thread's EventLoop.
+    glibThread->call(toCall, onFailure, [&glibThread]()
+    {
+        glibThread->notifyThread();
+        glibThread.unlock();
+    });
 }
 
 /*
@@ -39,7 +46,7 @@ bool GLib::ThreadHandler::isThreadRunning() const
 {
     SharedResource::LockedPtr<ThreadResource> glibThread
         = getReadLockedResource();
-    return glibThread->isThreadResourceRunning();
+    return glibThread->isThreadRunning();
 }
 
 /*

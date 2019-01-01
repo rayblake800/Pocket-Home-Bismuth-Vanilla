@@ -5,8 +5,8 @@
  * @brief  Provides an interface for easier access to a GDBusProxy.
  */
 
-#include "GLib/Object.h"
-#include "GLib/ThreadHandler.h"
+#include "GLib/Owned/Owned_Object.h"
+#include "GLib/Thread/ThreadHandler.h"
 #include "GLib/SignalHandler.h"
 #include "GLib/DBus/Variant/VariantConverter.h"
 #include "JuceHeader.h"
@@ -22,7 +22,7 @@ namespace GLib { class DBusThread; }
  *  DBusProxy objects are not meant to be interacted with directly. Instead, 
  * each interface type should be implemented as a class inheriting DBusProxy.
  */
-class GLib::DBusProxy : public GLib::Object, public GLib::ThreadHandler
+class GLib::DBusProxy : public GLib::Owned::Object, public GLib::ThreadHandler
 {
 protected:
     /**

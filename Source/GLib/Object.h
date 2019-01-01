@@ -5,39 +5,20 @@
  * @brief  A C++ interface and RAII container for GLib GObject data.
  */
 
-#include "GLib/WeakRef.h"
+#include "GLib/SmartPointers/ObjectPtr.h"
 #include "JuceHeader.h"
-#include <glib-object.h>
 
 namespace GLib { class Object; }
 
 /**
- *  GLib::Object holds a GObject*, providing methods for setting and getting 
- * object properties, and adding and removing object signal handlers. 
- * GLib::Object classes allow code to access GLib libraries through thread-safe,
- * RAII-managed C++ objects, reducing the amount of necessary C-style code.  
- * 
- *  GLib::Objects ensure that GObject pointers are referenced when acquired, and
- * unreferenced when removed. If the GObject data is null or otherwise invalid,
- * isNull() will return true, and all other methods will return default data or 
- * do nothing.
+ *  GLib::Object holds a GObject*, providing methods for accessing object data,
+ * and setting and getting object properties.
  * 
  *  GLib::Object subclasses should each handle a single type of GObject, 
- * providing methods to interact with that object. GLib::Objects should avoid 
- * holding any extra data, to ensure that all objects holding the same GObject 
- * data are completely interchangeable.
+ * providing methods to interact with that object type. 
  */
 class GLib::Object
 {
-public:
-    /**
-     * @brief  Gets this object's reference count.  Only use this for debugging.
-     * 
-     * @return  The stored object's reference count, or 0 if this object is
-     *          null.
-     */
-    int getReferenceCount() const;
-    
 protected:
     /**
      * @brief  Creates a null Object, with no internal GObject.
@@ -45,43 +26,33 @@ protected:
      * @param objectType   Sets the type of GObject this Object may hold.
      */
     Object(const GType objectType);
-    
-    /**
-     * @brief  Creates a new Object as a reference to existing object data.
-     * 
-     * @param toCopy      As long as this Object holds a compatible GObject, its
-     *                    GObject* will be shared, and the GObject's reference 
-     *                    count will be increased.
-     * 
-     * @param objectType  Sets the type of GObject this Object holds.
-     */
-    Object(const Object& toCopy, const GType objectType);
-    
-    /**
-     * @brief  Creates an Object from GObject* data.
-     * 
-     * @param toAssign     GObject data to store in this Object.  If this 
-     *                     GObject* has a floating reference, Object will 
-     *                     sink the reference.  Otherwise, a new reference will
-     *                     be added.
-     * 
-     * @param objectType   Sets the type of GObject this Object holds.
-     */
-    Object(GObject* toAssign, const GType objectType);
 
 public:
+    virtual ~Object() { }
+
     /**
-     * @brief  Unreferences the Object's GObject* data on destruction.
+     * @brief  Checks if this object is an Owned object that manages its own
+     *         life cycle, or a Borrowed object that has its life cycle managed
+     *         by a GLib librarycode.
+     *
+     * @return  Whether this object is Owned.
      */
-    virtual ~Object();
+    virtual bool isOwned() const = 0;
     
+    /**
+     * @brief  Gets a pointer to this object's data in a thread-safe manner.
+     * 
+     * @return  A pointer to the held GObject data.
+     */
+    virtual GObject* getGObject() const = 0;
+
     /**
      * @brief  Checks if this object holds valid GObject data.
      * 
      * @return  Whether this Object's GObject* is null or otherwise invalid.
      */
-    bool isNull() const;
-    
+    virtual bool isNull() const;
+
     /**
      * @brief  Checks if this Object and another share the same GObject data.
      * 
@@ -119,52 +90,42 @@ public:
      * @return     Whether rhs does not hold the same address as this Object.
      */
     bool operator!=(GObject* rhs) const;
+
+    /**
+     * @brief  Gets this object's reference count.  Only use this for debugging.
+     * 
+     * @return  The stored object's reference count, or 0 if this object is
+     *          null.
+     */
+    int getReferenceCount() const;
     
     /**
-     * @brief  Sets this Object's data container to a new reference of another 
-     *         Object's stored GObject.
+     * @brief  Gets the GType assigned to this Object class.
      * 
-     * @param rhs  Another Object instance. If rhs is a null object, this 
-     *             object's data will be removed.
+     * @return  The GType of GObjects held by this Object class.
      */
-    void operator=(const Object& rhs);
-    
+    GType getType() const;
+
     /**
-     * @brief  Sets this Object's stored GObject data.
+     * @brief  Checks if a GObject's type allows it to be held by this Object.
      * 
-     * @param rhs  A valid GObject to store, or nullptr to convert this 
-     *             Object into a null object. If this value is floating, 
-     *             the floating reference will be claimed by the Object. 
-     *             Otherwise, the reference count will be increased.
+     * @param toCheck  Any valid GObject, or nullptr.
+     * 
+     * @return         Whether toCheck shares a type with this object, or is 
+     *                 null. 
      */
-    void operator=(GObject* rhs);
+    bool isValidType(GObject* toCheck) const;
     
 protected:   
-    /**
-     * @brief  Gets a pointer to this object's data in a thread-safe manner.
-     * 
-     * @return  A pointer to the held GObject data. If this data is not null,
-     *          the GObject's reference count will increase by one, and the
-     *          caller is responsible for unreferencing the object once it is
-     *          no longer needed. 
-     */
-    GObject* getGObject() const;
-    
     /**
      * @brief  Assigns new GObject data to this Object. 
      *
      * Unless the new GObject to assign is already held by this Object, any 
      * references to the Object's previous GObject data will be removed.
      * 
-     * @param toAssign  GObject data to store in this Object.  If this GObject* 
-     *                  has a floating reference, the Object will sink the 
-     *                  reference.  Otherwise, a new reference will be added.  
-     * 
-     *                  If the GType of this object is invalid, or the same 
-     *                  GObject* is already held by this Object, the object's 
-     *                  reference count will not be changed.
+     * @param toAssign  GObject data to store in this Object.
      */
-    void setGObject(GObject* toAssign);
+    virtual void setGObject(GObject* toAssign) = 0;
     
     /**
      * @brief  Assigns new GObject data to this Object.  
@@ -176,47 +137,12 @@ protected:
      *                Object, or its GType is not compatible with this object's 
      *                type, nothing will happen.
      */
-    void setGObject(const Object& toCopy);
+    virtual void setGObject(const Object& toCopy) = 0;
     
     /**
-     * @brief  Allows Object subclasses to access GObject data within other 
-     *         Objects. 
-     *
-     * Avoid using this for anything other than calling library functions that 
-     * need GObject* parameter data.
-     * 
-     * @param source  Another Object.
-     * 
-     * @return        The GObject* data held by source, or nullptr if source is 
-     *                null. Any valid GObject returned by this function will 
-     *                have its reference count incremented, and the caller is 
-     *                responsible for unreferencing it when it is no longer 
-     *                needed.
+     * @brief  Removes this object's GObject data.
      */
-    GObject* getOtherGObject(const Object& source) const;
-
-    /**
-     * @brief  Removes this object's GObject data, clearing all associated 
-     *         references.
-     */
-    void clearGObject();
-    
-    /**
-     * @brief  Gets the GType assigned to this Object class.
-     * 
-     * @return  The GType of GObjects held by this Object class.
-     */
-    GType getType() const;
-    
-    /**
-     * @brief  Checks if a GObject's type allows it to be held by this Object.
-     * 
-     * @param toCheck  Any valid GObject, or nullptr.
-     * 
-     * @return         Whether toCheck shares a type with this object, or is 
-     *                 null. 
-     */
-    bool isValidType(GObject* toCheck) const;
+    virtual void clearGObject() = 0;
     
     /**
      * @brief  Gets a pointer to one of the property values stored by this 
@@ -233,14 +159,13 @@ protected:
      */
     template<typename T> T getProperty(const char* property) const
     {
-        GObject* object = getGObject();
-        T pValue;
-        if(object != nullptr)
+        ObjectPtr objectPtr(*this);
+        T propertyValue;
+        if(objectPtr != nullptr)
         {
-            g_object_get(object, property, &pValue, nullptr);
-            g_object_unref(object);
+            g_object_get(objectPtr, property, &propertyValue, nullptr);
         }
-        return pValue;
+        return propertyValue;
     }
     
     /**
@@ -254,22 +179,14 @@ protected:
      */
     template<typename T> void setProperty(const char* property, T value)
     {
-        GObject* object = getGObject();
-        if(object != nullptr)
+        ObjectPtr objectPtr(*this);
+        if(objectPtr != nullptr)
         {
-            g_object_set(object, property, value, nullptr);
-            g_object_unref(object);
+            g_object_set(objectPtr, property, value, nullptr);
         }
     } 
     
 private:  
     /* Holds the GObject type used by this Object */
     const GType objectType;
-    
-    /* Holds a weak reference to the GObject stored in this Object. This 
-       prevents attempts to access GObject data after it is deleted. */
-    WeakRef objectRef;
-
-    /* Only allow one thread to change the stored GObject at once. */
-    juce::CriticalSection objectLock;
 };

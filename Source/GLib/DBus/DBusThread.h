@@ -9,7 +9,7 @@
  */
 
 #include "GLib/DBus/DBusProxy.h"
-#include "GLib/ThreadResource.h"
+#include "GLib/Thread/ThreadResource.h"
 
 namespace GLib { class DBusThread; }
 

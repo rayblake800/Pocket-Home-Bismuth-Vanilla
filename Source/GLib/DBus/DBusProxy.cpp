@@ -6,15 +6,12 @@
 #include "GLib/SmartPointers/ObjectPtr.h"
 #include "Utils.h"
 
-typedef GLib::ObjectPtr<GDBusProxy*> GDBusProxyPtr;
-typedef GLib::ObjectPtr<> GObjectPtr;
-
 /*
  * Opens a new DBusProxy.
  */
 GLib::DBusProxy::DBusProxy
 (const char* name, const char* path, const char* interface) :
-GLib::Object(G_TYPE_DBUS_PROXY),
+GLib::Owned::Object(G_TYPE_DBUS_PROXY),
 GLib::ThreadHandler(DBusThread::resourceKey,
         []()->ThreadResource* { return new DBusThread(); })
 {
@@ -25,39 +22,39 @@ GLib::ThreadHandler(DBusThread::resourceKey,
     }
 
     call([this, name, path, interface]()
+    {
+        ErrorPtr error([name](GError* error)
         {
-            ErrorPtr error([name](GError* error)
-            {
-                DBG(__func__ << "Opening DBus adapter proxy "
-                        << name << " failed!");
-                DBG("Error: " << juce::String(error->message));
-            });
-            GDBusProxy * proxy = g_dbus_proxy_new_for_bus_sync(
-                    G_BUS_TYPE_SYSTEM,
-                    G_DBUS_PROXY_FLAGS_NONE,
-                    nullptr,
-                    name,
-                    path,
-                    interface,
-                    nullptr,
-                    error.getAddress());
-            if(proxy != nullptr)
-            {
-                setGObject(G_OBJECT(proxy));
-            }
-        },
-        [this]()
-        {
-            DBG("GLib::DBusProxy::DBusProxy: Opening proxy failed, couldn't "
-                    << "access GLib thread.");
+            DBG(__func__ << "Opening DBus adapter proxy "
+                    << name << " failed!");
+            DBG("Error: " << juce::String(error->message));
         });
+        GDBusProxy * proxy = g_dbus_proxy_new_for_bus_sync(
+                G_BUS_TYPE_SYSTEM,
+                G_DBUS_PROXY_FLAGS_NONE,
+                nullptr,
+                name,
+                path,
+                interface,
+                nullptr,
+                error.getAddress());
+        if(proxy != nullptr)
+        {
+            setGObject(G_OBJECT(proxy));
+        }
+    },
+    [this]()
+    {
+        DBG("GLib::DBusProxy::DBusProxy: Opening proxy failed, couldn't "
+                << "access GLib thread.");
+    });
 }
  
 /*
  * Creates an object holding an existing GDBusProxy.
  */
 GLib::DBusProxy::DBusProxy(GDBusProxy * proxy) :
-GLib::Object(G_OBJECT(proxy), G_TYPE_DBUS_PROXY),
+GLib::Owned::Object(G_OBJECT(proxy), G_TYPE_DBUS_PROXY),
 GLib::ThreadHandler(DBusThread::resourceKey,
         []()->ThreadResource* { return new DBusThread(); }) { }
         
@@ -65,7 +62,7 @@ GLib::ThreadHandler(DBusThread::resourceKey,
  * Creates a DBusProxy as a copy of another DBusProxy
  */
 GLib::DBusProxy::DBusProxy(const DBusProxy& proxy) : 
-GLib::Object(proxy, G_TYPE_DBUS_PROXY),
+GLib::Owned::Object(proxy, G_TYPE_DBUS_PROXY),
 GLib::ThreadHandler(DBusThread::resourceKey,
         []()->ThreadResource* { return new DBusThread(); }) { }
 
@@ -77,9 +74,9 @@ void GLib::DBusProxy::DBusSignalHandler::connectAllSignals(GObject* source)
 {
     if(source != nullptr && G_IS_DBUS_PROXY(source))
     {
-        connectSignal(source, "g-signal", G_CALLBACK(dBusSignalCallback));
+        connectSignal(source, "g-signal", G_CALLBACK(dBusSignalCallback), true);
         connectSignal(source, "g-properties-changed", 
-                G_CALLBACK(dBusPropertiesChanged));
+                G_CALLBACK(dBusPropertiesChanged), true);
     }
 }
 
@@ -132,7 +129,7 @@ GVariant* GLib::DBusProxy::callMethod
                 params = tuple;
             }
 
-            GDBusProxyPtr proxy(G_DBUS_PROXY(getGObject()));
+            ObjectPtr proxy(*this);
             if(proxy == nullptr)
             {
                 DBG("GLib::DBusProxy::" << __func__ << ": invalid DBus proxy!");
@@ -154,7 +151,7 @@ GVariant* GLib::DBusProxy::callMethod
             });
 
             result = g_dbus_proxy_call_sync(
-                    proxy,
+                    G_DBUS_PROXY((GObject*) proxy),
                     methodName,
                     params,
                     G_DBUS_CALL_FLAGS_NONE,
@@ -199,11 +196,11 @@ bool GLib::DBusProxy::hasProperty(const char *  propertyName) const
     bool hasProperty = false;
     call([this, propertyName, &hasProperty]()
         {
-            GDBusProxyPtr proxy(G_DBUS_PROXY(getGObject()));
+            ObjectPtr proxy(*this);
             if(proxy != nullptr)
             {
                 VariantPtr property(g_dbus_proxy_get_cached_property
-                        (proxy, propertyName));
+                        (G_DBUS_PROXY((GObject*) proxy), propertyName));
                 hasProperty = (property != nullptr);
             }
         },
@@ -222,7 +219,7 @@ bool GLib::DBusProxy::hasProperty(const char *  propertyName) const
 void GLib::DBusProxy::connectSignalHandler
 (DBusProxy::DBusSignalHandler& signalHandler)
 {
-    GObjectPtr proxy(getGObject());
+    ObjectPtr proxy(getGObject());
     if(proxy != nullptr)
     {
         signalHandler.connectAllSignals(proxy);

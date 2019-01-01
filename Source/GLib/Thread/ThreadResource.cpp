@@ -1,4 +1,4 @@
-#include "GLib/ThreadResource.h"
+#include "GLib/Thread/ThreadResource.h"
 #include "GLib/SmartPointers/SharedContextPtr.h"
 
 /*
@@ -25,15 +25,25 @@ void GLib::ThreadResource::call(std::function<void()> toCall,
             std::function<void()> onFailure,
             std::function<void()> afterAdding)
 {
-    if(isThreadRunning())
+    if(eventLoop.runningOnLoop())
     {
-        notify();
+        toCall();
     }
     else
     {
-        startThread();
+        if(juce::Thread::getCurrentThreadId() != getThreadId())
+        {
+            if(isThreadRunning())
+            {
+                notify();
+            }
+            else
+            {
+                startThread();
+            }
+        }
+        contextCaller.call(toCall, onFailure, afterAdding);
     }
-    contextCaller.call(toCall, onFailure, afterAdding);
 }
 
 /*
@@ -70,6 +80,16 @@ void GLib::ThreadResource::stopThreadResource()
 }
 
 /*
+ * Wakes the thread if it is currently waiting, and prevents it from waiting 
+ * again until after the thread loop restarts.
+ */
+void GLib::ThreadResource::notifyThread()
+{
+    waitingAllowed = false;
+    notify();
+}
+
+/*
  * Grants the ThreadResource access to its ThreadLock within the GLib event 
  * loop.
  */
@@ -92,6 +112,7 @@ void GLib::ThreadResource::runLoop
     threadLock = &lock;
     eventLoop.runLoop();
     threadLock = nullptr;
+    waitingAllowed = true;
 }
 
 /*
@@ -107,5 +128,14 @@ void GLib::ThreadResource::windowFocusLost()
  */
 void GLib::ThreadResource::windowFocusGained()
 {
-    notify();
+    notifyThread();
+}
+    
+/*
+ * Lets the thread wait while the EventLoop isn't running, rather than stopping 
+ * it completely.
+ */
+bool GLib::ThreadResource::threadShouldWait()
+{
+    return waitingAllowed;
 }

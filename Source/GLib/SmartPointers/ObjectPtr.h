@@ -1,45 +1,59 @@
 #pragma once
+/**
+ * @file GLib/SmartPointers/ObjectPtr.h
+ *
+ * @brief  An immutable smart pointer used to access the internal GObject data 
+ *         stored in a GLib::Object, automatically unreferencing it on
+ *         destruction if necessary.
+ */
+
 #include <glib-object.h>
-#include "GLib/SmartPointers/ScopedGPointer.h"
+
+namespace GLib { class Object; }
+namespace GLib { class ObjectPtr; }
 
 /**
- * @file  GLib/SmartPointers/MainContextPtr.h
- *
- * @brief  Defines a ScopedGPointer that holds a generic GObject, or optionally
- *         a specific GObject type.
+ *  GLib::ObjectPtr provides a way to directly access a GLib::Object's stored
+ * data pointer without having to manually manage GLib reference counts. 
+ * ObjectPtrs are only intended for temporary use and should not be created
+ * outside of function scope.
  */
-namespace GLib
+class GLib::ObjectPtr
 {
+public:
     /**
-     * @brief  Provides the unreferencing function used for GMainContext* data.
+     * @brief  Create this ObjectPtr to access a GLib::Object's internal 
+     *         GObject* data.
      *
-     * @tparam GObjectType  The type of GObject* held by the pointer.
+     * @param dataSource  The Object with data the ObjectPtr will access.
      */
-    template<typename GObjectType>
-    struct ObjectUnref
-    {
-        /**
-         * @brief  Unreferences GObject data.
-         *
-         * @param context  A non-null GObject pointer to unreference.
-         */
-        static void unref(GObjectType object)
-        {
-            g_object_unref(G_OBJECT(object));
-        }
-    };
+    ObjectPtr(const Object& dataSource);
 
     /**
-     * @brief  Stores and automatically unreferences a GMainContext*.
+     * @brief  Creates an ObjectPtr to hold a GObject* value.
      *
-     * @tparam GObjectType  The type of GObject held by the pointer.
+     * This constructor assumes that the dataSource will need to be unreferenced
+     * on destruction, as otherwise there's no reason to store it in an 
+     * ObjectPtr.
+     *
+     * @param dataSource  A GLib object data pointer the ObjectPtr will hold.
      */
-    template<typename GObjectType = GObject*>
-    class ObjectPtr : 
-        public ScopedGPointer<GObjectType, ObjectUnref<GObjectType>>
-    {
-    public:
-        using ScopedGPointer<GObjectType,ObjectUnref<GObjectType>>
-            ::ScopedGPointer;
-    };
-}
+    ObjectPtr(GObject* dataSource);
+
+    /**
+     * @brief  If necessary, unreferences the stored GObject* value.
+     */
+    ~ObjectPtr();
+
+    /**
+     * @brief  Allows this ObjectPtr to be directly used as if it was its
+     *         stored GObject* value.
+     *
+     * @return   The pointer's GObject* value.
+     */
+    operator GObject* const() const;
+
+private:
+    GObject* const objectData;
+    const bool shouldUnreference;
+};

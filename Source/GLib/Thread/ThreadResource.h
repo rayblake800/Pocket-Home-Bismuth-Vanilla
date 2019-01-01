@@ -8,8 +8,8 @@
 #include "SharedResource/ThreadResource.h"
 #include "WindowFocus.h"
 #include "JuceHeader.h"
-#include "GLib/EventLoop.h"
-#include "GLib/ContextCaller.h"
+#include "GLib/Thread/EventLoop.h"
+#include "GLib/Thread/ContextCaller.h"
 #include <gio/gio.h>
 
 namespace GLib { class ThreadResource; }
@@ -96,6 +96,12 @@ public:
      */
     virtual void stopThreadResource() override;
 
+    /**
+     * @brief  Wakes the thread if it is currently waiting, and prevents it from
+     *         waiting again until after the thread loop restarts.
+     */
+    void notifyThread();
+
 protected:
     /**
      * @brief  Grants the ThreadResource access to its ThreadLock within the
@@ -127,9 +133,13 @@ private:
      * @brief  Lets the thread wait while the EventLoop isn't running, rather
      *         than stopping it completely.
      *
-     * @return  True, so the ThreadResource sleeps when the EventLoop finishes. 
+     * @return  True if the thread hasn't waited already since the EventLoop
+     *          stopped running.
      */
-    virtual bool threadShouldWait() override { return true; }
+    virtual bool threadShouldWait() override;
+
+    /* Tracks if the thread is allowed to wait. */
+    bool waitingAllowed = true;
 
     /* Used to allow any function running on the thread's EventLoop to access
        its threadLock. */

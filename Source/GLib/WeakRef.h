@@ -84,7 +84,7 @@ public:
     operator juce::uint64() const;
     
     /**
-     * @brief  Attempts to return the GObject referenced by this GPPWeakRef.  
+     * @brief  Attempts to return the GObject referenced by this WeakRef.  
      *
      * If a non-null value is returned, an additional strong reference will have 
      * been added to the returned GObject.

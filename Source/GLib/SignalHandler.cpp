@@ -1,4 +1,5 @@
 #include "GLib/SignalHandler.h"
+#include "GLib/Object.h"
 
 /*
  * Unsubscribes the signal handler from all signal sources, and removes all
@@ -6,29 +7,49 @@
  */
 GLib::SignalHandler::~SignalHandler()
 {
-    using namespace juce;
     unsubscribeAll();
 }
-    
+
+/*
+ * Subscribe to all relevant signals from a single GObject signal source.
+ */
+void GLib::SignalHandler::connectAllSignals(Object& source)
+{
+    ObjectPtr sourcePtr(source);
+    if(sourcePtr != nullptr && !isConnected(sourcePtr))
+    {
+        addSignalSourceIfNew(sourcePtr, source.isOwned());
+        connectAllSignals(sourcePtr);
+    }
+}
+
+/*
+ * Unsubscribes this signal handler from all signals emitted by a GObject.
+ */
+bool GLib::SignalHandler::disconnectSignals(Object& source)
+{
+    return disconnectSignals(ObjectPtr(source));
+}
+
 /*
  * Unsubscribes this signal handler from all signals emitted by a GObject.
  */
 bool GLib::SignalHandler::disconnectSignals(GObject* source)
 {
-    if(source != nullptr)
+    if(source != nullptr && isConnected(source))
     {
-        const juce::ScopedLock changeSourceLock(signals.getLock());
-        WeakRef sourceRef(source);
-        if(signals.contains(sourceRef))
+        SourceData sourceData = signals[source];
+        for(const guint& signalID : sourceData.signalIDs)
         {
-            for(const guint& signalID : signals[sourceRef])
-            {
-                g_signal_handler_disconnect(source, signalID);
-            }
-            signals.remove(sourceRef);
-            g_object_unref(source);
-            return true;
+            g_signal_handler_disconnect(source, signalID);
         }
+        const juce::ScopedLock signalListLock(signals.getLock());
+        if(sourceData.referenceHeld)
+        {
+            g_object_unref(source);
+        }
+        signals.remove(source);
+        return true;
     }
     return false;
 }
@@ -39,120 +60,167 @@ bool GLib::SignalHandler::disconnectSignals(GObject* source)
  */
 bool GLib::SignalHandler::isConnected(GObject* source) const
 {
-    if(source == nullptr)
-    {
-        return false;
-    }
-    const juce::ScopedLock signalLock(signals.getLock());
-    WeakRef sourceRef(source);
-    return signals.contains(sourceRef);
+    jassert(source != nullptr);
+    const juce::ScopedLock signalListLock(signals.getLock());
+    return signals.contains(source);
 }
 
 /*
  * Subscribes the signal handler to a single signal.
  */
-void GLib::SignalHandler::connectSignal(GObject* source,
-        const char* signalName, GCallback callback)
+void GLib::SignalHandler::connectSignal
+(Object& source, const char* signalName, GCallback callback)
 {
-    if(source == nullptr || signalName == nullptr)
+    ObjectPtr sourcePtr(source);
+    if(sourcePtr != nullptr)
     {
-        return;
-    }
-    const juce::ScopedLock signalLock(signals.getLock());
-    gulong handlerID = g_signal_connect
-            (source, signalName, callback, this);
-    if(handlerID != 0)
-    {
-        WeakRef sourceRef(source);
-        
-        if(!signals.contains(sourceRef))
-        {
-            g_object_ref(source);
-        }
-        signals.getReference(sourceRef).add(handlerID);
-    }       
-    else
-    {
-        DBG("GLib::SignalHandler::" << __func__ << ": Failed to subscribe to \""
-                << signalName << "\" signal.");
+        connectSignal(sourcePtr, signalName, callback, source.isOwned());
     }
 }
-        
+
 /*
- * Subscribes the signal handler to receive notifications when a specific 
+ * Subscribes the signal handler to a single signal.
+ */
+void GLib::SignalHandler::connectSignal(
+        GObject* source,
+        const char* signalName,
+        GCallback callback,
+        const bool shouldHaveRef)
+{
+    jassert(signalName != nullptr);
+    if(source != nullptr)
+    {
+        gulong handlerID = g_signal_connect(source, signalName, callback, this);
+        if(handlerID != 0)
+        {
+            addSignalSourceIfNew(source, shouldHaveRef);
+            const juce::ScopedLock signalLock(signals.getLock());
+            signals.getReference(source).signalIDs.add(handlerID);
+        }
+        else
+        {
+            DBG("GLib::SignalHandler::" << __func__ 
+                    << ": Failed to subscribe to \"" << signalName
+                    << "\" signal.");
+        }
+    }
+}
+
+/*
+ * Subscribes the signal handler to receive notifications when a specific
  * object property changes.
  */
 void GLib::SignalHandler::connectNotifySignal
-(GObject* source, const char* propertyName)
-{   
+(Object& source, const char* propertyName)
+{
+    ObjectPtr sourcePtr(source);
+    if(source != nullptr)
+    {
+        connectNotifySignal(sourcePtr, propertyName, source.isOwned());
+    }
+}
+
+/*
+ * Subscribes the signal handler to receive notifications when a specific object
+ * property changes.
+ */
+void GLib::SignalHandler::connectNotifySignal(GObject* source, 
+        const char* propertyName, const bool shouldHaveRef)
+{
     if(propertyName != nullptr)
     {
         juce::String signal("notify::");
         signal += propertyName;
-        connectSignal(source, signal.toRawUTF8(), 
-                G_CALLBACK(notifyCallback));
+        connectSignal(source, signal.toRawUTF8(), G_CALLBACK(notifyCallback),
+                shouldHaveRef);
     }
 }
 
 /*
- * Connects to all relevant signals for all GObject signal sources tracked
- * by another signal handler.
+ * Connects to all relevant signals for all GObject signal sources tracked by
+ * another signal handler.
  */
 void GLib::SignalHandler::shareSignalSources(const SignalHandler& otherHandler)
 {
-    juce::Array<GObject*> signalSources;
+    struct SourceInitData
+    {
+        WeakRef source;
+        bool shouldHaveRef;
+    };
+    juce::Array<SourceInitData> sharedSources;
+
     const juce::ScopedLock readSourceLock(otherHandler.signals.getLock());
     auto iter = otherHandler.signals.begin();
     while(iter.next())
     {
-        GObject* source = iter.getKey().getObject();
-        if(source != nullptr)
+        sharedSources.add({iter.getKey(), iter.getValue().referenceHeld});
+    }
+    const juce::ScopedUnlock readFinishedUnlock(otherHandler.signals.getLock());
+
+    for(SourceInitData& sourceData : sharedSources)
+    {
+        ObjectPtr sourcePtr(sourceData.source.getObject());
+        if(sourcePtr != nullptr && !isConnected(sourcePtr))
         {
-            signalSources.add(source);
+            addSignalSourceIfNew(sourcePtr, sourceData.shouldHaveRef);
+            connectAllSignals(sourcePtr);
         }
     }
-    const juce::ScopedUnlock readFinished(otherHandler.signals.getLock());
-
-    for(GObject* source : signalSources)
-    {
-        connectAllSignals(source);
-        g_object_unref(source);
-    }
-    
 }
-    
+
 /*
- * Unsubscribes the signal handler from all signal sources, and removes all
+ * Unsubscribes the signal handler from all signal sources, and removes any
  * held references to signal sources.
  */
 void GLib::SignalHandler::unsubscribeAll()
 {
-    const juce::ScopedLock changeSourceLock(signals.getLock());
-    for(auto iter = signals.begin(); iter != signals.end(); iter.next())
+    const juce::ScopedLock clearSignalLock(signals.getLock());
+    auto iter = signals.begin();
+    while(iter.next())
     {
-        GObject* source = iter.getKey().getObject();
-        if(source != nullptr)
+        ObjectPtr sourcePtr(iter.getKey().getObject());
+        if(sourcePtr != nullptr)
         {
-            int count = source->ref_count;
-            jassert(source->ref_count > 1);
-            for(const guint& signalID : iter.getValue())
+            SourceData sourceData = iter.getValue();
+            for(const guint& signalID : sourceData.signalIDs)
             {
-                g_signal_handler_disconnect(source, signalID);
+                g_signal_handler_disconnect(sourcePtr, signalID);
             }
-            g_object_unref(source);
-            g_clear_object(&source);
+            if(sourceData.referenceHeld)
+            {
+                g_object_unref(sourcePtr);
+            }
         }
     }
     signals.clear();
 }
 
 /*
- * Callback to handle property change signals.  This passes all received
- * signals to the signal handler's propertyChanged method.
+ * A callback function used to handle property change signals. This passes all
+ * received signals to the signal handler's propertyChanged method.
  */
 void GLib::SignalHandler::notifyCallback
-(GObject* objectData, GParamSpec* pSpec, SignalHandler* signalHandler)
+(GObject* signalSource, GParamSpec* pSpec, SignalHandler* signalHandler)
 {
     juce::String property(pSpec->name);
-    signalHandler->propertyChanged(objectData, property);
+    signalHandler->propertyChanged(signalSource, property);
+}
+
+
+/*
+ * Ensures a signal source exists in the signal map, and that a reference to it
+ * is held if necessary.
+ */
+void GLib::SignalHandler::addSignalSourceIfNew
+(GObject* source, const bool shouldHaveRef)
+{
+    const juce::ScopedLock clearSignalLock(signals.getLock());
+    if(!signals.contains(source))
+    {
+        signals.set(WeakRef(source), { .referenceHeld = shouldHaveRef });
+        if(shouldHaveRef)
+        {
+            g_object_ref(source);
+        }
+    }
 }
