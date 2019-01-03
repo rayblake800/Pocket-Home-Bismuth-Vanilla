@@ -26,7 +26,7 @@ OBJECTS_WIFI_CONNECTION := \
   $(WIFI_CONNECTION_PREFIX)RecordResource.o \
   $(WIFI_CONNECTION_PREFIX)RecordReader.o \
   $(WIFI_CONNECTION_PREFIX)RecordWriter.o \
-  $(WIFI_CONNECTION_PREFIX)Listener.o \
+  $(WIFI_CONNECTION_PREFIX)Listener.o
 
 WIFI_DEVICE_ROOT := $(WIFI_ROOT)/Device
 WIFI_DEVICE_PREFIX := $(WIFI_PREFIX)Device_
@@ -50,6 +50,7 @@ OBJECTS_WIFI_COMPONENT := \
   $(WIFI_PREFIX)SettingsPage.o
 
 OBJECTS_WIFI := \
+  $(WIFI_PREFIX)Manager.o \
   $(OBJECTS_WIFI_ACCESS_POINT) \
   $(OBJECTS_WIFI_ACCESS_POINT_LIST) \
   $(OBJECTS_WIFI_CONNECTION) \
@@ -69,6 +70,9 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_WIFI)
 
 wifi : $(OBJECTS_WIFI)
 	@echo "Built Wifi module"
+
+$(WIFI_PREFIX)Manager.o : \
+    $(WIFI_ROOT)/Manager.cpp
 
 $(WIFI_PREFIX)APData.o : \
     $(WIFI_AP_ROOT)/APData.cpp
@@ -92,14 +96,14 @@ $(WIFI_CONNECTION_PREFIX)Controller.o : \
     $(WIFI_CONNECTION_ROOT)/Controller.cpp
 $(WIFI_CONNECTION_PREFIX)Event.o : \
     $(WIFI_CONNECTION_ROOT)/Event.cpp
-$(WIFI_CONNECTION_PREFIX)Listener.o : \
-    $(WIFI_CONNECTION_ROOT)/Listener.cpp
 $(WIFI_CONNECTION_PREFIX)RecordResource.o : \
     $(WIFI_CONNECTION_ROOT)/RecordResource.cpp
 $(WIFI_CONNECTION_PREFIX)RecordReader.o : \
     $(WIFI_CONNECTION_ROOT)/RecordReader.cpp
 $(WIFI_CONNECTION_PREFIX)RecordWriter.o : \
     $(WIFI_CONNECTION_ROOT)/RecordWriter.cpp
+$(WIFI_CONNECTION_PREFIX)Listener.o : \
+    $(WIFI_CONNECTION_ROOT)/Listener.cpp
 
 $(WIFI_DEVICE_PREFIX)Controller.o : \
     $(WIFI_DEVICE_ROOT)/Controller.cpp

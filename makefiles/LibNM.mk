@@ -10,7 +10,6 @@ OBJECTS_NM_BORROWED := \
 
 NM_OWNED_ROOT := $(NM_ROOT)/OwnedObjects
 OBJECTS_NM_OWNED := \
-  $(NM_PREFIX)OwnedObject.o \
   $(NM_PREFIX)Client.o \
   $(NM_PREFIX)Connection.o
 
@@ -65,8 +64,6 @@ $(NM_PREFIX)ActiveConnection.o : \
 $(NM_PREFIX)DeviceWifi.o : \
     $(NM_BORROWED_ROOT)/DeviceWifi.cpp
 
-$(NM_PREFIX)OwnedObject.o : \
-    $(NM_OWNED_ROOT)/OwnedObject.cpp
 $(NM_PREFIX)Client.o : \
     $(NM_OWNED_ROOT)/Client.cpp
 $(NM_PREFIX)Connection.o : \
