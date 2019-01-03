@@ -1,15 +1,19 @@
-/* Only use when implementing SharedResource! */
-#ifdef SHARED_RESOURCE_IMPLEMENTATION
+#ifndef SHARED_RESOURCE_IMPLEMENTATION
+  #error File included outside of SharedResource implementation.
+#endif
 #pragma once
-#include <map>
-#include "JuceHeader.h"
-#include "SharedResource/Implementation/Implementation.h"
-
 /**
  * @file  SharedResource/Implementation/Holder.h
  *
  * @brief  Holds each SharedResource resource type's resource Instance and lock.
  */
+
+#include <map>
+#include "JuceHeader.h"
+
+namespace SharedResource { class Holder; }
+namespace SharedResource { class Instance; }
+
 class SharedResource::Holder
 {
 private:
@@ -109,5 +113,3 @@ private:
     /* Holds all resource locks. */
     juce::OwnedArray<juce::ReadWriteLock> resourceLocks;
 };
-/* Only use when implementing SharedResource! */
-#endif

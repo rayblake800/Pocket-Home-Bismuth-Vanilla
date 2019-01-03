@@ -1,5 +1,5 @@
 #define SHARED_RESOURCE_IMPLEMENTATION
-#include "SharedResource/Implementation/Holder.h"
+#include "SharedResource_Holder.h"
 
 /* Holds the unique SharedResource::Holder instance */
 static std::unique_ptr<SharedResource::Holder> holderInstance;
@@ -89,8 +89,24 @@ void SharedResource::Holder::setResource(const juce::Identifier& resourceKey,
 
     // Make sure either a null resource is becoming non-null, or a
     // non-null resource is becoming null.
-    jassert((holder->resourceList.getUnchecked(resourceIndex) == nullptr)
-            != (resource == nullptr));
+#ifdef JUCE_DEBUG
+    if(resource == nullptr 
+            && holder->resourceList.getUnchecked(resourceIndex) == nullptr)
+    {
+        DBG("SharedResource::Holder::" << __func__
+                << ": Error, setting resource " << resourceKey.toString()
+                << " to null when it is already null!");
+        jassertfalse;
+    }
+    else if(resource != nullptr
+            && holder->resourceList.getUnchecked(resourceIndex) != nullptr)
+    {
+        DBG("SharedResource::Holder::" << __func__
+                << ": Error, setting new resource " << resourceKey.toString()
+                << " when it already exists!");
+        jassertfalse;
+    }
+#endif
 
     holder->resourceList.set(resourceIndex, resource);
 

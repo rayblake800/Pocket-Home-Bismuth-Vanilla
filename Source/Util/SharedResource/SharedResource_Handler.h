@@ -1,8 +1,8 @@
 #pragma once
+#include "SharedResource.h"
+#include "SharedResource_LockedPtr.h"
+#include "SharedResource_Reference.h"
 #include "JuceHeader.h"
-#include "SharedResource/SharedResource.h"
-#include "SharedResource/LockedPtr.h"
-#include "SharedResource/Implementation/Reference.h"
 
 /**
  * @file Handler.h

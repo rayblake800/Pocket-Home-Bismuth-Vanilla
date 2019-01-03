@@ -1,7 +1,7 @@
 #define SHARED_RESOURCE_IMPLEMENTATION
-#include "SharedResource/Implementation/Holder.h"
-#include "SharedResource/Implementation/Instance.h"
-#include "SharedResource/Implementation/Reference.h"
+#include "SharedResource_Reference.h"
+#include "SharedResource_Holder.h"
+#include "SharedResource_Instance.h"
 
 /*
  * Removes this Reference from its resource Instance object, destroying the 
@@ -37,6 +37,7 @@ resourceKey(resourceKey)
     if(resourceInstance == nullptr)
     {
         resourceInstance = createResource();
+        jassert(getResourceInstance() != nullptr);
         jassert(resourceInstance->references[0] == nullptr);
         resourceInstance->references.set(0, this);
     }

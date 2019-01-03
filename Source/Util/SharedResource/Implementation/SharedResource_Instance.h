@@ -1,14 +1,17 @@
 #pragma once
-#include "JuceHeader.h"
-#include "SharedResource/Implementation/Implementation.h"
-#include "SharedResource/SharedResource.h"
-
 /**
  * @file  SharedResource/Implementation/Instance.h
  *
  * @brief  Manages the lifespan of a resource object by tracking each reference
  *         object tied to the resource.
  */
+
+#include "JuceHeader.h"
+#include "SharedResource.h"
+
+namespace SharedResource { class Instance; }
+namespace SharedResource { class Reference; }
+
 class SharedResource::Instance
 {
 private:

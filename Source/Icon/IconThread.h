@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include "SharedResource/ThreadResource.h"
+#include "SharedResource_ThreadResource.h"
 #include "IconThemeIndex.h"
 #include "JuceHeader.h"
 

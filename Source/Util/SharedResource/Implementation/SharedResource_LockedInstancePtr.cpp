@@ -1,6 +1,6 @@
 #define SHARED_RESOURCE_IMPLEMENTATION
-#include "SharedResource/Implementation/Holder.h"
-#include "SharedResource/Implementation/LockedInstancePtr.h"
+#include "SharedResource_LockedInstancePtr.h"
+#include "SharedResource_Holder.h"
 
 /*
  * Initializes the resource pointer, locking the resource.

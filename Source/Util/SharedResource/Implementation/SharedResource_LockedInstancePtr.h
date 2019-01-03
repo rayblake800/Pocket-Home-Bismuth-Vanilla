@@ -1,13 +1,17 @@
 #pragma once
-#include "JuceHeader.h"
-#include "SharedResource/Implementation/Implementation.h"
-
 /**
  * @file  SharedResource/Implementation/LockedInstancePtr.h
  *
  * @brief  Provides access to a resource Instance, keeping the resource locked
  *         for as long as the LockedInstancePtr exists.
  */
+
+#include "SharedResource.h"
+#include "JuceHeader.h"
+
+namespace SharedResource { class LockedInstancePtr; }
+namespace SharedResource { class Instance; }
+
 class SharedResource::LockedInstancePtr
 {
 public:

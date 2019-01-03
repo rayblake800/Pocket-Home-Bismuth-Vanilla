@@ -1,6 +1,6 @@
 #pragma once
-#include "SharedResource/SharedResource.h"
-#include "SharedResource/Implementation/LockedInstancePtr.h"
+#include "SharedResource.h"
+#include "SharedResource_LockedInstancePtr.h"
 
 /**
  * @file  SharedResource/LockedPtr.h

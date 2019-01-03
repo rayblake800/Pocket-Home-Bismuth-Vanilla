@@ -1,6 +1,6 @@
 #define SHARED_RESOURCE_IMPLEMENTATION
-#include "SharedResource/Implementation/Holder.h"
-#include "SharedResource/Implementation/Instance.h"
+#include "SharedResource_Holder.h"
+#include "SharedResource_Instance.h"
 
 /*
  * Creates the unique resource object instance.

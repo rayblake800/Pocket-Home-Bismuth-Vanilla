@@ -1,7 +1,7 @@
 #pragma once
-#include "SharedResource/SharedResource.h"
-#include "SharedResource/Handler.h"
-#include "SharedResource/Resource.h"
+#include "SharedResource.h"
+#include "SharedResource_Handler.h"
+#include "SharedResource_Resource.h"
 
 /**
  * @file  ThreadResource.h
@@ -45,12 +45,8 @@ public:
      */
     virtual void stopThreadResource();
 
-    /**
-     * @brief  Checks if the ThreadResource's thread is running.
-     *
-     * @return  Whether the resource's thread is currently running. 
-     */
-    bool isThreadResourceRunning() const;
+    /* Checks if the resource's thread is currently running. */
+    using juce::Thread::isThreadRunning;
 
 protected:
     /**

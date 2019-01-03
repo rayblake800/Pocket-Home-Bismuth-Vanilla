@@ -1,6 +1,6 @@
 #pragma once
 #include "IconThread.h"
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 /**
  * @file IconLoader.h
  * 

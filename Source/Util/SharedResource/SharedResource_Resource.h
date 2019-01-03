@@ -1,6 +1,6 @@
 #pragma once
 #include "JuceHeader.h"
-#include "SharedResource/Implementation/Instance.h"
+#include "SharedResource_Instance.h"
 
 /**
  * @file SharedResource/Resource.h

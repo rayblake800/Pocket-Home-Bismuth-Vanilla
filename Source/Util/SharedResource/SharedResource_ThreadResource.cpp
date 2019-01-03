@@ -45,14 +45,6 @@ void SharedResource::ThreadResource::stopThreadResource()
 }
 
 /*
- * Checks if the ThreadResource's thread is running.
- */
-bool SharedResource::ThreadResource::isThreadResourceRunning() const
-{
-    return isThreadRunning();
-}
-
-/*
  * Creates a ThreadLock tied to a single thread resource.
  */
 SharedResource::ThreadResource::ThreadLock::ThreadLock

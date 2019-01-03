@@ -1,8 +1,4 @@
 #pragma once
-#include "JuceHeader.h"
-#include "SharedResource/Implementation/Implementation.h"
-#include "SharedResource/SharedResource.h"
-
 /**
  * @file  SharedResource/Implementation/Reference.h
  *
@@ -10,6 +6,13 @@
  *         resource is destroyed if and only if all of its References have been
  *         destroyed.
  */
+
+#include "JuceHeader.h"
+#include "SharedResource/SharedResource.h"
+
+namespace SharedResource { class Reference; }
+namespace SharedResource { class Instance; }
+
 class SharedResource::Reference
 {
 private:
