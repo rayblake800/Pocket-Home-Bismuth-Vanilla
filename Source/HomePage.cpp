@@ -64,8 +64,7 @@ void HomePage::configValueChanged(const juce::Identifier& key)
     Config::MainFile mainConfig;
     if (key == Config::MainKeys::backgroundKey)
     {
-        String background = mainConfig.getConfigValue<String>
-                (Config::MainKeys::backgroundKey);
+        String background = mainConfig.getHomeBackground();
         if (background.containsOnly("0123456789ABCDEFXabcdefx"))
         {
             setBackgroundImage(Image());

@@ -4,10 +4,10 @@
 #include "Icon/IconLoader.h"
 #include "PageComponent.h"
 #include "ComponentConfigFile.h"
-#include "Config/MainFile.h"
+#include "Config/MainListener.h"
 #include "ConfigurableImageButton.h"
 #include "ClockLabel.h"
-#include "WifiIcon.h"
+#include "Wifi/Component/StatusIcon.h"
 #include "BatteryIcon.h"
 #include "SystemCommands.h"
 #include "AppMenu/AppMenu.h"
@@ -25,7 +25,7 @@
  * except perhaps the login page. The HomePage will continue to exist as long as
  * Pocket-Home is running.
  */
-class HomePage : public PageComponent, public Config::MainFile::Listener
+class HomePage : public PageComponent, public Config::MainListener
 {
 public:
     /**
@@ -87,7 +87,7 @@ private:
     BatteryIcon batteryIcon;
     
     /* Displays the current wifi status. */
-    WifiIcon wifiIcon;
+    Wifi::StatusIcon wifiIcon;
 
     /* Opens the power page when clicked. */
     ConfigurableImageButton powerButton;
