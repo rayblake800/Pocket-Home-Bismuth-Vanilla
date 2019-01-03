@@ -28,7 +28,6 @@ Locale::TextUser::TextUser(const juce::Identifier& className) :
     Config::MainFile config;
     const juce::StringArray filesToTry = 
     {
-        config.getConfigValue<String>(Config::MainKeys::localeKey),
         getLocaleName(),
         defaultLocale
     };

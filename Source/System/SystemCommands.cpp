@@ -1,6 +1,6 @@
 #include "JSONFile.h"
 #include "LaunchedProcess.h"
-#include "SharedResource/Resource.h"
+#include "SharedResource_Resource.h"
 #include "SystemCommands.h"
 
 /* Script directory key */

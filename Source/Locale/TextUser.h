@@ -1,8 +1,7 @@
 #pragma once
-#include <map>
-#include "JuceHeader.h"
-#include "SharedResource/Handler.h"
 #include "Locale/Locale.h"
+#include "JuceHeader.h"
+#include <map>
 
 /**
  * @file  Locale/TextUser.h
