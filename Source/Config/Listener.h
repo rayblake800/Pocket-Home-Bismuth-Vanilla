@@ -7,7 +7,7 @@
  */
 
 #include "Config/Implementation/ListenerInterface.h"
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Config { template <class ResourceClass> class Listener; }
 
@@ -27,7 +27,7 @@ public:
     /**
      * @brief Calls configValueChanged() for every key tracked by this listener.
      */
-    void loadAllConfigProperties()
+    virtual void loadAllConfigProperties()
     {
         using juce::Identifier;
         juce::Array<Identifier> notifyKeys;

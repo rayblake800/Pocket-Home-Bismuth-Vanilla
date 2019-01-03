@@ -6,7 +6,7 @@
  *         and writing to a single JSON configuration file.
  */
 
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Config { template<class ResourceType> class FileHandler; }
 

@@ -6,8 +6,8 @@
  */
 
 #include "Config/Implementation/ListenerInterface.h"
-#include "SharedResource/Resource.h"
-#include "SharedResource/Handler.h"
+#include "SharedResource_Resource.h"
+#include "SharedResource_Handler.h"
 #include "JSONFile.h"
 #include "DataKey.h"
 #include "JuceHeader.h"
