@@ -1,6 +1,9 @@
+#define WIFI_IMPLEMENTATION
 #include "Wifi/Component/SettingsPage.h"
 #include "Wifi/Connection/RecordReader.h"
 #include "Wifi/Connection/Event.h"
+#include "Wifi/Connection/Controller.h"
+#include "Wifi/AccessPointList/APListReader.h"
 #include "LibNM/Data/SecurityType.h"
 #include "Locale/Time.h"
 
@@ -278,8 +281,9 @@ void Wifi::SettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
                 juce::NotificationType::dontSendNotification);
     }
 
-    DBG("WifiSettingsPage::" << __func__ << ": Updating connection controls for"
-            " AP " << selectedAP.getSSID().toString());
+    DBG("Wifi::SettingsPage::" << __func__ 
+            << ": Updating connection controls for AP " 
+            << selectedAP.getSSID().toString());
     const bool requiresAuth = selectedAP.getSecurityType() 
             != LibNM::SecurityType::unsecured;
     const bool hasSavedConnection 
@@ -331,26 +335,16 @@ void Wifi::SettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
             juce::NotificationType::dontSendNotification);
 }
 
-
-/*
- * Periodically triggers a new scan for Wifi AP updates.
- */
-void WifiSettingsPage::timerCallback() 
-{
-    DBG("WifiSettingsPage::" << __func__ << ": Scanning for AP updates.");
-    WifiStateManager wifiManager;
-    wifiManager.scanAccessPoints();
-}
-
-
 /*
  * Reloads the list of wifi access points within range of the wifi device,
  * and updates the access point list.
  */
-void WifiSettingsPage::loadAccessPoints()
+void Wifi::SettingsPage::loadAccessPoints()
 {
-    WifiStateManager wifiManager;
-    visibleAPs = wifiManager.getVisibleAPs();
+    visibleAPs.clearQuick();
+    const APListReader apListReader;
+    visibleAPs = apListReader.getAccessPoints();
+    visibleAPs.sort(apComparator, false);
     updateAPList();
 }
 
@@ -358,11 +352,12 @@ void WifiSettingsPage::loadAccessPoints()
  * Removes any lost access points, sorts the access point list, and
  * refreshes the access point list component.
  */
-void WifiSettingsPage::updateAPList()
+void Wifi::SettingsPage::updateAPList()
 {
     for (int i = 0; i < visibleAPs.size(); i++)
     {
-        if (visibleAPs[i].isNull() || visibleAPs[i].getSSID().isEmpty())
+        if (visibleAPs[i].isNull() 
+                || visibleAPs[i].getSSID().toString().isEmpty())
         {
             visibleAPs.remove(i);
             i--;
@@ -376,12 +371,12 @@ void WifiSettingsPage::updateAPList()
  * Attempts to connect to a Wifi access point.  This will close any
  * connections to other access points.
  */
-void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
+void Wifi::SettingsPage::connect(const AccessPoint accessPoint)
 {
     using juce::String;
     if (accessPoint.isNull())
     {
-        DBG("WifiSettingsPage::" << __func__ << ": ap is null!");
+        DBG("Wifi::SettingsPage::" << __func__ << ": ap is null!");
         return;
     }
     const String& psk = passwordEditor.getText();
@@ -392,20 +387,21 @@ void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
         passwordEditor.clear();
         return;
     }
-    lastConnecting = accessPoint;
-    WifiStateManager wifiManager;
-    if (accessPoint.getRequiresAuth())
+
+    Connection::Controller connectionControl;
+    if (accessPoint.getSecurityType() != LibNM::SecurityType::unsecured)
     {
-        DBG("WifiSettingsPage::" << __func__ << ": connecting to "
-                << accessPoint.getSSID() << " with psk of length "
+        DBG("Wifi::SettingsPage::" << __func__ << ": connecting to "
+                << accessPoint.getSSID().toString() << " with psk of length "
                 << psk.length());
-        wifiManager.connectToAccessPoint(accessPoint, psk);
+        connectionControl.connectToAccessPoint(accessPoint, psk);
     }
     else
     {
-        DBG("WifiSettingsPage::" << __func__ << ": connecting to "
-                << accessPoint.getSSID() << " with no psk required.");
-        wifiManager.connectToAccessPoint(accessPoint);
+        DBG("Wifi::SettingsPage::" << __func__ << ": connecting to "
+                << accessPoint.getSSID().toString() 
+                << " with no psk required.");
+        connectionControl.connectToAccessPoint(accessPoint);
     }
     passwordEditor.clear();
     errorLabel.setText(String(), 
@@ -415,16 +411,18 @@ void WifiSettingsPage::connect(const WifiAccessPoint& accessPoint)
 /*
  * Tries to disconnect from a specific wifi access point.
  */
-void WifiSettingsPage::disconnect(const WifiAccessPoint& accessPoint)
+void Wifi::SettingsPage::disconnect(const AccessPoint accessPoint)
 {
-    WifiStateManager wifiManager;
-    if (accessPoint == wifiManager.getActiveAP())
+
+    const Connection::RecordReader connectionRecords;
+    if (accessPoint == connectionRecords.getActiveAP())
     {
-        wifiManager.disconnect();
+        Connection::Controller connectionControl;
+        connectionControl.disconnect();
     }
     else
     {
-        DBG("WifiSettingsPage::" << __func__
+        DBG("Wifi::SettingsPage::" << __func__
                 << ": ap is not connected/connecting!");
     }
 }
@@ -433,85 +431,116 @@ void WifiSettingsPage::disconnect(const WifiAccessPoint& accessPoint)
  * Attempts to connect or disconnect from the current selected access point
  * when the connection button is clicked.
  */
-void WifiSettingsPage::listPageButtonClicked(juce::Button* button)
+void Wifi::SettingsPage::listPageButtonClicked(juce::Button* button)
 {
-    if (&connectionButton == button)
+    // Only the connection button should trigger this method!
+    jassert(&connectionButton == button);
+    const AccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
+    const Connection::RecordReader connectionRecords;
+    if(connectionRecords.getActiveAP() == selectedAP)
     {
-        WifiStateManager wifiManager;
-        const WifiAccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
-        switch (wifiManager.getAPState(selectedAP))
+        if(connectionRecords.isConnecting())
         {
-            case AccessPointState::connectedAP:
-                DBG("WifiSettingsPage::" << __func__ << ": Disconnecting from "
-                        << selectedAP.getSSID());
-                disconnect(selectedAP);
-                return;
-            case AccessPointState::disconnectedAP:
-            case AccessPointState::invalidSecurityAP:
-                DBG("WifiSettingsPage::" << __func__ << ": Connecting to "
-                        << selectedAP.getSSID());
-                connect(selectedAP);
-                return;
-            default:
-                DBG("WifiSettingsPage::" << __func__
-                        << ": The connection button should have been disabled "
-                        << "or hidden!");
+            DBG("Wifi::SettingsPage::" << __func__ 
+                    << ": Currently connecting, the connection button "
+                    << "should have been disabled or hidden!");
+            return;
         }
+        DBG("Wifi::SettingsPage::" << __func__ << ": Disconnecting from "
+                << selectedAP.getSSID().toString());
+        disconnect(selectedAP);
+        return;
     }
-}
-
-/*
- * Keeps the page updated when wifi state changes.
- */
-void WifiSettingsPage::wifiStateChanged(WifiState state)
-{
-    if(state == WifiState::connected)
+    else
     {
-        lastConnecting = WifiAccessPoint();
+        DBG("Wifi::SettingsPage::" << __func__ << ": Connecting to "
+                << selectedAP.getSSID().toString());
+        connect(selectedAP);
     }
-    updateList();
+}
+    
+/*
+ * Updates the list when access point signal strength changes.
+ */
+void Wifi::SettingsPage::signalStrengthUpdate(const AccessPoint updatedAP) 
+{
+    updateAPList();
 }
 
 /*
- * Adds all newly detected access points to the access point list.
+ * Adds a newly discovered access point to the list.
  */
-void WifiSettingsPage::accessPointAdded(const WifiAccessPoint& addedAP)
+void Wifi::SettingsPage::accessPointAdded(const AccessPoint addedAP)
 {
     visibleAPs.add(addedAP);
     updateAPList();
 }
 
 /*
- * Removes all missing access points from the access point list.
+ * Removes an access point from the list when it is no longer visible.
  */
-void WifiSettingsPage::accessPointRemoved(const WifiAccessPoint& removedAP)
+void Wifi::SettingsPage::accessPointRemoved(const AccessPoint removedAP)
 {
     visibleAPs.removeAllInstancesOf(removedAP);
     updateAPList();
 }
 
 /*
+ * Updates access point connection controls when a connection starts to 
+ * activate.
+ */
+void Wifi::SettingsPage::startedConnecting(const AccessPoint connectingAP)
+{
+    updateAPList();
+}
+
+/*
+ * Updates access point connection controls and prints an error message when 
+ * connection authentication fails.
+ */
+void Wifi::SettingsPage::connectionAuthFailed(const AccessPoint connectingAP)
+{
+    updateAPList();
+}
+
+/*
+ * Updates the access point list and connection controls when an access point 
+ * connects.
+ */
+void Wifi::SettingsPage::connected(const AccessPoint connectedAP)
+{
+    updateAPList();
+}
+
+/*
+ * Updates the access point list and connection controls when an access point 
+ * disconnects.
+ */
+void Wifi::SettingsPage::disconnected(const AccessPoint disconnectedAP)
+{
+    updateAPList();
+}
+
+/*
  * Attempts to connect if return is pressed after entering a password.
  */
-void WifiSettingsPage::textEditorReturnKeyPressed(juce::TextEditor& editor)
+void Wifi::SettingsPage::textEditorReturnKeyPressed(juce::TextEditor& editor)
 {
     connect(visibleAPs[getSelectedIndex()]);
 }
-
 
 /*
  * Gets the asset name for the icon that best represents accessPoint's 
  * signal strength.
  */
-juce::String WifiSettingsPage::getWifiAssetName
-(const WifiAccessPoint& accessPoint)
+juce::String Wifi::SettingsPage::getWifiAssetName(const AccessPoint accessPoint)
 {
     float sigStrength = accessPoint.getSignalStrength();
     int maxIndex = wifiImageFiles.size() - 1;
     return wifiImageFiles[round((maxIndex * (sigStrength) / 100.0f))];
 }
 
-WifiSettingsPage::ConnectionButton::ConnectionButton()
+Wifi::SettingsPage::ConnectionButton::ConnectionButton()
 {
     addChildComponent(spinner);
 }
@@ -520,15 +549,14 @@ WifiSettingsPage::ConnectionButton::ConnectionButton()
  * Show or hide the spinner, ensuring the button is enabled when
  * text is visible and disabled when the spinner is visible.
  */
-void WifiSettingsPage::ConnectionButton::setSpinnerVisible(bool showSpinner)
+void Wifi::SettingsPage::ConnectionButton::setSpinnerVisible(bool showSpinner)
 {
-    using namespace juce;
     spinner.setVisible(showSpinner);
     setEnabled(!showSpinner);
     if(showSpinner)
     {
         savedText = getButtonText();
-        setButtonText(String());
+        setButtonText(juce::String());
     }
     else if(getButtonText().isEmpty())
     {
@@ -539,10 +567,9 @@ void WifiSettingsPage::ConnectionButton::setSpinnerVisible(bool showSpinner)
 /*
  * Ensures spinner bounds are updated with connection button bounds.
  */
-void WifiSettingsPage::ConnectionButton::resized()
+void Wifi::SettingsPage::ConnectionButton::resized()
 {
     int spinnerSize = getHeight();
     spinner.setBounds(getLocalBounds().
             withSizeKeepingCentre(spinnerSize, spinnerSize));
 }
-

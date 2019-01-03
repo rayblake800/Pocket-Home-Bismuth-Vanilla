@@ -21,7 +21,7 @@ Wifi::ControlWidget::ControlWidget(std::function<void() > openWifiPage) :
 ConnectionSettingsComponent(openWifiPage, localeClassKey.toString()),
 Locale::TextUser(localeClassKey)
 {
-    refresh();
+    juce::MessageManager::callAsync([this]() { refresh(); });
 }
 
 /*
@@ -127,7 +127,7 @@ juce::String Wifi::ControlWidget::updateButtonText()
  */
 void Wifi::ControlWidget::wirelessEnabled()
 {
-    refresh();
+    juce::MessageManager::callAsync([this]() { refresh(); });
 }
 
 /*
@@ -135,7 +135,7 @@ void Wifi::ControlWidget::wirelessEnabled()
  */
 void Wifi::ControlWidget::wirelessDisabled()
 {
-    refresh();
+    juce::MessageManager::callAsync([this]() { refresh(); });
 }
 
 /*
@@ -144,7 +144,7 @@ void Wifi::ControlWidget::wirelessDisabled()
  */
 void Wifi::ControlWidget::startedConnecting(const AccessPoint connectingAP)
 {
-    refresh();
+    juce::MessageManager::callAsync([this]() { refresh(); });
 }
 
 /*
@@ -152,7 +152,7 @@ void Wifi::ControlWidget::startedConnecting(const AccessPoint connectingAP)
  */
 void Wifi::ControlWidget::connected(const AccessPoint connectedAP)
 {
-    refresh();
+    juce::MessageManager::callAsync([this]() { refresh(); });
 }
 
 /*
@@ -161,7 +161,7 @@ void Wifi::ControlWidget::connected(const AccessPoint connectedAP)
  */
 void Wifi::ControlWidget::disconnected(const AccessPoint disconnectedAP)
 {
-    refresh();
+    juce::MessageManager::callAsync([this]() { refresh(); });
 }
 
 /*
@@ -170,5 +170,5 @@ void Wifi::ControlWidget::disconnected(const AccessPoint disconnectedAP)
  */
 void Wifi::ControlWidget::connectionAuthFailed(const AccessPoint connectingAP)
 {
-    refresh();
+    juce::MessageManager::callAsync([this]() { refresh(); });
 }

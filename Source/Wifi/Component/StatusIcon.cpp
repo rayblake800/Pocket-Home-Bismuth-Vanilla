@@ -2,7 +2,7 @@
 #include "Wifi/Component/StatusIcon.h"
 #include "ComponentConfigKeys.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
-#include "Wifi/Connection/RecordResource.h"
+#include "Wifi/Connection/RecordReader.h"
 #include "Wifi/Device/DeviceViewer.h"
 
 Wifi::StatusIcon::StatusIcon() :
@@ -11,7 +11,7 @@ ConfigurableImageComponent(ComponentConfigKeys::wifiIconKey)
 #    if JUCE_DEBUG
     setName("Wifi::StatusIcon");
 #    endif
-    const Connection::RecordResource connectionRecords;
+    const Connection::RecordReader connectionRecords;
     if(connectionRecords.isConnected())
     {
         AccessPoint connectedAP = connectionRecords.getActiveAP();
@@ -44,7 +44,11 @@ void Wifi::StatusIcon::signalStrengthUpdate(const AccessPoint updatedAP)
     const int maxStrengthIdx = (int) APIcon::wifiStrength3;
     const int range = maxStrengthIdx - minStrengthIdx;
     const int strengthLevel = updatedAP.getSignalStrength() * range / 100;
-    setImageAssetIndex(minStrengthIdx + strengthLevel);
+    const int index = minStrengthIdx + strengthLevel;
+    juce::MessageManager::callAsync([this, index]
+    {
+        setImageAssetIndex(index);
+    });
 }
 
 /*
@@ -64,7 +68,10 @@ void Wifi::StatusIcon::connected(const AccessPoint connectedAP)
 void Wifi::StatusIcon::disconnected(const AccessPoint disconnectedAP)
 {
     ignoreAllUpdates();
-    setIcon(APIcon::wifiStrength0);
+    juce::MessageManager::callAsync([this]
+    {
+        setIcon(APIcon::wifiStrength0);
+    });
 }
 
 /*
@@ -72,7 +79,10 @@ void Wifi::StatusIcon::disconnected(const AccessPoint disconnectedAP)
  */
 void Wifi::StatusIcon::wirelessEnabled()
 {
-    setIcon(APIcon::wifiStrength0);
+    juce::MessageManager::callAsync([this]
+    {
+        setIcon(APIcon::wifiStrength0);
+    });
 }
 
 /*
@@ -82,5 +92,8 @@ void Wifi::StatusIcon::wirelessEnabled()
 void Wifi::StatusIcon::wirelessDisabled()
 {
     ignoreAllUpdates();
-    setIcon(APIcon::wifiOff);
+    juce::MessageManager::callAsync([this]
+    {
+        setIcon(APIcon::wifiOff);
+    });
 }
