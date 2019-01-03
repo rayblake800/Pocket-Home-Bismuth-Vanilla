@@ -1,30 +1,18 @@
 #include "LibNM/BorrowedObjects/AccessPoint.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/Data/APHash.h"
 #include "LibNM/Data/APMode.h"
 #include "LibNM/Data/SecurityType.h"
+#include "LibNM/ThreadHandler.h"
 #include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 #include <nm-utils.h>
 
-/* Rename smart pointers for brevity: */
-typedef GLib::ObjectPtr<NMAccessPoint*> NMAccessPointPtr;
-typedef GLib::ObjectPtr<NMObject*> NMObjectPtr;
-typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
-typedef GLib::ObjectPtr<> ObjectPtr;
-
-/*
- * Create a AccessPoint to contain a NMAccessPoint object.
- */
-LibNM::AccessPoint::AccessPoint(BorrowedObject<NMAccessPoint> toAssign) :
-    BorrowedObjectInterface<NMAccessPoint>(toAssign)
-{ 
-    ASSERT_NM_CONTEXT;
-}
-    
 /*
  * Creates a null AccessPoint.
  */
-LibNM::AccessPoint::AccessPoint() { }
+LibNM::AccessPoint::AccessPoint() : 
+GLib::Borrowed::Object(NM_TYPE_ACCESS_POINT) { }
 
 /*
  * Gets the access point's basic security type.
@@ -79,7 +67,7 @@ const GByteArray* LibNM::AccessPoint::getSSID() const
     const GByteArray* ssid = nullptr;
     if(!isNull())
     {
-        ssid = nm_access_point_get_ssid(getNMData());
+        ssid = nm_access_point_get_ssid(getNMObjectPtr());
     }
     return ssid;
 }
@@ -116,7 +104,7 @@ const char* LibNM::AccessPoint::getBSSID() const
     const char* bssid = "";
     if(!isNull())
     {
-        bssid = nm_access_point_get_bssid(getNMData());
+        bssid = nm_access_point_get_bssid(getNMObjectPtr());
     }
     return bssid;
 }
@@ -129,7 +117,7 @@ unsigned int LibNM::AccessPoint::getSignalStrength() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_strength(getNMData());
+        return nm_access_point_get_strength(getNMObjectPtr());
     }
     return 0;
 }
@@ -142,7 +130,7 @@ NM80211Mode LibNM::AccessPoint::getMode() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_mode(getNMData());
+        return nm_access_point_get_mode(getNMObjectPtr());
     }
     return NM_802_11_MODE_UNKNOWN;
 }
@@ -155,7 +143,7 @@ NM80211ApFlags LibNM::AccessPoint::getFlags() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_flags(getNMData());
+        return nm_access_point_get_flags(getNMObjectPtr());
     }
     return NM_802_11_AP_FLAGS_NONE;
 }
@@ -168,7 +156,7 @@ NM80211ApSecurityFlags LibNM::AccessPoint::getWPAFlags() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_wpa_flags(getNMData());
+        return nm_access_point_get_wpa_flags(getNMObjectPtr());
     }
     return NM_802_11_AP_SEC_NONE;
 }
@@ -181,7 +169,7 @@ NM80211ApSecurityFlags LibNM::AccessPoint::getRSNFlags() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        return nm_access_point_get_rsn_flags(getNMData());
+        return nm_access_point_get_rsn_flags(getNMObjectPtr());
     }
     return NM_802_11_AP_SEC_NONE;
 }
@@ -195,7 +183,7 @@ const char* LibNM::AccessPoint::getPath() const
     const char* path = "";
     if(!isNull())
     {
-        path = nm_object_get_path(NM_OBJECT(getNMData()));
+        path = nm_object_get_path(NM_OBJECT(getGObject()));
         if(path == nullptr)
         {
             path = "";
@@ -212,10 +200,25 @@ void LibNM::AccessPoint::Listener::connectAllSignals(GObject* source)
     ASSERT_NM_CONTEXT;
     if(source != nullptr && NM_IS_ACCESS_POINT(source))
     {
-        connectNotifySignal(source, NM_ACCESS_POINT_STRENGTH);
+        connectNotifySignal(source, NM_ACCESS_POINT_STRENGTH, false);
     }
 }
 
+static LibNM::AccessPoint findAccessPoint(GObject* nmAccessPoint)
+{
+    using namespace LibNM;
+    const ThreadHandler nmThreadHandler;
+    DeviceWifi wifiDevice = nmThreadHandler.getWifiDevice();
+    juce::Array<AccessPoint> allAPs = wifiDevice.getAccessPoints();
+    for(const AccessPoint& accessPoint : allAPs)
+    {
+        if(accessPoint == nmAccessPoint)
+        {
+            return accessPoint;
+        }
+    }
+    return AccessPoint();
+}
 /*
  * Builds signalStrengthChanged() calls from generic property change 
  * notifications.
@@ -226,14 +229,10 @@ void LibNM::AccessPoint::Listener::propertyChanged
     ASSERT_NM_CONTEXT;
     if(property == NM_ACCESS_POINT_STRENGTH && NM_IS_ACCESS_POINT(source))
     {
-        g_object_ref(source);
-        //PLACEHOLDER:
-        AccessPoint tempAP;
-        //TODO: get WifiDevice from ThreadResource,
-        //      get AccessPoint from WifiDevice
-        //AccessPoint tempAP(NM_ACCESS_POINT(source));
-        unsigned int strength = tempAP.getSignalStrength();
-        signalStrengthChanged(tempAP, strength);
+        AccessPoint changedAP = findAccessPoint(source);
+        jassert(!changedAP.isNull());
+        unsigned int strength = changedAP.getSignalStrength();
+        signalStrengthChanged(changedAP, strength);
     }
 }
  
@@ -245,6 +244,15 @@ void LibNM::AccessPoint::addListener(AccessPoint::Listener& listener)
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        listener.connectAllSignals(G_OBJECT(getNMData()));
+        listener.connectAllSignals(getGObject());
     }
+}
+
+/*
+ * Gets the AccessPoint object's stored LibNM access point data.
+ */
+NMAccessPoint* LibNM::AccessPoint::getNMObjectPtr() const
+{
+    return NM_ACCESS_POINT(getGObject());
+
 }

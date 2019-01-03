@@ -6,7 +6,7 @@
  *        objects.
  */
 
-#include "LibNM/BorrowedObjects/BorrowedObject.h"
+#include "GLib/Borrowed/Borrowed_Object.h"
 #include <nm-active-connection.h>
 
 namespace LibNM { class ActiveConnection; }
@@ -18,27 +18,9 @@ namespace LibNM { class AccessPoint; }
  * connection's status, its properties, and the access point used to activate
  * the connection.
  */
-class LibNM::ActiveConnection : 
-public BorrowedObjectInterface<NMActiveConnection>
+class LibNM::ActiveConnection : public GLib::Borrowed::Object
 {
 public:
-    /**
-     * @brief  Creates a ActiveConnection sharing a GObject with an existing
-     *         ActiveConnection.
-     * 
-     * @toCopy  An existing connection object.
-     */
-    ActiveConnection(const ActiveConnection& toCopy);
-    
-    /**
-     * @brief  Creates a ActiveConnection to contain a NMActiveConnection 
-     *         object.
-     * 
-     * @toAssign  A valid NMActiveConnection for this ActiveConnection to 
-     *            hold.
-     */
-    ActiveConnection(BorrowedObject<NMActiveConnection> toAssign);
-    
     /**
      * @brief  Creates a null ActiveConnection.
      */
@@ -90,4 +72,13 @@ public:
      *          NM_ACTIVE_CONNECTION_STATE_UNKNOWN otherwise.
      */
     NMActiveConnectionState getConnectionState() const;
+
+private:
+    /**
+     * @brief  Gets the object's stored LibNM object data.
+     *
+     * @return  The stored object data, cast to the LibNM active connection 
+     *          type.
+     */
+    NMActiveConnection* getNMObjectPtr() const;
 };

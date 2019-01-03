@@ -1,35 +1,91 @@
+// Required to implement the client's private ThreadHandler class. */
+#define LIB_NM_THREAD_IMPLEMENTATION
+
 #include "LibNM/OwnedObjects/Client.h"
 #include "LibNM/OwnedObjects/Connection.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/BorrowedObjects/ActiveConnection.h"
-#include "LibNM/ThreadHandler.h"
+#include "LibNM/ThreadResource.h"
 #include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
+#include "GLib/Thread/ThreadHandler.h"
 
-/* Rename smart pointers for brevity: */
-typedef GLib::ObjectPtr<NMClient*> NMClientPtr;
-typedef GLib::ObjectPtr<NMConnection*> NMConnectionPtr;
-typedef GLib::ObjectPtr<> ObjectPtr;
+/**
+ * @brief  The private ThreadHandler used by the active wifi device to access
+ *         the LibNM thread's Client data.
+ */
+class ClientThreadHandler : public GLib::ThreadHandler
+{ 
+public:
+    ClientThreadHandler() : 
+    GLib::ThreadHandler(LibNM::ThreadResource::resourceKey, 
+        []()->GLib::ThreadResource* { return new LibNM::ThreadResource(); } ) 
+    { }
+
+    virtual ~ClientThreadHandler() { }
+    
+    /**
+     * @brief  Gets the shared NetworkManager client object if called within
+     *         the LibNM event loop.
+     *
+     * @return  The client object if called within the event loop, or a null
+     *          Client if called outside of the event loop.
+     */
+    LibNM::Client getClient() const
+    {
+        SharedResource::LockedPtr<LibNM::ThreadResource> nmThread
+            = getWriteLockedResource<LibNM::ThreadResource>();
+        return nmThread->getClient();
+    }
+    
+    /**
+     * @brief  Gets the set of Wifi device objects managed by the networkClient.
+     *
+     * @return  The ObjectLender used to manage all NMDeviceWifi* data.
+     */
+    GLib::Borrowed::ObjectLender<LibNM::DeviceWifi>& getWifiDeviceLender() const
+    {
+        SharedResource::LockedPtr<LibNM::ThreadResource> nmThread
+            = getWriteLockedResource<LibNM::ThreadResource>();
+        return nmThread->getWifiDeviceLender();
+    }
+
+    /**
+     * @brief  Gets the set of ActiveConnection objects managed by the 
+     *         networkClient.
+     *
+     * @return  The ObjectLender used to manage the networkClient's
+     *          NMActiveConnection* data.
+     */
+    GLib::Borrowed::ObjectLender<LibNM::ActiveConnection>& getConnectionLender()
+        const
+    {
+        SharedResource::LockedPtr<LibNM::ThreadResource> nmThread
+            = getWriteLockedResource<LibNM::ThreadResource>();
+        return nmThread->getConnectionLender();
+    }
+};
 
 /*
  * Creates a null Client object.
  */
-LibNM::Client::Client() : LibNM::OwnedObject(NM_TYPE_CLIENT) { }
+LibNM::Client::Client() : GLib::Owned::Object(NM_TYPE_CLIENT) { }
 
 /*
  * Creates a Client that shares a NMClient with another Client.
  */
 LibNM::Client::Client(const Client& toCopy) : 
-LibNM::OwnedObject(toCopy, NM_TYPE_CLIENT)
+GLib::Owned::Object(toCopy, NM_TYPE_CLIENT)
 {
     ASSERT_NM_CONTEXT;
+    setGObject(toCopy);
 }
  
 /*
  * Creates a Client holding an existing NMClient object.
  */
 LibNM::Client::Client(NMClient* toAssign) :
-LibNM::OwnedObject(NM_OBJECT(toAssign), NM_TYPE_CLIENT) 
+GLib::Owned::Object(G_OBJECT(toAssign), NM_TYPE_CLIENT) 
 { 
     ASSERT_NM_CONTEXT;
 }
@@ -40,157 +96,213 @@ LibNM::OwnedObject(NM_OBJECT(toAssign), NM_TYPE_CLIENT)
 void LibNM::Client::initClient()
 {
     ASSERT_NM_CONTEXT;
-    setGObject(G_OBJECT(nm_client_new()));
+    GObject* newClient = G_OBJECT(nm_client_new());
+    g_object_ref(newClient); // TEST: this shouldn't be necessary
+    setGObject(newClient);
+}
+
+/**
+ * @brief  Casts a GLib::ObjectPtr holding the Client data to the NMClient*
+ *         type.
+ *
+ * @param clientPtr  A RAII pointer object storing the client's GObject* value.
+ *
+ * @return  The value stored in clientPtr as a NMClient*, or nullptr if 
+ *          clientPtr does not hold a NMClient*
+ */
+static NMClient* toClientPtr(GLib::ObjectPtr& clientPtr)
+{
+    return NM_CLIENT((GObject*) clientPtr);
 }
 
 /*
  * Gets all wifi devices from the network manager.
  */
-juce::Array<LibNM::DeviceWifi> LibNM::Client::getWifiDevices()
+juce::Array<LibNM::DeviceWifi> LibNM::Client::getWifiDevices() const
 { 
     ASSERT_NM_CONTEXT;
     juce::Array<DeviceWifi> devices;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
-        const GPtrArray* devArray = nm_client_get_devices(client);
-        for(int i = 0; devArray && i < devArray->len; i++)
+        const ClientThreadHandler threadHandler;
+        GLib::Borrowed::ObjectLender<DeviceWifi>& deviceLender
+            = threadHandler.getWifiDeviceLender();
+        const GPtrArray* deviceArray 
+            = nm_client_get_devices(toClientPtr(dataPtr));
+        for(int i = 0; deviceArray && i < deviceArray->len; i++)
         {
-            NMDevice* dev = NM_DEVICE(devArray->pdata[i]);
-            if(dev != nullptr && NM_IS_DEVICE_WIFI(dev))
+            NMDevice* device = NM_DEVICE(deviceArray->pdata[i]);
+            if(device != nullptr && NM_IS_DEVICE_WIFI(device))
             {
-                BorrowedObject<NMDeviceWifi> deviceHolder
-                    = wifiDevices.getBorrowedObject(NM_DEVICE_WIFI(dev));
-                devices.add(DeviceWifi(deviceHolder));
+                devices.add(deviceLender.borrowObject(G_OBJECT(device)));
             }
         }  
     }
     return devices;
 }
 
+/**
+ * @brief  Gets a DeviceWifi object holding a specific NMDeviceWifi*, adding
+ *         the device to the tracked list of Wifi devices if necessary.
+ *
+ * @param devicePtr  The LibNM Wifi device object pointer the DeviceWifi should
+ *                   hold.
+ *
+ * @return  A DeviceWifi that is holding devicePtr.
+ */
+static LibNM::DeviceWifi borrowDevice(NMDeviceWifi* devicePtr)
+{
+    using namespace LibNM;
+    const ClientThreadHandler threadHandler;
+    GLib::Borrowed::ObjectLender<DeviceWifi>& deviceLender
+        = threadHandler.getWifiDeviceLender();
+    return deviceLender.borrowObject(G_OBJECT(devicePtr));
+}
+
 /*
  * Gets a specific wifi device using its interface name.
  */
 LibNM::DeviceWifi 
-LibNM::Client::getWifiDeviceByIface(const char* interface)
+LibNM::Client::getWifiDeviceByIface(const char* interface) const
 { 
     ASSERT_NM_CONTEXT;
-    DeviceWifi wifiDevice;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
-        NMDevice* dev = nm_client_get_device_by_iface(client, interface);
-        if(dev != nullptr && NM_IS_DEVICE_WIFI(dev))
+        NMDevice* device = nm_client_get_device_by_iface(toClientPtr(dataPtr),
+                interface);
+        if(device != nullptr && NM_IS_DEVICE_WIFI(device))
         {
-            BorrowedObject<NMDeviceWifi> deviceHolder
-                = wifiDevices.getBorrowedObject(NM_DEVICE_WIFI(dev));
-            wifiDevice = DeviceWifi(deviceHolder);
+            return borrowDevice(NM_DEVICE_WIFI(device));
         }
     }
-    return wifiDevice;
+    return DeviceWifi();
 }
 
 /*
  * Gets a specific wifi device using its DBus path.
  */
-LibNM::DeviceWifi LibNM::Client::getWifiDeviceByPath(const char* path)
+LibNM::DeviceWifi LibNM::Client::getWifiDeviceByPath(const char* path) const
 { 
     ASSERT_NM_CONTEXT;
-    DeviceWifi wifiDevice;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
-        NMDevice* dev = nm_client_get_device_by_path(client, path);
-        if(dev != nullptr && NM_IS_DEVICE_WIFI(dev))
+        NMDevice* device = nm_client_get_device_by_path(toClientPtr(dataPtr),
+                path);
+        if(device != nullptr && NM_IS_DEVICE_WIFI(device))
         {
-            BorrowedObject<NMDeviceWifi> deviceHolder
-                = wifiDevices.getBorrowedObject(NM_DEVICE_WIFI(dev));
-            wifiDevice = DeviceWifi(deviceHolder);
+            return borrowDevice(NM_DEVICE_WIFI(device));
         }
     }
-    return wifiDevice;
+    return DeviceWifi();
 }
 
 /*
  * Gets the list of all active connections known to the network manager.
  */
-juce::Array<LibNM::ActiveConnection> LibNM::Client::getActiveConnections()
+juce::Array<LibNM::ActiveConnection> LibNM::Client::getActiveConnections() const
 { 
     ASSERT_NM_CONTEXT;
     juce::Array<ActiveConnection> connections;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
-        const GPtrArray* cons = nm_client_get_active_connections(client);
-        for(int i = 0; cons && i < cons->len; i++)
+        const ClientThreadHandler threadHandler;
+        GLib::Borrowed::ObjectLender<ActiveConnection>& connectionLender
+            = threadHandler.getConnectionLender();
+        const GPtrArray* nmConnections 
+                = nm_client_get_active_connections(toClientPtr(dataPtr));
+        for(int i = 0; nmConnections && i < nmConnections->len; i++)
         {
-            NMActiveConnection* con = NM_ACTIVE_CONNECTION(cons->pdata[i]);
-            if(con != nullptr && NM_IS_ACTIVE_CONNECTION(con))
+            NMActiveConnection* connection 
+                = NM_ACTIVE_CONNECTION(nmConnections->pdata[i]);
+            if(connection != nullptr && NM_IS_ACTIVE_CONNECTION(connection))
             {
-                BorrowedObject<NMActiveConnection> connectionHolder
-                    = activeConnections.getBorrowedObject(con);
-                connections.add(ActiveConnection(connectionHolder));
+                connections.add(connectionLender.borrowObject
+                        (G_OBJECT(connection)));
             }
         }
     }
     return connections;
 }
 
+
+/**
+ * @brief  Gets a ActiveConnection object holding a specific 
+ *         NMActiveConnection*, adding the connection to the tracked list of 
+ *         active connections if necessary.
+ *
+ * @param connectionPtr  The LibNM active connection object pointer the 
+ *                       ActiveConnection should hold.
+ *
+ * @return  An ActiveConnection that is holding connectionPtr.
+ */
+static LibNM::ActiveConnection borrowConnection
+(NMActiveConnection* connectionPtr) 
+{
+    using namespace LibNM;
+    const ClientThreadHandler threadHandler;
+    GLib::Borrowed::ObjectLender<ActiveConnection>& connectionLender
+        = threadHandler.getConnectionLender();
+    return connectionLender.borrowObject(G_OBJECT(connectionPtr));
+}
+
 /*
  * Gets the primary active network connection.
  */
-LibNM::ActiveConnection LibNM::Client::getPrimaryConnection()
+LibNM::ActiveConnection LibNM::Client::getPrimaryConnection() const
 { 
     ASSERT_NM_CONTEXT;
-    ActiveConnection primary;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
-        NMActiveConnection* con = nm_client_get_primary_connection(client);
-        if(con != nullptr && NM_IS_ACTIVE_CONNECTION(con))
+        NMActiveConnection* connection 
+                = nm_client_get_primary_connection(toClientPtr(dataPtr));
+        if(connection != nullptr && NM_IS_ACTIVE_CONNECTION(connection))
         {
-            BorrowedObject<NMActiveConnection> connectionHolder
-                = activeConnections.getBorrowedObject(con);
-            primary = ActiveConnection(connectionHolder);
+            return borrowConnection(connection);
         }
     }
-    return primary;
+    return ActiveConnection();
 }
 
 /*
  * Gets the connection being activated by the network manager.
  */
-LibNM::ActiveConnection LibNM::Client::getActivatingConnection()
+LibNM::ActiveConnection LibNM::Client::getActivatingConnection() const
 { 
     ASSERT_NM_CONTEXT;
-    ActiveConnection activating;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
-        NMActiveConnection* con = nm_client_get_activating_connection(
-                client);
-        if(con != nullptr)
+        NMActiveConnection* connection 
+                = nm_client_get_activating_connection(toClientPtr(dataPtr));
+        if(connection != nullptr && NM_IS_ACTIVE_CONNECTION(connection))
         {
-            BorrowedObject<NMActiveConnection> connectionHolder
-                = activeConnections.getBorrowedObject(con);
-            activating = ActiveConnection(connectionHolder);
+            return borrowConnection(connection);
         }
     }
-    return activating;
+    return ActiveConnection();
 }
 
 /*
  * Deactivates an active network connection.
  */
-void LibNM::Client::deactivateConnection(ActiveConnection& activeCon) 
+void LibNM::Client::deactivateConnection(ActiveConnection& activeCon) const
 { 
     ASSERT_NM_CONTEXT;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
         if(!activeCon.isNull())
         {
-                nm_client_deactivate_connection(client, activeCon.getNMData());
+                nm_client_deactivate_connection(toClientPtr(dataPtr),
+                        NM_ACTIVE_CONNECTION(activeCon.getGObject()));
+                ClientThreadHandler threadHandler;
+                threadHandler.getConnectionLender().invalidateObject
+                        (activeCon.getGObject());
         }         
     }
 }
@@ -201,11 +313,10 @@ void LibNM::Client::deactivateConnection(ActiveConnection& activeCon)
 bool LibNM::Client::wirelessEnabled() const
 { 
     ASSERT_NM_CONTEXT;
-    bool enabled = false;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
-        return nm_client_wireless_get_enabled(client);
+        return nm_client_wireless_get_enabled(toClientPtr(dataPtr));
     }
     return false;
 }
@@ -213,13 +324,13 @@ bool LibNM::Client::wirelessEnabled() const
 /*
  * Sets whether wireless connections are enabled.
  */
-void LibNM::Client::setWirelessEnabled(bool enabled) 
+void LibNM::Client::setWirelessEnabled(bool enabled) const
 { 
     ASSERT_NM_CONTEXT;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr dataPtr(*this);
+    if(dataPtr != nullptr)
     {
-        nm_client_wireless_set_enabled(client, enabled);
+        nm_client_wireless_set_enabled(toClientPtr(dataPtr), enabled);
     }
 }
 
@@ -234,17 +345,14 @@ void LibNM::Client::ConnectionHandler::activateCallback(NMClient* client,
         Client::ConnectionHandler* handler) 
 {
     ASSERT_NM_CONTEXT;
-    ThreadHandler nmThreadHandler;
-    Client networkClient = nmThreadHandler.getClient();
-    ActiveConnection activeConnnection(networkClient.activeConnections
-            .getBorrowedObject(connection));
+    ActiveConnection activeConnection = borrowConnection(connection);
     if(error != nullptr)
     {
-        handler->openingConnectionFailed(activeConnnection, error);
+        handler->openingConnectionFailed(activeConnection, error);
     }
     else
     {
-        handler->openingConnection(activeConnnection);
+        handler->openingConnection(activeConnection);
     } 
 }
 
@@ -259,10 +367,8 @@ void LibNM::Client::ConnectionHandler::addActivateCallback(NMClient* client,
         GError* error,
         Client::ConnectionHandler* handler) 
 {
-    ASSERT_NM_CONTEXT;
-    ThreadHandler nmThreadHandler;
-    Client networkClient = nmThreadHandler.getClient();
-    ActiveConnection activeConnection = networkClient.getPrimaryConnection();
+    ActiveConnection activeConnection 
+        = borrowConnection(NM_ACTIVE_CONNECTION(connection));
     jassert((activeConnection.isNull()) == (connection == nullptr));
     if(error != nullptr)
     {
@@ -288,35 +394,35 @@ void LibNM::Client::activateConnection(
     ASSERT_NM_CONTEXT;
     //determine if this is a new connection attempt
     bool isNew = !usedSavedConnection;
-    NMClientPtr client(NM_CLIENT(getGObject()));
-    if(client != nullptr)
+    GLib::ObjectPtr clientDataPtr(*this);
+    if(clientDataPtr != nullptr)
     {
         const char* apPath = accessPoint.getPath();
-        NMConnectionPtr connectionObject(NM_CONNECTION(
-                    getOtherGObject(connection)));
-       
-        //connecting with a null connection object is allowed and may work.
         if(apPath != nullptr && !wifiDevice.isNull())
         {
+            GLib::ObjectPtr connectionDataPtr(connection);
             if(isNew)
             {
                 DBG("Client::activateConnection"
                         << ": adding new connection.");
-                nm_client_add_and_activate_connection(client,
-                    connectionObject,
-                    NM_DEVICE(wifiDevice.getNMData()),
-                    apPath,
-                    (NMClientAddActivateFn) 
-                    ConnectionHandler::addActivateCallback,
-                    handler);   
+                // using a null connection object is allowed and may work.
+                nm_client_add_and_activate_connection(
+                        toClientPtr(clientDataPtr),
+                        NM_CONNECTION((GObject*) connectionDataPtr),
+                        NM_DEVICE(wifiDevice.getGObject()),
+                        apPath,
+                        (NMClientAddActivateFn) 
+                        ConnectionHandler::addActivateCallback,
+                        handler);   
             }
             else
             {
                 DBG("Client::activateConnection"
                         << ": activating saved connection.");
-                nm_client_activate_connection(client,
-                        connectionObject,
-                        NM_DEVICE(wifiDevice.getNMData()),
+                nm_client_activate_connection(
+                        toClientPtr(clientDataPtr),
+                        NM_CONNECTION((GObject*) connectionDataPtr),
+                        NM_DEVICE(wifiDevice.getGObject()),
                         apPath,
                         (NMClientActivateFn) 
                         ConnectionHandler::activateCallback,
@@ -334,7 +440,7 @@ void LibNM::Client::Listener::connectAllSignals(GObject* source)
     ASSERT_NM_CONTEXT;
     if(source != nullptr && NM_IS_CLIENT(source))
     {
-        connectNotifySignal(source, NM_CLIENT_WIRELESS_ENABLED);
+        connectNotifySignal(source, NM_CLIENT_WIRELESS_ENABLED, true);
     }
 }
 
@@ -362,7 +468,7 @@ void LibNM::Client::Listener::propertyChanged
 void LibNM::Client::addListener(Listener& listener)
 {
     ASSERT_NM_CONTEXT;
-    ObjectPtr source(getGObject());
+    GLib::ObjectPtr source(*this);
     if(source != nullptr)
     {
         listener.connectAllSignals(source);

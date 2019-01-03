@@ -3,11 +3,6 @@
 #include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
-/* Rename scoped GObject pointers for brevity: */
-typedef GLib::ObjectPtr<GObject*> GObjectPtr;
-typedef GLib::ObjectPtr<NMSettingWirelessSecurity*> 
-        NMSettingWirelessSecurityPtr;
-
 /* Relevant key management setting strings: */
 static const constexpr char* unsecuredTypeKey     = "none";
 static const constexpr char* wepTypeKey           = "ieee8021x";
@@ -54,10 +49,10 @@ bool LibNM::WifiSecuritySettings::addWPASettings(const juce::String psk)
     ASSERT_NM_CONTEXT;
     if(psk.length() >= 8)
     {
-        GObjectPtr settings = getGObject();
-        if(settings != nullptr)
+        GLib::ObjectPtr settingsPtr(*this);
+        if(settingsPtr != nullptr)
         {
-            g_object_set(settings,
+            g_object_set(settingsPtr,
                 NM_SETTING_WIRELESS_SECURITY_PSK,
                 psk.toRawUTF8(),
                 NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
@@ -70,6 +65,23 @@ bool LibNM::WifiSecuritySettings::addWPASettings(const juce::String psk)
         jassertfalse;
     }
     return false;
+}
+
+/**
+ * @brief  Casts a GLib::ObjectPtr holding the connection settings data to 
+ *         the NMSettingWirelessSecurity* type.
+ *
+ * @param settingsPtr  A RAII pointer object storing the settings object's 
+ *                     GObject* value.
+ *
+ * @return             The value stored in settingsPtr as a 
+ *                     NMSettingWirelessSecurity*, or nullptr if settingsPtr 
+ *                     does not hold a NMSettingWirelessSecurity*.
+ */
+static NMSettingWirelessSecurity* toNMSecuritySettings
+(GLib::ObjectPtr& settingPtr)
+{
+    return NM_SETTING_WIRELESS_SECURITY((GObject*) settingPtr);
 }
 
 /*
@@ -98,22 +110,23 @@ bool LibNM::WifiSecuritySettings::addWEPSettings(const juce::String psk)
         return false;
     }
     
-    GObjectPtr settings = getGObject();
-    if(settings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        g_object_set(settings,
+        g_object_set(settingsPtr,
                 NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE,
                 keyType,
                 NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS,
                 NM_SETTING_SECRET_FLAG_NONE,  nullptr);
 
-        nm_setting_wireless_security_set_wep_key
-                (NM_SETTING_WIRELESS_SECURITY((GObject*) settings), 0,
-                 psk.toRawUTF8());
+        nm_setting_wireless_security_set_wep_key(
+                toNMSecuritySettings(settingsPtr), 0,
+                psk.toRawUTF8());
         return true;
     }
     return false;
 }
+
 
 /*
  * Gets the basic security type defined by this settings object.
@@ -121,9 +134,8 @@ bool LibNM::WifiSecuritySettings::addWEPSettings(const juce::String psk)
 LibNM::SecurityType LibNM::WifiSecuritySettings::getSecurityType() const
 {
     ASSERT_NM_CONTEXT;
-    NMSettingWirelessSecurityPtr settings 
-        = NM_SETTING_WIRELESS_SECURITY(getGObject());
-    if(settings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
         juce::String securityType;
         if(securityType == wepTypeKey)

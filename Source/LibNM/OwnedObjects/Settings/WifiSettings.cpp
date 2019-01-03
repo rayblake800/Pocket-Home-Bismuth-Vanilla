@@ -4,9 +4,6 @@
 #include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
-typedef GLib::ObjectPtr<GObject*> GObjectPtr;
-typedef GLib::ObjectPtr<NMSettingWireless*> NMSettingWirelessPtr;
-
 /*
  * Creates a WifiSettings object that shares data with another WifiSettings
  * object.
@@ -35,16 +32,33 @@ Settings(NM_SETTING(nm_setting_wireless_new()), NM_TYPE_SETTING_WIRELESS)
     ASSERT_NM_CONTEXT;
 }
 
+/**
+ * @brief  Casts a GLib::ObjectPtr holding the connection settings data to 
+ *         the NMSettingWireless* type.
+ *
+ * @param settingsPtr  A RAII pointer object storing the settings object's 
+ *                     GObject* value.
+ *
+ * @return             The value stored in settingsPtr as a 
+ *                     NMSettingWireless*, or nullptr if settingsPtr 
+ *                     does not hold a NMSettingWireless*.
+ */
+static NMSettingWireless* toNMWifiSettings(GLib::ObjectPtr& settingPtr)
+{
+    return NM_SETTING_WIRELESS((GObject*) settingPtr);
+}
+
 /*
  * Gets the SSID saved to the wireless connection settings.
  */
 LibNM::SSID LibNM::WifiSettings::getSSID() const
 {
     ASSERT_NM_CONTEXT;
-    NMSettingWirelessPtr wifiSettings = NM_SETTING_WIRELESS(getGObject());
-    if(wifiSettings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        return SSID(nm_setting_wireless_get_ssid(wifiSettings));
+        return SSID(nm_setting_wireless_get_ssid
+                (toNMWifiSettings(settingsPtr)));
     }
     return SSID();
 }
@@ -55,10 +69,11 @@ LibNM::SSID LibNM::WifiSettings::getSSID() const
 LibNM::APMode LibNM::WifiSettings::getMode() const
 {
     ASSERT_NM_CONTEXT;
-    NMSettingWirelessPtr wifiSettings = NM_SETTING_WIRELESS(getGObject());
-    if(wifiSettings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        juce::String mode = nm_setting_wireless_get_mode(wifiSettings);
+        juce::String mode = nm_setting_wireless_get_mode
+                (toNMWifiSettings(settingsPtr));
         if(mode == NM_SETTING_WIRELESS_MODE_ADHOC)
         {
             return APMode::adhoc;
@@ -83,15 +98,15 @@ juce::StringArray LibNM::WifiSettings::getSeenBSSIDs() const
 {
     ASSERT_NM_CONTEXT;
     juce::StringArray seenBSSIDs;
-    NMSettingWirelessPtr wifiSettings = NM_SETTING_WIRELESS(getGObject());
-    if(wifiSettings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        unsigned int bssidCount 
-            = nm_setting_wireless_get_num_seen_bssids(wifiSettings);
+        unsigned int bssidCount = nm_setting_wireless_get_num_seen_bssids
+                (toNMWifiSettings(settingsPtr));
         for(int i = 0; i < bssidCount; i++)
         {
             seenBSSIDs.add(juce::String(nm_setting_wireless_get_seen_bssid
-                        (wifiSettings, i)));
+                    (toNMWifiSettings(settingsPtr), i)));
         }
     }
     return seenBSSIDs;
@@ -103,10 +118,10 @@ juce::StringArray LibNM::WifiSettings::getSeenBSSIDs() const
 bool LibNM::WifiSettings::isHidden() const
 {
     ASSERT_NM_CONTEXT;
-    NMSettingWirelessPtr wifiSettings = NM_SETTING_WIRELESS(getGObject());
-    if(wifiSettings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        return nm_setting_wireless_get_hidden(wifiSettings);
+        return nm_setting_wireless_get_hidden(toNMWifiSettings(settingsPtr));
     }
     return false;
 }
@@ -117,14 +132,7 @@ bool LibNM::WifiSettings::isHidden() const
 void LibNM::WifiSettings::setSSID(const SSID newSSID)
 {
     ASSERT_NM_CONTEXT;
-    GObjectPtr settings = getGObject();
-    if(settings != nullptr)
-    {
-        g_object_set(settings,
-                NM_SETTING_WIRELESS_SSID,
-                newSSID.getByteArray(),
-                nullptr);
-    }
+    setProperty(NM_SETTING_WIRELESS_SSID, newSSID.getByteArray());
 }
 
 /*
@@ -133,28 +141,21 @@ void LibNM::WifiSettings::setSSID(const SSID newSSID)
 void LibNM::WifiSettings::setMode(const APMode newMode)
 {
     ASSERT_NM_CONTEXT;
-    GObjectPtr settings = getGObject();
-    if(settings != nullptr)
+    const char* mode;
+    switch(newMode)
     {
-        const char* mode;
-        switch(newMode)
-        {
-            case APMode::unknown:
-                return;
-            case APMode::adhoc:
-                mode = NM_SETTING_WIRELESS_MODE_ADHOC;
-                break;
-            case APMode::infrastructure:
-                mode = NM_SETTING_WIRELESS_MODE_INFRA;
-                break;
-            case APMode::hotspot:
-                mode = NM_SETTING_WIRELESS_MODE_AP;
-        }
-        g_object_set(settings,
-                NM_SETTING_WIRELESS_MODE,
-                mode,
-                nullptr);
+        case APMode::unknown:
+            return;
+        case APMode::adhoc:
+            mode = NM_SETTING_WIRELESS_MODE_ADHOC;
+            break;
+        case APMode::infrastructure:
+            mode = NM_SETTING_WIRELESS_MODE_INFRA;
+            break;
+        case APMode::hotspot:
+            mode = NM_SETTING_WIRELESS_MODE_AP;
     }
+    setProperty(NM_SETTING_WIRELESS_MODE, mode);
 }
 
 /*
@@ -163,12 +164,5 @@ void LibNM::WifiSettings::setMode(const APMode newMode)
 void LibNM::WifiSettings::setHidden(const bool isHidden)
 {
     ASSERT_NM_CONTEXT;
-    GObjectPtr settings = getGObject();
-    if(settings != nullptr)
-    {
-        g_object_set(settings,
-                NM_SETTING_WIRELESS_HIDDEN,
-                isHidden,
-                nullptr);
-    }
+    setProperty(NM_SETTING_WIRELESS_HIDDEN, isHidden);
 }

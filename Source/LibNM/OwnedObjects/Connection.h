@@ -5,7 +5,7 @@
  * @brief  A RAII container and C++ interface for LibNM NMConnection objects.
  */
 
-#include "LibNM/OwnedObjects/OwnedObject.h"
+#include "GLib/Owned/Owned_Object.h"
 #include <nm-connection.h>
 
 namespace LibNM { class Connection; }
@@ -26,7 +26,7 @@ namespace LibNM { class WifiSecuritySettings; }
  * connection properties. To actually activate a Connection, use the 
  * LibNM::Client object held by the NMThread.
  */
-class LibNM::Connection : public LibNM::OwnedObject
+class LibNM::Connection : public GLib::Owned::Object
 {
 public:
     /**

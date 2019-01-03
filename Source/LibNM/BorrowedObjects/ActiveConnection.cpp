@@ -1,21 +1,12 @@
 #include "LibNM/BorrowedObjects/ActiveConnection.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/ContextTest.h"
- 
-/*
- * Creates a ActiveConnection to contain a NMActiveConnection object.
- */
-LibNM::ActiveConnection::ActiveConnection
-(BorrowedObject<NMActiveConnection> toAssign) :
-BorrowedObjectInterface<NMActiveConnection>(toAssign)
-{ 
-    ASSERT_NM_CONTEXT;
-}
     
 /*
  * Creates a null ActiveConnection.
  */
-LibNM::ActiveConnection::ActiveConnection() { }
+LibNM::ActiveConnection::ActiveConnection() : 
+    GLib::Borrowed::Object(NM_TYPE_ACTIVE_CONNECTION) { }
     
 /*
  * Gets the path of the access point used to activate this connection.
@@ -26,7 +17,7 @@ const char* LibNM::ActiveConnection::getAccessPointPath() const
     const char* path = "";
     if(!isNull())
     {
-        path = nm_active_connection_get_specific_object(getNMData());
+        path = nm_active_connection_get_specific_object(getNMObjectPtr());
         if(path == nullptr)
         {
             path = "";
@@ -60,7 +51,7 @@ const char* LibNM::ActiveConnection::getUUID() const
     const char* uuid = "";
     if(!isNull())
     {
-        uuid = nm_active_connection_get_uuid(getNMData());
+        uuid = nm_active_connection_get_uuid(getNMObjectPtr());
     }
     return uuid;
 }
@@ -74,7 +65,7 @@ const char* LibNM::ActiveConnection::getID() const
     const char* conId = "";
     if(!isNull())
     {
-        conId = nm_active_connection_get_id(getNMData());
+        conId = nm_active_connection_get_id(getNMObjectPtr());
     }
     return conId;
 }
@@ -88,7 +79,15 @@ NMActiveConnectionState LibNM::ActiveConnection::getConnectionState() const
     NMActiveConnectionState state = NM_ACTIVE_CONNECTION_STATE_UNKNOWN;
     if(!isNull())
     {
-        state = nm_active_connection_get_state(getNMData());
+        state = nm_active_connection_get_state(getNMObjectPtr());
     }
     return state;
+}
+
+/*
+ * Gets the object's stored LibNM object data.
+ */
+NMActiveConnection* LibNM::ActiveConnection::getNMObjectPtr() const
+{
+    return NM_ACTIVE_CONNECTION(getGObject());
 }

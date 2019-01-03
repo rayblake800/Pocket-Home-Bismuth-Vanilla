@@ -5,13 +5,15 @@
  * @brief  A RAII container and C++ interface for the LibNM NMClient class.
  */
 
-#include "LibNM/OwnedObjects/OwnedObject.h"
-#include "LibNM/BorrowedObjects/ActiveConnection.h"
-#include "LibNM/BorrowedObjects/DeviceWifi.h"
+#include "GLib/Owned/Owned_Object.h"
 #include "GLib/SignalHandler.h"
 #include <nm-client.h>
 
 namespace LibNM { class Client; }
+namespace LibNM { class DeviceWifi; }
+namespace LibNM { class AccessPoint; }
+namespace LibNM { class ActiveConnection; }
+namespace LibNM { class Connection; }
 
 /**
  *  The LibNM Client provides the main interface used to access and control
@@ -21,7 +23,7 @@ namespace LibNM { class Client; }
  *  Client provides a Listener interface, which may be used to receive
  * notifications when wireless networking is enabled or disabled.
  */
-class LibNM::Client : public LibNM::OwnedObject
+class LibNM::Client : public GLib::Owned::Object
 {
 public:
     /**
@@ -44,6 +46,14 @@ public:
      */
     Client(NMClient* toAssign);
 
+    virtual ~Client()
+    {
+        if(getReferenceCount() == 1)
+        {
+            DBG("Destroying LibNM::Client");
+        }
+    }
+
     /**
      * @brief  Initializes a null Client object with new NMClient data.
      */
@@ -55,7 +65,7 @@ public:
      * @return  All NMDevices found that are wifi devices, packaged into an
      *          array of DeviceWifi objects.
      */
-    juce::Array<DeviceWifi> getWifiDevices();
+    juce::Array<DeviceWifi> getWifiDevices() const;
     
     /**
      * @brief  Gets a specific wifi device using its interface name.
@@ -65,7 +75,7 @@ public:
      * @return           The requested wifi device, or a null object if no valid
      *                   device is found.
      */
-    DeviceWifi getWifiDeviceByIface(const char* interface);
+    DeviceWifi getWifiDeviceByIface(const char* interface) const;
         
     /**
      * @brief  Gets a specific wifi device using its DBus path.
@@ -75,7 +85,7 @@ public:
      * @return      The requested wifi device, or a null object if no valid 
      *              device is found.
      */
-    DeviceWifi getWifiDeviceByPath(const char* path);
+    DeviceWifi getWifiDeviceByPath(const char* path) const;
     
     /**
      * @brief  Gets the list of all active connections known to the network 
@@ -83,7 +93,7 @@ public:
      * 
      * @return  An array of all active network connections.
      */
-    juce::Array<ActiveConnection> getActiveConnections();
+    juce::Array<ActiveConnection> getActiveConnections() const;
     
     /**
      * @brief  Gets the primary active network connection.
@@ -91,7 +101,7 @@ public:
      * @return  An active Connection object, or a null object if there is no
      *          primary connection.
      */
-    ActiveConnection getPrimaryConnection();
+    ActiveConnection getPrimaryConnection() const;
     
     /**
      * @brief  Gets the connection being activated by the network manager.
@@ -99,7 +109,7 @@ public:
      * @return  The activating connection as an ActiveConnection object, or a 
      *          null object if there is no activating connection.
      */
-    ActiveConnection getActivatingConnection();
+    ActiveConnection getActivatingConnection() const;
     
     /**
      * @brief  Deactivates an active network connection.
@@ -107,7 +117,7 @@ public:
      * @param activeCon  The network connection to deactivate.  If this 
      *                   connection is not active, nothing will happen.
      */
-    void deactivateConnection(ActiveConnection& activeCon);
+    void deactivateConnection(ActiveConnection& activeCon) const;
     
     /**
      * @brief  Checks if wireless connections are currently enabled.
@@ -122,7 +132,7 @@ public:
      * @param enabled  If true, wifi will be enabled, if false, wifi will be
      *                 disabled.
      */
-    void setWirelessEnabled(bool enabled);
+    void setWirelessEnabled(bool enabled) const;
     
     /**
      * @brief  Handles connection activation attempts.  
@@ -287,12 +297,4 @@ public:
      *                  enabled or disabled.
      */
     void addListener(Listener& listener);
-
-private:
-    /* Holds the list of wifi device object pointers owned by NetworkManager. */
-    BorrowedObjectSet<NMDeviceWifi> wifiDevices;
-
-    /* Holds the list of active connection object pointers owned by 
-       NetworkManager. */
-    BorrowedObjectSet<NMActiveConnection> activeConnections;
 };

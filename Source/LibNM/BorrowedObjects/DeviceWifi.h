@@ -5,11 +5,12 @@
  * @brief A C++ interface for LibNM NMDeviceWifi objects.
  */
 
-#include "LibNM/BorrowedObjects/BorrowedObject.h"
+#include "GLib/Borrowed/Borrowed_Object.h"
 #include "GLib/SignalHandler.h"
 #include <nm-device-wifi.h>
 
 namespace LibNM { class DeviceWifi; }
+namespace LibNM { class Client; }
 namespace LibNM { class AccessPoint; }
 namespace LibNM { class Connection; }
 namespace LibNM { class ActiveConnection; }
@@ -29,20 +30,16 @@ namespace LibNM { class ActiveConnection; }
  * track NMDeviceWifi signals. Listeners are notified when the active connection
  * changes, access points are discovered or lost, or the device's state changes. 
  */
-class LibNM::DeviceWifi : public BorrowedObjectInterface<NMDeviceWifi>
+class LibNM::DeviceWifi : public GLib::Borrowed::Object
 {
 public:
-    /**
-     * @brief  Creates a DeviceWifi to contain a NMDeviceWifi object.
-     * 
-     * @toAssign  A valid NMDeviceWifi for this DeviceWifi to hold.
-     */
-    DeviceWifi(BorrowedObject<NMDeviceWifi> toAssign);
     
     /**
      * @brief  Creates a null DeviceWifi.
      */
     DeviceWifi();
+
+    virtual ~DeviceWifi() { }
     
     /**
      * @brief  Gets the current state of the wifi network device.
@@ -73,6 +70,13 @@ public:
      * @return  The interface name, or the empty string if this object is null.
      */
     const char* getInterface() const;
+
+    /**
+     * @brief  Gets the DBus path to this wifi device's remote object.
+     *
+     * @return  The device's NetworkManager DBus path.
+     */
+    const char* getPath() const;
     
     /**
      * @brief  Disconnects any connection that is active on this wifi device. 
@@ -80,7 +84,7 @@ public:
      * If there is no active connection, or the object is null, nothing will 
      * happen.
      */
-    void disconnect();
+    void disconnect() const;
     
     /**
      * @brief  Gets the current active connection running on this device.
@@ -88,7 +92,7 @@ public:
      * @return  The active connection object, or a null connection object if
      *          this object is not connected or is null.
      */
-    ActiveConnection getActiveConnection();
+    ActiveConnection getActiveConnection() const;
     
     /**
      * @brief  Gets an access point object using the access point's path.
@@ -98,7 +102,7 @@ public:
      * @return      The matching access point object, or a null access point 
      *              if the access point was not found or this object is null.
      */
-    AccessPoint getAccessPoint(const char* path);
+    AccessPoint getAccessPoint(const char* path) const;
     
     /**
      * @brief  Gets the active connection's access point.
@@ -106,7 +110,7 @@ public:
      * @return  The active access point object, or a null access point object
      *          if this object is disconnected or null.
      */
-    AccessPoint getActiveAccessPoint();
+    AccessPoint getActiveAccessPoint() const;
     
     /**
      * @brief  Gets all access points visible to this device.
@@ -114,13 +118,13 @@ public:
      * @return  An array containing one access point object for each nearby
      *          wifi access point visible to the device.
      */
-    juce::Array<AccessPoint> getAccessPoints();
+    juce::Array<AccessPoint> getAccessPoints() const;
     
     /**
      * @brief  Sends a request to the wifi device asking it to scan visible 
      *         access points.
      */
-    void requestScan();
+    void requestScan() const;
 
     /**
      * @brief  Listeners receive notifications when the wifi device changes, a 
@@ -263,9 +267,19 @@ private:
     static void apRemovedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
             Listener* listener);
 
-    /* Holds LibNM AccessPoint objects managed by the Wifi device. */
-    BorrowedObjectSet<NMAccessPoint> accessPointSet;
+private:
+    /**
+     * @brief  Gets this object's GLib object pointer cast as NMDeviceWifi* 
+     *         data.
+     *
+     * @return  The object's LibNM Wifi device object data pointer.
+     */
+    NMDeviceWifi* getWifiDevicePtr() const;
 
-    /* Holds LibNM ActiveConnection objects managed by the Wifi device. */
-    BorrowedObjectSet<NMActiveConnection> activeConnections;
+    /**
+     * @brief  Gets this object's GLib object pointer cast as NMDevice* data.
+     *
+     * @return  The object's LibNM device object data pointer.
+     */
+    NMDevice* getDevicePtr() const;
 };

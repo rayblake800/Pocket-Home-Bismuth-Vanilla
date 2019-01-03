@@ -58,6 +58,44 @@ LibNM::DeviceWifi LibNM::ThreadResource::getWifiDevice()
     initWifiDevice();
     return wifiDevice;
 }
+    
+
+
+/*
+ * Gets the set of Wifi device objects managed by the networkClient.
+ */
+GLib::Borrowed::ObjectLender<LibNM::DeviceWifi>& 
+LibNM::ThreadResource::getWifiDeviceLender()
+{
+    return wifiDeviceLender;
+}
+
+/*
+ * Gets the set of ActiveConnection objects managed by the networkClient.
+ */
+GLib::Borrowed::ObjectLender<LibNM::ActiveConnection>& 
+LibNM::ThreadResource::getConnectionLender()
+{
+    return connectionLender;
+}
+
+/*
+ * Gets the set of AccessPoint objects managed by the active Wifi device.
+ */
+GLib::Borrowed::ObjectLender<LibNM::AccessPoint>& 
+LibNM::ThreadResource::getAccessPointLender()
+{
+    return accessPointLender;
+}
+
+/*
+ * Gets the set of ActiveConnection objects managed by the active Wifi device.
+ */
+GLib::Borrowed::ObjectLender<LibNM::ActiveConnection>& 
+LibNM::ThreadResource::getWifiConnectionLender()
+{
+    return wifiConnectionLender;
+}
 
 /*
  * Initializes the thread's LibNM client object if necessary.

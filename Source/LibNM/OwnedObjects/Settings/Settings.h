@@ -6,12 +6,12 @@
  *         LibNM::Connection.
  */
 
-#include "GLib/Object.h"
+#include "GLib/Owned/Owned_Object.h"
 #include <nm-connection.h>
 
 namespace LibNM { class Settings; }
 
-class LibNM::Settings : public GLib::Object
+class LibNM::Settings : public GLib::Owned::Object
 {
 public:
     /**

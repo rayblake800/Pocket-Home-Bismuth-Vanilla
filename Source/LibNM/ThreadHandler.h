@@ -6,7 +6,7 @@
  *         any LibNM::NMObject objects.
  */
 
-#include "GLib/ThreadHandler.h"
+#include "GLib/Thread/ThreadHandler.h"
 
 namespace LibNM { class ThreadHandler; }
 namespace LibNM { class ThreadResource; }

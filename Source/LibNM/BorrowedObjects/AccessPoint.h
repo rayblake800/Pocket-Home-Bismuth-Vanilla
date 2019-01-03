@@ -5,7 +5,7 @@
  * @brief A C++ interface for NMAccessPoint objects owned by LibNM.
  */
 
-#include "LibNM/BorrowedObjects/BorrowedObject.h"
+#include "GLib/Borrowed/Borrowed_Object.h"
 #include "GLib/SignalHandler.h"
 #include <nm-access-point.h>
 
@@ -26,16 +26,9 @@ namespace LibNM { enum class SecurityType; }
  * removed. 
  */
 
-class LibNM::AccessPoint : public BorrowedObjectInterface<NMAccessPoint>
+class LibNM::AccessPoint : public GLib::Borrowed::Object
 {
 public:
-    /**
-     * @brief  Creates a AccessPoint to contain a NMAccessPoint object.
-     * 
-     * @toAssign  A NMAccessPoint container for this AccessPoint to hold.
-     */
-    AccessPoint(BorrowedObject<NMAccessPoint> toAssign);
-    
     /**
      * @brief  Creates a null AccessPoint.
      */
@@ -191,4 +184,23 @@ public:
      *                  strength changes.
      */
     void addListener(Listener& listener);
+
+private:
+    /* Only the DeviceWifi object may create AccessPoints from raw 
+       NMAccessPoint* data. */
+    friend class DeviceWifi;
+
+    /**
+     * @brief  Creates a AccessPoint to contain a NMAccessPoint object.
+     * 
+     * @toAssign  A NMAccessPoint* for this AccessPoint to hold.
+     */
+    AccessPoint(NMAccessPoint* toAssign);
+
+    /**
+     * @brief  Gets the AccessPoint object's stored LibNM access point data.
+     *
+     * @return  The stored object data, cast to the LibNM access point type.
+     */
+    NMAccessPoint* getNMObjectPtr() const;
 };

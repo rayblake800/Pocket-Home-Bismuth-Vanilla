@@ -2,8 +2,6 @@
 #include "LibNM/ContextTest.h"
 #include "GLib/SmartPointers/ObjectPtr.h"
 
-typedef GLib::ObjectPtr<NMSettingConnection*> NMSettingConnectionPtr;
-
 /*
  * Creates a ConnectionSettings object that shares data with another
  * ConnectionSettings object.
@@ -33,16 +31,33 @@ Settings(NM_TYPE_SETTING_CONNECTION)
     ASSERT_NM_CONTEXT;
 }
 
+/**
+ * @brief  Casts a GLib::ObjectPtr holding the connection settings data to 
+ *         the NMSettingsConnection* type.
+ *
+ * @param settingsPtr  A RAII pointer object storing the settings object's 
+ *                     GObject* value.
+ *
+ * @return             The value stored in settingsPtr as a 
+ *                     NMSettingsConnection*, or nullptr if settingsPtr does not 
+ *                     hold a NMSettingsConnection*.
+ */
+static NMSettingConnection* toNMSettingConnection(GLib::ObjectPtr& settingPtr)
+{
+    return NM_SETTING_CONNECTION((GObject*) settingPtr);
+}
+
 /*
  * Gets the basic ID used by this object's connection.
  */
 juce::String LibNM::ConnectionSettings::getID() const
 {
     ASSERT_NM_CONTEXT;
-    NMSettingConnectionPtr settings = NM_SETTING_CONNECTION(getGObject());
-    if(settings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        return juce::String(nm_setting_connection_get_id(settings));
+        return juce::String(nm_setting_connection_get_id
+                (toNMSettingConnection(settingsPtr)));
     }
     return juce::String();
 }
@@ -53,10 +68,11 @@ juce::String LibNM::ConnectionSettings::getID() const
 juce::String LibNM::ConnectionSettings::getUUID() const
 {
     ASSERT_NM_CONTEXT;
-    NMSettingConnectionPtr settings = NM_SETTING_CONNECTION(getGObject());
-    if(settings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        return juce::String(nm_setting_connection_get_uuid(settings));
+        return juce::String(nm_setting_connection_get_uuid(
+                    toNMSettingConnection(settingsPtr)));
     }
     return juce::String();
 }
@@ -67,10 +83,11 @@ juce::String LibNM::ConnectionSettings::getUUID() const
 juce::String LibNM::ConnectionSettings::getConnectionInterface() const
 {
     ASSERT_NM_CONTEXT;
-    NMSettingConnectionPtr settings = NM_SETTING_CONNECTION(getGObject());
-    if(settings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        return juce::String(nm_setting_connection_get_interface_name(settings));
+        return juce::String(nm_setting_connection_get_interface_name(
+                    toNMSettingConnection(settingsPtr)));
     }
     return juce::String();
 }
@@ -81,10 +98,11 @@ juce::String LibNM::ConnectionSettings::getConnectionInterface() const
 juce::Time LibNM::ConnectionSettings::getTimestamp() const
 {
     ASSERT_NM_CONTEXT;
-    NMSettingConnectionPtr settings = NM_SETTING_CONNECTION(getGObject());
-    if(settings != nullptr)
+    GLib::ObjectPtr settingsPtr(*this);
+    if(settingsPtr != nullptr)
     {
-        return juce::Time(1000 * nm_setting_connection_get_timestamp(settings));
+        return juce::Time(1000 * nm_setting_connection_get_timestamp(
+                    toNMSettingConnection(settingsPtr)));
     }
     return juce::Time();
 }
