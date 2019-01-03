@@ -1,5 +1,5 @@
 #pragma once
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 #include "DesktopEntry/Types/CallbackID.h"
 
 /** 

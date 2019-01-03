@@ -1,7 +1,7 @@
 #pragma once
 #include "DesktopEntry/DesktopEntry.h"
 #include "DesktopEntry/UpdateInterface.h"
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 /**
  * @file DesktopEntry/UpdateListener.h"

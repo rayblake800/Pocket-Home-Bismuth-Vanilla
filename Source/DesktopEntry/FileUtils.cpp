@@ -1,9 +1,9 @@
-#define DESKTOP_ENTRY_IMPLEMENTATION_ONLY
+#define DESKTOP_ENTRY_IMPLEMENTATION
+#include "DesktopEntry/FileUtils.h"
+#include "DesktopEntry/Exceptions/FormatError.h"
+#include "DesktopEntry/Exceptions/FileError.h"
 #include <map>
 #include <set>
-#include "DesktopEntry/FormatError.h"
-#include "DesktopEntry/FileError.h"
-#include "DesktopEntry/FileUtils.h"
 
 /* Group header identifying the main section of desktop entry data. */
 static const juce::Identifier mainGroupHeader("Desktop Entry");

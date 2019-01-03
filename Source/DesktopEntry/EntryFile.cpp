@@ -5,8 +5,8 @@
 #include "XDGDirectories.h"
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
-#include "DesktopEntry/FileError.h"
-#include "DesktopEntry/FormatError.h"
+#include "DesktopEntry/Exceptions/FileError.h"
+#include "DesktopEntry/Exceptions/FormatError.h"
 #include "DesktopEntry/FileUtils.h"
 
 /* Directory where desktop entries are stored within $XDG_DATA_DIRS */
@@ -354,8 +354,7 @@ juce::String DesktopEntry::EntryFile::getLaunchCommand() const
     if(terminal && command.isNotEmpty())
     {
         Config::MainFile config;
-        command = config.getConfigValue<String>
-            (Config::MainKeys::termLaunchCommandKey) + " " + command;
+        command = config.getTermLaunchPrefix() + " " + command;
     }
     return command;
 }

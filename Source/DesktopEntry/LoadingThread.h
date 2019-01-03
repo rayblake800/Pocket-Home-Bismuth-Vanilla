@@ -1,9 +1,9 @@
 #ifndef DESKTOP_ENTRY_IMPLEMENTATION
-#error __file__ included outside of DesktopEntry implementation.
+  #error File included outside of DesktopEntry implementation.
 #endif
 
 #pragma once
-#include "SharedResource/ThreadResource.h"
+#include "SharedResource_ThreadResource.h"
 #include "DesktopEntry/EntryFile.h"
 #include "DesktopEntry/Types/CallbackID.h"
 #include <map>
@@ -40,6 +40,9 @@ public:
     LoadingThread();
 
     virtual ~LoadingThread() { }
+
+    /* Allow handlers to notify the thread normally to wake it when waiting. */
+    using juce::Thread::notify;
 
     /**
      * @brief  Finds a desktop entry from its desktop file ID. 

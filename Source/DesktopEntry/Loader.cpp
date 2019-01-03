@@ -1,10 +1,10 @@
-#define DESKTOP_ENTRY_IMPLEMENTATION_ONLY
+#define DESKTOP_ENTRY_IMPLEMENTATION
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include "Utils.h"
 #include "Locale/TextUser.h"
-#include "SharedResource/ThreadResource.h"
+#include "SharedResource_ThreadResource.h"
 #include "XDGDirectories.h"
 #include "DesktopEntry/LoadingThread.h"
 #include "DesktopEntry/Loader.h"
@@ -67,7 +67,7 @@ void DesktopEntry::Loader::scanForChanges()
        = getWriteLockedResource();
    if(!loadingThread->isThreadRunning())
    {
-       loadingThread->startThread();
+       loadingThread->startThreadResource();
    }
    else if(loadingThread->isFinishedLoading())
    {
@@ -95,7 +95,7 @@ DesktopEntry::CallbackID DesktopEntry::Loader::waitUntilLoaded
     }
     else
     {
-        loadingThread->startThread();
+        loadingThread->startThreadResource();
     }
     return callbackID;
 }
