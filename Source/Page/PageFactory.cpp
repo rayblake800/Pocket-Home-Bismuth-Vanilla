@@ -7,7 +7,7 @@
 #include "FelPage.h"
 #include "QuickSettingsPage.h"
 #include "BluetoothSettingsPage.h"
-#include "WifiSettingsPage.h"
+#include "Wifi/Component/SettingsPage.h"
 #include "ColourPage.h"
 #include "SettingsListPage.h"
 #include "DateTimePage.h"
@@ -58,7 +58,7 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
         case PageComponent::BluetoothSettings:
             return new BluetoothSettingsPage();
         case PageComponent::WifiSettings:
-            return new WifiSettingsPage();
+            return new Wifi::SettingsPage();
         case PageComponent::UI:
             return nullptr;
         case PageComponent::ColourSettings:

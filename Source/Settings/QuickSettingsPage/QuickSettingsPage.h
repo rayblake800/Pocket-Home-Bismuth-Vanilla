@@ -4,7 +4,7 @@
 #include "ConfigurableImageButton.h"
 #include "PageComponent.h"
 #include "WindowFocusedTimer.h"
-#include "WifiSettingsComponent.h"
+#include "Wifi/Component/ControlWidget.h"
 #include "ScalingTextButton.h"
 //#include "BluetoothSettingsComponent.h"
 
@@ -77,7 +77,7 @@ public:
     juce::Slider* changingSlider;
 
     /* Turns wifi on or off, shows connection state, and opens the wifi page. */
-    WifiSettingsComponent wifiComponent;
+    Wifi::ControlWidget wifiComponent;
     /* Turns bluetooth on or off, shows connection state, and opens the 
        bluetooth page. */
     //BluetoothSettingsComponent bluetoothComponent;

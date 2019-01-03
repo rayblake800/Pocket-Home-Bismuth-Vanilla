@@ -3,6 +3,7 @@
 #include "Display.h"
 #include "PokeLookAndFeel.h"
 #include "QuickSettingsPage.h"
+#include "ComponentConfigKeys.h"
 
 /* Slider image assets.  TODO: define these in components.json. */
 static const constexpr char* brightnessLowIcon = "brightnessIconLo.svg";
