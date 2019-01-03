@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  AppMenu/AppMenu.h
+ * @file  AppMenu.h
  *
  * @brief  Creates the AppMenu application menu component, and returns it as a
  *         generic juce::Component pointer.

@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION
-#include "AppMenu/Data/JSON/MenuFile.h"
-#include "AppMenu/Data/MenuItem.h"
+#include "AppMenu_MenuFile.h"
+#include "AppMenu_MenuItem.h"
 #include "JuceHeader.h"
 
 class AppMenuTest : public juce::UnitTest

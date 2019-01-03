@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION
 #include "JuceHeader.h"
-#include "AppMenu/Control/InputHandler.h"
+#include "AppMenu_InputHandler.h"
 
 class InputHandlerTest : public juce::UnitTest
 {
