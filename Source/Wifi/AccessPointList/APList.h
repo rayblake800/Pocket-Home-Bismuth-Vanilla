@@ -9,7 +9,7 @@
  *         and data to construct and update Wifi::AccessPoint objects.
  */
 
-#include "SharedResource/Resource.h"
+#include "SharedResource_Resource.h"
 
 namespace Wifi { class AccessPoint; }
 namespace Wifi { class APList; }

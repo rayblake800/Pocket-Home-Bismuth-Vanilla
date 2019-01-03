@@ -5,16 +5,17 @@
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/AccessPointList/APListReader.h"
 #include "Wifi/AccessPointList/NMAPListReader.h"
-#include "LibNM/NMObjects/AccessPoint.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
-#include "LibNM/NMObjects/Client.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
+#include "LibNM/BorrowedObjects/ActiveConnection.h"
+#include "LibNM/OwnedObjects/Client.h"
 #include "LibNM/ThreadHandler.h"
 
 namespace WifiConnect = Wifi::Connection;
 
 /* SharedResource object instance key: */
 const juce::Identifier WifiConnect::RecordResource::resourceKey 
-        = "Wifi::Connection::RecordResource";
+        = "Wifi_Connection_RecordResource";
 
 /* Stores all connection events: */
 static juce::Array<WifiConnect::Event> connectionEvents;
@@ -169,6 +170,20 @@ void WifiConnect::RecordResource::addConnectionEvent(const Event newEvent)
                     jassertfalse;
             }
         });
+    }
+}
+
+/*
+ * Adds a new event to the list of saved events if the most recent saved event 
+ * doesn't have the same access point and event type.
+ */
+void WifiConnect::RecordResource::addEventIfNotDuplicate(const Event newEvent)
+{
+    Event latestEvent = getLastEvent();
+    if(latestEvent.getEventAP() != newEvent.getEventAP()
+            || latestEvent.getEventType() != newEvent.getEventType())
+    {
+        addConnectionEvent(newEvent);
     }
 }
 

@@ -1,4 +1,5 @@
 #pragma once
+#error "Outdated file, do not include"
 
 #include "JuceHeader.h"
 #include "WindowFocus.h"

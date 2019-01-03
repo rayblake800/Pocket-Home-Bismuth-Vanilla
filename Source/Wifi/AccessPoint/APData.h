@@ -66,14 +66,6 @@ public:
     LibNM::SSID getSSID() const;
 
     /**
-     * @brief  Gets the access point's hardware identifier.
-     *
-     * @return  The access point's BSSID value, which is usually its MAC 
-     *          address. 
-     */
-    juce::String getBSSID() const;
-
-    /**
      * @brief  Gets the access point's signal strength.
      *
      * @return  The access point signal strength, represented as a percentage
@@ -87,6 +79,17 @@ public:
      * @return  The type of security, if any, protecting the access point. 
      */
     LibNM::SecurityType getSecurityType() const;
+
+    /**
+     * @brief  Checks if a security key is formatted correctly for this access
+     *         point's security type.
+     *
+     * @param psk  A possible access point security key. 
+     *
+     * @return     Whether the psk is a valid security key for this access
+     *             point's security type.
+     */
+    bool isValidKeyFormat(const juce::String psk) const;
 
     /**
      * @brief  Gets the hash value used to identify and sort the access point.
@@ -110,9 +113,6 @@ private:
 
     /* The access point's displayed name and primary ID. */
     LibNM::SSID ssid;
-
-    /* The access point's base hardware ID. */
-    juce::String bssid;
 
     /* The access point's basic security type. */
     LibNM::SecurityType securityType;

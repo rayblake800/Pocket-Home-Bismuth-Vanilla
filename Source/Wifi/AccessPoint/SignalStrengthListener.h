@@ -1,7 +1,7 @@
 #pragma once
 #include "Wifi/AccessPoint/SignalUpdateInterface.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 /**
  * @file  Wifi/Listeners/SignalStrengthListener.h

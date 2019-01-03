@@ -6,12 +6,14 @@
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/AccessPointList/APListReader.h"
 #include "Wifi/AccessPointList/NMAPListReader.h"
+#include "LibNM/ContextTest.h"
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/Data/SSID.h"
 #include "LibNM/Data/SecurityType.h"
-#include "LibNM/NMObjects/AccessPoint.h"
-#include "LibNM/NMObjects/Connection.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
+#include "LibNM/BorrowedObjects/ActiveConnection.h"
+#include "LibNM/OwnedObjects/Connection.h"
 #include "GLib/SmartPointers/ErrorPtr.h"
 
 namespace WifiConnect = Wifi::Connection;
@@ -139,7 +141,7 @@ void WifiConnect::Controller::removeSavedConnection
 static LibNM::AccessPoint getActiveConnectionNMAP
 (const LibNM::ActiveConnection connection)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const LibNM::ThreadHandler nmThread;
     const LibNM::DeviceWifi wifiDevice = nmThread.getWifiDevice();
     return wifiDevice.getAccessPoint(connection.getAccessPointPath());
@@ -166,9 +168,9 @@ static Wifi::AccessPoint getActiveConnectionAP
  * Signals that a connection is being opened.
  */
 void WifiConnect::Controller::openingConnection
-(LibNM::ActiveConnection connection, bool isNew)
+(LibNM::ActiveConnection connection)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     const AccessPoint connectionAP = getActiveConnectionAP(connection);
     const RecordReader connectionRecordReader;
     Event latestEvent = connectionRecordReader.getLastEvent();
@@ -192,16 +194,18 @@ void WifiConnect::Controller::openingConnection
  * Signals that an attempt to open a connection failed.
  */
 void WifiConnect::Controller::openingConnectionFailed
-(LibNM::ActiveConnection connection, GError* error, bool isNew)
+(LibNM::ActiveConnection connection, GError* error)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     GLib::ErrorPtr connectionError(error);
     DBG("WifiConnect::Controller::openingConnectionFailed" << ": Error "
                 << error->code << ":" << error->message);
 
-    const RecordWriter connectionRecordWriter;
     const AccessPoint connectionAP = getActiveConnectionAP(connection);
-    if(isNew)
+    const RecordReader connectionRecordReader;
+    const RecordWriter connectionRecordWriter;
+
+    if(connectionRecordReader.hasSavedConnection(connectionAP))
     {
         DBG("WifiConnect::Controller::openingConnectionFailed" 
                 << ": Deleting new saved connection " << connection.getID());

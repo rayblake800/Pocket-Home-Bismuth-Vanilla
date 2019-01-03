@@ -6,8 +6,8 @@
  *         whenever Wifi is enabled or disabled. 
  */
 
-#include "SharedResource/Resource.h"
-#include "LibNM/NMObjects/Client.h"
+#include "SharedResource_Resource.h"
+#include "LibNM/OwnedObjects/Client.h"
 #include "WindowFocus/WindowFocus.h"
 
 namespace Wifi { class DeviceTracker; }

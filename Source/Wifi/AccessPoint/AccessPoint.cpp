@@ -1,11 +1,12 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/AccessPoint/APData.h"
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/Data/APHash.h"
 #include "LibNM/Data/APMode.h"
 #include "LibNM/Data/SecurityType.h"
 #include "LibNM/ThreadHandler.h"
+#include "LibNM/ContextTest.h"
 
 
 /*
@@ -13,12 +14,10 @@
  */
 Wifi::AccessPoint::AccessPoint(const LibNM::AccessPoint nmAccessPoint)
 {
+    ASSERT_NM_CONTEXT
+    LibNM::APHash hash = nmAccessPoint.generateHash();
     LibNM::ThreadHandler nmThread;
-    nmThread.call([this, &nmAccessPoint]()
-    {
-        LibNM::APHash hash = nmAccessPoint.generateHash();
-        getDataReference() = new APData(nmAccessPoint, hash);
-    });
+    getDataReference() = new APData(nmAccessPoint, hash);
 }
 
 /*
@@ -79,18 +78,6 @@ LibNM::SSID Wifi::AccessPoint::getSSID() const
 }
 
 /*
- * Gets the access point's hardware identifier.
- */
-juce::String Wifi::AccessPoint::getBSSID() const
-{
-    if(isNull())
-    {
-        return juce::String();
-    }
-    return getData()->getBSSID();
-}
-
-/*
  * Gets the access point's signal strength.
  */
 unsigned int Wifi::AccessPoint::getSignalStrength() const
@@ -112,6 +99,20 @@ LibNM::SecurityType Wifi::AccessPoint::getSecurityType() const
         return LibNM::SecurityType::unsecured;
     }
     return getData()->getSecurityType();
+}
+
+
+/*
+ * Checks if a security key is formatted correctly for this access point's 
+ * security type.
+ */
+bool Wifi::AccessPoint::isValidKeyFormat(const juce::String psk) const
+{
+    if(isNull())
+    {
+        return false;
+    }
+    return getData()->isValidKeyFormat(psk);
 }
 
 /*

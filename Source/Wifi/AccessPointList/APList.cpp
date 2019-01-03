@@ -4,13 +4,13 @@
 #include "Wifi/AccessPoint/SignalUpdateInterface.h"
 #include "Wifi/AccessPointList/APUpdateInterface.h"
 #include "LibNM/Data/APHash.h"
-#include "LibNM/NMObjects/AccessPoint.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/ThreadHandler.h"
 #include <map>
 
 /* SharedResource object instance key: */
-const juce::Identifier Wifi::APList::resourceKey = "Wifi::APList";
+const juce::Identifier Wifi::APList::resourceKey = "Wifi_APList";
 
 /* All visible Wifi::AccessPoint objects, mapped by hash value. */
 static std::map<LibNM::APHash, Wifi::AccessPoint> wifiAccessPoints;
@@ -21,11 +21,7 @@ static std::map<LibNM::APHash, juce::Array<LibNM::AccessPoint>> nmAccessPoints;
 /*
  * Reads initial access point data from LibNM.
  */
-Wifi::APList::APList() : SharedResource::Resource(resourceKey)
-{
-    clearAccessPoints();
-    updateAllAccessPoints();
-}
+Wifi::APList::APList() : SharedResource::Resource(resourceKey) { }
 
 /*
  * Gets Wifi::AccessPoint objects for all visible access points.
@@ -62,17 +58,22 @@ Wifi::AccessPoint Wifi::APList::getAccessPoint(LibNM::APHash apHash) const
 LibNM::AccessPoint Wifi::APList::getStrongestNMAccessPoint
 (const AccessPoint accessPoint) const
 {
-    LibNM::AccessPoint strongestAP;
     juce::Array<LibNM::AccessPoint>& apList 
             = nmAccessPoints[accessPoint.getHashValue()];
+    apList.removeIf([](LibNM::AccessPoint ap) 
+    { 
+        return ap.isNull(); 
+    });
+
+    LibNM::AccessPoint strongestAP;
     int bestSignalStrength = 0;
-    for(const LibNM::AccessPoint& nmAP : apList)
+    for(LibNM::AccessPoint& nmAccessPoint : apList)
     {
-        const int apStrength = nmAP.getSignalStrength();
+        const int apStrength = nmAccessPoint.getSignalStrength();
         if(apStrength > bestSignalStrength)
         {
             bestSignalStrength = apStrength;
-            strongestAP = nmAP;
+            strongestAP = nmAccessPoint;
         }
     }
     return strongestAP;
@@ -85,12 +86,9 @@ LibNM::AccessPoint Wifi::APList::getStrongestNMAccessPoint
 juce::Array<LibNM::AccessPoint> Wifi::APList::getNMAccessPoints() const
 {
     juce::Array<LibNM::AccessPoint> nmAPs;
-    for(auto apListIter : nmAccessPoints)
+    for(auto& apListIter : nmAccessPoints)
     {
-        for(LibNM::AccessPoint& accessPoint : apListIter.second)
-        {
-            nmAPs.add(accessPoint);
-        }
+        nmAPs.addArray(apListIter.second);
     }
     return nmAPs;
 }
@@ -101,7 +99,14 @@ juce::Array<LibNM::AccessPoint> Wifi::APList::getNMAccessPoints() const
 juce::Array<LibNM::AccessPoint> Wifi::APList::getNMAccessPoints
 (const AccessPoint accessPoint) const
 {
-    return nmAccessPoints[accessPoint.getHashValue()];
+    juce::Array<LibNM::AccessPoint>& matchingAPs
+        = nmAccessPoints[accessPoint.getHashValue()];
+    matchingAPs.removeIf([](LibNM::AccessPoint ap) 
+    { 
+        return ap.isNull(); 
+    });
+
+    return matchingAPs;
 }
 
 /*
@@ -110,7 +115,10 @@ juce::Array<LibNM::AccessPoint> Wifi::APList::getNMAccessPoints
  */
 void Wifi::APList::addAccessPoint(const LibNM::AccessPoint addedAP)
 {
-    jassert(!addedAP.isNull());
+    if(addedAP.isNull())
+    {
+        return;
+    }
     const LibNM::APHash apHash = addedAP.generateHash();
     nmAccessPoints[apHash].addIfNotAlreadyThere(addedAP);
     if(wifiAccessPoints.count(apHash) == 0)
@@ -168,7 +176,7 @@ void Wifi::APList::updateSignalStrength(AccessPoint toUpdate)
     const unsigned int oldSignalStrength 
         = wifiAccessPoints[apHash].getSignalStrength();
     unsigned int bestSignalStrength = 0;
-    for(LibNM::AccessPoint& accessPoint : nmAccessPoints[apHash])
+    for(LibNM::AccessPoint accessPoint : nmAccessPoints[apHash])
     {
         bestSignalStrength = std::max(bestSignalStrength, 
                 accessPoint.getSignalStrength());

@@ -7,7 +7,7 @@
  */
 
 #include "Wifi/Device/DeviceUpdateInterface.h"
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Wifi { class DeviceListener; }
 namespace Wifi { class DeviceTracker; }

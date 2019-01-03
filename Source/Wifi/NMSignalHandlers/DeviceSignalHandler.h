@@ -12,11 +12,11 @@
  *         to the Wifi::Connection::RecordResource.
  */
 
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 #include "Wifi/AccessPointList/APListWriter.h"
 #include "Wifi/Connection/RecordWriter.h"
 #include "Wifi/NMSignalHandlers/APSignalHandler.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
 
 namespace Wifi { class DeviceSignalHandler; }
 namespace Wifi { class APList; }
@@ -26,14 +26,39 @@ class Wifi::DeviceSignalHandler : public LibNM::DeviceWifi::Listener,
     public SharedResource::Handler<APList>
 {
 public:
-    /**
-     * @brief  Sets up Wifi access point signal strength tracking.
-     */
     DeviceSignalHandler();
 
     virtual ~DeviceSignalHandler() { }
 
+    /**
+     * @brief  Starts tracking the LibNM::ThreadResource's DeviceWifi object.
+     *
+     * Signals will not be received until the signal handler is connected.
+     */
+    void connect();
+
+    /**
+     * @brief  Stops tracking the LibNM::ThreadResource's DeviceWifi object.
+     * 
+     * Signals will not be received after the signal handler is disconnected 
+     * until it is connected again.
+     */
+    void disconnect();
+
 private:
+   /**
+    * @brief  Handles Wifi device state changes.
+    *
+    * @param newState  The new device state value.
+    *
+    * @param oldState  The previous device state value.
+    *
+    * @param reason    The reason for the change in device state.
+    */
+    virtual void stateChanged(NMDeviceState newState,
+            NMDeviceState oldState,
+            NMDeviceStateReason reason) final override;
+
     /**
      * @brief  Updates the access point list whenever a new access point is
      *         detected.
@@ -45,11 +70,8 @@ private:
     /**
      * @brief  Updates the access point list whenever a previously seen access
      *         point is lost.
-     *
-     * @param removedAP  The removed access point's LibNM object.
      */
-    virtual void accessPointRemoved
-    (LibNM::AccessPoint removedAP) final override;
+    virtual void accessPointRemoved() final override;
 
    /**
     * @brief  Updates the connection record when the active network connection
@@ -60,12 +82,6 @@ private:
     */
     virtual void activeConnectionChanged
     (LibNM::ActiveConnection activeConnection) final override;
-
-    /* Used to update the access point list. */
-    APListWriter apListWriter;
-
-    /* Used to update the connection state. */
-    Connection::RecordWriter connectionRecorder;
 
     /* Tracks all access point signal strengths. */
     APSignalHandler apSignalHandler;

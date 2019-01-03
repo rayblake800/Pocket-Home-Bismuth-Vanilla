@@ -1,10 +1,11 @@
 #include "Wifi/Device/DeviceTracker.h"
 #include "Wifi/Device/DeviceUpdateInterface.h"
 #include "LibNM/ThreadHandler.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
 
 
 /* SharedResource object instance key: */
-const juce::Identifier Wifi::DeviceTracker::resourceKey = "Wifi::DeviceTracker";
+const juce::Identifier Wifi::DeviceTracker::resourceKey = "Wifi_DeviceTracker";
 
 /*
  * Checks the initial Wifi device state.

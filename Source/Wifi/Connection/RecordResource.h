@@ -7,7 +7,7 @@
  *
  * @brief  Tracks all major Wifi connection events.
  */
-#include "SharedResource/Resource.h"
+#include "SharedResource_Resource.h"
 #include "LibNM/DBus/SavedConnectionLoader.h"
 #include "JuceHeader.h"
 
@@ -93,6 +93,15 @@ public:
      *                  parameter is null, no action will be taken.
      */
     void addConnectionEvent(const Event newEvent);
+
+    /**
+     * @brief  Adds a new event to the list of saved events if the most recent 
+     *         saved event doesn't have the same access point and event type.
+     *
+     * @param newEvent  A valid connection event to add to the list. If this
+     *                  parameter is null, no action will be taken.
+     */
+    void addEventIfNotDuplicate(const Event newEvent);
 
     /**
      * @brief  Removes all saved network connections that match a particular

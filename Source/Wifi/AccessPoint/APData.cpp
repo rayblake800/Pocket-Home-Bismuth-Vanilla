@@ -1,7 +1,8 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi/AccessPoint/APData.h"
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/ThreadHandler.h"
+#include "LibNM/Data/SecurityType.h"
 
 /* 
  * Creates the access point data object from a LibNM access point.
@@ -13,7 +14,6 @@ Wifi::APData::APData(const LibNM::AccessPoint nmAccessPoint,
     nmThread.call([this, &nmAccessPoint]()
     {
         ssid = nmAccessPoint.getSSID();
-        bssid = nmAccessPoint.getBSSID();
         securityType = nmAccessPoint.getSecurityType();
         signalStrength.set(nmAccessPoint.getSignalStrength());
     });
@@ -52,14 +52,6 @@ LibNM::SSID Wifi::APData::getSSID() const
 }
 
 /*
- * Gets the access point's hardware identifier.
- */
-juce::String Wifi::APData::getBSSID() const
-{
-    return bssid;
-}
-
-/*
  * Gets the access point's signal strength.
  */
 unsigned int Wifi::APData::getSignalStrength() const
@@ -73,6 +65,28 @@ unsigned int Wifi::APData::getSignalStrength() const
 LibNM::SecurityType Wifi::APData::getSecurityType() const
 {
     return securityType;
+}
+
+/*
+ * Checks if a security key is formatted correctly for this access point's 
+ * security type.
+ */
+bool Wifi::APData::isValidKeyFormat(const juce::String psk) const
+{
+    const int length = psk.length();
+    switch(securityType)
+    {
+        case LibNM::SecurityType::unsecured:
+            return length == 0;
+        case LibNM::SecurityType::securedWEP:
+            return length == 10 || length == 26 || length == 5 || length == 13;
+        case LibNM::SecurityType::securedWPA:
+        case LibNM::SecurityType::securedRSN:
+            return length >= 8;
+    }
+    // isValidKeyFormat() should be returning before this point.
+    jassertfalse;
+    return false;
 }
 
 /*

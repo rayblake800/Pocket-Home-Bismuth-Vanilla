@@ -1,4 +1,5 @@
 #pragma once
+#error "Outdated, do not include"
 
 #include "SharedResource/Resource.h"
 #include "SharedResource/Handler.h"

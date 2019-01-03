@@ -5,7 +5,7 @@
  * @brief  Sends basic commands to the Wifi device.
  */
 
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Wifi { class Controller; }
 namespace Wifi { class DeviceTracker; }

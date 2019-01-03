@@ -1,8 +1,10 @@
 #include "Wifi/Device/Controller.h"
 #include "Wifi/Device/DeviceTracker.h"
 #include "LibNM/ThreadHandler.h"
-#include "LibNM/NMObjects/Client.h"
-#include "LibNM/NMObjects/DeviceWifi.h"
+#include "LibNM/OwnedObjects/Client.h"
+#include "LibNM/BorrowedObjects/DeviceWifi.h"
+
+Wifi::Controller::Controller() { }
 
 /*
  * Enables or disables the Wifi device.

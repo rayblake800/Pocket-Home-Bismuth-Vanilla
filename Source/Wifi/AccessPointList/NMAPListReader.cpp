@@ -2,7 +2,7 @@
 #include "Wifi/AccessPointList/NMAPListReader.h"
 #include "Wifi/AccessPointList/APList.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
 
 Wifi::NMAPListReader::NMAPListReader() { }
 

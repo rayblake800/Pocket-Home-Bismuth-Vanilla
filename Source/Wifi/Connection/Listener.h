@@ -7,7 +7,7 @@
  */
 
 #include "Wifi/Connection/UpdateInterface.h"
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Wifi { namespace Connection { class Listener; } }
 namespace Wifi { namespace Connection { class RecordResource; } }
@@ -24,7 +24,7 @@ class Wifi::Connection::Listener : public UpdateInterface,
 public:
     Listener();
 
-    virtual ~Listener();
+    virtual ~Listener() { }
 
 private:
     /**

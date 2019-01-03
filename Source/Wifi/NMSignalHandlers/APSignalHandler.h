@@ -9,8 +9,8 @@
  *         list.
  */
 
-#include "SharedResource/Handler.h"
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "SharedResource_Handler.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
 
 namespace Wifi { class APSignalHandler; }
 namespace Wifi { class APList; }

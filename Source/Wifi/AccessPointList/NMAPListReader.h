@@ -9,7 +9,7 @@
  * @brief  Gets LibNM::AccessPoints held by the APList resource.
  */
 
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Wifi { class NMAPListReader; }
 namespace Wifi { class APList; }

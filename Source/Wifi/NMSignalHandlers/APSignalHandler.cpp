@@ -2,7 +2,8 @@
 #include "Wifi/NMSignalHandlers/APSignalHandler.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/AccessPointList/APList.h"
-#include "LibNM/NMObjects/AccessPoint.h"
+#include "LibNM/BorrowedObjects/AccessPoint.h"
+#include "LibNM/ContextTest.h"
 
 Wifi::APSignalHandler::APSignalHandler() { }
 
@@ -12,7 +13,7 @@ Wifi::APSignalHandler::APSignalHandler() { }
 void Wifi::APSignalHandler::signalStrengthChanged
 (LibNM::AccessPoint& updatedAP, unsigned int newStrength)
 {
-    ASSERT_CORRECT_CONTEXT;
+    ASSERT_NM_CONTEXT;
     SharedResource::LockedPtr<APList> apList = getWriteLockedResource();
     AccessPoint wifiAP = apList->getAccessPoint(updatedAP.generateHash());
     apList->updateSignalStrength(wifiAP);

@@ -5,7 +5,7 @@
  * @brief  Reads the list of visible Wifi access points.
  */
 
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Wifi { class APListReader; }
 namespace Wifi { class APList; }

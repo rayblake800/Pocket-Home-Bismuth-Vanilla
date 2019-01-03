@@ -5,8 +5,8 @@
  * @brief  Updates, adds, and removes both current and saved Wifi connections.
  */
 
-#include "LibNM/NMObjects/Client.h"
-#include "SharedResource/Resource.h"
+#include "LibNM/OwnedObjects/Client.h"
+#include "SharedResource_Resource.h"
 #include "JuceHeader.h"
 
 namespace Wifi { class AccessPoint; }
@@ -50,11 +50,8 @@ private:
      * @brief  Signals that a connection is being opened.
      *
      * @param connection  The activating connection object.
-     *
-     * @param isNew       Whether the activating connection is new.
      */
-    virtual void openingConnection(LibNM::ActiveConnection connection,
-            bool isNew) override;
+    virtual void openingConnection(LibNM::ActiveConnection connection) override;
 
     /**
      * @brief  Signals that an attempt to open a connection failed.
@@ -62,9 +59,7 @@ private:
      * @param connection  The failed connection object.
      *
      * @param error       A GLib error object explaining the problem.
-     *
-     * @param isNew       Whether the failed connection was new.
      */
     virtual void openingConnectionFailed(LibNM::ActiveConnection connection,
-            GError* error, bool isNew) override;
+            GError* error) override;
 };

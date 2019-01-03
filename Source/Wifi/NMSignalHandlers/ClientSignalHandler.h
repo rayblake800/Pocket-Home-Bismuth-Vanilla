@@ -9,8 +9,8 @@
  *         enabled or disabled.
  */
 
-#include "SharedResource/Handler.h"
-#include "LibNM/NMObjects/Client.h"
+#include "SharedResource_Handler.h"
+#include "LibNM/OwnedObjects/Client.h"
 
 namespace Wifi { class ClientSignalHandler; }
 namespace Wifi { class DeviceTracker; }
@@ -22,6 +22,22 @@ public:
     ClientSignalHandler();
 
     virtual ~ClientSignalHandler() { }
+
+    /**
+     * @brief  Starts tracking the LibNM::ThreadResource's Client object.
+     *
+     * wirelessStateChange() notifications will not be received until the signal
+     * handler is connected.
+     */
+    void connect();
+
+    /**
+     * @brief  Stops tracking the LibNM::ThreadResource's Client object.
+     * 
+     * wirelessStateChange() notifications will not be received after the signal
+     * handler is disconnected until it is connected again.
+     */
+    void disconnect();
 
 private:
     /**

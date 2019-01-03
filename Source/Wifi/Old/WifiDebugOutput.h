@@ -1,5 +1,5 @@
 #pragma once
-#include "WifiStateManager.h"
+#include <nm-device-wifi.h>
 
 /** 
  * @file WifiDebugOutput.h
@@ -216,6 +216,8 @@ const char * deviceStateReasonString(NMDeviceStateReason stateReason)
         case NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED:
             return "NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED";            
              */
+        default:
+            return "[Unknown NMDeviceStateReason!]";
     }
     return "[Unknown NMDeviceStateReason!]";
 }

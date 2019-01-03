@@ -8,7 +8,7 @@
  * @brief  Checks the status of the system's Wifi device.
  */
 
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Wifi { class DeviceViewer; }
 namespace Wifi { class DeviceTracker; }

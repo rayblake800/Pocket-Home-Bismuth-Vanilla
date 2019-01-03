@@ -5,7 +5,7 @@
  * @brief  Reads Wifi connection events saved in the Connection::RecordResource.
  */
 
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace Wifi { namespace Connection { class RecordReader; } }
 namespace Wifi { namespace Connection { class RecordResource; } }
