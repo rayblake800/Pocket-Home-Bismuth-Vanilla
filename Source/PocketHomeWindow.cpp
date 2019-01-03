@@ -1,23 +1,10 @@
 #include "Utils.h"
-#include "JsonWifiInterface.h"
-#include "LibNMInterface.h"
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
 
-PocketHomeWindow::PocketHomeWindow(juce::String windowName, bool fakeWifi) :
+PocketHomeWindow::PocketHomeWindow(juce::String windowName) :
 WindowFocus::BroadcastWindow(windowName, juce::Colours::darkgrey,
-        juce::DocumentWindow::allButtons),
-wifiManager([fakeWifi]()->NetworkInterface*
-{
-    if(fakeWifi)
-    {
-        return new JsonWifiInterface();
-    }
-    else
-    {
-        return new LibNMInterface();
-    }
-})
+        juce::DocumentWindow::allButtons)
 {
     using namespace juce;
     Rectangle<int> screenSize = getDisplaySize();

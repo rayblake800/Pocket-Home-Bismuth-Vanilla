@@ -2,7 +2,6 @@
 #include "LoginPage.h"
 #include "PageFactory.h"
 #include "PageStackComponent.h"
-#include "WifiStateManager.h"
 #include "WindowFocus.h"
 
 /**
@@ -16,15 +15,9 @@ class PocketHomeWindow : public WindowFocus::BroadcastWindow
 {
 public:
     /**
-     * @param windowName         Sets the text of the window title bar.
-     * 
-     * @param fakeWifi           If true, wifi-using components in this window
-     *                            will get all their wifi data from a simulated 
-     *                            wifi device.
+     * @param windowName  Sets the text of the window title bar.
      */
-    PocketHomeWindow(
-            juce::String windowName, 
-            bool fakeWifi);
+    PocketHomeWindow(juce::String windowName);
 
     virtual ~PocketHomeWindow() { }
 
@@ -42,8 +35,6 @@ private:
     //Factory object for creating all UI pages
     PageFactory pageFactory;
     
-    WifiStateManager wifiManager;
-
     //Holds all page components, besides the login page
     PageStackComponent pageStack;
 
