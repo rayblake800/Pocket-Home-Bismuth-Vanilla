@@ -5,7 +5,7 @@
  * @brief  Runs a GLib event loop on a shared thread resource. 
  */
 
-#include "SharedResource/ThreadResource.h"
+#include "SharedResource_ThreadResource.h"
 #include "WindowFocus.h"
 #include "JuceHeader.h"
 #include "GLib/Thread/EventLoop.h"

@@ -5,7 +5,7 @@
  * @brief  Provides access to a GLib thread resource.
  */
 
-#include "SharedResource/Handler.h"
+#include "SharedResource_Handler.h"
 
 namespace GLib { class ThreadHandler; }
 namespace GLib { class ThreadResource; }

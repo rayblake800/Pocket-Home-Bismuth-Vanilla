@@ -37,21 +37,22 @@ OwnedObject::~Object()
  * Sets this Object's data container to a new reference of another Object's 
  * stored GObject.
  */
-void OwnedObject::operator=(const Object& rhs)
+OwnedObject& OwnedObject::operator=(const Object& rhs)
 {
-    if(*this == rhs)
+    if(*this != rhs)
     {
-        return;
+        setGObject(rhs);
     }
-    setGObject(rhs);
+    return *this;
 }
 
 /*
  * Sets this Object's stored GObject data.
  */
-void OwnedObject::operator=(GObject* rhs)
+OwnedObject& OwnedObject::operator=(GObject* rhs)
 {
     setGObject(rhs);
+    return *this;
 }
  
 /*
@@ -93,8 +94,7 @@ void OwnedObject::setGObject(GObject* toAssign)
  */
 void OwnedObject::setGObject(const GLib::Object& toCopy)
 {
-    ObjectPtr copiedObject(toCopy);
-    setGObject(copiedObject);
+    setGObject(toCopy.getGObject());
 }
 
 /*

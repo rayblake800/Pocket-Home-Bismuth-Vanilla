@@ -62,8 +62,10 @@ public:
      * 
      * @param rhs  Another Object instance. If rhs is a null object, this 
      *             object's data will be removed.
+     *
+     * @return     This Object instance.
      */
-    void operator=(const Object& rhs);
+    Object& operator=(const Object& rhs);
     
     /**
      * @brief  Sets this Object's stored GObject data.
@@ -72,8 +74,10 @@ public:
      *             Object into a null object. If this value is floating, 
      *             the floating reference will be claimed by the Object. 
      *             Otherwise, the reference count will be increased.
+     *
+     * @return     This Object instance.
      */
-    void operator=(GObject* rhs);
+    Object& operator=(GObject* rhs);
 
     /**
      * @brief  Checks if the object is locally Owned.

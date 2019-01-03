@@ -9,7 +9,10 @@
 #include "GLib/Borrowed/SharedContainer.h"
 
 namespace GLib { namespace Borrowed { class Object; } }
-namespace GLib { namespace Borrowed { class ObjectLender; } }
+namespace GLib { namespace Borrowed { template <class BorrowedType>
+    class ObjectLender; } }
+namespace GLib { namespace Borrowed { template <class BorrowedType>
+    class SingleObjectLender; } }
 
 /**
  *  GLib::Borrowed::Object manages Borrowed GLib GObject* data.  Borrowed 
@@ -47,8 +50,10 @@ public:
      * 
      * @param rhs  Another Object instance. If rhs is a null object, this 
      *             object's data will be removed.
+     *
+     * @return     This Object instance.
      */
-    void operator=(const Object& rhs);
+    Object& operator=(const Object& rhs);
 
     /**
      * @brief  Checks if the object is locally Owned.
@@ -57,7 +62,6 @@ public:
      */
     virtual bool isOwned() const override { return false; }   
 
-protected:
     /**
      * @brief  Gets a pointer to this object's data.
      * 
@@ -65,6 +69,7 @@ protected:
      */
     virtual GObject* getGObject() const override;
 
+protected:
     /**
      * @brief  Assigns new GObject* data to this Object. 
      * 
@@ -81,16 +86,18 @@ protected:
 private:
     /* Only the ObjectLender may add new valid GObject* values and invalidate
        existing values. */
+    template <class BorrowedType>
     friend class ObjectLender;
 
     /**
-     * @brief  Creates an Object from GObject* data.
+     * @brief  Assigns new GObject data to this Object. 
+     *
+     * Unless the new GObject to assign is already held by this Object, any 
+     * references to the Object's previous GObject data will be removed.
      * 
-     * @param toAssign     GObject data to store in this Object.
-     * 
-     * @param objectType   Sets the type of GObject this Object holds.
+     * @param toAssign  GObject data to store in this Object.
      */
-    Object(GObject* toAssign, const GType objectType);
+    virtual void setGObject(GObject* toAssign) override;
 
     /**
      * @brief  Removes this object's stored GObject* data from every borrowed

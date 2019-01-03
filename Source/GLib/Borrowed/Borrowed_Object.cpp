@@ -16,6 +16,17 @@ BorrowedObject::Object(const Object& toCopy, const GType objectType) :
 
 BorrowedObject::~Object() { }
 
+
+/*
+ * Sets this Object's data container to a new reference of another Object's 
+ * stored GObject*.
+ */
+GLib::Borrowed::Object& BorrowedObject::operator=(const Object& rhs)
+{
+    setGObject(rhs);
+    return *this;
+}
+
 /*
  * Gets a pointer to this object's data.
  */
@@ -49,10 +60,19 @@ void BorrowedObject::clearGObject()
 }
 
 /*
- * Creates an Object from GObject* data.
+ * Assigns new GObject data to this Object. 
  */
-BorrowedObject::Object(GObject* toAssign, const GType objectType) :
-    GLib::Object(objectType), objectContainer(new SharedContainer(toAssign)) { }
+void BorrowedObject::setGObject(GObject* toAssign)
+{
+    if(toAssign == nullptr)
+    {
+        objectContainer = nullptr;
+    }
+    else
+    {
+        objectContainer = new SharedContainer(toAssign);
+    }
+}
 
 /*
  * Removes this object's stored GObject* data from every borrowed Object that
@@ -63,5 +83,6 @@ void BorrowedObject::invalidateObject()
     if(objectContainer != nullptr)
     {
         objectContainer->clearData();
+        objectContainer = nullptr;
     }
 }
