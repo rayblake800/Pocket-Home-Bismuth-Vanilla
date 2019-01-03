@@ -1,4 +1,5 @@
 #include "PopupEditorComponent.h"
+#include "ComponentConfigKeys.h"
 
 PopupEditorComponent::PopupEditorComponent
 ( std::function<void(PopupEditorComponent*) > onConfirm) :

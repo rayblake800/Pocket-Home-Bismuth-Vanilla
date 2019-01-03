@@ -1,6 +1,7 @@
 #include "AssetFiles.h"
 #include "Spinner.h"
 #include "ComponentConfigFile.h"
+#include "ComponentConfigKeys.h"
 
 Spinner::Spinner(int secondsToTimeout) :
 WindowFocusedTimer("SpinnerFrame"),

@@ -2,7 +2,7 @@
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
 #include "ConfigurableLabel.h"
-#include "Config/MainFile.h"
+#include "Config/MainListener.h"
 
 /**
  * @file ClockLabel.h
@@ -10,7 +10,7 @@
  * @brief  A configurable component that displays the current time.
  */
 
-class ClockLabel : public ConfigurableLabel, public Config::MainFile::Listener,
+class ClockLabel : public ConfigurableLabel, public Config::MainListener,
         private WindowFocusedTimer
 {
 public:

@@ -1,3 +1,4 @@
+#include "Config/MainFile.h"
 #include "Config/MainKeys.h"
 #include "ComponentConfigKeys.h"
 #include "ClockLabel.h"
@@ -72,7 +73,7 @@ void ClockLabel::configValueChanged(const juce::Identifier& key)
     Config::MainFile config;
     if (key == Config::MainKeys::showClockKey)
     {
-        showClock = config.getConfigValue<bool>(key);
+        showClock = config.getShowClock();
         juce::MessageManager::callAsync([this]
         {
             setAlpha(showClock ? 1 : 0);
@@ -88,7 +89,7 @@ void ClockLabel::configValueChanged(const juce::Identifier& key)
     }
     else if (key == Config::MainKeys::use24HrModeKey)
     {
-        use24HrMode = config.getConfigValue<bool>(key);
+        use24HrMode = config.get24HourEnabled();
         if (isVisible() && getAlpha() != 0)
         {
             stopTimer();
