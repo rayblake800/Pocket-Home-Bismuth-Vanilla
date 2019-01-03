@@ -4,7 +4,7 @@
  * Creates a GPPTestObject containing a new GTestObject.
  */
 GPPTestObject::GPPTestObject() : 
-GLib::Object(GTEST_TYPE_OBJECT)
+GLib::Owned::Object(GTEST_TYPE_OBJECT)
 {
     GObject* object = G_OBJECT(gtest_object_new());
     setGObject(object);
@@ -14,13 +14,13 @@ GLib::Object(GTEST_TYPE_OBJECT)
  * Creates a GPPTestObject sharing data with another GPPTestObject.
  */
 GPPTestObject::GPPTestObject(const GPPTestObject& toCopy) :
-GLib::Object(toCopy, GTEST_TYPE_OBJECT) { }
+GLib::Owned::Object(toCopy, GTEST_TYPE_OBJECT) { }
 
 /*
  * Creates a GPPTestObject holding a GTestObject. 
  */
 GPPTestObject::GPPTestObject(const GTestObject* toAssign) :
-GLib::Object(G_OBJECT(toAssign), GTEST_TYPE_OBJECT) { }
+GLib::Owned::Object(G_OBJECT(toAssign), GTEST_TYPE_OBJECT) { }
 
 /*
  * Gets the GTestObject testString value.
@@ -93,8 +93,8 @@ void GPPTestObject::Listener::connectAllSignals(GObject* source)
 {
     if(source != nullptr && GTEST_IS_OBJECT(source))
     {
-       connectNotifySignal(source, GTEST_OBJECT_TEST_STRING);
-       connectNotifySignal(source, GTEST_OBJECT_TEST_INT);
+       connectNotifySignal(source, GTEST_OBJECT_TEST_STRING, true);
+       connectNotifySignal(source, GTEST_OBJECT_TEST_INT, true);
        trackedStrings[source] = juce::String();
        trackedInts[source] = 0; 
     }

@@ -1,6 +1,6 @@
 #pragma once
 #include "gtest_object.h"
-#include "GLib/Object.h"
+#include "GLib/Owned/Owned_Object.h"
 #include "GLib/SignalHandler.h"
 #include <map>
 
@@ -9,7 +9,7 @@
  *
  * @brief A minimal GLib::Object test class to use for thread safety testing.
  */
-class GPPTestObject : public GLib::Object
+class GPPTestObject : public GLib::Owned::Object
 {
 public:
     /**

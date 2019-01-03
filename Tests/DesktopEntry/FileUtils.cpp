@@ -1,3 +1,4 @@
+#define DESKTOP_ENTRY_IMPLEMENTATION
 #include "JuceHeader.h"
 #include "DesktopEntry/FileUtils.h"
 
