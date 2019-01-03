@@ -55,7 +55,7 @@ cursorVisible("cursorVisible", localeText(showCursorTextKey))
     chooseMode.addItem(localeText(visibleTextKey), 2);
     chooseMode.addListener(this);
     Config::MainFile mainConfig;
-    if (mainConfig.getConfigValue<bool>(Config::MainKeys::showCursorKey))
+    if (mainConfig.getShowCursor())
     {
         chooseMode.setSelectedId(2);
     }
@@ -89,7 +89,6 @@ void InputSettingsPage::comboBoxChanged(juce::ComboBox* box)
     Config::MainFile mainConfig;
     if (box != &chooseMode) return;
     bool cursorVisible = (box->getSelectedId() == 2);
-    mainConfig.setConfigValue<bool>(Config::MainKeys::showCursorKey,
-                                    cursorVisible);
+    mainConfig.setShowCursor(cursorVisible);
 }
 

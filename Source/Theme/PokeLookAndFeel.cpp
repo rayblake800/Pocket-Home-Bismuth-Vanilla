@@ -310,7 +310,7 @@ void PokeLookAndFeel::MainListener::configValueChanged
     if (key == Config::MainKeys::showCursorKey)
     {
         Config::MainFile config;
-        owner.cursor = (config.getConfigValue<bool>(key) ?
+        owner.cursor = (config.getShowCursor() ?
                   MouseCursor::ParentCursor : MouseCursor::NoCursor);
     }
 }

@@ -1,6 +1,7 @@
 #include "Config/MainFile.h"
 #include "Config/MainKeys.h"
 #include "AppMenu/ConfigFile.h"
+#include "AppMenu/Format.h"
 #include "HomeSettingsPage.h"
 
 /* Localized object class key */
@@ -183,8 +184,7 @@ void HomeSettingsPage::updateComboBox()
     using juce::String;
     /* Checking the current configuration */
     Config::MainFile mainConfig;
-    String background = mainConfig.getConfigValue<String>
-        (Config::MainKeys::backgroundKey);
+    String background = mainConfig.getHomeBackground();
     bool display = false;
     if (validColorString(background))
     {
@@ -272,8 +272,7 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
         switch (box->getSelectedId())
         {
             case defaultBackgroundID:
-                mainConfig.setConfigValue<String>
-                        (Config::MainKeys::backgroundKey,
+                mainConfig.setHomeBackground(
                          findColour(PageComponent::backgroundColourId)
                          .toString());
                 bgEditor.setVisible(false);
@@ -334,13 +333,11 @@ void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
         }
         else
         {
-            mainConfig.setConfigValue<String>
-                    (Config::MainKeys::backgroundKey, value);
+            mainConfig.setHomeBackground(value);
         }
     }
     else if (bgTypePicker.getSelectedId() == imageBackgroundID)
     {
-        mainConfig.setConfigValue<String>
-                (Config::MainKeys::backgroundKey, value);
+        mainConfig.setHomeBackground(value);
     }
 }

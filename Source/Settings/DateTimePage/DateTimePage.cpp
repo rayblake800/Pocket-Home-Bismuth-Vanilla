@@ -53,10 +53,9 @@ clockModeLabel("modeLabel", localeText(clockModeTextKey))
     setClockMode.addItem(localeText(hideClockTextKey), 3);
     setClockMode.addListener(this);
     Config::MainFile mainConfig;
-    if (mainConfig.getConfigValue<bool>(Config::MainKeys::showClockKey))
+    if (mainConfig.getShowClock())
     {
-        if (mainConfig.getConfigValue<bool>
-            (Config::MainKeys::use24HrModeKey))
+        if (mainConfig.get24HourEnabled())
         {
             setClockMode.setSelectedId(1,
                     NotificationType::dontSendNotification);
@@ -83,8 +82,7 @@ void DateTimePage::pageButtonClicked(juce::Button* button)
     if (button == &reconfigureBtn)
     {
         Config::MainFile mainConfig;
-        String configureTime = mainConfig.getConfigValue<String>
-                (Config::MainKeys::termLaunchCommandKey)
+        String configureTime = mainConfig.getTermLaunchPrefix()
                 + reconfigureCommand;
         int ret = system(configureTime.toRawUTF8());
         if (ret != 0)
@@ -116,10 +114,8 @@ void DateTimePage::comboBoxChanged(juce::ComboBox* comboBox)
     Config::MainFile mainConfig;
     if (showClock)
     {
-        mainConfig.setConfigValue<bool>
-                (Config::MainKeys::use24HrModeKey, use24HrMode);
+        mainConfig.set24HourEnabled(use24HrMode);
     }
-    mainConfig.setConfigValue<bool>
-            (Config::MainKeys::showClockKey, showClock);
+    mainConfig.setShowClock(showClock);
 }
 

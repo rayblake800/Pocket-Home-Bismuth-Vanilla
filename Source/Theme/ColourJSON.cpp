@@ -12,6 +12,8 @@ ColourJSON::ColourJSON() : Config::FileResource(resourceKey, configFilename)
     loadJSONData();
 }
 
+ColourJSON::Listener::Listener() { }
+
 /**
  * Sets this listener to receive updates when a specific Juce ColourId value 
  * changes.
@@ -63,14 +65,14 @@ void ColourJSON::Listener::loadAllConfigProperties()
                     Colour(getConfigValue<String>(catKey).getHexValue32()));
         }
     }
-    Config::FileResource::Listener::loadAllConfigProperties();
+    Config::Listener<ColourJSON>::loadAllConfigProperties();
 }
 
 /**
  * Checks if a single handler object is a Listener tracking updates of a single 
  * key value, and if so, notifies it that the tracked value has updated.
  */
-void ColourJSON::notifyListener(Config::FileResource::Listener* listener,
+void ColourJSON::notifyListener(Config::Listener<ColourJSON>* listener,
         const juce::Identifier& key)
 {
     using namespace juce;
@@ -78,9 +80,6 @@ void ColourJSON::notifyListener(Config::FileResource::Listener* listener,
     Listener* colourListener = dynamic_cast<Listener*>(listener);
     if(colourListener != nullptr)
     {
-        // Call the default notifyListener method to notify listeners tracking
-        // colors by key:
-        Config::FileResource::notifyListener(listener, key);
         // Check for and notify listeners tracking colors by ColorId:
         String colourStr = getConfigValue<String>(key);
         int colourId = getColourId(key);

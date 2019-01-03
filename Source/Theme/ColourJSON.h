@@ -1,5 +1,6 @@
 #pragma once
 #include "Config/FileResource.h"
+#include "Config/Listener.h"
 
 class ColourJSON : public Config::FileResource
 {
@@ -14,12 +15,11 @@ public:
     /**
      * Receives updates when color configurations change.
      */
-    class Listener : protected Config::FileResource::Listener
+    class Listener : protected Config::Listener<ColourJSON>
     {
     friend class ColourJSON;
     protected:
-        Listener() : Config::FileResource::Listener(ColourJSON::resourceKey,
-                []()->FileResource* { return new ColourJSON(); }) { }
+        Listener();
 
         virtual ~Listener() { }
 
@@ -89,7 +89,7 @@ private:
      *
      * @param key               The key to an updated configuration value.
      */
-    virtual void notifyListener(Config::FileResource::Listener* listener,
-            const juce::Identifier& key) override; 
+    void notifyListener(Config::Listener<ColourJSON>* listener,
+            const juce::Identifier& key); 
 };
 
