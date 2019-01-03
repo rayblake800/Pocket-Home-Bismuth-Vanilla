@@ -95,4 +95,12 @@ public:
      *                       instead of 12 hour mode.
      */
     void set24HourEnabled(const bool use24HourMode);
+
+    /**
+     * @brief  Sets the background used by the HomePage component.
+     *
+     * @param background  The image asset name or hex color value to use as the
+     *                    HomePage background.
+     */
+    void setHomeBackground(const juce::String background);
 };

@@ -86,3 +86,11 @@ void Config::MainFile::set24HourEnabled(const bool use24HourMode)
 {
     setConfigValue<bool>(MainKeys::use24HrModeKey, use24HourMode);
 }
+
+/*
+ * Sets the background used by the HomePage component.
+ */
+void Config::MainFile::setHomeBackground(const juce::String background)
+{
+    setConfigValue<juce::String>(MainKeys::backgroundKey, background);
+}
