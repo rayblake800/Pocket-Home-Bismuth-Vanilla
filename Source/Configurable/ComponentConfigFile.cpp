@@ -75,3 +75,5 @@ int ComponentConfigFile::getFontHeight(TextSize sizeType)
     }
     return (int) (size * getWindowBounds().getHeight());
 }
+
+ComponentConfigFile::Listener::Listener() { }
