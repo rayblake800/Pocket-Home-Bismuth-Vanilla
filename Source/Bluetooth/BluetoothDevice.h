@@ -33,7 +33,7 @@ public:
         return name;
     }
 
-private:
+//private:
     juce::String name;
     juce::String macAddress;
     bool connected;
