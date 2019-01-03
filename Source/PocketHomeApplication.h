@@ -4,6 +4,7 @@
 #include "Config/MainFile.h"
 #include "ComponentConfigFile.h"
 #include "ColourConfigFile.h"
+#include "Wifi/Manager.h"
 
 /**
  * @file PocketHomeApplication.h
@@ -74,11 +75,15 @@ private:
     //Holds UI colour settings
     ColourConfigFile colourConfig;
 
-    //The program appearance manager.  This is dynamically allocated because it
-    //should be created after/destroyed before all of the above resources.
-    juce::ScopedPointer<PokeLookAndFeel> lookAndFeel = nullptr;
+    /* These resources are dynamically allocated because they should be created 
+     * in the order they are listed here. */
+
+    //Manages wifi network operations.
+    std::unique_ptr<Wifi::Manager> wifiManager;
+
+    //The program appearance manager.
+    std::unique_ptr<PokeLookAndFeel> lookAndFeel = nullptr;
     
-    //The single program window.  This is should be created after/destroyed 
-    //before all of the above resources.
-    juce::ScopedPointer<juce::DocumentWindow> homeWindow = nullptr;
+    //The single program window.
+    std::unique_ptr<juce::DocumentWindow> homeWindow = nullptr;
 };

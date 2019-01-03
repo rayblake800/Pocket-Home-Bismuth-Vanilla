@@ -74,9 +74,10 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         quit();
     }
 
+    wifiManager.reset(new Wifi::Manager);
 
-    lookAndFeel = new PokeLookAndFeel();
-    LookAndFeel::setDefaultLookAndFeel(lookAndFeel);
+    lookAndFeel.reset(new PokeLookAndFeel);
+    LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
 
     // open sound handle
     if (!Audio::chipAudioInit())
@@ -87,8 +88,7 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     runTests = args.contains("--test");
     if(!runTests)
     {
-        homeWindow = new PocketHomeWindow
-                (getApplicationName(), args.contains("--fakeWifi"));
+        homeWindow.reset(new PocketHomeWindow(getApplicationName()));
     }
     else
     {
@@ -102,8 +102,8 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
             }
         }
         //Use an empty window and don't initialize signal thread when testing
-        homeWindow = new DocumentWindow(getApplicationName(), Colours::dimgrey,
-                DocumentWindow::allButtons);
+        homeWindow.reset(new DocumentWindow(getApplicationName(), 
+                Colours::dimgrey, DocumentWindow::allButtons));
         homeWindow->setBounds(0,0,50,50);
         homeWindow->setLookAndFeel(&LookAndFeel::getDefaultLookAndFeel());
         homeWindow->setUsingNativeTitleBar(true);
@@ -119,8 +119,8 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
  */
 void PocketHomeApplication::shutdown()
 {
-    using namespace juce;
-    homeWindow = nullptr;
-    LookAndFeel::setDefaultLookAndFeel(nullptr);
-    lookAndFeel = nullptr;
+    homeWindow.reset(nullptr);
+    juce::LookAndFeel::setDefaultLookAndFeel(nullptr);
+    lookAndFeel.reset(nullptr);
+    wifiManager.reset(nullptr);
 }
