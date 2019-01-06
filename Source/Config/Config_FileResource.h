@@ -1,15 +1,15 @@
 #pragma once
 /**
- * @file  Config/FileResource.h
+ * @file  Config_FileResource.h
  * 
  * @brief Reads and writes data from a JSON configuration file. 
  */
 
-#include "Config/Implementation/ListenerInterface.h"
+#include "Config_ListenerInterface.h"
 #include "SharedResource_Resource.h"
 #include "SharedResource_Handler.h"
+#include "Config_DataKey.h"
 #include "JSONFile.h"
-#include "DataKey.h"
 #include "JuceHeader.h"
 #include <map>
 

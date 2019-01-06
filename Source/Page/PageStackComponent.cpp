@@ -1,6 +1,6 @@
 #include "Utils.h"
 #include "TempTimer.h"
-#include "TransitionAnimator.h"
+#include "Layout_Transition_Animator.h"
 #include "PageStackComponent.h"
 
 PageStackComponent::PageStackComponent()
@@ -12,12 +12,12 @@ PageStackComponent::PageStackComponent()
 #    endif
 }
 
-/**
+/*
  * Pushes a new PageComponent on top of the stack, optionally animating
  * the transition. 
  */
 void PageStackComponent::pushPage(PageComponent* page,
-        TransitionAnimator::Transition transition)
+        Layout::Transition::Type transition)
 {
     DBG("PageStackComponent::" << __func__ << ": pushing " << page->getName());
     stack.add(page);
@@ -25,11 +25,11 @@ void PageStackComponent::pushPage(PageComponent* page,
     transitionPage(page, transition, transitionDurationMS);
 }
 
-/**
+/*
  * Removes the top page from the stack, optionally animating the 
  * transition.  This will not remove the last page from the stack.
  */
-void PageStackComponent::popPage(TransitionAnimator::Transition transition)
+void PageStackComponent::popPage(Layout::Transition::Type transition)
 {
     if (stack.size() > 1)
     {
@@ -37,17 +37,17 @@ void PageStackComponent::popPage(TransitionAnimator::Transition transition)
         page->setEnabled(false);
 
         transitionPage(page, transition, transitionDurationMS,
-                [this](PageComponent * page)
-                {
-                    removeChildComponent(page);
-                    stack.removeObject(page);
-                    signalPageRevealed(stack.getLast());
-                },
+        [this](PageComponent * page)
+        {
+            removeChildComponent(page);
+            stack.removeObject(page);
+            signalPageRevealed(stack.getLast());
+        },
         false);
     }
 }
 
-/**
+/*
  * Checks if a page is the top page on the stack.
  */
 bool PageStackComponent::isTopPage(PageComponent* page)
@@ -56,7 +56,7 @@ bool PageStackComponent::isTopPage(PageComponent* page)
     return page == stack.getLast();
 }
 
-/**
+/*
  * Sets the current Page bounds to match the page stack.
  */
 void PageStackComponent::resized()
@@ -67,14 +67,14 @@ void PageStackComponent::resized()
     }
 }
 
-/**
+/*
  * Animate a page as it is added to or removed from the stack.  If the page
  * is being added, this will add it to the PageStackComponent, make it 
  * visible, and set its initial bounds.  The page will be disabled while
  * animating, and re-enabled once animation finishes.
  */
 void PageStackComponent::transitionPage(PageComponent* page,
-        TransitionAnimator::Transition transition,
+        Layout::Transition::Type transition,
         int duration,
         std::function<void(PageComponent*) > postAnimation,
         bool addingPage)
@@ -86,12 +86,13 @@ void PageStackComponent::transitionPage(PageComponent* page,
     page->setEnabled(false);
     if(addingPage)
     {
-        TransitionAnimator::transitionIn(page, transition, getLocalBounds(),
-                duration);
+        Layout::Transition::Animator::transitionIn(page, transition,
+                getLocalBounds(), duration);
     }
     else
     {
-        TransitionAnimator::transitionOut(page, transition, duration, true);
+        Layout::Transition::Animator::transitionOut(page, transition, duration,
+                true);
     }
     TempTimer::initTimer(duration * 1.2, [this, postAnimation, page]()
     {

@@ -1,8 +1,9 @@
 #pragma once
 #include "ScalingLabel.h"
 #include "DrawableImageButton.h"
-#include "LayoutManager.h"
-#include "ConfigurableImageComponent.h"
+#include "Layout_Component_Manager.h"
+#include "Layout_Group_Manager.h"
+#include "Theme_Image_Component.h"
 #include "JuceHeader.h"
 
 /**
@@ -17,7 +18,8 @@
  * responsible for adding all other controls to the component layout.
  */
 
-class PopupEditorComponent : public ConfigurableImageComponent,
+class PopupEditorComponent : 
+public Theme::Image::Component<DrawableImageComponent>,
 public juce::Button::Listener
 {
 public:
@@ -27,6 +29,12 @@ public:
      * Removes this component from the window.
      */
     void closePopup();
+
+    /**
+     * @brief  Applies the editor bounds defined in the layout configuration
+     *         file.
+     */
+    void applyConfigBounds();
 
 protected:
     /**
@@ -52,7 +60,7 @@ protected:
      *                to the end.  Each of these rows will have a vertical \
      *                weight of 1.
      */
-    void setLayout(LayoutManager::Layout layout);
+    void setLayout(Layout::Group::RelativeLayout layout);
 
     /**
      * Button click events for any buttons other than the cancel and confirm
@@ -128,8 +136,11 @@ private:
     //Closes the editor, saving all changes.
     DrawableImageButton confirmButton;
 
+    /* Manages the editor's bounds. */
+    Layout::Component::Manager boundsManager;
+
     //Manages editor child component layout.
-    LayoutManager layoutManager;
+    Layout::Group::Manager layoutManager;
 
     //Default layout margin/padding values.
     int marginPixels = 6;

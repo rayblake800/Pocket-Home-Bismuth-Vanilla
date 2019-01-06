@@ -1,6 +1,7 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_PopupEditor.h"
-#include "ComponentConfigFile.h"
+#include "Layout_Component_ConfigFile.h"
+#include "Layout_Component_TextSize.h"
 #include "Utils.h"
 
 /* Localized object class key: */
@@ -36,19 +37,17 @@ commandLabel("commandLabel", localeText(commandTextKey)),
 commandEditor("commandEditor"),
 terminalCheckboxLabel("runInTermLabel", localeText(runInTermTextKey))
 {
-    using juce::Font;
     categoryEditButton.addListener(this);
     iconNameEditor.addFileSelectListener(this);
     
-    ComponentConfigFile config;
-    titleEditor.setFont(Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
-    commandEditor.setFont(Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+    using TextSize = Layout::Component::TextSize;
+    using juce::Font;
+    Layout::Component::ConfigFile config;
+    titleEditor.setFont(Font(config.getFontHeight(TextSize::smallText)));
+    commandEditor.setFont(Font(config.getFontHeight(TextSize::smallText)));
 
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout(
+    using namespace Layout::Group;
+    RelativeLayout layout(
     {
         Row(10,
         {

@@ -24,12 +24,13 @@ categoryList(categories)
 #    if JUCE_DEBUG
     setName("categoryEditor");
 #    endif
-    //TODO: localize this!
     setEditorTitle(localeText(editCategoryTitleKey));
-    LayoutManager::Layout layout({
-        LayoutManager::Row(40,
+
+    using namespace Layout::Group;
+    RelativeLayout layout({
+        Row(40,
         {
-            LayoutManager::RowItem(&categoryList, 10)
+            RowItem(&categoryList, 10)
         })
     }
     );

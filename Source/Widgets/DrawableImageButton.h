@@ -16,8 +16,9 @@ public:
      * @param placement  Defines how the image will be scaled to fit the button
      *                    bounds.
      */
-    DrawableImageButton(juce::File imageFile, juce::RectanglePlacement placement
-            = juce::RectanglePlacement::centred);
+    DrawableImageButton(const juce::File imageFile, 
+            const juce::RectanglePlacement placement
+                = juce::RectanglePlacement::centred);
 
     /**
      * @param assetName  The button image will be loaded from the file with 
@@ -26,9 +27,9 @@ public:
      * @param placement  Defines how the image will be scaled to fit the button
      *                    bounds.
      */
-    DrawableImageButton(juce::String assetName, 
-            juce::RectanglePlacement placement 
-            = juce::RectanglePlacement::centred);
+    DrawableImageButton(const juce::String assetName, 
+            const juce::RectanglePlacement placement 
+                = juce::RectanglePlacement::centred);
 
     /**
      * @param imageObject This will be set as the button's image.
@@ -36,8 +37,17 @@ public:
      * @param placement   Defines how the image will be scaled to fit the 
      *                     button bounds.
      */
-    DrawableImageButton(juce::Image imageObject,
-            juce::RectanglePlacement placement 
+    DrawableImageButton(const juce::Image imageObject,
+            const juce::RectanglePlacement placement 
+                = juce::RectanglePlacement::centred);
+
+    /**
+     * @brief  Creates the button with no initial image.
+     *
+     * @param placement   Defines how the image will be scaled to fit the 
+     *                    button bounds.
+     */
+    DrawableImageButton(const juce::RectanglePlacement placement 
             = juce::RectanglePlacement::centred);
 
     virtual ~DrawableImageButton() { }
@@ -91,8 +101,8 @@ private:
     /**
      * Changes button alpha on click.
      */
-    void paintButton
-    (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown);
+    virtual void paintButton
+    (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown) override;
     
     //Internal button image component.
     juce::ScopedPointer<DrawableImageComponent> imageComponent;

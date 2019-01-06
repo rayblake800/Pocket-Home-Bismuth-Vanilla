@@ -1,9 +1,10 @@
 #pragma once
 #include "JuceHeader.h"
-#include "PokeLookAndFeel.h"
-#include "Config/MainFile.h"
-#include "ComponentConfigFile.h"
-#include "ColourConfigFile.h"
+#include "Theme_LookAndFeel.h"
+#include "Config_MainFile.h"
+#include "Layout_Component_ConfigFile.h"
+#include "Theme_Colour_ConfigFile.h"
+#include "Theme_Image_ConfigFile.h"
 #include "Wifi/Manager.h"
 
 /**
@@ -61,19 +62,19 @@ private:
         return false;
     }
     
-    //global resource objects:
+    /* Application resource objects: */
     //These objects remain allocated as long as one instance of them exists
     //somewhere.  Declaring them here ensures that they will remain allocated
     //as long as the application is running.
 
-    //Holds general user-set program configuration data.
+    /* Holds general user-set program configuration data. */
     Config::MainFile mainConfig;
     
-    //Holds user-set UI component configuration data.
-    ComponentConfigFile componentConfig;
+    /* Holds UI component layout data. */
+    Layout::Component::ConfigFile layoutConfig;
     
     //Holds UI colour settings
-    ColourConfigFile colourConfig;
+    Theme::Colour::ConfigFile colourConfig;
 
     /* These resources are dynamically allocated because they should be created 
      * in the order they are listed here. */
@@ -82,7 +83,7 @@ private:
     std::unique_ptr<Wifi::Manager> wifiManager;
 
     //The program appearance manager.
-    std::unique_ptr<PokeLookAndFeel> lookAndFeel = nullptr;
+    std::unique_ptr<Theme::LookAndFeel> lookAndFeel = nullptr;
     
     //The single program window.
     std::unique_ptr<juce::DocumentWindow> homeWindow = nullptr;

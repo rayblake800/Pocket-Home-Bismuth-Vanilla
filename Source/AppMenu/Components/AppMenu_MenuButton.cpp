@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_MenuButton.h"
-#include "ComponentConfigFile.h"
+#include "Layout_Component_ConfigFile.h"
 #include "AssetFiles.h"
 
 /* Extra characters applied when calculating title width, defining title padding
@@ -93,8 +93,9 @@ void AppMenu::MenuButton::updateFont()
 juce::Font AppMenu::MenuButton::findTitleFont
 (const juce::Rectangle<float>& titleBounds) const
 {
-    ComponentConfigFile config;
-    return juce::Font(config.getFontHeight(ComponentConfigFile::smallText));
+    Layout::Component::ConfigFile config;
+    return juce::Font(config.getFontHeight(
+                Layout::Component::TextSize::smallText));
 }
 
 /*

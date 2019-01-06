@@ -1,6 +1,12 @@
 #pragma once
+/**
+ * @file  HomeSettingsPage.h
+ * 
+ * @brief  Allows the user to configure the HomePage, setting the page 
+ *         background, the application menu type, and the application menu 
+ *         dimensions.
+ */
 
-#include "ConfigurableImageButton.h"
 #include "FileSelectTextEditor.h"
 #include "ScalingLabel.h"
 #include "CounterComponent.h"
@@ -8,12 +14,6 @@
 #include "Utils.h"
 #include "Locale/TextUser.h"
 
-/**
- * @file  HomeSettingsPage.h
- * 
- * @brief  Allows the user to configure the HomePage, set the  page background, 
- *         the application menu type, and the application menu dimensions.
- */
 class HomeSettingsPage : public PageComponent, public Locale::TextUser,
     private juce::ComboBox::Listener, private FileSelectTextEditor::Listener
 {
@@ -21,14 +21,15 @@ public:
     HomeSettingsPage();
 
     /**
-     * Update AppMenu dimensions when the page closes.
+     * @brief  Updates AppMenu dimensions when the page closes.
      */
     virtual ~HomeSettingsPage();
 
 private:
     /**
-     * Initializes the background and AppMenuType combo boxes with values
-     * loaded from the MainConfigFile, and updates their labels to match.
+     * @brief  Initializes the background and AppMenuType combo boxes with 
+     *         values loaded from Config resources and updates their labels to 
+     *         match.
      */
     void updateComboBox();
 
@@ -40,6 +41,8 @@ private:
     void updateMenuCounters();
     
     /**
+     * @brief  Handles ComboBox selections.
+     *
      * If the background type ComboBox is updated, clear the background text
      * field, and update its labels. If the menu type ComboBox is updated,
      * save the changed value to the MainConfigFile
@@ -47,11 +50,11 @@ private:
     void comboBoxChanged(juce::ComboBox* box) override;
 
     /**
-     * When a value is set in the background editor, attempt to set a new
-     * color or image value for the background, depending on the state of
-     * bgTypePicker.
+     * @brief  Atttempt to set a new color or image value for the background 
+     *         when the background editor is updated, depending on the state of
+     *         bgTypePicker.
      * 
-     * @param edited
+     * @param edited  The bgEditor component.
      */
     virtual void fileSelected(FileSelectTextEditor* edited) override;
 

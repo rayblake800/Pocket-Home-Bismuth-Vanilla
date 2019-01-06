@@ -22,11 +22,12 @@ PageComponent("SettingsListPage")
     setName("SettingsListPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
-    LayoutManager::Layout layout(
+    using namespace Layout::Group;
+    RelativeLayout layout(
     {
-        LayoutManager::Row(1,
+        Row(1,
         {
-            LayoutManager::RowItem(&buttonList)
+            RowItem(&buttonList)
         })
     });
     setLayout(layout);
@@ -37,8 +38,7 @@ PageComponent("SettingsListPage")
  */
 juce::StringArray SettingsListPage::getButtonTitles()
 {
-    using namespace juce;
-    StringArray titleList;
+    juce::StringArray titleList;
     titleList.add(localeText(homeSettingsTitleKey));
     titleList.add(localeText(colorSettingsTitleKey));
     if (Password::isPasswordSet())

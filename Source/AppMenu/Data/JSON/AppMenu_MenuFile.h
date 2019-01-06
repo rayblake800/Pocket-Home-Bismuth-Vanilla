@@ -9,7 +9,7 @@
  *         displayed in the AppMenu.
  */
 
-#include "Config/FileHandler.h"
+#include "Config_FileHandler.h"
 
 namespace AppMenu { class MenuFile; }
 namespace AppMenu { class MenuJSON; }

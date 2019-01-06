@@ -3,7 +3,7 @@
 #include "LibNM/OwnedObjects/Client.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/ContextTest.h"
-#include "Config/MainFile.h"
+#include "Config_MainFile.h"
 
 /* Unique SharedResource object instance key: */
 const juce::Identifier LibNM::ThreadResource::resourceKey 

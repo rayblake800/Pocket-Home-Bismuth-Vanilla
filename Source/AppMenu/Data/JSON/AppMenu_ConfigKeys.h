@@ -10,7 +10,7 @@
  */
 
 #include "AppMenu_Format.h"
-#include "Config/DataKey.h"
+#include "Config_DataKey.h"
 #include "JuceHeader.h"
 #include <map>
 

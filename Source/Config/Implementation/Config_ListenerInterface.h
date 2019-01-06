@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Config/Implementation/ListenerInterface.h
+ * @file  Config_ListenerInterface.h
  *
  * @brief  The interface used by Config::FileResource objects to send 
  *         notifications to Config::Listener objects when one of their tracked

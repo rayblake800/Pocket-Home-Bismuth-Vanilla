@@ -1,26 +1,32 @@
-#include "ConfigurableImageComponent.h"
-#include "MainKeys.h"
-#include "ComponentConfigKeys.h"
-#include "PokeLookAndFeel.h"
-#include "AssetFiles.h"
-#include "AppMenu/AppMenu.h"
-#include "AppMenu/ConfigFile.h"
 #include "HomePage.h"
+#include "Layout_Component_JSONKeys.h"
+#include "Theme_Image_JSONKeys.h"
+#include "Config_MainFile.h"
+#include "Config_MainKeys.h"
+#include "AssetFiles.h"
+#include "AppMenu.h"
+#include "AppMenu_ConfigFile.h"
 
 /*
  * Initializes all page components and creates the AppMenu.
  */
 HomePage::HomePage() :
 PageComponent("HomePage"),
-frame(ComponentConfigKeys::menuFrameKey, 0,
+frame(Theme::Image::JSONKeys::menuFrame, 0,
         juce::RectanglePlacement::stretchToFit),
-powerButton(ComponentConfigKeys::powerButtonKey),
-settingsButton(ComponentConfigKeys::settingsButtonKey)
+powerButton(Theme::Image::JSONKeys::powerButton),
+settingsButton(Theme::Image::JSONKeys::settingsButton)
 {
 #    if JUCE_DEBUG
     setName("HomePage");
 #    endif
     addTrackedKey(Config::MainKeys::backgroundKey);
+
+    using namespace Layout::Component;
+    layoutManagers.add(Manager(&wifiIcon, JSONKeys::wifiIcon));
+    layoutManagers.add(Manager(&powerButton, JSONKeys::powerButton));
+    layoutManagers.add(Manager(&settingsButton, JSONKeys::settingsButton));
+    layoutManagers.add(Manager(&frame, JSONKeys::menuFrame));
 
     setWantsKeyboardFocus(false);
     addAndMakeVisible(frame);
@@ -96,7 +102,7 @@ void HomePage::pageButtonClicked(juce::Button * button)
     else if (button == &powerButton)
     {
         pushPageToStack(PageComponent::PageType::Power,
-                TransitionAnimator::moveRight);
+                Layout::Transition::Type::moveRight);
     }
 }
 
@@ -126,10 +132,9 @@ void HomePage::pageResized()
     {
         appMenu->setBounds(getLocalBounds());
     }
-    frame.applyConfigBounds();
-    clock.applyConfigBounds();
     batteryIcon.applyConfigBounds();
-    wifiIcon.applyConfigBounds();
-    powerButton.applyConfigBounds();
-    settingsButton.applyConfigBounds();
+    for(Layout::Component::Manager& layoutManager : layoutManagers)
+    {
+        layoutManager.applyConfigBounds();
+    }
 }

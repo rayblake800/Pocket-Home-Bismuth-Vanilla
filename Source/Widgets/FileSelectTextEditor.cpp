@@ -1,5 +1,5 @@
 #include "Utils.h"
-#include "ComponentConfigFile.h"
+#include "Layout_Component_ConfigFile.h"
 #include "FileSelectTextEditor.h"
 
 /* Default file filter, allowing image types: */
@@ -40,9 +40,9 @@ fileSelectButton("...")
     }
     fileSelectButton.addListener(this);
     filePath.addListener(this);
-    ComponentConfigFile config;
+    Layout::Component::ConfigFile config;
     filePath.setFont(juce::Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+            (Layout::Component::TextSize::smallText)));
     addAndMakeVisible(filePath);
     addAndMakeVisible(fileSelectButton);
 }

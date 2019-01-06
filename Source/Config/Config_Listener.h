@@ -1,12 +1,12 @@
 #pragma once
 /**
- * @file  Config/Listener.h
+ * @file  Config_Listener.h
  *
  * @brief  A listener that tracks any number of values in a 
  *         Config::FileResource. 
  */
 
-#include "Config/Implementation/ListenerInterface.h"
+#include "Config_ListenerInterface.h"
 #include "SharedResource_Handler.h"
 
 namespace Config { template <class ResourceClass> class Listener; }
@@ -87,7 +87,6 @@ public:
         return configFile->template getConfigValue<ValueType>(key);
     }
 
-private:
     /**
      * @brief  Checks if a particular value is tracked by this Listener.
      *
@@ -102,6 +101,7 @@ private:
         return subscribedKeys.contains(key);
     }
 
+private:
     /**
      * @brief  This method will be called whenever a key tracked by this 
      *         listener changes in the config file.

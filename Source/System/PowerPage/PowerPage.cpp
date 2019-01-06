@@ -1,9 +1,8 @@
-#include <map>
-#include "Utils.h"
-#include "PokeLookAndFeel.h"
 #include "PowerPage.h"
-#include "TransitionAnimator.h"
+#include "Layout_Transition_Animator.h"
 #include "SystemCommands.h"
+#include "Utils.h"
+#include <map>
 
 
 /* Localized object class key: */
@@ -30,15 +29,8 @@ lockscreen([this]()
     hideLockscreen();
 })
 {
-    using namespace juce; 
-    powerOffButton.setMaxTextScale(ComponentConfigFile::mediumText);
-    rebootButton.setMaxTextScale(ComponentConfigFile::mediumText);
-    sleepButton.setMaxTextScale(ComponentConfigFile::mediumText);
-    felButton.setMaxTextScale(ComponentConfigFile::mediumText);
-    
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+    using namespace Layout::Group;
+    RelativeLayout layout({
         Row(6, { RowItem(&versionLabel) }),
         Row(10, { RowItem(&powerOffButton) }),
         Row(10, { RowItem(&sleepButton) }),
@@ -51,20 +43,20 @@ lockscreen([this]()
     setBackButton(PageComponent::rightBackButton);
     setLayout(layout);
  
-    versionLabel.setJustificationType(Justification::centred);
+    versionLabel.setJustificationType(juce::Justification::centred);
     versionLabel.setText(localeText(versionTextKey) 
         + juce::JUCEApplication::getInstance()->getApplicationVersion(),
-            NotificationType::dontSendNotification);
+            juce::NotificationType::dontSendNotification);
     
     // Determine release label contents
-    String buildText = localeText(buildTextKey) + " ";
+    juce::String buildText = localeText(buildTextKey) + " ";
 #ifdef BUILD_NAME
-    buildText += String(BUILD_NAME);
+    buildText += juce::String(BUILD_NAME);
 #else
-    buildText += String("unset");
+    buildText += juce::String("unset");
 #endif
-    buildLabel.setJustificationType(Justification::centred);
-    buildLabel.setText(buildText, NotificationType::dontSendNotification);
+    buildLabel.setJustificationType(juce::Justification::centred);
+    buildLabel.setText(buildText, juce::NotificationType::dontSendNotification);
 
     powerOffButton.addListener(this);
     sleepButton.addListener(this);
@@ -79,7 +71,6 @@ lockscreen([this]()
  */
 void PowerPage::startSleepMode()
 {
-    using namespace juce;
     SystemCommands systemCommands;
     if(systemCommands.runIntCommand(SystemCommands::IntCommand::sleepCheck)
             == 0)
@@ -103,7 +94,7 @@ void PowerPage::hideLockscreen()
     if (lockscreen.isShowing())
     {
         removeChildComponent(&lockscreen);
-        removeFromStack(TransitionAnimator::moveRight);
+        removeFromStack(Layout::Transition::Type::moveRight);
     }
 }
 
@@ -137,7 +128,7 @@ void PowerPage::pageButtonClicked(juce::Button *button)
     using namespace juce;
     if (button == &felButton)
     {
-        pushPageToStack(PageType::Fel, TransitionAnimator::moveRight);
+        pushPageToStack(PageType::Fel, Layout::Transition::Type::moveRight);
         return;
     }
     if (button == &sleepButton)

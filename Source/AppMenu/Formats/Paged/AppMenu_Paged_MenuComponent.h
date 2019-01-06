@@ -11,7 +11,7 @@
 
 #include "AppMenu_MenuComponent.h"
 #include "AppMenu_ConfigFile.h"
-#include "ConfigurableComponent.h"
+#include "Layout_Component_Manager.h"
 #include "NavButton.h"
 
 namespace AppMenu { namespace Paged { class MenuComponent; } }
@@ -28,7 +28,7 @@ namespace AppMenu { namespace Paged { class MenuComponent; } }
  * buttons used to change the selected folder page.
  */
 class AppMenu::Paged::MenuComponent : public AppMenu::MenuComponent,
-    public ConfigurableComponent, public ConfigFile::Listener
+    public ConfigFile::Listener
 {
 public:
     /**
@@ -119,6 +119,9 @@ private:
      */
     virtual void configValueChanged(const juce::Identifier& propertyKey)
         final override;
+
+    /* Sets the menu's bounds relative to the application window. */
+    Layout::Component::Manager boundsManager;
 
     /* Navigation button that closes the active folder: */
     NavButton upButton;

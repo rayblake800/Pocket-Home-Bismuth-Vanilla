@@ -1,9 +1,9 @@
-#include <numeric>
+#include "Bluetooth_SettingsPage.h"
+#include "Bluetooth_SettingsComponent.h"
 #include "Utils.h"
-#include "BluetoothSettingsPage.h"
-#include "BluetoothSettingsComponent.h"
+#include <numeric>
 
-BluetoothSettingsComponent::BluetoothSettingsComponent
+Bluetooth::SettingsComponent::SettingsComponent
 (std::function<void() > openBluetoothPage) :
 ConnectionSettingsComponent(openBluetoothPage)
 {
@@ -17,7 +17,7 @@ ConnectionSettingsComponent(openBluetoothPage)
 /**
  * @return true iff bluetooth is turned on
  */
-bool BluetoothSettingsComponent::connectionEnabled()
+bool Bluetooth::SettingsComponent::connectionEnabled()
 {
     return false;
 }
@@ -29,7 +29,7 @@ bool BluetoothSettingsComponent::connectionEnabled()
  * 
  * @return false
  */
-bool BluetoothSettingsComponent::shouldShowSpinner()
+bool Bluetooth::SettingsComponent::shouldShowSpinner()
 {
     return false;
 }
@@ -40,7 +40,7 @@ bool BluetoothSettingsComponent::shouldShowSpinner()
  * 
  * @return false
  */
-bool BluetoothSettingsComponent::allowConnectionToggle()
+bool Bluetooth::SettingsComponent::allowConnectionToggle()
 {
     return false;
 }
@@ -51,7 +51,7 @@ bool BluetoothSettingsComponent::allowConnectionToggle()
  * 
  * @return false
  */
-bool BluetoothSettingsComponent::connectionPageAvailable()
+bool Bluetooth::SettingsComponent::connectionPageAvailable()
 {
     return false;
 }
@@ -59,7 +59,7 @@ bool BluetoothSettingsComponent::connectionPageAvailable()
 /**
  * @return the bluetooth icon asset name
  */
-juce::String BluetoothSettingsComponent::getIconAsset()
+juce::String Bluetooth::SettingsComponent::getIconAsset()
 {
     return "bluetoothIcon.svg";
 }
@@ -68,12 +68,12 @@ juce::String BluetoothSettingsComponent::getIconAsset()
  * Enable/disable bluetooth, once this program can actually do that.
  * @param enabled
  */
-void BluetoothSettingsComponent::enabledStateChanged(bool enabled) { }
+void Bluetooth::SettingsComponent::enabledStateChanged(bool enabled) { }
 
 /**
  * @return "coming soon!"
  */
-juce::String BluetoothSettingsComponent::updateButtonText()
+juce::String Bluetooth::SettingsComponent::updateButtonText()
 {
     return "coming soon!";
 }

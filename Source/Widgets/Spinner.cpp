@@ -1,26 +1,26 @@
 #include "AssetFiles.h"
 #include "Spinner.h"
-#include "ComponentConfigFile.h"
-#include "ComponentConfigKeys.h"
+#include "Theme_Image_Component.h"
+#include "Theme_Image_ConfigFile.h"
+#include "Theme_Image_JSONKeys.h"
 
 Spinner::Spinner(int secondsToTimeout) :
 WindowFocusedTimer("SpinnerFrame"),
-ConfigurableImageComponent(
-ComponentConfigKeys::spinnerKey,
-0,juce::RectanglePlacement::fillDestination),
+Theme::Image::Component<DrawableImageComponent>(Theme::Image::JSONKeys::spinner,
+        0, juce::RectanglePlacement::fillDestination),
 timeout(secondsToTimeout)
 {
 #    if JUCE_DEBUG
     setName("spinner");
 #    endif
-    ComponentConfigFile config;
-    numImages = config.getComponentSettings(ComponentConfigKeys::spinnerKey)
-            .getAssetFiles().size();
+    Theme::Image::ConfigFile config;
+    numImages = config.getAssetList(Theme::Image::JSONKeys::spinner)
+            .getImageFiles().size();
 }
 
-/**
- * Disables animation when losing visibility, enables animation when
- * gaining visibility.
+/*
+ * Disables animation when losing visibility, and enables animation when gaining
+ * visibility.
  */
 void Spinner::visibilityChanged()
 {
@@ -34,7 +34,7 @@ void Spinner::visibilityChanged()
     }
 }
 
-/**
+/*
  * Shows the next frame of the spinner animation, and disables the spinner if
  * runtime exceeds the timeout period.
  */
@@ -53,5 +53,3 @@ void Spinner::timerCallback()
         startTimer(timerInterval);
     }
 }
-
-

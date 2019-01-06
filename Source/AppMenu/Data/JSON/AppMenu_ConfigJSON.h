@@ -9,8 +9,8 @@
  *         and the number of items the menu shows on screen at once.
  */
 
-#include "Config/FileResource.h"
-#include "Config/FileHandler.h"
+#include "Config_FileResource.h"
+#include "Config_FileHandler.h"
 #include "AppMenu.h"
 
 namespace AppMenu { class ConfigJSON; }

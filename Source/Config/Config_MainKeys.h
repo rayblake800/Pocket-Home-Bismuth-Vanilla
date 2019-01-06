@@ -1,8 +1,8 @@
 #pragma once
-#include "Config/DataKey.h"
+#include "Config_DataKey.h"
 
 /**
- * @file MainKeys.h
+ * @file  Config_MainKeys.h
  *
  * @brief  Provides the keys for all parameters in the main.json configuration
  *         file.

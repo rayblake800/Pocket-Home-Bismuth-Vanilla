@@ -1,13 +1,13 @@
 #pragma once
-#include "LayoutManager.h"
-#include "Locale/TextUser.h"
-#include "JuceHeader.h"
-
 /**
  * @file ColourPicker.h
  * 
  * @brief A UI component that allows the user to select a color value.
  */
+
+#include "Layout_Group_Manager.h"
+#include "Locale/TextUser.h"
+#include "JuceHeader.h"
 
 class ColourPicker : public juce::Component, public Locale::TextUser,
         private juce::Slider::Listener,
@@ -22,13 +22,13 @@ public:
      * @param colour           Sets the initial colour value to show in the
      *                         ColourPicker.
      */
-    ColourPicker
-    (int numSavedColours = 5, juce::Colour colour = juce::Colours::white);
+    ColourPicker(int numSavedColours = 5, 
+            juce::Colour colour = juce::Colours::white);
 
     virtual ~ColourPicker() { }
     
     enum ColourIds
-      {
+    {
         //Light area of the checkerboard pattern drawn behind color previews.
         checkerboardLight = 0x1900600,
         //Dark area of the checkerboard pattern drawn behind color previews.
@@ -37,7 +37,7 @@ public:
         outline           = 0x1900602,
         //Outline color used on saved color buttons when held down.
         focusedOutline    = 0x1900603
-      };
+    };
 
     /**
      * Gets the current selected colour.
@@ -45,7 +45,7 @@ public:
     juce::Colour getSelectedColour();
 
     /**
-     * Sets a new colour value.
+     * @brief  Sets a new colour value.
      *
      * @param colour
      *
@@ -55,7 +55,7 @@ public:
     void setSelectedColour(juce::Colour colour, bool runCallback = false);
 
     /**
-     * Assigns a callback function to run when a colour is selected.
+     * @brief  Assigns a callback function to run when a colour is selected.
      *
      * @param callback  The function to run. The new colour will be passed in
      *                  as a parameter.
@@ -64,33 +64,33 @@ public:
 
 private:
     /**
-     * Apply the current colour selection to the sliders.
+     * @brief  Apply the current colour selection to the sliders.
      */
     void setSlidersToColour();
 
     /**
-     * Set the text field to the current color's 8 digit hex value.
+     * @brief  Set the text field to the current color's 8 digit hex value.
      */
     void setEditorText();
 
     /**
-     * If the current colour selection isn't one of the preset colour buttons,
+     * @brief  If the current colour selection isn't one of the preset colour buttons,
      * add it to the list and remove the oldest value from the list.
      */
     void updateColourButtons();
 
     /**
-     * Updates the color preview and text box when slider values change.
+     * @brief  Updates the color preview and text box when slider values change.
      */
     void sliderValueChanged(juce::Slider* slider) override;
 
     /**
-     * Updates the sliders and colour preview after the text box value changes.
+     * @brief  Updates the sliders and colour preview after the text box value changes.
      */
     void textEditorFocusLost(juce::TextEditor& editor) override;
 
     /**
-     * Updates the sliders and colour preview after the text box value changes.
+     * @brief  Updates the sliders and colour preview after the text box value changes.
      */
     void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
 
@@ -145,8 +145,8 @@ private:
 	/**
 	 * Change the outline color when the button is down.
 	 */
-	void paintButton
-	(juce::Graphics &g, bool isMouseOverButton, bool isButtonDown);	
+	virtual void paintButton
+	(juce::Graphics &g, bool isMouseOverButton, bool isButtonDown) override;	
 
 	void resized() override;
 
@@ -158,7 +158,7 @@ private:
     juce::Colour colour;
 
     //Handles child component layout
-    LayoutManager layoutManager;
+    Layout::Group::Manager layoutManager;
     
     //Shows the current color selection over a grid background.
     ColourBox colourPreview;

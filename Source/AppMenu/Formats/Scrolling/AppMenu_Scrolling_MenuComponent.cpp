@@ -2,8 +2,8 @@
 #include "AppMenu_Scrolling_MenuComponent.h"
 #include "AppMenu_Scrolling_FolderComponent.h"
 #include "AppMenu_ConfigKeys.h"
-#include "TransitionAnimator.h"
-#include "ComponentConfigKeys.h"
+#include "Layout_Component_JSONKeys.h"
+#include "Layout_Transition_Animator.h"
 #include "TempTimer.h"
 #include "Utils.h"
 
@@ -15,7 +15,7 @@ static const constexpr int animationMS = 300;
  * to the number of rows to fit on screen.
  */
 AppMenu::Scrolling::MenuComponent::MenuComponent() :
-    ConfigurableComponent(ComponentConfigKeys::scrollingAppMenuKey)
+boundsManager(this, Layout::Component::JSONKeys::scrollingAppMenu)
 { 
     ConfigFile formatConfig;
     maxRows = formatConfig.getScrollingMenuRows();
@@ -127,7 +127,7 @@ AppMenu::Scrolling::MenuComponent::createFolderComponent
 void AppMenu::Scrolling::MenuComponent::parentResized
 (const juce::Rectangle<int> parentBounds)
 {
-    applyConfigBounds();
+    boundsManager.applyConfigBounds();
     updateMenuLayout();
 }
 

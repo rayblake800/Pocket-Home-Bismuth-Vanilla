@@ -1,5 +1,5 @@
 #include "JuceHeader.h"
-#include "Config/FileHandler.h"
+#include "Config_FileHandler.h"
 
 class FileHandlerTest : public juce::UnitTest
 {

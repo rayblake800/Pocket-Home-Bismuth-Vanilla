@@ -5,7 +5,8 @@
  * @brief  Displays an icon indicating Wifi connection signal strength.
  */
 
-#include "Configurable/ConfigurableImageComponent.h"
+#include "Theme_Image_Component.h"
+#include "DrawableImageComponent.h"
 #include "Wifi/Device/DeviceListener.h"
 #include "Wifi/AccessPoint/SignalStrengthListener.h"
 #include "Wifi/Connection/Listener.h"
@@ -14,7 +15,7 @@ namespace Wifi { class StatusIcon; }
 
 
 class Wifi::StatusIcon : 
-    public ConfigurableImageComponent, 
+    public Theme::Image::Component<DrawableImageComponent>, 
     public SignalStrengthListener, 
     public Connection::Listener,
     public DeviceListener

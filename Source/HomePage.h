@@ -3,9 +3,10 @@
 #include "DesktopEntry/Loader.h"
 #include "Icon/IconLoader.h"
 #include "PageComponent.h"
-#include "ComponentConfigFile.h"
-#include "Config/MainListener.h"
-#include "ConfigurableImageButton.h"
+#include "Config_MainListener.h"
+#include "Theme_Image_Component.h"
+#include "DrawableImageButton.h"
+#include "Layout_Component_Manager.h"
 #include "ClockLabel.h"
 #include "Wifi/Component/StatusIcon.h"
 #include "BatteryIcon.h"
@@ -90,13 +91,16 @@ private:
     Wifi::StatusIcon wifiIcon;
 
     /* Opens the power page when clicked. */
-    ConfigurableImageButton powerButton;
+    Theme::Image::Component<DrawableImageButton> powerButton;
     
     /* Opens the settings page when clicked. */
-    ConfigurableImageButton settingsButton;
+    Theme::Image::Component<DrawableImageButton> settingsButton;
 
     /* Page frame image. This component is entirely decorative. */
-    ConfigurableImageComponent frame;
+    Theme::Image::Component<DrawableImageComponent> frame;
+
+    /* Manages the layouts of configurable components. */ 
+    juce::Array<Layout::Component::Manager> layoutManagers;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);
 };

@@ -6,8 +6,8 @@
  *         preferences.
  */ 
 
-#include "Config/FileHandler.h"
-#include "Config/Listener.h"
+#include "Config_FileHandler.h"
+#include "Config_Listener.h"
 
 namespace AppMenu { class ConfigFile; }
 namespace AppMenu { class ConfigJSON; }

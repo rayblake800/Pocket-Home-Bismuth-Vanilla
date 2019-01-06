@@ -1,5 +1,6 @@
 #include "SetPasswordPage.h"
 #include "Password.h"
+#include "Layout_Component_ConfigFile.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "SetPasswordPage";
@@ -42,14 +43,13 @@ newPassword("New", 0x2022),
 confirmLabel("ConfLabel", localeText(retypePasswordTextKey)),
 confirmPassword("Confirmation", 0x2022)
 {
-    using namespace juce;
+    using juce::Font;
 #    if JUCE_DEBUG
     setName("SetPasswordPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+    using namespace Layout::Group;
+    RelativeLayout layout({
         Row(20, { RowItem(&title)}),
         Row(10,
         {
@@ -72,7 +72,7 @@ confirmPassword("Confirmation", 0x2022)
     layout.setYPaddingWeight(1);
     setLayout(layout);
 
-    title.setJustificationType(Justification::centred);
+    title.setJustificationType(juce::Justification::centred);
     setPassword.setButtonText(localeText(applyTextKey));
     setPassword.addListener(this);
     bool passwordSet = Password::isPasswordSet();
@@ -80,13 +80,13 @@ confirmPassword("Confirmation", 0x2022)
     curLabel.setVisible(passwordSet);
     curPassword.setVisible(passwordSet);
      
-    ComponentConfigFile config;
+    Layout::Component::ConfigFile config;
     curPassword.setFont(Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+            (Layout::Component::TextSize::smallText)));
     newPassword.setFont(Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+            (Layout::Component::TextSize::smallText)));
     confirmPassword.setFont(Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+            (Layout::Component::TextSize::smallText)));
 }
 
 /*
@@ -97,7 +97,6 @@ confirmPassword("Confirmation", 0x2022)
  */
 void SetPasswordPage::pageButtonClicked(juce::Button* button)
 {
-    using namespace juce;
     if (button != &setPassword)
     {
         DBG("SetPasswordPage::" << __func__ << ": button " << button->getName()
@@ -112,7 +111,7 @@ void SetPasswordPage::pageButtonClicked(juce::Button* button)
     }
     else
     {
-        String title, message;
+        juce::String title, message;
         switch (Password::changePassword(curPassword.getText(),
                 newPassword.getText()))
         {
@@ -124,13 +123,13 @@ void SetPasswordPage::pageButtonClicked(juce::Button* button)
                 return;
             case Password::paswordSetSuccess:
                 DBG("SetPasswordPage::" << __func__ << ": paswordSetSuccess");
-                AlertWindow::showMessageBoxAsync(
-                        AlertWindow::AlertIconType::InfoIcon,
+                juce::AlertWindow::showMessageBoxAsync(
+                        juce::AlertWindow::AlertIconType::InfoIcon,
                         localeText(successTextKey),
                         localeText(passwordUpdatedTextKey),
                         "",
                         nullptr,
-                        ModalCallbackFunction::create([this](int i)
+                        juce::ModalCallbackFunction::create([this](int i)
                         {
                             removeFromStack();
                         }));
@@ -173,8 +172,12 @@ void SetPasswordPage::pageButtonClicked(juce::Button* button)
                 message = localeText(polkitMissingTextKey);
                 break;
         }
-        AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,
-                title, message, "", nullptr);
+        juce::AlertWindow::showMessageBoxAsync(
+                juce::AlertWindow::AlertIconType::WarningIcon,
+                title,
+                message,
+                "",
+                nullptr);
         clearAllFields();
     }
 }

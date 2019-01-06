@@ -1,7 +1,6 @@
 #pragma once
 #include "JuceHeader.h"
 #include "PageComponent.h"
-#include "LayoutManager.h"
 #include "SwitchComponent.h"
 #include "Spinner.h"
 #include "DrawableImageComponent.h"

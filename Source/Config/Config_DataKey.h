@@ -1,7 +1,7 @@
 #pragma once
 #include "JuceHeader.h"
 /**
- * @file  Config/DataKey.h
+ * @file  Config_DataKey.h
  *
  * @brief  Holds the key string and data type of a value in a JSON configuration
  *         file.

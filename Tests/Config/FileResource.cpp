@@ -1,5 +1,5 @@
 #include "JuceHeader.h"
-#include "Config/FileResource.h"
+#include "Config_FileResource.h"
 
 class FileResourceTest : public juce::UnitTest
 {

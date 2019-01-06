@@ -1,5 +1,6 @@
 #include "BatteryIcon.h"
-#include "ComponentConfigKeys.h"
+#include "Layout_Component_JSONKeys.h"
+#include "Theme_Image_JSONKeys.h"
 #include "Utils.h"
 
 /* Battery update frequency in milliseconds. */
@@ -9,17 +10,17 @@ static const constexpr int timerFrequency = 2000;
 static const constexpr int percentageCount = 10;
 
 BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
-batteryImage(ComponentConfigKeys::batteryIconKey),
-batteryPercent(ComponentConfigKeys::batteryPercentKey)
+batteryImage(Theme::Image::JSONKeys::batteryIcon),
+batteryImageLayout(&batteryImage, Layout::Component::JSONKeys::batteryIcon),
+batteryPercentLayout(&batteryPercent, 
+        Layout::Component::JSONKeys::batteryPercent)
 {
-    using namespace juce;
-
 #    if JUCE_DEBUG
     setName("BatteryIcon");
 #    endif
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
-    batteryPercent.setJustificationType(Justification::centredLeft);
+    batteryPercent.setJustificationType(juce::Justification::centredLeft);
     addAndMakeVisible(batteryPercent);
     addAndMakeVisible(batteryImage);
     startTimer(1);
@@ -32,8 +33,8 @@ batteryPercent(ComponentConfigKeys::batteryPercentKey)
 void BatteryIcon::applyConfigBounds()
 {
     using namespace juce;
-    batteryImage.applyConfigBounds();
-    batteryPercent.applyConfigBounds();
+    batteryImageLayout.applyConfigBounds();
+    batteryPercentLayout.applyConfigBounds();
     Rectangle<int> childBounds = batteryImage.getBounds()
             .getUnion(batteryPercent.getBounds());
     childBounds.setLeft(0);
@@ -88,7 +89,6 @@ void BatteryIcon::onSuspend()
  */
 void BatteryIcon::timerCallback()
 {
-    using namespace juce;
     BatteryMonitor::BatteryStatus batteryStatus =
             batteryMonitor.getBatteryStatus();
     int batteryPercent = batteryStatus.percent;
@@ -117,7 +117,7 @@ void BatteryIcon::timerCallback()
             status += (int) charging0;
         }
         setStatus((BatteryIconImage) status,
-                String(batteryPercent) + String("%"));
+                juce::String(batteryPercent) + juce::String("%"));
     }
     if (getTimerInterval() != timerFrequency)
     {

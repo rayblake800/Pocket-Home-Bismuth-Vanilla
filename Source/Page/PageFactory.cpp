@@ -6,9 +6,9 @@
 #include "PowerPage.h"
 #include "FelPage.h"
 #include "QuickSettingsPage.h"
-#include "BluetoothSettingsPage.h"
+#include "Bluetooth_SettingsPage.h"
 #include "Wifi/Component/SettingsPage.h"
-#include "ColourPage.h"
+#include "Theme_Colour_ConfigPage.h"
 #include "SettingsListPage.h"
 #include "DateTimePage.h"
 #include "HomeSettingsPage.h"
@@ -56,13 +56,13 @@ PageComponent* PageFactory::createPage(PageComponent::PageType type)
         case PageComponent::QuickSettings:
             return setPageFactory(new QuickSettingsPage());
         case PageComponent::BluetoothSettings:
-            return new BluetoothSettingsPage();
+            return new Bluetooth::SettingsPage();
         case PageComponent::WifiSettings:
             return new Wifi::SettingsPage();
         case PageComponent::UI:
             return nullptr;
         case PageComponent::ColourSettings:
-            return new ColourPage();
+            return new Theme::Colour::ConfigPage();
         case PageComponent::SettingsList:
             return setPageFactory(new SettingsListPage());
         case PageComponent::DateTime:

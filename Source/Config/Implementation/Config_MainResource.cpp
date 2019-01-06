@@ -1,12 +1,12 @@
-#include "Config/Implementation/MainResource.h"
-#include "Config/MainKeys.h"
+#include "Config_MainResource.h"
+#include "Config_MainKeys.h"
 
 /* Filename of the JSON configuration file */
 static const constexpr char * configFilename = "config.json";
 
 /* SharedResource object key */
 const juce::Identifier Config::MainResource::resourceKey 
-    = "Config::MainResource";
+    = "Config_MainResource";
 
 Config::MainResource::MainResource() : FileResource(resourceKey, configFilename)
 {

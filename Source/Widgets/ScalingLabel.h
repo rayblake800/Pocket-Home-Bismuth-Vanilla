@@ -1,6 +1,4 @@
 #pragma once
-#include "JuceHeader.h"
-#include "ComponentConfigFile.h"
 /**
  * @File  ScalingLabel.h
  * 
@@ -8,17 +6,19 @@
  *         whenever it is resized.
  */
 
+#include "JuceHeader.h"
+#include "Layout_Component_TextSize.h"
+
 class ScalingLabel : public juce::Label
 {
 public:
-
     /**
      * @param componentName  Sets the component's internal name value. 
      * 
      * @param labelText      Sets the initial label display text.
      * 
      * @param fontPadding    Sets the minimum number of pixels to leave between
-     *                        the text top and bottom and the label edges.
+     *                       the text top and bottom and the label edges.
      */
     ScalingLabel(
             const juce::String& componentName = juce::String(),
@@ -32,7 +32,7 @@ public:
      *
      * @param maxSize  One of the text height values set in ComponentConfigFile.
      */
-    void setMaximumTextSize(ComponentConfigFile::TextSize maxSize);
+    void setMaximumTextSize(Layout::Component::TextSize maxSize);
 
 private:
     /**
@@ -40,43 +40,12 @@ private:
      */
     void resized() override;
     
-    /**
-     * Listens for changes to text size configuration, and updates the
-     * ScalingLabel in response.  I would normally have ScalingLabel directly
-     * inherit from ConfigFile::Listener, but doing that would leave
-     * ScalingLabel subclasses unable to inherit ConfigurableComponent.
-     */
-    class SizeListener : public ComponentConfigFile::Listener
-    {
-    public:
-        /**
-         * @param label  Passes in the address of the ScalingLabel that owns
-         *               this SizeListener.
-         */
-        SizeListener(ScalingLabel* label);
-        
-        virtual ~SizeListener() { }
-        
-    private:
-        /**
-         * @brief  Updates the ScalingLabel component when text size 
-         *         configuration changes.
-         * 
-         * @param propertyKey  One of the text size keys defined by 
-         *                     ComponentConfigFile.
-         */
-        virtual void configValueChanged(const juce::Identifier& propertyKey)
-        override;
-        
-        ScalingLabel* label = nullptr;
-    };
-    SizeListener sizeListener;
-
     /* Pixels of vertical space to leave between text and component bounds. */
     int fontPadding = 0;
 
     /* Maximum text height setting. */
-    ComponentConfigFile::TextSize maxSize = ComponentConfigFile::largeText;
+    Layout::Component::TextSize maxSize 
+        = Layout::Component::TextSize::largeText;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ScalingLabel)
 };

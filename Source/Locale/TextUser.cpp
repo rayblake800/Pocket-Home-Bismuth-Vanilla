@@ -1,6 +1,6 @@
 #include "AssetFiles.h"
-#include "Config/MainFile.h"
-#include "Config/MainKeys.h"
+#include "Config_MainFile.h"
+#include "Config_MainKeys.h"
 #include "Locale/TextUser.h"
 
 /* Localized text data loaded from a JSON locale file: */

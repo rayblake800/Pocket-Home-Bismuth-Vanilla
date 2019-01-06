@@ -1,4 +1,3 @@
-#include "PokeLookAndFeel.h"
 #include "SystemCommands.h"
 #include "I2CBus.h"
 #include "FelPage.h"
@@ -25,9 +24,8 @@ infoLine2("infoLine2", localeText(flashingInfoTextKey))
 #    if JUCE_DEBUG
     setName("FelPage");
 #    endif
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+    using namespace Layout::Group;
+    RelativeLayout layout({
         Row(10, { RowItem(&infoLine1) } ),
         Row(10,
         { 
@@ -61,10 +59,9 @@ infoLine2("infoLine2", localeText(flashingInfoTextKey))
  */
 void FelPage::pageButtonClicked(juce::Button* button)
 {
-    using namespace juce;
     if (button == &noButton)
     {
-        removeFromStack(TransitionAnimator::moveRight);
+        removeFromStack(Layout::Transition::Type::moveRight);
     }
     else if (button == &yesButton && !debounce)
     {

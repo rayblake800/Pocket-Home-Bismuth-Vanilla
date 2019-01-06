@@ -1,15 +1,16 @@
 #pragma once
+/**
+ * @file  DrawableImageComponent.h
+ * 
+ * @brief  A Juce component that draws a scaled image. 
+ */
+
 #include "JuceHeader.h"
 
-/**
- * @file DrawableImageComponent.h
- * 
- * @brief A Juce component that draws a scaled image. 
- * 
+/** 
  * Unlike Juce DrawableImage objects, this component's image will resize itself
  * whenever the component bounds change.
  */
-
 class DrawableImageComponent : public juce::Component {
 public:
     /**
@@ -22,8 +23,6 @@ public:
      * for and averted, so you can safely do things like set imageColour0Id
      * to defaultColors[3], and then set imageColour3Id to some new color
      * without also changing the areas set by imageColour0Id.
-     * 
-     * TODO: check if this works with images not loaded from .svg files
      */
     enum ColourIds {
         imageColour0Id = 0x1900000,
@@ -33,9 +32,8 @@ public:
         imageColour4Id = 0x1900004
     };
     
-    friend class PokeLookAndFeel;
     /**
-     * Create a DrawableImageComponent using an image file.
+     * @brief  Creates a DrawableImageComponent using an image file.
      * 
      * @param assetFilename  The filename of an image in the asset folder, or
      *                        a full image path.
@@ -43,60 +41,59 @@ public:
      * @param placement      Defines how the image will be scaled to fit the
      *                        component.
      */
-    DrawableImageComponent(juce::String assetFilename,
-            juce::RectanglePlacement placement 
-            = juce::RectanglePlacement::centred);
+    DrawableImageComponent(const juce::String assetFilename,
+            const juce::RectanglePlacement placement 
+                = juce::RectanglePlacement::centred);
 
     /**
-     * Create a DrawableImageComponent using any image file.
+     * @brief  Creates a DrawableImageComponent using any image file.
      * 
      * @param imageFile  Any image file.
      * 
      * @param placement  Defines how the image will be scaled to fit the
-     *                    component.
+     *                   component.
      */
-    DrawableImageComponent(juce::File imageFile,
-            juce::RectanglePlacement placement 
-            = juce::RectanglePlacement::centred);
+    DrawableImageComponent(const juce::File imageFile,
+            const juce::RectanglePlacement placement 
+                = juce::RectanglePlacement::centred);
 
     /**
-     * Create a DrawableImageComponent using an image object.
+     * @brief  Creates a DrawableImageComponent using an image object.
      * 
      * @param image      Any image object.
      * 
      * @param placement  Defines how the image will be scaled to fit the
-     *                    component.
+     *                   component.
      */
-    DrawableImageComponent(juce::Image image,
-            juce::RectanglePlacement placement 
-            = juce::RectanglePlacement::centred);
+    DrawableImageComponent(const juce::Image image,
+            const juce::RectanglePlacement placement 
+                = juce::RectanglePlacement::centred);
 
     /**
-     * Create a DrawableImageComponent using a Drawable object.
+     * @brief  Creates a DrawableImageComponent using a Drawable object.
      * 
      * @param drawable   Any non-null drawable object.
      * 
      * @param placement  Defines how the image will be scaled to fit the
-     *                    component.
+     *                   component.
      */
     DrawableImageComponent(juce::Drawable* drawable,
-            juce::RectanglePlacement placement 
-            = juce::RectanglePlacement::centred);
-
+            const juce::RectanglePlacement placement 
+                = juce::RectanglePlacement::centred);
 
     /**
-     * Create a DrawableImageComponent without an initial image.
+     * @brief  Creates a DrawableImageComponent without an initial image.
      * 
      * @param placement  Defines how the image will be scaled to fit the
-     *                    component, once it is added.
+     *                   component, once it is added.
      */
-    DrawableImageComponent(juce::RectanglePlacement placement 
+    DrawableImageComponent(const juce::RectanglePlacement placement 
             = juce::RectanglePlacement::centred);
 
     virtual ~DrawableImageComponent() { }
 
     /**
-     * Changes the image drawn by this component.
+     * @brief  Changes the image drawn by this component.
      * 
      * @param assetFilename  The filename of an image in the asset folder, or
      *                        a full image path.
@@ -104,75 +101,71 @@ public:
     void setImage(juce::String assetFilename);
 
     /**
-     * Changes the image drawn by this component.
+     * @brief  Changes the image drawn by this component.
      * 
      * @param imageFile  Any image file.
      */
     void setImage(juce::File imageFile);
 
     /**
-     * Changes the image drawn by this component.
+     * @brief  Changes the image drawn by this component.
      * 
      * @param image  Any image object.
      */
     void setImage(juce::Image image);
 
     /**
-     * Changes the image drawn by this component.
+     * @brief  Changes the image drawn by this component.
      * 
      * @param drawable  Any drawable object.
      */
     void setImage(juce::Drawable* drawable);
     
     /**
-     * Checks if an image is set for this component.
+     * @brief  Checks if an image is set for this component.
      * 
-     * @return  True iff the drawable image is null or has an area of zero
+     * @return  Whether the drawable image is null or has an area of zero
      *          pixels. 
      */
     bool isEmpty();
 
     /**
-     * Apply component colors to the image.
+     * @brief  Applies component colors to the image.
      */
     virtual void colourChanged() override;
 
 protected:
-    
     /**
-     * Adjust image size and placement whenever component size changes.
+     * @brief  Adjusts image size and placement whenever component size changes.
      */
     void resized() override;
     
 private:
-    
     /**
-     * After loading an image through any method, this sets the image colors and
-     * scale.
+     * @brief  Sets the initial image colors and scale.
      */
     void initImage();
     
-    //Image source file, if one is provided.
+    /* The image source file, if one is provided: */
     juce::File imageSource;
     
-    //Internal image component.
+    /* The internal image component: */
     juce::ScopedPointer<juce::Drawable> imageDrawable;
     
-    //Image placement setting.
+    /* The image placement setting: */
     juce::RectanglePlacement placement;
 
-    //Default image colors, to be replaced by the actual image colors.
+    /* Default image colors, to be replaced by the actual image colors. */
     static const juce::Array<juce::Colour> defaultColours;
 
     /**
-     * This gets the list of default image colors, which can be changed through
-     * setColour().  
+     * @brief  Gets the list of default image colors.
      * 
-     * @return the default colors 
+     * @return  The default image color list. 
      */
     static const juce::Array<juce::Colour> loadDefaultColours() {
-        using namespace juce;
-        Array<Colour> defaults;
+        using juce::Colour;
+        juce::Array<Colour> defaults;
         defaults.add(Colour(0xffffffff));
         defaults.add(Colour(0xff000000));
         defaults.add(Colour(0xffff0000));

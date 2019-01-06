@@ -1,22 +1,18 @@
 #include "ScalingTextButton.h"
-
-
     
 /*
- * Sets the maximum text height scale to use when rendering this button's
- * text.
+ * Sets the maximum text height scale to use when rendering this button's text.
  */
-void ScalingTextButton::setMaxTextScale(ComponentConfigFile::TextSize textScale)
+void ScalingTextButton::setMaxTextScale(Layout::Component::TextSize textScale)
 {
     maxTextScale = textScale;
     resized();
 }
 
 /*
- * Gets the maximum text height scale to use when rendering this button's
- * text.
+ * Gets the maximum text height scale to use when rendering this button's text.
  */
-ComponentConfigFile::TextSize ScalingTextButton::getMaxTextScale()
+Layout::Component::TextSize ScalingTextButton::getMaxTextScale()
 {
     return maxTextScale;
 }

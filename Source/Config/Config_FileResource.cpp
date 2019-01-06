@@ -1,4 +1,4 @@
-#include "Config/FileResource.h"
+#include "Config_FileResource.h"
 #include "AssetFiles.h"
     
 /* The directory where all config files will be located. */

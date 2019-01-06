@@ -1,29 +1,32 @@
 #pragma once
 /**
- * @file  Bluetooth/BluetoothDevice.h
+ * @file  Bluetooth_Device.h
  *
- * @brief  Represents a visible bluetooth device.
+ * @brief  Early placeholder for a class that will represent a visible bluetooth
+ *         device.
  */
 
 #include "JuceHeader.h"
 
-class BluetoothDevice
+namespace Bluetooth { class Device; }
+
+class Bluetooth::Device
 {
 public:
-    BluetoothDevice() { }
-    virtual ~BluetoothDevice() { }
+    Device() { }
+    virtual ~Device() { }
     
     bool isNull() const
     {
         return macAddress.isEmpty();
     }
 
-    bool operator==(const BluetoothDevice rhs) const
+    bool operator==(const Device rhs) const
     {
         return macAddress == rhs.macAddress;
     }
 
-    bool operator!=(const BluetoothDevice rhs) const
+    bool operator!=(const Device rhs) const
     {
         return macAddress != rhs.macAddress;
     }

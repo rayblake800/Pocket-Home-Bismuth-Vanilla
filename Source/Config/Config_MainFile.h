@@ -1,12 +1,12 @@
 #pragma once
 /**
- * @file Config/MainFile.h
+ * @file  Config_MainFile.h
  * 
  * @brief Loads general application settings from the config.json file.
  */
 
-#include "Config/FileHandler.h"
-#include "Config/Listener.h"
+#include "Config_FileHandler.h"
+#include "Config_Listener.h"
 
 namespace Config { class MainFile; }
 namespace Config { class MainResource; }

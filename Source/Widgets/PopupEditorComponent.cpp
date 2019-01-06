@@ -1,10 +1,13 @@
 #include "PopupEditorComponent.h"
-#include "ComponentConfigKeys.h"
+#include "Layout_Component_JSONKeys.h"
+#include "Theme_Image_JSONKeys.h"
 
 PopupEditorComponent::PopupEditorComponent
 ( std::function<void(PopupEditorComponent*) > onConfirm) :
-ConfigurableImageComponent(ComponentConfigKeys::popupMenuKey,
-0, juce::RectanglePlacement::stretchToFit),
+Theme::Image::Component<DrawableImageComponent>(
+        Theme::Image::JSONKeys::popupMenu, 0, 
+        juce::RectanglePlacement::stretchToFit),
+boundsManager(this, Layout::Component::JSONKeys::popupMenu),
 onConfirm(onConfirm),
 titleLabel("EditorTitle", "", 2),
 cancelButton("component assets/PopupEditor/cancel.svg"),
@@ -44,7 +47,7 @@ void PopupEditorComponent::setEditorTitle(const juce::String newTitle)
 void PopupEditorComponent::closePopup()
 {
     setVisible(false);
-    Component* parent = getParentComponent();
+    juce::Component* parent = getParentComponent();
     if (parent != nullptr)
     {
         parent->removeChildComponent(this);
@@ -52,15 +55,21 @@ void PopupEditorComponent::closePopup()
 }
 
 /*
+ * Applies the editor bounds defined in the layout configuration file.
+ */
+void PopupEditorComponent::applyConfigBounds()
+{
+    boundsManager.applyConfigBounds();
+}
+
+/*
  * Add, make visible, and set the layout of components below the title
  * label and above the cancel and confirm buttons.
  */
-void PopupEditorComponent::setLayout(LayoutManager::Layout layout)
+void PopupEditorComponent::setLayout(Layout::Group::RelativeLayout layout)
 {
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
+    using namespace Layout::Group;
     layout.insertRow(0, Row(10, { RowItem(&titleLabel) }));
-
     layout.addRow(Row(10,
     {
         RowItem(&cancelButton, 10),
@@ -120,7 +129,7 @@ bool PopupEditorComponent::keyPressed(const juce::KeyPress & key)
  */
 void PopupEditorComponent::resized()
 {
-    this->ConfigurableImageComponent::resized();
+    DrawableImageComponent::resized();
     layoutManager.layoutComponents(getLocalBounds());
 }
 

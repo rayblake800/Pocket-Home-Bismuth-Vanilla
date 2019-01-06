@@ -188,8 +188,7 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(MODULES) $(RESOURCES)
 
 $(OBJECTS_APP) :
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "   Building $(@F):"
-	@echo "      Compiling $<"
+	@echo "   Compiling: $(<F) -> $(@F)"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 		-o "$@" -c "$<"
 

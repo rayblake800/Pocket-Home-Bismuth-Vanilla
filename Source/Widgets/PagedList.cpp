@@ -64,10 +64,10 @@ void PagedList::setYPaddingFraction(float paddingFraction)
  * Reloads list content, running updateListItem for each visible
  * list item.
  */
-void PagedList::refreshListContent(TransitionAnimator::Transition transition,
+void PagedList::refreshListContent(Layout::Transition::Type transition,
         unsigned int duration)
 {
-    LayoutManager::Layout layout;
+    Layout::Group::RelativeLayout layout;
     unsigned int listSize = getListSize();
     while((pageIndex * itemsPerPage) > listSize)
     {
@@ -77,14 +77,14 @@ void PagedList::refreshListContent(TransitionAnimator::Transition transition,
     for(int i = 0; i < itemsPerPage; i++)
     {
         int itemIndex = i + pageIndex * itemsPerPage;
-        LayoutManager::Row row(getListItemWeight(itemIndex));
+        Layout::Group::Row row(getListItemWeight(itemIndex));
         if(itemIndex < listSize)
         {
             if(componentsSaved < i || listComponents[i] == nullptr)
             {
                 listComponents.set(i, updateListItem(nullptr, itemIndex));
             }
-            row.addRowItem(LayoutManager::RowItem(listComponents[i], 1));
+            row.addRowItem(Layout::Group::RowItem(listComponents[i], 1));
         }
         layout.addRow(row);
     }
@@ -108,11 +108,7 @@ void PagedList::refreshListContent(TransitionAnimator::Transition transition,
 }
 
 /*
- * Shows or hides the list page navigation buttons. By default, navigation
- * buttons will be visible.  Even if navigation buttons are currently
- * set as visible, the up navigation button will still be hidden on the
- * first list page, and the down navigation button will still be hidden on
- * the last list page.
+ * Shows or hides the list page navigation buttons.
  */
 void PagedList::setNavButtonsVisible(bool buttonsVisible)
 {
@@ -137,7 +133,7 @@ void PagedList::buttonClicked(juce::Button* button)
         {
             pageIndex--;
         }
-        refreshListContent(TransitionAnimator::moveDown, animDuration);
+        refreshListContent(Layout::Transition::Type::moveDown, animDuration);
     }
     else if(button == &downButton)
     {
@@ -145,7 +141,7 @@ void PagedList::buttonClicked(juce::Button* button)
         {
             pageIndex++;
         }
-        refreshListContent(TransitionAnimator::moveUp, animDuration);
+        refreshListContent(Layout::Transition::Type::moveUp, animDuration);
     }
 }
 

@@ -1,15 +1,14 @@
-#include "ComponentConfigFile.h"
 #include "PageComponent.h"
 
 PageComponent::PageComponent(const juce::String& name) :
 Component(name) { }
     
-/**
+/*
  * Sets the layout of the page component.  If the page layout was set
  * previously, the old layout will be cleared, and its components will be
  * removed from the page.
  */
-void PageComponent::setLayout(LayoutManager::Layout layout)
+void PageComponent::setLayout(Layout::Group::RelativeLayout layout)
 {
     layoutManager.clearLayout(true);
     //make sure layout margins fit the back button
@@ -63,7 +62,7 @@ void PageComponent::setBackButton(PageComponent::BackButtonType buttonType)
     addAndMakeVisible(backButton);
     backButton->addListener(this);
     
-    LayoutManager::Layout layout = layoutManager.getLayout();
+    Layout::Group::RelativeLayout layout = layoutManager.getLayout();
     if(!layout.isEmpty()
        && layout.getXMarginFraction() < backButton->xMarginFractionNeeded())
     {
@@ -95,7 +94,7 @@ void PageComponent::addAndShowLayoutComponents()
 void PageComponent::PageStackInterface::setRootPage(PageComponent* page)
 {
     page->pageStack = this;
-    pushPage(page, TransitionAnimator::none);
+    pushPage(page, Layout::Transition::Type::none);
 }
 
 /*
@@ -141,7 +140,7 @@ bool PageComponent::isStackTop()
  * If this page is currently on top of a page stack, this will remove it 
  * from the stack and destroy it.
  */
-void PageComponent::removeFromStack(TransitionAnimator::Transition transition)
+void PageComponent::removeFromStack(Layout::Transition::Type transition)
 {
     if (isStackTop())
     {
@@ -154,7 +153,7 @@ void PageComponent::removeFromStack(TransitionAnimator::Transition transition)
  * Creates and pushes a new page on top of the stack.
  */
 void PageComponent::pushPageToStack(PageComponent::PageType pageType,
-        TransitionAnimator::Transition transition)
+        Layout::Transition::Type transition)
 {
     if (isStackTop() && pageFactory != nullptr)
     {
@@ -198,8 +197,8 @@ void PageComponent::buttonClicked(juce::Button* button)
     if (button == backButton && !overrideBackButton())
     {
         removeFromStack(backButton->getEdge() == NavButton::right ?
-                TransitionAnimator::moveLeft 
-                : TransitionAnimator::moveRight);
+                Layout::Transition::Type::moveLeft 
+                : Layout::Transition::Type::moveRight);
     }
     else
     {

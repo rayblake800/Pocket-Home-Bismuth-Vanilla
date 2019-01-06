@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Config/Implementation/AlertWindow.h
+ * @file  Config_AlertWindow.h
  * 
  * @brief Displays pop-up error messages when something goes wrong with reading
  *        or writing JSON configuration files.

@@ -1,5 +1,5 @@
-#include "Audio.h"
 #include "PocketHomeApplication.h"
+#include "Audio.h"
 #include "XWindowInterface.h"
 #include "TempTimer.h"
 #include "PocketHomeWindow.h"
@@ -76,7 +76,7 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
 
     wifiManager.reset(new Wifi::Manager);
 
-    lookAndFeel.reset(new PokeLookAndFeel);
+    lookAndFeel.reset(new Theme::LookAndFeel);
     LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
 
     // open sound handle

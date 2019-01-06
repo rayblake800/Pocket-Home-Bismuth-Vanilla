@@ -1,25 +1,20 @@
 #pragma once
-#include "PageComponent.h"
-#include "ConfigurableImageButton.h"
-#include "ScalingTextButton.h"
-#include "ScalingLabel.h"
-
-#include "OverlaySpinner.h"
-#include "SwitchComponent.h"
-#include "LoginPage.h"
-#include "Locale/TextUser.h"
-#include "FocusingListPage.h"
-
 /**
  * @file  PowerPageComponent.h
  * 
  * @brief  A UI menu page that shows buttons that perform actions related to
  *         system power state.  
- *
+ */
+
+#include "PageComponent.h"
+#include "OverlaySpinner.h"
+#include "LoginPage.h"
+#include "Locale/TextUser.h"
+
+/**
  * From this page, the user can shut down the system, reboot the system, turn 
  * off the display, or enter PocketCHIP flashing mode.
  */
-
 class PowerPage : public PageComponent, private Locale::TextUser
 {
 public:
@@ -61,13 +56,13 @@ private:
     /* Identifies this pocket-home build */
     ScalingLabel buildLabel;
     /* Turns off the system using the shutdown command in the MainConfigFile. */
-    ScalingTextButton powerOffButton;
+    juce::TextButton powerOffButton;
     /* Starts sleep mode with startSleepMode() */
-    ScalingTextButton sleepButton;
+    juce::TextButton sleepButton;
     /* Restarts the system using the reboot command in the MainConfigFile. */
-    ScalingTextButton rebootButton;
+    juce::TextButton rebootButton;
     /* Shows a page that gives the user the option to enter flashing mode. */
-    ScalingTextButton felButton;
+    juce::TextButton felButton;
     /* Identifies the pocket-home version */
     ScalingLabel versionLabel;
     /* Spinner to indicate that the system is rebooting/shutting down */

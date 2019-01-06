@@ -1,11 +1,11 @@
 #pragma once
 /**
- * @file  Config/Implementation/MainResource.h
+ * @file  Config_MainResource.h
  *
  * @brief  Loads general application settings from the config.json file.
  */
 
-#include "Config/FileResource.h"
+#include "Config_FileResource.h"
 #include "JuceHeader.h"
 
 namespace Config { class MainResource; }

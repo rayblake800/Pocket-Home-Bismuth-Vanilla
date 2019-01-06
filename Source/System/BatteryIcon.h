@@ -1,22 +1,23 @@
 #pragma once
-#include "ConfigurableImageComponent.h"
-#include "ConfigurableLabel.h"
-#include "WindowFocusedTimer.h"
-#include "BatteryMonitor.h"
-
 /** 
  * @file   BatteryIcon.h
  * 
  * @brief  Displays the current charge level and charging state of the battery
  *         as an icon, and writes the battery percentage as text.
- *
- * While this icon is visible, it will periodically check battery state and 
- * update itself accordingly.  To reduce inaccuracies, a rolling average of the
- * last several detected battery percentages is used to create the reported
- * battery percentage.
- *
  */
 
+#include "Theme_Image_Component.h"
+#include "DrawableImageComponent.h"
+#include "Layout_Component_Manager.h"
+#include "WindowFocusedTimer.h"
+#include "BatteryMonitor.h"
+
+/** 
+ *  While this icon is visible, it will periodically check battery state and 
+ * update itself accordingly. To reduce inaccuracies, a rolling average of the
+ * last several detected battery percentages is used to create the reported
+ * battery percentage.
+ */
 class BatteryIcon : public juce::Component, private WindowFocusedTimer
 {
 public:
@@ -32,8 +33,8 @@ public:
 
 private:
     /**
-     * All tracked battery states.  Each corresponds with an image asset file
-     * that should be defined in config.json.
+     * @brief  All tracked battery states. Each corresponds with an image asset 
+     *         file that should be defined in imageAssets.json.
      */
     enum BatteryIconImage
     {
@@ -77,10 +78,12 @@ private:
     virtual void timerCallback() override;
 
     /* Shows the battery icon */
-    ConfigurableImageComponent batteryImage;
+    Theme::Image::Component<DrawableImageComponent> batteryImage;
+    Layout::Component::Manager batteryImageLayout;
     
     /* Shows battery percentage text */
-    ConfigurableLabel batteryPercent;
+    juce::Label batteryPercent;
+    Layout::Component::Manager batteryPercentLayout;
     
     /* Gets battery info */
     BatteryMonitor batteryMonitor;

@@ -4,6 +4,7 @@
 #include "Wifi/Connection/Event.h"
 #include "Wifi/Connection/Controller.h"
 #include "Wifi/AccessPointList/APListReader.h"
+#include "Layout_Component_ConfigFile.h"
 #include "LibNM/Data/SecurityType.h"
 #include "Locale/Time.h"
 
@@ -107,9 +108,9 @@ Locale::TextUser(localeClassKey)
     setName("WifiSettingsPage");
 #    endif
     passwordEditor.addListener(this);
-    ComponentConfigFile config;
-    passwordEditor.setFont(juce::Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+    Layout::Component::ConfigFile config;
+    passwordEditor.setFont(juce::Font(config.getFontHeight(
+                    Layout::Component::TextSize::smallText)));
     
     connectionButton.addListener(this);
     errorLabel.setJustificationType(juce::Justification::centred);
@@ -156,9 +157,10 @@ static ComponentType * getFirstUnused
 /*
  * Creates or updates the layout of one access point on the list.
  */
-void Wifi::SettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
-        const unsigned int index)
+void Wifi::SettingsPage::updateListItemLayout
+(Layout::Group::RelativeLayout& layout, const unsigned int index)
 {
+    using namespace Layout::Group;
     jassert(index < visibleAPs.size());
     const AccessPoint& wifiAP = visibleAPs[index];
     ScalingLabel* apLabel = nullptr;
@@ -166,7 +168,7 @@ void Wifi::SettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
     DrawableImageComponent * lockIcon = nullptr;
     if (!layout.isEmpty())
     {
-        LayoutManager::Row labelRow = layout.getRow(0);
+        Row labelRow = layout.getRow(0);
         jassert(labelRow.itemCount() == 3);
         apLabel = dynamic_cast<ScalingLabel*>
                 (labelRow.getRowItem(0).getComponent());
@@ -202,13 +204,13 @@ void Wifi::SettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
         lockIcon = nullptr;
     }
 
-    layout = LayoutManager::Layout(
+    layout = RelativeLayout(
     {
-        LayoutManager::Row(baseRowWeight,
+        Row(baseRowWeight,
         {
-            LayoutManager::RowItem(apLabel, labelWeight),
-            LayoutManager::RowItem(lockIcon, iconWeight),
-            LayoutManager::RowItem(apIcon, iconWeight)
+            RowItem(apLabel, labelWeight),
+            RowItem(lockIcon, iconWeight),
+            RowItem(apIcon, iconWeight)
         })
     });
     layout.setXMarginFraction(xMarginFraction);
@@ -235,13 +237,14 @@ void Wifi::SettingsPage::updateListItemLayout(LayoutManager::Layout& layout,
  * Creates or updates the access point control/information panel that
  * appears when an access point in the list is selected.
  */
-void Wifi::SettingsPage::updateSelectedItemLayout(LayoutManager::Layout& layout)
+void Wifi::SettingsPage::updateSelectedItemLayout
+(Layout::Group::RelativeLayout& layout)
 {
     using juce::String;
     jassert(getSelectedIndex() >= 0 && !layout.isEmpty());
     const AccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
+
+    using namespace Layout::Group;
     if (layout.rowCount() == 1)
     {
         layout.addRow(Row(baseRowWeight,{

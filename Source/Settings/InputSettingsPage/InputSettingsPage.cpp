@@ -1,5 +1,5 @@
-#include "Config/MainFile.h"
-#include "Config/MainKeys.h"
+#include "Config_MainFile.h"
+#include "Config_MainKeys.h"
 #include "SystemCommands.h"
 #include "InputSettingsPage.h"
 
@@ -25,9 +25,8 @@ cursorVisible("cursorVisible", localeText(showCursorTextKey))
     setName("InputSettingsPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+    using namespace Layout::Group;
+    RelativeLayout layout({
         Row(30,
         {
             RowItem(&title, 10)

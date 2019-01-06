@@ -1,12 +1,14 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi/Component/StatusIcon.h"
-#include "ComponentConfigKeys.h"
+#include "Theme_Image_Component.h"
+#include "Theme_Image_JSONKeys.h"
+#include "DrawableImageComponent.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/Connection/RecordReader.h"
 #include "Wifi/Device/DeviceViewer.h"
 
 Wifi::StatusIcon::StatusIcon() :
-ConfigurableImageComponent(ComponentConfigKeys::wifiIconKey)
+Theme::Image::Component<DrawableImageComponent>(Theme::Image::JSONKeys::wifiIcon)
 {
 #    if JUCE_DEBUG
     setName("Wifi::StatusIcon");

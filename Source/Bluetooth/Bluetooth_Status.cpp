@@ -1,19 +1,14 @@
-#include "BluetoothStatus.h"
-#include "glib.h"
-#include "gio/gio.h"
+#include "Bluetooth_Status.h"
 
-BluetoothStatus::BluetoothStatus()
-{
+Bluetooth::Status::Status() { }
 
-}
-
-void BluetoothStatus::populateFromJson(const juce::var &json)
+void Bluetooth::Status::populateFromJson(const juce::var &json)
 {
     devices.clear();
 
     for (const auto &btDevice : *json.getArray())
     {
-        auto device = new BluetoothDevice();
+        auto device = new Device();
         device->name = btDevice["name"].toString();
         device->macAddress = btDevice["mac"].toString();
         device->connected = btDevice["connected"];

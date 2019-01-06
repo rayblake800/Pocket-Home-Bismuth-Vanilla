@@ -1,7 +1,7 @@
-#include "Config/MainFile.h"
-#include "Config/MainKeys.h"
-#include "AppMenu/ConfigFile.h"
-#include "AppMenu/Format.h"
+#include "Config_MainFile.h"
+#include "Config_MainKeys.h"
+#include "AppMenu_ConfigFile.h"
+#include "AppMenu_Format.h"
 #include "HomeSettingsPage.h"
 
 /* Localized object class key */
@@ -53,9 +53,8 @@ rowCounter(1, 1, 9)
     setName("HomeSettingsPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+    using namespace Layout::Group;
+    RelativeLayout layout({
         Row(30,
         { 
             RowItem(&title)

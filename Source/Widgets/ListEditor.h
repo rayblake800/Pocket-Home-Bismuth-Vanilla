@@ -1,5 +1,5 @@
 #pragma once
-#include "LayoutManager.h"
+#include "Layout_Group_Manager.h"
 #include "DrawableImageButton.h"
 #include "JuceHeader.h"
 
@@ -188,7 +188,7 @@ private:
     juce::StringArray listItems;
 
     //Handles the layout of the list and the editor components.
-    LayoutManager layoutManager;
+    Layout::Group::Manager layoutManager;
 
     //The component displaying all list items.
     juce::ListBox listContainer;

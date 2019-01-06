@@ -1,11 +1,11 @@
 #pragma once
 /**
- * @file Config/MainListener.h
+ * @file Config_MainListener.h
  *
  * @brief  A listener that tracks updates in the main config.json file.
  */
 
-#include "Config/Listener.h"
+#include "Config_Listener.h"
 
 namespace Config { class MainListener; }
 namespace Config { class MainResource; }

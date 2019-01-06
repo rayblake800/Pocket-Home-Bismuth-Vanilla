@@ -24,8 +24,19 @@ imageComponent(new DrawableImageComponent(imageObject, placement))
     addAndMakeVisible(imageComponent);
 }
 
-/**
- * Changed the image drawn by this component.
+/*
+ * Creates the button with no initial image.
+ */
+DrawableImageButton::DrawableImageButton
+(const juce::RectanglePlacement placement) :
+Button("DrawableImageButton"),
+imageComponent(new DrawableImageComponent(placement))
+{
+    addAndMakeVisible(imageComponent);
+}
+
+/*
+ * Changes the image drawn by this component.
  */
 void DrawableImageButton::setImage(juce::String assetFilename)
 {

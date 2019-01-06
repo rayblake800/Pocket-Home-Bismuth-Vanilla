@@ -1,33 +1,37 @@
 #pragma once
-
-#include "LayoutManager.h"
-#include "NavButton.h"
-#include "TransitionAnimator.h"
-#include "JuceHeader.h"
-
 /**
  * @file PageComponent.h
  * 
- * PageComponent is a container component that organizes and manages one screen
- * of the program UI.  PageComponents fill the entire program window, so that
+ * @brief  A container component that organizes and manages one screen of the 
+ *         program UI.
+ */
+
+#include "Layout_Group_Manager.h"
+#include "Layout_Group_RelativeLayout.h"
+#include "Layout_Transition_Type.h"
+#include "NavButton.h"
+#include "JuceHeader.h"
+
+/**
+ *  PageComponent is a container component that organizes and manages one screen
+ * of the program UI. PageComponents fill the entire program window, so that
  * only one can be visible at a time.
  *
- * Active pages are held in a stack, with the topmost page visible. The top page
+ *  Active pages are held in a stack, with the topmost page visible. The top page
  * on the stack may add another page to the stack above it. It may also remove
  * itself to reveal the page beneath it, as long as it's not the only page on
- * the stack.  The stack takes ownership of all pages it holds, deleting
- * them when they're removed from the stack.  The page stack is managed by
- * an object implementing PageComponent::PageStackInterface, that is linked to
- * the PageComponent after the page is added to the stack.
+ * the stack. The stack takes ownership of all pages it holds, deleting them 
+ * when they're removed from the stack. The page stack is managed by an object 
+ * implementing PageComponent::PageStackInterface, that is linked to the 
+ * PageComponent after the page is added to the stack.
  * 
- * All pages are aware of all other page types that they can create through the 
- * PageComponent::PageType enum.  To be able to create pages, a page must have
+ *  All pages are aware of all other page types that they can create through the 
+ * PageComponent::PageType enum. To be able to create pages, a page must have
  * a pointer to a PageFactoryInterface object assigned to it on construction.  
  * If it has a PageFactoryInterface, the page on the top of the page stack can
  * create any other page type to add to the stack, without needing to know
  * anything about the created page.
  */
-
 class PageComponent : public juce::Component, public juce::Button::Listener
 {
 public:
@@ -56,7 +60,7 @@ public:
      *                    and made visible. If necessary, the layout margins 
      *                    will be resized to make room for the back button.
      */
-    void setLayout(LayoutManager::Layout layout);
+    void setLayout(Layout::Group::RelativeLayout layout);
     
     //Options available for showing a back button on the page
     enum BackButtonType
@@ -160,9 +164,8 @@ public:
          *                    transition.
          */
         virtual void pushPage
-        (PageComponent* page,
-                TransitionAnimator::Transition transition 
-                = TransitionAnimator::moveLeft) = 0;
+        (PageComponent* page, Layout::Transition::Type transition 
+                = Layout::Transition::Type::moveLeft) = 0;
 
         /**
          * Removes the top page from the stack, optionally animating the 
@@ -171,8 +174,8 @@ public:
          * @param transition  The animation type to use for the page
          *                    transition.
          */
-        virtual void popPage(TransitionAnimator::Transition transition 
-                = TransitionAnimator::moveRight) = 0;
+        virtual void popPage(Layout::Transition::Type transition 
+                = Layout::Transition::Type::moveRight) = 0;
 
 
         /**
@@ -270,8 +273,8 @@ protected:
      * @param transition  This transition animation will run if the page that 
      *                    was on top of the stack and was removed successfully.
      */
-    void removeFromStack(TransitionAnimator::Transition transition 
-                = TransitionAnimator::moveLeft);
+    void removeFromStack(Layout::Transition::Type transition 
+                = Layout::Transition::Type::moveLeft);
 
     /**
      * Creates and pushes a new page on top of the stack.
@@ -282,8 +285,8 @@ protected:
      *                   successfully added to the stack.
      */
     void pushPageToStack(PageType pageType,
-            TransitionAnimator::Transition transition 
-                = TransitionAnimator::moveLeft);
+            Layout::Transition::Type transition 
+                = Layout::Transition::Type::moveLeft);
 
 private:
     /**
@@ -322,7 +325,7 @@ private:
     juce::ScopedPointer<NavButton> backButton = nullptr;
 
     //Layout manager and component margin/padding values.
-    LayoutManager layoutManager;
+    Layout::Group::Manager layoutManager;
 
     //Optional page background image.
     juce::Image backgroundImage;

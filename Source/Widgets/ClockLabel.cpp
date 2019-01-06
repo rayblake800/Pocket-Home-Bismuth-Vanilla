@@ -1,11 +1,12 @@
-#include "Config/MainFile.h"
-#include "Config/MainKeys.h"
-#include "ComponentConfigKeys.h"
+#include "Config_MainFile.h"
+#include "Config_MainKeys.h"
+#include "Layout_Component_ConfigFile.h"
+#include "Layout_Component_JSONKeys.h"
 #include "ClockLabel.h"
 
 ClockLabel::ClockLabel() :
 WindowFocusedTimer("ClockLabel"),
-ConfigurableLabel(ComponentConfigKeys::clockLabelKey, "clockLabel", "00:00")
+juce::Label("clockLabel", "00:00")
 {
 #    if JUCE_DEBUG
     setName("ClockLabel");

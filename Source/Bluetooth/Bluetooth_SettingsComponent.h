@@ -1,20 +1,21 @@
 #pragma once
-#include "BluetoothStatus.h"
-#include "ConnectionSettingsComponent.h"
-
 /**
- * @file BluetoothSettingsComponent.h
+ * @file Bluetooth_SettingsComponent.h
  * 
  * Bluetooth is not yet implemented, for now this does pretty much nothing.
- * TODO: documentation
  */
 
-class BluetoothSettingsComponent : public ConnectionSettingsComponent
+#include "Bluetooth_Status.h"
+#include "ConnectionSettingsComponent.h"
+
+namespace Bluetooth { class SettingsComponent; }
+
+class Bluetooth::SettingsComponent : public ConnectionSettingsComponent
 {
 public:
-    BluetoothSettingsComponent(std::function<void() > openBluetoothPage);
+    SettingsComponent(std::function<void() > openBluetoothPage);
 
-    virtual ~BluetoothSettingsComponent() { }
+    virtual ~SettingsComponent() { }
 
 private:
     /**
@@ -62,5 +63,5 @@ private:
      */
     juce::String updateButtonText() override;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BluetoothSettingsComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsComponent)
 };

@@ -1,17 +1,14 @@
 #pragma once
 /**
- * @file  Config/ValueListener.h
+ * @file  Config_ValueListener.h
  *
  * @brief  A listener that tracks a single value in a Config::FileResource.
  */
 
 #include "JuceHeader.h"
 
-namespace Config 
-{ 
-    template <class ListenerType, typename ValueType>
-    class ValueListener;
-}
+namespace Config { template <class ListenerType, typename ValueType> 
+        class ValueListener; }
     
 /**
  *  ValueListener tracks a single value in a single JSON file, receiving updates

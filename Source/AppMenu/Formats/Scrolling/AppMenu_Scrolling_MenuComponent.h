@@ -11,7 +11,7 @@
 
 #include "AppMenu_MenuComponent.h"
 #include "AppMenu_ConfigFile.h"
-#include "ConfigurableComponent.h"
+#include "Layout_Component_Manager.h"
 
 namespace AppMenu { namespace Scrolling { class MenuComponent; } }
 
@@ -24,7 +24,7 @@ namespace AppMenu { namespace Scrolling { class MenuComponent; } }
  * of rows specified by the AppMenu config file.
  */
 class AppMenu::Scrolling::MenuComponent : public AppMenu::MenuComponent,
-    public ConfigurableComponent, public ConfigFile::Listener
+    public ConfigFile::Listener
 {
 public:
     /**
@@ -107,6 +107,9 @@ private:
      */
     virtual void configValueChanged(const juce::Identifier& propertyKey)
         final override;
+
+    /* Sets the menu's bounds relative to the application window. */
+    Layout::Component::Manager boundsManager;
 
     /* Cached folder widths to reuse when calculating layout changes: */
     juce::Array<int> folderWidths;

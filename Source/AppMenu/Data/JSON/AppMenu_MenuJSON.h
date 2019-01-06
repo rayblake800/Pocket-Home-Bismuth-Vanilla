@@ -9,8 +9,8 @@
  *         configuration file
  */
 
-#include "Config/FileResource.h"
-#include "Config/FileHandler.h"
+#include "Config_FileResource.h"
+#include "Config_FileHandler.h"
 #include "AppMenu_EntryLoader.h"
 #include "AppMenu_MenuItem.h"
 #include "AppMenu_ConfigData.h"

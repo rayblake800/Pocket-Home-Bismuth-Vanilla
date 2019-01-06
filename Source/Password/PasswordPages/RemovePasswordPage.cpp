@@ -1,5 +1,6 @@
 #include "RemovePasswordPage.h"
 #include "Password.h"
+#include "Layout_Component_ConfigFile.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "RemovePasswordPage";
@@ -27,14 +28,13 @@ curPwdLabel("CurLabel", localeText(currentPasswordTextKey)),
 curPassword("Current", 0x2022),
 titleLabel("Title", localeText(removePasswordTextKey))
 {
-    using namespace juce;
 #    if JUCE_DEBUG
     setName("RemovePasswordPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+
+    using namespace Layout::Group;
+    RelativeLayout layout({
         Row(20, { RowItem(&titleLabel) }),
         Row(10, {
                     RowItem(&curPwdLabel, 20),
@@ -47,23 +47,23 @@ titleLabel("Title", localeText(removePasswordTextKey))
     layout.setYPaddingWeight(1);
     setLayout(layout);
     
-    ComponentConfigFile config;
-    curPassword.setFont(Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+    Layout::Component::ConfigFile config;
+    curPassword.setFont(juce::Font(config.getFontHeight
+            (Layout::Component::TextSize::smallText)));
     
-    titleLabel.setJustificationType(Justification::centred);
+    titleLabel.setJustificationType(juce::Justification::centred);
     deleteButton.setButtonText(localeText(applyTextKey));
     deleteButton.addListener(this);
     addAndShowLayoutComponents();
 }
 
-/**
+/*
  * Attempts to delete the Pocket-Home password when deleteButton is pressed.
  * If this succeeds, the page will close after showing an AlertWindow.
  */
 void RemovePasswordPage::pageButtonClicked(juce::Button* button)
 {
-    using namespace juce;
+    using juce::AlertWindow;
     if (button != &deleteButton)
     {
         DBG("RemovePasswordPage::" << __func__ << ": button "
@@ -72,7 +72,7 @@ void RemovePasswordPage::pageButtonClicked(juce::Button* button)
         curPassword.clear();
         return;
     }
-    String title, message;
+    juce::String title, message;
     switch (Password::removePassword(curPassword.getText()))
     {
         case Password::missingNewPassword:
@@ -91,7 +91,7 @@ void RemovePasswordPage::pageButtonClicked(juce::Button* button)
                     localeText(passwordRemovedTextKey),
                     "",
                     nullptr,
-                    ModalCallbackFunction::create([this](int i)
+                    juce::ModalCallbackFunction::create([this](int i)
                     {
                         removeFromStack();
                     }));

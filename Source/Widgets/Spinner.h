@@ -1,5 +1,6 @@
 #pragma once
-#include "ConfigurableImageComponent.h"
+#include "Theme_Image_Component.h"
+#include "DrawableImageComponent.h"
 #include "WindowFocusedTimer.h"
 #include "JuceHeader.h"
 
@@ -13,7 +14,8 @@
  * a set amount of time.
  */
 
-class Spinner : public ConfigurableImageComponent, private WindowFocusedTimer {
+class Spinner : public Theme::Image::Component<DrawableImageComponent>,
+    private WindowFocusedTimer {
 public:
     /**
      * @param secondsToTimeout  Sets how many seconds should pass after enabling
@@ -38,7 +40,7 @@ private:
      * Shows the next frame of the spinner animation, and disables the spinner
      * if runtime exceeds the timeout period.
      */
-    void timerCallback();
+    virtual void timerCallback() override;
     
     //the current spinnerImages index loaded into spinnerImage
     int imageIndex = 0;

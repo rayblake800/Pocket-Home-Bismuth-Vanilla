@@ -1,5 +1,6 @@
 #pragma once
-#include "ComponentConfigFile.h"
+#include "Layout_Component_TextSize.h"
+#include "JuceHeader.h"
 
 /**
  * @brief  A Juce TextButton that can have its minimum text scale set to one of
@@ -25,7 +26,7 @@ public:
      * @param textScale  One of the text height options defined in the
      *                  ComponentConfigFile.
      */
-    void setMaxTextScale(ComponentConfigFile::TextSize textScale);
+    void setMaxTextScale(Layout::Component::TextSize textScale);
     
     /**
      * Gets the maximum text height scale to use when rendering this button's
@@ -33,9 +34,9 @@ public:
      * 
      * @return  A maximum text height scale defined in the ComponentConfigFile.
      */
-    ComponentConfigFile::TextSize getMaxTextScale();
+    Layout::Component::TextSize getMaxTextScale();
     
 private:
-    ComponentConfigFile::TextSize maxTextScale =
-                ComponentConfigFile::largeText;
+    Layout::Component::TextSize maxTextScale =
+                Layout::Component::TextSize::largeText;
 };

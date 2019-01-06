@@ -1,8 +1,8 @@
+#include "LoginPage.h"
 #include "SetPasswordPage.h"
 #include "AssetFiles.h"
-#include "LoginPage.h"
 #include "Password.h"
-
+#include "Layout_Component_ConfigFile.h"
 /* Class localized text key: */
 static const juce::Identifier localeClassKey("LoginPage");
 
@@ -35,9 +35,8 @@ foundPassword(false)
 #if JUCE_DEBUG
     setName("LoginPage");
 #endif
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+    using namespace Layout::Group;
+    RelativeLayout layout({
         Row(70, { RowItem(&ntcIcon) } ),
         Row(12, 
         {   
@@ -66,9 +65,9 @@ foundPassword(false)
     setBackgroundImage(AssetFiles::loadImageAsset(backgroundImagePath));
     loginButton.addListener(this);   
     
-    ComponentConfigFile config;
+    Layout::Component::ConfigFile config;
     passwordField.setFont(juce::Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+            (Layout::Component::TextSize::smallText)));
     passwordField.addListener(this);
     addAndShowLayoutComponents();
     if (!hasPassword())
@@ -78,16 +77,15 @@ foundPassword(false)
     }
 }
 
-/**
+/*
  * Checks if an application password was set.
- * 
  */
 bool LoginPage::hasPassword()
 {
     return Password::isPasswordSet();
 }
 
-/**
+/*
  * Grants keyboard focus to the password field, so it doesn't need to be
  * clicked before the user can start typing their password.
  */
@@ -97,13 +95,12 @@ void LoginPage::textFocus()
     passwordField.setWantsKeyboardFocus(true);
 }
 
-/**
+/*
  * Attempts to login when the user clicks the login button.
  */
 void LoginPage::pageButtonClicked(juce::Button *button)
 {
-    using namespace juce;
-    String password = passwordField.getText();
+    juce::String password = passwordField.getText();
     passwordField.setText("");
     if (Password::checkPassword(password))
     {
@@ -112,7 +109,7 @@ void LoginPage::pageButtonClicked(juce::Button *button)
     else displayError();
 }
 
-/**
+/*
  * If the return key is pressed, handle it the same as clicking the login
  * button.
  */
@@ -121,12 +118,12 @@ void LoginPage::textEditorReturnKeyPressed(juce::TextEditor& editor)
     pageButtonClicked(&loginButton);
 }
 
-/**
- * Show an error message in a message box if logging in fails.
+/*
+ * Shows an error message in a message box if logging in fails.
  */
 void LoginPage::displayError()
 {
-    using namespace juce;
+    using juce::AlertWindow;
     AlertWindow::showMessageBoxAsync(
             AlertWindow::AlertIconType::WarningIcon,
             localeText(wrongPasswordTextKey),

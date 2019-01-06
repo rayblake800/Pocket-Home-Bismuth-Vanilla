@@ -1,9 +1,10 @@
+#include "QuickSettingsPage.h"
 #include "Utils.h"
 #include "Audio.h"
 #include "Display.h"
-#include "PokeLookAndFeel.h"
-#include "QuickSettingsPage.h"
-#include "ComponentConfigKeys.h"
+#include "Theme_LookAndFeel.h"
+#include "Theme_Image_JSONKeys.h"
+#include "Layout_Component_JSONKeys.h"
 
 /* Slider image assets.  TODO: define these in components.json. */
 static const constexpr char* brightnessLowIcon = "brightnessIconLo.svg";
@@ -25,22 +26,26 @@ wifiComponent([this]()
 //}),
 screenBrightnessSlider(brightnessLowIcon, brightnessHighIcon),
 volumeSlider(volumeLowIcon, volumeHighIcon),
-settingsListBtn(ComponentConfigKeys::settingsListBtnKey)
+settingsListBtn(Theme::Image::JSONKeys::settingsListBtn),
+listButtonManager(&settingsListBtn, 
+        Layout::Component::JSONKeys::settingsListBtn)
 {
 
 #    if JUCE_DEBUG
     setName("QuickSettingsPage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout({
+    using namespace Layout::Group;
+    RelativeLayout layout(
+    {
         Row(10, { RowItem(&wifiComponent) } ),
         //Row(10, { RowItem(&bluetoothComponent) } ),
         Row(10, { RowItem(&screenBrightnessSlider) } ),
         Row(10, { RowItem(&volumeSlider) } )
     });
-    layout.setXMarginFraction(1.0 - settingsListBtn.getXFraction());
+
+    layout.setXMarginFraction(
+            1.0 - listButtonManager.getLayout().getXFraction());
     layout.setYMarginFraction(0.1);
     layout.setXPaddingWeight(1);
     layout.setYPaddingWeight(1);
@@ -89,9 +94,8 @@ void QuickSettingsPage::timerCallback()
  */
 void QuickSettingsPage::pageResized()
 {
-    settingsListBtn.applyConfigBounds();
+    listButtonManager.applyConfigBounds();
 }
-
 
 /*
  * Opens the advanced settings page when its button is clicked.
@@ -126,5 +130,3 @@ void QuickSettingsPage::sliderDragEnded(juce::Slider* slider)
     stopTimer();
     changingSlider = nullptr;
 }
-
-

@@ -1,7 +1,16 @@
 #pragma once
+/**
+ * @file  Bluetooth_BluezAdapter.h
+ *
+ * @brief  Extremely incomplete DBus proxy class that will eventually be used
+ *         to control Bluetooth connections.
+ */
+
 #include "GLib/DBus/DBusProxy.h"
 
-class BluezAdapter : private GLib::DBusProxy
+namespace Bluetooth { class BluezAdapter; }
+
+class Bluetooth::BluezAdapter : private GLib::DBusProxy
 {
 public:
     BluezAdapter();

@@ -49,7 +49,7 @@ protected:
      *                the WifiAccessPoint with this index in the the sorted
      *                list of access points.
      */
-    virtual void updateListItemLayout(LayoutManager::Layout& layout,
+    virtual void updateListItemLayout(Layout::Group::RelativeLayout& layout,
             const unsigned int index) final override;
     
     /**
@@ -59,7 +59,7 @@ protected:
      * @param layout   The control layout object, to be updated to match the 
      *                 current selected access point.
      */
-    virtual void updateSelectedItemLayout(LayoutManager::Layout& layout) 
+    virtual void updateSelectedItemLayout(Layout::Group::RelativeLayout& layout) 
             final override;
 
 private:

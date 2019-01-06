@@ -1,5 +1,6 @@
 #pragma once
 #include "PageComponent.h"
+#include "Layout_Transition_Type.h"
 #include "JuceHeader.h"
 
 /**
@@ -32,8 +33,8 @@ private:
      * @param transition  The transition animation type to apply to the added
      *                    page.
      */
-    void pushPage(PageComponent* page, TransitionAnimator::Transition transition 
-                = TransitionAnimator::moveLeft) override;
+    void pushPage(PageComponent* page, Layout::Transition::Type transition 
+                = Layout::Transition::Type::moveLeft) override;
 
     /**
      * Removes the top page from the stack, optionally animating the 
@@ -42,8 +43,8 @@ private:
      * @param transition  The transition animation type to apply to the removed
      *                    page.
      */
-    void popPage(TransitionAnimator::Transition transition 
-                = TransitionAnimator::moveRight) override;
+    void popPage(Layout::Transition::Type transition 
+                = Layout::Transition::Type::moveRight) override;
 
 
     /**
@@ -80,7 +81,7 @@ private:
      *                        being removed.
      */
     void transitionPage(PageComponent* page,
-            TransitionAnimator::Transition transition,
+            Layout::Transition::Type transition,
             int duration,
             std::function<void(PageComponent*) > postAnimation = []
             (PageComponent* page)

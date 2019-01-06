@@ -53,7 +53,7 @@ placement(placement)
  * Create a DrawableImageComponent using a Drawable object.
  */
 DrawableImageComponent::DrawableImageComponent
-(juce::Drawable* drawable, juce::RectanglePlacement placement) :
+(juce::Drawable* drawable, const juce::RectanglePlacement placement) :
 placement(placement)
 {
 #    if JUCE_DEBUG

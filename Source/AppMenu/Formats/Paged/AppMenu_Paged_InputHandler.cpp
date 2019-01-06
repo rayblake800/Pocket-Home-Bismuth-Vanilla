@@ -2,7 +2,7 @@
 #include "AppMenu_Paged_InputHandler.h"
 #include "AppMenu_Paged_MenuComponent.h"
 #include "AppMenu_Paged_FolderComponent.h"
-#include "TransitionAnimator.h"
+#include "Layout_Transition_Animator.h"
 #include "NavButton.h"
 
 /*
@@ -26,7 +26,7 @@ bool AppMenu::Paged::InputHandler::keyPressed
    FolderComponent* activeFolder = getActivePagedFolderComponent();
 
    // Suppress key events while animating the menu.
-   if(TransitionAnimator::isAnimating(activeFolder))
+   if(Layout::Transition::Animator::isAnimating(activeFolder))
    {
        return true;
    }

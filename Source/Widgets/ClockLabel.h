@@ -1,8 +1,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
-#include "ConfigurableLabel.h"
-#include "Config/MainListener.h"
+#include "Config_MainListener.h"
 
 /**
  * @file ClockLabel.h
@@ -10,7 +9,7 @@
  * @brief  A configurable component that displays the current time.
  */
 
-class ClockLabel : public ConfigurableLabel, public Config::MainListener,
+class ClockLabel : public juce::Label, public Config::MainListener,
         private WindowFocusedTimer
 {
 public:
@@ -23,7 +22,7 @@ private:
     /**
      * @brief Updates the displayed time each minute.
      */
-    void timerCallback();
+    virtual void timerCallback() override;
     
     /**
      * @brief  Enables the timer when the component becomes visible, disables 

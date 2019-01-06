@@ -4,7 +4,7 @@
 #include "AppMenu_NewConfigItemEditor.h"
 #include "AppMenu_NewDesktopAppEditor.h"
 #include "AppMenu_MenuFile.h"
-#include "Config/MainFile.h"
+#include "Config_MainFile.h"
 #include "Utils.h"
 
 /* Localized object class key: */

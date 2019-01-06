@@ -1,6 +1,6 @@
-#include "Config/MainFile.h"
-#include "Config/MainKeys.h"
-#include "Config/Implementation/MainResource.h"
+#include "Config_MainFile.h"
+#include "Config_MainKeys.h"
+#include "Config_MainResource.h"
 
 Config::MainFile::MainFile() { }
 

@@ -1,5 +1,6 @@
-#include "Utils.h"
 #include "ConnectionSettingsComponent.h"
+#include "Utils.h"
+#include "Layout_Component_ConfigFile.h"
 
 /* Padding space between child components, as a fraction of component height. */
 static const constexpr float childPaddingFraction = 0.1;
@@ -17,14 +18,13 @@ Component(name),
 openConnectionPage(openConnectionPage),
 pageButton(name + "Button")
 {
-    using namespace juce;
     toggle.addListener(this);
     pageButton.addListener(this);
     addAndMakeVisible(icon);
     addAndMakeVisible(toggle);
     addAndMakeVisible(pageButton);
     addChildComponent(spinner);
-    Colour iconColour = findColour(Label::textColourId);
+    juce::Colour iconColour = findColour(juce::Label::textColourId);
     icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
 }
 
@@ -34,8 +34,6 @@ pageButton(name + "Button")
  */
 void ConnectionSettingsComponent::refresh()
 {
-    using namespace juce;
-    //DBG("ConnectionSettingsComponent::refresh()");
     bool busy = shouldShowSpinner();
     bool enabled = connectionEnabled();
     
@@ -46,8 +44,8 @@ void ConnectionSettingsComponent::refresh()
     if (!busy)
     {
         icon.setImage(getIconAsset());
-        toggle.setToggleState(enabled, NotificationType::dontSendNotification,
-                true);
+        toggle.setToggleState(enabled, 
+                juce::NotificationType::dontSendNotification, true);
     }
     toggle.setEnabled(allowConnectionToggle());
     pageButton.setText(updateButtonText());
@@ -82,8 +80,7 @@ void ConnectionSettingsComponent::resized()
  */
 void ConnectionSettingsComponent::colourChanged()
 {
-    using namespace juce;
-    Colour iconColour = findColour(Label::textColourId);
+    juce::Colour iconColour = findColour(juce::Label::textColourId);
     icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
 }
 
@@ -134,10 +131,9 @@ void ConnectionSettingsComponent::ConnectionButton::setText
 void ConnectionSettingsComponent::ConnectionButton::paintButton
 (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
 {
-    using namespace juce;
-    const Rectangle<int>& bounds = getLocalBounds();
+    const juce::Rectangle<int>& bounds = getLocalBounds();
 
-    g.setColour(findColour(TextButton::textColourOnId));
+    g.setColour(findColour(juce::TextButton::textColourOnId));
     setAlpha((isButtonDown ? buttonDownAlpha : buttonUpAlpha));
 
     if (isEnabled())
@@ -149,10 +145,10 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
                 1, borderSize);
     }
     g.setFont(textHeight);
-    g.setColour(findColour(Label::textColourId));
+    g.setColour(findColour(juce::Label::textColourId));
     g.drawText(displayText, bounds.getX(), bounds.getY(),
             bounds.getWidth(), bounds.getHeight(),
-            Justification::centred);
+            juce::Justification::centred);
 }
 
 /*
@@ -161,7 +157,7 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
 void ConnectionSettingsComponent::ConnectionButton::resized()
 {
     borderSize = getHeight() * borderFraction;
-    ComponentConfigFile config;
+    Layout::Component::ConfigFile config;
     textHeight = config.getFontHeight(getLocalBounds().reduced(borderSize * 2),
             displayText);
 }

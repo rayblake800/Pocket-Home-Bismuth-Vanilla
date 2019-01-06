@@ -1,9 +1,11 @@
 #include "NavButton.h"
-#include "ComponentConfigFile.h"
-#include "ComponentConfigKeys.h"
+#include "Layout_Component_ConfigFile.h"
+#include "Layout_Component_JSONKeys.h"
 
-NavButton::NavButton(NavButton::WindowEdge edge) : edge(edge),
-ConfigurableImageButton(NavButton::getEdgeComponentKey(edge)) 
+NavButton::NavButton(NavButton::WindowEdge edge) : 
+Theme::Image::Component<DrawableImageButton>(getEdgeComponentKey(edge)),
+boundsManager(this, getEdgeComponentKey(edge)),
+edge(edge)
 { 
     setWantsKeyboardFocus(false);
 }
@@ -22,11 +24,11 @@ NavButton::WindowEdge NavButton::getEdge()
  */
 float NavButton::xMarginFractionNeeded(NavButton::WindowEdge edge)
 {
-    ComponentConfigFile config;
-    ComponentSettings settings = config.getComponentSettings
-        (getEdgeComponentKey(edge));
-    return std::min(settings.getXFraction() + settings.getWidthFraction(),
-            1.0f - settings.getXFraction()) + marginPadding;
+    Layout::Component::ConfigFile config;
+    Layout::Component::ConfigLayout layout 
+            = config.getLayout(getEdgeComponentKey(edge));
+    return std::min(layout.getXFraction() + layout.getWidthFraction(),
+            1.0f - layout.getXFraction()) + marginPadding;
 }
 
 /*
@@ -35,13 +37,12 @@ float NavButton::xMarginFractionNeeded(NavButton::WindowEdge edge)
  */
 float NavButton::yMarginFractionNeeded(NavButton::WindowEdge edge)
 {
-    ComponentConfigFile config;
-    ComponentSettings settings = config.getComponentSettings
-        (getEdgeComponentKey(edge));
-    return std::min(settings.getYFraction() + settings.getHeightFraction(),
-            1.0f - settings.getYFraction()) + marginPadding;
+    Layout::Component::ConfigFile config;
+    Layout::Component::ConfigLayout layout 
+            = config.getLayout(getEdgeComponentKey(edge));
+    return std::min(layout.getYFraction() + layout.getHeightFraction(),
+            1.0f - layout.getYFraction()) + marginPadding;
 }
-
 
 /*
  * Gets the amount of horizontal margin space needed to keep window
@@ -62,6 +63,14 @@ float NavButton::yMarginFractionNeeded() const
 }
 
 /*
+ * Applies the navigation button bounds defined in the layout.json file.
+ */
+void NavButton::applyConfigBounds()
+{
+    boundsManager.applyConfigBounds();
+}
+
+/*
  * Given a window edge, return the component key string for the
  * corresponding NavButton type.
  */
@@ -70,13 +79,13 @@ const juce::Identifier& NavButton::getEdgeComponentKey(const WindowEdge edge)
     switch(edge)
     {
         case up:
-            return ComponentConfigKeys::pageUpKey;
+            return Layout::Component::JSONKeys::pageUp;
         case down:
-            return ComponentConfigKeys::pageDownKey;
+            return Layout::Component::JSONKeys::pageDown;
         case left:
-            return ComponentConfigKeys::pageLeftKey;
+            return Layout::Component::JSONKeys::pageLeft;
         case right:
-            return ComponentConfigKeys::pageRightKey;
+            return Layout::Component::JSONKeys::pageRight;
     }
     DBG("NavButton::" << __func__ << ": Unknown edge value!");
     return juce::Identifier::null;

@@ -2,6 +2,7 @@
 #include "AppMenu_Scrolling_InputHandler.h"
 #include "AppMenu_Scrolling_FolderComponent.h"
 #include "AppMenu_Scrolling_MenuComponent.h"
+#include "Layout_Transition_Animator.h"
 
 /*
  * Initializes the InputHandler, setting it to handle the menu component's input
@@ -30,7 +31,7 @@ bool AppMenu::Scrolling::InputHandler::keyPressed
     jassert(activeFolder != nullptr);
     
     // Ignore key events if the folder is animating
-    if(TransitionAnimator::isAnimating(activeFolder))
+    if(Layout::Transition::Animator::isAnimating(activeFolder))
     {
         return true;
     }

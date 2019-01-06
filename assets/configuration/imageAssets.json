@@ -1,31 +1,11 @@
 {  
-    "small text"  : 0.075,  
-    "medium text" : 0.085,  
-    "large text"  : 0.13,
-
-    "scrolling app menu": {
-        "x": 0,
-        "y": 0,
-        "width": 1,
-        "height": 1
-    },
-    "paged app menu": {
-        "x": 0,
-        "y": 0.02,
-        "width": 1,
-        "height": 0.96
-    },
     "battery": {
-        "x": 0.01,
-        "y": 0.012,
-        "width": 0.085,
-        "height": 0.075,
         "colours": [
             "0xffeb008b",
             "fffa9622",
             "ffff0000"
         ],
-        "asset files": [
+        "image files": [
             "component assets/BatteryIcon/battery_0.svg",
             "component assets/BatteryIcon/battery_1.svg",
             "component assets/BatteryIcon/battery_2.svg",
@@ -37,70 +17,41 @@
             "component assets/BatteryIcon/noBattery.svg"
         ]
     },
-    "battery percent text": {
-        "x": 0.115,
-        "y": 0.018,
-        "width": 0.15,
-        "height": 0.075,
-        "colours": [
-            "0xffffffff"
-        ]
-    },
     "menu frame": {
-        "x": 0,
-        "y": 0,
-        "width": 1,
-        "height": 1,
         "colours": [
             "0xffb88e47",
             "0xffb8b8b8"
         ],
-        "asset files": [
+        "image files": [
             "component assets/MenuFrame/frame.svg"
         ]
     },
     "power button": {
-        "x": 0,
-        "y": 0.9,
-        "width": 0.09,
-        "height": 0.09,
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/PowerButton/powerIcon.svg"
         ]
     },
     "settings button": {
-        "x": 0.91,
-        "y": 0.9,
-        "width": 0.09,
-        "height": 0.09,
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/SettingsButton/settingsIcon.svg"
         ]
     },
     "time": {
-        "x": 0.74,
-        "y": 0.018,
-        "width": 0.15,
-        "height": 0.075,
         "colours": [
             "0xffffffff"
         ]
     },
     "wifi": {
-        "x": 0.91,
-        "y": 0.01,
-        "width": 0.085,
-        "height": 0.085,
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/WifiIcon/wifiOff.svg",
             "component assets/WifiIcon/wifiStrength0.svg",
             "component assets/WifiIcon/wifiStrength1.svg",
@@ -109,73 +60,51 @@
         ]
     },  
     "popup menu": {
-        "width": 0.7,
-        "height": 0.7,
         "colours": [
             "0xffb88e47",
             "0xffe9e9e9"
         ],
-        "asset files": [
+        "image files": [
             "component assets/PopupMenu/popupFrame.svg"
         ]
     },
     "left arrow button": {
-        "x": 0,
-        "y": 0.4,
-        "width": 0.1,
-        "height": 0.2,
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/NavButton/backIcon.svg"
         ]
     },
     "right arrow button": {
-        "x": 0.9,
-        "y": 0.4,
-        "width": 0.1,
-        "height": 0.2,
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/NavButton/nextIcon.svg"
         ]
     },
     "up arrow button": {
-        "x": 0.42,
-        "y": 0.07,
-        "width": 0.18,
-        "height": 0.08,
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/NavButton/pageUpIcon.svg"
         ]
     },
     "down arrow button": {
-        "x": 0.42,
-        "y": 0.89,
-        "width": 0.18,
-        "height": 0.08,
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/NavButton/pageDownIcon.svg"
         ]
     },
     "settings list button": {
-        "x": 0.9,
-        "y": 0.4,
-        "width": 0.1,
-        "height": 0.2,
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/SettingsListButton/settingsListIcon.svg"
         ]
     },
@@ -183,7 +112,7 @@
         "colours": [
             "0xffeb008b"
         ],
-        "asset files": [
+        "image files": [
             "component assets/Spinner/spinner0.svg",
             "component assets/Spinner/spinner1.svg",
             "component assets/Spinner/spinner2.svg",

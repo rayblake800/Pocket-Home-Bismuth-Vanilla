@@ -1,23 +1,26 @@
 #include "FocusingListPage.h"
 
-//default number of list items per page
+/* Default number of list items per page: */
 static const constexpr unsigned int defaultItemsPerPage = 5;
 
-//default list padding fraction
+/* Default list padding fraction: */
 static const constexpr float defaultPaddingFraction = 0.02;
 
-//milliseconds to take when (un)focusing list content
+/* Milliseconds to take when (un)focusing list content: */
 static const constexpr unsigned int focusDuration = 300;
 
+/* List item border width in pixels: */
+static const constexpr unsigned int borderWidth = 4;
 
 FocusingListPage::FocusingListPage() : PageComponent("FocusingListPage") 
 { 
     setBackButton(PageComponent::leftBackButton);
-    setLayout(LayoutManager::Layout(
+    using namespace Layout::Group;
+    setLayout(RelativeLayout(
     {
-        LayoutManager::Row(1,
+        Row(1,
         { 
-            LayoutManager::RowItem(&pageList, 1) 
+            RowItem(&pageList, 1) 
         })
     }));
 }
@@ -38,7 +41,7 @@ void FocusingListPage::setSelectedIndex(const int index)
     if(index >= 0 && index < getListSize())
     {
         selectedIndex = index;
-        updateList(TransitionAnimator::toDestination, focusDuration);
+        updateList(Layout::Transition::Type::toDestination, focusDuration);
     }
     
 }
@@ -52,14 +55,14 @@ void FocusingListPage::deselect()
     if(selectedIndex >= 0)
     {
         selectedIndex = -1;
-        updateList(TransitionAnimator::toDestination, focusDuration);
+        updateList(Layout::Transition::Type::toDestination, focusDuration);
     }
 }
 
 /*
  * Refreshes displayed list content.
  */
-void FocusingListPage::updateList(TransitionAnimator::Transition transition,
+void FocusingListPage::updateList(Layout::Transition::Type transition,
         unsigned int duration)
 {
     pageList.updateList(transition, duration);
@@ -110,20 +113,20 @@ FocusingListPage::ListItem::ListItem() : Button("FocusingListItem")
 /*
  * Gets the layout used by this list item.
  */
-LayoutManager::Layout FocusingListPage::ListItem::getLayout() const
+Layout::Group::RelativeLayout FocusingListPage::ListItem::getLayout() const
 { 
-    return buttonLayout.getLayout();
+    return buttonLayoutManager.getLayout();
 }
 
 /*
  * Sets the layout used by this list item.  All components in the layout
  * will be added to the list item as child components.
  */
-void FocusingListPage::ListItem::setLayout(LayoutManager::Layout layout,
-        const TransitionAnimator::Transition transition,
+void FocusingListPage::ListItem::setLayout(Layout::Group::RelativeLayout layout,
+        const Layout::Transition::Type transition,
         const unsigned int duration) 
 { 
-    buttonLayout.transitionLayout(layout, this, transition, duration);
+    buttonLayoutManager.transitionLayout(layout, this, transition, duration);
 }
         
 /*
@@ -158,7 +161,7 @@ void FocusingListPage::ListItem::paintButton(juce::Graphics &g,
  */
 void FocusingListPage::ListItem::resized()
 {
-    buttonLayout.layoutComponents(getLocalBounds());
+    buttonLayoutManager.layoutComponents(getLocalBounds());
 }
 
 FocusingListPage::FocusingList::FocusingList() 
@@ -172,7 +175,7 @@ FocusingListPage::FocusingList::FocusingList()
 * list item.
 */
 void FocusingListPage::FocusingList::updateList(
-        TransitionAnimator::Transition transition,
+        Layout::Transition::Type transition,
         unsigned int duration)
 {   
     FocusingListPage* parentPage 
@@ -223,9 +226,11 @@ juce::Component* FocusingListPage::FocusingList::updateListItem
         pageButton = static_cast<ListItem*>(listItem);
     }
        
-    LayoutManager::Layout buttonLayout = pageButton->getLayout();
+    Layout::Group::RelativeLayout buttonLayout = pageButton->getLayout();
+    Layout::Group::RelativeLayout selectedLayout 
+            = selectedLayoutManager.getLayout();
     bool wasSelected = (buttonLayout == selectedLayout);
-    bool  isSelected = (index == parentPage->getSelectedIndex());
+    bool isSelected  = (index == parentPage->getSelectedIndex());
 
     if(isSelected)
     {
@@ -237,21 +242,17 @@ juce::Component* FocusingListPage::FocusingList::updateListItem
     {
         if(wasSelected)
         {
-            buttonLayout = LayoutManager::Layout();
+            buttonLayout = Layout::Group::RelativeLayout();
         }
         parentPage->updateListItemLayout(buttonLayout, index);
     }
-
     pageButton->setLayout(buttonLayout);
     pageButton->setIndex(index);
     return pageButton;
 }
 
-/**
- * Gets the weight value used to determine the height of a particular
- * row item.  When no list item is selected, all row heights are
- * equal.  When a list item is selected, the selected item uses the
- * entire list height.
+/*
+ * Gets the weight value used to determine the height of a particular row item.
  */ 
 unsigned int FocusingListPage::FocusingList::getListItemWeight
 (const unsigned int index)

@@ -1,66 +1,66 @@
-#include "BluezAdapter.h"
+#include "Bluetooth_BluezAdapter.h"
 
-BluezAdapter::BluezAdapter() :
+Bluetooth::BluezAdapter::BluezAdapter() :
 GLib::DBusProxy("org.bluez", "/org/bluez/hci0", "org.bluez.Adapter1") { }
 
-juce::String BluezAdapter::getDeviceAddress()
+juce::String Bluetooth::BluezAdapter::getDeviceAddress()
 {
     return getProperty<juce::String>("Address");
 }
 
-juce::String BluezAdapter::getDeviceName()
+juce::String Bluetooth::BluezAdapter::getDeviceName()
 {
     return getProperty<juce::String>("Name");
 }
 
-juce::StringArray BluezAdapter::getUUIDs()
+juce::StringArray Bluetooth::BluezAdapter::getUUIDs()
 {
     return getProperty<juce::StringArray>("UUIDs");
 }
 
-bool BluezAdapter::isPowered()
+bool Bluetooth::BluezAdapter::isPowered()
 {
     return getProperty<bool>("Powered");
 }
 
-bool BluezAdapter::isDiscoverable()
+bool Bluetooth::BluezAdapter::isDiscoverable()
 {
     return getProperty<bool>("Discoverable");
 }
 
-bool BluezAdapter::isPairable()
+bool Bluetooth::BluezAdapter::isPairable()
 {
     return getProperty<bool>("Pairable");
 }
 
-void BluezAdapter::startDiscovery()
+void Bluetooth::BluezAdapter::startDiscovery()
 {
     callMethod("startDiscovery");
 }
 
-void BluezAdapter::stopDiscovery()
+void Bluetooth::BluezAdapter::stopDiscovery()
 {
     callMethod("stopDiscovery");
 }
 
-void BluezAdapter::setPowered(bool powered)
+void Bluetooth::BluezAdapter::setPowered(bool powered)
 {
     setProperty<bool>("Powered", powered);
 }
 
-void BluezAdapter::setDiscoverable(bool discoverable)
+void Bluetooth::BluezAdapter::setDiscoverable(bool discoverable)
 {
     setProperty<bool>("Discoverable", discoverable);
 }
 
-void BluezAdapter::setPairable(bool pairable)
+void Bluetooth::BluezAdapter::setPairable(bool pairable)
 {
     setProperty<bool>("Pairable", pairable);
 }
 
 #ifdef JUCE_DEBUG
 
-void BluezAdapter::printDebug()
+void Bluetooth::BluezAdapter::printDebug()
 {
     DBG("Bluetooth adapter " << getDeviceName());
     DBG("\taddress:" << getDeviceAddress());

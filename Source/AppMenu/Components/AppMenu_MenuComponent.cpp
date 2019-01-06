@@ -1,6 +1,6 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_MenuComponent.h"
-#include "TransitionAnimator.h"
+#include "Layout_Transition_Animator.h"
 #include "Utils.h"
 
 /*
@@ -122,7 +122,9 @@ void AppMenu::MenuComponent::updateMenuLayout
         }
         if(animate)
         {
-            TransitionAnimator::transformBounds(folder, newBounds,
+            Layout::Transition::Animator::transformBounds(
+                    folder,
+                    newBounds,
                     getAnimationDuration(), 
                     closingFolder && (i == openFolders.size() - 1));
         }

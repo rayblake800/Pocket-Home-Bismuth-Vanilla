@@ -1,12 +1,4 @@
 #pragma once
-
-#include "SwitchComponent.h"
-#include "DrawableImageComponent.h"
-#include "ScalingLabel.h"
-#include "Spinner.h"
-#include "BluetoothStatus.h"
-#include "FocusingListPage.h"
-
 /**
  * @file BluetoothSettingsPage.h
  * 
@@ -17,15 +9,23 @@
  * empty FocusingListPage.
  */
 
-class BluetoothSettingsPage :
-public FocusingListPage {
+#include "Bluetooth_Status.h"
+#include "FocusingListPage.h"
+#include "SwitchComponent.h"
+#include "DrawableImageComponent.h"
+#include "ScalingLabel.h"
+#include "Spinner.h"
+
+namespace Bluetooth { class SettingsPage; }
+
+class Bluetooth::SettingsPage : public FocusingListPage 
+{
 public:
+    SettingsPage() { }
     
-    BluetoothSettingsPage() { }
-    
-    ~BluetoothSettingsPage() { }
+    ~SettingsPage() { }
+
 private:
-    
     /**
      * Gets the total number of items that should be in the list.
      * 
@@ -44,8 +44,8 @@ private:
      *                
      * @param index   The index of a Bluetooth device in the list. 
      */
-    virtual void updateListItemLayout(LayoutManager::Layout& layout,
-            const unsigned int index) { }
+    virtual void updateListItemLayout(Layout::Group::RelativeLayout& layout,
+            const unsigned int index) override { }
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BluetoothSettingsPage)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsPage)
 };

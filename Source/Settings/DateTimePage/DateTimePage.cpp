@@ -1,6 +1,6 @@
 #include "DateTimePage.h"
-#include "Config/MainKeys.h"
-#include "Config/MainFile.h"
+#include "Config_MainKeys.h"
+#include "Config_MainFile.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "DateTimePage";
@@ -29,9 +29,8 @@ clockModeLabel("modeLabel", localeText(clockModeTextKey))
     setName("DateTimePage");
 #    endif
     setBackButton(PageComponent::leftBackButton);
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout(
+    using namespace Layout::Group;
+    RelativeLayout layout(
     {
         Row(30, { RowItem(&titleLabel, 20) }),
         Row(20,{

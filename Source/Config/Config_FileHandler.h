@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file FileHandler.h
+ * @file  Config_FileHandler.h
  *
  * @brief  Controls access to a FileResource object, managing all reading from 
  *         and writing to a single JSON configuration file.

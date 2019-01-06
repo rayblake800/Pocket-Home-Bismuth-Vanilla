@@ -1,19 +1,17 @@
 #include "ListEditor.h"
-#include "ComponentConfigFile.h"
+#include "Layout_Component_ConfigFile.h"
 
 ListEditor::ListEditor(juce::StringArray initialList) :
 listItems(initialList),
 listContainer("ListEditor", nullptr),
 addItemBtn("+")
 {
-    using namespace juce;
 #    if JUCE_DEBUG
     setName("ListEditor");
 #    endif
 
-    using Row = LayoutManager::Row;
-    using RowItem = LayoutManager::RowItem;
-    LayoutManager::Layout layout(
+    using namespace Layout::Group;
+    RelativeLayout layout(
     {
         Row(30, { RowItem(&listContainer) }),
         Row(10,
@@ -28,9 +26,9 @@ addItemBtn("+")
     layout.setYMarginFraction(0.02);
     layoutManager.setLayout(layout, this);
     
-    ComponentConfigFile config;
-    newItemField.setFont(Font(config.getFontHeight
-            (ComponentConfigFile::smallText)));
+    Layout::Component::ConfigFile config;
+    newItemField.setFont(juce::Font(config.getFontHeight
+            (Layout::Component::TextSize::smallText)));
 
     updateColours();
 
@@ -41,24 +39,24 @@ addItemBtn("+")
     addItemBtn.addListener(this);
 }
 
-/**
- * @return the number of rows in the list
+/*
+ * Gets the number of rows in the list.
  */
 int ListEditor::getNumRows()
 {
     return listItems.size();
 }
 
-/**
- * @return all list row strings.
+/*
+ * Gets all list row strings.
  */
 juce::StringArray ListEditor::getListItems() const
 {
     return listItems;
 }
 
-/**
- * Replace the existing item list entries with new ones.
+/*
+ * Replaces the existing item list entries with new ones.
  */
 void ListEditor::setListItems(juce::StringArray newItems)
 {
@@ -67,7 +65,7 @@ void ListEditor::setListItems(juce::StringArray newItems)
     repaint();
 }
 
-/**
+/*
  * Calls updateColours whenever component color values are changed. 
  */
 void ListEditor::colourChanged()
@@ -75,12 +73,14 @@ void ListEditor::colourChanged()
     updateColours();
 }
 
-/**
+/*
  * Sets the colors of child components to match ListEditor colors
  */
 void ListEditor::updateColours()
 {
-    using namespace juce;
+    using juce::TextButton;
+    using juce::ListBox;
+    using juce::ScrollBar;
     addItemBtn.setColour(TextButton::textColourOnId, findColour(textColourId));
     listContainer.setColour(ListBox::backgroundColourId,
             findColour(backgroundColourId));
@@ -93,7 +93,7 @@ void ListEditor::updateColours()
     scrollbar.setColour(ScrollBar::thumbColourId, findColour(textColourId));
 }
 
-/**
+/*
  * Receives notifications when ListItemComponent text is changed.
  */
 void ListEditor::labelTextChanged(juce::Label *source)
@@ -110,7 +110,7 @@ void ListEditor::labelTextChanged(juce::Label *source)
     listContainer.repaint();
 }
 
-/**
+/*
  * Clicking a listBoxItem selects it.
  */
 void ListEditor::listBoxItemClicked
@@ -119,35 +119,34 @@ void ListEditor::listBoxItemClicked
     listContainer.selectRow(row);
 }
 
-/**
+/*
  * Double clicking a listBoxItem makes it editable.
  */
 void ListEditor::listBoxItemDoubleClicked
 (int row, const juce::MouseEvent & mouseEvent)
 {
-    using namespace juce;
+    using juce::Label;
     Label * rowClicked =
             static_cast<Label*> (listContainer.getComponentForRowNumber(row));
     rowClicked->showEditor();
-    TextEditor * editor = rowClicked->getCurrentTextEditor();
+    juce::TextEditor * editor = rowClicked->getCurrentTextEditor();
     if (editor != nullptr)
     {
         editor->setBounds(rowClicked->getBounds());
     }
 }
 
-/**
+/*
  * Pressing the delete key removes the selected row.
  */
 void ListEditor::deleteKeyPressed(int lastRowSelected)
 {
     int selected = listContainer.getSelectedRow(0);
     removeRow(selected);
-
 }
 
-/**
- * Remove a string from the list and update the underlying ListBox
+/*
+ * Removes a string from the list and update the underlying ListBox.
  */
 void ListEditor::removeRow(int rowNumber)
 {
@@ -160,8 +159,7 @@ ListEditor::ListItemComponent::ListItemComponent
 (juce::String text, ListEditor * owner) : juce::Label(text),
 delBtn("cancel.svg")
 {
-    using namespace juce;
-    setJustificationType(Justification::left);
+    setJustificationType(juce::Justification::left);
     setButtonColour(owner->findColour(textColourId));
     addAndMakeVisible(delBtn);
     delBtn.addListener(owner);
@@ -169,18 +167,14 @@ delBtn("cancel.svg")
     setInterceptsMouseClicks(false, true);
 }
 
-/**
- * @param id  This should be set to String(rowIndex) by the
- *             ListEditor.
- */
 void ListEditor::ListItemComponent::setButtonComponentID(juce::String id)
 {
     delBtn.setComponentID(id);
 }
 
-/**
- * Sets button colour, used by the ListEditor to apply
- * its color scheme to all list items.
+/*
+ * Sets button colour, used by the ListEditor to apply its color scheme to all 
+ * list items.
  */
 void ListEditor::ListItemComponent::setButtonColour(juce::Colour colour)
 {
@@ -188,8 +182,8 @@ void ListEditor::ListItemComponent::setButtonColour(juce::Colour colour)
             findColour(textColourId));
 }
 
-/**
- * Update the font and delete button to fit new bounds.
+/*
+ * Updates the font and delete button to fit new bounds.
  */
 void ListEditor::ListItemComponent::resized()
 {
@@ -200,13 +194,14 @@ void ListEditor::ListItemComponent::resized()
             .reduced(2));
 }
 
-/**
+/*
  * Creates or recycles a list component to fit a list row.
  */
 juce::Component * ListEditor::refreshComponentForRow
 (int rowNumber, bool isRowSelected, juce::Component * existingComponent)
 {
-    using namespace juce;
+    using juce::String;
+    using juce::Label;
     ListItemComponent * rowLabel =
             static_cast<ListItemComponent*> (existingComponent);
     if (rowNumber >= getNumRows())
@@ -223,7 +218,7 @@ juce::Component * ListEditor::refreshComponentForRow
         rowLabel->addListener(this);
     }
     rowLabel->setText(listItems[rowNumber],
-            NotificationType::dontSendNotification);
+            juce::NotificationType::dontSendNotification);
     rowLabel->setColour(Label::textColourId, findColour(textColourId));
     rowLabel->setButtonComponentID(String(rowNumber));
     rowLabel->setButtonColour(findColour(textColourId));
@@ -238,15 +233,14 @@ juce::Component * ListEditor::refreshComponentForRow
     return rowLabel;
 }
 
-/**
+/*
  * Handles the add and delete item buttons.
  */
 void ListEditor::buttonClicked(juce::Button* buttonClicked)
 {
-    using namespace juce;
     if (buttonClicked == &addItemBtn)
     {
-        String newListItem = newItemField.getText();
+        juce::String newListItem = newItemField.getText();
         if (newListItem.isNotEmpty())
         {
             listItems.add(newListItem);
@@ -262,7 +256,7 @@ void ListEditor::buttonClicked(juce::Button* buttonClicked)
     }
 }
 
-/**
+/*
  * Re-applies the layout and adjusts list item height to fit the new
  * bounds.
  */

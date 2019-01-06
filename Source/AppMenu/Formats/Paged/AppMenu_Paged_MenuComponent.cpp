@@ -2,7 +2,7 @@
 #include "AppMenu_Paged_MenuComponent.h"
 #include "AppMenu_Paged_FolderComponent.h"
 #include "AppMenu_ConfigKeys.h"
-#include "ComponentConfigKeys.h"
+#include "Layout_Component_JSONKeys.h"
 
 /* Animation duration in milliseconds: */
 static const constexpr int animationMS = 300;
@@ -11,7 +11,7 @@ static const constexpr int animationMS = 300;
  * Creates the menu component and initializes the navigation buttons.
  */
 AppMenu::Paged::MenuComponent::MenuComponent() :
-    ConfigurableComponent(ComponentConfigKeys::pagedAppMenuKey), 
+    boundsManager(this, Layout::Component::JSONKeys::pagedAppMenu), 
     upButton(NavButton::WindowEdge::up),
     leftButton(NavButton::WindowEdge::left),
     rightButton(NavButton::WindowEdge::right)
@@ -118,7 +118,7 @@ AppMenu::Paged::MenuComponent::createFolderComponent(MenuItem folderItem) const
 void AppMenu::Paged::MenuComponent::parentResized
 (const juce::Rectangle<int> parentBounds)
 {
-    applyConfigBounds();
+    boundsManager.applyConfigBounds();
     upButton.applyConfigBounds();
     leftButton.applyConfigBounds();
     rightButton.applyConfigBounds();

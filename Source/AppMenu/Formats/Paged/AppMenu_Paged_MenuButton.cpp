@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_Paged_MenuButton.h"
 #include "AppMenu_MenuButton.h"
-#include "ComponentConfigFile.h"
+#include "Layout_Component_ConfigFile.h"
 
 /*
  * Creates a new MenuButton component for a menu item.
@@ -15,8 +15,9 @@ AppMenu::MenuButton(menuItem) { }
  */
 juce::Rectangle<float> AppMenu::Paged::MenuButton::findTitleBounds() const 
 {
-    ComponentConfigFile config;
-    const int textHeight = config.getFontHeight(ComponentConfigFile::smallText); 
+    using namespace Layout::Component;
+    ConfigFile config;
+    const int textHeight = config.getFontHeight(TextSize::smallText); 
     return getLocalBounds().withTop(getHeight() - textHeight).toFloat();
 }
 
@@ -26,8 +27,9 @@ juce::Rectangle<float> AppMenu::Paged::MenuButton::findTitleBounds() const
  */
 juce::Rectangle<float> AppMenu::Paged::MenuButton::findIconBounds() const 
 {
-    ComponentConfigFile config;
-    const int textHeight = config.getFontHeight(ComponentConfigFile::smallText); 
+    using namespace Layout::Component;
+    ConfigFile config;
+    const int textHeight = config.getFontHeight(TextSize::smallText); 
     return getLocalBounds().reduced(0, textHeight).toFloat();
 }
 

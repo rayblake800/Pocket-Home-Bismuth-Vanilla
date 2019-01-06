@@ -1,7 +1,8 @@
 #pragma once
 #include "IconSliderComponent.h"
 #include "SwitchComponent.h"
-#include "ConfigurableImageButton.h"
+#include "Theme_Image_Component.h"
+#include "Layout_Component_Manager.h"
 #include "PageComponent.h"
 #include "WindowFocusedTimer.h"
 #include "Wifi/Component/ControlWidget.h"
@@ -78,13 +79,19 @@ public:
 
     /* Turns wifi on or off, shows connection state, and opens the wifi page. */
     Wifi::ControlWidget wifiComponent;
+
     /* Turns bluetooth on or off, shows connection state, and opens the 
        bluetooth page. */
     //BluetoothSettingsComponent bluetoothComponent;
+
     /* Sets the display brightness */
     IconSliderComponent screenBrightnessSlider;
+
     /* Sets system volume levels */
     IconSliderComponent volumeSlider;
+
     /* Opens the settings list page */
-    ConfigurableImageButton settingsListBtn;
+    Theme::Image::Component<DrawableImageButton> settingsListBtn;
+    /* Sets the bounds of the settings list button: */
+    Layout::Component::Manager listButtonManager; 
 };
