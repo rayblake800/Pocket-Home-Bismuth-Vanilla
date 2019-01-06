@@ -1,9 +1,9 @@
 #pragma once
+#include "DesktopEntry_CallbackID.h"
 #include "SharedResource_Handler.h"
-#include "DesktopEntry/Types/CallbackID.h"
 
 /** 
- * @file  DesktopEntry/Loader.h
+ * @file  DesktopEntry_Loader.h
  *
  * @brief  Finds and caches all desktop entry file data.
  */

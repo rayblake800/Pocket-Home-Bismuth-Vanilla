@@ -10,7 +10,7 @@
  *         installed application located in the application menu.
  */
 
-#include "DesktopEntry/EntryFile.h"
+#include "DesktopEntry_EntryFile.h"
 #include "AppMenu_ItemData.h"
 #include "Locale/TextUser.h"
 

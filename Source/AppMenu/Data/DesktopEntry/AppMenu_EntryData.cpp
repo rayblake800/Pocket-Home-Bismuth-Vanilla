@@ -1,8 +1,8 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_EntryData.h"
-#include "DesktopEntry/Loader.h"
-#include "DesktopEntry/Exceptions/FormatError.h"
-#include "DesktopEntry/Exceptions/FileError.h"
+#include "DesktopEntry_Loader.h"
+#include "DesktopEntry_FormatError.h"
+#include "DesktopEntry_FileError.h"
 #include "Utils.h"
 
 /* Localized object class key: */

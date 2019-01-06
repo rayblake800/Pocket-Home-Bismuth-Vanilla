@@ -10,7 +10,7 @@
  *         the menu.
  */
 
-#include "DesktopEntry/UpdateListener.h"
+#include "DesktopEntry_UpdateListener.h"
 
 namespace AppMenu { class EntryUpdater; }
 

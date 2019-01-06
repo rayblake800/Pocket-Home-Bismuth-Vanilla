@@ -1,6 +1,6 @@
 #define DESKTOP_ENTRY_IMPLEMENTATION
 #include "JuceHeader.h"
-#include "DesktopEntry/EntryFile.h"
+#include "DesktopEntry_EntryFile.h"
 
 class EntryFileTest : public juce::UnitTest
 {

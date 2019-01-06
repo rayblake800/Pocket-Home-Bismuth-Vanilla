@@ -1,13 +1,15 @@
 #pragma once
-#include "JuceHeader.h"
-#include <map>
-
-/* 
+/** 
  * @file  DesktopEntry/EntryFile.h
  * 
  * @brief  Reads in standardized .desktop application shortcut files.
- *
- * Desktop entry files store all the information needed to create application
+ */
+
+#include "JuceHeader.h"
+#include <map>
+
+/** 
+ *  Desktop entry files store all the information needed to create application
  * shortcuts to display in menus.  Each EntryFile loads and shares the data from
  * one of these files, or collects the data needed to create a new desktop entry
  * file.

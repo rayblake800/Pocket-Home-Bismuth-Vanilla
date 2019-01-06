@@ -1,13 +1,13 @@
 #define DESKTOP_ENTRY_IMPLEMENTATION
+#include "DesktopEntry_Loader.h"
+#include "DesktopEntry_LoadingThread.h"
+#include "SharedResource_ThreadResource.h"
+#include "Locale/TextUser.h"
+#include "XDGDirectories.h"
+#include "Utils.h"
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>
-#include "Utils.h"
-#include "Locale/TextUser.h"
-#include "SharedResource_ThreadResource.h"
-#include "XDGDirectories.h"
-#include "DesktopEntry/LoadingThread.h"
-#include "DesktopEntry/Loader.h"
 
 
 DesktopEntry::Loader::Loader() : 

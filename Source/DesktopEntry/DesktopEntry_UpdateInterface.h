@@ -1,12 +1,15 @@
 #pragma once
-#include "DesktopEntry/Implementation.h"
-
 /**
- * @file DesktopEntry/UpdateInterface
+ * @file DesktopEntry_UpdateInterface
  *
  * @brief  Defines the interface used by the DesktopEntry::LoadingThread to send
  *         updates to DesktopEntry::UpdateListener objects.
  */
+
+#include "JuceHeader.h"
+
+namespace DesktopEntry { class UpdateInterface; }
+
 class DesktopEntry::UpdateInterface
 {
 public:

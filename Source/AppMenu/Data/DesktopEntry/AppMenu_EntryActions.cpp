@@ -2,7 +2,7 @@
 #include "AppMenu_EntryActions.h"
 #include "AppMenu_EntryData.h"
 #include "AppMenu_MenuItem.h"
-#include "DesktopEntry/EntryFile.h"
+#include "DesktopEntry_EntryFile.h"
 
 /*
  * Recursively applies a function to a menu folder and all its subfolders.

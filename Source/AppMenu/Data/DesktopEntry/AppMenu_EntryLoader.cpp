@@ -4,7 +4,7 @@
 #include "AppMenu_EntryActions.h"
 #include "AppMenu_MenuFile.h"
 #include "AppMenu_MenuItem.h"
-#include "DesktopEntry/Loader.h"
+#include "DesktopEntry_Loader.h"
 
 /*
  * Cancels any pending DesktopEntry::Loader callbacks the loader created.

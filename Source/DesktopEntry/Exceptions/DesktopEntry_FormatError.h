@@ -3,7 +3,7 @@
 #include "JuceHeader.h"
 
 /**
- * @file  DesktopEntry/FormatError.h
+ * @file  DesktopEntry_FormatError.h
  *
  * @brief  Signals that an attempt was made to add invalid data to a
  *         DesktopEntry object.

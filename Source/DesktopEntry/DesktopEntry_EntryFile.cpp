@@ -1,13 +1,13 @@
 #define DESKTOP_ENTRY_IMPLEMENTATION
-#include "DesktopEntry/EntryFile.h"
+#include "DesktopEntry_EntryFile.h"
+#include "DesktopEntry_FileError.h"
+#include "DesktopEntry_FormatError.h"
+#include "DesktopEntry_FileUtils.h"
 #include "Locale.h"
 #include "Utils.h"
 #include "XDGDirectories.h"
 #include "Config_MainFile.h"
 #include "Config_MainKeys.h"
-#include "DesktopEntry/Exceptions/FileError.h"
-#include "DesktopEntry/Exceptions/FormatError.h"
-#include "DesktopEntry/FileUtils.h"
 
 /* Directory where desktop entries are stored within $XDG_DATA_DIRS */
 static const juce::String entryDirectory = "/applications/";

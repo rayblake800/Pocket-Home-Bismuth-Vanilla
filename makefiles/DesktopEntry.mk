@@ -29,15 +29,15 @@ desktopEntry : $(OBJECTS_DESKTOP_ENTRY)
 	@echo "Built DesktopEntry module"
 
 $(DESKTOP_ENTRY_PREFIX)FileUtils.o: \
-    $(DESKTOP_ENTRY_ROOT)/FileUtils.cpp
+    $(DESKTOP_ENTRY_ROOT)/DesktopEntry_FileUtils.cpp
 $(DESKTOP_ENTRY_PREFIX)EntryFile.o: \
-	$(DESKTOP_ENTRY_ROOT)/EntryFile.cpp
+	$(DESKTOP_ENTRY_ROOT)/DesktopEntry_EntryFile.cpp
 $(DESKTOP_ENTRY_PREFIX)LoadingThread.o: \
-	$(DESKTOP_ENTRY_ROOT)/LoadingThread.cpp
+	$(DESKTOP_ENTRY_ROOT)/DesktopEntry_LoadingThread.cpp
 $(DESKTOP_ENTRY_PREFIX)UpdateListener.o : \
-	$(DESKTOP_ENTRY_ROOT)/UpdateListener.cpp
+	$(DESKTOP_ENTRY_ROOT)/DesktopEntry_UpdateListener.cpp
 $(DESKTOP_ENTRY_PREFIX)Loader.o: \
-	$(DESKTOP_ENTRY_ROOT)/Loader.cpp
+	$(DESKTOP_ENTRY_ROOT)/DesktopEntry_Loader.cpp
 
 # Tests:
 $(DESKTOP_ENTRY_PREFIX)Test_FileUtils.o: \

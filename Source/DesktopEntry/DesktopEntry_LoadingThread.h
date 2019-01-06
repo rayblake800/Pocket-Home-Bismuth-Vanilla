@@ -1,19 +1,20 @@
 #ifndef DESKTOP_ENTRY_IMPLEMENTATION
   #error File included outside of DesktopEntry implementation.
 #endif
-
 #pragma once
-#include "SharedResource_ThreadResource.h"
-#include "DesktopEntry/EntryFile.h"
-#include "DesktopEntry/Types/CallbackID.h"
-#include <map>
-
 /**
  * @file  DesktopEntry/LoadingThread.h
  *
  * @brief  Loads, caches, and updates desktop entry data.
- *
- * The desktop entry standard defines a set of directories that may contain 
+ */
+
+#include "SharedResource_ThreadResource.h"
+#include "DesktopEntry_EntryFile.h"
+#include "DesktopEntry_CallbackID.h"
+#include <map>
+
+/**
+ *  The desktop entry standard defines a set of directories that may contain 
  * desktop files, along with the order that they should be searched.  Each
  * desktop entry has a desktop file ID based on its filename and path within
  * its desktop entry directory.  When multiple entry files exist with the same 

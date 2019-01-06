@@ -4,7 +4,7 @@
 #include "AppMenu_EntryActions.h"
 #include "AppMenu_MenuItem.h"
 #include "AppMenu_MenuFile.h"
-#include "DesktopEntry/Loader.h"
+#include "DesktopEntry_Loader.h"
 
 /**
  * @brief  Loads a list of DesktopEntry::EntryFile objects from their desktop

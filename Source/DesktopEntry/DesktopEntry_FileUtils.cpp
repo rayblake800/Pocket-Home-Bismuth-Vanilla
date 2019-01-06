@@ -1,7 +1,7 @@
 #define DESKTOP_ENTRY_IMPLEMENTATION
-#include "DesktopEntry/FileUtils.h"
-#include "DesktopEntry/Exceptions/FormatError.h"
-#include "DesktopEntry/Exceptions/FileError.h"
+#include "DesktopEntry_FileUtils.h"
+#include "DesktopEntry_FormatError.h"
+#include "DesktopEntry_FileError.h"
 #include <map>
 #include <set>
 

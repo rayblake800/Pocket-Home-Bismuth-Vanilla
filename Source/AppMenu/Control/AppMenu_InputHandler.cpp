@@ -1,7 +1,7 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_InputHandler.h"
 #include "AppMenu_MenuFile.h"
-#include "DesktopEntry/Loader.h"
+#include "DesktopEntry_Loader.h"
 #include <map>
 
 /*

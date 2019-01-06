@@ -1,6 +1,6 @@
 #define DESKTOP_ENTRY_IMPLEMENTATION
-#include "DesktopEntry/UpdateListener.h"
-#include "DesktopEntry/LoadingThread.h"
+#include "DesktopEntry_UpdateListener.h"
+#include "DesktopEntry_LoadingThread.h"
 
 DesktopEntry::UpdateListener::UpdateListener() : 
     SharedResource::Handler<LoadingThread>() { }

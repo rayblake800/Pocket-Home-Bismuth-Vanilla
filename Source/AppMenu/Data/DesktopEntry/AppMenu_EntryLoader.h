@@ -8,7 +8,7 @@
  * @brief  Finds and adds desktop entry menu items to menu folders.
  */
 
-#include "DesktopEntry/Types/CallbackID.h"
+#include "DesktopEntry_CallbackID.h"
 
 namespace AppMenu { class EntryLoader; }
 namespace AppMenu { class MenuItem; }

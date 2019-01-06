@@ -3,7 +3,7 @@
 #include <exception>
 
 /**
- * @file  DesktopEntry/FileError.h
+ * @file  DesktopEntry_FileError.h
  *
  * @brief  Signals that a desktop entry file is invalid.
  */

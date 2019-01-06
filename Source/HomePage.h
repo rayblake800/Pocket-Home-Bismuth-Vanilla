@@ -1,6 +1,12 @@
 #pragma once
+/**
+ * @file  HomePage.h
+ * 
+ * @brief  The application's main Page Component.
+ */
+
 #include "OverlaySpinner.h"
-#include "DesktopEntry/Loader.h"
+#include "DesktopEntry_Loader.h"
 #include "Icon/IconLoader.h"
 #include "PageComponent.h"
 #include "Config_MainListener.h"
@@ -14,10 +20,6 @@
 #include "AppMenu/AppMenu.h"
 
 /**
- * @file  HomePage.h
- * 
- * @brief  The application's main Page Component.
- *
  *  HomePage displays the application menu, time, battery percentage, and Wifi
  * connection state. HomePage also provides navigation buttons used to access 
  * the power and settings pages.

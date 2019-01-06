@@ -1,15 +1,15 @@
 #ifndef DESKTOP_ENTRY_IMPLEMENTATION
   #error File included outside of DesktopEntry implementation.
 #endif
-
 #pragma once
-#include "JuceHeader.h"
-
 /**
- * @file  DesktopEntry/FileUtils.h
+ * @file  DesktopEntry_FileUtils.h
  *
  * @brief  Helps DesktopEntry validate, process, and create desktop entry data.
  */
+
+#include "JuceHeader.h"
+
 namespace DesktopEntry
 {
     namespace FileUtils
