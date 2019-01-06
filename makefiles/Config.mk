@@ -28,17 +28,17 @@ config : $(OBJECTS_CONFIG)
 	@echo "Built Config module"
 
 $(CONFIG_PREFIX)FileResource.o: \
-    $(CONFIG_ROOT)/FileResource.cpp
+    $(CONFIG_ROOT)/Config_FileResource.cpp
 $(CONFIG_PREFIX)DataKey.o: \
-    $(CONFIG_ROOT)/DataKey.cpp
+    $(CONFIG_ROOT)/Config_DataKey.cpp
 $(CONFIG_PREFIX)AlertWindow.o: \
-    $(CONFIG_ROOT)/Implementation/AlertWindow.cpp
+    $(CONFIG_ROOT)/Implementation/Config_AlertWindow.cpp
 $(CONFIG_PREFIX)MainResource.o: \
-    $(CONFIG_ROOT)/Implementation/MainResource.cpp
+    $(CONFIG_ROOT)/Implementation/Config_MainResource.cpp
 $(CONFIG_PREFIX)MainFile.o: \
-    $(CONFIG_ROOT)/MainFile.cpp
+    $(CONFIG_ROOT)/Config_MainFile.cpp
 $(CONFIG_PREFIX)MainListener.o: \
-    $(CONFIG_ROOT)/MainListener.cpp
+    $(CONFIG_ROOT)/Config_MainListener.cpp
 
 # Tests:
 $(CONFIG_PREFIX)Test_FileResource.o: \

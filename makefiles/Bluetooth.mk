@@ -23,12 +23,12 @@ bluetooth : $(OBJECTS_BLUETOOTH)
 	@echo "Built Bluetooth module"
 
 $(BLUETOOTH_PREFIX)BluezAdapter.o : \
-    $(BLUETOOTH_ROOT)/BluezAdapter.cpp
+    $(BLUETOOTH_ROOT)/Bluetooth_BluezAdapter.cpp
 $(BLUETOOTH_PREFIX)Status.o : \
-    $(BLUETOOTH_ROOT)/BluetoothStatus.cpp
+    $(BLUETOOTH_ROOT)/Bluetooth_Status.cpp
 $(BLUETOOTH_PREFIX)Device.o : \
-    $(BLUETOOTH_ROOT)/BluetoothDevice.cpp
+    $(BLUETOOTH_ROOT)/Bluetooth_Device.cpp
 $(BLUETOOTH_PREFIX)SettingsComponent.o : \
-    $(BLUETOOTH_ROOT)/BluetoothSettingsComponent.cpp
+    $(BLUETOOTH_ROOT)/Bluetooth_SettingsComponent.cpp
 $(BLUETOOTH_PREFIX)SettingsPage.o : \
-    $(BLUETOOTH_ROOT)/BluetoothSettingsPage.cpp
+    $(BLUETOOTH_ROOT)/Bluetooth_SettingsPage.cpp
