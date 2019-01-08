@@ -97,7 +97,7 @@ sub readFiles
             my $changesMade = 0;
             my $outText = "";
             my $input = "";
-            while($text =~ /(.*)(^.*?)($toFind)(.*?$)(.*)/ms)
+            while($text =~ /(.*?)(^.*?)($toFind)(.*?$)(.*)/ms)
             {
                 print("Found line:\n");
                 print($2);
