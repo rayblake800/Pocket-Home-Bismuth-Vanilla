@@ -1,8 +1,8 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi/Component/SettingsPage.h"
-#include "Wifi/Connection/RecordReader.h"
-#include "Wifi/Connection/Event.h"
-#include "Wifi/Connection/Controller.h"
+#include "Wifi_Connection_RecordReader.h"
+#include "Wifi_Connection_Event.h"
+#include "Wifi_Connection_Controller.h"
 #include "Wifi_APList_Reader.h"
 #include "Layout_Component_ConfigFile.h"
 #include "LibNM/Data/SecurityType.h"

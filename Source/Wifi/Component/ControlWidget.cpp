@@ -1,10 +1,10 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi/Component/ControlWidget.h"
-#include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi_AP_AccessPoint.h"
 #include "Wifi/Device/DeviceViewer.h"
 #include "Wifi/Device/Controller.h"
-#include "Wifi/Connection/RecordReader.h"
-#include "Wifi/Connection/Event.h"
+#include "Wifi_Connection_RecordReader.h"
+#include "Wifi_Connection_Event.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "Wifi::ControlWidget";

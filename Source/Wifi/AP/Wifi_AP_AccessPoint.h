@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Wifi/SavedState/AccessPoint
+ * @file  Wifi_AP_AccessPoint.h
  *
  * @brief  Holds shared data describing a wifi access point.
  */
@@ -9,7 +9,7 @@
   #define WIFI_IMPLEMENTATION
   #define WIFI_TEMP
 #endif
-#include "Wifi/AccessPoint/APData.h"
+#include "Wifi_AP_Data.h"
 
 #ifdef WIFI_TEMP
   #undef WIFI_IMPLEMENTATION

@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/AccessPoint/APData.h"
+#include "Wifi_AP_Data.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/Data/SecurityType.h"

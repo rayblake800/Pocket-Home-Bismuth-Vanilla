@@ -8,7 +8,7 @@
 
 #include "Settings/QuickSettingsPage/ConnectionSettingsComponent.h"
 #include "Wifi/Device/DeviceListener.h"
-#include "Wifi/Connection/Listener.h"
+#include "Wifi_Connection_Listener.h"
 #include "Locale/TextUser.h"
 
 namespace Wifi { class ControlWidget; }

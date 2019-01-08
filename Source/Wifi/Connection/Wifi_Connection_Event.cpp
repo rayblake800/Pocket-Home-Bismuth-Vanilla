@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/Connection/Event.h"
+#include "Wifi_Connection_Event.h"
 
 namespace WifiConnect = Wifi::Connection;
 

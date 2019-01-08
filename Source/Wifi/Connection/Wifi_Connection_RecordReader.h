@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file Wifi/Connection/RecordReader.h
+ * @file Wifi_Connection_RecordReader.h
  *
  * @brief  Reads Wifi connection events saved in the Connection::RecordResource.
  */

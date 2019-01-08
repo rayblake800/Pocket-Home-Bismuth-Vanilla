@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Wifi/Connection/Controller.h
+ * @file  Wifi_Connection_Controller.h
  *
  * @brief  Updates, adds, and removes both current and saved Wifi connections.
  */

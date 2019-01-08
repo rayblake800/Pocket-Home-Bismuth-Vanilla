@@ -7,9 +7,9 @@
  */
 
 #include "FocusingListPage.h"
-#include "Wifi/AccessPoint/SignalStrengthListener.h"
+#include "Wifi_AP_StrengthListener.h"
 #include "Wifi_APList_Listener.h"
-#include "Wifi/Connection/Listener.h"
+#include "Wifi_Connection_Listener.h"
 #include "Locale/TextUser.h"
 #include "Spinner.h"
 #include "ScalingLabel.h"

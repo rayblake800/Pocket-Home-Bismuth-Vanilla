@@ -1,7 +1,7 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/Connection/Listener.h"
-#include "Wifi/Connection/RecordResource.h"
-#include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi_Connection_Listener.h"
+#include "Wifi_Connection_RecordResource.h"
+#include "Wifi_AP_AccessPoint.h"
 
 namespace WifiConnect = Wifi::Connection;
 

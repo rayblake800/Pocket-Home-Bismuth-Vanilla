@@ -3,8 +3,8 @@
 #include "Theme_Image_Component.h"
 #include "Theme_Image_JSONKeys.h"
 #include "DrawableImageComponent.h"
-#include "Wifi/AccessPoint/AccessPoint.h"
-#include "Wifi/Connection/RecordReader.h"
+#include "Wifi_AP_AccessPoint.h"
+#include "Wifi_Connection_RecordReader.h"
 #include "Wifi/Device/DeviceViewer.h"
 
 Wifi::StatusIcon::StatusIcon() :

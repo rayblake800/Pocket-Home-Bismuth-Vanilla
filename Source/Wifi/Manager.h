@@ -9,7 +9,7 @@
 #include "WindowFocus/WindowFocus.h"
 #include "LibNM/ThreadHandler.h"
 #include "Wifi_APList_Reader.h"
-#include "Wifi/Connection/RecordReader.h"
+#include "Wifi_Connection_RecordReader.h"
 
 #ifndef WIFI_IMPLEMENTATION
   #define WIFI_MANAGER_TEMP

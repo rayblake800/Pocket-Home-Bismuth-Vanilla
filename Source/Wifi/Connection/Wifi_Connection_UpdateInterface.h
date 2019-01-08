@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Wifi/Connection/UpdateInterface.h
+ * @file  Wifi_Connection_UpdateInterface.h
  *
  * @brief  The interface used by the Wifi::Connection::RecordResource instance
  *         to notify all Wifi::Connection::Listener objects of new Wifi network 

@@ -3,7 +3,7 @@
 #endif
 #pragma once
 /**
- * @file Wifi/Connection/RecordResource.h
+ * @file Wifi_Connection_RecordResource.h
  *
  * @brief  Tracks all major Wifi connection events.
  */

@@ -14,7 +14,7 @@
 
 #include "SharedResource_Handler.h"
 #include "Wifi_APList_Writer.h"
-#include "Wifi/Connection/RecordWriter.h"
+#include "Wifi_Connection_RecordWriter.h"
 #include "Wifi/NMSignalHandlers/APSignalHandler.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 

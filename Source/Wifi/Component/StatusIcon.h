@@ -8,8 +8,8 @@
 #include "Theme_Image_Component.h"
 #include "DrawableImageComponent.h"
 #include "Wifi/Device/DeviceListener.h"
-#include "Wifi/AccessPoint/SignalStrengthListener.h"
-#include "Wifi/Connection/Listener.h"
+#include "Wifi_AP_StrengthListener.h"
+#include "Wifi_Connection_Listener.h"
 
 namespace Wifi { class StatusIcon; }
 

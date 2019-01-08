@@ -1,12 +1,12 @@
 #pragma once
 /**
- * @file  Wifi/Connection/Listener.h
+ * @file  Wifi_Connection_Listener.h
  *
  * @brief  Receives notifications whenever the Wifi network connection's state
  *         changes.
  */
 
-#include "Wifi/Connection/UpdateInterface.h"
+#include "Wifi_Connection_UpdateInterface.h"
 #include "SharedResource_Handler.h"
 
 namespace Wifi { namespace Connection { class Listener; } }

@@ -3,7 +3,7 @@
 #endif
 #pragma once
 /**
- * @file  Wifi/Connection/RecordWriter.h
+ * @file  Wifi_Connection_RecordWriter.h
  *
  * @brief  Updates the RecordResource's Wifi event records.
  */

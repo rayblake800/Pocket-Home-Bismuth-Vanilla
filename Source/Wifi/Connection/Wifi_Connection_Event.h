@@ -1,11 +1,11 @@
 #pragma once
 /**
- * @file  Wifi/ConnectionHistory/ConnectionEvent.h
+ * @file  Wifi_Connection_Event.h
  *
  * @brief  Stores the wifi access point, time, and type of a Wifi connection
  *         event.
  */
-#include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi_AP_AccessPoint.h"
 
 namespace Wifi { namespace Connection { class Event; } }
 namespace Wifi { namespace Connection { enum class EventType; } }
@@ -13,11 +13,11 @@ namespace Wifi { namespace Connection { enum class EventType; } }
 namespace WifiConnect = Wifi::Connection;
 
 /**
- * @brief  All types of event tracked using ConnectionEvent.
+ * @brief  All types of event tracked using Connection::Event.
  */
 enum class Wifi::Connection::EventType
 {
-    /* A new connection was requested through the Wifi::ConnectionManager. */
+    /* A new connection was requested. */
     connectionRequested,
     /* NetworkManager is attempting to open a connection. */ 
     startedConnecting,

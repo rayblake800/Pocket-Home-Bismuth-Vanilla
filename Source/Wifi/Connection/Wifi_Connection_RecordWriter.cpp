@@ -1,8 +1,8 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/Connection/RecordWriter.h"
-#include "Wifi/Connection/RecordResource.h"
-#include "Wifi/Connection/Event.h"
-#include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi_Connection_RecordWriter.h"
+#include "Wifi_Connection_RecordResource.h"
+#include "Wifi_Connection_Event.h"
+#include "Wifi_AP_AccessPoint.h"
 
 WifiConnect::RecordWriter::RecordWriter() { }
 

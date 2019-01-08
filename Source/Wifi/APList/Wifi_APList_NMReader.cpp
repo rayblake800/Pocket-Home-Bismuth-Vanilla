@@ -1,7 +1,7 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_APList_NMReader.h"
 #include "Wifi_APList_ListResource.h"
-#include "Wifi/AccessPoint/AccessPoint.h"
+#include "Wifi_AP_AccessPoint.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 
 Wifi::APList::NMReader::NMReader() { }

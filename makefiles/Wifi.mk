@@ -4,11 +4,12 @@ WIFI_PREFIX := $(JUCE_OBJDIR)/Wifi_
 WIFI_ROOT = Source/Wifi
 WIFI_TEST_ROOT = Tests/Wifi
 
-WIFI_AP_ROOT := $(WIFI_ROOT)/AccessPoint
+WIFI_AP_ROOT := $(WIFI_ROOT)/AP
+WIFI_AP_PREFIX := $(WIFI_PREFIX)AP_
 OBJECTS_WIFI_ACCESS_POINT := \
-  $(WIFI_PREFIX)APData.o \
-  $(WIFI_PREFIX)AccessPoint.o \
-  $(WIFI_PREFIX)SignalStrengthListener.o
+  $(WIFI_AP_PREFIX)Data.o \
+  $(WIFI_AP_PREFIX)AccessPoint.o \
+  $(WIFI_AP_PREFIX)StrengthListener.o
 
 WIFI_AP_LIST_ROOT := $(WIFI_ROOT)/APList
 WIFI_AP_LIST_PREFIX := $(WIFI_PREFIX)APList_
@@ -75,12 +76,12 @@ wifi : $(OBJECTS_WIFI)
 $(WIFI_PREFIX)Manager.o : \
     $(WIFI_ROOT)/Manager.cpp
 
-$(WIFI_PREFIX)APData.o : \
-    $(WIFI_AP_ROOT)/APData.cpp
-$(WIFI_PREFIX)AccessPoint.o : \
-    $(WIFI_AP_ROOT)/AccessPoint.cpp
-$(WIFI_PREFIX)SignalStrengthListener.o : \
-    $(WIFI_AP_ROOT)/SignalStrengthListener.cpp
+$(WIFI_AP_PREFIX)Data.o : \
+    $(WIFI_AP_ROOT)/Wifi_AP_Data.cpp
+$(WIFI_AP_PREFIX)AccessPoint.o : \
+    $(WIFI_AP_ROOT)/Wifi_AP_AccessPoint.cpp
+$(WIFI_AP_PREFIX)StrengthListener.o : \
+    $(WIFI_AP_ROOT)/Wifi_AP_StrengthListener.cpp
 
 $(WIFI_AP_LIST_PREFIX)ListResource.o : \
     $(WIFI_AP_LIST_ROOT)/Wifi_APList_ListResource.cpp
@@ -94,17 +95,17 @@ $(WIFI_AP_LIST_PREFIX)Writer.o : \
     $(WIFI_AP_LIST_ROOT)/Wifi_APList_Writer.cpp
 
 $(WIFI_CONNECTION_PREFIX)Controller.o : \
-    $(WIFI_CONNECTION_ROOT)/Controller.cpp
+    $(WIFI_CONNECTION_ROOT)/Wifi_Connection_Controller.cpp
 $(WIFI_CONNECTION_PREFIX)Event.o : \
-    $(WIFI_CONNECTION_ROOT)/Event.cpp
+    $(WIFI_CONNECTION_ROOT)/Wifi_Connection_Event.cpp
 $(WIFI_CONNECTION_PREFIX)RecordResource.o : \
-    $(WIFI_CONNECTION_ROOT)/RecordResource.cpp
+    $(WIFI_CONNECTION_ROOT)/Wifi_Connection_RecordResource.cpp
 $(WIFI_CONNECTION_PREFIX)RecordReader.o : \
-    $(WIFI_CONNECTION_ROOT)/RecordReader.cpp
+    $(WIFI_CONNECTION_ROOT)/Wifi_Connection_RecordReader.cpp
 $(WIFI_CONNECTION_PREFIX)RecordWriter.o : \
-    $(WIFI_CONNECTION_ROOT)/RecordWriter.cpp
+    $(WIFI_CONNECTION_ROOT)/Wifi_Connection_RecordWriter.cpp
 $(WIFI_CONNECTION_PREFIX)Listener.o : \
-    $(WIFI_CONNECTION_ROOT)/Listener.cpp
+    $(WIFI_CONNECTION_ROOT)/Wifi_Connection_Listener.cpp
 
 $(WIFI_DEVICE_PREFIX)Controller.o : \
     $(WIFI_DEVICE_ROOT)/Controller.cpp
