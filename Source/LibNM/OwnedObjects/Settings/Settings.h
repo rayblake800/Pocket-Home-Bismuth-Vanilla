@@ -6,7 +6,7 @@
  *         LibNM::Connection.
  */
 
-#include "GLib/Owned/Owned_Object.h"
+#include "GLib_Owned_Object.h"
 #include <nm-connection.h>
 
 namespace LibNM { class Settings; }

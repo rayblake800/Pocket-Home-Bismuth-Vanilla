@@ -1,7 +1,7 @@
 #include "LibNM/OwnedObjects/Settings/WifiSecuritySettings.h"
 #include "LibNM/Data/SecurityType.h"
 #include "LibNM/ContextTest.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
+#include "GLib_ObjectPtr.h"
 
 /* Relevant key management setting strings: */
 static const constexpr char* unsecuredTypeKey     = "none";

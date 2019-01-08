@@ -1,6 +1,6 @@
 #include "LibNM/OwnedObjects/Settings/ConnectionSettings.h"
 #include "LibNM/ContextTest.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
+#include "GLib_ObjectPtr.h"
 
 /*
  * Creates a ConnectionSettings object that shares data with another

@@ -5,8 +5,8 @@
  * @brief A C++ interface for NMAccessPoint objects owned by LibNM.
  */
 
-#include "GLib/Borrowed/Borrowed_Object.h"
-#include "GLib/SignalHandler.h"
+#include "GLib_Borrowed_Object.h"
+#include "GLib_SignalHandler.h"
 #include <nm-access-point.h>
 
 namespace LibNM { class AccessPoint; }

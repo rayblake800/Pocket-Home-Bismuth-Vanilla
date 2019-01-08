@@ -10,12 +10,12 @@
  *         device objects within the event loop.
  */
 
-#include "GLib/Thread/ThreadResource.h"
+#include "GLib_ThreadResource.h"
 #include "LibNM/OwnedObjects/Client.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/BorrowedObjects/ActiveConnection.h"
-#include "GLib/Borrowed/ObjectLender.h"
+#include "GLib_Borrowed_ObjectLender.h"
 
 namespace LibNM { class ThreadResource; }
 

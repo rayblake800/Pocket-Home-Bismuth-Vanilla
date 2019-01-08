@@ -1,6 +1,6 @@
 #define DESKTOP_ENTRY_IMPLEMENTATION
 #include "JuceHeader.h"
-#include "DesktopEntry/FileUtils.h"
+#include "DesktopEntry_FileUtils.h"
 
 class FileUtilsTest : public juce::UnitTest
 {

@@ -6,7 +6,7 @@
  *        objects.
  */
 
-#include "GLib/Borrowed/Borrowed_Object.h"
+#include "GLib_Borrowed_Object.h"
 #include <nm-active-connection.h>
 
 namespace LibNM { class ActiveConnection; }

@@ -5,8 +5,8 @@
  * @brief  A RAII container and C++ interface for the LibNM NMClient class.
  */
 
-#include "GLib/Owned/Owned_Object.h"
-#include "GLib/SignalHandler.h"
+#include "GLib_Owned_Object.h"
+#include "GLib_SignalHandler.h"
 #include <nm-client.h>
 
 namespace LibNM { class Client; }

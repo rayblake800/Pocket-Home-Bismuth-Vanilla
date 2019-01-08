@@ -5,7 +5,7 @@
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/Data/SSID.h"
 #include "LibNM/ContextTest.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
+#include "GLib_ObjectPtr.h"
 
 /*
  * Creates a Connection sharing a GObject with an existing Connection.

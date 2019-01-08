@@ -1,4 +1,4 @@
-#include "ThreadResource.h"
+#include "SharedResource_ThreadResource.h"
 
 /* Number of milliseconds to wait before forcibly terminating the thread: */
 static const constexpr int timeoutMilliseconds = 1000;

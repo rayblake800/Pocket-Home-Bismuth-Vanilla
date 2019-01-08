@@ -2,7 +2,7 @@
 #include "DesktopEntry_LoadingThread.h"
 #include "DesktopEntry_FileError.h"
 #include "DesktopEntry_FormatError.h"
-#include "DesktopEntry/UpdateInterface.h"
+#include "DesktopEntry_UpdateInterface.h"
 #include "Util/Files/XDGDirectories.h"
 
 /* SharedResource object class key */ 

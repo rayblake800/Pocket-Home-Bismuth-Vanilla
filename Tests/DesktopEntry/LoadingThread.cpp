@@ -1,6 +1,6 @@
 #define DESKTOP_ENTRY_IMPLEMENTATION
 #include "JuceHeader.h"
-#include "DesktopEntry/LoadingThread.h"
+#include "DesktopEntry_LoadingThread.h"
 
 class LoadingThreadTest : public juce::UnitTest
 {

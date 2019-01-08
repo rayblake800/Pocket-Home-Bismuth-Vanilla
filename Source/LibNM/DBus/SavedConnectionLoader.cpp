@@ -107,7 +107,7 @@ LibNM::SavedConnectionLoader::findConnectionsForAP
 inline juce::StringArray 
 LibNM::SavedConnectionLoader::getConnectionPaths() const
 {
-    using namespace VariantConverter;
+    using namespace GLib::VariantConverter;
     using juce::StringArray;
     GVariant* conArrayVar = callMethod(listConnectionMethod);
     if(conArrayVar != nullptr)

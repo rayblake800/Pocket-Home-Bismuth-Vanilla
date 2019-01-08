@@ -5,7 +5,7 @@
  * @brief  Controls a NetworkManager saved connection object over DBus.
  */
 
-#include "GLib/DBus/DBusProxy.h"
+#include "GLib_DBusProxy.h"
 #include "LibNM/OwnedObjects/Connection.h"
 #include "JuceHeader.h"
 

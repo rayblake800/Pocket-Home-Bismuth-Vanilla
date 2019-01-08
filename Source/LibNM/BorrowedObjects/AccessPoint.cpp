@@ -5,7 +5,7 @@
 #include "LibNM/Data/SecurityType.h"
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/ContextTest.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
+#include "GLib_ObjectPtr.h"
 #include <nm-utils.h>
 
 /*

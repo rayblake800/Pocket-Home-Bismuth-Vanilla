@@ -5,7 +5,7 @@
  * @brief Connects to NetworkManager to read saved network connections.
  */
 
-#include "GLib/DBus/DBusProxy.h"
+#include "GLib_DBusProxy.h"
 #include "LibNM/DBus/SavedConnection.h"
 
 namespace LibNM { class SavedConnectionLoader; }

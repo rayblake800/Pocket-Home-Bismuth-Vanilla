@@ -5,8 +5,8 @@
  * @brief A C++ interface for LibNM NMDeviceWifi objects.
  */
 
-#include "GLib/Borrowed/Borrowed_Object.h"
-#include "GLib/SignalHandler.h"
+#include "GLib_Borrowed_Object.h"
+#include "GLib_SignalHandler.h"
 #include <nm-device-wifi.h>
 
 namespace LibNM { class DeviceWifi; }

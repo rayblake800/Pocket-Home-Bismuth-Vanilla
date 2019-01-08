@@ -1,5 +1,5 @@
 #include "JuceHeader.h"
-#include "GLib/DBus/Variant/TypeHelper.h"
+#include "GLib_TypeHelper.h"
 
 class TypeHelperTest : public juce::UnitTest
 {

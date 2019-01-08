@@ -67,45 +67,45 @@ glib : $(OBJECTS_GLIB)
 	@echo "Built GLib module"
 
 $(GLIB_PREFIX)Object.o : \
-    $(GLIB_ROOT)/Object.cpp
+    $(GLIB_ROOT)/GLib_Object.cpp
 $(GLIB_PREFIX)WeakRef.o : \
-    $(GLIB_ROOT)/WeakRef.cpp
+    $(GLIB_ROOT)/GLib_WeakRef.cpp
 $(GLIB_PREFIX)SignalHandler.o : \
-    $(GLIB_ROOT)/SignalHandler.cpp
+    $(GLIB_ROOT)/GLib_SignalHandler.cpp
 
 $(GLIB_PREFIX)Owned_Object.o : \
-    $(GLIB_OWNED_ROOT)/Owned_Object.cpp
+    $(GLIB_OWNED_ROOT)/GLib_Owned_Object.cpp
 
 $(GLIB_PREFIX)Borrowed_Object.o : \
-    $(GLIB_BORROWED_ROOT)/Borrowed_Object.cpp
+    $(GLIB_BORROWED_ROOT)/GLib_Borrowed_Object.cpp
 $(GLIB_PREFIX)SharedContainer.o : \
-    $(GLIB_BORROWED_ROOT)/SharedContainer.cpp
+    $(GLIB_BORROWED_ROOT)/GLib_Borrowed_SharedContainer.cpp
 
 $(GLIB_PREFIX)EventLoop.o : \
-    $(GLIB_THREAD_ROOT)/EventLoop.cpp
+    $(GLIB_THREAD_ROOT)/GLib_EventLoop.cpp
 $(GLIB_PREFIX)ContextCaller.o : \
-    $(GLIB_THREAD_ROOT)/ContextCaller.cpp
+    $(GLIB_THREAD_ROOT)/GLib_ContextCaller.cpp
 $(GLIB_PREFIX)ThreadResource.o : \
-    $(GLIB_THREAD_ROOT)/ThreadResource.cpp
+    $(GLIB_THREAD_ROOT)/GLib_ThreadResource.cpp
 $(GLIB_PREFIX)ThreadHandler.o : \
-    $(GLIB_THREAD_ROOT)/ThreadHandler.cpp
+    $(GLIB_THREAD_ROOT)/GLib_ThreadHandler.cpp
 
 $(GLIB_PREFIX)ObjectPtr.o : \
-    $(GLIB_PTR_ROOT)/ObjectPtr.cpp
+    $(GLIB_PTR_ROOT)/GLib_ObjectPtr.cpp
 $(GLIB_PREFIX)ErrorPtr.o : \
-    $(GLIB_PTR_ROOT)/ErrorPtr.cpp
+    $(GLIB_PTR_ROOT)/GLib_ErrorPtr.cpp
 $(GLIB_PREFIX)SharedContextPtr.o : \
-    $(GLIB_PTR_ROOT)/SharedContextPtr.cpp
+    $(GLIB_PTR_ROOT)/GLib_SharedContextPtr.cpp
 
 $(GLIB_PREFIX)DBusThread.o : \
-    $(GLIB_DBUS_ROOT)/DBusThread.cpp
+    $(GLIB_DBUS_ROOT)/GLib_DBusThread.cpp
 $(GLIB_PREFIX)DBusProxy.o : \
-    $(GLIB_DBUS_ROOT)/DBusProxy.cpp
+    $(GLIB_DBUS_ROOT)/GLib_DBusProxy.cpp
 
 $(GLIB_PREFIX)VariantConverter.o : \
-    $(GLIB_VAR_ROOT)/VariantConverter.cpp
+    $(GLIB_VAR_ROOT)/GLib_VariantConverter.cpp
 $(GLIB_PREFIX)TypeHelper.o : \
-    $(GLIB_VAR_ROOT)/TypeHelper.cpp
+    $(GLIB_VAR_ROOT)/GLib_TypeHelper.cpp
 
 
 # Tests

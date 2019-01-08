@@ -5,8 +5,8 @@
 #include "LibNM/OwnedObjects/Connection.h"
 #include "LibNM/ThreadResource.h"
 #include "LibNM/ContextTest.h"
-#include "GLib/SignalHandler.h"
-#include "GLib/Thread/ThreadHandler.h"
+#include "GLib_SignalHandler.h"
+#include "GLib_ThreadHandler.h"
 
 /* Object property keys: */
 static const constexpr char * activeConnectionProperty = "active-connection";

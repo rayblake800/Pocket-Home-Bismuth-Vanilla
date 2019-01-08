@@ -7,8 +7,8 @@
 #include "LibNM/BorrowedObjects/ActiveConnection.h"
 #include "LibNM/ThreadResource.h"
 #include "LibNM/ContextTest.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
-#include "GLib/Thread/ThreadHandler.h"
+#include "GLib_ObjectPtr.h"
+#include "GLib_ThreadHandler.h"
 
 /**
  * @brief  The private ThreadHandler used by the active wifi device to access

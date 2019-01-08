@@ -1,7 +1,7 @@
 #pragma once
 #include "gtest_object.h"
-#include "GLib/Owned/Owned_Object.h"
-#include "GLib/SignalHandler.h"
+#include "GLib_Owned_Object.h"
+#include "GLib_SignalHandler.h"
 #include <map>
 
 /**

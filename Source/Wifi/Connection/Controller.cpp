@@ -14,7 +14,7 @@
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/BorrowedObjects/ActiveConnection.h"
 #include "LibNM/OwnedObjects/Connection.h"
-#include "GLib/SmartPointers/ErrorPtr.h"
+#include "GLib_ErrorPtr.h"
 
 namespace WifiConnect = Wifi::Connection;
 

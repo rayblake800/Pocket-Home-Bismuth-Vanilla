@@ -100,7 +100,8 @@ juce::Time LibNM::SavedConnection::lastConnectionTime() const
         if(timestamp != nullptr)
         {
 	        lastTime = juce::Time(1000 
-                    * VariantConverter::getValue<juce::uint64> (timestamp));
+                    * GLib::VariantConverter::getValue<juce::uint64> 
+                        (timestamp));
             g_variant_unref(timestamp);
         }
     }
@@ -117,7 +118,7 @@ bool LibNM::SavedConnection::hasSavedKey() const
         return false;
     }
     using juce::String;
-    using namespace VariantConverter;
+    using namespace GLib::VariantConverter;
     GError * secretsError = nullptr;
     GVariant* secrets = callMethod(
             getSecretsMethod,
@@ -214,7 +215,7 @@ void LibNM::SavedConnection::createNMConnection()
     threadHandler.call([this]()
     {
         using juce::String;
-        using namespace VariantConverter;
+        using namespace GLib::VariantConverter;
         if(!settingNames.isEmpty())
         {
             settingNames.clear();

@@ -2,7 +2,7 @@
 #include "LibNM/Data/SSID.h"
 #include "LibNM/Data/APMode.h"
 #include "LibNM/ContextTest.h"
-#include "GLib/SmartPointers/ObjectPtr.h"
+#include "GLib_ObjectPtr.h"
 
 /*
  * Creates a WifiSettings object that shares data with another WifiSettings

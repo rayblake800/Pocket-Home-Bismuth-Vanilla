@@ -5,7 +5,7 @@
  * @brief  A RAII container and C++ interface for LibNM NMConnection objects.
  */
 
-#include "GLib/Owned/Owned_Object.h"
+#include "GLib_Owned_Object.h"
 #include <nm-connection.h>
 
 namespace LibNM { class Connection; }
