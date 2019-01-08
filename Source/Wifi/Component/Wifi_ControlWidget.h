@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Wifi/Component/ControlWidget.h
+ * @file  Wifi_ControlWidget.h
  * 
  * @brief  Shows wifi state, lets the user enable or disable wifi, and opens the
  *         wifi settings page.

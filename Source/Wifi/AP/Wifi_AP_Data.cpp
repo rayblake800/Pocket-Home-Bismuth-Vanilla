@@ -7,7 +7,7 @@
 /* 
  * Creates the access point data object from a LibNM access point.
  */
-Wifi::APData::APData(const LibNM::AccessPoint nmAccessPoint, 
+Wifi::AP::Data::Data(const LibNM::AccessPoint nmAccessPoint, 
         const LibNM::APHash apHash) : hash(apHash)
 {
     LibNM::ThreadHandler nmThread;
@@ -20,25 +20,25 @@ Wifi::APData::APData(const LibNM::AccessPoint nmAccessPoint,
 }
 
 /*
- * Compares APData objects using their hash values.
+ * Compares Data objects using their hash values.
  */
-bool Wifi::APData::operator==(const APData& rhs) const
+bool Wifi::AP::Data::operator==(const Data& rhs) const
 {
     return hash == rhs.hash;
 }
 
 /*
- * Compares APData objects using their hash values.
+ * Compares AP::Data objects using their hash values.
  */
-bool Wifi::APData::operator!=(const APData& rhs) const
+bool Wifi::AP::Data::operator!=(const Data& rhs) const
 {
     return hash != rhs.hash;
 }
 
 /*
- * Compares APData objects using their hash values so they can be sorted.
+ * Compares AP::Data objects using their hash values so they can be sorted.
  */
-bool Wifi::APData::operator<(const APData& rhs) const
+bool Wifi::AP::Data::operator<(const Data& rhs) const
 {
     return hash < rhs.hash;
 }
@@ -46,7 +46,7 @@ bool Wifi::APData::operator<(const APData& rhs) const
 /*
  * Gets the access point's primary identifier.
  */
-LibNM::SSID Wifi::APData::getSSID() const
+LibNM::SSID Wifi::AP::Data::getSSID() const
 {
     return ssid;
 }
@@ -54,7 +54,7 @@ LibNM::SSID Wifi::APData::getSSID() const
 /*
  * Gets the access point's signal strength.
  */
-unsigned int Wifi::APData::getSignalStrength() const
+unsigned int Wifi::AP::Data::getSignalStrength() const
 {
     return signalStrength.get();
 }
@@ -62,7 +62,7 @@ unsigned int Wifi::APData::getSignalStrength() const
 /*
  * Gets the access point's general security type.
  */
-LibNM::SecurityType Wifi::APData::getSecurityType() const
+LibNM::SecurityType Wifi::AP::Data::getSecurityType() const
 {
     return securityType;
 }
@@ -71,7 +71,7 @@ LibNM::SecurityType Wifi::APData::getSecurityType() const
  * Checks if a security key is formatted correctly for this access point's 
  * security type.
  */
-bool Wifi::APData::isValidKeyFormat(const juce::String psk) const
+bool Wifi::AP::Data::isValidKeyFormat(const juce::String psk) const
 {
     const int length = psk.length();
     switch(securityType)
@@ -92,7 +92,7 @@ bool Wifi::APData::isValidKeyFormat(const juce::String psk) const
 /*
  * Gets the hash value used to identify and sort the access point.
  */
-LibNM::APHash Wifi::APData::getHashValue() const
+LibNM::APHash Wifi::AP::Data::getHashValue() const
 {
     return hash;
 }
@@ -100,7 +100,7 @@ LibNM::APHash Wifi::APData::getHashValue() const
 /*
  * Updates the access point's signal strength.
  */
-void Wifi::APData::setSignalStrength(const unsigned int newStrength)
+void Wifi::AP::Data::setSignalStrength(const unsigned int newStrength)
 {
     signalStrength.set(newStrength);
 }

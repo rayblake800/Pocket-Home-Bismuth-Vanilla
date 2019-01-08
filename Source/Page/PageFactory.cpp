@@ -7,7 +7,7 @@
 #include "FelPage.h"
 #include "QuickSettingsPage.h"
 #include "Bluetooth_SettingsPage.h"
-#include "Wifi/Component/SettingsPage.h"
+#include "Wifi_SettingsPage.h"
 #include "Theme_Colour_ConfigPage.h"
 #include "SettingsListPage.h"
 #include "DateTimePage.h"

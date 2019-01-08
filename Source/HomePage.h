@@ -14,7 +14,7 @@
 #include "DrawableImageButton.h"
 #include "Layout_Component_Manager.h"
 #include "ClockLabel.h"
-#include "Wifi/Component/StatusIcon.h"
+#include "Wifi_StatusIcon.h"
 #include "BatteryIcon.h"
 #include "SystemCommands.h"
 #include "AppMenu/AppMenu.h"

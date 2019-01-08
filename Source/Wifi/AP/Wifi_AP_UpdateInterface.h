@@ -1,26 +1,25 @@
 #pragma once
 /**
- * @file  Wifi/Listeners/UpdateInterfaces/SignalUpdateInterface.h
+ * @file  Wifi_AP_UpdateInterface.h
  *
- * @brief  The interface used by Wifi::APList to send updates to all
- *         Wifi::SignalStrengthListener objects.
+ * @brief  The interface used by the Wifi::APList::ListResource to send updates 
+ *         to all Wifi::AP::StrengthListener objects.
  */
 
-namespace Wifi { class SignalUpdateInterface; }
+namespace Wifi { namespace AP { class UpdateInterface; } }
 namespace Wifi { class AccessPoint; }
 
-class Wifi::SignalUpdateInterface
+class Wifi::AP::UpdateInterface
 {
 public:
-    SignalUpdateInterface() { }
+    UpdateInterface() { }
 
-    virtual ~SignalUpdateInterface() { }
+    virtual ~UpdateInterface() { }
 
     /**
-     * @brief  Called whenever a Wifi::AccessPoint object's signal strength
-     *         changes.
+     * @brief  Called whenever a AccessPoint object's signal strength changes.
      *
      * @param updatedAP  The access point with a new signal strength value.
      */
-    virtual void signalStrengthChanged(const Wifi::AccessPoint updatedAP) = 0;
+    virtual void signalStrengthChanged(const AccessPoint updatedAP) = 0;
 };

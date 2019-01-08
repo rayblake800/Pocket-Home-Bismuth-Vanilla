@@ -4,35 +4,35 @@
 #include "SharedResource_Handler.h"
 
 /**
- * @file  Wifi/Listeners/SignalStrengthListener.h
+ * @file  Wifi_AP_StrengthListener.h
  *
  * @brief  Receives updates whenever Wifi access point signal strength changes.
  *
- *  SignalStrengthListener may choose to receive updates from all AccessPoint
- * objects, receive updates from a specific AccessPoint, or ignore all 
- * signal strength updates. This choice may be changed at any time.
+ *  StrengthListener may choose to receive updates from all AccessPoint objects,
+ * receive updates from a specific AccessPoint, or ignore all signal strength 
+ * updates. This choice may be changed at any time.
  */
 
-namespace Wifi { class SignalStrengthListener; }
+namespace Wifi { namespace AP { class StrengthListener; } }
 namespace Wifi { namespace APList { class ListResource; } }
 
-class Wifi::SignalStrengthListener : public SignalUpdateInterface,
+class Wifi::AP::StrengthListener : public UpdateInterface,
     public SharedResource::Handler<APList::ListResource>
 {
 public:
     /**
-     * @brief  Creates a SignalStrengthListener tracking all visible access 
+     * @brief  Creates a StrengthListener tracking all visible access 
      *         point signal strengths.
      */
-    SignalStrengthListener();
+    StrengthListener();
     
     /**
-     * @brief  Creates a SignalStrengthListener tracking a specific access
+     * @brief  Creates a StrengthListener tracking a specific access
      *         point's signal strength.
      *
      * @param toTrack  The access point this Listener will track.
      */
-    SignalStrengthListener(const AccessPoint toTrack);
+    StrengthListener(const AccessPoint toTrack);
     
     /**
      * @brief  Sets a single AccessPoint this Listener will track.

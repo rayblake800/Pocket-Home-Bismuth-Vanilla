@@ -124,8 +124,8 @@ $(WIFI_SIGNAL_HANDLER_PREFIX)Device.o : \
     $(WIFI_SIGNAL_HANDLER_ROOT)/DeviceSignalHandler.cpp
 
 $(WIFI_PREFIX)ControlWidget.o : \
-    $(WIFI_COMPONENT_ROOT)/ControlWidget.cpp
+    $(WIFI_COMPONENT_ROOT)/Wifi_ControlWidget.cpp
 $(WIFI_PREFIX)SettingsPage.o : \
-    $(WIFI_COMPONENT_ROOT)/SettingsPage.cpp
+    $(WIFI_COMPONENT_ROOT)/Wifi_SettingsPage.cpp
 $(WIFI_PREFIX)StatusIcon.o : \
-    $(WIFI_COMPONENT_ROOT)/StatusIcon.cpp
+    $(WIFI_COMPONENT_ROOT)/Wifi_StatusIcon.cpp

@@ -3,23 +3,23 @@
 #include "Wifi_APList_ListResource.h"
 
 /*
- * Creates a SignalStrengthListener tracking all visible access point signal
+ * Creates a StrengthListener tracking all visible access point signal
  * strengths.
  */
-Wifi::SignalStrengthListener::SignalStrengthListener() :
+Wifi::AP::StrengthListener::StrengthListener() :
     trackedAP(AccessPoint()), handleUpdates(true) { }
 
 /*
- * Creates a SignalStrengthListener tracking a specific access point's signal 
+ * Creates a StrengthListener tracking a specific access point's signal 
  * strength.
  */
-Wifi::SignalStrengthListener::SignalStrengthListener
+Wifi::AP::StrengthListener::StrengthListener
 (const AccessPoint toTrack) : trackedAP(toTrack), handleUpdates(true) { }
 
 /*
  * Sets a single AccessPoint this Listener will track.
  */
-void Wifi::SignalStrengthListener::setTrackedAccessPoint
+void Wifi::AP::StrengthListener::setTrackedAccessPoint
 (const AccessPoint toTrack)
 {
     const juce::ScopedLock updateLock(updateGuard);
@@ -31,7 +31,7 @@ void Wifi::SignalStrengthListener::setTrackedAccessPoint
  * Sets the Listener to receive updates when any AccessPoint signal strength
  * updates.
  */
-void Wifi::SignalStrengthListener::trackAllAccessPoints()
+void Wifi::AP::StrengthListener::trackAllAccessPoints()
 {
     const juce::ScopedLock updateLock(updateGuard);
     trackedAP = AccessPoint();
@@ -41,7 +41,7 @@ void Wifi::SignalStrengthListener::trackAllAccessPoints()
 /*
  * Sets the Listener to ignore all signal strength updates.
  */
-void Wifi::SignalStrengthListener::ignoreAllUpdates()
+void Wifi::AP::StrengthListener::ignoreAllUpdates()
 {
     const juce::ScopedLock updateLock(updateGuard);
     trackedAP = AccessPoint();
@@ -53,7 +53,7 @@ void Wifi::SignalStrengthListener::ignoreAllUpdates()
  * signalStrengthUpdate method if the changed access point is tracked by the
  * Listener.
  */
-void Wifi::SignalStrengthListener::signalStrengthChanged
+void Wifi::AP::StrengthListener::signalStrengthChanged
 (const AccessPoint updatedAP)
 {
     const juce::ScopedLock updateLock(updateGuard);

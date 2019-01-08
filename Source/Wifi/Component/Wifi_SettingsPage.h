@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file Wifi/Component/SettingsPage.h
+ * @file Wifi_SettingsPage.h
  * 
  * @brief Shows information on all visible Wifi access points, and provides 
  *        controls for connecting to or disconnecting from those access points.
@@ -19,7 +19,7 @@ namespace Wifi { class SettingsPage; }
 
 class Wifi::SettingsPage : public FocusingListPage,
         public Wifi::APList::Listener,
-        public Wifi::SignalStrengthListener,
+        public Wifi::AP::StrengthListener,
         public Wifi::Connection::Listener,
         public juce::TextEditor::Listener,
         public Locale::TextUser

@@ -10,7 +10,6 @@
   #define WIFI_TEMP
 #endif
 #include "Wifi_AP_Data.h"
-
 #ifdef WIFI_TEMP
   #undef WIFI_IMPLEMENTATION
   #undef WIFI_TEMP
@@ -26,17 +25,17 @@ namespace LibNM { class Connection; }
 namespace LibNM { enum class SecurityType; }
 
 /**
- *  Wifi::AccessPoint represents a LibNM::AccessPoint, which in turn represents
- * a Wifi access point found by NetworkManager through the network device. 
- * Wifi::AccessPoint objects hold shared, reference counted data. This allows
- * access point data to be freely shared between threads, while keeping 
- * interaction with LibNM confined to the LibNM thread resource.
+ *  Wifi::AccessPoint represents one or more LibNM::AccessPoints, which in 
+ * turn represent a Wifi access point found by NetworkManager through the 
+ * network device. Wifi::AccessPoint objects hold shared, reference counted 
+ * data. This allows access point data to be freely shared between threads, 
+ * while keeping interaction with LibNM confined to the LibNM thread resource.
  *
  *  AccessPoint data is mostly immutable. Only the signal strength may be 
- * updated, and only the APList may update it.
+ * updated, and only the APList::ListResource may update it.
  */
 class Wifi::AccessPoint : 
-    public Nullable<juce::ReferenceCountedObjectPtr<APData>>
+    public Nullable<juce::ReferenceCountedObjectPtr<AP::Data>>
 {
 public:
     /* Only the APList resource may update access point data. */

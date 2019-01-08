@@ -8,7 +8,6 @@
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/ContextTest.h"
 
-
 /*
  * Creates new access point data from a LibNM access point object.
  */
@@ -17,13 +16,13 @@ Wifi::AccessPoint::AccessPoint(const LibNM::AccessPoint nmAccessPoint)
     ASSERT_NM_CONTEXT
     LibNM::APHash hash = nmAccessPoint.generateHash();
     LibNM::ThreadHandler nmThread;
-    getDataReference() = new APData(nmAccessPoint, hash);
+    getDataReference() = new AP::Data(nmAccessPoint, hash);
 }
 
 /*
  * Initializes the AccessPoint with another AccessPoint's data.
  */
- Wifi::AccessPoint::AccessPoint(const AccessPoint& rhs) : Nullable(rhs) { }
+Wifi::AccessPoint::AccessPoint(const AccessPoint& rhs) : Nullable(rhs) { }
 
 /*
  * Compares AccessPoint objects using their hash values.
@@ -100,7 +99,6 @@ LibNM::SecurityType Wifi::AccessPoint::getSecurityType() const
     }
     return getData()->getSecurityType();
 }
-
 
 /*
  * Checks if a security key is formatted correctly for this access point's 

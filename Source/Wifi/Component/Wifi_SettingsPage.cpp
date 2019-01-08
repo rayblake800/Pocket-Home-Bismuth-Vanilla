@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/Component/SettingsPage.h"
+#include "Wifi_SettingsPage.h"
 #include "Wifi_Connection_RecordReader.h"
 #include "Wifi_Connection_Event.h"
 #include "Wifi_Connection_Controller.h"

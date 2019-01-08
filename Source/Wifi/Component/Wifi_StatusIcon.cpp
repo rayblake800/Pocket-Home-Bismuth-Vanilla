@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/Component/StatusIcon.h"
+#include "Wifi_StatusIcon.h"
 #include "Theme_Image_Component.h"
 #include "Theme_Image_JSONKeys.h"
 #include "DrawableImageComponent.h"

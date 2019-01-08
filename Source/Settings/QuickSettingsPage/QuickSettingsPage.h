@@ -5,7 +5,7 @@
 #include "Layout_Component_Manager.h"
 #include "PageComponent.h"
 #include "WindowFocusedTimer.h"
-#include "Wifi/Component/ControlWidget.h"
+#include "Wifi_ControlWidget.h"
 #include "ScalingTextButton.h"
 //#include "BluetoothSettingsComponent.h"
 

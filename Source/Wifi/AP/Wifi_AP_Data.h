@@ -4,59 +4,59 @@
 #pragma once
 
 /**
- * @file  Wifi/SavedState/APData.h
+ * @file  Wifi_AP_Data.h
  *
- * @brief  Holds data describing a Wifi access point.
+ * @brief  Holds shared, reference counted data describing a Wifi access point.
  */
 
 #include "LibNM/Data/APHash.h"
 #include "LibNM/Data/SSID.h"
 #include "JuceHeader.h"
 
-namespace Wifi { class APData; }
+namespace Wifi { namespace AP { class Data; } }
 namespace LibNM { class AccessPoint; }
-class Wifi::APData : public juce::ReferenceCountedObject
+class Wifi::AP::Data : public juce::ReferenceCountedObject
 {
 public:
     /**
      * @brief  Creates the access point data object from a LibNM access point.
      *
-     * @param nmAccessPoint    The LibNM access point this APData represents. 
+     * @param nmAccessPoint    The LibNM access point this Data represents. 
      *
      * @param apHash           The access point's hash value.
      */
-    APData(const LibNM::AccessPoint nmAccessPoint, const LibNM::APHash apHash);
+    Data(const LibNM::AccessPoint nmAccessPoint, const LibNM::APHash apHash);
 
-    virtual ~APData() { }
+    virtual ~Data() { }
 
     /**
-     * @brief  Compares APData objects using their hash values.
+     * @brief  Compares Data objects using their hash values.
      *
-     * @param rhs  The APData object to compare with this one.
+     * @param rhs  The Data object to compare with this one.
      *
      * @return     Whether this and rhs have identical hash values.
      */
-    bool operator==(const APData& rhs) const;
+    bool operator==(const Data& rhs) const;
     
     /**
-     * @brief  Compares APData objects using their hash values.
+     * @brief  Compares Data objects using their hash values.
      *
-     * @param rhs  The APData object to compare with this one.
+     * @param rhs  The Data object to compare with this one.
      *
      * @return     Whether this and rhs do not have identical hash values.
      */
-    bool operator!=(const APData& rhs) const;
+    bool operator!=(const Data& rhs) const;
     
     /**
-     * @brief  Compares APData objects using their hash values so they can be
+     * @brief  Compares Data objects using their hash values so they can be
      *         sorted.
      *
-     * @param rhs  The APData object to compare with this one.
+     * @param rhs  The Data object to compare with this one.
      *
      * @return     Whether this access point's hash value should come before the 
-     *             rhs APData's hash value.
+     *             rhs Data's hash value.
      */
-    bool operator<(const APData& rhs) const;
+    bool operator<(const Data& rhs) const;
 
     /**
      * @brief  Gets the access point's primary identifier.

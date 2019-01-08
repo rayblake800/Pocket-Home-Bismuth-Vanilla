@@ -145,8 +145,8 @@ void WifiAPList::ListResource::addAccessPoint(const LibNM::AccessPoint addedAP)
     {
         wifiAP.setSignalStrength(newSignalStrength);
         AccessPoint updatedAP = wifiAccessPoints[apHash];
-        foreachHandler<SignalUpdateInterface>([&updatedAP]
-                (SignalUpdateInterface* updateHandler)
+        foreachHandler<AP::UpdateInterface>([&updatedAP]
+                (AP::UpdateInterface* updateHandler)
         {
             updateHandler->signalStrengthChanged(updatedAP);
         });
@@ -192,8 +192,8 @@ void WifiAPList::ListResource::updateSignalStrength(AccessPoint toUpdate)
     if(bestSignalStrength != oldSignalStrength)
     {
         toUpdate.setSignalStrength(bestSignalStrength);
-        foreachHandler<SignalUpdateInterface>([&toUpdate]
-                (SignalUpdateInterface* updateHandler)
+        foreachHandler<AP::UpdateInterface>([&toUpdate]
+                (AP::UpdateInterface* updateHandler)
         {
             updateHandler->signalStrengthChanged(toUpdate);
         });

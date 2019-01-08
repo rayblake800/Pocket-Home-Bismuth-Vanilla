@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Wifi/Component/StatusIcon.h
+ * @file  Wifi_StatusIcon.h
  * 
  * @brief  Displays an icon indicating Wifi connection signal strength.
  */
@@ -16,7 +16,7 @@ namespace Wifi { class StatusIcon; }
 
 class Wifi::StatusIcon : 
     public Theme::Image::Component<DrawableImageComponent>, 
-    public SignalStrengthListener, 
+    public AP::StrengthListener, 
     public Connection::Listener,
     public DeviceListener
 {

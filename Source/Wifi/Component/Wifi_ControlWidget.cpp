@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/Component/ControlWidget.h"
+#include "Wifi_ControlWidget.h"
 #include "Wifi_AP_AccessPoint.h"
 #include "Wifi/Device/DeviceViewer.h"
 #include "Wifi/Device/Controller.h"
