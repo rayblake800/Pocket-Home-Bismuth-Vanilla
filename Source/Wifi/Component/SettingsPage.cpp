@@ -3,7 +3,7 @@
 #include "Wifi/Connection/RecordReader.h"
 #include "Wifi/Connection/Event.h"
 #include "Wifi/Connection/Controller.h"
-#include "Wifi/AccessPointList/APListReader.h"
+#include "Wifi_APList_Reader.h"
 #include "Layout_Component_ConfigFile.h"
 #include "LibNM/Data/SecurityType.h"
 #include "Locale/Time.h"
@@ -345,7 +345,7 @@ void Wifi::SettingsPage::updateSelectedItemLayout
 void Wifi::SettingsPage::loadAccessPoints()
 {
     visibleAPs.clearQuick();
-    const APListReader apListReader;
+    const APList::Reader apListReader;
     visibleAPs = apListReader.getAccessPoints();
     visibleAPs.sort(apComparator, false);
     updateAPList();

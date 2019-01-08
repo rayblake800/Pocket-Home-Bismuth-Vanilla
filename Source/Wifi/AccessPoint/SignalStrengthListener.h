@@ -14,10 +14,10 @@
  */
 
 namespace Wifi { class SignalStrengthListener; }
-namespace Wifi { class APList; }
+namespace Wifi { namespace APList { class ListResource; } }
 
 class Wifi::SignalStrengthListener : public SignalUpdateInterface,
-    public SharedResource::Handler<APList>
+    public SharedResource::Handler<APList::ListResource>
 {
 public:
     /**

@@ -13,17 +13,17 @@
  */
 
 #include "SharedResource_Handler.h"
-#include "Wifi/AccessPointList/APListWriter.h"
+#include "Wifi_APList_Writer.h"
 #include "Wifi/Connection/RecordWriter.h"
 #include "Wifi/NMSignalHandlers/APSignalHandler.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 
 namespace Wifi { class DeviceSignalHandler; }
-namespace Wifi { class APList; }
+namespace Wifi { namespace APList { class ListResource; } }
 namespace Wifi { namespace Connection { class RecordWriter; } }
 
 class Wifi::DeviceSignalHandler : public LibNM::DeviceWifi::Listener,
-    public SharedResource::Handler<APList>
+    public SharedResource::Handler<APList::ListResource>
 {
 public:
     DeviceSignalHandler();

@@ -4,25 +4,25 @@
 #endif
 #pragma once
 /**
- * @file Wifi/AccessPointList/NMAPListReader.h
+ * @file Wifi_APList_NMReader.h
  *
  * @brief  Gets LibNM::AccessPoints held by the APList resource.
  */
 
 #include "SharedResource_Handler.h"
 
-namespace Wifi { class NMAPListReader; }
-namespace Wifi { class APList; }
+namespace Wifi { namespace APList { class NMReader; } }
+namespace Wifi { namespace APList { class ListResource; } }
 namespace Wifi { class AccessPoint; }
 namespace LibNM { class AccessPoint; }
 namespace LibNM { class APHash; }
 
-class Wifi::NMAPListReader : public SharedResource::Handler<APList>
+class Wifi::APList::NMReader : public SharedResource::Handler<ListResource>
 {
 public:
-    NMAPListReader();
+    NMReader();
 
-    virtual ~NMAPListReader() { }
+    virtual ~NMReader() { }
 
     /**
      * @brief  Gets the strongest visible LibNM::AccessPoint that matches a

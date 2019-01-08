@@ -3,7 +3,7 @@
 #endif
 #pragma once
 /**
- * @file  Wifi/AccessPoint/APList.h
+ * @file  Wifi_APList_ListResource.h
  *
  * @brief  Tracks all visible Wifi access points, using NetworkManager signals
  *         and data to construct and update Wifi::AccessPoint objects.
@@ -12,11 +12,11 @@
 #include "SharedResource_Resource.h"
 
 namespace Wifi { class AccessPoint; }
-namespace Wifi { class APList; }
+namespace Wifi { namespace APList { class ListResource; } }
 namespace LibNM { class APHash; }
 namespace LibNM { class AccessPoint; }
 
-class Wifi::APList : public SharedResource::Resource
+class Wifi::APList::ListResource : public SharedResource::Resource
 {
 public:
     /* SharedResource object instance key: */
@@ -26,9 +26,9 @@ public:
      * @brief  Reads initial access point data from LibNM, using it to construct
      *         the access point list.
      */
-    APList();
+    ListResource();
 
-    virtual ~APList() { }
+    virtual ~ListResource() { }
 
     /**
      * @brief  Gets Wifi::AccessPoint objects for all visible access points.

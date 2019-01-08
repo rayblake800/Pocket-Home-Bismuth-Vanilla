@@ -20,6 +20,7 @@
 #include "JuceHeader.h"
 
 namespace Wifi { class AccessPoint; }
+namespace Wifi { namespace APList { class ListResource; } }
 namespace LibNM { class AccessPoint; }
 namespace LibNM { class Connection; }
 namespace LibNM { enum class SecurityType; }
@@ -38,8 +39,8 @@ class Wifi::AccessPoint :
     public Nullable<juce::ReferenceCountedObjectPtr<APData>>
 {
 public:
-    /* Only the APList may update access point data. */
-    friend class APList;
+    /* Only the APList resource may update access point data. */
+    friend class APList::ListResource;
 
     /**
      * @brief  Creates new access point data from a LibNM access point object.

@@ -3,8 +3,8 @@
 #include "Wifi/Connection/Event.h"
 #include "Wifi/Connection/UpdateInterface.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
-#include "Wifi/AccessPointList/APListReader.h"
-#include "Wifi/AccessPointList/NMAPListReader.h"
+#include "Wifi_APList_Reader.h"
+#include "Wifi_APList_NMReader.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/BorrowedObjects/ActiveConnection.h"
@@ -87,7 +87,7 @@ juce::Array<LibNM::SavedConnection>
 WifiConnect::RecordResource::getMatchingConnections
 (const Wifi::AccessPoint toMatch) const
 {
-    NMAPListReader nmList;
+    APList::NMReader nmList;
     LibNM::AccessPoint nmAccessPoint 
             = nmList.getStrongestNMAccessPoint(toMatch);
     if(nmAccessPoint.isNull())
@@ -196,7 +196,7 @@ void WifiConnect::RecordResource::removeSavedConnection
     const LibNM::ThreadHandler nmThread;
     nmThread.call([this, &toRemove]()
     {
-        const NMAPListReader nmList;
+        const APList::NMReader nmList;
         const LibNM::AccessPoint nmAccessPoint 
                 = nmList.getStrongestNMAccessPoint(toRemove);
         if(nmAccessPoint.isNull())
@@ -244,7 +244,7 @@ void WifiConnect::RecordResource::updateRecords()
             return;
         }
 
-        const APListReader accessPointList;
+        const APList::Reader accessPointList;
         AccessPoint activeAP = accessPointList.getAccessPoint
                 (nmAP.generateHash());
         jassert(!activeAP.isNull());

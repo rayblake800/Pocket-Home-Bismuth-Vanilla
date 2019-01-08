@@ -3,24 +3,24 @@
 #endif
 #pragma once
 /**
- * @file  Wifi/AccessPointList/APListWriter.h
+ * @file  Wifi_APList_Writer.h
  *
  * @brief  Updates the list of visible Wifi access points.
  */
 
 #include "SharedResource_Handler.h"
 
-namespace Wifi { class APListWriter; }
-namespace Wifi { class APList; }
+namespace Wifi { namespace APList { class Writer; } }
+namespace Wifi { namespace APList { class ListResource; } }
 namespace Wifi { class AccessPoint; }
 namespace LibNM { class AccessPoint; }
 
-class Wifi::APListWriter : public SharedResource::Handler<APList>
+class Wifi::APList::Writer : public SharedResource::Handler<ListResource>
 {
 public:
-    APListWriter();
+    Writer();
 
-    virtual ~APListWriter() { }
+    virtual ~Writer() { }
     
     /**
      * @brief  Adds a new LibNM::AccessPoint to the list, constructing a

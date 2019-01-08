@@ -8,7 +8,7 @@
 
 #include "FocusingListPage.h"
 #include "Wifi/AccessPoint/SignalStrengthListener.h"
-#include "Wifi/AccessPointList/VisibleAPListener.h"
+#include "Wifi_APList_Listener.h"
 #include "Wifi/Connection/Listener.h"
 #include "Locale/TextUser.h"
 #include "Spinner.h"
@@ -18,7 +18,7 @@
 namespace Wifi { class SettingsPage; }
 
 class Wifi::SettingsPage : public FocusingListPage,
-        public Wifi::VisibleAPListener,
+        public Wifi::APList::Listener,
         public Wifi::SignalStrengthListener,
         public Wifi::Connection::Listener,
         public juce::TextEditor::Listener,

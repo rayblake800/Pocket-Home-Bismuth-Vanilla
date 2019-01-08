@@ -1,6 +1,6 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi/Manager.h"
-#include "Wifi/AccessPointList/APListWriter.h"
+#include "Wifi_APList_Writer.h"
 
 /*
  * Initializes the LibNM thread resource, then creates and connects all Wifi
@@ -12,9 +12,9 @@ Wifi::Manager::Manager()
     nmThread.startThread();
     nmThread.call([this]()
     {
-        apListReader.reset(new APListReader);
+        apListReader.reset(new APList::Reader);
 
-        Wifi::APListWriter listInit;
+        Wifi::APList::Writer listInit;
         listInit.updateAllAccessPoints();
 
         recordReader.reset(new Connection::RecordReader);

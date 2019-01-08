@@ -13,10 +13,10 @@
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 
 namespace Wifi { class APSignalHandler; }
-namespace Wifi { class APList; }
+namespace Wifi { namespace APList { class ListResource; } }
 
 class Wifi::APSignalHandler : public LibNM::AccessPoint::Listener,
-    public SharedResource::Handler<APList>
+    public SharedResource::Handler<APList::ListResource>
 {
 public:
     APSignalHandler();

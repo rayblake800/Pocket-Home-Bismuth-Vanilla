@@ -10,13 +10,14 @@ OBJECTS_WIFI_ACCESS_POINT := \
   $(WIFI_PREFIX)AccessPoint.o \
   $(WIFI_PREFIX)SignalStrengthListener.o
 
-WIFI_AP_LIST_ROOT := $(WIFI_ROOT)/AccessPointList
+WIFI_AP_LIST_ROOT := $(WIFI_ROOT)/APList
+WIFI_AP_LIST_PREFIX := $(WIFI_PREFIX)APList_
 OBJECTS_WIFI_ACCESS_POINT_LIST := \
-  $(WIFI_PREFIX)APList.o \
-  $(WIFI_PREFIX)APListReader.o \
-  $(WIFI_PREFIX)NMAPListReader.o \
-  $(WIFI_PREFIX)APListWriter.o \
-  $(WIFI_PREFIX)VisibleAPListener.o
+  $(WIFI_AP_LIST_PREFIX)ListResource.o \
+  $(WIFI_AP_LIST_PREFIX)Listener.o \
+  $(WIFI_AP_LIST_PREFIX)Reader.o \
+  $(WIFI_AP_LIST_PREFIX)NMReader.o \
+  $(WIFI_AP_LIST_PREFIX)Writer.o
 
 WIFI_CONNECTION_ROOT := $(WIFI_ROOT)/Connection
 WIFI_CONNECTION_PREFIX := $(WIFI_PREFIX)Connection_
@@ -81,16 +82,16 @@ $(WIFI_PREFIX)AccessPoint.o : \
 $(WIFI_PREFIX)SignalStrengthListener.o : \
     $(WIFI_AP_ROOT)/SignalStrengthListener.cpp
 
-$(WIFI_PREFIX)APList.o : \
-    $(WIFI_AP_LIST_ROOT)/APList.cpp
-$(WIFI_PREFIX)APListReader.o : \
-    $(WIFI_AP_LIST_ROOT)/APListReader.cpp
-$(WIFI_PREFIX)NMAPListReader.o : \
-    $(WIFI_AP_LIST_ROOT)/NMAPListReader.cpp
-$(WIFI_PREFIX)APListWriter.o : \
-    $(WIFI_AP_LIST_ROOT)/APListWriter.cpp
-$(WIFI_PREFIX)VisibleAPListener.o : \
-    $(WIFI_AP_LIST_ROOT)/VisibleAPListener.cpp
+$(WIFI_AP_LIST_PREFIX)ListResource.o : \
+    $(WIFI_AP_LIST_ROOT)/Wifi_APList_ListResource.cpp
+$(WIFI_AP_LIST_PREFIX)Listener.o : \
+    $(WIFI_AP_LIST_ROOT)/Wifi_APList_Listener.cpp
+$(WIFI_AP_LIST_PREFIX)Reader.o : \
+    $(WIFI_AP_LIST_ROOT)/Wifi_APList_Reader.cpp
+$(WIFI_AP_LIST_PREFIX)NMReader.o : \
+    $(WIFI_AP_LIST_ROOT)/Wifi_APList_NMReader.cpp
+$(WIFI_AP_LIST_PREFIX)Writer.o : \
+    $(WIFI_AP_LIST_ROOT)/Wifi_APList_Writer.cpp
 
 $(WIFI_CONNECTION_PREFIX)Controller.o : \
     $(WIFI_CONNECTION_ROOT)/Controller.cpp

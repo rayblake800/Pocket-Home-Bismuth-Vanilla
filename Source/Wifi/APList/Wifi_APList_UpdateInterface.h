@@ -1,21 +1,21 @@
 #pragma once
 /**
- * @file Wifi/Listeners/UpdateInterfaces/APUpdateInterface.h
+ * @file Wifi_APList_UpdateInterface.h
  *
- * @brief  The interface used by the Wifi::APList to update all
- *         Wifi::VisibleAPListener objects when access points are added or 
+ * @brief  The interface used by the Wifi::APList::ListResource to update all
+ *         Wifi::APList::Listener objects when access points are added or 
  *         removed.
  */
 
-namespace Wifi { class APUpdateInterface; }
+namespace Wifi { namespace APList { class UpdateInterface; } }
 namespace Wifi { class AccessPoint; }
 
-class Wifi::APUpdateInterface
+class Wifi::APList::UpdateInterface
 {
 public:
-    APUpdateInterface() { }
+    UpdateInterface() { }
 
-    virtual ~APUpdateInterface() { }
+    virtual ~UpdateInterface() { }
 
     /**
      * @brief  Signals that a new access point was discovered.

@@ -1,16 +1,19 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/AccessPointList/APList.h"
+#include "Wifi_APList_ListResource.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
 #include "Wifi/AccessPoint/SignalUpdateInterface.h"
-#include "Wifi/AccessPointList/APUpdateInterface.h"
+#include "Wifi_APList_UpdateInterface.h"
 #include "LibNM/Data/APHash.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/ThreadHandler.h"
 #include <map>
 
+namespace WifiAPList = Wifi::APList;
+
 /* SharedResource object instance key: */
-const juce::Identifier Wifi::APList::resourceKey = "Wifi_APList";
+const juce::Identifier WifiAPList::ListResource::resourceKey 
+        = "Wifi_APList_ListResource";
 
 /* All visible Wifi::AccessPoint objects, mapped by hash value. */
 static std::map<LibNM::APHash, Wifi::AccessPoint> wifiAccessPoints;
@@ -21,12 +24,14 @@ static std::map<LibNM::APHash, juce::Array<LibNM::AccessPoint>> nmAccessPoints;
 /*
  * Reads initial access point data from LibNM.
  */
-Wifi::APList::APList() : SharedResource::Resource(resourceKey) { }
+WifiAPList::ListResource::ListResource() : 
+    SharedResource::Resource(resourceKey) { }
 
 /*
  * Gets Wifi::AccessPoint objects for all visible access points.
  */
-juce::Array<Wifi::AccessPoint> Wifi::APList::getAccessPoints() const
+juce::Array<Wifi::AccessPoint> 
+WifiAPList::ListResource::getAccessPoints() const
 {
     juce::Array<Wifi::AccessPoint> accessPoints;
     for(auto apIterator : wifiAccessPoints)
@@ -39,7 +44,8 @@ juce::Array<Wifi::AccessPoint> Wifi::APList::getAccessPoints() const
 /*
  * Finds a single Wifi::AccessPoint
  */
-Wifi::AccessPoint Wifi::APList::getAccessPoint(LibNM::APHash apHash) const
+Wifi::AccessPoint 
+WifiAPList::ListResource::getAccessPoint(LibNM::APHash apHash) const
 {
     try
     {
@@ -55,7 +61,7 @@ Wifi::AccessPoint Wifi::APList::getAccessPoint(LibNM::APHash apHash) const
  * Gets the strongest visible LibNM::AccessPoint that matches a
  * Wifi::AccessPoint.
  */
-LibNM::AccessPoint Wifi::APList::getStrongestNMAccessPoint
+LibNM::AccessPoint WifiAPList::ListResource::getStrongestNMAccessPoint
 (const AccessPoint accessPoint) const
 {
     juce::Array<LibNM::AccessPoint>& apList 
@@ -83,7 +89,8 @@ LibNM::AccessPoint Wifi::APList::getStrongestNMAccessPoint
  * Gets LibNM::AccessPoint objects for all access point devices visible through
  * the Wifi device.
  */
-juce::Array<LibNM::AccessPoint> Wifi::APList::getNMAccessPoints() const
+juce::Array<LibNM::AccessPoint> WifiAPList::ListResource::getNMAccessPoints() 
+        const
 {
     juce::Array<LibNM::AccessPoint> nmAPs;
     for(auto& apListIter : nmAccessPoints)
@@ -96,7 +103,7 @@ juce::Array<LibNM::AccessPoint> Wifi::APList::getNMAccessPoints() const
 /*
  * Gets all LibNM::AccessPoint objects described by a Wifi::AccessPoint.
  */
-juce::Array<LibNM::AccessPoint> Wifi::APList::getNMAccessPoints
+juce::Array<LibNM::AccessPoint> WifiAPList::ListResource::getNMAccessPoints
 (const AccessPoint accessPoint) const
 {
     juce::Array<LibNM::AccessPoint>& matchingAPs
@@ -113,7 +120,7 @@ juce::Array<LibNM::AccessPoint> Wifi::APList::getNMAccessPoints
  * Adds a new LibNM::AccessPoint to the list, constructing a matching
  * Wifi::AccessPoint if one does not yet exist.
  */
-void Wifi::APList::addAccessPoint(const LibNM::AccessPoint addedAP)
+void WifiAPList::ListResource::addAccessPoint(const LibNM::AccessPoint addedAP)
 {
     if(addedAP.isNull())
     {
@@ -124,8 +131,8 @@ void Wifi::APList::addAccessPoint(const LibNM::AccessPoint addedAP)
     if(wifiAccessPoints.count(apHash) == 0)
     {
         wifiAccessPoints[apHash] = AccessPoint(addedAP);
-        foreachHandler<APUpdateInterface>([&apHash]
-                (APUpdateInterface* updateHandler)
+        foreachHandler<UpdateInterface>([&apHash]
+                (UpdateInterface* updateHandler)
         {
             updateHandler->accessPointAdded(wifiAccessPoints[apHash]);
         });
@@ -150,7 +157,8 @@ void Wifi::APList::addAccessPoint(const LibNM::AccessPoint addedAP)
  * Removes a LibNM::AccessPoint from the list, removing the matching
  * Wifi::AccessPoint if it no longer has any matching LibNM::AccessPoints.
  */
-void Wifi::APList::removeAccessPoint(const LibNM::AccessPoint removedAP)
+void WifiAPList::ListResource::removeAccessPoint
+(const LibNM::AccessPoint removedAP)
 {
     const LibNM::APHash apHash = removedAP.generateHash();
     nmAccessPoints[apHash].removeAllInstancesOf(removedAP);
@@ -158,8 +166,8 @@ void Wifi::APList::removeAccessPoint(const LibNM::AccessPoint removedAP)
     {
         const AccessPoint toRemove = wifiAccessPoints[apHash];
         wifiAccessPoints.erase(apHash);
-        foreachHandler<APUpdateInterface>([&toRemove]
-                (APUpdateInterface* updateHandler)
+        foreachHandler<UpdateInterface>([&toRemove]
+                (UpdateInterface* updateHandler)
         {
             updateHandler->accessPointRemoved(toRemove);
         });
@@ -170,7 +178,7 @@ void Wifi::APList::removeAccessPoint(const LibNM::AccessPoint removedAP)
  * Updates the signal strength of an AccessPoint, setting it to the strongest
  * signal strength of its LibNM::AccessPoints.
  */
-void Wifi::APList::updateSignalStrength(AccessPoint toUpdate)
+void WifiAPList::ListResource::updateSignalStrength(AccessPoint toUpdate)
 {
     const LibNM::APHash apHash = toUpdate.getHashValue();
     const unsigned int oldSignalStrength 
@@ -195,7 +203,7 @@ void Wifi::APList::updateSignalStrength(AccessPoint toUpdate)
 /*
  * Removes all saved Wifi::AccessPoints and LibNM::AccessPoints.
  */
-void Wifi::APList::clearAccessPoints()
+void WifiAPList::ListResource::clearAccessPoints()
 {
     LibNM::ThreadHandler nmThread;
     nmThread.call([]()
@@ -209,7 +217,7 @@ void Wifi::APList::clearAccessPoints()
  * Reloads all LibNM::AccessPoints from the NetworkManager, updating
  * Wifi::AccessPoints as necessary.
  */
-void Wifi::APList::updateAllAccessPoints()
+void WifiAPList::ListResource::updateAllAccessPoints()
 {
     LibNM::ThreadHandler nmThread;
     nmThread.call([this, &nmThread]()

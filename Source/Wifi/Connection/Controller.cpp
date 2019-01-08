@@ -4,8 +4,8 @@
 #include "Wifi/Connection/RecordWriter.h"
 #include "Wifi/Connection/Event.h"
 #include "Wifi/AccessPoint/AccessPoint.h"
-#include "Wifi/AccessPointList/APListReader.h"
-#include "Wifi/AccessPointList/NMAPListReader.h"
+#include "Wifi_APList_Reader.h"
+#include "Wifi_APList_NMReader.h"
 #include "LibNM/ContextTest.h"
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/Data/SSID.h"
@@ -41,7 +41,7 @@ void WifiConnect::Controller::connectToAccessPoint
     const LibNM::ThreadHandler nmThread;
     nmThread.call([this, &nmThread, &toConnect, &securityKey]()
     {
-        const NMAPListReader nmAPReader;
+        const APList::NMReader nmAPReader;
         const RecordReader connectionRecord;
         const LibNM::AccessPoint& nmAccessPoint 
                 = nmAPReader.getStrongestNMAccessPoint(toConnect);
@@ -160,7 +160,7 @@ static Wifi::AccessPoint getActiveConnectionAP
 (const LibNM::ActiveConnection connection)
 {
     const LibNM::AccessPoint nmAP = getActiveConnectionNMAP(connection);
-    const Wifi::APListReader apListReader;
+    const Wifi::APList::Reader apListReader;
     return apListReader.getAccessPoint(nmAP.generateHash());
 }
 

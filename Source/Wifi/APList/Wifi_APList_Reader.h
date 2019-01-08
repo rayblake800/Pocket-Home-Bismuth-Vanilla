@@ -1,23 +1,23 @@
 #pragma once
 /**
- * @file  Wifi/AccessPointList/APListReader.h
+ * @file  Wifi_APList_Reader.h
  *
  * @brief  Reads the list of visible Wifi access points.
  */
 
 #include "SharedResource_Handler.h"
 
-namespace Wifi { class APListReader; }
-namespace Wifi { class APList; }
+namespace Wifi { namespace APList { class Reader; } }
+namespace Wifi { namespace APList { class ListResource; } }
 namespace Wifi { class AccessPoint; }
 namespace LibNM { class APHash; }
 
-class Wifi::APListReader : public SharedResource::Handler<APList>
+class Wifi::APList::Reader : public SharedResource::Handler<ListResource>
 {
 public:
-    APListReader();
+    Reader();
 
-    virtual ~APListReader() { }
+    virtual ~Reader() { }
     
     /**
      * @brief  Gets Wifi::AccessPoint objects for all visible access points.

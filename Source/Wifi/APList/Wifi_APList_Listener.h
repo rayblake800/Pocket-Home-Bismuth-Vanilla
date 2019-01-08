@@ -1,20 +1,28 @@
 #pragma once
-#include "Wifi/AccessPointList/APUpdateInterface.h"
+/**
+ * @file  Wifi_APList_Listener.h
+ *
+ * @brief  Receives notifications whenever the list of visible Wifi access
+ *         points changes.
+ */
+
+#include "Wifi_APList_UpdateInterface.h"
 #include "SharedResource_Handler.h"
 
-namespace Wifi { class VisibleAPListener; }
-namespace Wifi { class APList; }
+namespace Wifi { namespace APList { class Listener; } }
+namespace Wifi { namespace APList { class ListResource; } }
 
-class Wifi::VisibleAPListener : public APUpdateInterface,
-    public SharedResource::Handler<APList>
+class Wifi::APList::Listener : public UpdateInterface,
+    public SharedResource::Handler<ListResource>
 {
 public:
-    VisibleAPListener();
+    Listener();
 
-    virtual ~VisibleAPListener() { }
+    virtual ~Listener() { }
 
     /**
-     * @brief  Gets the list of all visible access points from the APList.
+     * @brief  Gets the list of all visible access points from the access point 
+     *         list resource.
      *
      * @return  All visible access points.
      */

@@ -1,8 +1,8 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi/NMSignalHandlers/DeviceSignalHandler.h"
-#include "Wifi/AccessPointList/APList.h"
-#include "Wifi/AccessPointList/APListReader.h"
-#include "Wifi/AccessPointList/NMAPListReader.h"
+#include "Wifi_APList_ListResource.h"
+#include "Wifi_APList_Reader.h"
+#include "Wifi_APList_NMReader.h"
 #include "Wifi/Connection/Event.h"
 #include "Wifi/Connection/RecordReader.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
@@ -11,7 +11,7 @@
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/ContextTest.h"
 #if JUCE_DEBUG
-#include "WifiDebugOutput.h"
+#include "Wifi_DebugOutput.h"
 #endif
 
 Wifi::DeviceSignalHandler::DeviceSignalHandler() { }
@@ -144,7 +144,8 @@ void Wifi::DeviceSignalHandler::accessPointAdded(LibNM::AccessPoint addedAP)
 {
     ASSERT_NM_CONTEXT;
     addedAP.addListener(apSignalHandler);
-    SharedResource::LockedPtr<APList> apList = getWriteLockedResource();
+    SharedResource::LockedPtr<APList::ListResource> apList 
+            = getWriteLockedResource();
     apList->addAccessPoint(addedAP);
 }
 
@@ -155,7 +156,8 @@ void Wifi::DeviceSignalHandler::accessPointAdded(LibNM::AccessPoint addedAP)
 void Wifi::DeviceSignalHandler::accessPointRemoved()
 {
     ASSERT_NM_CONTEXT;
-    SharedResource::LockedPtr<APList> apList = getWriteLockedResource();
+    SharedResource::LockedPtr<APList::ListResource> apList 
+            = getWriteLockedResource();
     apList->updateAllAccessPoints();
     // TODO: define and use apList->removeInvalidatedAccessPoints() instead
 }
@@ -198,7 +200,7 @@ void Wifi::DeviceSignalHandler::activeConnectionChanged
         const LibNM::DeviceWifi wifiDevice = nmThreadHandler.getWifiDevice();
         const LibNM::AccessPoint nmAP = wifiDevice.getAccessPoint(
                 activeConnection.getAccessPointPath());
-        const APListReader apListReader;
+        const APList::Reader apListReader;
         connectionAP = apListReader.getAccessPoint(nmAP.generateHash());
     }
 

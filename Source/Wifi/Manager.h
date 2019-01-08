@@ -8,7 +8,7 @@
 
 #include "WindowFocus/WindowFocus.h"
 #include "LibNM/ThreadHandler.h"
-#include "Wifi/AccessPointList/APListReader.h"
+#include "Wifi_APList_Reader.h"
 #include "Wifi/Connection/RecordReader.h"
 
 #ifndef WIFI_IMPLEMENTATION
@@ -16,7 +16,6 @@
   #define WIFI_IMPLEMENTATION
 #endif
 
-#include "Wifi/AccessPointList/APListReader.h"
 #include "Wifi/Device/DeviceListener.h"
 #include "Wifi/NMSignalHandlers/DeviceSignalHandler.h"
 #include "Wifi/NMSignalHandlers/ClientSignalHandler.h"
@@ -61,7 +60,7 @@ private:
     LibNM::ThreadHandler nmThread;
 
     /* Ensures the access point list resource is initialized. */
-    std::unique_ptr<APListReader> apListReader;
+    std::unique_ptr<APList::Reader> apListReader;
 
     /* Ensures the connection record resource is initialized. */
     std::unique_ptr<Connection::RecordReader> recordReader;
