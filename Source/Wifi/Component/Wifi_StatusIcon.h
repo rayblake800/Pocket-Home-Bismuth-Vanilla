@@ -7,7 +7,7 @@
 
 #include "Theme_Image_Component.h"
 #include "DrawableImageComponent.h"
-#include "Wifi/Device/DeviceListener.h"
+#include "Wifi_Device_Listener.h"
 #include "Wifi_AP_StrengthListener.h"
 #include "Wifi_Connection_Listener.h"
 
@@ -18,7 +18,7 @@ class Wifi::StatusIcon :
     public Theme::Image::Component<DrawableImageComponent>, 
     public AP::StrengthListener, 
     public Connection::Listener,
-    public DeviceListener
+    public Device::Listener
 {
 public:
     StatusIcon();

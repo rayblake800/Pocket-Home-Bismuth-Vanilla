@@ -1,15 +1,15 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/Device/DeviceViewer.h"
-#include "Wifi/Device/DeviceTracker.h"
+#include "Wifi_Device_Reader.h"
+#include "Wifi_Device_Tracker.h"
 
-Wifi::DeviceViewer::DeviceViewer() { }
+Wifi::Device::Reader::Reader() { }
 
 /*
  * Checks if the wifi device is enabled.
  */
-bool Wifi::DeviceViewer::wifiDeviceEnabled() const
+bool Wifi::Device::Reader::wifiDeviceEnabled() const
 {
-    SharedResource::LockedPtr<DeviceTracker> wifiDeviceTracker
+    SharedResource::LockedPtr<Tracker> wifiDeviceTracker
         = getReadLockedResource();
     return wifiDeviceTracker->wifiDeviceEnabled();
 
@@ -18,9 +18,9 @@ bool Wifi::DeviceViewer::wifiDeviceEnabled() const
 /*
  * Checks if a Wifi device managed by NetworkManager exists.
  */
-bool Wifi::DeviceViewer::wifiDeviceExists() const
+bool Wifi::Device::Reader::wifiDeviceExists() const
 {
-    SharedResource::LockedPtr<DeviceTracker> wifiDeviceTracker
+    SharedResource::LockedPtr<Tracker> wifiDeviceTracker
         = getReadLockedResource();
     return wifiDeviceTracker->wifiDeviceExists();
 }
@@ -28,9 +28,9 @@ bool Wifi::DeviceViewer::wifiDeviceExists() const
 /*
  * Checks if wifi is currently being enabled or disabled.
  */
-bool Wifi::DeviceViewer::isDeviceStateChanging() const
+bool Wifi::Device::Reader::isDeviceStateChanging() const
 {
-    SharedResource::LockedPtr<DeviceTracker> wifiDeviceTracker
+    SharedResource::LockedPtr<Tracker> wifiDeviceTracker
         = getReadLockedResource();
     return wifiDeviceTracker->isDeviceStateChanging();
 }

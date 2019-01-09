@@ -3,22 +3,22 @@
 #endif
 #pragma once
 /**
- * @file  Wifi/Device/DeviceViewer.h
+ * @file  Wifi_Device_Reader.h
  *
  * @brief  Checks the status of the system's Wifi device.
  */
 
 #include "SharedResource_Handler.h"
 
-namespace Wifi { class DeviceViewer; }
-namespace Wifi { class DeviceTracker; }
+namespace Wifi { namespace Device { class Reader; } }
+namespace Wifi { namespace Device { class Tracker; } }
 
-class Wifi::DeviceViewer : public SharedResource::Handler<DeviceTracker>
+class Wifi::Device::Reader : public SharedResource::Handler<Tracker>
 {
 public:
-    DeviceViewer();
+    Reader();
 
-    virtual ~DeviceViewer() { }
+    virtual ~Reader() { }
     
     /**
      * @brief  Checks if the wifi device is enabled. 

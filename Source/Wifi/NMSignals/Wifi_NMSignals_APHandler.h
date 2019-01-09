@@ -3,7 +3,7 @@
 #endif
 #pragma once
 /**
- * @file  Wifi/NMSignalHandlers/APSignalHandler.h
+ * @file  Wifi_NMSignals_APHandler.h
  *
  * @brief  Sends Wifi access point signal strength changes to the access point
  *         list.
@@ -12,16 +12,16 @@
 #include "SharedResource_Handler.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 
-namespace Wifi { class APSignalHandler; }
+namespace Wifi { namespace NMSignals { class APHandler; } }
 namespace Wifi { namespace APList { class ListResource; } }
 
-class Wifi::APSignalHandler : public LibNM::AccessPoint::Listener,
+class Wifi::NMSignals::APHandler : public LibNM::AccessPoint::Listener,
     public SharedResource::Handler<APList::ListResource>
 {
 public:
-    APSignalHandler();
+    APHandler();
 
-    virtual ~APSignalHandler() { }
+    virtual ~APHandler() { }
 
 private:
     /**

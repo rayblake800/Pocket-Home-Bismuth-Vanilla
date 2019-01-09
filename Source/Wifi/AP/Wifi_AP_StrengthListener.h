@@ -1,6 +1,6 @@
 #pragma once
 #include "Wifi_AP_UpdateInterface.h"
-#include "Wifi_AP_AccessPoint.h"
+#include "Wifi_AccessPoint.h"
 #include "SharedResource_Handler.h"
 
 /**

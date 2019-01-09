@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/NMSignalHandlers/DeviceSignalHandler.h"
+#include "Wifi_NMSignals_DeviceHandler.h"
 #include "Wifi_APList_ListResource.h"
 #include "Wifi_APList_Reader.h"
 #include "Wifi_APList_NMReader.h"

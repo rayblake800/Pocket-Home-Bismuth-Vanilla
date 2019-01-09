@@ -3,7 +3,7 @@
 #endif
 #pragma once
 /**
- * @file  Wifi/NMSignalHandlers/DeviceSignalHandler.h
+ * @file  Wifi_NMSignals_DeviceHandler.h
  *
  * @brief  Handles signals from the Wifi device object, updating Wifi connection
  *         state, and visible access points. The DeviceSignalHandler is also
@@ -15,20 +15,20 @@
 #include "SharedResource_Handler.h"
 #include "Wifi_APList_Writer.h"
 #include "Wifi_Connection_RecordWriter.h"
-#include "Wifi/NMSignalHandlers/APSignalHandler.h"
+#include "Wifi_NMSignals_APHandler.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 
-namespace Wifi { class DeviceSignalHandler; }
+namespace Wifi { namespace NMSignals { class DeviceHandler; } }
 namespace Wifi { namespace APList { class ListResource; } }
 namespace Wifi { namespace Connection { class RecordWriter; } }
 
-class Wifi::DeviceSignalHandler : public LibNM::DeviceWifi::Listener,
+class Wifi::NMSignals::DeviceHandler : public LibNM::DeviceWifi::Listener,
     public SharedResource::Handler<APList::ListResource>
 {
 public:
-    DeviceSignalHandler();
+    DeviceHandler();
 
-    virtual ~DeviceSignalHandler() { }
+    virtual ~DeviceHandler() { }
 
     /**
      * @brief  Starts tracking the LibNM::ThreadResource's DeviceWifi object.
@@ -84,5 +84,5 @@ private:
     (LibNM::ActiveConnection activeConnection) final override;
 
     /* Tracks all access point signal strengths. */
-    APSignalHandler apSignalHandler;
+    APHandler apSignalHandler;
 };

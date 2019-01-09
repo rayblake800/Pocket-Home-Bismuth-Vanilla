@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Wifi/State/DeviceTracker.h
+ * @file  Wifi_Device_Tracker.h
  *
  * @brief  Tracks whether the Wifi device is enabled, notifying listeners
  *         whenever Wifi is enabled or disabled. 
@@ -10,19 +10,20 @@
 #include "LibNM/OwnedObjects/Client.h"
 #include "WindowFocus/WindowFocus.h"
 
-namespace Wifi { class DeviceTracker; }
+namespace Wifi { namespace Device { class Tracker; } }
 
 /**
- *  DeviceTracker tracks whether a Wifi device managed by NetworkManager is
- * known to exist, and whether it is currently enabled. Whenever this status
- * changes, the DeviceTracker notifies all DeviceListeners of the change. 
+ *  Wifi::Device::Tracker tracks whether a Wifi device managed by NetworkManager
+ * is known to exist, and whether it is currently enabled. Whenever this status
+ * changes, the Tracker notifies all Wifi::Device::Listener objects of the 
+ * change. 
  * 
- *  DeviceTracker is a singleton SharedResource object, and may only be accessed
- * by its Handler classes, DeviceListener and DeviceSignalHandler. A 
- * DeviceSignalHandler instance is required to keep the DeviceTracker updated
- * when the Wifi device state changes.
+ *  Tracker is a singleton SharedResource object, and may only be accessed by 
+ * its Handler classes, Device::Listener and Device::SignalHandler. A 
+ * SignalHandler instance is required to keep the Tracker updated when the Wifi 
+ * device state changes.
  */
-class Wifi::DeviceTracker : public SharedResource::Resource
+class Wifi::Device::Tracker : public SharedResource::Resource
 {
 public:
     /* SharedResource object instance key: */
@@ -31,9 +32,9 @@ public:
     /**
      * @brief  Checks the initial Wifi device state.
      */
-    DeviceTracker();
+    Tracker();
 
-    virtual ~DeviceTracker() { }
+    virtual ~Tracker() { }
 
     /**
      * @brief  Checks if a Wifi device managed by NetworkManager exists.

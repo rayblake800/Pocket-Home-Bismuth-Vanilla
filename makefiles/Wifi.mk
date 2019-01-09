@@ -8,7 +8,6 @@ WIFI_AP_ROOT := $(WIFI_ROOT)/AP
 WIFI_AP_PREFIX := $(WIFI_PREFIX)AP_
 OBJECTS_WIFI_ACCESS_POINT := \
   $(WIFI_AP_PREFIX)Data.o \
-  $(WIFI_AP_PREFIX)AccessPoint.o \
   $(WIFI_AP_PREFIX)StrengthListener.o
 
 WIFI_AP_LIST_ROOT := $(WIFI_ROOT)/APList
@@ -34,16 +33,16 @@ WIFI_DEVICE_ROOT := $(WIFI_ROOT)/Device
 WIFI_DEVICE_PREFIX := $(WIFI_PREFIX)Device_
 OBJECTS_WIFI_DEVICE := \
   $(WIFI_DEVICE_PREFIX)Controller.o \
-  $(WIFI_DEVICE_PREFIX)DeviceListener.o \
-  $(WIFI_DEVICE_PREFIX)DeviceTracker.o \
-  $(WIFI_DEVICE_PREFIX)DeviceViewer.o
+  $(WIFI_DEVICE_PREFIX)Listener.o \
+  $(WIFI_DEVICE_PREFIX)Tracker.o \
+  $(WIFI_DEVICE_PREFIX)Reader.o
 
-WIFI_SIGNAL_HANDLER_ROOT := $(WIFI_ROOT)/NMSignalHandlers
-WIFI_SIGNAL_HANDLER_PREFIX := $(WIFI_PREFIX)Signal_Handler_
+WIFI_SIGNAL_HANDLER_ROOT := $(WIFI_ROOT)/NMSignals
+WIFI_SIGNAL_HANDLER_PREFIX := $(WIFI_PREFIX)NMSignals_
 OBJECTS_WIFI_SIGNAL_HANDLER := \
-  $(WIFI_SIGNAL_HANDLER_PREFIX)AccessPoint.o \
-  $(WIFI_SIGNAL_HANDLER_PREFIX)Client.o \
-  $(WIFI_SIGNAL_HANDLER_PREFIX)Device.o
+  $(WIFI_SIGNAL_HANDLER_PREFIX)APHandler.o \
+  $(WIFI_SIGNAL_HANDLER_PREFIX)ClientHandler.o \
+  $(WIFI_SIGNAL_HANDLER_PREFIX)DeviceHandler.o
 
 WIFI_COMPONENT_ROOT := $(WIFI_ROOT)/Component
 OBJECTS_WIFI_COMPONENT := \
@@ -53,6 +52,7 @@ OBJECTS_WIFI_COMPONENT := \
 
 OBJECTS_WIFI := \
   $(WIFI_PREFIX)Manager.o \
+  $(WIFI_PREFIX)AccessPoint.o \
   $(OBJECTS_WIFI_ACCESS_POINT) \
   $(OBJECTS_WIFI_ACCESS_POINT_LIST) \
   $(OBJECTS_WIFI_CONNECTION) \
@@ -75,11 +75,11 @@ wifi : $(OBJECTS_WIFI)
 
 $(WIFI_PREFIX)Manager.o : \
     $(WIFI_ROOT)/Manager.cpp
+$(WIFI_PREFIX)AccessPoint.o : \
+    $(WIFI_ROOT)/Wifi_AccessPoint.cpp
 
 $(WIFI_AP_PREFIX)Data.o : \
     $(WIFI_AP_ROOT)/Wifi_AP_Data.cpp
-$(WIFI_AP_PREFIX)AccessPoint.o : \
-    $(WIFI_AP_ROOT)/Wifi_AP_AccessPoint.cpp
 $(WIFI_AP_PREFIX)StrengthListener.o : \
     $(WIFI_AP_ROOT)/Wifi_AP_StrengthListener.cpp
 
@@ -108,20 +108,20 @@ $(WIFI_CONNECTION_PREFIX)Listener.o : \
     $(WIFI_CONNECTION_ROOT)/Wifi_Connection_Listener.cpp
 
 $(WIFI_DEVICE_PREFIX)Controller.o : \
-    $(WIFI_DEVICE_ROOT)/Controller.cpp
-$(WIFI_DEVICE_PREFIX)DeviceListener.o : \
-    $(WIFI_DEVICE_ROOT)/DeviceListener.cpp
-$(WIFI_DEVICE_PREFIX)DeviceTracker.o : \
-    $(WIFI_DEVICE_ROOT)/DeviceTracker.cpp
-$(WIFI_DEVICE_PREFIX)DeviceViewer.o : \
-    $(WIFI_DEVICE_ROOT)/DeviceViewer.cpp
+    $(WIFI_DEVICE_ROOT)/Wifi_Device_Controller.cpp
+$(WIFI_DEVICE_PREFIX)Listener.o : \
+    $(WIFI_DEVICE_ROOT)/Wifi_Device_Listener.cpp
+$(WIFI_DEVICE_PREFIX)Tracker.o : \
+    $(WIFI_DEVICE_ROOT)/Wifi_Device_Tracker.cpp
+$(WIFI_DEVICE_PREFIX)Reader.o : \
+    $(WIFI_DEVICE_ROOT)/Wifi_Device_Reader.cpp
 
-$(WIFI_SIGNAL_HANDLER_PREFIX)AccessPoint.o : \
-    $(WIFI_SIGNAL_HANDLER_ROOT)/APSignalHandler.cpp
-$(WIFI_SIGNAL_HANDLER_PREFIX)Client.o : \
-    $(WIFI_SIGNAL_HANDLER_ROOT)/ClientSignalHandler.cpp
-$(WIFI_SIGNAL_HANDLER_PREFIX)Device.o : \
-    $(WIFI_SIGNAL_HANDLER_ROOT)/DeviceSignalHandler.cpp
+$(WIFI_SIGNAL_HANDLER_PREFIX)APHandler.o : \
+    $(WIFI_SIGNAL_HANDLER_ROOT)/Wifi_NMSignals_APHandler.cpp
+$(WIFI_SIGNAL_HANDLER_PREFIX)ClientHandler.o : \
+    $(WIFI_SIGNAL_HANDLER_ROOT)/Wifi_NMSignals_ClientHandler.cpp
+$(WIFI_SIGNAL_HANDLER_PREFIX)DeviceHandler.o : \
+    $(WIFI_SIGNAL_HANDLER_ROOT)/Wifi_NMSignals_DeviceHandler.cpp
 
 $(WIFI_PREFIX)ControlWidget.o : \
     $(WIFI_COMPONENT_ROOT)/Wifi_ControlWidget.cpp

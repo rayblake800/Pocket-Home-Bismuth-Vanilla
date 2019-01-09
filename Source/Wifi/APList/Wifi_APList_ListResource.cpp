@@ -1,6 +1,6 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_APList_ListResource.h"
-#include "Wifi_AP_AccessPoint.h"
+#include "Wifi_AccessPoint.h"
 #include "Wifi_AP_UpdateInterface.h"
 #include "Wifi_APList_UpdateInterface.h"
 #include "LibNM/Data/APHash.h"

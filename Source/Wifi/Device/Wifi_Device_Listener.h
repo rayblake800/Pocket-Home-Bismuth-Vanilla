@@ -1,24 +1,24 @@
 #pragma once
 /**
- * @file Wifi/Listeners/DeviceListener.h
+ * @file Wifi_Device_Listener.h
  *
  * @brief  Checks if a Wifi device is present and enabled, and receives signals
  *         whenever Wifi is enabled or disabled.
  */
 
-#include "Wifi/Device/DeviceUpdateInterface.h"
+#include "Wifi_Device_UpdateInterface.h"
 #include "SharedResource_Handler.h"
 
-namespace Wifi { class DeviceListener; }
-namespace Wifi { class DeviceTracker; }
+namespace Wifi { namespace Device { class Listener; } }
+namespace Wifi { namespace Device { class Tracker; } }
 
-class Wifi::DeviceListener : public SharedResource::Handler<DeviceTracker>,
-    public DeviceUpdateInterface
+class Wifi::Device::Listener : public SharedResource::Handler<Tracker>,
+    public UpdateInterface
 {
 public:
-    DeviceListener();
+    Listener();
 
-    virtual ~DeviceListener() { }
+    virtual ~Listener() { }
 
     /**
      * @brief  Checks if a Wifi device managed by NetworkManager exists.

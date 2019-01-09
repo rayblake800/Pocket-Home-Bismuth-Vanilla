@@ -5,7 +5,7 @@
  * @brief  Stores the wifi access point, time, and type of a Wifi connection
  *         event.
  */
-#include "Wifi_AP_AccessPoint.h"
+#include "Wifi_AccessPoint.h"
 
 namespace Wifi { namespace Connection { class Event; } }
 namespace Wifi { namespace Connection { enum class EventType; } }

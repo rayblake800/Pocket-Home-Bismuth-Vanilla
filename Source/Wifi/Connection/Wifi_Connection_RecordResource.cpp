@@ -2,7 +2,7 @@
 #include "Wifi_Connection_RecordResource.h"
 #include "Wifi_Connection_Event.h"
 #include "Wifi_Connection_UpdateInterface.h"
-#include "Wifi_AP_AccessPoint.h"
+#include "Wifi_AccessPoint.h"
 #include "Wifi_APList_Reader.h"
 #include "Wifi_APList_NMReader.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"

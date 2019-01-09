@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Wifi_AP_AccessPoint.h
+ * @file  Wifi_AccessPoint.h
  *
  * @brief  Holds shared data describing a wifi access point.
  */

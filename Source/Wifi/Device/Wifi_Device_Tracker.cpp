@@ -1,16 +1,17 @@
-#include "Wifi/Device/DeviceTracker.h"
-#include "Wifi/Device/DeviceUpdateInterface.h"
+#include "Wifi_Device_Tracker.h"
+#include "Wifi_Device_UpdateInterface.h"
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 
 
 /* SharedResource object instance key: */
-const juce::Identifier Wifi::DeviceTracker::resourceKey = "Wifi_DeviceTracker";
+const juce::Identifier Wifi::Device::Tracker::resourceKey 
+        = "Wifi_Device_Tracker";
 
 /*
  * Checks the initial Wifi device state.
  */ 
-Wifi::DeviceTracker::DeviceTracker() : SharedResource::Resource(resourceKey)
+Wifi::Device::Tracker::Tracker() : SharedResource::Resource(resourceKey)
 {
     updateDeviceState(false);
 } 
@@ -18,7 +19,7 @@ Wifi::DeviceTracker::DeviceTracker() : SharedResource::Resource(resourceKey)
 /*
  * Checks if a Wifi device managed by NetworkManager exists.
  */
-bool Wifi::DeviceTracker::wifiDeviceExists() const
+bool Wifi::Device::Tracker::wifiDeviceExists() const
 {
     return deviceExists;
 }
@@ -26,7 +27,7 @@ bool Wifi::DeviceTracker::wifiDeviceExists() const
 /*
  * Checks if the wifi device is enabled. 
  */
-bool Wifi::DeviceTracker::wifiDeviceEnabled() const
+bool Wifi::Device::Tracker::wifiDeviceEnabled() const
 {
     return deviceExists && deviceEnabled;
 }
@@ -34,7 +35,7 @@ bool Wifi::DeviceTracker::wifiDeviceEnabled() const
 /*
  * Checks if wifi is currently being enabled or disabled.
  */
-bool Wifi::DeviceTracker::isDeviceStateChanging() const
+bool Wifi::Device::Tracker::isDeviceStateChanging() const
 {
     return stateChanging;
 }
@@ -43,7 +44,7 @@ bool Wifi::DeviceTracker::isDeviceStateChanging() const
  * Connects to NetworkManager to update the Wifi device state, notifying all 
  * DeviceListeners if the state changes.
  */
-void Wifi::DeviceTracker::updateDeviceState(const bool notifyListeners)
+void Wifi::Device::Tracker::updateDeviceState(const bool notifyListeners)
 {
     bool exists = deviceExists;
     bool enabled = deviceEnabled;
@@ -59,10 +60,10 @@ void Wifi::DeviceTracker::updateDeviceState(const bool notifyListeners)
 }
 
 /*
- * Updates the DeviceTracker's saved wifi device state, notifying all 
+ * Updates the Device::Tracker's saved wifi device state, notifying all 
  * DeviceListeners if the state changes.
  */
-void Wifi::DeviceTracker::updateDeviceState
+void Wifi::Device::Tracker::updateDeviceState
 (const bool exists, const bool enabled)
 {
     stateChanging = false;
@@ -72,8 +73,8 @@ void Wifi::DeviceTracker::updateDeviceState
     const bool isEnabled = wifiDeviceEnabled();
     if(isEnabled != wasEnabled)
     {
-        foreachHandler<DeviceUpdateInterface>([isEnabled]
-            (DeviceUpdateInterface* listener)
+        foreachHandler<UpdateInterface>([isEnabled]
+            (UpdateInterface* listener)
         {
             if(isEnabled)
             {
@@ -90,7 +91,7 @@ void Wifi::DeviceTracker::updateDeviceState
 /*
  * Notifies the device tracker that Wifi is about to be enabled or disabled.
  */
-void Wifi::DeviceTracker::signalDeviceStateChanging()
+void Wifi::Device::Tracker::signalDeviceStateChanging()
 {
     stateChanging = true;
 }

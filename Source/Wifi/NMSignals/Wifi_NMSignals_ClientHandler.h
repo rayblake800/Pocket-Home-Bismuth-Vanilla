@@ -3,7 +3,7 @@
 #endif
 #pragma once
 /**
- * @file  Wifi/NMSignalHandlers/ClientSignalHandler.h
+ * @file  Wifi_NMSignals_ClientHandler.h
  *
  * @brief  Notifies the Wifi device tracker whenever wireless networking is
  *         enabled or disabled.
@@ -12,16 +12,16 @@
 #include "SharedResource_Handler.h"
 #include "LibNM/OwnedObjects/Client.h"
 
-namespace Wifi { class ClientSignalHandler; }
-namespace Wifi { class DeviceTracker; }
+namespace Wifi { namespace NMSignals { class ClientHandler; } }
+namespace Wifi { namespace Device { class Tracker; } }
 
-class Wifi::ClientSignalHandler : public LibNM::Client::Listener,
-    public SharedResource::Handler<DeviceTracker>
+class Wifi::NMSignals::ClientHandler : public LibNM::Client::Listener,
+    public SharedResource::Handler<Device::Tracker>
 {
 public:
-    ClientSignalHandler();
+    ClientHandler();
 
-    virtual ~ClientSignalHandler() { }
+    virtual ~ClientHandler() { }
 
     /**
      * @brief  Starts tracking the LibNM::ThreadResource's Client object.

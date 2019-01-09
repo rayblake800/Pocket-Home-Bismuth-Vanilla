@@ -3,9 +3,9 @@
 #include "Theme_Image_Component.h"
 #include "Theme_Image_JSONKeys.h"
 #include "DrawableImageComponent.h"
-#include "Wifi_AP_AccessPoint.h"
+#include "Wifi_AccessPoint.h"
 #include "Wifi_Connection_RecordReader.h"
-#include "Wifi/Device/DeviceViewer.h"
+#include "Wifi_Device_Reader.h"
 
 Wifi::StatusIcon::StatusIcon() :
 Theme::Image::Component<DrawableImageComponent>(Theme::Image::JSONKeys::wifiIcon)
@@ -22,8 +22,8 @@ Theme::Image::Component<DrawableImageComponent>(Theme::Image::JSONKeys::wifiIcon
         return;
     }
 
-    const DeviceViewer deviceViewer;
-    setIcon(deviceViewer.wifiDeviceEnabled() ? 
+    const Device::Reader deviceReader;
+    setIcon(deviceReader.wifiDeviceEnabled() ? 
             APIcon::wifiStrength0 : APIcon::wifiOff);
 }
 

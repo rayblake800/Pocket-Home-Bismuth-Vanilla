@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi_AP_AccessPoint.h"
+#include "Wifi_AccessPoint.h"
 #include "Wifi_AP_Data.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/Data/APHash.h"

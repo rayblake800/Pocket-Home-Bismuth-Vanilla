@@ -19,8 +19,8 @@ Wifi::Manager::Manager()
 
         recordReader.reset(new Connection::RecordReader);
 
-        clientSignalHandler.reset(new ClientSignalHandler());
-        deviceSignalHandler.reset(new DeviceSignalHandler());
+        clientSignalHandler.reset(new NMSignals::ClientHandler());
+        deviceSignalHandler.reset(new NMSignals::DeviceHandler());
         clientSignalHandler->connect();
         deviceSignalHandler->connect();
     });

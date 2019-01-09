@@ -16,9 +16,9 @@
   #define WIFI_IMPLEMENTATION
 #endif
 
-#include "Wifi/Device/DeviceListener.h"
-#include "Wifi/NMSignalHandlers/DeviceSignalHandler.h"
-#include "Wifi/NMSignalHandlers/ClientSignalHandler.h"
+#include "Wifi_Device_Listener.h"
+#include "Wifi_NMSignals_DeviceHandler.h"
+#include "Wifi_NMSignals_ClientHandler.h"
 
 #ifdef WIFI_MANAGER_TEMP
   #undef WIFI_MANAGER_TEMP
@@ -66,8 +66,8 @@ private:
     std::unique_ptr<Connection::RecordReader> recordReader;
 
     /* Handles all signals from the LibNM thread resource's Client object. */
-    std::unique_ptr<ClientSignalHandler> clientSignalHandler;
+    std::unique_ptr<NMSignals::ClientHandler> clientSignalHandler;
 
     /* Handles all signals from the LibNM thread resource's DeviceWifi object.*/
-    std::unique_ptr<DeviceSignalHandler> deviceSignalHandler;
+    std::unique_ptr<NMSignals::DeviceHandler> deviceSignalHandler;
 };

@@ -1,8 +1,8 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_ControlWidget.h"
-#include "Wifi_AP_AccessPoint.h"
-#include "Wifi/Device/DeviceViewer.h"
-#include "Wifi/Device/Controller.h"
+#include "Wifi_AccessPoint.h"
+#include "Wifi_Device_Reader.h"
+#include "Wifi_Device_Controller.h"
 #include "Wifi_Connection_RecordReader.h"
 #include "Wifi_Connection_Event.h"
 
@@ -29,8 +29,8 @@ Locale::TextUser(localeClassKey)
  */
 bool Wifi::ControlWidget::connectionEnabled()
 {
-    const DeviceViewer wifiDevice;
-    return wifiDevice.wifiDeviceEnabled();
+    const Device::Reader deviceReader;
+    return deviceReader.wifiDeviceEnabled();
 }
 
 /*
@@ -38,10 +38,10 @@ bool Wifi::ControlWidget::connectionEnabled()
  */
 bool Wifi::ControlWidget::shouldShowSpinner() 
 {
-    const Connection::RecordReader connectionRecords;
-    const DeviceViewer deviceViewer; 
-    return connectionRecords.isConnecting()
-            && !deviceViewer.isDeviceStateChanging();
+    const Connection::RecordReader recordReader;
+    const Device::Reader deviceReader; 
+    return recordReader.isConnecting()
+            && !deviceReader.isDeviceStateChanging();
 }
 
 /*
@@ -49,9 +49,9 @@ bool Wifi::ControlWidget::shouldShowSpinner()
  */
 bool Wifi::ControlWidget::allowConnectionToggle()
 {
-    const DeviceViewer deviceViewer;
-    return deviceViewer.wifiDeviceExists() 
-        && !deviceViewer.isDeviceStateChanging();
+    const Device::Reader deviceReader;
+    return deviceReader.wifiDeviceExists() 
+        && !deviceReader.isDeviceStateChanging();
 }
 
 /*
@@ -59,11 +59,11 @@ bool Wifi::ControlWidget::allowConnectionToggle()
  */
 bool Wifi::ControlWidget::connectionPageAvailable() 
 {
-    const DeviceViewer deviceViewer;
-    const Connection::RecordReader connectionRecords;
-    return deviceViewer.wifiDeviceEnabled()
-        && !deviceViewer.isDeviceStateChanging()
-        && !connectionRecords.isConnecting();
+    const Device::Reader deviceReader;
+    const Connection::RecordReader recordReader;
+    return deviceReader.wifiDeviceEnabled()
+        && !deviceReader.isDeviceStateChanging()
+        && !recordReader.isConnecting();
 }
 
 
@@ -81,7 +81,7 @@ juce::String Wifi::ControlWidget::getIconAsset()
  */
 void Wifi::ControlWidget::enabledStateChanged(bool enabled)
 {
-    Controller deviceController;
+    Device::Controller deviceController;
     deviceController.setEnabled(enabled);
 }
 
@@ -90,30 +90,30 @@ void Wifi::ControlWidget::enabledStateChanged(bool enabled)
  */
 juce::String Wifi::ControlWidget::updateButtonText()
 {
-    const DeviceViewer deviceViewer;
-    if(!deviceViewer.wifiDeviceExists())
+    const Device::Reader deviceReader;
+    if(!deviceReader.wifiDeviceExists())
     {
         return localeText(wifiNotFoundTextKey);
     }
-    if(!deviceViewer.wifiDeviceEnabled())
+    if(!deviceReader.wifiDeviceEnabled())
     {
         return localeText(wifiDisabledTextKey);
     }
 
-    const Connection::RecordReader connectionRecords;
-    if(connectionRecords.getLastEvent().getEventType()
+    const Connection::RecordReader recordReader;
+    if(recordReader.getLastEvent().getEventType()
             == Connection::EventType::connectionAuthFailed)
     {
         return localeText(missingPSKTextKey);
     }
 
-    const bool isConnected = connectionRecords.isConnected();
+    const bool isConnected = recordReader.isConnected();
     const bool isConnecting = isConnected ? 
-        false : connectionRecords.isConnecting();
+        false : recordReader.isConnecting();
     if(isConnected || isConnecting)
     {
         juce::String apName 
-                = connectionRecords.getActiveAP().getSSID().toString();
+                = recordReader.getActiveAP().getSSID().toString();
         jassert(apName.isNotEmpty());
         return isConnected ? apName :
             (localeText(connectingAPTextKey) + apName);

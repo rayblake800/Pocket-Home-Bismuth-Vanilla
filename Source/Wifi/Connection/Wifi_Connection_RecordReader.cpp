@@ -2,7 +2,7 @@
 #include "Wifi_Connection_RecordReader.h"
 #include "Wifi_Connection_RecordResource.h"
 #include "Wifi_Connection_Event.h"
-#include "Wifi_AP_AccessPoint.h"
+#include "Wifi_AccessPoint.h"
 
 namespace WifiConnect = Wifi::Connection;
 

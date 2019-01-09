@@ -1,20 +1,20 @@
-#include "Wifi/Device/Controller.h"
-#include "Wifi/Device/DeviceTracker.h"
+#include "Wifi_Device_Controller.h"
+#include "Wifi_Device_Tracker.h"
 #include "LibNM/ThreadHandler.h"
 #include "LibNM/OwnedObjects/Client.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 
-Wifi::Controller::Controller() { }
+Wifi::Device::Controller::Controller() { }
 
 /*
  * Enables or disables the Wifi device.
  */
-void Wifi::Controller::setEnabled(const bool enableWifi)
+void Wifi::Device::Controller::setEnabled(const bool enableWifi)
 {
     const LibNM::ThreadHandler nmThreadHandler;
     nmThreadHandler.call([this, &nmThreadHandler, enableWifi]()
     {
-        SharedResource::LockedPtr<DeviceTracker> deviceTracker =
+        SharedResource::LockedPtr<Tracker> deviceTracker =
                 getWriteLockedResource();
         if(deviceTracker->wifiDeviceExists())
         {
@@ -37,7 +37,7 @@ void Wifi::Controller::setEnabled(const bool enableWifi)
 /*
  * Makes the Wifi device rescan nearby access points.
  */
-void Wifi::Controller::scanAccessPoints()
+void Wifi::Device::Controller::scanAccessPoints()
 {
     const LibNM::ThreadHandler nmThreadHandler;
     nmThreadHandler.call([]()

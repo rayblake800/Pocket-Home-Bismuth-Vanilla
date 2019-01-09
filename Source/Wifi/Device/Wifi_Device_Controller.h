@@ -1,20 +1,20 @@
 #pragma once
 /**
- * @file  Wifi/Control/Controller.h
+ * @file  Wifi_Device_Controller.h
  *
  * @brief  Sends basic commands to the Wifi device.
  */
 
 #include "SharedResource_Handler.h"
 
-namespace Wifi { class Controller; }
-namespace Wifi { class DeviceTracker; }
+namespace Wifi { namespace Device { class Controller; } }
+namespace Wifi { namespace Device { class Tracker; } }
 
 /**
  *  Controller objects are used to turn Wifi on and off, and to make the Wifi
  * device rescan visible access points. 
  */
-class Wifi::Controller : public SharedResource::Handler<DeviceTracker>
+class Wifi::Device::Controller : public SharedResource::Handler<Tracker>
 {
 public:
     Controller();
