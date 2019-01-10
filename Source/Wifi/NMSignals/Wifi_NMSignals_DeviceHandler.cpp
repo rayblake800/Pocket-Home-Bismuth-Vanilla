@@ -14,12 +14,12 @@
 #include "Wifi_DebugOutput.h"
 #endif
 
-Wifi::DeviceSignalHandler::DeviceSignalHandler() { }
+Wifi::NMSignals::DeviceHandler::DeviceHandler() { }
 
 /*
  * Starts tracking the LibNM::ThreadResource's DeviceWifi object.
  */
-void Wifi::DeviceSignalHandler::connect()
+void Wifi::NMSignals::DeviceHandler::connect()
 {
     const LibNM::ThreadHandler nmThreadHandler;
     nmThreadHandler.call([this, &nmThreadHandler]()
@@ -38,7 +38,7 @@ void Wifi::DeviceSignalHandler::connect()
 /*
  * Stops tracking the LibNM::ThreadResource's DeviceWifi object.
  */
-void Wifi::DeviceSignalHandler::disconnect()
+void Wifi::NMSignals::DeviceHandler::disconnect()
 {
     unsubscribeAll();
 }
@@ -46,13 +46,13 @@ void Wifi::DeviceSignalHandler::disconnect()
 /*
  * This method will be called whenever the wifi device state changes.
  */
-void Wifi::DeviceSignalHandler::stateChanged(NMDeviceState newState,
+void Wifi::NMSignals::DeviceHandler::stateChanged(NMDeviceState newState,
         NMDeviceState oldState, NMDeviceStateReason reason)
 {
     ASSERT_NM_CONTEXT;
-    DBG("Wifi::DeviceSignalHandler::stateChanged" << ":  changed to "
+    DBG("Wifi::NMSignals::DeviceHandler::stateChanged" << ":  changed to "
             << deviceStateString(newState));
-    DBG("LibNMInterface::stateChanged" << ":  reason="
+    DBG("Wifi::NMSignals::DeviceHandler::stateChanged" << ":  reason="
             << deviceStateReasonString(reason));
 
     const LibNM::ThreadHandler nmThreadHandler;
@@ -69,7 +69,8 @@ void Wifi::DeviceSignalHandler::stateChanged(NMDeviceState newState,
     {
         case NM_DEVICE_STATE_ACTIVATED:
         {
-            DBG("LibNMInterface::stateChanged: new connection activated, "
+            DBG("Wifi::NMSignals::DeviceHandler::stateChanged"
+                    << ": new connection activated, "
                     << "send connection signal");
             jassert(!lastActiveAP.isNull());
             if(!connectionRecord.isConnected())
@@ -125,7 +126,7 @@ void Wifi::DeviceSignalHandler::stateChanged(NMDeviceState newState,
         case NM_DEVICE_STATE_UNAVAILABLE:
         default:
         {
-            DBG("LibNMInterface::stateChanged"
+            DBG("Wifi::NMSignals::DeviceHandler::stateChanged"
                     << ": wlan0 device entered unmanaged state: "
                     << deviceStateString(newState));
             if(!lastActiveAP.isNull())
@@ -140,7 +141,8 @@ void Wifi::DeviceSignalHandler::stateChanged(NMDeviceState newState,
 /*
  * Updates the access point list whenever a new access point is detected.
  */
-void Wifi::DeviceSignalHandler::accessPointAdded(LibNM::AccessPoint addedAP)
+void Wifi::NMSignals::DeviceHandler::accessPointAdded
+(LibNM::AccessPoint addedAP)
 {
     ASSERT_NM_CONTEXT;
     addedAP.addListener(apSignalHandler);
@@ -153,7 +155,7 @@ void Wifi::DeviceSignalHandler::accessPointAdded(LibNM::AccessPoint addedAP)
  * Updates the access point list whenever a previously seen access point is 
  * lost.
  */
-void Wifi::DeviceSignalHandler::accessPointRemoved()
+void Wifi::NMSignals::DeviceHandler::accessPointRemoved()
 {
     ASSERT_NM_CONTEXT;
     SharedResource::LockedPtr<APList::ListResource> apList 
@@ -165,7 +167,7 @@ void Wifi::DeviceSignalHandler::accessPointRemoved()
 /*
  * Updates the connection record when the active network connection changes.
  */
-void Wifi::DeviceSignalHandler::activeConnectionChanged
+void Wifi::NMSignals::DeviceHandler::activeConnectionChanged
 (LibNM::ActiveConnection activeConnection)
 {
     ASSERT_NM_CONTEXT;
