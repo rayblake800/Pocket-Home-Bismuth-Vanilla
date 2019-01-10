@@ -1,9 +1,9 @@
 #pragma once
 /**
- * @file  Wifi/Manager.h
+ * @file  Wifi_Manager.h
  *
  * @brief  Ensures Wifi resources and signal handlers remain initialized as
- *         long as an Initializer object exists.
+ *         long as a Wifi::Manager object exists.
  */
 
 #include "WindowFocus/WindowFocus.h"

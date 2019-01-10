@@ -74,7 +74,7 @@ wifi : $(OBJECTS_WIFI)
 	@echo "Built Wifi module"
 
 $(WIFI_PREFIX)Manager.o : \
-    $(WIFI_ROOT)/Manager.cpp
+    $(WIFI_ROOT)/Wifi_Manager.cpp
 $(WIFI_PREFIX)AccessPoint.o : \
     $(WIFI_ROOT)/Wifi_AccessPoint.cpp
 

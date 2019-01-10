@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi/Manager.h"
+#include "Wifi_Manager.h"
 #include "Wifi_APList_Writer.h"
 
 /*

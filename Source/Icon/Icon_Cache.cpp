@@ -1,25 +1,27 @@
 #include <fcntl.h>
 #include <unistd.h>
-#include "IconCache.h"
+#include "Icon_Cache.h"
 
 /*
  * Maps an icon cache file to memory.
  */
-IconCache::IconCache(const juce::String& themePath)
+Icon::Cache::Cache(const juce::String& themePath)
 {
-    using namespace juce;
+    using juce::String;
+    using juce::File;
+    using juce::uint32;
     String cachePath = themePath + cacheFileName;
     File cacheFile(cachePath);
     if (!cacheFile.existsAsFile())
     {
-        DBG("IconCache::IconCache: Failed to find cache file " << cachePath);
+        DBG("Icon::Cache::Cache: Failed to find cache file " << cachePath);
         return;
     }
     
     fileLen = cacheFile.getSize();
     if (fileLen <= 0)
     {
-        DBG("IconCache::IconCache: Cache file is empty, path = " << cachePath);
+        DBG("Icon::Cache::Cache: Cache file is empty, path = " << cachePath);
         return;
     }
     
@@ -27,7 +29,7 @@ IconCache::IconCache(const juce::String& themePath)
         cacheFile.getParentDirectory().getLastModificationTime()
         .toMilliseconds())
     {
-        //DBG("IconCache::IconCache: Cache file is out of date, path = "
+        //DBG("Icon::Cache::Cache: Cache file is out of date, path = "
         //        << cachePath);
         return;
     }
@@ -35,18 +37,18 @@ IconCache::IconCache(const juce::String& themePath)
     fd = open(cachePath.toRawUTF8(), O_RDONLY, 0);
     if (fd <= 0)
     {
-        DBG("IconCache::IconCache: Failed to open cache file " << cachePath);
+        DBG("Icon::Cache::Cache: Failed to open cache file " << cachePath);
         return;
     }
     fileMap = mmap(nullptr, fileLen, PROT_READ, MAP_PRIVATE | MAP_POPULATE,
             fd, 0);
     if (fileMap == MAP_FAILED)
     {
-        DBG("IconCache::IconCache: Failed to map cache file " << cachePath);
+        DBG("Icon::Cache::Cache: Failed to map cache file " << cachePath);
         return;
     }
     
-    //DBG("IconCache::IconCache: mapped cache file " << cachePath << ", size "
+    //DBG("Icon::Cache::Cache: mapped cache file " << cachePath << ", size "
     //        << String(fileLen));
 
     /*
@@ -63,7 +65,7 @@ IconCache::IconCache(const juce::String& themePath)
     uint32 dirListOffset = read32(8);
 
     uint32 numDirs = read32(dirListOffset);
-    //DBG("IconCache::IconCache:: reading " << String(numDirs) 
+    //DBG("Icon::Cache::Cache reading " << String(numDirs) 
     //        << " directory names from offset " 
     //        << String::toHexString(dirListOffset));
     dirListOffset += 4;
@@ -76,7 +78,7 @@ IconCache::IconCache(const juce::String& themePath)
 
     hashBuckets = read32(hashOffset);
     hashOffset += 4;
-    //DBG("IconCache::IconCache:: reading " << String(hashBuckets) 
+    //DBG("Icon::Cache::Cache reading " << String(hashBuckets) 
     //        << " hash bucket offsets");
     for (int i = 0; i < hashBuckets; i++)
     {
@@ -84,7 +86,7 @@ IconCache::IconCache(const juce::String& themePath)
     }
 }
 
-IconCache::~IconCache()
+Icon::Cache::~Cache()
 {
     if (fileMap != MAP_FAILED)
     {
@@ -103,7 +105,7 @@ IconCache::~IconCache()
  * Checks if this object represents a valid cache file.  This ensures that
  * the cache file exists, is not out of date, and contains icon data. 
  */
-bool IconCache::isValidCache() const
+bool Icon::Cache::isValidCache() const
 {
     return fileMap != MAP_FAILED && fileLen > 0
             && !directories.isEmpty() && !hashOffsets.isEmpty();
@@ -112,7 +114,7 @@ bool IconCache::isValidCache() const
 /*
  * Looks up an icon's data in the icon cache.
  */
-std::map<juce::String,juce::String> IconCache::lookupIcon
+std::map<juce::String,juce::String> Icon::Cache::lookupIcon
 (const juce::String& iconName) const
 {
     using namespace juce;
@@ -170,7 +172,7 @@ std::map<juce::String,juce::String> IconCache::lookupIcon
 /*
  * Calculate the hash value of an icon name.
  */
-juce::uint32 IconCache::hashValue(const char* icon) const
+juce::uint32 Icon::Cache::hashValue(const char* icon) const
 {
     using namespace juce;
     if (icon == nullptr)
@@ -191,7 +193,7 @@ juce::uint32 IconCache::hashValue(const char* icon) const
  * file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-juce::uint16 IconCache::read16(juce::uint32 offset) const
+juce::uint16 Icon::Cache::read16(juce::uint32 offset) const
 {
     using namespace juce;
     if(fileMap == MAP_FAILED || (offset + sizeof(uint16)) > fileLen
@@ -210,7 +212,7 @@ juce::uint16 IconCache::read16(juce::uint32 offset) const
  * file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-juce::uint32 IconCache::read32(juce::uint32 offset) const
+juce::uint32 Icon::Cache::read32(juce::uint32 offset) const
 {
     using namespace juce;
     if(fileMap == MAP_FAILED || (offset + sizeof(uint32)) > fileLen
@@ -229,7 +231,7 @@ juce::uint32 IconCache::read32(juce::uint32 offset) const
  * cache file, after ensuring that the cache file is valid and the offset is
  * within the file bounds.
  */
-juce::String IconCache::readString(juce::uint32 offset) const
+juce::String Icon::Cache::readString(juce::uint32 offset) const
 {
     using namespace juce;
     if (fileMap == MAP_FAILED || offset >= fileLen)
