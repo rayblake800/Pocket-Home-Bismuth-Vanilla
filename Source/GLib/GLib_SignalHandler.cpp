@@ -60,7 +60,10 @@ bool GLib::SignalHandler::disconnectSignals(GObject* source)
  */
 bool GLib::SignalHandler::isConnected(GObject* source) const
 {
-    jassert(source != nullptr);
+    if(source == nullptr)
+    {
+        return false;
+    }
     const juce::ScopedLock signalListLock(signals.getLock());
     return signals.contains(source);
 }
@@ -175,7 +178,8 @@ void GLib::SignalHandler::shareSignalSources(const SignalHandler& otherHandler)
 void GLib::SignalHandler::unsubscribeAll()
 {
     const juce::ScopedLock clearSignalLock(signals.getLock());
-    auto iter = signals.begin();
+    juce::HashMap<WeakRef, SourceData, juce::DefaultHashFunctions,
+            juce::CriticalSection>::Iterator iter(signals);
     while(iter.next())
     {
         ObjectPtr sourcePtr(iter.getKey().getObject());
