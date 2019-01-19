@@ -1,14 +1,19 @@
 #pragma once
-#include "SharedResource.h"
-#include "SharedResource_Handler.h"
-#include "SharedResource_Resource.h"
-
 /**
  * @file  ThreadResource.h
  * 
  * @brief  An abstract basis for SharedResource Thread objects. 
- *
- * Each ThreadResource subclass manages a single child thread using the
+ */
+
+#include "SharedResource_Handler.h"
+#include "SharedResource_Resource.h"
+#include <condition_variable>
+#include <mutex>
+
+namespace SharedResource { class ThreadResource; }
+
+/**
+ *  Each ThreadResource subclass manages a single child thread using the
  * SharedResource control pattern. ThreadResource threads may be accessed
  * through any of their Handler objects, and will only be destroyed when all of
  * their handlers are destroyed. 
@@ -40,10 +45,20 @@ public:
     virtual void startThreadResource();
 
     /**
-     * @brief  Performs all necessary steps to stop the thread, and waits for
+     * @brief  Performs all necessary steps to stop the thread.
      *         the thread to exit.
      */
     virtual void stopThreadResource();
+
+    /**
+     * @brief  Stops the thread resource, waiting until the thread completely
+     *         stops running and deletes its ThreadLock.
+     *
+     *  The caller must aquire the thread resource's lock for writing before
+     * calling this method. The lock will be unlocked and then relocked
+     * as the thread exits.
+     */
+    void stopThreadAndWait();
 
     /* Checks if the resource's thread is currently running. */
     using juce::Thread::isThreadRunning;
@@ -143,4 +158,15 @@ private:
      *         routines before the thread exits.
      */
     virtual void run() final override;
+
+    /* Used when waiting for the thread to start: */
+    std::mutex startMutex;
+    std::condition_variable startCondition;
+
+    /* Used when waiting for the thread to stop: */
+    std::mutex stopMutex;
+    std::condition_variable stopCondition;
+
+    /* Preserves the thread object and controls access while the thread runs: */
+    std::unique_ptr<ThreadLock> threadLock = nullptr;
 };

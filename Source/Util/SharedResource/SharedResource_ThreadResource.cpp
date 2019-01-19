@@ -1,7 +1,7 @@
 #include "SharedResource_ThreadResource.h"
 
 /* Number of milliseconds to wait before forcibly terminating the thread: */
-static const constexpr int timeoutMilliseconds = 1000;
+static const constexpr int timeoutMilliseconds = 5000;
 
 /*
  * Creates a new ThreadResource.
@@ -16,6 +16,8 @@ SharedResource::ThreadResource::ThreadResource
 SharedResource::ThreadResource::~ThreadResource()
 {
     stopThreadResource();
+    // Force the thread to stop if it refuses on its own for some reason.
+    stopThread(timeoutMilliseconds);
 }
 
 /*
@@ -23,7 +25,15 @@ SharedResource::ThreadResource::~ThreadResource()
  */
 void SharedResource::ThreadResource::startThreadResource()
 {
-    startThread();
+    std::unique_lock<std::mutex> startLock(startMutex);
+    if(!isThreadRunning())
+    {
+        startThread();
+        ThreadLock tempUnlocker(getResourceKey());
+        tempUnlocker.exitWrite();
+        startCondition.wait(startLock);
+        tempUnlocker.enterWrite();
+    }
 }
 
 /*
@@ -32,6 +42,7 @@ void SharedResource::ThreadResource::startThreadResource()
  */
 void SharedResource::ThreadResource::stopThreadResource()
 {
+    // Don't try to stop the thread while running on the thread:
     jassert(Thread::getCurrentThreadId() != getThreadId());
     if(isThreadRunning())
     {
@@ -40,7 +51,23 @@ void SharedResource::ThreadResource::stopThreadResource()
         DBG("SharedResource::ThreadResource::" << __func__ << ": Thread \""
                 << getResourceKey().toString() 
                 << "\" is stopping.");
-        stopThread(timeoutMilliseconds);
+    }
+}
+
+/*
+ * Stops the thread resource, waiting until the thread completely stops running 
+ * and deletes its ThreadLock.
+ */
+void SharedResource::ThreadResource::stopThreadAndWait()
+{
+    std::unique_lock<std::mutex> stopLock(stopMutex);
+    if(isThreadRunning() || threadLock != nullptr)
+    {
+        ThreadLock tempUnlocker(getResourceKey());
+        tempUnlocker.exitWrite();
+        stopThreadResource();
+        stopCondition.wait(stopLock);
+        tempUnlocker.enterWrite();
     }
 }
 
@@ -91,51 +118,76 @@ void SharedResource::ThreadResource::ThreadLock::exitWrite() const
  */
 void SharedResource::ThreadResource::run()
 {
+    // Make sure a previous ThreadLock instance doesn't still exist:
+    {
+        std::unique_lock<std::mutex> stopLock(stopMutex);
+        if(threadLock != nullptr)
+        {
+            stopCondition.wait(stopLock);
+        }
+    }
+    // Notify any callers waiting for the thread to start:
+    {
+        std::unique_lock<std::mutex> startLock(startMutex);
+        startCondition.notify_all();
+    }
+    threadLock.reset(new ThreadLock(getResourceKey()));
+
     while(!threadShouldExit())
     {
-        ThreadLock* threadLock = new ThreadLock(getResourceKey());
         threadLock->enterWrite();
+        DBG("SharedResource::ThreadResource::" << __func__ 
+                << ": Initializing thread \"" << getResourceKey().toString() 
+                << "\".");
         init();
         threadLock->exitWrite();
 
+        DBG("SharedResource::ThreadResource::" << __func__ 
+                << ": Thread \"" << getResourceKey().toString() 
+                << "\" entering main action loop.");
         while(!threadShouldExit() && !threadShouldWait())
         {
             runLoop(*threadLock);
         }
         
         threadLock->enterWrite();
+        DBG("SharedResource::ThreadResource::" << __func__ 
+                << ": Running cleanup for thread \"" 
+                << getResourceKey().toString() << "\".");
         cleanup();
         threadLock->exitWrite();
 
-        // Delete the lock outside of the thread, just in case deleting the lock
-        // also deletes the thread.
-        std::function<void()> deleteLock = buildAsyncFunction(LockType::write,
-            [this, threadLock]()
-            {
-                if(threadShouldExit())
-                {
-                    notify();
-                    waitForThreadToExit(-1);
-                }
-                delete threadLock;
-            });
-        
-        // Use the message thread if possible, create a new thread instead if the
-        // message thread is stopping.
-        juce::MessageManager* messageManager 
-            = juce::MessageManager::getInstanceWithoutCreating();
-        if(messageManager == nullptr || messageManager->hasStopMessageBeenSent())
-        {
-            juce::Thread::launch(deleteLock);
-        }
-        else
-        {
-            juce::MessageManager::callAsync(deleteLock);
-        }
-
         if(threadShouldWait() && !threadShouldExit())
         {
+            DBG("SharedResource::ThreadResource::" << __func__ << ": Thread \""
+                    << getResourceKey().toString() 
+                    << "\" is waiting.");
             wait(-1);
         }
+
+        DBG("SharedResource::ThreadResource::" << __func__ << ": Thread \""
+                << getResourceKey().toString() 
+                << "\" finished running.");
     }
+
+    // Delete the lock outside of the thread, just in case deleting the lock
+    // also deletes the thread.
+    std::function<void()> lockDelete = buildAsyncFunction(LockType::write,
+    [this]()
+    {
+        std::unique_lock<std::mutex> stopLock(stopMutex);
+        DBG("SharedResource::ThreadResource: Asynchronously deleting "
+                << "ThreadLock after thread exits.");
+        if(threadShouldExit())
+        {
+            notify();
+            waitForThreadToExit(-1);
+        }
+        threadLock.reset(nullptr);
+        stopCondition.notify_all();
+    });
+
+    // The MessageManager thread shouldn't be used, as it might be stopping or 
+    // waiting for the lock to be deleted.
+    juce::Thread::launch(lockDelete);
 }
