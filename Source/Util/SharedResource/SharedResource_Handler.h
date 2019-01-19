@@ -82,9 +82,9 @@ protected:
      * @return  A read-locked pointer to the class Resource instance.
      */
     template <class LockedType = ResourceType>
-    LockedPtr<LockedType> getReadLockedResource() const
+    LockedPtr<const LockedType> getReadLockedResource() const
     {
-        return LockedPtr<LockedType>(resourceKey, LockType::read);
+        return LockedPtr<const LockedType>(resourceKey, LockType::read);
     }
 
     /**
