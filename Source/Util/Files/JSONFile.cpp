@@ -1,17 +1,42 @@
 #include "JSONFile.h"
 #include "AssetFiles.h"
 
-//Maximum number of decimal places to save when writing double values to JSON.
+/* Maximum number of decimal places saved when writing double values to JSON: */
 static const constexpr int decimalPlacesSaved = 5;
 
 /*
- * Opens a JSON data file interface.
+ * Creates a JSON data file interface, creating a new JSON file or reading an
+ * existing JSON file's data.
  */
-JSONFile::JSONFile(const juce::String filePath)
-: filePath(filePath) { }
+JSONFile::JSONFile(const juce::String filePath) : filePath(filePath) 
+{ 
+    using juce::var;
+    jsonData = AssetFiles::loadJSONAsset(filePath);
+    if (!jsonData.isObject())
+    {
+        jsonData = var(); 
+        juce::File sourceFile = AssetFiles::findAssetFile(filePath);
+        if (sourceFile.existsAsFile())
+        {
+            if (sourceFile.getSize() > 0)
+            {
+                throw FileException(filePath, "Not a valid JSON file!");
+            }
+        }
+        else
+        {
+            juce::Result createFile = sourceFile.create();
+            if (!createFile)
+            {
+                throw FileException(filePath, createFile.getErrorMessage());
+            }
+        }
+        jsonData = var(new juce::DynamicObject());
+    }
+}
 
 /*
- * Saves all changes back to the source file, if applicable.
+ * Saves all changes back to the source file if applicable.
  */
 JSONFile::~JSONFile()
 {
@@ -50,46 +75,29 @@ void JSONFile::writeChanges()
 }
  
 /*
- * Unloads all file data from memory, writing any pending changes first.
- * File data will be reloaded from disk if any methods accessing property
- * data are called.
- */
-void JSONFile::unloadData()
-{
-    if(!openedFile)
-    {
-        return;
-    }
-    writeChanges();
-    jsonData = juce::var();
-    openedFile = false;
-}
-
-/*
- * Removes and returns a value of type T from a var container. The caller
- * is responsible for ensuring that the container definitely contains
- * a value of type T.
+ * Removes and returns a value of type T from a var container. 
  */
 template<> juce::String JSONFile::extractProperty<juce::String>
-(juce::var& container) { return container; }
+(juce::var& container) const { return container; }
 
 template<> int JSONFile::extractProperty<int>
-(juce::var& container) { return container; }
+(juce::var& container) const { return container; }
 
 template<> bool JSONFile::extractProperty<bool>
-(juce::var& container) { return container; }
+(juce::var& container) const { return container; }
 
 template<> double JSONFile::extractProperty<double>
-(juce::var& container) { return container; }
+(juce::var& container) const { return container; }
 
 template<> juce::var JSONFile::extractProperty<juce::var>
-(juce::var& container) { return container; }
+(juce::var& container) const { return container; }
 
 template<> 
 juce::Array<juce::var> JSONFile::extractProperty <juce::Array<juce::var>>
-(juce::var& container)
+(juce::var& container) const
 {
-    using namespace juce;
+    using juce::Array;
+    using juce::var;
     Array<var>* arrayProperty = container.getArray();
     if(arrayProperty != nullptr)
     {
@@ -100,7 +108,7 @@ juce::Array<juce::var> JSONFile::extractProperty <juce::Array<juce::var>>
 }
 
 template<> juce::DynamicObject* JSONFile::extractProperty<juce::DynamicObject*>
-(juce::var& container)
+(juce::var& container) const
 {
     return container.getDynamicObject();
 }
@@ -109,7 +117,7 @@ template<> juce::DynamicObject* JSONFile::extractProperty<juce::DynamicObject*>
 /*
  * Gets the name of the data type held in the JSON var object.
  */
-juce::String JSONFile::getTypeName(const juce::var& property)
+juce::String JSONFile::getTypeName(const juce::var& property) const
 {
     if (property.isVoid())
     {
@@ -161,72 +169,37 @@ juce::String JSONFile::getTypeName(const juce::var& property)
 /*
  * Gets the name of a data type that may be contained in a JSON var object.
  */
-template<>juce::String JSONFile::getTypeName<int>()
+template<>juce::String JSONFile::getTypeName<int>() const
 {
     return "int";
 }
 
-template<>juce::String JSONFile::getTypeName<bool>()
+template<>juce::String JSONFile::getTypeName<bool>() const
 {
     return "bool";
 }
 
-template<>juce::String JSONFile::getTypeName<double>()
+template<>juce::String JSONFile::getTypeName<double>() const
 {
     return "double";
 }
 
-template<>juce::String JSONFile::getTypeName<juce::String>()
+template<>juce::String JSONFile::getTypeName<juce::String>() const
 {
     return "String";
 }
 
-template<>juce::String JSONFile::getTypeName<juce::DynamicObject*>()
+template<>juce::String JSONFile::getTypeName<juce::DynamicObject*>() const
 {
     return "DynamicObject*";
 }
 
-template<>juce::String JSONFile::getTypeName<juce::Array<juce::var>>()
+template<>juce::String JSONFile::getTypeName<juce::Array<juce::var>>() const
 {
     return "Array<var>";
 }
 
-template<>juce::String JSONFile::getTypeName<juce::var>()
+template<>juce::String JSONFile::getTypeName<juce::var>() const
 {
     return "var";
-}
-
-/*
- * If the file has not yet been opened, this will open it, and read its
- * data into the jsonData var object.
- */
-void JSONFile::readFileIfUnopened()
-{
-    using namespace juce;
-    if (!openedFile && jsonData.isVoid())
-    {
-        jsonData = AssetFiles::loadJSONAsset(filePath);
-        if (!jsonData.isObject())
-        {
-            jsonData = var(); 
-            File sourceFile = AssetFiles::findAssetFile(filePath);
-            if (sourceFile.existsAsFile())
-            {
-                if (sourceFile.getSize() > 0)
-                {
-                    throw FileException(filePath, "Not a valid JSON file!");
-                }
-            }
-            else
-            {
-                Result createFile = sourceFile.create();
-                if (!createFile)
-                {
-                    throw FileException(filePath, createFile.getErrorMessage());
-                }
-            }
-            jsonData = var(new DynamicObject());
-        }
-        openedFile = true;
-    }
 }
