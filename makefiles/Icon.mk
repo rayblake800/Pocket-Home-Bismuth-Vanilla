@@ -3,10 +3,10 @@ ICON_PREFIX := $(JUCE_OBJDIR)/Icon_
 ICON_ROOT = Source/Icon
 
 OBJECTS_ICON := \
-  $(ICON_PREFIX)IconCache.o \
-  $(ICON_PREFIX)IconLoader.o \
-  $(ICON_PREFIX)IconThemeIndex.o \
-  $(ICON_PREFIX)IconThread.o 
+  $(ICON_PREFIX)Cache.o \
+  $(ICON_PREFIX)Loader.o \
+  $(ICON_PREFIX)ThemeIndex.o \
+  $(ICON_PREFIX)ThreadResource.o 
 
 OBJECTS_ICON_TEST :=
 
@@ -21,11 +21,11 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_ICON)
 icon : $(OBJECTS_ICON)
 	@echo "Built Icon module"
 
-$(ICON_PREFIX)IconCache.o: \
-	$(ICON_ROOT)/IconCache.cpp
-$(ICON_PREFIX)IconLoader.o: \
-	$(ICON_ROOT)/IconLoader.cpp
-$(ICON_PREFIX)IconThemeIndex.o: \
-	$(ICON_ROOT)/IconThemeIndex.cpp
-$(ICON_PREFIX)IconThread.o: \
-	$(ICON_ROOT)/IconThread.cpp
+$(ICON_PREFIX)Cache.o: \
+	$(ICON_ROOT)/Icon_Cache.cpp
+$(ICON_PREFIX)Loader.o: \
+	$(ICON_ROOT)/Icon_Loader.cpp
+$(ICON_PREFIX)ThemeIndex.o: \
+	$(ICON_ROOT)/Icon_ThemeIndex.cpp
+$(ICON_PREFIX)ThreadResource.o: \
+	$(ICON_ROOT)/Icon_ThreadResource.cpp

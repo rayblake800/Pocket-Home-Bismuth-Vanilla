@@ -1,21 +1,51 @@
+#include "Icon_ThreadResource.h"
 #include "AssetFiles.h"
-#include "Utils.h"
 #include "XDGDirectories.h"
-#include "IconThread.h"
+#include "Utils.h"
 
-const juce::Identifier IconThread::resourceKey = "IconThread";
+/* SharedResource object instance key: */
+const juce::Identifier Icon::ThreadResource::resourceKey 
+        = "Icon_ThreadResource";
 
-static const constexpr char* defaultIconPath =
-        "/usr/share/pocket-home/appIcons/chip.png";
+/* Path to the default icon file: TODO: Define this in config files */
+static const constexpr char* defaultIconPath 
+        = "/usr/share/pocket-home/appIcons/chip.png";
 
-IconThread::IconThread() : ThreadResource(resourceKey),
+/* Legacy application icon directory: */
+static const constexpr char* pixmapIconPath = "/usr/share/pixmaps";
+
+/* Subdirectory to search for icon files within data directories: */
+static const constexpr char* iconSubDir = "icons";
+
+/* The file in the home directory where the icon theme is stored: */
+static const constexpr char* iconThemeFile = ".gtkrc-2.0";
+
+/* Primary icon theme selection key in the iconThemeFile: */
+static const constexpr char* iconThemeKey = "gtk-icon-theme-name";
+
+/* Backup icon theme selection key in the iconThemeFile: */
+static const constexpr char* backupThemeKey = "gtk-fallback-icon-theme";
+
+/* Default fallback icon theme: */
+static const constexpr char* fallbackTheme = "hicolor";
+
+/* Pocket-home's icon directory:  
+   TODO: use XDGDirectories to set data directory. */ 
+static const constexpr char* pocketHomeIconPath
+        = "/usr/share/pocket-home/icons";
+
+Icon::ThreadResource::ThreadResource() : 
+SharedResource::ThreadResource(resourceKey),
 defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
 { 
-    using namespace juce;
-    //Icon directory search list and priority defined at
-    //   https://specifications.freedesktop.org/icon-theme-spec
-    //   /icon-theme-spec-latest.html
-    iconDirectories.add(String(getenv("HOME")) + "/.icons");
+    using juce::StringArray;
+    using juce::String;
+    using juce::File;
+
+    /* Find all icon data directories to search, ordered from highest to lowest
+     * priority. The icon directory search list and priority are defined at
+     * https://specifications.freedesktop.org/icon-theme-spec
+     *      /icon-theme-spec-latest.html */
     StringArray dataDirs = XDGDirectories::getDataSearchPaths();
     for(String& dir : dataDirs)
     {
@@ -23,16 +53,17 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
         {
             dir += '/';
         }
-        dir += "icons";
+        dir += iconSubDir;
     }
     iconDirectories.addArray(dataDirs);
-    iconDirectories.add("/usr/share/pixmaps");
-    iconDirectories.add("/usr/share/pocket-home/icons");
+    iconDirectories.add(pixmapIconPath);
+    iconDirectories.add(pocketHomeIconPath);
     
+    /* Find the icon themes to use and store them sorted from highest to lowest
+       priority: */
     StringArray themeNames;
-    //Icon theme selection is stored in $HOME/.gtkrc-2.0
     StringArray themeSettings;
-    String gtkSettingPath(String(getenv("HOME")) + "/.gtkrc-2.0");
+    String gtkSettingPath(String(getenv("HOME")) + "/" + iconThemeFile);
     File(gtkSettingPath).readLines(themeSettings);
     for(const String& line : themeSettings)
     {
@@ -40,7 +71,7 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
         if(divider != -1)
         {
             String key = line.substring(0,divider);
-            if(key == "gtk-icon-theme-name" || key == "gtk-fallback-icon-theme")
+            if(key == iconThemeKey || key == backupThemeKey)
             {
                 themeNames.add(line.substring(divider+1).unquoted());
                 if(themeNames.size() > 1)
@@ -50,25 +81,27 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
             }
         }
     }
-    themeNames.add("hicolor");//The default fallback theme
+    themeNames.add(fallbackTheme);
     
-    //create theme index objects for the user's icon theme and all
-    //inherited/fallback themes
+    /* Create theme index objects for the user's icon theme and all inherited
+       or fallback themes: */
     for(int i = 0; i < themeNames.size(); i++)
     {
-        //DBG("IconThread::IconThread: Finding icon theme " << themeNames[i]);
+        //DBG("Icon::ThreadResource::ThreadResource: Finding icon theme " 
+        //      << themeNames[i]);
         for(const String& dir : iconDirectories)
         {
             File themeDir(dir + (dir.endsWithChar('/') ? "" : "/") 
                     + themeNames[i]);
             if(themeDir.isDirectory())
             {
-                iconThemes.add(new IconThemeIndex(themeDir));
+                iconThemes.add(new ThemeIndex(themeDir));
                 if(iconThemes.getLast()->isValidTheme())
                 {
-                    //DBG("IconThread::IconThread: Theme directory " 
-                    //        << iconThemes.size() << " added with path "
-                    //        << themeDir.getFullPathName());
+                    //DBG("Icon::ThreadResource::ThreadResource"
+                    //      << ": Theme directory " << iconThemes.size() 
+                    //      << " added with path "
+                    //      << themeDir.getFullPathName());
                     StringArray inherited = iconThemes.getLast()
                             ->getInheritedThemes();
                     int insertParentIdx = i + 1;
@@ -84,8 +117,9 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
                 }
                 else
                 {
-                    //DBG("IconThread::IconThread: Invalid theme directory "
-                    //        << themeDir.getFullPathName());
+                    //DBG("Icon::ThreadResource::ThreadResource: "
+                    //      << "Invalid theme directory "
+                    //      << themeDir.getFullPathName());
                     iconThemes.removeLast();
                 }
             }
@@ -93,7 +127,7 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
     } 
 }
 
-IconThread::~IconThread()
+Icon::ThreadResource::~ThreadResource()
 {
     imageCache.clear();
 }
@@ -101,7 +135,7 @@ IconThread::~IconThread()
 /*
  * Cancels a pending icon request.
  */
-void IconThread::cancelRequest(const RequestID requestID)
+void Icon::ThreadResource::cancelRequest(const RequestID requestID)
 {
     requestMap.erase(requestID);
 }
@@ -109,7 +143,7 @@ void IconThread::cancelRequest(const RequestID requestID)
 /*
  * Adds an icon loading request to the queue.
  */
-IconThread::RequestID IconThread::addRequest(IconRequest request)
+Icon::RequestID Icon::ThreadResource::addRequest(IconRequest request)
 {
     using std::function;
     using juce::Image;
@@ -169,7 +203,7 @@ IconThread::RequestID IconThread::addRequest(IconRequest request)
 /*
  * Asynchronously handles queued icon requests.
  */
-void IconThread::runLoop(ThreadLock& lock)
+void Icon::ThreadResource::runLoop(ThreadLock& lock)
 {
     using juce::Image;
     using juce::String;
@@ -226,7 +260,7 @@ void IconThread::runLoop(ThreadLock& lock)
 /*
  * Keeps the thread dormant when all icon requests have been processed.
  */
-bool IconThread::threadShouldWait()
+bool Icon::ThreadResource::threadShouldWait()
 {
     return requestMap.empty();
 }
@@ -234,11 +268,12 @@ bool IconThread::threadShouldWait()
 /*
  * Search icon theme directories for an icon matching a given request.
  */
-juce::String IconThread::getIconPath(const IconRequest& request)
+juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
 {
-    using namespace juce;
-    //First, search themes in order to find a matching icon
-    for(const IconThemeIndex* themeIndex : iconThemes)
+    using juce::String;
+    using juce::File;
+    /* First, search themes in order to find a matching icon: */
+    for(const ThemeIndex* themeIndex : iconThemes)
     {
         String iconPath = themeIndex->lookupIcon(request.icon, request.size,
                 request.context, request.scale);
@@ -247,10 +282,10 @@ juce::String IconThread::getIconPath(const IconRequest& request)
             return iconPath;
         }
     }
-    //If not searching within the application context and the icon name is
-    //hyphenated, remove the last section of the name to search for a less
-    //specific icon.
-    if(request.context != IconThemeIndex::applicationsCtx &&
+    /* If not searching within the application context and the icon name is
+     * hyphenated, remove the last section of the name to search for a less
+     * specific icon. */
+    if(request.context != Context::applications &&
        request.icon.containsChar('-'))
     {
         IconRequest subRequest = request;
@@ -262,7 +297,7 @@ juce::String IconThread::getIconPath(const IconRequest& request)
             return iconPath;
         }
     }
-    //Last, search for matching un-themed icon files
+    /* If that didn't find anything, search for matching unthemed icon files: */
     for(const String& iconDir : iconDirectories)
     {
         //TODO: add support for .xpm files, fix svg rendering problems

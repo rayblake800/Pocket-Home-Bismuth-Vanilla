@@ -16,7 +16,7 @@
 #include "AppMenu_MenuFile.h"
 #include "AppMenu_Controller.h"
 #include "OverlaySpinner.h"
-#include "Icon/IconLoader.h"
+#include "Icon_Loader.h"
 #include "JuceHeader.h"
 
 namespace AppMenu { class MainComponent; }
@@ -112,7 +112,7 @@ private:
     MenuFile menuConfig;
 
     /* Ensures the icon cache exists as long as the AppMenu does. */
-    const IconLoader iconLoader;
+    const Icon::Loader iconLoader;
 
     /* The menu's loading spinner. */
     OverlaySpinner loadingSpinner;

@@ -1,17 +1,21 @@
-#include "IconLoader.h"
+#include "Icon_Loader.h"
+#include "Icon_ThreadResource.h"
+
+Icon::Loader::Loader() { }
 
 /*
  * Adds a request to the list of queued tasks.
  */
-IconLoader::RequestID IconLoader::loadIcon(
+Icon::RequestID Icon::Loader::loadIcon(
         const juce::String icon, 
         const int size, 
         const std::function<void(juce::Image)> assignImage,
-        const IconThemeIndex::Context context,
+        const Context context,
         const int scale)
 {
-    auto iconThread = getWriteLockedResource();
-    IconThread::IconRequest newJob = 
+    SharedResource::LockedPtr<ThreadResource> iconThread 
+            = getWriteLockedResource();
+    ThreadResource::IconRequest newJob = 
     {
         icon,
         size,
@@ -25,9 +29,10 @@ IconLoader::RequestID IconLoader::loadIcon(
 /*
  * Cancels a pending image assignment.
  */
-void IconLoader::cancelImageRequest(const RequestID toCancel)
+void Icon::Loader::cancelImageRequest(const RequestID toCancel)
 {
-    auto iconThread = getWriteLockedResource();
+    SharedResource::LockedPtr<ThreadResource> iconThread 
+            = getWriteLockedResource();
     iconThread->cancelRequest(toCancel);
 }
 

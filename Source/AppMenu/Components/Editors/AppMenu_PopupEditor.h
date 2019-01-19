@@ -13,7 +13,7 @@
 #include "Widgets/FileSelectTextEditor.h"
 #include "Widgets/PopupEditorComponent.h"
 #include "Widgets/SwitchComponent.h"
-#include "Icon/IconLoader.h"
+#include "Icon_RequestID.h"
 #include "AppMenu_CategoryEditor.h"
 
 namespace AppMenu { class PopupEditor; }
@@ -154,7 +154,7 @@ private:
     virtual void editorButtonClicked(juce::Button* button) override;
 
     /* Used to cancel pending icon requests on destruction. */
-    IconLoader::RequestID iconRequestID;
+    Icon::RequestID iconRequestID;
 
     /* Label text: "Name:" */
     ScalingLabel nameLabel;     

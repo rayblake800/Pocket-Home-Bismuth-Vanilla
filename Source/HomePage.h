@@ -7,7 +7,7 @@
 
 #include "OverlaySpinner.h"
 #include "DesktopEntry_Loader.h"
-#include "Icon/IconLoader.h"
+#include "Icon_Loader.h"
 #include "PageComponent.h"
 #include "Config_MainListener.h"
 #include "Theme_Image_Component.h"
@@ -77,7 +77,7 @@ private:
 
     /* Loads icon images. This resource should exist as long as the home page
        exists. */
-    IconLoader iconLoader;
+    Icon::Loader iconLoader;
     
     /* Displays the time. */
     ClockLabel clock;

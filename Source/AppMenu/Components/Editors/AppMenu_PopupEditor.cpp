@@ -2,6 +2,7 @@
 #include "AppMenu_PopupEditor.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Layout_Component_TextSize.h"
+#include "Icon_Loader.h"
 #include "Utils.h"
 
 /* Localized object class key: */
@@ -98,7 +99,7 @@ AppMenu::PopupEditor::~PopupEditor()
 {
     if(iconRequestID != 0)
     {
-        IconLoader iconLoader;
+        Icon::Loader iconLoader;
         iconLoader.cancelImageRequest(iconRequestID);
         iconRequestID = 0;
     }
@@ -195,12 +196,12 @@ void AppMenu::PopupEditor::loadIconPreview()
     using juce::String;
     using juce::Image;
     String iconName = getIconNameField();
-    IconLoader iconThread;
+    Icon::Loader iconLoader;
     if(iconRequestID != 0)
     {
-        iconThread.cancelImageRequest(iconRequestID);
+        iconLoader.cancelImageRequest(iconRequestID);
     }
-    iconRequestID = iconThread.loadIcon(iconName, iconPreview.getWidth(), 
+    iconRequestID = iconLoader.loadIcon(iconName, iconPreview.getWidth(), 
         [this](Image iconImg)
     {
         iconRequestID = 0;

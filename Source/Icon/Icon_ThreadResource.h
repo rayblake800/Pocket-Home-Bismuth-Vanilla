@@ -1,46 +1,45 @@
 #pragma once
-#include <map>
-#include "SharedResource_ThreadResource.h"
-#include "IconThemeIndex.h"
-#include "JuceHeader.h"
-
 /**
- * @File IconThread.h
+ * @File Icon_ThreadResource.h
  * 
  * @brief Finds icon files in icon theme directories, and loads them as Image
  *        objects.
+ */
+
+#include "SharedResource_ThreadResource.h"
+#include "Icon_ThemeIndex.h"
+#include "Icon_RequestID.h"
+#include "JuceHeader.h"
+#include <map>
+
+namespace Icon { class ThreadResource; }
+
+/**
+ *  The ThreadResource provides an interface for other objects to request icon 
+ * Image objects with a specific name, and a preferred size and scale. The 
+ * ThreadResource handles these requests asynchronously, searching the user's
+ * selected icon theme directories for the closest icon matching the request.  
  * 
- * The IconThread provides an interface for other objects to request icon Image
- * objects with a specific name, and a preferred size and scale.  The IconThread
- * handles these requests asynchronously, searching the user's selected icon
- * theme directories for the closest icon matching the request.  
- * 
- * This process uses the XDG Base Directory Specification, the user's .gtkrc
+ *  This process uses the XDG Base Directory Specification, the user's .gtkrc
  * config file, and the icon themes' index.theme files to determine which
  * directories are prioritized.  GTK's icon-theme.cache files are used to
  * quickly locate image files within icon theme directories.
  * 
- * @see IconThemeIndex.h, IconCache.h
+ * @see Icon_ThemeIndex.h, Icon_Cache.h
  */
 
-class IconThread : public SharedResource::ThreadResource
+class Icon::ThreadResource : public SharedResource::ThreadResource
 {
 public:
     /* SharedResource object key */
     static const juce::Identifier resourceKey;
 
-    IconThread();
+    ThreadResource();
 
     /**
      * @brief Ensures the thread exits before destruction.
      */
-    virtual ~IconThread();
-
-
-    /**
-     * @brief  Identifies pending icon requests so that they can be cancelled.
-     */
-    typedef unsigned int RequestID;
+    virtual ~ThreadResource();
 
     /**
      * @brief  Cancels a pending icon request.
@@ -61,7 +60,7 @@ public:
         /* Expected scale factor of the icon */
         int scale;
         /* Category of icon requested */
-        IconThemeIndex::Context context;
+        Context context;
         /* Function used to apply the requested icon */
         std::function<void(juce::Image)> loadingCallback;
     };
@@ -105,7 +104,7 @@ private:
     std::map<RequestID, IconRequest> requestMap;
 
     /* Icon theme indexes used to load icons, in order of priority */
-    juce::OwnedArray<IconThemeIndex> iconThemes;
+    juce::OwnedArray<ThemeIndex> iconThemes;
 
     /* Directories to search, in order, for icon themes and unthemed icons. */
     juce::StringArray iconDirectories;

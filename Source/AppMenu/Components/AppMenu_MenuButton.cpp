@@ -23,7 +23,7 @@ AppMenu::MenuButton::~MenuButton()
 {
     if(iconCallbackID != 0)
     {
-        IconLoader iconLoader;
+        Icon::Loader iconLoader;
         iconLoader.cancelImageRequest(iconCallbackID);
         iconCallbackID = 0;
     }
@@ -137,9 +137,9 @@ void AppMenu::MenuButton::loadIcon()
     if(!iconBounds.isEmpty() && !iconCallbackID)
     {
         icon = AssetFiles::loadImageAsset("appIcons/default.png");
-        IconLoader iconThread;
+        Icon::Loader iconLoader;
 
-        iconCallbackID = iconThread.loadIcon(
+        iconCallbackID = iconLoader.loadIcon(
                 getMenuItem().getIconName(),
                 iconBounds.toNearestInt().getWidth(),
                 [this](Image iconImg)

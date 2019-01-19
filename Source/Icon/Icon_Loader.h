@@ -1,23 +1,23 @@
 #pragma once
-#include "IconThread.h"
-#include "SharedResource_Handler.h"
 /**
- * @file IconLoader.h
+ * @file Icon_Loader.h
  * 
  * @brief  Sends icon search requests to the shared IconThread.
  */
-class IconLoader : public SharedResource::Handler<IconThread>
+
+#include "SharedResource_Handler.h"
+#include "Icon_RequestID.h"
+#include "Icon_Context.h"
+
+namespace Icon { class Loader; }
+namespace Icon { class ThreadResource; }
+
+class Icon::Loader : public SharedResource::Handler<ThreadResource>
 {
 public:
-    IconLoader() { }
+    Loader();
 
-    virtual ~IconLoader() { }
-
-    /**
-     * @brief  Identifies pending icon callback functions so that they can be
-     *         cancelled.
-     */
-    typedef IconThread::RequestID RequestID;
+    virtual ~Loader() { }
 
     /**
      * @brief  Adds a request to the list of queued tasks.
@@ -56,7 +56,7 @@ public:
             const juce::String icon, 
             const int size, 
             const std::function<void(juce::Image)> assignImage,
-            const IconThemeIndex::Context context = IconThemeIndex::unknownCtx,
+            const Context context = Context::unknown,
             const int scale = 1);
 
     /**

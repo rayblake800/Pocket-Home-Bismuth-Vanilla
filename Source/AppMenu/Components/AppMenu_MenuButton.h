@@ -8,7 +8,7 @@
  * @brief  Represents a single menu item as a juce::Button component.
  */
 
-#include "IconLoader.h"
+#include "Icon_Loader.h"
 #include "AppMenu_MenuItem.h"
 
 namespace AppMenu { class MenuButton; }
@@ -246,7 +246,7 @@ private:
     juce::Image icon;
 
     /* ID used to cancel pending icon requests if necessary */
-    IconLoader::RequestID iconCallbackID = 0;
+    Icon::RequestID iconCallbackID = 0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuButton)
 };
