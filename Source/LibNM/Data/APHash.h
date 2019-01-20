@@ -52,6 +52,13 @@ public:
     APHash(const APHash& toCopy);
 
     /**
+     * @brief  Creates an APHash from a saved hash value string.
+     *
+     * @param hashString  The string representation of a hash value.
+     */
+    APHash(const juce::String hashString);
+
+    /**
      * @brief  Checks if another APHash is equivalent to this one.
      *
      * @param rhs  Another hash value to compare with this APHash.
@@ -78,6 +85,21 @@ public:
      *             sorted alphabetically.
      */
     bool operator<(const APHash& rhs) const;
+
+    /**
+     * @brief  Checks if this hash object is invalid.
+     *
+     * @return  Whether the hash was initialized with a null access point and
+     *          does not hold valid hash data.
+     */
+    bool isNull() const;
+
+    /**
+     * @brief  Gets a string representation of the hash value.
+     *
+     * @return  The hash value as a printable string.
+     */
+    juce::String toString() const;
 
 private:
     /* The fixed hash value. */
