@@ -294,7 +294,7 @@ private:
      * back button. It will be called every time the back button is clicked, and
      * if it returns true, the back button will not remove the page.
      * 
-     * @return true if the back button's action was replaced, false to allow
+     * @return  True if the back button's action was replaced, false to allow
      *          the back button to remove the page as usual.
      */
     virtual bool overrideBackButton();

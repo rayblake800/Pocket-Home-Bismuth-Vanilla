@@ -155,9 +155,10 @@ void PageComponent::removeFromStack(Layout::Transition::Type transition)
 void PageComponent::pushPageToStack(PageComponent::PageType pageType,
         Layout::Transition::Type transition)
 {
-    if (isStackTop() && pageFactory != nullptr)
+    if(isStackTop() && pageFactory != nullptr)
     {
-        DBG(getName() << " pushing new page ");
+        DBG("PageComponent::" << __func__ << ": " << getName() 
+                << " pushing new page ");
         PageComponent* newPage = pageFactory->createPage(pageType);
         newPage->pageStack = pageStack;
         pageStack->pushPage(newPage, transition);
@@ -180,7 +181,7 @@ bool PageComponent::overrideBackButton()
  */
 void PageComponent::resized()
 {
-    if (backButton != nullptr)
+    if(backButton != nullptr)
     {
         backButton->applyConfigBounds();
     }
@@ -194,11 +195,14 @@ void PageComponent::resized()
  */
 void PageComponent::buttonClicked(juce::Button* button)
 {
-    if (button == backButton && !overrideBackButton())
+    if(button == backButton)
     {
-        removeFromStack(backButton->getEdge() == NavButton::right ?
+        if(!overrideBackButton())
+        {
+            removeFromStack(backButton->getEdge() == NavButton::right ?
                 Layout::Transition::Type::moveLeft 
                 : Layout::Transition::Type::moveRight);
+        }
     }
     else
     {
