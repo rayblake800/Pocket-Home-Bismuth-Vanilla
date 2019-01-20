@@ -9,7 +9,6 @@
  */
 
 #include "AppMenu_ItemData.h"
-#include "IconThread.h"
 #include "Nullable.h"
 
 namespace AppMenu { class MenuItem; }
