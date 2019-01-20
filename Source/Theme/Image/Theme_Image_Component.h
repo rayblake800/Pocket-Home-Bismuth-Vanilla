@@ -43,8 +43,7 @@ public:
     DrawableImageType(placement),
     assetIndex(assetIndex) 
     {
-        const ConfigFile configReader;
-        assetList = configReader.getAssetList(componentKey);
+        assetList = assetConfig.getAssetList(componentKey);
         applyImageAssets();
     }
 
@@ -100,4 +99,7 @@ private:
 
     /* The list of available image assets, and custom image colors. */
     AssetList assetList;
+
+    /* Gets image assets and keeps the image asset list loaded: */
+    ConfigFile assetConfig;
 };

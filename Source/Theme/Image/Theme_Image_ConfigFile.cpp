@@ -12,6 +12,7 @@ ThemeImages::ConfigFile::ConfigFile() { }
 ThemeImages::AssetList ThemeImages::ConfigFile::getAssetList
 (const juce::Identifier& componentKey) const
 {
-    SharedResource::LockedPtr<JSONResource> config = getReadLockedResource();
+    SharedResource::LockedPtr<const JSONResource> config 
+            = getReadLockedResource();
     return config->getAssetList(componentKey);
 }
