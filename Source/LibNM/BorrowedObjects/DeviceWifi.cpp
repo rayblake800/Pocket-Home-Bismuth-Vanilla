@@ -244,7 +244,8 @@ juce::Array<LibNM::AccessPoint> LibNM::DeviceWifi::getAccessPoints() const
             jassert(nmAccessPoint != nullptr);
             AccessPoint foundAccessPoint = nmThreadHandler
                 .getAccessPointLender().borrowObject(nmAccessPoint);
-            if(!foundAccessPoint.isNull())
+            if(!foundAccessPoint.isNull() 
+                    && foundAccessPoint.getSSID() != nullptr)
             {
                 currentAccessPoints.add(foundAccessPoint);
                 removedAccessPoints.removeAllInstancesOf(foundAccessPoint);

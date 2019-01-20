@@ -67,7 +67,8 @@ const GByteArray* LibNM::AccessPoint::getSSID() const
     const GByteArray* ssid = nullptr;
     if(!isNull())
     {
-        ssid = nm_access_point_get_ssid(getNMObjectPtr());
+        NMAccessPoint* nmPtr = getNMObjectPtr();
+        ssid = nm_access_point_get_ssid(nmPtr);
     }
     return ssid;
 }
@@ -230,9 +231,11 @@ void LibNM::AccessPoint::Listener::propertyChanged
     if(property == NM_ACCESS_POINT_STRENGTH && NM_IS_ACCESS_POINT(source))
     {
         AccessPoint changedAP = findAccessPoint(source);
-        jassert(!changedAP.isNull());
-        unsigned int strength = changedAP.getSignalStrength();
-        signalStrengthChanged(changedAP, strength);
+        if(!changedAP.isNull())
+        {
+            unsigned int strength = changedAP.getSignalStrength();
+            signalStrengthChanged(changedAP, strength);
+        }
     }
 }
  
