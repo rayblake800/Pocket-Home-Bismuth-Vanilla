@@ -18,7 +18,8 @@ void WifiAPList::Writer::addAccessPoint(const LibNM::AccessPoint addedAP)
     const LibNM::ThreadHandler nmThreadHandler;
     nmThreadHandler.call([this, &addedAP]()
     {
-        SharedResource::LockedPtr<ListResource> apList = getWriteLockedResource();
+        SharedResource::LockedPtr<ListResource> apList 
+                = getWriteLockedResource();
         apList->addAccessPoint(addedAP);
     });
 }
@@ -32,7 +33,8 @@ void WifiAPList::Writer::removeAccessPoint(const LibNM::AccessPoint removedAP)
     const LibNM::ThreadHandler nmThreadHandler;
     nmThreadHandler.call([this, &removedAP]()
     {
-        SharedResource::LockedPtr<ListResource> apList = getWriteLockedResource();
+        SharedResource::LockedPtr<ListResource> apList 
+                = getWriteLockedResource();
         apList->removeAccessPoint(removedAP);
     });
 }
@@ -46,7 +48,8 @@ void WifiAPList::Writer::updateSignalStrength(AccessPoint toUpdate)
     const LibNM::ThreadHandler nmThreadHandler;
     nmThreadHandler.call([this, &toUpdate]()
     {
-        SharedResource::LockedPtr<ListResource> apList = getWriteLockedResource();
+        SharedResource::LockedPtr<ListResource> apList 
+                = getWriteLockedResource();
         apList->updateSignalStrength(toUpdate);
     });
 }
@@ -59,21 +62,23 @@ void WifiAPList::Writer::clearAccessPoints()
     const LibNM::ThreadHandler nmThreadHandler;
     nmThreadHandler.call([this]()
     {
-        SharedResource::LockedPtr<ListResource> apList = getWriteLockedResource();
+        SharedResource::LockedPtr<ListResource> apList 
+                = getWriteLockedResource();
         apList->clearAccessPoints();
     });
 }
 
 /*
  * Reloads all LibNM::AccessPoints from the NetworkManager, updating
- * Wifi::AccessPoints as necessary.
+ * Wifi::AccessPoint objects as necessary.
  */
 void WifiAPList::Writer::updateAllAccessPoints()
 {
     const LibNM::ThreadHandler nmThreadHandler;
     nmThreadHandler.call([this]()
     {
-        SharedResource::LockedPtr<ListResource> apList = getWriteLockedResource();
+        SharedResource::LockedPtr<ListResource> apList 
+                = getWriteLockedResource();
         apList->updateAllAccessPoints();
     });
 }

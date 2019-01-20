@@ -11,7 +11,8 @@ Wifi::APList::Listener::Listener() { }
  */
 juce::Array<Wifi::AccessPoint> Wifi::APList::Listener::getVisibleAPs() const
 {
-    SharedResource::LockedPtr<ListResource> apList = getReadLockedResource();
+    SharedResource::LockedPtr<const ListResource> apList 
+            = getReadLockedResource();
     return apList->getAccessPoints();
 }
 

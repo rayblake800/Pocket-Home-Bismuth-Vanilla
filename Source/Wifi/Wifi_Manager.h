@@ -6,7 +6,6 @@
  *         long as a Wifi::Manager object exists.
  */
 
-#include "WindowFocus/WindowFocus.h"
 #include "LibNM/ThreadHandler.h"
 #include "Wifi_APList_Reader.h"
 #include "Wifi_Connection_RecordReader.h"
@@ -27,7 +26,7 @@
 
 namespace Wifi { class Manager; }
 
-class Wifi::Manager : public WindowFocus::Listener
+class Wifi::Manager
 {
 public:
     /**
@@ -43,19 +42,6 @@ public:
     virtual ~Manager();
 
 private:
-    /**
-     * @brief  Disables signal handlers while the application does not have
-     *         window focus.
-     */
-    virtual void windowFocusLost() override;
-
-
-    /**
-     * @brief  Enables signal handlers when the application regains window
-     *         focus.
-     */
-    virtual void windowFocusGained() override;
-
     /* Ensures the LibNM thread resource is initialized. */
     LibNM::ThreadHandler nmThread;
 

@@ -93,6 +93,7 @@ void Wifi::NMSignals::DeviceHandler::stateChanged(NMDeviceState newState,
                 recordWriter.addConnectionEvent(lastActiveAP,
                         EventType::startedConnecting);
             }
+            break;
         }
         case NM_DEVICE_STATE_DISCONNECTED:
         {
@@ -146,9 +147,16 @@ void Wifi::NMSignals::DeviceHandler::accessPointAdded
 {
     ASSERT_NM_CONTEXT;
     addedAP.addListener(apSignalHandler);
-    SharedResource::LockedPtr<APList::ListResource> apList 
-            = getWriteLockedResource();
-    apList->addAccessPoint(addedAP);
+
+    // Ignore access points with null SSIDs.
+    // TODO: Find out why access points without SSIDs are showing up at all
+    //       Are they hidden? Have the SSIDs just not loaded yet?
+    if(addedAP.getSSID() != nullptr)
+    {
+        SharedResource::LockedPtr<APList::ListResource> apList 
+                = getWriteLockedResource();
+        apList->addAccessPoint(addedAP);
+    }
 }
 
 /*

@@ -9,8 +9,8 @@ Wifi::Device::Reader::Reader() { }
  */
 bool Wifi::Device::Reader::wifiDeviceEnabled() const
 {
-    SharedResource::LockedPtr<Tracker> wifiDeviceTracker
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const Tracker> wifiDeviceTracker
+            = getReadLockedResource();
     return wifiDeviceTracker->wifiDeviceEnabled();
 
 }
@@ -20,8 +20,8 @@ bool Wifi::Device::Reader::wifiDeviceEnabled() const
  */
 bool Wifi::Device::Reader::wifiDeviceExists() const
 {
-    SharedResource::LockedPtr<Tracker> wifiDeviceTracker
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const Tracker> wifiDeviceTracker
+            = getReadLockedResource();
     return wifiDeviceTracker->wifiDeviceExists();
 }
 
@@ -30,7 +30,7 @@ bool Wifi::Device::Reader::wifiDeviceExists() const
  */
 bool Wifi::Device::Reader::isDeviceStateChanging() const
 {
-    SharedResource::LockedPtr<Tracker> wifiDeviceTracker
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const Tracker> wifiDeviceTracker
+            = getReadLockedResource();
     return wifiDeviceTracker->isDeviceStateChanging();
 }

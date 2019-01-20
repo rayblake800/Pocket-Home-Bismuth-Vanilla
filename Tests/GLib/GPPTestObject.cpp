@@ -75,9 +75,10 @@ void GPPTestObject::setTestInt(int newInt)
     setProperty<int>(GTEST_OBJECT_TEST_INT, newInt);
 }
  
-GPPTestObject::Listener::Listener()
-{
-}
+GPPTestObject::Listener::Listener() { }
+
+GPPTestObject::Listener::~Listener() { }
+
 /*
  * Checks if this object is listening to a particular GPPTestObject.
  */

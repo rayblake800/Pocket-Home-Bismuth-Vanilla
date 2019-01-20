@@ -16,8 +16,8 @@ WifiConnect::RecordReader::RecordReader() { }
  */
 bool WifiConnect::RecordReader::isConnected() const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->isConnected();
 }
 
@@ -26,8 +26,8 @@ bool WifiConnect::RecordReader::isConnected() const
  */
 bool WifiConnect::RecordReader::isConnecting() const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->isConnecting();
 }
 
@@ -36,8 +36,8 @@ bool WifiConnect::RecordReader::isConnecting() const
  */
 Wifi::AccessPoint WifiConnect::RecordReader::getActiveAP() const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->getActiveAP();
 }
 
@@ -48,8 +48,8 @@ Wifi::AccessPoint WifiConnect::RecordReader::getActiveAP() const
 bool WifiConnect::RecordReader::hasSavedConnection
 (const AccessPoint toCheck) const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->hasSavedConnection(toCheck);
 }
 
@@ -60,8 +60,8 @@ bool WifiConnect::RecordReader::hasSavedConnection
 juce::Time WifiConnect::RecordReader::lastConnectionTime
 (const AccessPoint connectionAP) const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->lastConnectionTime(connectionAP);
 }
 
@@ -70,8 +70,8 @@ juce::Time WifiConnect::RecordReader::lastConnectionTime
  */
 WifiConnect::Event WifiConnect::RecordReader::getLastEvent() const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->getLastEvent();
 }
 
@@ -82,8 +82,8 @@ WifiConnect::Event WifiConnect::RecordReader::getLastEvent() const
 WifiConnect::Event WifiConnect::RecordReader::getLastEvent
 (const AccessPoint eventAP) const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->getLastEvent(eventAP);
 }
 
@@ -93,8 +93,8 @@ WifiConnect::Event WifiConnect::RecordReader::getLastEvent
 WifiConnect::Event WifiConnect::RecordReader::getLastEvent
 (const EventType eventType) const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->getLastEvent(eventType);
 }
 
@@ -105,7 +105,7 @@ WifiConnect::Event WifiConnect::RecordReader::getLastEvent
 WifiConnect::Event WifiConnect::RecordReader::getLastEvent
 (const AccessPoint eventAP, const EventType eventType) const
 {
-    SharedResource::LockedPtr<RecordResource> connectionRecord
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const RecordResource> connectionRecord
+            = getReadLockedResource();
     return connectionRecord->getLastEvent(eventAP, eventType);
 }

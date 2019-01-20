@@ -219,7 +219,7 @@ void Wifi::SettingsPage::updateListItemLayout
 
     jassert(apLabel != nullptr);
     jassert(apIcon != nullptr);
-    jassert(lockIcon == nullptr || wifiAP.getSecurityType() 
+    jassert(lockIcon != nullptr || wifiAP.getSecurityType() 
             == LibNM::SecurityType::unsecured);
     jassert(!visibleAPs[index].isNull());
     jassert(visibleAPs[index].getSSID().toString().isNotEmpty());
@@ -467,7 +467,10 @@ void Wifi::SettingsPage::listPageButtonClicked(juce::Button* button)
  */
 void Wifi::SettingsPage::signalStrengthUpdate(const AccessPoint updatedAP) 
 {
-    updateAPList();
+    juce::MessageManager::callAsync([this]()
+    {
+        updateAPList();
+    });
 }
 
 /*
@@ -475,8 +478,11 @@ void Wifi::SettingsPage::signalStrengthUpdate(const AccessPoint updatedAP)
  */
 void Wifi::SettingsPage::accessPointAdded(const AccessPoint addedAP)
 {
-    visibleAPs.add(addedAP);
-    updateAPList();
+    juce::MessageManager::callAsync([this, addedAP]()
+    {
+        visibleAPs.addIfNotAlreadyThere(addedAP);
+        updateAPList();
+    });
 }
 
 /*
@@ -484,8 +490,11 @@ void Wifi::SettingsPage::accessPointAdded(const AccessPoint addedAP)
  */
 void Wifi::SettingsPage::accessPointRemoved(const AccessPoint removedAP)
 {
-    visibleAPs.removeAllInstancesOf(removedAP);
-    updateAPList();
+    juce::MessageManager::callAsync([this, removedAP]()
+    {
+        visibleAPs.removeAllInstancesOf(removedAP);
+        updateAPList();
+    });
 }
 
 /*
@@ -494,7 +503,10 @@ void Wifi::SettingsPage::accessPointRemoved(const AccessPoint removedAP)
  */
 void Wifi::SettingsPage::startedConnecting(const AccessPoint connectingAP)
 {
-    updateAPList();
+    juce::MessageManager::callAsync([this]()
+    {
+        updateAPList();
+    });
 }
 
 /*
@@ -503,7 +515,10 @@ void Wifi::SettingsPage::startedConnecting(const AccessPoint connectingAP)
  */
 void Wifi::SettingsPage::connectionAuthFailed(const AccessPoint connectingAP)
 {
-    updateAPList();
+    juce::MessageManager::callAsync([this]()
+    {
+        updateAPList();
+    });
 }
 
 /*
@@ -512,7 +527,10 @@ void Wifi::SettingsPage::connectionAuthFailed(const AccessPoint connectingAP)
  */
 void Wifi::SettingsPage::connected(const AccessPoint connectedAP)
 {
-    updateAPList();
+    juce::MessageManager::callAsync([this]()
+    {
+        updateAPList();
+    });
 }
 
 /*
@@ -521,7 +539,10 @@ void Wifi::SettingsPage::connected(const AccessPoint connectedAP)
  */
 void Wifi::SettingsPage::disconnected(const AccessPoint disconnectedAP)
 {
-    updateAPList();
+    juce::MessageManager::callAsync([this]()
+    {
+        updateAPList();
+    });
 }
 
 /*

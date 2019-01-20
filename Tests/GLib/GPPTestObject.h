@@ -71,6 +71,8 @@ public:
     public:
         friend class GPPTestObject;
         Listener();
+
+        virtual ~Listener();
     
         /**
          * Checks if this object is listening to a particular GPPTestObject.

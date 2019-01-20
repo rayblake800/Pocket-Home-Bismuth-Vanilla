@@ -1,5 +1,6 @@
 ########################### Wifi Module ########################################
 WIFI_PREFIX := $(JUCE_OBJDIR)/Wifi_
+WIFI_TEST_PREFIX = $(JUCE_OBJDIR)/Tests_Wifi_
 
 WIFI_ROOT = Source/Wifi
 WIFI_TEST_ROOT = Tests/Wifi
@@ -60,7 +61,9 @@ OBJECTS_WIFI := \
   $(OBJECTS_WIFI_SIGNAL_HANDLER) \
   $(OBJECTS_WIFI_COMPONENT)
 
-OBJECTS_WIFI_TEST :=
+OBJECTS_WIFI_TEST := \
+  $(WIFI_TEST_PREFIX)APListTest.o \
+  $(WIFI_TEST_PREFIX)Connection.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_WIFI := $(OBJECTS_WIFI) $(OBJECTS_WIFI_TEST)
@@ -129,3 +132,8 @@ $(WIFI_PREFIX)SettingsPage.o : \
     $(WIFI_COMPONENT_ROOT)/Wifi_SettingsPage.cpp
 $(WIFI_PREFIX)StatusIcon.o : \
     $(WIFI_COMPONENT_ROOT)/Wifi_StatusIcon.cpp
+  
+$(WIFI_TEST_PREFIX)APListTest.o : \
+    $(WIFI_TEST_ROOT)/APListTest.cpp
+$(WIFI_TEST_PREFIX)Connection.o : \
+    $(WIFI_TEST_ROOT)/Wifi_Connection.cpp

@@ -42,23 +42,7 @@ Wifi::Manager::~Manager()
         recordReader.reset(nullptr);
         apListReader.reset(nullptr);
     });
+    DBG("Wifi::Manager::~Manager(): Stopping LibNM thread:");
     nmThread.stopThread();
 }
 
-/*
- * Disables signal handlers while the application does not have window focus.
- */
-void Wifi::Manager::windowFocusLost()
-{
-    clientSignalHandler->disconnect();
-    deviceSignalHandler->disconnect();
-}
-
-/*
- * Enables signal handlers when the application regains window focus.
- */
-void Wifi::Manager::windowFocusGained()
-{
-    clientSignalHandler->connect();
-    deviceSignalHandler->connect();
-}

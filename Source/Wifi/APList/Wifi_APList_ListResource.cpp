@@ -21,6 +21,23 @@ static std::map<LibNM::APHash, Wifi::AccessPoint> wifiAccessPoints;
 /* All visible LibNM::AccessPoint objects, mapped by hash value. */
 static std::map<LibNM::APHash, juce::Array<LibNM::AccessPoint>> nmAccessPoints;
 
+#ifdef JUCE_DEBUG
+/**
+ * @brief Prints the access point list's data maps for debugging.
+ */
+void printAPList()
+{
+    DBG("Wifi::APList::printAPList: " << wifiAccessPoints.size()
+            << " access points found.");
+    for(auto& iter : wifiAccessPoints)
+    {
+        DBG("  [" << iter.first.toString() << "] ("
+                << nmAccessPoints[iter.first].size() <<  " LibNM AP)");
+        DBG("   = " << iter.second.toString());
+    }
+}
+#endif
+
 /*
  * Reads initial access point data from LibNM.
  */
@@ -49,10 +66,17 @@ WifiAPList::ListResource::getAccessPoint(LibNM::APHash apHash) const
 {
     try
     {
-        return wifiAccessPoints.at(apHash);
+        jassert(!apHash.isNull());
+        AccessPoint matchingAP = wifiAccessPoints.at(apHash);
+        jassert(!matchingAP.isNull());
+        jassert(matchingAP.getHashValue() == apHash);
+        return matchingAP;
     }
     catch(std::out_of_range e)
     {
+        DBG("Failed to find hash value \"" << apHash.toString() << "\"");
+        DBG("Full access point list:");
+        printAPList();
         return Wifi::AccessPoint();
     }
 }
@@ -122,19 +146,20 @@ juce::Array<LibNM::AccessPoint> WifiAPList::ListResource::getNMAccessPoints
  */
 void WifiAPList::ListResource::addAccessPoint(const LibNM::AccessPoint addedAP)
 {
-    if(addedAP.isNull())
-    {
-        return;
-    }
+    jassert(!addedAP.isNull());
     const LibNM::APHash apHash = addedAP.generateHash();
+    jassert(!apHash.isNull());
     nmAccessPoints[apHash].addIfNotAlreadyThere(addedAP);
     if(wifiAccessPoints.count(apHash) == 0)
     {
-        wifiAccessPoints[apHash] = AccessPoint(addedAP);
-        foreachHandler<UpdateInterface>([&apHash]
+        AccessPoint newWifiAP(addedAP);
+        jassert(!newWifiAP.isNull());
+        jassert(newWifiAP.getHashValue() == apHash);
+        wifiAccessPoints[apHash] = newWifiAP;
+        foreachHandler<UpdateInterface>([&newWifiAP]
                 (UpdateInterface* updateHandler)
         {
-            updateHandler->accessPointAdded(wifiAccessPoints[apHash]);
+            updateHandler->accessPointAdded(newWifiAP);
         });
     }
     
@@ -223,13 +248,11 @@ void WifiAPList::ListResource::updateAllAccessPoints()
     nmThread.call([this, &nmThread]()
     {
         LibNM::DeviceWifi wifiDevice = nmThread.getWifiDevice(); 
-
+        nmAccessPoints.clear();
         juce::Array<LibNM::AccessPoint> nmAPs = wifiDevice.getAccessPoints();
         for(LibNM::AccessPoint& nmAccessPoint : nmAPs)
         {
-            LibNM::APHash apHash = nmAccessPoint.generateHash();
-            wifiAccessPoints[apHash] = Wifi::AccessPoint(nmAccessPoint);
-            nmAccessPoints[apHash].add(nmAccessPoint);
+            addAccessPoint(nmAccessPoint);
         }
     });
 }

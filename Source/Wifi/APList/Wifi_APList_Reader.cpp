@@ -11,7 +11,8 @@ Wifi::APList::Reader::Reader() { }
  */
 juce::Array<Wifi::AccessPoint> Wifi::APList::Reader::getAccessPoints() const
 {
-    SharedResource::LockedPtr<ListResource> apList = getReadLockedResource();
+    SharedResource::LockedPtr<const ListResource> apList
+            = getReadLockedResource();
     return apList->getAccessPoints();
     
 }
@@ -22,6 +23,7 @@ juce::Array<Wifi::AccessPoint> Wifi::APList::Reader::getAccessPoints() const
 Wifi::AccessPoint Wifi::APList::Reader::getAccessPoint
 (LibNM::APHash apHash) const
 {
-    SharedResource::LockedPtr<ListResource> apList = getReadLockedResource();
+    SharedResource::LockedPtr<const ListResource> apList 
+            = getReadLockedResource();
     return apList->getAccessPoint(apHash);
 }

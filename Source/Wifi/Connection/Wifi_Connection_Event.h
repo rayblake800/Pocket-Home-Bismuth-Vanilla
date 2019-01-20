@@ -135,6 +135,13 @@ public:
      */
     bool isNull() const;
 
+    /**
+     * @brief  Represents this Event object as a string, usable for debugging.
+     *
+     * @return  All event data in string format.
+     */
+    juce::String toString() const;
+
 private:
 
     /* The access point used in the connection event. */

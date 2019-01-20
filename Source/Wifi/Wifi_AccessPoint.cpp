@@ -14,9 +14,12 @@
 Wifi::AccessPoint::AccessPoint(const LibNM::AccessPoint nmAccessPoint)
 {
     ASSERT_NM_CONTEXT
-    LibNM::APHash hash = nmAccessPoint.generateHash();
-    LibNM::ThreadHandler nmThread;
-    getDataReference() = new AP::Data(nmAccessPoint, hash);
+    if(!nmAccessPoint.isNull())
+    {
+        LibNM::APHash hash = nmAccessPoint.generateHash();
+        jassert(!hash.isNull());
+        getDataReference() = new AP::Data(nmAccessPoint, hash);
+    }
 }
 
 /*
@@ -124,6 +127,18 @@ LibNM::APHash Wifi::AccessPoint::getHashValue() const
                 LibNM::SecurityType::unsecured); 
     }
     return getData()->getHashValue();
+}
+
+/*
+ * Gets a string representation of the AccessPoint for debug use.
+ */
+juce::String Wifi::AccessPoint::toString() const
+{
+    if(getData() == nullptr)
+    {
+        return "NULL";
+    }
+    return getData()->toString();
 }
 
 /*

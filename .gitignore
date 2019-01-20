@@ -2,3 +2,4 @@ build/
 pack-debian/usr/
 debian/.debhelper/*
 debian/debhelper-build-stamp
+assets/testing/*

@@ -139,6 +139,13 @@ public:
      */
     LibNM::APHash getHashValue() const;
 
+    /**
+     * @brief  Gets a string representation of the AccessPoint for debug use.
+     *
+     * @return  A printable string describing this object.
+     */
+    juce::String toString() const;
+
 private:
     /**
      * @brief  Updates the access point's signal strength.

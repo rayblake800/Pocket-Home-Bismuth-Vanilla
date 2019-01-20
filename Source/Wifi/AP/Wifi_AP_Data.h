@@ -106,6 +106,19 @@ public:
      */
     void setSignalStrength(const unsigned int newStrength);
 
+    /**
+     * @brief  Checks if this data object has no valid data.
+     *
+     * @return  Whether this object contains no access point data.
+     */
+    bool isNull() const;
+
+    /**
+     * @brief  Gets a string representation of the AP data object for debug use.
+     *
+     * @return  A printable string describing this object.
+     */
+    juce::String toString() const;
 private:
     /* The hash value used to compare access points and identify access points
        with equivalent connections. */

@@ -5,6 +5,7 @@
 #include "Wifi_AccessPoint.h"
 #include "Wifi_APList_Reader.h"
 #include "Wifi_APList_NMReader.h"
+#include "Wifi_APList_Writer.h"
 #include "LibNM/BorrowedObjects/AccessPoint.h"
 #include "LibNM/BorrowedObjects/DeviceWifi.h"
 #include "LibNM/BorrowedObjects/ActiveConnection.h"
@@ -145,6 +146,8 @@ void WifiConnect::RecordResource::addConnectionEvent(const Event newEvent)
 {
     if(!newEvent.isNull())
     {
+       DBG("Wifi::Connection::RecordResource::" << __func__
+               << ": adding " << newEvent.toString());
         connectionEvents.addSorted(eventSorter, newEvent);
         foreachHandler<UpdateInterface>([this, &newEvent]
                 (UpdateInterface* listener)
@@ -179,6 +182,7 @@ void WifiConnect::RecordResource::addConnectionEvent(const Event newEvent)
  */
 void WifiConnect::RecordResource::addEventIfNotDuplicate(const Event newEvent)
 {
+    jassert(!newEvent.getEventAP().isNull());
     Event latestEvent = getLastEvent();
     if(latestEvent.getEventAP() != newEvent.getEventAP()
             || latestEvent.getEventType() != newEvent.getEventType())
@@ -226,11 +230,12 @@ void WifiConnect::RecordResource::updateRecords()
         
         LibNM::ActiveConnection connection 
                 = networkClient.getActivatingConnection();
-        const bool isConnecting = !connection.isNull();
-        if(!isConnecting)
+        if(connection.isNull())
         {
             connection = networkClient.getPrimaryConnection();
         }
+        const bool isConnecting 
+                = wifiDevice.getState() != NM_DEVICE_STATE_ACTIVATED; 
 
         if(connection.isNull())
         {
@@ -245,12 +250,22 @@ void WifiConnect::RecordResource::updateRecords()
         }
 
         const APList::Reader accessPointList;
+        const LibNM::APHash apHash = nmAP.generateHash();
+        jassert(!apHash.isNull());
         AccessPoint activeAP = accessPointList.getAccessPoint
                 (nmAP.generateHash());
-        jassert(!activeAP.isNull());
+        if(activeAP.isNull())
+        {
+            APList::Writer listWriter;
+            listWriter.updateAllAccessPoints();
+            activeAP = accessPointList.getAccessPoint(apHash);
+            jassert(!activeAP.isNull());
+        }
 
         Event initialEvent(activeAP, isConnecting ?
                 EventType::startedConnecting : EventType::connected);
+        DBG("Wifi::Connection::RecordResource::" << __func__
+                << ": Initial event:" << initialEvent.toString());
         connectionEvents.addSorted(eventSorter, initialEvent);
     });
 }

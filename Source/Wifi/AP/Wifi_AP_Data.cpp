@@ -13,9 +13,12 @@ Wifi::AP::Data::Data(const LibNM::AccessPoint nmAccessPoint,
     LibNM::ThreadHandler nmThread;
     nmThread.call([this, &nmAccessPoint]()
     {
-        ssid = nmAccessPoint.getSSID();
-        securityType = nmAccessPoint.getSecurityType();
-        signalStrength.set(nmAccessPoint.getSignalStrength());
+        if(!nmAccessPoint.isNull())
+        {
+            ssid = nmAccessPoint.getSSID();
+            securityType = nmAccessPoint.getSecurityType();
+            signalStrength.set(nmAccessPoint.getSignalStrength());
+        }
     });
 }
 
@@ -104,3 +107,42 @@ void Wifi::AP::Data::setSignalStrength(const unsigned int newStrength)
 {
     signalStrength.set(newStrength);
 }
+    
+/*
+ * Checks if this data object has no valid data.
+ */
+bool Wifi::AP::Data::isNull() const
+{
+    return hash.isNull();
+}
+
+/*
+ * Gets a string representation of the AP data object for debug use.
+ */
+juce::String Wifi::AP::Data::toString() const
+{
+    juce::String dataString = "(";
+    dataString += ssid.toString();
+    dataString += ", strength ";
+    dataString += juce::String((int) signalStrength.get());
+    dataString += ", ";
+    switch(securityType)
+    {
+        case LibNM::SecurityType::unsecured:
+            dataString += "unsecured";
+            break;
+        case LibNM::SecurityType::securedWEP:
+            dataString += "securedWEP";
+            break;
+        case LibNM::SecurityType::securedWPA:
+            dataString += "securedWPA";
+            break;
+        case LibNM::SecurityType::securedRSN:
+            dataString += "securedRSN";
+    }
+    dataString += ", Hash ";
+    dataString += hash.toString();
+    dataString += ")";
+    return dataString;
+}
+

@@ -13,7 +13,8 @@ Wifi::APList::NMReader::NMReader() { }
 LibNM::AccessPoint Wifi::APList::NMReader::getStrongestNMAccessPoint
 (const AccessPoint accessPoint) const
 {
-    SharedResource::LockedPtr<ListResource> apList = getReadLockedResource();
+    SharedResource::LockedPtr<const ListResource> apList 
+            = getReadLockedResource();
     return apList->getStrongestNMAccessPoint(accessPoint);
 
 }
@@ -24,6 +25,7 @@ LibNM::AccessPoint Wifi::APList::NMReader::getStrongestNMAccessPoint
 juce::Array<LibNM::AccessPoint> Wifi::APList::NMReader::getNMAccessPoints
 (const AccessPoint accessPoint) const
 {
-    SharedResource::LockedPtr<ListResource> apList = getReadLockedResource();
-    return apList->getNMAccessPoints();
+    SharedResource::LockedPtr<const ListResource> apList 
+            = getReadLockedResource();
+    return apList->getNMAccessPoints(accessPoint);
 }
