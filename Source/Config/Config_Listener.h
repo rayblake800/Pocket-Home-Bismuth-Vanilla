@@ -82,7 +82,7 @@ public:
     template<typename ValueType>
     ValueType getConfigValue(const juce::Identifier& key)
     {
-        SharedResource::LockedPtr<ResourceClass> configFile
+        SharedResource::LockedPtr<const ResourceClass> configFile
             = SharedResource::Handler<ResourceClass>::getReadLockedResource();
         return configFile->template getConfigValue<ValueType>(key);
     }

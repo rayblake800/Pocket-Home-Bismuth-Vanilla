@@ -19,7 +19,7 @@ SharedResource::Handler<LoadingThread>() { }
 DesktopEntry::EntryFile DesktopEntry::Loader::getDesktopEntry
 (const juce::String& entryFileID) const
 {
-    SharedResource::LockedPtr<LoadingThread> loadingThread 
+    SharedResource::LockedPtr<const LoadingThread> loadingThread 
         = getReadLockedResource();
     return loadingThread->getDesktopEntry(entryFileID);
 }
@@ -30,7 +30,7 @@ DesktopEntry::EntryFile DesktopEntry::Loader::getDesktopEntry
 juce::Array<DesktopEntry::EntryFile> 
 DesktopEntry::Loader::getAllEntries() const
 {
-    SharedResource::LockedPtr<LoadingThread> loadingThread 
+    SharedResource::LockedPtr<const LoadingThread> loadingThread 
         = getReadLockedResource();
     return loadingThread->getAllEntries();
 }
@@ -41,7 +41,7 @@ DesktopEntry::Loader::getAllEntries() const
 juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
 (const juce::String& category) const
 {
-    SharedResource::LockedPtr<LoadingThread> loadingThread 
+    SharedResource::LockedPtr<const LoadingThread> loadingThread 
         = getReadLockedResource();
     return loadingThread->getCategoryEntries(category);
 }
@@ -52,7 +52,7 @@ juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
 juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
 (const juce::StringArray& categoryList) const
 {
-    SharedResource::LockedPtr<LoadingThread> loadingThread 
+    SharedResource::LockedPtr<const LoadingThread> loadingThread 
         = getReadLockedResource();
     return loadingThread->getCategoryEntries(categoryList);
 }

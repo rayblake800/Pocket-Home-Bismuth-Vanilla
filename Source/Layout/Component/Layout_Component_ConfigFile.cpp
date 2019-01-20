@@ -15,7 +15,8 @@ ComponentLayout::ConfigFile::ConfigFile() { }
 ComponentLayout::ConfigLayout 
 ComponentLayout::ConfigFile::getLayout(const juce::Identifier& componentKey)
 {
-    SharedResource::LockedPtr<JSONResource> config = getReadLockedResource();
+    SharedResource::LockedPtr<const JSONResource> config 
+            = getReadLockedResource();
     return config->getLayout(componentKey);
 }
 
@@ -25,7 +26,8 @@ ComponentLayout::ConfigFile::getLayout(const juce::Identifier& componentKey)
 int ComponentLayout::ConfigFile::getFontHeight
 (juce::Rectangle <int> textBounds, juce::String text)
 {
-    SharedResource::LockedPtr<JSONResource> config = getReadLockedResource();
+    SharedResource::LockedPtr<const JSONResource> config 
+            = getReadLockedResource();
 
     int numLines = 1;
     for (int i = 0; i < text.length(); i++)

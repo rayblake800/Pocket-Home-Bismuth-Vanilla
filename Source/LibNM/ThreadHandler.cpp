@@ -16,7 +16,7 @@ GLib::ThreadHandler(ThreadResource::resourceKey,
 LibNM::Client LibNM::ThreadHandler::getClient() const
 {
     SharedResource::LockedPtr<ThreadResource> nmThread
-        = getReadLockedResource<ThreadResource>();
+            = getWriteLockedResource<ThreadResource>();
     return nmThread->getClient();
 }
 
@@ -27,6 +27,6 @@ LibNM::Client LibNM::ThreadHandler::getClient() const
 LibNM::DeviceWifi LibNM::ThreadHandler::getWifiDevice() const
 {
     SharedResource::LockedPtr<ThreadResource> nmThread
-        = getReadLockedResource<ThreadResource>();
+            = getWriteLockedResource<ThreadResource>();
     return nmThread->getWifiDevice();
 }

@@ -79,9 +79,8 @@ public:
      * @return                          The value read from the config file.
      */
     template<typename ValueType >
-    ValueType getConfigValue(const juce::Identifier& key)
+    ValueType getConfigValue(const juce::Identifier& key) const
     {      
-        using namespace juce;
         if(!isValidKey(key))
         {
             throw BadKeyException(key);

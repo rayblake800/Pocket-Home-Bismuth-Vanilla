@@ -50,7 +50,7 @@ public:
     template<typename ValueType>
     ValueType getConfigValue(const juce::Identifier& key) const
     {
-        SharedResource::LockedPtr<ResourceType> jsonPtr 
+        SharedResource::LockedPtr<const ResourceType> jsonPtr 
             = SharedResource::Handler<ResourceType>::getReadLockedResource();
         return jsonPtr->template getConfigValue<ValueType>(key);
     }
@@ -80,7 +80,7 @@ public:
     bool setConfigValue(const juce::Identifier& key, ValueType newValue)
     {
         SharedResource::LockedPtr<ResourceType> jsonPtr 
-            = SharedResource::Handler<ResourceType>::getReadLockedResource();
+            = SharedResource::Handler<ResourceType>::getWriteLockedResource();
         return jsonPtr->template setConfigValue<ValueType>(key, newValue);
     }
 };

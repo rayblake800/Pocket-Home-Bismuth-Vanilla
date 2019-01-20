@@ -12,7 +12,7 @@ AppMenu::MenuFile::MenuFile() { }
  */
 AppMenu::MenuItem AppMenu::MenuFile::getRootFolderItem()
 {
-    SharedResource::LockedPtr<MenuJSON> appJSON = getReadLockedResource();
+    SharedResource::LockedPtr<const MenuJSON> appJSON = getReadLockedResource();
     return appJSON->getRootFolderItem();
 }
 
