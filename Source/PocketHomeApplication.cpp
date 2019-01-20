@@ -72,12 +72,8 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         cerr << "     -categories    Run tests within listed categories\n";
         cerr << "     -v 	         Verbose test output\n";
         quit();
+        return;
     }
-
-    wifiManager.reset(new Wifi::Manager);
-
-    lookAndFeel.reset(new Theme::LookAndFeel);
-    LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
 
     // open sound handle
     if (!Audio::chipAudioInit())
@@ -88,6 +84,10 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     runTests = args.contains("--test");
     if(!runTests)
     {
+        dBusThread.reset(new GLib::DBusThreadRunner);
+        wifiManager.reset(new Wifi::Manager);
+        lookAndFeel.reset(new Theme::LookAndFeel);
+        LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
         homeWindow.reset(new PocketHomeWindow(getApplicationName()));
     }
     else
@@ -119,8 +119,11 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
  */
 void PocketHomeApplication::shutdown()
 {
+    DBG("PocketHomeApplication::shutdown(): Closing application resources.");
     homeWindow.reset(nullptr);
     juce::LookAndFeel::setDefaultLookAndFeel(nullptr);
     lookAndFeel.reset(nullptr);
     wifiManager.reset(nullptr);
+    dBusThread.reset(nullptr);
+    DBG("PocketHomeApplication::shutdown(): All resources were destroyed.");
 }

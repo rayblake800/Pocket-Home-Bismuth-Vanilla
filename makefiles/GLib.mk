@@ -32,7 +32,8 @@ OBJECTS_GLIB_THREAD := \
 
 OBJECTS_GLIB_DBUS := \
   $(GLIB_PREFIX)DBusProxy.o \
-  $(GLIB_PREFIX)DBusThread.o
+  $(GLIB_PREFIX)DBusThread.o \
+  $(GLIB_PREFIX)DBusThreadRunner.o
 
 OBJECTS_GLIB_VAR := \
   $(GLIB_PREFIX)VariantConverter.o \
@@ -99,6 +100,8 @@ $(GLIB_PREFIX)SharedContextPtr.o : \
 
 $(GLIB_PREFIX)DBusThread.o : \
     $(GLIB_DBUS_ROOT)/GLib_DBusThread.cpp
+$(GLIB_PREFIX)DBusThreadRunner.o : \
+    $(GLIB_DBUS_ROOT)/GLib_DBusThreadRunner.cpp
 $(GLIB_PREFIX)DBusProxy.o : \
     $(GLIB_DBUS_ROOT)/GLib_DBusProxy.cpp
 
