@@ -53,6 +53,10 @@ bool GLib::Object::operator!=(GObject* rhs) const
 int GLib::Object::getReferenceCount() const
 {
     ObjectPtr objectPtr(*this);
+    if(objectPtr == nullptr)
+    {
+        return 0;
+    }
     int refCount = ((GObject*) objectPtr)->ref_count;
     return (isOwned() ? refCount - 1 : refCount);
 }
