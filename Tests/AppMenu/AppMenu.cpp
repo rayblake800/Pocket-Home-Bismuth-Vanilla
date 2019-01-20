@@ -2,7 +2,7 @@
 #include "AppMenu_Format.h"
 #include "AppMenu_ConfigFile.h"
 #include "JuceHeader.h"
-#include "Icon/IconLoader.h"
+#include "Icon_Loader.h"
 #include "DesktopEntry_Loader.h"
 #include "TestWindow.h"
 #include "DelayUtils.h"
