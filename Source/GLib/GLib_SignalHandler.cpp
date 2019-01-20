@@ -1,6 +1,7 @@
 #include "GLib_SignalHandler.h"
 #include "GLib_Object.h"
 
+
 /*
  * Unsubscribes the signal handler from all signal sources, and removes all
  * held references to signal sources.
@@ -153,7 +154,7 @@ void GLib::SignalHandler::shareSignalSources(const SignalHandler& otherHandler)
     juce::Array<SourceInitData> sharedSources;
 
     const juce::ScopedLock readSourceLock(otherHandler.signals.getLock());
-    auto iter = otherHandler.signals.begin();
+    SignalHashMap::Iterator iter(otherHandler.signals);
     while(iter.next())
     {
         sharedSources.add({iter.getKey(), iter.getValue().referenceHeld});
@@ -178,8 +179,7 @@ void GLib::SignalHandler::shareSignalSources(const SignalHandler& otherHandler)
 void GLib::SignalHandler::unsubscribeAll()
 {
     const juce::ScopedLock clearSignalLock(signals.getLock());
-    juce::HashMap<WeakRef, SourceData, juce::DefaultHashFunctions,
-            juce::CriticalSection>::Iterator iter(signals);
+    SignalHashMap::Iterator iter(signals);
     while(iter.next())
     {
         ObjectPtr sourcePtr(iter.getKey().getObject());

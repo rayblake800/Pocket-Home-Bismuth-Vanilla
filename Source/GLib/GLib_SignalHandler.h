@@ -206,7 +206,10 @@ private:
      */
     void addSignalSourceIfNew(GObject* source, const bool shouldHaveRef);
     
+    /* The specific HashMap type used to store SourceData. */
+    typedef juce::HashMap<WeakRef, SourceData, juce::DefaultHashFunctions,
+            juce::CriticalSection> SignalHashMap;
+
     /* Maps each GObject* signal source to its signal SourceData. */
-    juce::HashMap<WeakRef, SourceData,
-            juce::DefaultHashFunctions, juce::CriticalSection> signals;
+    SignalHashMap signals;
 };
