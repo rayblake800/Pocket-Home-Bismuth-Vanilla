@@ -7,7 +7,7 @@
 
 /* Unique SharedResource object instance key: */
 const juce::Identifier LibNM::ThreadResource::resourceKey 
-        = "LibNM::ThreadResource";
+        = "LibNM_ThreadResource";
 
 /* Tracks if no Wifi device exists, to make sure the thread doesn't waste time
    trying to find it every single time getWifiDevice() is called. */
