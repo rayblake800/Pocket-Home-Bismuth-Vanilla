@@ -41,7 +41,7 @@ public:
      *
      * @return  The GLib context set when the EventLoop was constructed.
      */
-    SharedContextPtr getContext();
+    SharedContextPtr getContext() const;
     
     /*
      * @brief  Runs the GLib main loop. 

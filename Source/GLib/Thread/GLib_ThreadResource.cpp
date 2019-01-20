@@ -62,7 +62,7 @@ void GLib::ThreadResource::callAsync(std::function<void()> toCall,
 /*
  * Gets the thread's GLib context.
  */
-GLib::SharedContextPtr GLib::ThreadResource::getContext()
+GLib::SharedContextPtr GLib::ThreadResource::getContext() const
 {
     return eventLoop.getContext();
 }
@@ -72,11 +72,12 @@ GLib::SharedContextPtr GLib::ThreadResource::getContext()
  */
 void GLib::ThreadResource::stopThreadResource()
 {
-    contextCaller.callAsync([this]()
-        {
-            eventLoop.stopLoop();
-        });
     SharedResource::ThreadResource::signalThreadShouldExit();
+    contextCaller.call([this]()
+    {
+        eventLoop.stopLoop();
+    });
+    SharedResource::ThreadResource::stopThreadResource();
 }
 
 /*
@@ -112,7 +113,7 @@ void GLib::ThreadResource::runLoop
     threadLock = &lock;
     eventLoop.runLoop();
     threadLock = nullptr;
-    waitingAllowed = true;
+    waitingAllowed = !threadShouldExit();
 }
 
 /*

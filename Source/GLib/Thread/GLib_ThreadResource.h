@@ -12,6 +12,7 @@
 #include "GLib_ContextCaller.h"
 #include <gio/gio.h>
 
+
 namespace GLib { class ThreadResource; }
 namespace GLib { class SharedContextPtr; }
 
@@ -89,10 +90,14 @@ public:
      *
      * @return  The GLib context set when the EventLoop was constructed.
      */
-    SharedContextPtr getContext();
+    SharedContextPtr getContext() const;
 
     /**
      * @brief  Exits the GLib event loop before stopping the thread normally.
+     *
+     *  The caller must aquire the thread resource's lock for writing before
+     * calling this method. The lock will be unlocked and then relocked
+     * as the thread exits.
      */
     virtual void stopThreadResource() override;
 
@@ -150,4 +155,5 @@ private:
 
     /* Executes functions in the event loop. */
     ContextCaller contextCaller;
+
 };

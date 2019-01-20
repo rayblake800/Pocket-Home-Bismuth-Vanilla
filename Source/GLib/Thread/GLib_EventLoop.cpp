@@ -31,7 +31,7 @@ bool GLib::EventLoop::runningOnLoop()
 /*
  * Gets the event loop's context.
  */
-GLib::SharedContextPtr GLib::EventLoop::getContext()
+GLib::SharedContextPtr GLib::EventLoop::getContext() const
 {
     return context;
 }
