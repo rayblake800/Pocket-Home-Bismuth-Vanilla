@@ -45,8 +45,8 @@ void GLib::ThreadHandler::callAsync(const std::function<void()> toCall,
  */
 bool GLib::ThreadHandler::isThreadRunning() const
 {
-    SharedResource::LockedPtr<ThreadResource> glibThread
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const ThreadResource> glibThread
+            = getReadLockedResource();
     return glibThread->isThreadRunning();
 }
 
@@ -55,8 +55,8 @@ bool GLib::ThreadHandler::isThreadRunning() const
  */
 GLib::SharedContextPtr GLib::ThreadHandler::getContext()
 {
-    SharedResource::LockedPtr<ThreadResource> glibThread
-        = getReadLockedResource();
+    SharedResource::LockedPtr<const ThreadResource> glibThread
+            = getReadLockedResource();
     return glibThread->getContext();
 }
 
@@ -77,5 +77,5 @@ void GLib::ThreadHandler::stopThread()
 {
     SharedResource::LockedPtr<ThreadResource> glibThread
         = getWriteLockedResource();
-    glibThread->stopThreadResource();
+    glibThread->stopThreadAndWait();
 }
