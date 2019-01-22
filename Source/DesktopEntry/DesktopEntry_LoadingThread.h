@@ -1,5 +1,5 @@
 #ifndef DESKTOP_ENTRY_IMPLEMENTATION
-  #error File included outside of DesktopEntry implementation.
+  #error File included directly outside of DesktopEntry implementation.
 #endif
 #pragma once
 /**

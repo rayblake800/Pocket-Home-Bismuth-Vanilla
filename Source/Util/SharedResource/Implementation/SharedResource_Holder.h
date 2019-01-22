@@ -1,5 +1,5 @@
 #ifndef SHARED_RESOURCE_IMPLEMENTATION
-  #error File included outside of SharedResource implementation.
+  #error File included directly outside of SharedResource implementation.
 #endif
 #pragma once
 /**

@@ -1,5 +1,5 @@
 #ifndef LIB_NM_THREAD_IMPLEMENTATION
-  #error File included outside of LibNM Thread implementation.
+  #error File included directly outside of LibNM Thread implementation.
 #endif
 #pragma once
 /**

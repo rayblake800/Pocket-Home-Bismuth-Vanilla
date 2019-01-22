@@ -353,9 +353,11 @@ GValue GLib::VariantConverter::getGValue(GVariant* variant)
         case stringArrayType:
             g_value_take_boxed(&value,
                     g_variant_get_strv(variant, nullptr));
+            break;
         default:
             DBG("GLib::VariantConverter::" << __func__ 
-                    << ": Unhandled variant type!");
+                    << ": Ignoring unhandled variant type \""
+                    << g_variant_get_type_string(variant) << "\"");
     }
     return value;
 }

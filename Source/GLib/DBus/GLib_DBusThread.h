@@ -1,5 +1,5 @@
 #ifndef DBUS_THREAD_IMPLEMENTATION
-  #error File included outside of DBusProxy implementation.
+  #error File included directly outside of DBusProxy implementation.
 #endif
 #pragma once
 /**
