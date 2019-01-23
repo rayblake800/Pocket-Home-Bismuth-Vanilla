@@ -13,9 +13,12 @@ OBJECTS_SHARED_RESOURCE_IMPL := \
 OBJECTS_SHARED_RESOURCE := \
   $(OBJECTS_SHARED_RESOURCE_IMPL) \
   $(SHARED_RESOURCE_PREFIX)Resource.o \
-  $(SHARED_RESOURCE_PREFIX)ThreadResource.o
+  $(SHARED_RESOURCE_PREFIX)ThreadResource.o \
+  $(SHARED_RESOURCE_PREFIX)Modular_Resource.o
 
-OBJECTS_SHARED_RESOURCE_TEST :=
+OBJECTS_SHARED_RESOURCE_TEST := \
+  $(SHARED_RESOURCE_PREFIX)Test_SharedResource_ModuleTest.o \
+  $(SHARED_RESOURCE_PREFIX)Test_SharedResource_Modular_TestClasses.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_SHARED_RESOURCE := $(OBJECTS_SHARED_RESOURCE) \
@@ -41,4 +44,11 @@ $(SHARED_RESOURCE_PREFIX)Resource.o : \
     $(SHARED_RESOURCE_ROOT)/SharedResource_Resource.cpp
 $(SHARED_RESOURCE_PREFIX)ThreadResource.o : \
     $(SHARED_RESOURCE_ROOT)/SharedResource_ThreadResource.cpp
+$(SHARED_RESOURCE_PREFIX)Modular_Resource.o : \
+    $(SHARED_RESOURCE_ROOT)/Modular/SharedResource_Modular_Resource.cpp
+
+$(SHARED_RESOURCE_PREFIX)Test_SharedResource_ModuleTest.o : \
+    $(SHARED_RESOURCE_TEST_ROOT)/Test_SharedResource_ModuleTest.cpp
+$(SHARED_RESOURCE_PREFIX)Test_SharedResource_Modular_TestClasses.o : \
+    $(SHARED_RESOURCE_TEST_ROOT)/Test_SharedResource_Modular_TestClasses.cpp
 
