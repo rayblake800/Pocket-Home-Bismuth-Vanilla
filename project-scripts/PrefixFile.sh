@@ -1,6 +1,6 @@
 #!/bin/bash
 # Recursively adds a prefix string to the name of each file within a directory.
-# Use: ./filePrefix.sh /path/to/directory "PrefixString"
+# Use: ./prefixFile.sh /path/to/directory "PrefixString"
 if [[ ! -d $1 ]]; then
     echo "$1 is not a valid directory."
     exit 0

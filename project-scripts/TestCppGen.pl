@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # Make .cpp test files for each header file in the project within a test
-# directory.
+# directory to test the CppGen.pl script.
 #
 use strict;
 use warnings;

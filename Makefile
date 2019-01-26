@@ -131,7 +131,7 @@ endif
 JUCE_CPPFLAGS := $(DEPFLAGS) \
 	             $(JUCE_CONFIG_FLAGS) \
 	             $(JUCE_DEFS)\
-                 -DBUILD_NAME="\"$(shell ./project-scripts/buildLabel.sh)\"" \
+                 -DBUILD_NAME="\"$(shell ./project-scripts/BuildLabel.sh)\"" \
 	             $(shell pkg-config --cflags $(PKG_CONFIG_LIBS)) \
 	             $(DIR_FLAGS)
 

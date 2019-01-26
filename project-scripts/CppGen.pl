@@ -1,13 +1,13 @@
 #!/usr/bin/perl
 
 ################################################################################
-#  MakeCpp.pl                                                                  # 
+#  CppGen.pl                                                                   # 
 # ---------------------------------------------------------------------------- #
-#  Given a header file, MakeCpp creates a .cpp file defining the values        #
+#  Given a header file, CppGen creates a .cpp file defining the values         #
 # declared in that header. The new .cpp file is then formatted according to my #
 # personal preferences.                                                        #
 #------------------------------------------------------------------------------#
-#  usage: ./MakeCpp.pl [path to input header file] [path to output .cpp file]  #
+#  usage: ./CppGen.pl [path to input header file] [path to output .cpp file]   #
 ################################################################################
 
 use strict;

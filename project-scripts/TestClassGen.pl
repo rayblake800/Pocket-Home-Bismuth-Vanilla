@@ -2,7 +2,7 @@
 #
 # Generates empty unit test classes for project source files.
 #
-# Use: ./generateTest.pl "path/in/Source/dir/to/file.cpp" "Test Category Name"
+# Use: ./TestGen.pl "path/in/Source/dir/to/file.cpp" "Test Category Name"
 
 use strict;
 use warnings;
