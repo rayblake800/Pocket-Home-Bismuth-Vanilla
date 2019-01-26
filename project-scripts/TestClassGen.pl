@@ -8,7 +8,7 @@ use strict;
 use warnings;
 use File::Slurp;
 
-my $projectRoot = "/home/anthony/Workspace/C++/PocketCHIP-pocket-home/";
+my $projectRoot = $ENV{'HOME'}."/Workspace/C++/PocketCHIP-pocket-home";
 
 my $path = $ARGV[0] or die "Missing source file path!\n";
 my $category = $ARGV[1] or die "Missing test category!\n";
@@ -43,5 +43,7 @@ public:
 static $testClassName test;
 ];
 
-my $testPath =  "$projectRoot/Tests/$path";
+my $subDir = $path;
+$subDir =~ s/^.*Source\///;
+my $testPath =  "$projectRoot/Tests/$subDir";
 write_file($testPath, $testFile) or die "Failed to write to $testPath\n";
