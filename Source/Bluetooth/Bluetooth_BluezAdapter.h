@@ -6,11 +6,11 @@
  *         to control Bluetooth connections.
  */
 
-#include "GLib_DBusProxy.h"
+#include "GLib_DBus_Proxy.h"
 
 namespace Bluetooth { class BluezAdapter; }
 
-class Bluetooth::BluezAdapter : private GLib::DBusProxy
+class Bluetooth::BluezAdapter : private GLib::DBus::Proxy
 {
 public:
     BluezAdapter();

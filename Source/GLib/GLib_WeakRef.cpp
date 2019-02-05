@@ -64,7 +64,8 @@ GLib::WeakRef& GLib::WeakRef::operator=(const GObject* rhs)
     }
     else if(refCleared)
     {
-        DBG("GLib::WeakRef::" << __func__ << ": weak reference already cleared!");
+        DBG("GLib::WeakRef::" << __func__ 
+                << ": weak reference already cleared!");
     }
     else
     {
@@ -98,21 +99,6 @@ bool GLib::WeakRef::operator==(const GObject* rhs) const
 }
 
 /*
- * Casts stored object pointer data to an unsigned long, so WeakRefs can be used 
- * as hash keys.
- */
-GLib::WeakRef::operator juce::uint64() const
-{
-    GObject* object = getObject();
-    if(object != NULL)
-    {
-        g_object_unref(object);
-    }
-    return (juce::uint64) object;
-}
-
-
-/*
  * Attempts to return the GObject referenced by this WeakRef.
  */
 GObject* GLib::WeakRef::getObject() const
@@ -131,7 +117,6 @@ GObject* GLib::WeakRef::getObject() const
     else
     {
         gpointer object = g_weak_ref_get(const_cast<GWeakRef*>(&weakRef));
-        jassert(object == nullptr || G_IS_OBJECT(object));
         return (object == NULL || !G_IS_OBJECT(object)) 
             ? nullptr : G_OBJECT(object);
     }

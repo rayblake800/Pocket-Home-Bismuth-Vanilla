@@ -74,14 +74,6 @@ public:
      * @return     Whether this WeakRef's stored value equals rhs.
      */
     bool operator==(const GObject* rhs) const;
-
-    /**
-     * @brief  Casts stored object pointer data to an unsigned long, so 
-     *         WeakRefs can be used as hash keys.
-     *
-     * @return  The referenced data address, as an unsigned 64-bit number.
-     */
-    operator juce::uint64() const;
     
     /**
      * @brief  Attempts to return the GObject referenced by this WeakRef.  
@@ -115,4 +107,6 @@ private:
     /* Lock for reading when checking if the reference was initialized/cleared
        Lock for writing when initializing or clearing the reference. */
     juce::ReadWriteLock referenceLock;
+
+    JUCE_LEAK_DETECTOR(WeakRef);
 };

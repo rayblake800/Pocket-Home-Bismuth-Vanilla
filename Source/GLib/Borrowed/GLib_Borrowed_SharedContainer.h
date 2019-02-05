@@ -48,6 +48,8 @@ public:
      * @brief  Permanently sets the SharedContainer object's data to nullptr.
      */
     void clearData();
+
+    JUCE_LEAK_DETECTOR(SharedContainer);
 };
 
 

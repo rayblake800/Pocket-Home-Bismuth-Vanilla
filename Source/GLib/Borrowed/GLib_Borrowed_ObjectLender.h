@@ -166,4 +166,6 @@ public:
         }
         borrowedObjects.clear();
     }
+ 
+JUCE_LEAK_DETECTOR(ObjectLender);
 };

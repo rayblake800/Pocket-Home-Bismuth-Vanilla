@@ -1,6 +1,4 @@
 #pragma once
-#include <map>
-#include "JuceHeader.h"
 /**
  * @file StressTest.h
  *
@@ -8,6 +6,38 @@
  *        many threads.
  */
 
+#include <map>
+#include "JuceHeader.h"
+
+class TestAction
+{
+public:
+    TestAction(
+            const juce::String testName,
+            const std::function<bool()> testAction,
+            std::function<bool()> allowAction = []() { return true; });
+
+    TestAction() { }
+
+    virtual ~TestAction() { }
+
+    const juce::String& getTestName() const;
+
+    bool canRunAction();
+
+    void runTestAction();
+
+    int getActionCount() const;
+
+    int getSuccessfulActionCount() const;
+
+private:
+    const juce::String testName;
+    std::function<bool()> testAction;
+    std::function<bool()> allowAction;
+    juce::Atomic<int> testsRan;
+    juce::Atomic<int> testsPassed;
+};
 
 class StressTest : public juce::UnitTest 
 {
@@ -16,6 +46,8 @@ public:
      * Initialize a new StressTest.
      *
      * @param testName      A name identifying this StressTest.
+     *
+     * @param testCategory  The test's category name.
      *
      * @param minThreads    Minimum number of testing threads to run at once.
      *
@@ -26,19 +58,22 @@ public:
      *
      * @param testDuration  Duration to run tests, in seconds.
      */
-    StressTest(juce::String testName, int minThreads, int maxThreads,
-            int actionFreq, int testDuration);
+    StressTest(
+            const juce::String testName, 
+            const juce::String testCategory,
+            const int minThreads,
+            const int maxThreads,
+            const int actionFreq,
+            const int testDuration);
             
 protected:
-
-
     /**
      * Adds a new action for threads to randomly perform while testing. 
      *
      * @param testAction  A function that threads may randomly select to run
      *                    while testing.
      */
-    void addAction(std::function<void()> testAction);
+    void addAction(TestAction testAction);
 
     /**
      * Starts the test.  This creates the minimum number of threads, and allows
@@ -62,6 +97,7 @@ private:
         TestThread(StressTest& testSource);
 
         virtual ~TestThread() { }
+
     private:
         /**
          * Runs a random function from testSource.testActions, then sleeps for
@@ -77,7 +113,7 @@ private:
     };
 
     //All actions that TestThreads may select while testing.
-    juce::Array<std::function<void()>> testActions;
+    juce::Array<TestAction> testActions;
     //Minimum number of TestThreads to run at once.
     const int minThreads;
     //Maximum number of TestThreads to run at once.
@@ -91,9 +127,4 @@ private:
     juce::uint64 endTime;
     //Holds all active test threads.
     juce::OwnedArray<TestThread, juce::CriticalSection> threads;
-    
-    //tracks how many actions each thread performed
-    juce::Array<int> threadActionCounts;
-    //tracks how many times each action was executed
-    juce::Array<int> actionRunCounts;
 };

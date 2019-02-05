@@ -1,7 +1,7 @@
 #include "Bluetooth_BluezAdapter.h"
 
 Bluetooth::BluezAdapter::BluezAdapter() :
-GLib::DBusProxy("org.bluez", "/org/bluez/hci0", "org.bluez.Adapter1") { }
+GLib::DBus::Proxy("org.bluez", "/org/bluez/hci0", "org.bluez.Adapter1") { }
 
 juce::String Bluetooth::BluezAdapter::getDeviceAddress()
 {
