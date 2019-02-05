@@ -7,10 +7,9 @@
  */
 
 #include "JuceHeader.h"
-#include "SharedResource.h"
 
 namespace SharedResource { class Instance; }
-namespace SharedResource { class Reference; }
+namespace SharedResource { class ReferenceInterface; }
 
 class SharedResource::Instance
 {
@@ -43,6 +42,13 @@ public:
      */
     const juce::Identifier& getResourceKey() const;
 
+    /**
+     * @brief  Gets the number of Reference objects connected to this resource.
+     *
+     * @return  The Instance object's reference count.
+     */
+    int getReferenceCount() const;
+
 private:
     /**
      * @brief  Runs an arbitrary function on each Reference object 
@@ -55,11 +61,11 @@ private:
      *                       a pointer to the Reference as a parameter.
      */
     void foreachReference
-    (std::function<void(Reference*)> referenceAction);
+    (std::function<void(ReferenceInterface*)> referenceAction);
 
     /* The resource's unique key identifier. */
     const juce::Identifier& resourceKey;
 
     /* Tracks all reference object associated with the resource. */
-    juce::Array<Reference*> references;
+    juce::Array<ReferenceInterface*> references;
 };

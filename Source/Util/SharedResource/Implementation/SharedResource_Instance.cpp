@@ -1,6 +1,7 @@
 #define SHARED_RESOURCE_IMPLEMENTATION
 #include "SharedResource_Holder.h"
 #include "SharedResource_Instance.h"
+#include "SharedResource_ReferenceInterface.h"
 
 /*
  * Creates the unique resource object instance.
@@ -51,19 +52,44 @@ const juce::Identifier& SharedResource::Instance::getResourceKey() const
 }
 
 /*
+ * Gets the number of Reference objects connected to this resource.
+ */
+int SharedResource::Instance::getReferenceCount() const
+{
+    return references.size();
+}
+
+/*
  * Runs an arbitrary function on each Reference object connected to the 
  * resource.
  */
 void SharedResource::Instance::foreachReference
-(std::function<void(Reference*)> referenceAction)
+(std::function<void(ReferenceInterface*)> referenceAction)
 {
     Holder* resourceHolder = Holder::getHolderInstance();
     const juce::ReadWriteLock& resourceLock = resourceHolder->getResourceLock
         (resourceKey);
-    const juce::ScopedReadLock referenceLock(resourceLock);
-    for(Reference* reference : references)
+    const juce::ScopedReadLock referenceListLock(resourceLock);
+
+    juce::Array<ReferenceInterface*> handledReferences;
+    int referencesHandled;
+    do
     {
-        referenceAction(reference);
+        referencesHandled = 0;
+        for(int i = 0; i < references.size(); i++)
+        {
+            ReferenceInterface* reference = references[i];
+            if(reference != nullptr && !handledReferences.contains(reference))
+            {
+                const juce::ScopedLock referenceLock(reference->getLock());
+                resourceLock.exitRead();
+                referenceAction(reference);
+                resourceLock.enterRead();
+                handledReferences.add(reference);
+                referencesHandled++;
+            }
+        }
     }
+    while(referencesHandled > 0);
 }
 

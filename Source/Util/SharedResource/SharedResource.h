@@ -1,4 +1,7 @@
 #pragma once
+//TODO: Update and transfer module documentation and get rid of this file.
+#error "Do not include SharedResource.h, module header files are being phased out"
+
 
 /**
  * @file  SharedResource/SharedResource.h

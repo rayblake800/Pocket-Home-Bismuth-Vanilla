@@ -8,7 +8,8 @@
 
 #include "SharedResource_Resource.h"
 
-namespace SharedResource { namespace Modular { class Resource; } }
+namespace SharedResource { namespace Modular { 
+        template<class ResourceType> class Resource; } }
 namespace SharedResource { namespace Modular { 
         template<class ResourceType> class Module; } }
 
@@ -21,8 +22,15 @@ namespace SharedResource { namespace Modular {
  * all of them share a single lock. This approach allows Resources that perform
  * a large number of interconnected tasks to be divided up without the risk of
  * deadlocks involved when multiple resources interact.
+ *
+ * @tparam ResourceType  The Modular::Resource's parent class. This will be 
+ *                       SharedResource::Resource by default. Only classes that
+ *                       inherit from SharedResource::Resource are valid
+ *                       options.
+ *                      
  */
-class SharedResource::Modular::Resource : public SharedResource::Resource
+template <class ResourceType = SharedResource::Resource>
+class SharedResource::Modular::Resource : public ResourceType
 {
 protected:
     /**
@@ -30,7 +38,8 @@ protected:
      *
      * @param resourceKey  The Resource subclass instance's unique key. 
      */
-    Resource(const juce::Identifier& resourceKey);
+    Resource(const juce::Identifier& resourceKey) : 
+            ResourceType(resourceKey) { }
 
 public:
     /**
@@ -55,7 +64,7 @@ public:
 
 private:
     /* Allows modules to act on their Handler objects: */
-    template<class ResourceType> friend class Module;
+    template<class ModularResourceType> friend class Module;
     
     /**
      * @brief  Performs an action on all of a module's Handlers that share a 

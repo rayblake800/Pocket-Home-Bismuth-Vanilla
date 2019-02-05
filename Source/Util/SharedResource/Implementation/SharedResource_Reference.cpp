@@ -11,6 +11,7 @@ SharedResource::Reference::~Reference()
 {
     {
         const juce::ScopedWriteLock resourceLock(getResourceLock());
+        const juce::ScopedLock referenceLock(getLock());
         Instance* resourceInstance = getResourceInstance();
         jassert(resourceInstance != nullptr);
         resourceInstance->references.removeFirstMatchingValue(this);

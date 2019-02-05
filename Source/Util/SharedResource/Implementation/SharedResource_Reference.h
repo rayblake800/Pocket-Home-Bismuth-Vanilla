@@ -1,19 +1,22 @@
 #pragma once
 /**
- * @file  SharedResource/Implementation/Reference.h
+ * @file  SharedResource_Reference.h
  *
- * @brief  Provides access to a resource's Instance and lock, and ensures the 
- *         resource is destroyed if and only if all of its References have been
- *         destroyed.
+ * @brief  Provides access to a Resource object's Instance and lock, and ensures
+ *         the resource is destroyed if and only if all of its References have 
+ *         been destroyed.
  */
 
 #include "JuceHeader.h"
-#include "SharedResource/SharedResource.h"
+#include "SharedResource_ReferenceInterface.h"
 
-namespace SharedResource { class Reference; }
-namespace SharedResource { class Instance; }
+namespace SharedResource 
+{ 
+    class Reference; 
+    class Instance;
+}
 
-class SharedResource::Reference
+class SharedResource::Reference : public ReferenceInterface
 {
 private:
     /**

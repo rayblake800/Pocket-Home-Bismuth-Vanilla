@@ -1,10 +1,31 @@
 #pragma once
+/**
+ * @file  SharedResource_Modular_LockedPtr.h
+ *
+ * @brief  Provides controlled access to a SharedResource::Modular::Module
+ *         object.
+ */
 
 #include "SharedResource_LockedInstancePtr.h"
 
 namespace SharedResource { namespace Modular { 
         template<class ResourceType, class ModuleType> class LockedPtr; } }
 
+/**
+ *  @brief  Accesses a SharedResource::Modular::Module object, keeping that 
+ *          Module's Resource locked while the LockedPtr exists.
+ *
+ *  Modular::LockedPtr functions almost identically to a 
+ * SharedResource::LockedPtr, the only difference being that its -> operator
+ * accesses a Module object held by the locked Resource object, instead of
+ * directly accessing the resource itself.
+ *
+ * @tparam ResourceType  The SharedResource::Modular::Resource subclass accessed
+ *                       by the LockedPtr object.
+ *
+ * @tparam ModuleType    The SharedResource::Modular::Module subclass the 
+ *                       LockedPtr should request from the ResourceType object.
+ */
 template <class ResourceType, class ModuleType>
 class SharedResource::Modular::LockedPtr : public LockedInstancePtr
 {

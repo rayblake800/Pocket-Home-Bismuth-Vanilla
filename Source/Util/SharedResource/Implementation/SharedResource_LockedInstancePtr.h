@@ -6,20 +6,26 @@
  *         for as long as the LockedInstancePtr exists.
  */
 
-#include "SharedResource.h"
 #include "JuceHeader.h"
+#include "SharedResource_LockType.h"
 
 namespace SharedResource { class LockedInstancePtr; }
 namespace SharedResource { class Instance; }
+namespace SharedResource { 
+        template<class ResourceType> class LockedPtr; }
+namespace SharedResource { namespace Modular { 
+        template<class ResourceType, class ModuleType> class LockedPtr; } }
 
 class SharedResource::LockedInstancePtr
 {
 public:
 
-    /* LockedInstancePtr may only be created as the parent class of 
-       a LockedPtr<ResourceType> object. */
-    template<class ResourceType>
-    friend class LockedPtr;
+    /* LockedInstancePtr may only be created as the parent class of a LockedPtr 
+       object. */
+    template<class ResourceType> 
+            friend class LockedPtr;
+    template<class ResourceType, class ModuleType> 
+            friend class Modular::LockedPtr;
 
 private:
     /**

@@ -1,21 +1,23 @@
 #pragma once
-#include "SharedResource.h"
-#include "SharedResource_LockedPtr.h"
-#include "SharedResource_Reference.h"
-#include "JuceHeader.h"
-
 /**
- * @file Handler.h
+ * @file  SharedResource_Handler.h
  *
  * @brief  Provides safe access to a specific SharedResource::Resource subclass,
  *         ensuring the single Resource object instance exists as long as any of
  *         its Handlers exists, destroying it when its last handler is 
  *         destroyed.
- *
+ */
+
+#include "SharedResource_LockedPtr.h"
+#include "SharedResource_Reference.h"
+#include "JuceHeader.h"
+
+namespace SharedResource { template<class ResourceType> class Handler; }
+
+/**
  * @tparam ResourceType  The specific SharedResource::Resource subclass managed 
  *                       by the ResourceHandler.
  */
-
 template <class ResourceType>
 class SharedResource::Handler : public SharedResource::Reference
 {
@@ -106,6 +108,10 @@ protected:
         return LockedPtr<LockedType>(resourceKey, LockType::write);
     }
 
+    const juce::Identifier& getResourceKey() const
+    {
+        return resourceKey;
+    }
 private:
     /* The unique key identifier used to find the connected Resource instance.*/
     const juce::Identifier& resourceKey;

@@ -1,14 +1,17 @@
 #pragma once
-#include "JuceHeader.h"
-#include "SharedResource_Instance.h"
-
 /**
  * @file SharedResource/Resource.h
  *
  * @brief  A basis for threadsafe, RAII-managed Singleton objects.
- *
- * @see SharedResource.h
- *
+ */
+
+#include "JuceHeader.h"
+#include "SharedResource_Instance.h"
+#include "SharedResource_LockType.h"
+
+namespace SharedResource { class Resource; }
+
+/**
  * Resource object subclasses define access-controlled, reference counted
  * singletons.  Each Reference subclass is automatically created and destroyed
  * by its corresponding SharedResource::Handler class or classes, and may only
@@ -66,7 +69,7 @@ protected:
     template<class HandlerType>
     void foreachHandler(const std::function<void(HandlerType*)> handlerAction)
     {
-        foreachReference([&handlerAction](Reference* reference)
+        foreachReference([&handlerAction](ReferenceInterface* reference)
         {
             HandlerType* handler = dynamic_cast<HandlerType*>(reference);
             if(handler != nullptr)

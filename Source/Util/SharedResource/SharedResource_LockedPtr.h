@@ -1,13 +1,17 @@
 #pragma once
-#include "SharedResource.h"
-#include "SharedResource_LockedInstancePtr.h"
-
 /**
  * @file  SharedResource/LockedPtr.h
  *
  * @brief  Provides access to a specific SharedResource::Resource, keeping it
  *         locked for as long as the LockedPtr exists.
- *
+ */
+
+#include "SharedResource_LockedInstancePtr.h"
+#include "SharedResource_LockType.h"
+
+namespace SharedResource { template<class ResourceType> class LockedPtr; }
+
+/**
  * @tparam ResourceType  The SharedResource::Resource subclass this LockedPtr
  *                       accesses.
  */
@@ -15,6 +19,10 @@ template<class ResourceType>
 class SharedResource::LockedPtr : public LockedInstancePtr
 {
 private:
+    /* LockedPtr objects should only be created and used internally by 
+       Handler objects. */
+    template <class LockType> friend class Handler;
+
     /**
      * @brief  Locks the ResourceType resource for as long as the LockedPtr
      *         exists.
@@ -29,10 +37,6 @@ private:
 
 public:
     virtual ~LockedPtr() { }
-
-    /* LockedPtr objects should only be created and used internally by 
-       Handler objects. */
-    template <class LockType> friend class Handler;
 
     /**
      * @brief  Accesses the locked resource's methods or data.
