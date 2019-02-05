@@ -106,7 +106,7 @@ DIR_FLAGS := $(shell echo $(INCLUDE_DIRS) | xargs printf " -I'%s'") \
 	                 -printf " -I'%p'")
 
 # Generate the build label from the /etc/os-release file:
-BUILD_NAME := $(shell ./project-scripts/buildLabel.sh)
+BUILD_NAME := $(shell ./project-scripts/BuildLabel.sh)
 
 # Keep debug and release build files in separate directories:
 JUCE_OBJDIR := $(JUCE_OBJDIR)/$(CONFIG)

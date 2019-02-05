@@ -63,7 +63,7 @@
         "dateTime"       : "Date and time",
         "inputSettings"  : "Input settings"
     },
-    "WifiSettingsPage": 
+    "Wifi_SettingsPage": 
     {
         "password"         : "Password:",
         "connect"          : "Connect",
@@ -72,7 +72,7 @@
         "invalidFormat"    : "Invalid password length",
         "connectionFailed" : "Connection failed.",
         "lostAP"           : "Access point lost.",
-        "lastConnected"    : "Last connected:"
+        "lastConnected"    : "Last connected: "
     },
     "Wifi::ControlWidget":
     {
@@ -98,7 +98,7 @@
         "reboot"       : "Reboot into software flashing mode?",
         "yes"          : "Yes",
         "no"           : "No",
-        "flashingInfo" : "For instructions, visit pcflash.getchip.com" 
+        "flashingInfo" : "For instructions, visit https://archive.org/details/C.h.i.p.FlashCollection" 
     },
     "SetPasswordPage": 
     {
