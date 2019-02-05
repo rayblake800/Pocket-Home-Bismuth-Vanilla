@@ -1,6 +1,7 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_APList_Listener.h"
-#include "Wifi_APList_ListResource.h"
+#include "Wifi_APList_Module.h"
+#include "Wifi_Resource.h"
 #include "Wifi_AccessPoint.h"
 
 Wifi::APList::Listener::Listener() { }
@@ -11,7 +12,7 @@ Wifi::APList::Listener::Listener() { }
  */
 juce::Array<Wifi::AccessPoint> Wifi::APList::Listener::getVisibleAPs() const
 {
-    SharedResource::LockedPtr<const ListResource> apList 
+    SharedResource::Modular::LockedPtr<Resource, const Module> apList 
             = getReadLockedResource();
     return apList->getAccessPoints();
 }

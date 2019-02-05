@@ -1,0 +1,165 @@
+#define WIFI_IMPLEMENTATION
+#include "Wifi_Resource.h"
+#include "Wifi_LibNM_Thread_Module.h"
+#include "Wifi_Device_Module.h"
+#include "Wifi_Connection_Saved_Module.h"
+#include "Wifi_Connection_Record_Module.h"
+#include "Wifi_Connection_Control_Module.h"
+#include "Wifi_APList_Module.h"
+#include "Wifi_Device_Listener.h"
+#include "Wifi_LibNM_Signal_DeviceHandler.h"
+#include "Wifi_LibNM_Signal_ClientHandler.h"
+
+/*##################### Shared resource modules: #############################*/
+/* The SharedResource::Resource object instance key: */
+const juce::Identifier Wifi::Resource::resourceKey = "Wifi_Resource";
+
+/* Runs the LibNM Wifi thread: */
+static std::unique_ptr<Wifi::LibNM::Thread::Module> nmThread;
+
+/* Tracks the state of the active Wifi device: */
+static std::unique_ptr<Wifi::Device::Module> deviceTracker;
+
+/* Accesses saved connections:*/
+static std::unique_ptr<Wifi::Connection::Saved::Module> savedConnections;
+
+/* Tracks the list of visible Wifi access points: */
+static std::unique_ptr<Wifi::APList::Module> apList;
+
+/* Keeps a record of Wifi connection events: */
+static std::unique_ptr<Wifi::Connection::Record::Module> connectionRecord;
+
+/* Opens and closes Wifi connections: */
+static std::unique_ptr<Wifi::Connection::Control::Module> connectionControl;
+
+/*########################  LibNM signal handlers:  ##########################*/
+/* Handles all signals from the LibNM thread resource's Client object. */
+static Wifi::LibNM::Signal::ClientHandler clientSignalHandler;
+
+/* Handles all signals from the LibNM thread resource's DeviceWifi object.*/
+static Wifi::LibNM::Signal::DeviceHandler deviceSignalHandler;
+
+/*######################  Resource method definitions:  #######################*/
+/*
+ * Initializes all Wifi resource modules.
+ */
+Wifi::Resource::Resource() : SharedResource::Modular::Resource<>(resourceKey)
+{
+    DBG("Wifi::Resource::Resource: Initializing Wifi resources.");
+    nmThread.reset(new LibNM::Thread::Module(*this));
+    deviceTracker.reset(new Device::Module(*this));
+    savedConnections.reset(new Connection::Saved::Module(*this));
+    apList.reset(new APList::Module(*this));
+    connectionRecord.reset(new Connection::Record::Module(*this));
+    connectionControl.reset(new Connection::Control::Module(*this));
+
+    DBG("Wifi::Resource::Resource: Finishing init in the LibNM thread");
+    nmThread->startResourceThread();
+    nmThread->callAsync([this]()
+    {
+        deviceTracker->updateDeviceState();
+        apList->updateAllAccessPoints();
+        connectionRecord->updateRecords();
+        clientSignalHandler.connect();
+        deviceSignalHandler.connect();
+        DBG("Wifi::Resource::Resource: Finished initializing Wifi resources.");
+    });
+}
+
+/*
+ * Shuts down all Wifi resource modules.
+ */
+Wifi::Resource::~Resource()
+{
+    clientSignalHandler.disconnect();
+    deviceSignalHandler.disconnect();
+
+    connectionControl.reset(nullptr);
+    connectionRecord.reset(nullptr);
+    apList.reset(nullptr);
+    savedConnections.reset(nullptr);
+    deviceTracker.reset(nullptr);
+    DBG("Wifi::Resource::~Resource(): Stopping LibNM thread:");
+    nmThread->stopResourceThread();
+    nmThread.reset(nullptr);
+}
+
+/*###############  Module access method specializations:  ####################*/
+template<> template<> Wifi::LibNM::Thread::Module*
+SharedResource::Modular::Resource<>::getModule<Wifi::LibNM::Thread::Module>()
+{
+    return nmThread.get();
+}
+
+template<> template<> Wifi::Device::Module* 
+SharedResource::Modular::Resource<>::getModule<Wifi::Device::Module>()
+{
+    return deviceTracker.get();
+}
+
+template<> template<> Wifi::Connection::Saved::Module* 
+SharedResource::Modular::Resource<>::getModule
+        <Wifi::Connection::Saved::Module>()
+{
+    return savedConnections.get();
+}
+
+template<> template<> Wifi::Connection::Record::Module* 
+SharedResource::Modular::Resource<>::getModule
+        <Wifi::Connection::Record::Module>()
+{
+    return connectionRecord.get();
+}
+
+template<> template<> Wifi::Connection::Control::Module* 
+SharedResource::Modular::Resource<>::getModule
+        <Wifi::Connection::Control::Module>()
+{
+    return connectionControl.get();
+}
+
+template<> template<> Wifi::APList::Module* 
+SharedResource::Modular::Resource<>::getModule <Wifi::APList::Module>()
+{
+    return apList.get();
+}
+
+template<> template<> const Wifi::LibNM::Thread::Module*
+SharedResource::Modular::Resource<>::getModule
+        <const Wifi::LibNM::Thread::Module>()
+{
+    return nmThread.get();
+}
+
+template<> template<> const Wifi::Device::Module* 
+SharedResource::Modular::Resource<>::getModule <const Wifi::Device::Module>()
+{
+    return deviceTracker.get();
+}
+
+template<> template<> const Wifi::Connection::Saved::Module* 
+SharedResource::Modular::Resource<>::getModule
+        <const Wifi::Connection::Saved::Module>()
+{
+    return savedConnections.get();
+}
+
+template<> template<> const Wifi::Connection::Record::Module* 
+SharedResource::Modular::Resource<>::getModule
+        <const Wifi::Connection::Record::Module>()
+{
+    return connectionRecord.get();
+}
+
+template<> template<> const Wifi::Connection::Control::Module* 
+SharedResource::Modular::Resource<>::getModule
+        <const Wifi::Connection::Control::Module>()
+{
+    return connectionControl.get();
+}
+
+template<> template<> const Wifi::APList::Module* 
+SharedResource::Modular::Resource<>::getModule<const Wifi::APList::Module>()
+{
+    return apList.get();
+}

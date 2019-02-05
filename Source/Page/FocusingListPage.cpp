@@ -38,7 +38,7 @@ int FocusingListPage::getSelectedIndex() const
  */
 void FocusingListPage::setSelectedIndex(const int index)
 {
-    if(index >= 0 && index < getListSize())
+    if(index >= 0 && index < getListSize() && index != selectedIndex)
     {
         selectedIndex = index;
         updateList(Layout::Transition::Type::toDestination, focusDuration);

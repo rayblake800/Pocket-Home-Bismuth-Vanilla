@@ -5,14 +5,22 @@
  * @brief  Reads the list of visible Wifi access points.
  */
 
-#include "SharedResource_Handler.h"
+#include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace APList { class Reader; } }
-namespace Wifi { namespace APList { class ListResource; } }
-namespace Wifi { class AccessPoint; }
-namespace LibNM { class APHash; }
+namespace Wifi 
+{ 
+    namespace APList 
+    { 
+        class Reader; 
+        class Module;
+    } 
+    class Resource;
+    class AccessPoint;
+    namespace LibNM { class APHash; }
+}
 
-class Wifi::APList::Reader : public SharedResource::Handler<ListResource>
+class Wifi::APList::Reader : 
+    public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     Reader();

@@ -1,29 +1,30 @@
 #pragma once
 /**
- * @file Wifi_Connection_RecordReader.h
+ * @file Wifi_Connection_Record_Reader.h
  *
- * @brief  Reads Wifi connection events saved in the Connection::RecordResource.
+ * @brief  Reads Wifi connection events saved in the Connection::Record::Module.
  */
 
-#include "SharedResource_Handler.h"
+#include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace Connection { class RecordReader; } }
-namespace Wifi { namespace Connection { class RecordResource; } }
+namespace Wifi { namespace Connection { namespace Record { class Reader; } } }
+namespace Wifi { namespace Connection { namespace Record { class Module; } } }
 namespace Wifi { namespace Connection { class Event; } }
 namespace Wifi { namespace Connection { enum class EventType; } }
+namespace Wifi { class Resource; }
 namespace Wifi { class AccessPoint; }
 
 
-class Wifi::Connection::RecordReader : 
-    public SharedResource::Handler<RecordResource>
+class Wifi::Connection::Record::Reader : 
+    public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     /**
-     * @brief  Initializes the RecordResource if necessary.
+     * @brief  Initializes the Wifi::Resource object if necessary.
      */
-    RecordReader();
+    Reader();
 
-    virtual ~RecordReader() { }
+    virtual ~Reader() { }
     
     /**
      * @brief  Checks if the system has an active, established Wifi network
@@ -49,30 +50,6 @@ public:
      *          if no connection exists.
      */
     AccessPoint getActiveAP() const;
-    
-    /**
-     * @brief  Checks if NetworkManager has a saved connection that is
-     *         compatible with an access point.
-     *
-     * @param toCheck  The access point to check against the list of saved
-     *                 connections.
-     *
-     * @return  Whether a saved connection exists that uses that access point. 
-     */
-    bool hasSavedConnection(const AccessPoint toCheck) const;
-
-    /**
-     * @brief  Finds the last time the system was fully connected to a 
-     *         particular wifi access point's connection.
-     *
-     * @param connectionAP  A Wifi access point object to search for in
-     *                      saved connection records.
-     *
-     * @return              The last time the system was connected using a 
-     *                      connection compatible with connectionAP, or the 
-     *                      Unix epoch if no saved connection was found.
-     */
-    juce::Time lastConnectionTime(const AccessPoint connectionAP) const;
 
     /**
      * @brief  Gets the most recent connection event in the connection history.
@@ -80,7 +57,7 @@ public:
      * @return  The stored Connection::Event with the most recent time value, or
      *          a null Connection::Event if no events were found.
      */
-    Event getLastEvent() const;
+    Event getLatestEvent() const;
 
     /**
      * @brief  Gets the most recent connection event that involves a particular
@@ -92,7 +69,7 @@ public:
      *                 as its access point, or a null Connection::Event if no
      *                 stored event has the given access point.
      */
-    Event getLastEvent(const AccessPoint eventAP) const;
+    Event getLatestEvent(const AccessPoint eventAP) const;
 
     /**
      * @brief  Gets the most recent connection event with a specific event type.
@@ -103,7 +80,7 @@ public:
      *                   type, or a null Event if no stored event is of type 
      *                   eventType.
      */
-    Event getLastEvent(const EventType eventType) const;
+    Event getLatestEvent(const EventType eventType) const;
 
     /**
      * @brief  Gets the most recent connection event with a specific event type
@@ -116,6 +93,6 @@ public:
      * @return           The most recent Event with that type and access point, 
      *                   or a null Event if no matching event is found.
      */
-    Event getLastEvent(const AccessPoint eventAP,
+    Event getLatestEvent(const AccessPoint eventAP,
             const EventType eventType) const;
 };

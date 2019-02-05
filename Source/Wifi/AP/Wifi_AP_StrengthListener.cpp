@@ -1,6 +1,6 @@
 #define WIFI_IMPLEMENTATION
+#include "Wifi_Resource.h"
 #include "Wifi_AP_StrengthListener.h"
-#include "Wifi_APList_ListResource.h"
 
 /*
  * Creates a StrengthListener tracking all visible access point signal

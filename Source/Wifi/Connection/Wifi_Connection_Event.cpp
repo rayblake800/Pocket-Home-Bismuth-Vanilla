@@ -143,6 +143,8 @@ juce::String WifiConnect::Event::toString() const
     }
     eventString += "], Time:[";
     eventString += eventTime.toString(true, true, true, true);
-    eventString += "]";
+    eventString += " (";
+    eventString += juce::String(eventTime.toMilliseconds());
+    eventString += " ms)]";
     return eventString;
 }

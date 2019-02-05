@@ -1,28 +1,29 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included outside of Wifi module implementation.
+  #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
- * @file  Wifi_Connection_RecordWriter.h
+ * @file  Wifi_Connection_Record_Writer.h
  *
- * @brief  Updates the RecordResource's Wifi event records.
+ * @brief  Updates the Record::Module's Wifi event records.
  */
-#include "SharedResource_Handler.h"
+#include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace Connection { class RecordWriter; } }
-namespace Wifi { namespace Connection { class RecordResource; } }
+namespace Wifi { namespace Connection {  namespace Record { class Writer; } } }
+namespace Wifi { namespace Connection {  namespace Record { class Module; } } }
+namespace Wifi { class Resource; }
 namespace Wifi { namespace Connection { class Event; }  }
 namespace Wifi { namespace Connection { enum class EventType; }  }
 namespace Wifi { class AccessPoint; }
 
-namespace WifiConnect = Wifi::Connection;
 
-class WifiConnect::RecordWriter : public SharedResource::Handler<RecordResource>
+class Wifi::Connection::Record::Writer : 
+        public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
-    RecordWriter();
+    Writer();
 
-    virtual ~RecordWriter() { }
+    virtual ~Writer() { }
 
     /**
      * @brief  Connects to NetworkManager to rebuild the list of connection 
@@ -77,13 +78,4 @@ public:
             const AccessPoint eventAP, 
             const EventType eventType, 
             const juce::Time eventTime = juce::Time::getCurrentTime());
-
-    /**
-     * @brief  Removes all saved network connections that match a particular
-     *         access point.
-     *
-     * @param toRemove  The access point used to select saved connections to
-     *                  delete.
-     */
-    void removeSavedConnection(const AccessPoint toRemove) const;
 };

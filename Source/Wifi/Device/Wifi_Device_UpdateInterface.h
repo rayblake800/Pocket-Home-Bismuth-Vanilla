@@ -2,24 +2,25 @@
 /**
  * @file  Wifi_Device_UpdateInterface.h
  *
- * @brief  The interface shared by Device::Tracker and Device::Listener, used to
- *         notify DeviceListeners when wireless networking is enabled or
+ * @brief  The interface shared by Device::Module and Device::Listener, used to
+ *         notify all Listener objects when wireless networking is enabled or
  *         disabled.
  */
 
 namespace Wifi { namespace Device { class UpdateInterface; } }
+namespace Wifi { namespace Device { class Module; } }
 
 class Wifi::Device::UpdateInterface
 {
 public:
-    /* Only the Tracker may send update notifications.  */
-    friend class Tracker;
-
     UpdateInterface() { }
 
     virtual ~UpdateInterface() { }
 
 private:
+    /* Only the Module may send update notifications.  */
+    friend class Module;
+
     /**
      * @brief  Called whenever wireless networking is enabled. 
      *

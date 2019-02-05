@@ -4,16 +4,15 @@
 #include "Theme_Image_JSONKeys.h"
 #include "DrawableImageComponent.h"
 #include "Wifi_AccessPoint.h"
-#include "Wifi_Connection_RecordReader.h"
 #include "Wifi_Device_Reader.h"
 
-Wifi::StatusIcon::StatusIcon() :
-Theme::Image::Component<DrawableImageComponent>(Theme::Image::JSONKeys::wifiIcon)
+Wifi::StatusIcon::StatusIcon() : Theme::Image::Component<DrawableImageComponent>
+        (Theme::Image::JSONKeys::wifiIcon)
 {
 #    if JUCE_DEBUG
     setName("Wifi::StatusIcon");
 #    endif
-    const Connection::RecordReader connectionRecords;
+    const Connection::Record::Reader connectionRecords;
     if(connectionRecords.isConnected())
     {
         AccessPoint connectedAP = connectionRecords.getActiveAP();

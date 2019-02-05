@@ -3,7 +3,7 @@
 #include "Wifi_AccessPoint.h"
 #include "Wifi_Device_Reader.h"
 #include "Wifi_Device_Controller.h"
-#include "Wifi_Connection_RecordReader.h"
+#include "Wifi_Connection_Record_Reader.h"
 #include "Wifi_Connection_Event.h"
 
 /* Localized object class key: */
@@ -38,7 +38,7 @@ bool Wifi::ControlWidget::connectionEnabled()
  */
 bool Wifi::ControlWidget::shouldShowSpinner() 
 {
-    const Connection::RecordReader recordReader;
+    const Connection::Record::Reader recordReader;
     const Device::Reader deviceReader; 
     return recordReader.isConnecting()
             && !deviceReader.isDeviceStateChanging();
@@ -60,7 +60,7 @@ bool Wifi::ControlWidget::allowConnectionToggle()
 bool Wifi::ControlWidget::connectionPageAvailable() 
 {
     const Device::Reader deviceReader;
-    const Connection::RecordReader recordReader;
+    const Connection::Record::Reader recordReader;
     return deviceReader.wifiDeviceEnabled()
         && !deviceReader.isDeviceStateChanging()
         && !recordReader.isConnecting();
@@ -100,8 +100,8 @@ juce::String Wifi::ControlWidget::updateButtonText()
         return localeText(wifiDisabledTextKey);
     }
 
-    const Connection::RecordReader recordReader;
-    if(recordReader.getLastEvent().getEventType()
+    const Connection::Record::Reader recordReader;
+    if(recordReader.getLatestEvent().getEventType()
             == Connection::EventType::connectionAuthFailed)
     {
         return localeText(missingPSKTextKey);

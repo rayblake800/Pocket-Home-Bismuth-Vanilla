@@ -1,84 +1,79 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_APList_Writer.h"
-#include "Wifi_APList_ListResource.h"
+#include "Wifi_APList_Module.h"
+#include "Wifi_Resource.h"
 #include "Wifi_AccessPoint.h"
-#include "LibNM/BorrowedObjects/AccessPoint.h"
-#include "LibNM/ThreadHandler.h"
+#include "Wifi_LibNM_AccessPoint.h"
+#include "Wifi_LibNM_ContextTest.h"
 
-namespace WifiAPList = Wifi::APList;
-
-WifiAPList::Writer::Writer() { }
+Wifi::APList::Writer::Writer() { }
 
 /*
  * Adds a new LibNM::AccessPoint to the list, constructing a matching
  * Wifi::AccessPoint if one does not yet exist.
  */
-void WifiAPList::Writer::addAccessPoint(const LibNM::AccessPoint addedAP)
+void Wifi::APList::Writer::addAccessPoint(const LibNM::AccessPoint addedAP)
 {
-    const LibNM::ThreadHandler nmThreadHandler;
-    nmThreadHandler.call([this, &addedAP]()
-    {
-        SharedResource::LockedPtr<ListResource> apList 
-                = getWriteLockedResource();
-        apList->addAccessPoint(addedAP);
-    });
+    ASSERT_NM_CONTEXT;
+    SharedResource::Modular::LockedPtr<Resource, Module> apList 
+            = getWriteLockedResource();
+    apList->addAccessPoint(addedAP);
 }
 
 /*
  * Removes a LibNM::AccessPoint from the list, removing the matching
  * Wifi::AccessPoint if it no longer has any matching LibNM::AccessPoints.
  */
-void WifiAPList::Writer::removeAccessPoint(const LibNM::AccessPoint removedAP)
+void Wifi::APList::Writer::removeAccessPoint(const LibNM::AccessPoint removedAP)
 {
-    const LibNM::ThreadHandler nmThreadHandler;
-    nmThreadHandler.call([this, &removedAP]()
-    {
-        SharedResource::LockedPtr<ListResource> apList 
-                = getWriteLockedResource();
-        apList->removeAccessPoint(removedAP);
-    });
+    ASSERT_NM_CONTEXT;
+    SharedResource::Modular::LockedPtr<Resource, Module> apList 
+            = getWriteLockedResource();
+    apList->removeAccessPoint(removedAP);
 }
 
 /*
  * Updates the signal strength of an AccessPoint, setting it to the strongest
  * signal strength of its LibNM::AccessPoints.
  */
-void WifiAPList::Writer::updateSignalStrength(AccessPoint toUpdate)
+void Wifi::APList::Writer::updateSignalStrength(AccessPoint toUpdate)
 {
-    const LibNM::ThreadHandler nmThreadHandler;
-    nmThreadHandler.call([this, &toUpdate]()
-    {
-        SharedResource::LockedPtr<ListResource> apList 
-                = getWriteLockedResource();
-        apList->updateSignalStrength(toUpdate);
-    });
+    ASSERT_NM_CONTEXT;
+    SharedResource::Modular::LockedPtr<Resource, Module> apList 
+            = getWriteLockedResource();
+    apList->updateSignalStrength(toUpdate);
 }
 
 /*
  * Removes all saved Wifi::AccessPoints and LibNM::AccessPoints.
  */
-void WifiAPList::Writer::clearAccessPoints()
+void Wifi::APList::Writer::clearAccessPoints()
 {
-    const LibNM::ThreadHandler nmThreadHandler;
-    nmThreadHandler.call([this]()
-    {
-        SharedResource::LockedPtr<ListResource> apList 
-                = getWriteLockedResource();
-        apList->clearAccessPoints();
-    });
+    ASSERT_NM_CONTEXT;
+    SharedResource::Modular::LockedPtr<Resource, Module> apList 
+            = getWriteLockedResource();
+    apList->clearAccessPoints();
 }
 
 /*
  * Reloads all LibNM::AccessPoints from the NetworkManager, updating
  * Wifi::AccessPoint objects as necessary.
  */
-void WifiAPList::Writer::updateAllAccessPoints()
+void Wifi::APList::Writer::updateAllAccessPoints()
 {
-    const LibNM::ThreadHandler nmThreadHandler;
-    nmThreadHandler.call([this]()
-    {
-        SharedResource::LockedPtr<ListResource> apList 
-                = getWriteLockedResource();
-        apList->updateAllAccessPoints();
-    });
+    ASSERT_NM_CONTEXT;
+    SharedResource::Modular::LockedPtr<Resource, Module> apList 
+            = getWriteLockedResource();
+    apList->updateAllAccessPoints();
+}
+
+/*
+ * Removes all LibNM::AccessPoint objects that are no longer valid.
+ */
+void Wifi::APList::Writer::removeInvalidatedAccessPoints()
+{
+    ASSERT_NM_CONTEXT;
+    SharedResource::Modular::LockedPtr<Resource, Module> apList 
+            = getWriteLockedResource();
+    apList->removeInvalidatedAccessPoints();
 }

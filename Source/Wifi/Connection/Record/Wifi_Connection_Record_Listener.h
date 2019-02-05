@@ -1,25 +1,34 @@
 #pragma once
 /**
- * @file  Wifi_Connection_Listener.h
+ * @file  Wifi_Connection_Record_Listener.h
  *
  * @brief  Receives notifications whenever the Wifi network connection's state
  *         changes.
  */
 
-#include "Wifi_Connection_UpdateInterface.h"
-#include "SharedResource_Handler.h"
+#ifndef WIFI_IMPLEMENTATION
+  #define CONNECTION_LISTENER_IMPLEMENTATION
+  #define WIFI_IMPLEMENTATION
+#endif
+#include "Wifi_Connection_Record_UpdateInterface.h"
+#ifdef CONNECTION_LISTENER_IMPLEMENTATION
+  #undef CONNECTION_LISTENER_IMPLEMENTATION
+  #undef WIFI_IMPLEMENTATION
+#endif
+#include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace Connection { class Listener; } }
-namespace Wifi { namespace Connection { class RecordResource; } }
+namespace Wifi { namespace Connection { namespace Record { class Listener; } } }
+namespace Wifi { namespace Connection { namespace Record { class Module; } } }
+namespace Wifi { class Resource; }
 
 /**
- *  Connection::Listener object methods will be called by the 
- * Connection::RecordResource to notify the Listener of new connection events.  
- * All of these methods do nothing by default; Listener subclasses should 
- * override these methods to handle the connection events as necessary.
+ *  Listener object methods will be called by the Connection::Record::Module to 
+ * notify the Listener of new connection events.  All of its notification 
+ * methods do nothing by default. Listener subclasses should override these 
+ * methods to handle the connection events as necessary.
  */
-class Wifi::Connection::Listener : public UpdateInterface,
-    public SharedResource::Handler<RecordResource>
+class Wifi::Connection::Record::Listener : public UpdateInterface,
+    public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     Listener();

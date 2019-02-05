@@ -8,14 +8,14 @@
 
 #include "Settings/QuickSettingsPage/ConnectionSettingsComponent.h"
 #include "Wifi_Device_Listener.h"
-#include "Wifi_Connection_Listener.h"
+#include "Wifi_Connection_Record_Listener.h"
 #include "Locale/TextUser.h"
 
 namespace Wifi { class ControlWidget; }
 namespace Wifi { class AccessPoint; }
 
 class Wifi::ControlWidget : public ConnectionSettingsComponent,
-    public Wifi::Device::Listener, public Wifi::Connection::Listener,  
+    public Wifi::Device::Listener, public Wifi::Connection::Record::Listener,  
     public Locale::TextUser
 {
 public:

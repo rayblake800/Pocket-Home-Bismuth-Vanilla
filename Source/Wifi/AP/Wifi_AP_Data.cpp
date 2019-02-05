@@ -1,25 +1,20 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_AP_Data.h"
-#include "LibNM/BorrowedObjects/AccessPoint.h"
-#include "LibNM/ThreadHandler.h"
-#include "LibNM/Data/SecurityType.h"
 
 /* 
  * Creates the access point data object from a LibNM access point.
  */
-Wifi::AP::Data::Data(const LibNM::AccessPoint nmAccessPoint, 
-        const LibNM::APHash apHash) : hash(apHash)
+Wifi::AP::Data::Data(
+        const LibNM::SSID ssid, 
+        const LibNM::APHash apHash,
+        const LibNM::SecurityType securityType,
+        const int strength) : 
+    ssid(ssid),
+    hash(apHash),
+    securityType(securityType)
 {
-    LibNM::ThreadHandler nmThread;
-    nmThread.call([this, &nmAccessPoint]()
-    {
-        if(!nmAccessPoint.isNull())
-        {
-            ssid = nmAccessPoint.getSSID();
-            securityType = nmAccessPoint.getSecurityType();
-            signalStrength.set(nmAccessPoint.getSignalStrength());
-        }
-    });
+    connectionSaved.set(false);
+    signalStrength.set(strength);
 }
 
 /*
@@ -49,7 +44,7 @@ bool Wifi::AP::Data::operator<(const Data& rhs) const
 /*
  * Gets the access point's primary identifier.
  */
-LibNM::SSID Wifi::AP::Data::getSSID() const
+Wifi::LibNM::SSID Wifi::AP::Data::getSSID() const
 {
     return ssid;
 }
@@ -63,9 +58,28 @@ unsigned int Wifi::AP::Data::getSignalStrength() const
 }
 
 /*
+ * Checks if a saved network connection exists that is compatible with this 
+ * access point.
+ */
+bool Wifi::AP::Data::hasSavedConnection() const
+{
+    return connectionSaved.get();
+}
+
+/*
+ * Gets the last recorded time the system was connected using this access 
+ * point's connection.
+ */
+juce::int64 Wifi::AP::Data::getLastConnectionTime() const
+{
+    return connectionTime.get();
+}
+
+/*
  * Gets the access point's general security type.
  */
-LibNM::SecurityType Wifi::AP::Data::getSecurityType() const
+Wifi::LibNM::SecurityType 
+Wifi::AP::Data::getSecurityType() const
 {
     return securityType;
 }
@@ -95,7 +109,8 @@ bool Wifi::AP::Data::isValidKeyFormat(const juce::String psk) const
 /*
  * Gets the hash value used to identify and sort the access point.
  */
-LibNM::APHash Wifi::AP::Data::getHashValue() const
+Wifi::LibNM::APHash 
+Wifi::AP::Data::getHashValue() const
 {
     return hash;
 }
@@ -107,7 +122,25 @@ void Wifi::AP::Data::setSignalStrength(const unsigned int newStrength)
 {
     signalStrength.set(newStrength);
 }
+
+/*
+ * Sets the AccessPoint data object's record of whether it has a compatible 
+ * saved connection.
+ */
+void Wifi::AP::Data::setHasSavedConnection(const bool isSaved)
+{
+    connectionSaved.set(isSaved);
+}
     
+/*
+ * Stores the last time the system was connected to a network using a connection
+ * that is compatible with this access point.
+ */
+void Wifi::AP::Data::setLastConnectionTime(const juce::int64 newTime)
+{
+    connectionTime.set(newTime);
+}
+
 /*
  * Checks if this data object has no valid data.
  */

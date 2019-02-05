@@ -65,6 +65,14 @@ public:
         expectEquals(cHandlers[1]->getValue(), newCValue,
                 "Failed to set and read new TestModuleC value.");
 
+        beginTest("Sibling module access");
+        expectEquals(cHandlers[0]->getAValue(), aHandlers[0]->getValue(),
+                "Invalid value read from TestModule A through module C.");
+        expectEquals(cHandlers[0]->getBValue(), bHandlers[0]->getValue(),
+                "Invalid value read from TestModule B through module C.");
+        expectEquals(aCount + bCount + cCount, cHandlers[0]->actOnAllHandlers(),
+                "Failed to access all test handlers via sibling modules.");
+
         beginTest("Module reset");
         aHandlers.clear();
         bHandlers.clear();

@@ -1,6 +1,6 @@
 #pragma once
 #ifndef WIFI_IMPLEMENTATION
-  #error File included outside of Wifi module implementation.
+  #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -9,15 +9,22 @@
  * @brief  Gets LibNM::AccessPoints held by the APList resource.
  */
 
-#include "SharedResource_Handler.h"
+#include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace APList { class NMReader; } }
-namespace Wifi { namespace APList { class ListResource; } }
-namespace Wifi { class AccessPoint; }
-namespace LibNM { class AccessPoint; }
-namespace LibNM { class APHash; }
+namespace Wifi 
+{ 
+    namespace APList 
+    { 
+        class NMReader;
+        class Module;
+    } 
+    class Resource;
+    class AccessPoint;
+    namespace LibNM { class AccessPoint; }
+}
 
-class Wifi::APList::NMReader : public SharedResource::Handler<ListResource>
+class Wifi::APList::NMReader : 
+    public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     NMReader();

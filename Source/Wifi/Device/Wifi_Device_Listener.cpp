@@ -1,5 +1,7 @@
+#define WIFI_IMPLEMENTATION
 #include "Wifi_Device_Listener.h"
-#include "Wifi_Device_Tracker.h"
+#include "Wifi_Device_Module.h"
+#include "Wifi_Resource.h"
 
 Wifi::Device::Listener::Listener() { }
 
@@ -8,9 +10,9 @@ Wifi::Device::Listener::Listener() { }
  */
 bool Wifi::Device::Listener::wifiDeviceExists() const
 {
-    SharedResource::LockedPtr<const Tracker> deviceTracker
+    SharedResource::Modular::LockedPtr<Resource, const Module> deviceModule
             = getReadLockedResource();
-    return deviceTracker->wifiDeviceExists();
+    return deviceModule->wifiDeviceExists();
 }
 
 /*
@@ -18,7 +20,7 @@ bool Wifi::Device::Listener::wifiDeviceExists() const
  */
 bool Wifi::Device::Listener::wifiDeviceEnabled() const
 {
-    SharedResource::LockedPtr<const Tracker> deviceTracker
+    SharedResource::Modular::LockedPtr<Resource, const Module> deviceModule
             = getReadLockedResource();
-    return deviceTracker->wifiDeviceEnabled();
+    return deviceModule->wifiDeviceEnabled();
 }

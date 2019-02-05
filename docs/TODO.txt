@@ -1,5 +1,17 @@
 # Pocket-home: Bismuth Edition Task List
 
+1/21:
+    -Fix Wifi deadlocks when checking saved connections within NM callbacks.
+        -Is this a problem with SharedResource::Handler notifications that can
+         be fixed?
+        -Even if it is, reduce LibNM interaction by tracking saved connection
+         state in Wifi::AccessPoint
+    -Fix over-enthusiastic Wifi::SettingsPage sorting
+    -Fix scrolling list animations; old list items aren't animated when
+     scrolling out
+    -Continue building Wifi test classes
+    -Update this document
+
 ### Documentation
     -Priority:  Change list is out of date, check commit messages and update it.
 

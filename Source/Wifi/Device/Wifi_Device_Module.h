@@ -1,40 +1,38 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included directly outside of Wifi module implementation.
+#endif
 #pragma once
 /**
- * @file  Wifi_Device_Tracker.h
+ * @file  Wifi_Device_Module.h
  *
  * @brief  Tracks whether the Wifi device is enabled, notifying listeners
  *         whenever Wifi is enabled or disabled. 
  */
 
-#include "SharedResource_Resource.h"
-#include "LibNM/OwnedObjects/Client.h"
-#include "WindowFocus/WindowFocus.h"
+#include "SharedResource_Modular_Module.h"
 
-namespace Wifi { namespace Device { class Tracker; } }
+
+namespace Wifi { namespace Device { class Module; } }
+namespace Wifi { class Resource; }
 
 /**
- *  Wifi::Device::Tracker tracks whether a Wifi device managed by NetworkManager
- * is known to exist, and whether it is currently enabled. Whenever this status
- * changes, the Tracker notifies all Wifi::Device::Listener objects of the 
- * change. 
- * 
- *  Tracker is a singleton SharedResource object, and may only be accessed by 
- * its Handler classes, Device::Listener and Device::SignalHandler. A 
- * SignalHandler instance is required to keep the Tracker updated when the Wifi 
- * device state changes.
+ *   Wifi::Device::Module tracks whether a Wifi device managed by 
+ * NetworkManager is known to exist, and whether it is currently enabled. 
+ * Whenever this status changes, the TrackingModule notifies all 
+ * Wifi::Device::Listener objects of the change. 
  */
-class Wifi::Device::Tracker : public SharedResource::Resource
+class Wifi::Device::Module 
+        : public SharedResource::Modular::Module<Resource>
 {
 public:
-    /* SharedResource object instance key: */
-    static const juce::Identifier resourceKey;
-
     /**
      * @brief  Checks the initial Wifi device state.
+     *
+     * @param wifiResource  The modular resource object creating this Module.
      */
-    Tracker();
+    Module(Resource& wifiResource);
 
-    virtual ~Tracker() { }
+    virtual ~Module() { }
 
     /**
      * @brief  Checks if a Wifi device managed by NetworkManager exists.
@@ -59,19 +57,26 @@ public:
 
     /**
      * @brief  Connects to NetworkManager to update the Wifi device state,
-     *         notifying all DeviceListeners if the state changes.
+     *         optionally notifying all DeviceListeners if the state changes.
+     *
+     * @param notifyListeners  Whether the module should notify DeviceListeners
+     *                         if the state changes.
      */
     void updateDeviceState(const bool notifyListeners = true);
 
     /**
-     * @brief  Updates the DeviceTracker's saved wifi device state, notifying
-     *         all DeviceListeners if the state changes.
+     * @brief  Updates the TrackingModule's saved wifi device state, optionally
+     *         notifying all DeviceListeners if the state changes.
      *
      * @param exists   Indicates if a managed Wifi device is present.
      *
      * @param enabled  Indicates if the Wifi device is enabled.
+     *
+     * @param notifyListeners  Whether the module should notify DeviceListeners
+     *                         if the state changes.
      */
-    void updateDeviceState(const bool exists, const bool enabled);
+    void updateDeviceState(const bool exists, const bool enabled,
+            const bool notifyListeners = true);
 
     /**
      * @brief  Notifies the device tracker that Wifi is about to be enabled or

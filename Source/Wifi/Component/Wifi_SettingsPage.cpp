@@ -1,12 +1,17 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_SettingsPage.h"
-#include "Wifi_Connection_RecordReader.h"
+#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Saved_Reader.h"
 #include "Wifi_Connection_Event.h"
-#include "Wifi_Connection_Controller.h"
 #include "Wifi_APList_Reader.h"
 #include "Layout_Component_ConfigFile.h"
-#include "LibNM/Data/SecurityType.h"
+#include "Wifi_LibNM_SecurityType.h"
 #include "Locale/Time.h"
+
+#ifdef JUCE_DEBUG
+/* Print the full class name before debug output: */
+static const constexpr char* dbgPrefix = "Wifi::SettingsPage::";
+#endif
 
 /* Wifi signal strength icon asset files: */
 // TODO: load these assets from a JSON file!
@@ -36,7 +41,7 @@ static const constexpr float xPaddingFraction = 0.04;
 static const constexpr float yPaddingFraction = 0.04;
 
 /* Localized object class key: */
-static const juce::Identifier localeClassKey = "WifiSettingsPage";
+static const juce::Identifier localeClassKey = "Wifi_SettingsPage";
 
 /* Localized text value keys: */
 static const juce::Identifier passwordTextKey         = "password";
@@ -73,7 +78,7 @@ public:
     {
         using namespace Wifi;
         jassert(!first.isNull() && !second.isNull());
-        const Connection::RecordReader recordReader;
+        const Connection::Record::Reader recordReader;
         AccessPoint activeAP = recordReader.getActiveAP();
         if (!activeAP.isNull())
         {
@@ -86,8 +91,8 @@ public:
                 return 1;
             }
         }
-        bool firstSaved = recordReader.hasSavedConnection(first);
-        bool secondSaved = recordReader.hasSavedConnection(second);
+        bool firstSaved = first.hasSavedConnection();
+        bool secondSaved = second.hasSavedConnection();
         if (firstSaved && !secondSaved)
         {
             return -1;
@@ -107,6 +112,7 @@ Locale::TextUser(localeClassKey)
 #    if JUCE_DEBUG
     setName("WifiSettingsPage");
 #    endif
+    listUpdatePending.set(false);
     passwordEditor.addListener(this);
     Layout::Component::ConfigFile config;
     passwordEditor.setFont(juce::Font(config.getFontHeight(
@@ -265,35 +271,24 @@ void Wifi::SettingsPage::updateSelectedItemLayout
         layout.setXMarginFraction(xMarginFraction);
         layout.setYMarginFraction(yMarginFraction);
     }
+
     String connectionBtnText = localeText(connectTextKey);
+    String lastConnectionText;
     bool showButtonSpinner = false;
     bool showPasswordEntry = false;
     String errorMessage = "";
 
-    const Connection::RecordReader connectionRecord;
-    if(connectionRecord.hasSavedConnection(selectedAP))
-    {
-        Locale::Time connTime(connectionRecord.lastConnectionTime(selectedAP));
-        lastConnectionLabel.setText(localeText(lastConnectedTextKey)
-                + connTime.approxTimePassed(),
-                juce::NotificationType::dontSendNotification);
-    }
-    else
-    {
-        lastConnectionLabel.setText(String(),
-                juce::NotificationType::dontSendNotification);
-    }
+    const Connection::Record::Reader connectionRecord;
 
-    DBG("Wifi::SettingsPage::" << __func__ 
-            << ": Updating connection controls for AP " 
+    DBG(dbgPrefix << __func__ << ": Updating connection controls for AP " 
             << selectedAP.getSSID().toString());
     const bool requiresAuth = selectedAP.getSecurityType() 
             != LibNM::SecurityType::unsecured;
-    const bool hasSavedConnection 
-            = connectionRecord.hasSavedConnection(selectedAP);
-    const bool isActiveAP
-            = connectionRecord.getActiveAP() == selectedAP;
+    const bool hasSavedConnection = selectedAP.hasSavedConnection();
+    const bool isActiveAP = connectionRecord.getActiveAP() == selectedAP;
 
+
+    juce::int64 lastConnectionTime = 0;
     if(isActiveAP && connectionRecord.isConnecting())
     {
         connectionBtnText = "";
@@ -302,12 +297,16 @@ void Wifi::SettingsPage::updateSelectedItemLayout
     else if(isActiveAP && connectionRecord.isConnected())
     {
         connectionBtnText = localeText(disconnectTextKey);
+        lastConnectionTime = juce::Time::currentTimeMillis();
     }
-
+    else if(hasSavedConnection)
+    {
+        lastConnectionTime = selectedAP.getLastConnectionTime();
+    }
     else
     {
         const Connection::EventType lastEventType 
-                 = connectionRecord.getLastEvent(selectedAP).getEventType();
+                 = connectionRecord.getLatestEvent(selectedAP).getEventType();
         showPasswordEntry = requiresAuth && !hasSavedConnection;
         if(lastEventType == Connection::EventType::connectionFailed)
         {
@@ -320,6 +319,14 @@ void Wifi::SettingsPage::updateSelectedItemLayout
             errorMessage = localeText(wrongPasswordTextKey);
         }
     }
+    if(lastConnectionTime > 0)
+    {
+        Locale::Time localizedTime((juce::Time(lastConnectionTime)));
+
+        lastConnectionText = localeText(lastConnectedTextKey)
+                + localizedTime.approxTimePassed();
+    }
+
     if (showPasswordEntry)
     {
         passwordEditor.clear();
@@ -332,6 +339,8 @@ void Wifi::SettingsPage::updateSelectedItemLayout
     {
         layout.setRow(2 , Row(baseRowWeight));
     }
+    lastConnectionLabel.setText(lastConnectionText,
+            juce::NotificationType::dontSendNotification);
     connectionButton.setButtonText(connectionBtnText);
     connectionButton.setSpinnerVisible(showButtonSpinner);
     errorLabel.setText(errorMessage, 
@@ -357,17 +366,35 @@ void Wifi::SettingsPage::loadAccessPoints()
  */
 void Wifi::SettingsPage::updateAPList()
 {
-    for (int i = 0; i < visibleAPs.size(); i++)
+    /* Check for pending updates and schedule an update if none is pending, all
+       as one atomic action. */
+    if(listUpdatePending.compareAndSetBool(true, false))
     {
-        if (visibleAPs[i].isNull() 
-                || visibleAPs[i].getSSID().toString().isEmpty())
-        {
-            visibleAPs.remove(i);
-            i--;
-        }
+        return;
     }
-    visibleAPs.sort(apComparator, false);
-    updateList();
+    juce::Component::SafePointer<SettingsPage> safePagePtr(this);
+    juce::MessageManager::callAsync([safePagePtr]()
+    {
+        SettingsPage* settingsPage = safePagePtr.getComponent();
+        if(settingsPage != nullptr)
+        {
+            for (int i = 0; i < settingsPage->visibleAPs.size(); i++)
+            {
+                if (settingsPage->visibleAPs[i].isNull() || settingsPage
+                        ->visibleAPs[i].getSSID().toString().isEmpty())
+                {
+                    settingsPage->visibleAPs.remove(i);
+                    i--;
+                }
+            }
+            if(settingsPage->getSelectedIndex() == -1)
+            {
+                settingsPage->visibleAPs.sort(apComparator, false);
+            }
+            settingsPage->updateList();
+            settingsPage->listUpdatePending.set(false);
+        }
+    });
 }
 
 /*
@@ -379,7 +406,7 @@ void Wifi::SettingsPage::connect(const AccessPoint accessPoint)
     using juce::String;
     if (accessPoint.isNull())
     {
-        DBG("Wifi::SettingsPage::" << __func__ << ": ap is null!");
+        DBG(dbgPrefix << __func__ << ": ap is null!");
         return;
     }
     const String& psk = passwordEditor.getText();
@@ -391,17 +418,16 @@ void Wifi::SettingsPage::connect(const AccessPoint accessPoint)
         return;
     }
 
-    Connection::Controller connectionControl;
     if (accessPoint.getSecurityType() != LibNM::SecurityType::unsecured)
     {
-        DBG("Wifi::SettingsPage::" << __func__ << ": connecting to "
+        DBG(dbgPrefix << __func__ << ": connecting to "
                 << accessPoint.getSSID().toString() << " with psk of length "
                 << psk.length());
         connectionControl.connectToAccessPoint(accessPoint, psk);
     }
     else
     {
-        DBG("Wifi::SettingsPage::" << __func__ << ": connecting to "
+        DBG(dbgPrefix << __func__ << ": connecting to "
                 << accessPoint.getSSID().toString() 
                 << " with no psk required.");
         connectionControl.connectToAccessPoint(accessPoint);
@@ -417,15 +443,14 @@ void Wifi::SettingsPage::connect(const AccessPoint accessPoint)
 void Wifi::SettingsPage::disconnect(const AccessPoint accessPoint)
 {
 
-    const Connection::RecordReader connectionRecords;
+    const Connection::Record::Reader connectionRecords;
     if (accessPoint == connectionRecords.getActiveAP())
     {
-        Connection::Controller connectionControl;
         connectionControl.disconnect();
     }
     else
     {
-        DBG("Wifi::SettingsPage::" << __func__
+        DBG(dbgPrefix << __func__
                 << ": ap is not connected/connecting!");
     }
 }
@@ -439,24 +464,24 @@ void Wifi::SettingsPage::listPageButtonClicked(juce::Button* button)
     // Only the connection button should trigger this method!
     jassert(&connectionButton == button);
     const AccessPoint& selectedAP = visibleAPs[getSelectedIndex()];
-    const Connection::RecordReader connectionRecords;
+    const Connection::Record::Reader connectionRecords;
     if(connectionRecords.getActiveAP() == selectedAP)
     {
         if(connectionRecords.isConnecting())
         {
-            DBG("Wifi::SettingsPage::" << __func__ 
+            DBG(dbgPrefix << __func__ 
                     << ": Currently connecting, the connection button "
                     << "should have been disabled or hidden!");
             return;
         }
-        DBG("Wifi::SettingsPage::" << __func__ << ": Disconnecting from "
+        DBG(dbgPrefix << __func__ << ": Disconnecting from "
                 << selectedAP.getSSID().toString());
         disconnect(selectedAP);
         return;
     }
     else
     {
-        DBG("Wifi::SettingsPage::" << __func__ << ": Connecting to "
+        DBG(dbgPrefix << __func__ << ": Connecting to "
                 << selectedAP.getSSID().toString());
         connect(selectedAP);
     }

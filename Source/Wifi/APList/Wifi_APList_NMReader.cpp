@@ -1,8 +1,9 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_APList_NMReader.h"
-#include "Wifi_APList_ListResource.h"
+#include "Wifi_APList_Module.h"
+#include "Wifi_Resource.h"
 #include "Wifi_AccessPoint.h"
-#include "LibNM/BorrowedObjects/AccessPoint.h"
+#include "Wifi_LibNM_AccessPoint.h"
 
 Wifi::APList::NMReader::NMReader() { }
 
@@ -10,22 +11,22 @@ Wifi::APList::NMReader::NMReader() { }
  * Gets the strongest visible LibNM::AccessPoint that matches a
  * Wifi::AccessPoint.
  */
-LibNM::AccessPoint Wifi::APList::NMReader::getStrongestNMAccessPoint
+Wifi::LibNM::AccessPoint 
+Wifi::APList::NMReader::getStrongestNMAccessPoint
 (const AccessPoint accessPoint) const
 {
-    SharedResource::LockedPtr<const ListResource> apList 
+    SharedResource::Modular::LockedPtr<Resource, const Module> apList 
             = getReadLockedResource();
     return apList->getStrongestNMAccessPoint(accessPoint);
-
 }
 
 /*
  * Gets all LibNM::AccessPoint objects described by a Wifi::AccessPoint.
  */
-juce::Array<LibNM::AccessPoint> Wifi::APList::NMReader::getNMAccessPoints
-(const AccessPoint accessPoint) const
+juce::Array<Wifi::LibNM::AccessPoint> 
+Wifi::APList::NMReader::getNMAccessPoints(const AccessPoint accessPoint) const
 {
-    SharedResource::LockedPtr<const ListResource> apList 
+    SharedResource::Modular::LockedPtr<Resource, const Module> apList 
             = getReadLockedResource();
     return apList->getNMAccessPoints(accessPoint);
 }

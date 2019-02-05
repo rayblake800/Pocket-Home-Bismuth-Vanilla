@@ -1,20 +1,29 @@
 ###################### SharedResource Module ################################### 
 SHARED_RESOURCE_PREFIX := $(JUCE_OBJDIR)/SharedResource_
 SHARED_RESOURCE_ROOT = Source/Util/SharedResource
-SHARED_RESOURCE_IMPL_ROOT = Source/Util/SharedResource/Implementation
+SHARED_RESOURCE_THREAD_ROOT = $(SHARED_RESOURCE_ROOT)/Thread
+SHARED_RESOURCE_IMPL_ROOT = $(SHARED_RESOURCE_ROOT)/Implementation
 SHARED_RESOURCE_TEST_ROOT = Tests/Util/SharedResource
 
 OBJECTS_SHARED_RESOURCE_IMPL := \
   $(SHARED_RESOURCE_PREFIX)Holder.o \
+  $(SHARED_RESOURCE_PREFIX)ReferenceInterface.o \
   $(SHARED_RESOURCE_PREFIX)Instance.o \
   $(SHARED_RESOURCE_PREFIX)Reference.o \
   $(SHARED_RESOURCE_PREFIX)LockedInstancePtr.o \
 
+SHARED_RESOURCE_THREAD_PREFIX := $(SHARED_RESOURCE_PREFIX)Thread_
+OBJECTS_SHARED_RESOURCE_THREAD := \
+  $(SHARED_RESOURCE_THREAD_PREFIX)Lock.o \
+  $(SHARED_RESOURCE_THREAD_PREFIX)ScopedReadLock.o \
+  $(SHARED_RESOURCE_THREAD_PREFIX)ScopedWriteLock.o \
+  $(SHARED_RESOURCE_THREAD_PREFIX)Thread.o \
+  $(SHARED_RESOURCE_THREAD_PREFIX)Resource.o
+
 OBJECTS_SHARED_RESOURCE := \
   $(OBJECTS_SHARED_RESOURCE_IMPL) \
-  $(SHARED_RESOURCE_PREFIX)Resource.o \
-  $(SHARED_RESOURCE_PREFIX)ThreadResource.o \
-  $(SHARED_RESOURCE_PREFIX)Modular_Resource.o
+  $(OBJECTS_SHARED_RESOURCE_THREAD) \
+  $(SHARED_RESOURCE_PREFIX)Resource.o
 
 OBJECTS_SHARED_RESOURCE_TEST := \
   $(SHARED_RESOURCE_PREFIX)Test_SharedResource_ModuleTest.o \
@@ -34,6 +43,8 @@ sharedResource : $(OBJECTS_SHARED_RESOURCE)
 
 $(SHARED_RESOURCE_PREFIX)Holder.o : \
     $(SHARED_RESOURCE_IMPL_ROOT)/SharedResource_Holder.cpp
+$(SHARED_RESOURCE_PREFIX)ReferenceInterface.o : \
+    $(SHARED_RESOURCE_IMPL_ROOT)/SharedResource_ReferenceInterface.cpp
 $(SHARED_RESOURCE_PREFIX)Instance.o : \
     $(SHARED_RESOURCE_IMPL_ROOT)/SharedResource_Instance.cpp
 $(SHARED_RESOURCE_PREFIX)Reference.o : \
@@ -42,10 +53,17 @@ $(SHARED_RESOURCE_PREFIX)LockedInstancePtr.o : \
     $(SHARED_RESOURCE_IMPL_ROOT)/SharedResource_LockedInstancePtr.cpp
 $(SHARED_RESOURCE_PREFIX)Resource.o : \
     $(SHARED_RESOURCE_ROOT)/SharedResource_Resource.cpp
-$(SHARED_RESOURCE_PREFIX)ThreadResource.o : \
-    $(SHARED_RESOURCE_ROOT)/SharedResource_ThreadResource.cpp
-$(SHARED_RESOURCE_PREFIX)Modular_Resource.o : \
-    $(SHARED_RESOURCE_ROOT)/Modular/SharedResource_Modular_Resource.cpp
+
+$(SHARED_RESOURCE_THREAD_PREFIX)Lock.o : \
+    $(SHARED_RESOURCE_THREAD_ROOT)/SharedResource_Thread_Lock.cpp
+$(SHARED_RESOURCE_THREAD_PREFIX)ScopedReadLock.o : \
+    $(SHARED_RESOURCE_THREAD_ROOT)/SharedResource_Thread_ScopedReadLock.cpp
+$(SHARED_RESOURCE_THREAD_PREFIX)ScopedWriteLock.o : \
+    $(SHARED_RESOURCE_THREAD_ROOT)/SharedResource_Thread_ScopedWriteLock.cpp
+$(SHARED_RESOURCE_THREAD_PREFIX)Thread.o : \
+    $(SHARED_RESOURCE_THREAD_ROOT)/SharedResource_Thread_Thread.cpp
+$(SHARED_RESOURCE_THREAD_PREFIX)Resource.o : \
+    $(SHARED_RESOURCE_THREAD_ROOT)/SharedResource_Thread_Resource.cpp
 
 $(SHARED_RESOURCE_PREFIX)Test_SharedResource_ModuleTest.o : \
     $(SHARED_RESOURCE_TEST_ROOT)/Test_SharedResource_ModuleTest.cpp

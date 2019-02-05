@@ -1,6 +1,7 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_Device_Reader.h"
-#include "Wifi_Device_Tracker.h"
+#include "Wifi_Device_Module.h"
+#include "Wifi_Resource.h"
 
 Wifi::Device::Reader::Reader() { }
 
@@ -9,9 +10,9 @@ Wifi::Device::Reader::Reader() { }
  */
 bool Wifi::Device::Reader::wifiDeviceEnabled() const
 {
-    SharedResource::LockedPtr<const Tracker> wifiDeviceTracker
+    SharedResource::Modular::LockedPtr<Resource, const Module> deviceModule
             = getReadLockedResource();
-    return wifiDeviceTracker->wifiDeviceEnabled();
+    return deviceModule->wifiDeviceEnabled();
 
 }
 
@@ -20,9 +21,9 @@ bool Wifi::Device::Reader::wifiDeviceEnabled() const
  */
 bool Wifi::Device::Reader::wifiDeviceExists() const
 {
-    SharedResource::LockedPtr<const Tracker> wifiDeviceTracker
+    SharedResource::Modular::LockedPtr<Resource, const Module> deviceModule
             = getReadLockedResource();
-    return wifiDeviceTracker->wifiDeviceExists();
+    return deviceModule->wifiDeviceExists();
 }
 
 /*
@@ -30,7 +31,7 @@ bool Wifi::Device::Reader::wifiDeviceExists() const
  */
 bool Wifi::Device::Reader::isDeviceStateChanging() const
 {
-    SharedResource::LockedPtr<const Tracker> wifiDeviceTracker
+    SharedResource::Modular::LockedPtr<Resource, const Module> deviceModule
             = getReadLockedResource();
-    return wifiDeviceTracker->isDeviceStateChanging();
+    return deviceModule->isDeviceStateChanging();
 }

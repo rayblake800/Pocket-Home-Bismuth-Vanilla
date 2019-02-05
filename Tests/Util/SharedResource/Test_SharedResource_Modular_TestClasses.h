@@ -33,7 +33,7 @@ static const constexpr int defaultValueC = 2;
 /**
  * @brief  The modular resource instance class used for testing.
  */
-class TestResource : public SharedResource::Modular::Resource
+class TestResource : public SharedResource::Modular::Resource<>
 {
 public:
     static const juce::Identifier resourceKey;
@@ -45,7 +45,7 @@ public:
 private:
     /* Allow getModule() specializations to access resource modules: */
     template<class ModuleType> 
-    friend ModuleType* SharedResource::Modular::Resource::getModule();
+    friend ModuleType* SharedResource::Modular::Resource<>::getModule();
 
     TestModuleA* moduleA;
     TestModuleB* moduleB;
@@ -161,6 +161,12 @@ class TestModuleC : public TestModule<int>
 {
 public:
     TestModuleC(TestResource& resource);
+
+    juce::String getAValue() const;
+
+    double getBValue() const;
+
+    int actOnAllHandlers();
 };
 
 /* Test handler implementations: */
@@ -180,4 +186,10 @@ class TestHandlerC : public TestHandler<TestModuleC, int>
 {
 public:
     virtual juce::String getName() override { return "HandlerC"; }
+
+    juce::String getAValue() const;
+
+    double getBValue() const;
+
+    int actOnAllHandlers();
 };

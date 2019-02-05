@@ -5,16 +5,18 @@
  * @brief  Sends basic commands to the Wifi device.
  */
 
-#include "SharedResource_Handler.h"
+#include "SharedResource_Modular_Handler.h"
 
 namespace Wifi { namespace Device { class Controller; } }
-namespace Wifi { namespace Device { class Tracker; } }
+namespace Wifi { namespace Device { class Module; } }
+namespace Wifi { class Resource; }
 
 /**
- *  Controller objects are used to turn Wifi on and off, and to make the Wifi
- * device rescan visible access points. 
+ * @brief  Accesses the wifi device module to turn Wifi on and off, and to make 
+ *         the Wifi * device rescan visible access points. 
  */
-class Wifi::Device::Controller : public SharedResource::Handler<Tracker>
+class Wifi::Device::Controller : 
+    public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     Controller();

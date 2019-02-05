@@ -1,41 +1,39 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included outside of Wifi module implementation.
+  #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
- * @file Wifi_Connection_RecordResource.h
+ * @file Wifi_Connection_Record_Module.h
  *
  * @brief  Tracks all major Wifi connection events.
  */
-#include "SharedResource_Resource.h"
-#include "LibNM/DBus/SavedConnectionLoader.h"
-#include "JuceHeader.h"
+#include "SharedResource_Modular_Module.h"
 
-namespace Wifi { namespace Connection { class RecordResource; }  }
+namespace Wifi { namespace Connection { namespace Record { class Module; } } }
 namespace Wifi { namespace Connection { class Event; }  }
 namespace Wifi { namespace Connection { enum class EventType; }  }
+namespace Wifi { class Resource; }
 namespace Wifi { class AccessPoint; }
 
 /**
- *  RecordResource records all Wifi connection events relevant to Pocket-Home
- * that occur after the program is launched. RecordResource also reads saved
- * connections, storing the last connection times of all Wifi connections known
- * to NetworkManager. RecordResource finds and shares events with the most
- * recent stored time, optionally sorting by access point or event type.
+ *  Record::Module records all Wifi connection events relevant to this 
+ * application that occur after the program is launched. RecordModule finds and 
+ * shares the most recent connection events, optionally filtering by access 
+ * point or event type.
  */
-class Wifi::Connection::RecordResource : public SharedResource::Resource
+class Wifi::Connection::Record::Module : 
+    public SharedResource::Modular::Module<Resource>
 {
 public:
-    /* SharedResource object instance key: */
-    static const juce::Identifier resourceKey;
-
     /**
      * @brief  Reads NetworkManager data to build the initial set of connection 
      *         records.
+     *
+     * @param wifiResource  The modular resource object creating this Module.
      */
-    RecordResource();
+    Module(Resource& wifiResource);
 
-    virtual ~RecordResource() { }
+    virtual ~Module() { }
 
     /**
      * @brief  Checks if the system has an active, established Wifi network
@@ -61,30 +59,6 @@ public:
      *          if no connection exists.
      */
     AccessPoint getActiveAP() const;
-    
-    /**
-     * @brief  Checks if NetworkManager has a saved connection that is
-     *         compatible with an access point.
-     *
-     * @param toCheck  The access point to check against the list of saved
-     *                 connections.
-     *
-     * @return  Whether a saved connection exists that uses that access point. 
-     */
-    bool hasSavedConnection(const AccessPoint toCheck) const;
-
-    /**
-     * @brief  Finds the last time the system was fully connected to a 
-     *         particular wifi access point's connection.
-     *
-     * @param connectionAP  A Wifi access point object to search for in
-     *                      saved connection records.
-     *
-     * @return              The last time the system was connected using a 
-     *                      connection compatible with connectionAP, or the 
-     *                      Unix epoch if no saved connection was found.
-     */
-    juce::Time lastConnectionTime(const AccessPoint connectionAP) const;
 
     /**
      * @brief  Adds a new event to the list of saved events.
@@ -104,15 +78,6 @@ public:
     void addEventIfNotDuplicate(const Event newEvent);
 
     /**
-     * @brief  Removes all saved network connections that match a particular
-     *         access point.
-     *
-     * @param toRemove  The access point used to select saved connections to
-     *                  delete.
-     */
-    void removeSavedConnection(const AccessPoint toRemove);
-
-    /**
      * @brief  Connects with NetworkManager to build the initial set of
      *         connection records.
      */
@@ -124,7 +89,7 @@ public:
      * @return  The stored Connection::Event with the most recent time value, or
      *          a null Connection::Event if no events were found.
      */
-    Event getLastEvent() const;
+    Event getLatestEvent() const;
 
     /**
      * @brief  Gets the most recent connection event that involves a particular
@@ -136,7 +101,7 @@ public:
      *                 as its access point, or a null Connection::Event if no
      *                 stored event has the given access point.
      */
-    Event getLastEvent(const AccessPoint eventAP) const;
+    Event getLatestEvent(const AccessPoint eventAP) const;
 
     /**
      * @brief  Gets the most recent connection event with a specific event type.
@@ -147,7 +112,7 @@ public:
      *                   type, or a null Event if no stored event is of type 
      *                   eventType.
      */
-    Event getLastEvent(const EventType eventType) const;
+    Event getLatestEvent(const EventType eventType) const;
 
     /**
      * @brief  Gets the most recent connection event with a specific event type
@@ -160,24 +125,6 @@ public:
      * @return           The most recent Event with that type and access point, 
      *                   or a null Event if no matching event is found.
      */
-    Event getLastEvent(const AccessPoint eventAP,
+    Event getLatestEvent(const AccessPoint eventAP,
             const EventType eventType) const;
-
-private:
-    /**
-     * @brief  Gets all saved connections compatible with a particular 
-     *         AccessPoint object.
-     *
-     * This method must be called within the LibNM::ThreadResource.
-     *
-     * @param toMatch  The access point to search for.
-     *
-     * @return         All saved connections that could have used the provided
-     *                 AccessPoint parameter.
-     */
-    juce::Array<LibNM::SavedConnection> getMatchingConnections
-    (const Wifi::AccessPoint toMatch) const;
-
-    /* Reads and removes saved network connections: */
-    LibNM::SavedConnectionLoader savedConnections;
 };

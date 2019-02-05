@@ -1,25 +1,21 @@
-#include "Wifi_Device_Tracker.h"
+#define WIFI_IMPLEMENTATION
+#include "Wifi_Device_Module.h"
+#include "Wifi_Resource.h"
 #include "Wifi_Device_UpdateInterface.h"
-#include "LibNM/ThreadHandler.h"
-#include "LibNM/BorrowedObjects/DeviceWifi.h"
-
-
-/* SharedResource object instance key: */
-const juce::Identifier Wifi::Device::Tracker::resourceKey 
-        = "Wifi_Device_Tracker";
+#include "Wifi_LibNM_Thread_Module.h"
+#include "Wifi_LibNM_DeviceWifi.h"
+#include "Wifi_LibNM_Client.h"
 
 /*
  * Checks the initial Wifi device state.
  */ 
-Wifi::Device::Tracker::Tracker() : SharedResource::Resource(resourceKey)
-{
-    updateDeviceState(false);
-} 
+Wifi::Device::Module::Module(Resource& wifiResource) : 
+    SharedResource::Modular::Module<Resource>(wifiResource) { } 
 
 /*
  * Checks if a Wifi device managed by NetworkManager exists.
  */
-bool Wifi::Device::Tracker::wifiDeviceExists() const
+bool Wifi::Device::Module::wifiDeviceExists() const
 {
     return deviceExists;
 }
@@ -27,7 +23,7 @@ bool Wifi::Device::Tracker::wifiDeviceExists() const
 /*
  * Checks if the wifi device is enabled. 
  */
-bool Wifi::Device::Tracker::wifiDeviceEnabled() const
+bool Wifi::Device::Module::wifiDeviceEnabled() const
 {
     return deviceExists && deviceEnabled;
 }
@@ -35,7 +31,7 @@ bool Wifi::Device::Tracker::wifiDeviceEnabled() const
 /*
  * Checks if wifi is currently being enabled or disabled.
  */
-bool Wifi::Device::Tracker::isDeviceStateChanging() const
+bool Wifi::Device::Module::isDeviceStateChanging() const
 {
     return stateChanging;
 }
@@ -44,34 +40,34 @@ bool Wifi::Device::Tracker::isDeviceStateChanging() const
  * Connects to NetworkManager to update the Wifi device state, notifying all 
  * DeviceListeners if the state changes.
  */
-void Wifi::Device::Tracker::updateDeviceState(const bool notifyListeners)
+void Wifi::Device::Module::updateDeviceState(const bool notifyListeners)
 {
     bool exists = deviceExists;
     bool enabled = deviceEnabled;
-    LibNM::ThreadHandler nmThreadHandler;
-    nmThreadHandler.call([this, &nmThreadHandler, &exists, &enabled]()
+    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    nmThread->call([this, nmThread, &exists, &enabled]()
     {
-        LibNM::DeviceWifi wifiDevice = nmThreadHandler.getWifiDevice();
+        LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
         exists = !wifiDevice.isNull();
-        LibNM::Client client = nmThreadHandler.getClient();
+        LibNM::Client client = nmThread->getClient();
         enabled = client.wirelessEnabled();
     });
-    updateDeviceState(exists, enabled);
+    updateDeviceState(exists, enabled, notifyListeners);
 }
 
 /*
- * Updates the Device::Tracker's saved wifi device state, notifying all 
+ * Updates the Device::Module's saved wifi device state, notifying all 
  * DeviceListeners if the state changes.
  */
-void Wifi::Device::Tracker::updateDeviceState
-(const bool exists, const bool enabled)
+void Wifi::Device::Module::updateDeviceState
+(const bool exists, const bool enabled, const bool notifyListeners)
 {
     stateChanging = false;
     const bool wasEnabled = wifiDeviceEnabled();
     deviceExists = exists;
     deviceEnabled = enabled;
     const bool isEnabled = wifiDeviceEnabled();
-    if(isEnabled != wasEnabled)
+    if(isEnabled != wasEnabled && notifyListeners)
     {
         foreachHandler<UpdateInterface>([isEnabled]
             (UpdateInterface* listener)
@@ -91,8 +87,7 @@ void Wifi::Device::Tracker::updateDeviceState
 /*
  * Notifies the device tracker that Wifi is about to be enabled or disabled.
  */
-void Wifi::Device::Tracker::signalDeviceStateChanging()
+void Wifi::Device::Module::signalDeviceStateChanging()
 {
     stateChanging = true;
 }
-

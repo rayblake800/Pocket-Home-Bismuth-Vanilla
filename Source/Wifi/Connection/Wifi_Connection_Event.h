@@ -1,3 +1,6 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included directly outside of Wifi module implementation.
+#endif
 #pragma once
 /**
  * @file  Wifi_Connection_Event.h

@@ -9,7 +9,8 @@
 #include "FocusingListPage.h"
 #include "Wifi_AP_StrengthListener.h"
 #include "Wifi_APList_Listener.h"
-#include "Wifi_Connection_Listener.h"
+#include "Wifi_Connection_Record_Listener.h"
+#include "Wifi_Connection_Control_Handler.h"
 #include "Locale/TextUser.h"
 #include "Spinner.h"
 #include "ScalingLabel.h"
@@ -20,7 +21,7 @@ namespace Wifi { class SettingsPage; }
 class Wifi::SettingsPage : public FocusingListPage,
         public Wifi::APList::Listener,
         public Wifi::AP::StrengthListener,
-        public Wifi::Connection::Listener,
+        public Wifi::Connection::Record::Listener,
         public juce::TextEditor::Listener,
         public Locale::TextUser
 {
@@ -183,6 +184,9 @@ private:
     
     /* Wifi icon paths for all signal strengths: */
     static const juce::StringArray wifiImageFiles;
+
+    /* Handles Wifi connections requested through the SettingsPage: */
+    Wifi::Connection::Control::Handler connectionControl;
     
     /**
      * ConnectionButton is a TextButton with text that can be replaced by a
@@ -228,6 +232,9 @@ private:
 
     /* Clicked to connect or disconnect: */
     ConnectionButton connectionButton;
+
+    /* Tracks if the list is waiting for an update. */
+    juce::Atomic<bool> listUpdatePending;
 
     /* Shows an error message if the connection fails. */
     ScalingLabel errorLabel;

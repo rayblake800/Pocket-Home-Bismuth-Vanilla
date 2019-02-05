@@ -9,7 +9,8 @@
 #include "DrawableImageComponent.h"
 #include "Wifi_Device_Listener.h"
 #include "Wifi_AP_StrengthListener.h"
-#include "Wifi_Connection_Listener.h"
+#include "Wifi_Connection_Record_Listener.h"
+#include "Wifi_Connection_Record_Reader.h"
 
 namespace Wifi { class StatusIcon; }
 
@@ -17,7 +18,7 @@ namespace Wifi { class StatusIcon; }
 class Wifi::StatusIcon : 
     public Theme::Image::Component<DrawableImageComponent>, 
     public AP::StrengthListener, 
-    public Connection::Listener,
+    public Connection::Record::Listener,
     public Device::Listener
 {
 public:
@@ -26,6 +27,8 @@ public:
     virtual ~StatusIcon() { }
 
 private:
+    Connection::Record::Reader connectionReader;
+
     /**
      * All wifi state icons.  Each should correspond to an image asset file 
      * defined in components.json

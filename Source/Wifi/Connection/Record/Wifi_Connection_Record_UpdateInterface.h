@@ -1,17 +1,21 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included directly outside of Wifi module implementation.
+#endif
 #pragma once
 /**
  * @file  Wifi_Connection_UpdateInterface.h
  *
- * @brief  The interface used by the Wifi::Connection::RecordResource instance
+ * @brief  The interface used by the Wifi::Connection::RecordModule instance
  *         to notify all Wifi::Connection::Listener objects of new Wifi network 
  *         connection events.
  */
 
-namespace Wifi { namespace Connection { class UpdateInterface; } }
-namespace Wifi { namespace Connection { class RecordResource; } }
+namespace Wifi { namespace Connection { namespace Record { 
+        class UpdateInterface; } } }
+namespace Wifi { namespace Connection { namespace Record { class Module; } } }
 namespace Wifi { class AccessPoint; }
 
-class Wifi::Connection::UpdateInterface
+class Wifi::Connection::Record::UpdateInterface
 {
 public:
     UpdateInterface() { }
@@ -19,7 +23,7 @@ public:
     virtual ~UpdateInterface() { }
 
 private:
-    friend class Wifi::Connection::RecordResource;
+    friend class Wifi::Connection::Record::Module;
 
     /**
      * @brief  Signals that a new active Wifi connection is being opened.

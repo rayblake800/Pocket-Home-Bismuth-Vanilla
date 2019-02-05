@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included outside of Wifi module implementation.
+  #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -8,12 +8,14 @@
  * @brief  Checks the status of the system's Wifi device.
  */
 
-#include "SharedResource_Handler.h"
+#include "SharedResource_Modular_Handler.h"
 
 namespace Wifi { namespace Device { class Reader; } }
-namespace Wifi { namespace Device { class Tracker; } }
+namespace Wifi { namespace Device { class Module; } }
+namespace Wifi { class Resource; }
 
-class Wifi::Device::Reader : public SharedResource::Handler<Tracker>
+class Wifi::Device::Reader : 
+    public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     Reader();

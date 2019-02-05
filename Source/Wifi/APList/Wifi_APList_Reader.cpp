@@ -1,8 +1,9 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_APList_Reader.h"
-#include "Wifi_APList_ListResource.h"
+#include "Wifi_APList_Module.h"
+#include "Wifi_Resource.h"
 #include "Wifi_AccessPoint.h"
-#include "LibNM/Data/APHash.h"
+#include "Wifi_LibNM_APHash.h"
 
 Wifi::APList::Reader::Reader() { }
 
@@ -11,7 +12,7 @@ Wifi::APList::Reader::Reader() { }
  */
 juce::Array<Wifi::AccessPoint> Wifi::APList::Reader::getAccessPoints() const
 {
-    SharedResource::LockedPtr<const ListResource> apList
+    SharedResource::Modular::LockedPtr<Resource, const Module> apList
             = getReadLockedResource();
     return apList->getAccessPoints();
     
@@ -23,7 +24,7 @@ juce::Array<Wifi::AccessPoint> Wifi::APList::Reader::getAccessPoints() const
 Wifi::AccessPoint Wifi::APList::Reader::getAccessPoint
 (LibNM::APHash apHash) const
 {
-    SharedResource::LockedPtr<const ListResource> apList 
+    SharedResource::Modular::LockedPtr<Resource, const Module> apList 
             = getReadLockedResource();
     return apList->getAccessPoint(apHash);
 }

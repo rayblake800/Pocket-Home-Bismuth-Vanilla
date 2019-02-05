@@ -6,14 +6,23 @@
  *         points changes.
  */
 
+#ifndef WIFI_IMPLEMENTATION
+  #define APLIST_LISTENER_IMPLEMENTATION
+  #define WIFI_IMPLEMENTATION
+#endif
 #include "Wifi_APList_UpdateInterface.h"
-#include "SharedResource_Handler.h"
+#ifdef APLIST_LISTENER_IMPLEMENTATION
+  #undef APLIST_LISTENER_IMPLEMENTATION
+  #undef WIFI_IMPLEMENTATION
+#endif
+#include "SharedResource_Modular_Handler.h"
 
 namespace Wifi { namespace APList { class Listener; } }
-namespace Wifi { namespace APList { class ListResource; } }
+namespace Wifi { namespace APList { class Module; } }
+namespace Wifi { class Resource; }
 
 class Wifi::APList::Listener : public UpdateInterface,
-    public SharedResource::Handler<ListResource>
+    public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     Listener();

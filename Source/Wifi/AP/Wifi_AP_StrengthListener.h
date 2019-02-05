@@ -1,23 +1,32 @@
 #pragma once
-#include "Wifi_AP_UpdateInterface.h"
-#include "Wifi_AccessPoint.h"
-#include "SharedResource_Handler.h"
-
 /**
  * @file  Wifi_AP_StrengthListener.h
  *
  * @brief  Receives updates whenever Wifi access point signal strength changes.
- *
+ */
+
+#ifndef WIFI_IMPLEMENTATION
+  #define STRENGTH_LISTENER_IMPLEMENTATION
+  #define WIFI_IMPLEMENTATION
+#endif
+#include "Wifi_AP_UpdateInterface.h"
+#ifdef STRENGTH_LISTENER_IMPLEMENTATION
+  #undef STRENGTH_LISTENER_IMPLEMENTATION
+  #undef WIFI_IMPLEMENTATION
+#endif
+#include "Wifi_AccessPoint.h"
+#include "SharedResource_Handler.h"
+
+namespace Wifi { namespace AP { class StrengthListener; } }
+namespace Wifi { class Resource; }
+
+/**
  *  StrengthListener may choose to receive updates from all AccessPoint objects,
  * receive updates from a specific AccessPoint, or ignore all signal strength 
  * updates. This choice may be changed at any time.
  */
-
-namespace Wifi { namespace AP { class StrengthListener; } }
-namespace Wifi { namespace APList { class ListResource; } }
-
 class Wifi::AP::StrengthListener : public UpdateInterface,
-    public SharedResource::Handler<APList::ListResource>
+    public SharedResource::Handler<Resource>
 {
 public:
     /**

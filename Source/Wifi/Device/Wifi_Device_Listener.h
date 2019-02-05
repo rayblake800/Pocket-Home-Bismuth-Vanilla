@@ -6,13 +6,23 @@
  *         whenever Wifi is enabled or disabled.
  */
 
+#ifndef WIFI_IMPLEMENTATION
+  #define DEVICE_LISTENER_IMPLEMENTATION
+  #define WIFI_IMPLEMENTATION
+#endif
 #include "Wifi_Device_UpdateInterface.h"
-#include "SharedResource_Handler.h"
+#ifdef DEVICE_LISTENER_IMPLEMENTATION
+  #undef DEVICE_LISTENER_IMPLEMENTATION
+  #undef WIFI_IMPLEMENTATION
+#endif
+#include "SharedResource_Modular_Handler.h"
 
 namespace Wifi { namespace Device { class Listener; } }
-namespace Wifi { namespace Device { class Tracker; } }
+namespace Wifi { namespace Device { class Module; } }
+namespace Wifi { class Resource; }
 
-class Wifi::Device::Listener : public SharedResource::Handler<Tracker>,
+class Wifi::Device::Listener : 
+    public SharedResource::Modular::Handler<Resource, Module>,
     public UpdateInterface
 {
 public:

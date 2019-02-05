@@ -1,8 +1,11 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included directly outside of Wifi module implementation.
+#endif
 #pragma once
 /**
  * @file  Wifi_AP_UpdateInterface.h
  *
- * @brief  The interface used by the Wifi::APList::ListResource to send updates 
+ * @brief  The interface used by the Wifi::APList::ListModule to send updates 
  *         to all Wifi::AP::StrengthListener objects.
  */
 

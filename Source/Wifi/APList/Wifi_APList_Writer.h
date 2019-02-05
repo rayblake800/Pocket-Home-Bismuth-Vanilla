@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included outside of Wifi module implementation.
+  #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -8,14 +8,22 @@
  * @brief  Updates the list of visible Wifi access points.
  */
 
-#include "SharedResource_Handler.h"
+#include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace APList { class Writer; } }
-namespace Wifi { namespace APList { class ListResource; } }
-namespace Wifi { class AccessPoint; }
-namespace LibNM { class AccessPoint; }
+namespace Wifi 
+{ 
+    namespace APList 
+    { 
+        class Writer;
+        class Module;
+    } 
+    class Resource;
+    class AccessPoint;
+    namespace LibNM { class AccessPoint; }
+}
 
-class Wifi::APList::Writer : public SharedResource::Handler<ListResource>
+class Wifi::APList::Writer : 
+    public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     Writer();
@@ -64,4 +72,9 @@ public:
      *         Wifi::AccessPoints as necessary.
      */
     void updateAllAccessPoints();
+
+    /**
+     * @brief  Removes all LibNM::AccessPoint objects that are no longer valid.
+     */
+    void removeInvalidatedAccessPoints();
 };

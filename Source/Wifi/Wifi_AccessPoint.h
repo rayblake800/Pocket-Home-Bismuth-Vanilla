@@ -18,42 +18,81 @@
 #include "Util/Nullable.h"
 #include "JuceHeader.h"
 
-namespace Wifi { class AccessPoint; }
-namespace Wifi { namespace APList { class ListResource; } }
-namespace LibNM { class AccessPoint; }
-namespace LibNM { class Connection; }
-namespace LibNM { enum class SecurityType; }
+namespace Wifi 
+{ 
+    class AccessPoint; 
+    enum class SecurityType;
+    namespace APList { class Module; }
+    namespace Connection { namespace Saved { class Module; } }
+    namespace LibNM
+    {
+        class Connection;
+        class AccessPoint;
+        namespace Signal { class DeviceHandler; }
+    }
+    
+    /* Restricted property update interfaces used by the AccessPoint class: */
+    namespace APInterface
+    {
+        class SignalStrength;
+        class SavedConnection;
+    }
+}
 
 /**
+ * @brief  Allows only the APList::Module to update AccessPoint signal strength.
+ */
+class Wifi::APInterface::SignalStrength
+{
+public:
+    virtual ~SignalStrength() { }
+protected:
+    SignalStrength() { }
+    friend class APList::Module;
+    virtual void setSignalStrength(const unsigned int newStrength) = 0;
+};
+
+/**
+ * @brief  Allows only the Connection::Saved::Module and the 
+ *         LibNM::Signal::DeviceHandler to update AccessPoint saved connection 
+ *         state.
+ */
+class Wifi::APInterface::SavedConnection
+{
+public:
+    virtual ~SavedConnection() { }
+protected:
+    SavedConnection() { }
+    friend class Connection::Saved::Module;
+    friend class LibNM::Signal::DeviceHandler;
+    virtual void setHasSavedConnection(const bool isSaved) = 0;
+    virtual void setLastConnectionTime(const juce::int64 newTime) = 0;
+};
+
+/**
+ * @brief  Holds shared data describing a wifi access point.
+ *
  *  Wifi::AccessPoint represents one or more LibNM::AccessPoints, which in 
  * turn represent a Wifi access point found by NetworkManager through the 
  * network device. Wifi::AccessPoint objects hold shared, reference counted 
  * data. This allows access point data to be freely shared between threads, 
  * while keeping interaction with LibNM confined to the LibNM thread resource.
  *
- *  AccessPoint data is mostly immutable. Only the signal strength may be 
- * updated, and only the APList::ListResource may update it.
+ *  AccessPoint data is mostly immutable. Only the signal strength, saved
+ * connection state, and last connection time may be updated.
  */
 class Wifi::AccessPoint : 
-    public Nullable<juce::ReferenceCountedObjectPtr<AP::Data>>
+    public Nullable<juce::ReferenceCountedObjectPtr<AP::Data>>,
+    public APInterface::SignalStrength, public APInterface::SavedConnection
 {
 public:
-    /* Only the APList resource may update access point data. */
-    friend class APList::ListResource;
 
     /**
      * @brief  Creates new access point data from a LibNM access point object.
      *
-     * @param nmAccessPoint  The LibNM access point the data should represent.
+     * @param nmAccessPoint    The LibNM access point the data should represent.
      */
     AccessPoint(const LibNM::AccessPoint nmAccessPoint);
-
-    /**
-     * @brief  Creates new access point data from a LibNM connection object.
-     *
-     * @param connection  A valid wifi connection with saved access point data.
-     */
-    AccessPoint(const LibNM::Connection connection);
 
     /**
      * @brief  Initializes the AccessPoint with another AccessPoint's data.
@@ -115,6 +154,25 @@ public:
     unsigned int getSignalStrength() const;
 
     /**
+     * @brief  Checks whether this access point is compatible with a saved 
+     *         network connection.
+     *
+     * @return  Whether any saved network connection is compatible with this
+     *          access point.
+     */
+    bool hasSavedConnection() const;
+
+    /**
+     * @brief  Gets the last recorded time the system was connected using this
+     *         access point's connection.
+     *
+     * @return  The last connection time as the number of milliseconds since the
+     *          Unix epoch, or 0 if no record exists of the system using this 
+     *          access point's connection.
+     */
+    juce::int64 getLastConnectionTime() const;
+
+    /**
      * @brief  Gets the access point's general security type.
      *
      * @return  The type of security, if any, protecting the access point. 
@@ -146,12 +204,29 @@ public:
      */
     juce::String toString() const;
 
-private:
+protected:
     /**
      * @brief  Updates the access point's signal strength.
      *
      * @param newStrength  The new signal strength, as a percentage value
      *                     between 0 and 100.
      */
-    void setSignalStrength(const unsigned int newStrength);
+    virtual void setSignalStrength(const unsigned int newStrength) override;
+
+    /**
+     * @brief  Sets the AccessPoint object's record of whether it has a
+     *         compatible saved connection.
+     *
+     * @param isSaved  The value that hasSavedConnection() calls should return.
+     */
+    virtual void setHasSavedConnection(const bool isSaved) override;
+
+    /**
+     * @brief  Stores the last time the system was connected to a network using
+     *         a connection that is compatible with this access point.
+     *
+     * @param newTime  The new connection time to store, expressed as the number
+     *                 of milliseconds since the Unix epoch.
+     */
+    virtual void setLastConnectionTime(const juce::int64 newTime) override;
 };

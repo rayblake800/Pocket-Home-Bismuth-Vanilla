@@ -1,34 +1,44 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included outside of Wifi module implementation.
+  #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
- * @file  Wifi_APList_ListResource.h
+ * @file  Wifi_APList_Module.h
  *
- * @brief  Tracks all visible Wifi access points, using NetworkManager signals
+ * @brief  Tracks all visible Wifi access points, using NetworkResource signals
  *         and data to construct and update Wifi::AccessPoint objects.
  */
 
-#include "SharedResource_Resource.h"
+#include "SharedResource_Modular_Module.h"
 
-namespace Wifi { class AccessPoint; }
-namespace Wifi { namespace APList { class ListResource; } }
-namespace LibNM { class APHash; }
-namespace LibNM { class AccessPoint; }
+namespace Wifi 
+{ 
+    namespace APList { class Module; } 
+    class Resource;
+    class AccessPoint;
+    namespace LibNM
+    {
+        class APHash;
+        class AccessPoint;
+    }
+}
 
-class Wifi::APList::ListResource : public SharedResource::Resource
+class Wifi::APList::Module : 
+    public SharedResource::Modular::Module<Wifi::Resource>
 {
 public:
-    /* SharedResource object instance key: */
-    static const juce::Identifier resourceKey;
-
     /**
      * @brief  Reads initial access point data from LibNM, using it to construct
      *         the access point list.
+     *
+     * @param wifiResource  The modular resource object creating this Module.
      */
-    ListResource();
+    Module(Resource& wifiResource);
 
-    virtual ~ListResource() { }
+    /**
+     * @brief  Clears all access point data on destruction.
+     */
+    virtual ~Module();
 
     /**
      * @brief  Gets Wifi::AccessPoint objects for all visible access points.
@@ -105,7 +115,7 @@ public:
      * Like all methods that get or set LibNM::Object objects, this should only 
      * be called within the LibNM::ThreadHandler's call or callAsync methods.
      *
-     * @param addedAP  A new LibNM::AccessPoint discovered by NetworkManager.
+     * @param addedAP  A new LibNM::AccessPoint discovered by NetworkResource.
      */
     void addAccessPoint(const LibNM::AccessPoint addedAP);
 
@@ -117,7 +127,7 @@ public:
      * Like all methods that get or set LibNM::Object objects, this should only 
      * be called within the LibNM::ThreadHandler's call or callAsync methods.
      *
-     * @param removedAP  The LibNM::AccessPoint that NetworkManager can no
+     * @param removedAP  The LibNM::AccessPoint that NetworkResource can no
      *                   longer find.
      */
     void removeAccessPoint(const LibNM::AccessPoint removedAP);
@@ -136,8 +146,13 @@ public:
     void clearAccessPoints();
 
     /**
-     * @brief  Reloads all LibNM::AccessPoints from the NetworkManager, updating
+     * @brief  Reloads all LibNM::AccessPoints from the NetworkResource, updating
      *         Wifi::AccessPoints as necessary.
      */
     void updateAllAccessPoints();
+
+    /**
+     * @brief  Removes all LibNM::AccessPoint objects that are no longer valid.
+     */
+    void removeInvalidatedAccessPoints();
 };

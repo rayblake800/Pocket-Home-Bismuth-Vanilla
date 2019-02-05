@@ -2,7 +2,7 @@
 #include <nm-device-wifi.h>
 
 /** 
- * @file WifiDebugOutput.h
+ * @file  Wifi_DebugOutput.h
  * 
  * @brief Converts assorted Wifi-related enums to text for debug output.
  */
