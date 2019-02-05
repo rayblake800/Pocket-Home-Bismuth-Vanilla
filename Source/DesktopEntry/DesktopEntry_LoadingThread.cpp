@@ -3,11 +3,15 @@
 #include "DesktopEntry_FileError.h"
 #include "DesktopEntry_FormatError.h"
 #include "DesktopEntry_UpdateInterface.h"
+#include "SharedResource_Thread_ScopedWriteLock.h"
 #include "Util/Files/XDGDirectories.h"
 
-/* SharedResource object class key */ 
+/* SharedResource object class key: */ 
 const juce::Identifier DesktopEntry::LoadingThread::resourceKey
-    = "DesktopEntry::LoadingThread";
+    = "DesktopEntry_LoadingThread";
+
+/* Resource thread name: */
+static const juce::String threadName = "DesktopEntry_LoadingThread";
 
 /* The desktop entry subdirectory within the data directory: */
 static const constexpr char* entryDirectory = "/applications/";
@@ -25,9 +29,9 @@ static const constexpr char* fileExtension = ".desktop";
  * Creates and starts the thread resource.
  */
 DesktopEntry::LoadingThread::LoadingThread() : 
-SharedResource::ThreadResource(resourceKey)
+SharedResource::Thread::Resource(resourceKey, ::threadName)
 {
-    startThread();
+    startResourceThread();
 }
 
 /*
@@ -226,8 +230,9 @@ bool DesktopEntry::LoadingThread::isFinishedLoading()
  * Finds all unloaded or updated desktop entry files within the application data
  * directories, ignoring files with duplicate desktop file IDs.
  */
-void DesktopEntry::LoadingThread::init() 
+void DesktopEntry::LoadingThread::init(SharedResource::Thread::Lock& threadLock) 
 {
+    const SharedResource::Thread::ScopedWriteLock writeLock(threadLock);
     finishedLoading = false;
     lastAddedIDs.clear();
     lastChangedIDs.clear();
@@ -239,7 +244,7 @@ void DesktopEntry::LoadingThread::init()
  * Loads or updates a single desktop entry file in the list of pending files.
  */
 void DesktopEntry::LoadingThread::runLoop
-(ThreadResource::ThreadLock& threadLock) 
+(SharedResource::Thread::Lock& threadLock) 
 {
     using juce::String;
     threadLock.enterWrite();
@@ -305,8 +310,10 @@ void DesktopEntry::LoadingThread::runLoop
  * Runs loading and update callback functions once all desktop entries are 
  * loaded or updated.
  */
-void DesktopEntry::LoadingThread::cleanup() 
+void DesktopEntry::LoadingThread::cleanup
+(SharedResource::Thread::Lock& threadLock) 
 {
+    const SharedResource::Thread::ScopedWriteLock writeLock(threadLock);
     finishedLoading = true;
     DBG("DesktopEntry::LoadingThread::" << __func__ << ": "
             << lastAddedIDs.size() << " added, "

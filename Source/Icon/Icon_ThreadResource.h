@@ -6,7 +6,7 @@
  *        objects.
  */
 
-#include "SharedResource_ThreadResource.h"
+#include "SharedResource_Thread_Resource.h"
 #include "Icon_ThemeIndex.h"
 #include "Icon_RequestID.h"
 #include "JuceHeader.h"
@@ -28,7 +28,7 @@ namespace Icon { class ThreadResource; }
  * @see Icon_ThemeIndex.h, Icon_Cache.h
  */
 
-class Icon::ThreadResource : public SharedResource::ThreadResource
+class Icon::ThreadResource : public SharedResource::Thread::Resource
 {
 public:
     /* SharedResource object key */
@@ -78,7 +78,7 @@ private:
     /**
      * @brief  Asynchronously handles queued icon requests.
      */
-    virtual void runLoop(ThreadLock& lock) override;
+    virtual void runLoop(SharedResource::Thread::Lock& lock) override;
 
     /**
      * @brief   Keeps the thread dormant when all icon requests have been

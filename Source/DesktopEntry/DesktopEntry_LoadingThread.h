@@ -8,7 +8,7 @@
  * @brief  Loads, caches, and updates desktop entry data.
  */
 
-#include "SharedResource_ThreadResource.h"
+#include "SharedResource_Thread_Resource.h"
 #include "DesktopEntry_EntryFile.h"
 #include "DesktopEntry_CallbackID.h"
 #include <map>
@@ -29,7 +29,7 @@
  */
 namespace DesktopEntry { class LoadingThread; }
 
-class DesktopEntry::LoadingThread : public SharedResource::ThreadResource
+class DesktopEntry::LoadingThread : public SharedResource::Thread::Resource
 {
 public:
     /* SharedResource object class key */ 
@@ -41,9 +41,6 @@ public:
     LoadingThread();
 
     virtual ~LoadingThread() { }
-
-    /* Allow handlers to notify the thread normally to wake it when waiting. */
-    using juce::Thread::notify;
 
     /**
      * @brief  Finds a desktop entry from its desktop file ID. 
@@ -129,8 +126,11 @@ private:
      *         process.
      *
      * This function runs once whenever the desktop entry thread starts running.
+     *
+     * @param threadLock  An object used to access the desktop entry thread's
+     *                    SharedResource lock.
      */
-    virtual void init() override;
+    virtual void init(SharedResource::Thread::Lock& threadLock) override;
 
     /**
      * @brief  Loads or updates a single desktop entry file in the list of 
@@ -142,7 +142,7 @@ private:
      * @param threadLock  An object used to access the desktop entry thread's
      *                    SharedResource lock.
      */
-    virtual void runLoop(ThreadResource::ThreadLock& threadLock) override;
+    virtual void runLoop(SharedResource::Thread::Lock& threadLock) override;
     
     /**
      * @brief  Runs all registered callback functions once all desktop entry 
@@ -151,8 +151,11 @@ private:
      *
      * This function will be called on the desktop entry thread just before the
      * thread stops running.
+     *
+     * @param threadLock  An object used to access the desktop entry thread's
+     *                    SharedResource lock.
      */
-    void cleanup() override;
+    void cleanup(SharedResource::Thread::Lock& threadLock) override;
 
     /**
      * @brief   Makes the thread sleep after loading or updating all desktop

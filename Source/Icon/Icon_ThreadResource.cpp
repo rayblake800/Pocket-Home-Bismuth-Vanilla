@@ -7,6 +7,9 @@
 const juce::Identifier Icon::ThreadResource::resourceKey 
         = "Icon_ThreadResource";
 
+/* Resource thread name: */
+static const juce::String threadName = "Icon_ThreadResource";
+
 /* Path to the default icon file: TODO: Define this in config files */
 static const constexpr char* defaultIconPath 
         = "/usr/share/pocket-home/appIcons/chip.png";
@@ -35,7 +38,7 @@ static const constexpr char* pocketHomeIconPath
         = "/usr/share/pocket-home/icons";
 
 Icon::ThreadResource::ThreadResource() : 
-SharedResource::ThreadResource(resourceKey),
+SharedResource::Thread::Resource(resourceKey, ::threadName),
 defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
 { 
     using juce::StringArray;
@@ -189,7 +192,7 @@ Icon::RequestID Icon::ThreadResource::addRequest(IconRequest request)
         requestMap[newID] = request;
         if (!isThreadRunning())
         {
-            startThread();
+            startResourceThread();
         }
         else //Ensure thread isn't sleeping
         {
@@ -203,7 +206,7 @@ Icon::RequestID Icon::ThreadResource::addRequest(IconRequest request)
 /*
  * Asynchronously handles queued icon requests.
  */
-void Icon::ThreadResource::runLoop(ThreadLock& lock)
+void Icon::ThreadResource::runLoop(SharedResource::Thread::Lock& lock)
 {
     using juce::Image;
     using juce::String;

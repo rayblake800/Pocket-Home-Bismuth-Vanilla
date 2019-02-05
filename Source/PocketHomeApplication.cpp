@@ -1,8 +1,9 @@
 #include "PocketHomeApplication.h"
+#include "PocketHomeWindow.h"
+#include "ShutdownListener.h"
 #include "Audio.h"
 #include "XWindowInterface.h"
 #include "TempTimer.h"
-#include "PocketHomeWindow.h"
 
 /* Milliseconds to wait between window focus attempts: */
 static const constexpr int focusWaitMs = 200;
@@ -82,12 +83,10 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
                 << ": Sound failed to initialize");
     }
     runTests = args.contains("--test");
+    lookAndFeel.reset(new Theme::LookAndFeel);
+    LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
     if(!runTests)
     {
-        dBusThread.reset(new GLib::DBusThreadRunner);
-        wifiManager.reset(new Wifi::Manager);
-        lookAndFeel.reset(new Theme::LookAndFeel);
-        LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
         homeWindow.reset(new PocketHomeWindow(getApplicationName()));
     }
     else
@@ -120,10 +119,8 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
 void PocketHomeApplication::shutdown()
 {
     DBG("PocketHomeApplication::shutdown(): Closing application resources.");
+    ShutdownBroadcaster::broadcastShutdown();
     homeWindow.reset(nullptr);
     juce::LookAndFeel::setDefaultLookAndFeel(nullptr);
     lookAndFeel.reset(nullptr);
-    wifiManager.reset(nullptr);
-    dBusThread.reset(nullptr);
-    DBG("PocketHomeApplication::shutdown(): All resources were destroyed.");
 }

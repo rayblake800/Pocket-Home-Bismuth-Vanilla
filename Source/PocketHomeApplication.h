@@ -5,8 +5,6 @@
 #include "Layout_Component_ConfigFile.h"
 #include "Theme_Colour_ConfigFile.h"
 #include "Theme_Image_ConfigFile.h"
-#include "GLib_DBusThreadRunner.h"
-#include "Wifi_Manager.h"
 
 /**
  * @file PocketHomeApplication.h
@@ -80,12 +78,6 @@ private:
 
     /* These resources are dynamically allocated because they should be created 
      * in the order they are listed here. */
-
-    /* Handles inter-process communication over DBus: */
-    std::unique_ptr<GLib::DBusThreadRunner> dBusThread;
-
-    /* Manages wifi network operations: */
-    std::unique_ptr<Wifi::Manager> wifiManager;
 
     /* The program appearance manager: */
     std::unique_ptr<Theme::LookAndFeel> lookAndFeel = nullptr;

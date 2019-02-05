@@ -1,20 +1,19 @@
 #pragma once
 /**
- * @file GLib_ThreadResource.h
+ * @file GLib_SharedThread.h
  * 
  * @brief  Runs a GLib event loop on a shared thread resource. 
  */
 
-#include "SharedResource_ThreadResource.h"
 #include "WindowFocus.h"
-#include "JuceHeader.h"
 #include "GLib_EventLoop.h"
 #include "GLib_ContextCaller.h"
+#include "GLib_SharedContextPtr.h"
+#include "SharedResource_Thread_Thread.h" 
+#include "JuceHeader.h" 
 #include <gio/gio.h>
 
-
-namespace GLib { class ThreadResource; }
-namespace GLib { class SharedContextPtr; }
+namespace GLib { class SharedThread; }
 
 /**
  *  On creation, this starts up a GLib event thread to handle events associated
@@ -23,29 +22,28 @@ namespace GLib { class SharedContextPtr; }
  * getContext method, so that it can be used to add signal sources and signal
  * handlers to this thread.
  * 
- *  GLib::ThreadResource also provides methods for synchronously or 
+ *  GLib::SharedThread also provides methods for synchronously or 
  * asynchronously executing code within the thread. These should be used to 
  * handle all interactions with GLib objects tied to the thread context, unless 
  * those objects are explicitly guaranteed to be thread-safe.
+ *
+ *  SharedThread is an abstract interface, meant to be implemented as a 
+ * SharedResource Resource or Module.
  */
-class GLib::ThreadResource : public SharedResource::ThreadResource,
+class GLib::SharedThread : public SharedResource::Thread::Thread,
     private WindowFocus::Listener
 {
 public:
     /**
      * @brief  Creates the thread with an initial GMainContext.
      *
-     * @param resourceKey  The unique key used to identify the single object
-     *                     instance of a ThreadResource subclass.
+     * @param threadName  The name to give to the object's thread.
      *
-     * @param context      The event context that will be claimed by this 
-     *                     thread. This will be unreferenced when the thread is 
-     *                     destroyed.
+     * @param context     The GLib context the thread should use.
      */
-    ThreadResource(const juce::Identifier& resourceKey, 
-            const SharedContextPtr& context);
+    SharedThread(const juce::String threadName, const SharedContextPtr context);
     
-    virtual ~ThreadResource() { }
+    virtual ~SharedThread() { }
     
     /**
      * @brief  Checks if this is being executed within the event loop.
@@ -99,7 +97,7 @@ public:
      * calling this method. The lock will be unlocked and then relocked
      * as the thread exits.
      */
-    virtual void stopThreadResource() override;
+    virtual void stopResourceThread() override;
 
     /**
      * @brief  Wakes the thread if it is currently waiting, and prevents it from
@@ -109,20 +107,19 @@ public:
 
 protected:
     /**
-     * @brief  Grants the ThreadResource access to its ThreadLock within the
+     * @brief  Grants the SharedThread access to its ThreadLock within the
      *         GLib event loop.
      *
      * @return  The ThreadLock if called within the event loop, nullptr
      *          otherwise.
      */
-    SharedResource::ThreadResource::ThreadLock* getThreadLock();
+    SharedResource::Thread::Lock* getThreadLock();
     
 private:
     /**
      * @brief  Runs the GLib main loop. 
      */
-    virtual void runLoop(SharedResource::ThreadResource::ThreadLock& lock) 
-        override;
+    virtual void runLoop(SharedResource::Thread::Lock& lock) override;
 
     /**
      * @brief  Pauses the event loop whenever window focus is lost.
@@ -148,12 +145,11 @@ private:
 
     /* Used to allow any function running on the thread's EventLoop to access
        its threadLock. */
-    ThreadResource::ThreadLock* threadLock = nullptr;
+    SharedResource::Thread::Lock* threadLock = nullptr;
     
     /* Runs the GLib event loop. */
     EventLoop eventLoop;
 
     /* Executes functions in the event loop. */
     ContextCaller contextCaller;
-
 };
