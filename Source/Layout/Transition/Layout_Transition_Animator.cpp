@@ -112,7 +112,8 @@ private:
 /*
  * Checks if a component is being animated through the default juce Animator.
  */
-bool Layout::Transition::Animator::isAnimating(juce::Component* possiblyAnimating)
+bool Layout::Transition::Animator::isAnimating
+(juce::Component* possiblyAnimating)
 {
     return juce::Desktop::getInstance().getAnimator().isAnimating
         (possiblyAnimating);
@@ -231,7 +232,7 @@ void Layout::Transition::Animator::transitionIn(
         transformBounds(component, destination, animationMilliseconds);
         return;
     }
-    Rectangle<int> windowBounds = getWindowBounds();
+    Rectangle<int> windowBounds = getWindowBounds().withZeroOrigin();
     Rectangle<int> startBounds = destination;
     if(destination.intersects(windowBounds))
     {

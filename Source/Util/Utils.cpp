@@ -184,5 +184,5 @@ juce::Rectangle<int> getWindowBounds()
     {
         return Rectangle<int>();
     }
-    return windowComp->getLocalBounds();
+    return windowComp->getBounds();
 }
