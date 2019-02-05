@@ -47,6 +47,9 @@ syntax on
 set number
 set colorcolumn=81
 
+" Make YcmCompleter use Python2
+let g:ycm_server_python_interpreter="python2"
+
 
 " read custom .vimrc from any folder
 set exrc

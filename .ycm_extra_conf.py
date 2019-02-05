@@ -30,7 +30,7 @@ import ycm_core
 import pkgconfig
 
 flags = [
-'-std=c++14',
+'-std=gnu++14',
 # ...and the same thing goes for the magic -x option which specifies the
 # language that the files to be compiled are written in. This is mostly
 # relevant for c++ headers.
@@ -46,7 +46,12 @@ flags = [
 '-DJUCER_LINUX_MAKE_6D53C8B4=1',
 '-DJUCE_APP_VERSION=0.0.8.10',
 '-DJUCE_APP_VERSION_HEX=0x80a',
-'-pthread',
+'-lcrypto',
+'-ldl',
+'-lpthread',
+'-lrt',
+'-I./JuceLibraryCode',
+'-I./deps/JUCE/modules',
  ]
 
 pkgConfigFlags = [
@@ -66,7 +71,9 @@ for pflag in pkgConfigFlags:
   for f in flagList:
     flags.append(f)
 
-for dirname, subdirList, fileList in os.walk('.'):
+for dirname, subdirList, fileList in os.walk('./Source'):
+  flags.append('-I'+dirname)
+for dirname, subdirList, fileList in os.walk('./Tests'):
   flags.append('-I'+dirname)
 
 def DirectoryOfThisScript():
