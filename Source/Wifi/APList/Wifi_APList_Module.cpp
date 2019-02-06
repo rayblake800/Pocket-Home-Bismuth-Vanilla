@@ -31,7 +31,7 @@ static const constexpr char* dbgPrefix = "Wifi::APList::Module::";
  */
 void printAPList()
 {
-    DBG(dbgPrefix << __func__ << ": " << wifiAccessPoints.size()
+    DBG(dbgPrefix << __func__ << ": " << (int) wifiAccessPoints.size()
             << " access points found.");
     for(auto& iter : wifiAccessPoints)
     {
