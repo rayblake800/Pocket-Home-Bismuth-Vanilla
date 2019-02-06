@@ -66,6 +66,8 @@ TestResource::~TestResource()
     delete moduleC;
 }
 
+namespace SharedResource { namespace Modular {
+
 template<> template<> TestModuleA* 
 SharedResource::Modular::Resource<>::getModule<TestModuleA>()
 {
@@ -108,3 +110,5 @@ SharedResource::Modular::Resource<>::getModule<const TestModuleC>()
     TestResource* thisResource = static_cast<TestResource*>(this);
     return thisResource->moduleC;
 }
+
+} }
