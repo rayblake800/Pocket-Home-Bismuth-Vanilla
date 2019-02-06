@@ -122,6 +122,8 @@ void NMSignal::DeviceHandler::stateChanged(NMDeviceState newState,
         case NM_DEVICE_STATE_SECONDARIES:
         case NM_DEVICE_STATE_NEED_AUTH:
         {
+            DBG(dbgPrefix << __func__
+                    << ": new connection activating, send connecting signal");
             jassert(!lastActiveAP.isNull());
             if(!connectionRecord.isConnecting())
             {
@@ -135,10 +137,14 @@ void NMSignal::DeviceHandler::stateChanged(NMDeviceState newState,
             Wifi::Connection::EventType eventType;
             if(oldState == NM_DEVICE_STATE_DEACTIVATING)
             {
+                DBG(dbgPrefix << __func__
+                        << ": connection disconnected, send disconnect signal");
                 eventType = EventType::disconnected;
             }
             else
             {
+                DBG(dbgPrefix << __func__
+                        << ": connection failed, send failure signal");
                 eventType = EventType::connectionFailed;
             }
             recordWriter.addEventIfNotDuplicate(lastActiveAP, eventType);
@@ -149,10 +155,14 @@ void NMSignal::DeviceHandler::stateChanged(NMDeviceState newState,
         {
             if(reason == NM_DEVICE_STATE_REASON_NO_SECRETS)
             {
+                DBG(dbgPrefix << __func__
+                        << ": missing secrets, sending auth failure signal");
                 recordWriter.addEventIfNotDuplicate(lastActiveAP,
                         EventType::connectionAuthFailed);
                 return;
             }
+            DBG(dbgPrefix << __func__
+                    << ": connection disconnected, send disconnect signal");
             recordWriter.addEventIfNotDuplicate(lastActiveAP,
                     EventType::disconnected);
             break;

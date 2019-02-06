@@ -12,6 +12,11 @@
 #include "Wifi_LibNM_Client.h"
 #include "Wifi_LibNM_ContextTest.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Wifi::Connection::Record::Module::";
+#endif
+
 namespace WifiRecord = Wifi::Connection::Record;
 
 /* Stores all connection events: */
@@ -80,17 +85,7 @@ void WifiRecord::Module::addConnectionEvent(const Event newEvent)
 {
     if(!newEvent.isNull())
     {
-       DBG("Wifi::Connection::Record::Module::" << __func__
-               << ": adding " << newEvent.toString());
-       
-       DBG("Wifi::Connection::Record::Module::" << __func__
-               << ": full list:");
-       int counter = 0;
-       for(Event& event : connectionEvents)
-       {
-           counter++;
-           DBG("Event " << counter << ": " << event.toString());
-       }
+       DBG(dbgPrefix << __func__ << ": adding " << newEvent.toString());
        connectionEvents.addSorted(eventSorter, newEvent);
        foreachHandler<UpdateInterface>([this, &newEvent]
                (UpdateInterface* listener)
@@ -125,7 +120,7 @@ void WifiRecord::Module::addConnectionEvent(const Event newEvent)
  */
 void WifiRecord::Module::addEventIfNotDuplicate(const Event newEvent)
 {
-    if(!newEvent.getEventAP().isNull())
+    if(newEvent.getEventAP().isNull())
     {
         return;
     }
@@ -184,8 +179,8 @@ void WifiRecord::Module::updateRecords()
 
         Event initialEvent(activeAP, isConnecting ?
                 EventType::startedConnecting : EventType::connected);
-        DBG("Wifi::Connection::Record::Module::" << __func__
-                << ": Initial event:" << initialEvent.toString());
+        DBG(dbgPrefix << __func__ << ": Initial event:"
+                << initialEvent.toString());
         addConnectionEvent(initialEvent);
     });
 }
