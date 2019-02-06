@@ -21,11 +21,13 @@ GVariant* GLib::VariantConverter::unpack(GVariant* container)
     return nullptr;
 }
 
+namespace GLib { namespace VariantConverter {
+
 /*
  * Extracts the value from a GVariant object as a specific type.  Supported
  * types are bool, guint32, String, StringArray, GArray*, and GByteArray*.
  */
-template<> bool GLib::VariantConverter::getValue(GVariant* variant)
+template<> bool getValue(GVariant* variant)
 {
     if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_BOOLEAN))
     {
@@ -35,7 +37,7 @@ template<> bool GLib::VariantConverter::getValue(GVariant* variant)
     return g_variant_get_boolean(variant);
 }
 
-template<> guint32 GLib::VariantConverter::getValue(GVariant* variant)
+template<> guint32 getValue(GVariant* variant)
 {
     if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_UINT32))
     {
@@ -45,7 +47,7 @@ template<> guint32 GLib::VariantConverter::getValue(GVariant* variant)
     return g_variant_get_int32(variant);
 }
 
-template<> const char* GLib::VariantConverter::getValue(GVariant* variant)
+template<> const char* getValue(GVariant* variant)
 {
     if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_STRING))
     {
@@ -55,7 +57,7 @@ template<> const char* GLib::VariantConverter::getValue(GVariant* variant)
     return g_variant_get_string(variant, nullptr);
 }
 
-template<> juce::String GLib::VariantConverter::getValue(GVariant* variant)
+template<> juce::String getValue(GVariant* variant)
 {
     if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_STRING))
     {
@@ -65,7 +67,7 @@ template<> juce::String GLib::VariantConverter::getValue(GVariant* variant)
     return g_variant_get_string(variant, nullptr);
 }
 
-template<> juce::StringArray GLib::VariantConverter::getValue(GVariant* variant)
+template<> juce::StringArray getValue(GVariant* variant)
 {
     const gchar ** array = nullptr;
     gsize arraySize = 0;
@@ -92,7 +94,7 @@ template<> juce::StringArray GLib::VariantConverter::getValue(GVariant* variant)
     return varArray;
 }
 
-template<> GArray* GLib::VariantConverter::getValue(GVariant* variant)
+template<> GArray* getValue(GVariant* variant)
 {
     if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_ARRAY))
     {
@@ -114,7 +116,7 @@ template<> GArray* GLib::VariantConverter::getValue(GVariant* variant)
     return arrayValue;
 }
 
-template<> GByteArray* GLib::VariantConverter::getValue(GVariant* variant)
+template<> GByteArray* getValue(GVariant* variant)
 {
     GByteArray* array = g_byte_array_new();
     gsize numBytes = 0;
@@ -124,7 +126,7 @@ template<> GByteArray* GLib::VariantConverter::getValue(GVariant* variant)
     return array;
 }
 
-template<> juce::uint64 GLib::VariantConverter::getValue(GVariant* variant)
+template<> juce::uint64 getValue(GVariant* variant)
 {
      if (!g_variant_is_of_type(variant, G_VARIANT_TYPE_UINT64))
     {
@@ -138,22 +140,22 @@ template<> juce::uint64 GLib::VariantConverter::getValue(GVariant* variant)
  * Packages a variable into a GVariant* object.  Supported types are bool,
  * guint32, String, and StringArray.
  */
-template<> GVariant* GLib::VariantConverter::getVariant(bool value)
+template<> GVariant* getVariant(bool value)
 {
     return g_variant_new_boolean(value);
 }
 
-template<> GVariant* GLib::VariantConverter::getVariant(guint32 value)
+template<> GVariant* getVariant(guint32 value)
 {
     return g_variant_new_uint32(value);
 }
 
-template<> GVariant* GLib::VariantConverter::getVariant(juce::String value)
+template<> GVariant* getVariant(juce::String value)
 {
     return g_variant_new_string(value.toRawUTF8());
 }
 
-template<> GVariant* GLib::VariantConverter::getVariant(juce::StringArray value)
+template<> GVariant* getVariant(juce::StringArray value)
 {
     const char ** array = new (std::nothrow) const char*[value.size()];
     if (array == nullptr)
@@ -170,6 +172,8 @@ template<> GVariant* GLib::VariantConverter::getVariant(juce::StringArray value)
     delete[] array;
     return varArray;
 }
+
+} }
 
 /*
  * Gets the VariantType enum value that best describes a variant.
