@@ -85,6 +85,11 @@ Wifi::Resource::~Resource()
 }
 
 /*###############  Module access method specializations:  ####################*/
+
+/* Older compiler versions will not allow template specializations outside of
+   the original namespace. */
+namespace SharedResource { namespace Modular {
+
 template<> template<> Wifi::LibNM::Thread::Module*
 SharedResource::Modular::Resource<>::getModule<Wifi::LibNM::Thread::Module>()
 {
@@ -163,3 +168,5 @@ SharedResource::Modular::Resource<>::getModule<const Wifi::APList::Module>()
 {
     return apList.get();
 }
+
+} } // Close SharedResource::Modular namespace
