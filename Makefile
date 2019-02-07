@@ -23,6 +23,14 @@
 ##	                                                                          ##
 ## V=1	                 Enable verbose build output.                         ##
 ##	                                                                          ##
+## OPTIMIZE=1            Set to 1 to enable full optimization, or 0 to        ##
+##	                     disable all optimization, overriding the behavior    ##
+##	                     selected by the CONFIG option.                       ##
+##	                                                                          ##
+## GDB_SUPPORT=1         Set to 1 to compile with gdb debugging symbols, or 0 ##
+##	                     to disable debugging symbols. This will also         ##
+##	                     override the behavior selected by the CONFIG option. ##
+##	                                                                          ##
 ################################################################################
 ######### Build values: #########
 
@@ -113,19 +121,34 @@ JUCE_OBJDIR := $(JUCE_OBJDIR)/$(CONFIG)
 JUCE_OUTDIR := $(JUCE_OUTDIR)/$(CONFIG)
 
 ifeq ($(CONFIG),Debug)
+    # Disable optimization and enable gdb flags unless otherwise specified:
+    OPTIMIZATION ?= 0
+    GDB_SUPPORT ?= 1
 	# Debug-specific preprocessor definitions:
 	JUCE_CONFIG_FLAGS = -DDEBUG=1 -D_DEBUG=1
-	# Debug-specific compiler flags:
-	CONFIG_CFLAGS  = -g -ggdb -O0 
-	CONFIG_LDFLAGS =
 endif
 
 ifeq ($(CONFIG),Release)
+    # Enable optimization and disable gdb flags unless otherwise specified:
+    OPTIMIZATION ?= 1
+    GDB_SUPPORT ?= 0
 	# Release-specific preprocessor definitions:
 	JUCE_CONFIG_FLAGS = -DNDEBUG=1
-	# Release-specific compiler flags:
-	CONFIG_CFLAGS  = -O3 -flto
-	CONFIG_LDFLAGS =-fvisibility=hidden -flto
+endif
+
+# Set optimization level flags:
+ifeq ($(OPTIMIZATION), 1)
+    CONFIG_CFLAGS := $(CONFIG_CFLAGS) -O3 -flto
+    CONFIG_LDFLAGS := $(CONFIG_LDFLAGS) -flto
+else
+    CONFIG_CFLAGS := $(CONFIG_CFLAGS) -O0
+endif
+
+# Set debugging flags:
+ifeq ($(GDB_SUPPORT), 1)
+    CONFIG_CFLAGS := $(CONFIG_CFLAGS) -g -ggdb
+else
+    CONFIG_LDFLAGS := $(CONFIG_LDFLAGS) -fvisibility=hidden
 endif
   
 JUCE_CPPFLAGS := $(DEPFLAGS) \
