@@ -94,7 +94,9 @@ WifiAPList::Module::getAccessPoint(LibNM::APHash apHash) const
         DBG(dbgPrefix << __func__ << ": Failed to find hash value \""
                 << apHash.toString() << "\"");
         DBG(dbgPrefix << __func__ << ": Full access point list:");
+#ifdef JUCE_DEBUG
         printAPList();
+#endif
         return Wifi::AccessPoint();
     }
 }
