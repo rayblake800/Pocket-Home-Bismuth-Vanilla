@@ -2,12 +2,19 @@
 #include "AppMenu_FolderComponent.h"
 #include "DesktopEntry_Loader.h"
 
+#ifdef JUCE_DEBUG
+/* Print full class name before debug output: */
+static const constexpr char* dbgPrefix = "AppMenu::FolderComponent::";
+#endif
+
 /*
  * Creates a new folder component.
  */
 AppMenu::FolderComponent::FolderComponent(MenuItem folderItem) :
 folderItem(folderItem) 
 {
+    DBG(dbgPrefix << __func__ << ": Creating folder component holding "
+            folderItem.getFolderSize() << " folder items.");
     folderItem.addListener(this);
     setWantsKeyboardFocus(false);
 }
