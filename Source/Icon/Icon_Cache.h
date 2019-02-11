@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file Icon_Cache.h
+ * @file  Icon_Cache.h
  * 
  * @brief  Reads GTK icon cache files to quickly find icon files.
  */
@@ -32,6 +32,9 @@ public:
      */
     Cache() { }
     
+    /**
+     * @brief  Closes the cache file on destruction.
+     */
     virtual ~Cache();
 
     /**
@@ -42,20 +45,6 @@ public:
      * @return  Whether the object maps a valid cache file.
      */
     bool isValidCache() const;
-    
-    //icon flags
-    /*
-     * According to the documentation, these are the correct flag values.
-     * However, they always provide incorrect results.
-     *  static const constexpr uint16 pngExtensionFlag = 1;
-     *  static const constexpr uint16 xpmExtensionFlag = 2;
-     *  static const constexpr uint16 svgExtensionFlag = 4;
-     * These values actually work:
-     */
-    static const constexpr juce::uint16 xpmExtensionFlag = 1;
-    static const constexpr juce::uint16 svgExtensionFlag = 2;
-    static const constexpr juce::uint16 pngExtensionFlag = 4;
-
     
     /**
      * @brief  Looks up an icon's data in the icon cache.
@@ -120,29 +109,27 @@ private:
      */
     juce::String readString(juce::uint32 offset) const;
     
-    /* Filename shared by all icon cache files: */
-    static const constexpr char* cacheFileName = "/icon-theme.cache";
     
-    /* file descriptor needed to map the cache file to memory: */
+    /* File descriptor needed to map the cache file to memory: */
     int fd = -1;
     
-    //pointer to the memory-mapped cache file data
+    /* Pointer to the memory-mapped cache file data: */
     void* fileMap = MAP_FAILED;
     
-    //length of the cache file in bytes
+    /* Length of the cache file in bytes: */
     juce::int64 fileLen = 0;
     
-    //number of hash values used to store icon data
+    /* Number of hash buckets used to store hashed icon data in the file: */
     juce::uint32 hashBuckets = 0;
     
-    //all icon directory sub-paths within the icon theme directory
+    /* All icon directory sub-paths within the icon theme directory: */
     juce::Array<juce::String> directories;
     
-    //the index of each hash bucket within the icon file
+    /* The index of each hash bucket within the cache file: */
     juce::Array<juce::uint32> hashOffsets;
     
-    //stores if the system byte order is big-Endian.  If this value is false,
-    //numbers read from the cache file will need to be converted from network to
-    //host order.
+    /* Whether the system byte order is big-Endian. If this value is false,
+       numbers read from the cache file will need to be converted from network 
+       to host order. */
     bool bigEndian = false;
 };

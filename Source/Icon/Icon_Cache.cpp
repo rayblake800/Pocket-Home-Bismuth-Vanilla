@@ -1,6 +1,29 @@
+#include "Icon_Cache.h"
 #include <fcntl.h>
 #include <unistd.h>
-#include "Icon_Cache.h"
+
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Icon::Cache::";
+#endif
+
+/* Filename shared by all icon cache files: */
+static const constexpr char* cacheFileName = "/icon-theme.cache";
+
+/*
+ * Icon file extension flags:
+ *
+ * According to the documentation, these are the correct flag values:
+ *  pngExtensionFlag = 1;
+ *  xpmExtensionFlag = 2;
+ *  svgExtensionFlag = 4;
+ *
+ * However, they always provide incorrect results.
+ * These values actually work:
+ */
+static const constexpr juce::uint16 xpmExtensionFlag = 1;
+static const constexpr juce::uint16 svgExtensionFlag = 2;
+static const constexpr juce::uint16 pngExtensionFlag = 4;
 
 /*
  * Maps an icon cache file to memory.
@@ -14,14 +37,16 @@ Icon::Cache::Cache(const juce::String& themePath)
     File cacheFile(cachePath);
     if (!cacheFile.existsAsFile())
     {
-        DBG("Icon::Cache::Cache: Failed to find cache file " << cachePath);
+        DBG(dbgPrefix << __func__ << ": Failed to find cache file " 
+                << cachePath);
         return;
     }
     
     fileLen = cacheFile.getSize();
     if (fileLen <= 0)
     {
-        DBG("Icon::Cache::Cache: Cache file is empty, path = " << cachePath);
+        DBG(dbgPrefix << __func__ << ": Cache file is empty, path = " 
+                << cachePath);
         return;
     }
     
@@ -29,27 +54,26 @@ Icon::Cache::Cache(const juce::String& themePath)
         cacheFile.getParentDirectory().getLastModificationTime()
         .toMilliseconds())
     {
-        //DBG("Icon::Cache::Cache: Cache file is out of date, path = "
-        //        << cachePath);
+        DBG(dbgPrefix << __func__ << ": Cache file is out of date, path = "
+                << cachePath);
         return;
     }
     
     fd = open(cachePath.toRawUTF8(), O_RDONLY, 0);
     if (fd <= 0)
     {
-        DBG("Icon::Cache::Cache: Failed to open cache file " << cachePath);
+        DBG(dbgPrefix << __func__ << ": Failed to open cache file, path = " 
+                << cachePath);
         return;
     }
     fileMap = mmap(nullptr, fileLen, PROT_READ, MAP_PRIVATE | MAP_POPULATE,
             fd, 0);
     if (fileMap == MAP_FAILED)
     {
-        DBG("Icon::Cache::Cache: Failed to map cache file " << cachePath);
+        DBG(dbgPrefix << __func__ << ": Failed to map cache file, path = " 
+                << cachePath);
         return;
     }
-    
-    //DBG("Icon::Cache::Cache: mapped cache file " << cachePath << ", size "
-    //        << String(fileLen));
 
     /*
      * Quick method for determining local byte order from 
@@ -64,10 +88,8 @@ Icon::Cache::Cache(const juce::String& themePath)
     uint32 hashOffset = read32(4);
     uint32 dirListOffset = read32(8);
 
+    /* Read in the list of directory names: */
     uint32 numDirs = read32(dirListOffset);
-    //DBG("Icon::Cache::Cache reading " << String(numDirs) 
-    //        << " directory names from offset " 
-    //        << String::toHexString(dirListOffset));
     dirListOffset += 4;
     for (int i = 0; i < numDirs; i++)
     {
@@ -76,16 +98,19 @@ Icon::Cache::Cache(const juce::String& themePath)
         directories.add(dirPath);
     }
 
+    /* Read in the list of hash bucket offsets: */
     hashBuckets = read32(hashOffset);
     hashOffset += 4;
-    //DBG("Icon::Cache::Cache reading " << String(hashBuckets) 
-    //        << " hash bucket offsets");
     for (int i = 0; i < hashBuckets; i++)
     {
         hashOffsets.add(read32(hashOffset + i * 4));
     }
 }
 
+    
+/*
+ * Closes the cache file on destruction.
+ */
 Icon::Cache::~Cache()
 {
     if (fileMap != MAP_FAILED)
@@ -117,7 +142,8 @@ bool Icon::Cache::isValidCache() const
 std::map<juce::String,juce::String> Icon::Cache::lookupIcon
 (const juce::String& iconName) const
 {
-    using namespace juce;
+    using juce::String;
+    using juce::uint32;
     std::map<String, String>  matches;
     if(!isValidCache())
     {
@@ -138,26 +164,30 @@ std::map<juce::String,juce::String> Icon::Cache::lookupIcon
                  img < (imageOffset + numImg * 8);
                  img += 8)
             {
-                uint16 iconFlags = read16(img + 2);
+                juce::uint16 iconFlags = read16(img + 2);
                 String extension;
                 if((iconFlags & pngExtensionFlag) == pngExtensionFlag)
                 {
                     extension = ".png";
                 }
-                //TODO: add support for the xpm file format
+                
+                // .xpm and .svg icons should eventually be supported:
                 /*
+                //TODO: add support for the xpm file format
                 else if((iconFlags & xpmExtensionFlag) == xpmExtensionFlag)
                 {
                     extension = ".xpm";
                 }
                 
-                //svg image loading tends to fail on icon files, so don't select
-                //svg icons automatically
+                // svg image loading fails with some svg files, so don't select
+                // svg icons automatically.
+                //TODO: fix svg rendering issues
                 else if((iconFlags & svgExtensionFlag) == svgExtensionFlag)
                 {
                     extension = ".svg";
                 }
                 */
+
                 if(extension.isNotEmpty())
                 {
                    matches[directories[read16(img)]] = extension;
@@ -174,13 +204,12 @@ std::map<juce::String,juce::String> Icon::Cache::lookupIcon
  */
 juce::uint32 Icon::Cache::hashValue(const char* icon) const
 {
-    using namespace juce;
     if (icon == nullptr)
     {
         jassertfalse;
         return 0;
     }
-    uint32 val = (int) * icon;
+    juce::uint32 val = (int) * icon;
     for (const char* ch = icon + 1; *ch != '\0'; ch++)
     {
         val = (val << 5) - val + *ch;
@@ -195,7 +224,7 @@ juce::uint32 Icon::Cache::hashValue(const char* icon) const
  */
 juce::uint16 Icon::Cache::read16(juce::uint32 offset) const
 {
-    using namespace juce;
+    using juce::uint16;
     if(fileMap == MAP_FAILED || (offset + sizeof(uint16)) > fileLen
        || (offset + sizeof(uint16)) < offset)
     {
@@ -214,7 +243,7 @@ juce::uint16 Icon::Cache::read16(juce::uint32 offset) const
  */
 juce::uint32 Icon::Cache::read32(juce::uint32 offset) const
 {
-    using namespace juce;
+    using juce::uint32;
     if(fileMap == MAP_FAILED || (offset + sizeof(uint32)) > fileLen
        || (offset + sizeof(uint32)) < offset)
     {
@@ -233,7 +262,8 @@ juce::uint32 Icon::Cache::read32(juce::uint32 offset) const
  */
 juce::String Icon::Cache::readString(juce::uint32 offset) const
 {
-    using namespace juce;
+    using juce::String;
+    using juce::CharPointer_UTF8;
     if (fileMap == MAP_FAILED || offset >= fileLen)
     {
         jassertfalse;

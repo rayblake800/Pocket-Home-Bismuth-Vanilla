@@ -1,6 +1,11 @@
 #include "Icon_ThemeIndex.h"
 #include <limits>
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Icon::ThemeIndex::";
+#endif
+
 /* Filename shared by all icon theme indexes: */
 static const constexpr char* indexFileName = "/index.theme";
 
@@ -18,7 +23,8 @@ cacheFile(themeDir.getFullPathName())
     using std::map;
     if (!themeDir.isDirectory())
     {
-        //DBG("Icon::ThemeIndex::ThemeIndex:: Theme directory does not exist!");
+        DBG(dbgPrefix << __func__ << ": Theme directory \""
+                << themeDir.getFullPathName() << "\" does not exist.");
         path = String();
         return;
     }
@@ -26,7 +32,8 @@ cacheFile(themeDir.getFullPathName())
     File themeIndex(themeDir.getFullPathName() + indexFileName);
     if (!themeIndex.existsAsFile())
     {
-        //DBG("Icon::ThemeIndex::ThemeIndex:: Theme index does not exist!");
+        DBG(dbgPrefix << __func__ << ": Theme directory \""
+                << themeDir.getFullPathName() << "\" has no index file.");
         path = String();
         return;
     }
@@ -171,8 +178,6 @@ cacheFile(themeDir.getFullPathName())
         if (line.startsWithChar('[') && line.endsWithChar(']'))
         {
             sectionName = line.substring(1, line.length() - 1);
-            //jassert(sectionName == "Icon Theme"
-            //        || directories[sectionName].path == sectionName);
         }
         else if (line.isNotEmpty())
         {
@@ -227,8 +232,16 @@ juce::String Icon::ThemeIndex::lookupIcon
             }
             catch(std::out_of_range e)
             {
-                //DBG("Icon::ThemeIndex::" << __func__ << ": directory "
-                //        << it->first << " in cache is missing from index!");
+                /* A directory referenced in the theme's icon cache file wasn't 
+                 * defined in the theme's index file, add it as an undefined
+                 * IconDirectory. */
+                DBG(dbgPrefix << __func__ << ": Cached directory \""
+                        << it->first << "\" is not present in the index file, "
+                        << "adding it as an undefined IconDirectory.");
+                IconDirectory undefinedDir;
+                undefinedDir.path = it->first;
+                undefinedDir.undefined = true;
+                searchDirs.add(undefinedDir);
             }
         }
     }
@@ -239,6 +252,7 @@ juce::String Icon::ThemeIndex::lookupIcon
     }
     else
     {
+        // Cache is invalid, so we'll need to search all possible directories.
         for (auto dirIter = directories.begin(); dirIter != directories.end();
              dirIter++)
         {
@@ -265,12 +279,14 @@ juce::String Icon::ThemeIndex::lookupIcon
             }
             else
             {
-                DBG("Bad cache result:" << filePath << extension);
+                DBG(dbgPrefix << __func__ << ": Cached file is missing:" 
+                        << filePath << extension);
             }
         }
         catch (std::out_of_range e)
         {
-            //file extensions not found, continue on to check all possibilities
+            // File extensions not found, continue on to check all possible
+            // extensions:
         }
         //TODO: add support for the .xpm file extension, fix svg render issues
         //static const StringArray extensions = {".png", ".svg", ".xpm"};
@@ -284,8 +300,6 @@ juce::String Icon::ThemeIndex::lookupIcon
             }
         //}
     }
-    //DBG("Icon::ThemeIndex::" << __func__ << ": No matches for " << icon
-    //        << " in theme directory at " << path);
     return String();
 }
 
@@ -336,6 +350,17 @@ juce::String Icon::ThemeIndex::getExampleIcon() const
 int Icon::ThemeIndex::DirectoryComparator::compareElements
 (IconDirectory first, IconDirectory second)
 {
+    // Always prioritize directories that were properly defined in the index 
+    // file: 
+    if(first.undefined)
+    {
+        return second.undefined ? 0 : 1;
+    }
+    else if(second.undefined)
+    {
+        return -1;
+    }
+
     bool firstMatches = directoryMatchesSize(first);
     bool secondMatches = directoryMatchesSize(second);
 
@@ -373,8 +398,6 @@ bool Icon::ThemeIndex::DirectoryComparator::directoryMatchesSize
         case SizeType::threshold:
             return abs(size - subdir.size) < subdir.threshold;
     }
-    //DBG("ThemeIndex::DirectoryComparator::" << __func__ 
-    //        << ": Missing directory type!");
     return false;
 }
 
@@ -412,7 +435,5 @@ int Icon::ThemeIndex::DirectoryComparator::directorySizeDistance
             }
             return 0;
     }
-    //DBG("Icon::ThemeIndex::DirectoryComparator::" << __func__ 
-    //        << ": Missing directory type!");
     return 0;
 }

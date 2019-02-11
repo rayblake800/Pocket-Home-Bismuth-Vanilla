@@ -3,6 +3,11 @@
 #include "XDGDirectories.h"
 #include "Utils.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Icon::ThreadResource::";
+#endif
+
 /* SharedResource object instance key: */
 const juce::Identifier Icon::ThreadResource::resourceKey 
         = "Icon_ThreadResource";
@@ -90,8 +95,6 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
        or fallback themes: */
     for(int i = 0; i < themeNames.size(); i++)
     {
-        //DBG("Icon::ThreadResource::ThreadResource: Finding icon theme " 
-        //      << themeNames[i]);
         for(const String& dir : iconDirectories)
         {
             File themeDir(dir + (dir.endsWithChar('/') ? "" : "/") 
@@ -101,10 +104,6 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
                 iconThemes.add(new ThemeIndex(themeDir));
                 if(iconThemes.getLast()->isValidTheme())
                 {
-                    //DBG("Icon::ThreadResource::ThreadResource"
-                    //      << ": Theme directory " << iconThemes.size() 
-                    //      << " added with path "
-                    //      << themeDir.getFullPathName());
                     StringArray inherited = iconThemes.getLast()
                             ->getInheritedThemes();
                     int insertParentIdx = i + 1;
@@ -120,9 +119,6 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
                 }
                 else
                 {
-                    //DBG("Icon::ThreadResource::ThreadResource: "
-                    //      << "Invalid theme directory "
-                    //      << themeDir.getFullPathName());
                     iconThemes.removeLast();
                 }
             }
@@ -132,7 +128,7 @@ defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
 
 Icon::ThreadResource::~ThreadResource()
 {
-    imageCache.clear();
+    loadedImageCache.clear();
 }
 
 /*
@@ -150,12 +146,13 @@ Icon::RequestID Icon::ThreadResource::addRequest(IconRequest request)
 {
     using std::function;
     using juce::Image;
+
     /* Ignore requests without valid callbacks. */
     if(!request.loadingCallback)
     {
         return 0;
     }
-    /* First, attempt to load the icon from assets or the image cache. */
+    /* First, attempt to load the icon from  the loaded image cache or assets. */
     Image preLoadedIcon;
     if(request.icon[0] == '/')
     {
@@ -169,9 +166,9 @@ Icon::RequestID Icon::ThreadResource::addRequest(IconRequest request)
             request.icon = request.icon.substring
                 (1 + request.icon.lastIndexOf("/"));
         }
-        if(imageCache.contains(request.icon))
+        if(loadedImageCache.contains(request.icon))
         {
-            preLoadedIcon = imageCache[request.icon];
+            preLoadedIcon = loadedImageCache[request.icon];
             jassert(preLoadedIcon.isValid());
         }
     }
@@ -182,8 +179,16 @@ Icon::RequestID Icon::ThreadResource::addRequest(IconRequest request)
     }
     else
     {
-        //assign the default icon for now
+        // Assign the default icon for now:
         request.loadingCallback(defaultIcon);
+
+        /* Send the request to the icon loading thread, unless it has tried and
+         * failed to find this icon in the past: */
+        if(missingIcons.contains(request.icon))
+        {
+            return 0;
+        }
+
         static RequestID newID = 0;
         while(newID == 0 || requestMap.count(newID) != 0)
         {
@@ -223,13 +228,13 @@ void Icon::ThreadResource::runLoop(SharedResource::Thread::Lock& lock)
         Image iconImg = AssetFiles::loadImageAsset(iconPath);
         if(iconImg.isNull())
         {
-            DBG("IconThread::" << __func__ << ": Unable to load icon "
+            DBG(dbgPrefix << __func__ << ": Unable to load icon "
                     << icon);
             return;
         }
 
         lock.enterWrite();
-        imageCache.set(icon, iconImg);
+        loadedImageCache.set(icon, iconImg);
         lock.exitWrite();
 
         // If callback wasn't removed, lock the message thread, check again that
@@ -255,6 +260,7 @@ void Icon::ThreadResource::runLoop(SharedResource::Thread::Lock& lock)
     {
         // Couldn't find the icon, remove the request
         lock.enterWrite();
+        missingIcons.add(firstRequest.icon);
         requestMap.erase(requestID);
         lock.exitWrite();
     }
@@ -275,6 +281,13 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
 {
     using juce::String;
     using juce::File;
+
+    /* Don't waste time searching for icons that weren't found before: */
+    if(missingIcons.contains(request.icon))
+    {
+        return String();
+    }
+
     /* First, search themes in order to find a matching icon: */
     for(const ThemeIndex* themeIndex : iconThemes)
     {

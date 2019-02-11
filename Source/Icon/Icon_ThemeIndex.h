@@ -1,8 +1,8 @@
 #pragma once
 /**
- * @file Icon_ThemeIndex.h
+ * @file  Icon_ThemeIndex.h
  * 
- * @brief Holds icon data for a particular display theme.
+ * @brief  Indexes icon directory data for a particular display theme.
  */
 
 #include "Icon_Cache.h"
@@ -13,8 +13,8 @@
 namespace Icon { class ThemeIndex; }
 
 /**
- *  The theme index stores theme data, tracks all theme icon directories, and 
- * finds icon paths within the icon theme.
+ * @brief  Stores theme data, tracks all theme icon directories, and finds icon 
+ *         paths within the icon theme.
  * 
  * For more information on icon theme specifications, see 
  * https://specifications.freedesktop.org/icon-theme-spec/icon-theme-spec-latest.html
@@ -136,6 +136,11 @@ private:
         int maxSize = -1;
         int minSize = -1;
         int threshold = 2;
+
+        /* An undefined IconDirectory was listed in the icon cache, but not
+         * found in the theme's index file. IconDirectories listed in the index
+         * file will always be preferred over undefined directories. */
+        bool undefined = false;
     };
     
     /**
@@ -217,9 +222,6 @@ private:
     juce::String example;
     /* Accesses the theme's cache file, if one exists: */
     Cache cacheFile;
-    
     /* All icon sub-directories in the theme, indexed by relative path name: */
     std::map<juce::String, IconDirectory> directories;
-    
-    
 };

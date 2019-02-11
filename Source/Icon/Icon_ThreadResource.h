@@ -111,7 +111,11 @@ private:
 
     /* Stores loaded icon names mapped to image objects to avoid having to
        repeatedly load icons: */
-    juce::HashMap<juce::String, juce::Image> imageCache;
+    juce::HashMap<juce::String, juce::Image> loadedImageCache;
+
+    /* Store the names of icons that couldn't be found, to avoid wasting time
+       searching for them more than once: */
+    juce::StringArray missingIcons;
 
     /* Default icon */
     juce::Image defaultIcon;
