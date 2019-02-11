@@ -2,7 +2,6 @@
 #include "AppMenu_MenuComponent.h"
 #include "Layout_Transition_Animator.h"
 #include "Utils.h"
-#include "ScopeTimer.h"
 
 /*
  * Gets the MenuItem for the current active folder component.
@@ -18,13 +17,12 @@ AppMenu::MenuItem AppMenu::MenuComponent::getActiveFolder() const
  */
 void AppMenu::MenuComponent::openFolder(MenuItem folderItem)
 {
-    ScopeTimer scopeTimer("AppMenu::MenuComponent::openFolder");
     FolderComponent* newFolder = createFolderComponent(folderItem);
     newFolder->initMenuItems();
     openFolders.add(newFolder);
     addAndMakeVisible(newFolder);
     newFolder->setBounds(initialFolderBounds(openFolders.size() - 1));
-    newFolder->updateButtonLayout();
+    //newFolder->updateButtonLayout();
     updateMenuLayout();
 }
 
@@ -41,7 +39,6 @@ int AppMenu::MenuComponent::openFolderCount() const
  */
 void AppMenu::MenuComponent::closeActiveFolder()
 {
-    ScopeTimer scopeTimer("AppMenu::MenuComponent::closeActiveFolder");
     if(openFolders.size() > 1)
     {
         updateMenuLayout(true, true);
@@ -55,7 +52,6 @@ void AppMenu::MenuComponent::closeActiveFolder()
  */
 void AppMenu::MenuComponent::updateMenuLayout(const bool animate)
 {
-    ScopeTimer scopeTimer("AppMenu::MenuComponent::updateMenuLayout");
     updateMenuLayout(animate, false); 
 }
 
@@ -113,7 +109,6 @@ void AppMenu::MenuComponent::removeEditor()
 void AppMenu::MenuComponent::updateMenuLayout
 (const bool animate, const bool closingFolder)
 {
-    ScopeTimer scopeTimer("AppMenu::MenuComponent::updateMenuLayout");
     using juce::Rectangle;
     layoutUpdateStarting(closingFolder);
     for(int i = 0; i < openFolders.size(); i++)
@@ -145,7 +140,6 @@ void AppMenu::MenuComponent::updateMenuLayout
  */
 void AppMenu::MenuComponent::resized()
 {
-    ScopeTimer scopeTimer("AppMenu::MenuComponent::resized");
     // Don't animate the change the first time the MenuComponent's bounds are
     // set.
     updateMenuLayout(!openFolders.getLast()->getBounds().isEmpty());

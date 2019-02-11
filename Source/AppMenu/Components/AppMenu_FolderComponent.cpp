@@ -1,7 +1,6 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_FolderComponent.h"
 #include "DesktopEntry_Loader.h"
-#include "ScopeTimer.h"
 
 #ifdef JUCE_DEBUG
 /* Print full class name before debug output: */
@@ -14,7 +13,6 @@ static const constexpr char* dbgPrefix = "AppMenu::FolderComponent::";
 AppMenu::FolderComponent::FolderComponent(MenuItem folderItem) :
 folderItem(folderItem) 
 {
-    ScopeTimer t("AppMenu::FolderComponent::FolderComponent");
     DBG(dbgPrefix << __func__ << ": Creating folder component holding "
             << folderItem.getFolderSize() << " folder items.");
     folderItem.addListener(this);
@@ -27,7 +25,6 @@ folderItem(folderItem)
  */
 void AppMenu::FolderComponent::initMenuItems()
 {
-    ScopeTimer t("AppMenu::FolderComponent::initMenuItems");
     const int itemCount = folderItem.getFolderSize();
     for(int i = 0; i < itemCount; i++)
     {
@@ -81,7 +78,6 @@ int AppMenu::FolderComponent::getSelectedIndex() const
  */
 void AppMenu::FolderComponent::setSelectedIndex(const int newSelection)
 {
-    ScopeTimer t("AppMenu::FolderComponent::setSelectedIndex");
     if(selectedIndex == newSelection)
     {
         return;
@@ -189,6 +185,5 @@ void AppMenu::FolderComponent::childrenSwapped
  */
 void AppMenu::FolderComponent::resized()
 {
-    ScopeTimer t("AppMenu::FolderComponent::resized");
     updateButtonLayout();
 }

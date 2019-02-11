@@ -2,7 +2,6 @@
 #include "AppMenu_MenuButton.h"
 #include "Layout_Component_ConfigFile.h"
 #include "AssetFiles.h"
-#include "ScopeTimer.h"
 
 /* Extra characters applied when calculating title width, defining title padding
    space relative to the font size. */
@@ -134,7 +133,6 @@ void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
  */
 void AppMenu::MenuButton::loadIcon()
 {
-    ScopeTimer("AppMenu::MenuButton::loadIcon");
     using juce::Image;
     if(!iconBounds.isEmpty() && !iconCallbackID)
     {
@@ -159,7 +157,6 @@ void AppMenu::MenuButton::loadIcon()
  */
 void AppMenu::MenuButton::resized()
 {
-    ScopeTimer("AppMenu::MenuButton::resized");
     menuButtonResized();
     updateTitleBounds();
     updateIconBounds();
