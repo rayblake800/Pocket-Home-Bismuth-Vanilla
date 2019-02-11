@@ -2,6 +2,7 @@
 #include "AppMenu_Paged_FolderComponent.h"
 #include "AppMenu_Paged_MenuButton.h"
 #include "AppMenu_ConfigFile.h"
+#include "ScopeTimer.h"
 
 /* Amount of empty space to leave on the left and right sides of each folder
    page, as a fraction of the page's width. */
@@ -67,6 +68,7 @@ AppMenu::MenuButton* AppMenu::Paged::FolderComponent::createMenuButton
  */
 void AppMenu::Paged::FolderComponent::updateButtonLayout()
 {
+    ScopeTimer scopeTimer("AppMenu::Paged::FolderComponent::updateButtonLayout");
     ConfigFile formatConfig;
     const int numPages    = getNumFolderPages();
     const int pageColumns = formatConfig.getPagedMenuColumns();
