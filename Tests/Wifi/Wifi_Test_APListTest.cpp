@@ -1,3 +1,9 @@
+/**
+ * @file  Wifi_Test_APListTest.h
+ *
+ * @brief  Tests the Wifi resource module's APList submodule.
+ */
+
 #define WIFI_IMPLEMENTATION
 #include "JuceHeader.h"
 #include "Wifi_APList_Reader.h"
@@ -8,15 +14,16 @@
 #include "Wifi_LibNM_AccessPoint.h"
 #include "SharedResource_Handler.h"
 
-class APListTest : public juce::UnitTest
+namespace Wifi { namespace Test { class APListTest; } }
+
+class Wifi::Test::APListTest : public juce::UnitTest
 {
 public:
-    APListTest() : juce::UnitTest("Wifi::APListTest Testing",
+    APListTest() : juce::UnitTest("Wifi::APList Testing",
             "Wifi") {}
     
     void runTest() override
     {
-        using namespace Wifi;
         beginTest("APList Reading Test");
         APList::Reader listReader;
         juce::Array<AccessPoint> visibleAPs = listReader.getAccessPoints();
@@ -80,5 +87,5 @@ public:
     }
 };
 
-static APListTest listTest;
+static Wifi::Test::APListTest listTest;
 

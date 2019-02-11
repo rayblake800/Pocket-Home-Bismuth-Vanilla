@@ -1,3 +1,8 @@
+/**
+ * @file  Wifi_Test_ConnectionTest.cpp
+ *
+ * @brief  Tests the Wifi module's ability to control Wifi connections.
+ */
 #define WIFI_IMPLEMENTATION
 #include "Wifi_Connection_Control_Handler.h"
 #include "Wifi_Connection_Record_Reader.h"
@@ -10,21 +15,53 @@
 #include "DelayUtils.h"
 #include "JuceHeader.h"
 
-namespace Test { class Connection; }
-namespace Test { class Listener; }
+namespace Wifi
+{
+    namespace Test
+    {
+        class ConnectionTest;
+        class Listener;
+    }
+}
 
 /* Path to the JSON test data file in the program's assets folder: */
 static const constexpr char* testFilePath = "testing/connectionTest.json";
-/* APHash string identifying a secured, visible AP with a saved connection: */
-static const constexpr char* savedAPHashKey = "Saved connection hash";
-/* APHash string identifying a secured, visible AP with no saved connection: */
-static const constexpr char* unsavedAPHashKey = "Unsaved connection hash";
+
+/* Test data keys: */
+namespace TestKeys
+{
+    namespace FirstSavedAP
+    {
+        static const constexpr char* hash = "First saved connection AP hash";
+        static const constexpr char* badPSK = "First connection invalid PSK";
+        static const constexpr char* goodPSK = "First connection valid PSK";
+    }
+    namespace SecondSavedAP
+    {
+        static const constexpr char* hash = "Second saved connection AP hash";
+        static const constexpr char* badPSK = "Second connection invalid PSK";
+        static const constexpr char* goodPSK = "Second connection valid PSK";
+    }
+    namespace UnsavedAP
+    {
+        static const constexpr char* hash = "Unsaved connection AP hash";
+        static const constexpr char* badPSK = "Unsaved connection invalid PSK";
+    }
+}
+
+/* Holds access point test data: */
+struct APTestData
+{
+    juce::String hashString;
+    juce::String invalidPSK;
+    juce::String validPSK;
+};
 
 /**
  * @brief  Listens for connection events to make sure they appear in the right
  *         time and order.
  */
-class Test::Listener : public Wifi::Connection::Record::Listener
+class Wifi::Test::Listener : public Wifi::Connection::Record::Listener
 {
 private:
     typedef Wifi::Connection::EventType EventType;
@@ -93,32 +130,85 @@ private:
     Wifi::Connection::Event lastEvent;
 };
 
-class Test::Connection : public juce::UnitTest
+class Wifi::Test::ConnectionTest : public juce::UnitTest
 {
 public:
-    Connection() : juce::UnitTest("Wifi::Connection Testing",
+    ConnectionTest() : juce::UnitTest("Wifi::Connection Testing",
             "Wifi") {}
     
     void runTest() override
     {
         using namespace Wifi::Connection;
         using juce::String;
+        
+        /* Read in test data from the test JSON file: */
+        APTestData firstSaved;
+        APTestData secondSaved;
+        APTestData unsaved;
+        try
+        {
+            JSONFile testValues(testFilePath);
+            firstSaved.hashString = testValues.getProperty<String>
+                    (TestKeys::FirstSavedAP::hash);
+            firstSaved.invalidPSK = testValues.getProperty<String>
+                    (TestKeys::FirstSavedAP::badPSK);
+            firstSaved.validPSK = testValues.getProperty<String>
+                    (TestKeys::FirstSavedAP::goodPSK);
+
+            secondSaved.hashString = testValues.getProperty<String>
+                    (TestKeys::SecondSavedAP::hash);
+            secondSaved.invalidPSK = testValues.getProperty<String>
+                    (TestKeys::SecondSavedAP::badPSK);
+            secondSaved.validPSK = testValues.getProperty<String>
+                    (TestKeys::SecondSavedAP::goodPSK);
+
+            unsaved.hashString = testValues.getProperty<String>
+                    (TestKeys::UnsavedAP::hash);
+            unsaved.invalidPSK = testValues.getProperty<String>
+                    (TestKeys::UnsavedAP::badPSK);
+        }
+        catch(JSONFile::FileException e)
+        {
+            logMessage(juce::String("Failed to open and parse test file ")
+                    + e.getFilePath());
+            logMessage(juce::String("This file is not included with this ")
+                    + "project, and must be created as a JSON file defining "
+                    + "valid access point test values as described at the start"
+                    + " of Wifi_Test_Connection_Test.cpp.");
+            jassertfalse;
+            return;
+        }
+        catch(JSONFile::TypeException e)
+        {
+            logMessage(juce::String("Failed to find a test string value with ")
+                    + "key \"" + e.getPropertyKey() + "\"");
+            logMessage(juce::String("Make sure the JSON file at ") 
+                    + testFilePath + " provides valid data at this key.");
+            logMessage("Visible access point values:");
+            Wifi::APList::Reader apListReader;
+            juce::Array<AccessPoint> visibleAPs 
+                    = apListReader.getAccessPoints();
+            for(const AccessPoint& ap : visibleAPs)
+            {
+                logMessage(ap.toString());
+            }
+
+            jassertfalse;
+            return;
+        }
+
         Test::Listener updateListener;
         Control::Handler connectionController;
         Record::Reader recordReader;
         Wifi::APList::Reader apListReader;
         
         beginTest("Valid saved connection control test");
-        JSONFile testValues(testFilePath);
-        String savedHashStr;
-        expectDoesNotThrow(savedHashStr = testValues.getProperty<String>
-                (savedAPHashKey));
-        Wifi::LibNM::APHash savedHash(savedHashStr);
+        Wifi::LibNM::APHash savedHash(firstSaved.hashString);
 
         Wifi::AccessPoint savedAP = apListReader.getAccessPoint(savedHash);
         expect(!savedAP.isNull(), 
-                String("Failed to find saved AP from hash string, check ")
-                + testFilePath);
+                String("Failed to find saved AP from hash string, ensure ")
+                + testFilePath + " provides valid test hash values.");
 
         if(recordReader.isConnected())
         {
@@ -153,5 +243,5 @@ public:
     }
 };
 
-static Test::Connection connectionTest;
+static Wifi::Test::ConnectionTest connectionTest;
 

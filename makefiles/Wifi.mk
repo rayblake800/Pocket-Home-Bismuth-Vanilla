@@ -1,10 +1,7 @@
 ########################### Wifi Module ########################################
-WIFI_PREFIX := Wifi_
-WIFI_TEST_PREFIX = Tests_Wifi_
-WIFI_OBJ := $(JUCE_OBJDIR)/$(WIFI_PREFIX)
-
 WIFI_ROOT = Source/Wifi
-WIFI_TEST_ROOT = Tests/Wifi
+WIFI_PREFIX := Wifi_
+WIFI_OBJ := $(JUCE_OBJDIR)/$(WIFI_PREFIX)
 
 ################ LibNM Submodule ################
 
@@ -150,10 +147,12 @@ OBJECTS_WIFI := \
   $(OBJECTS_WIFI_SIGNAL_HANDLER) \
   $(OBJECTS_WIFI_COMPONENT)
 
-WIFI_TEST_OBJ := $(JUCE_OBJDIR)/$(WIFI_PREFIX)
+WIFI_TEST_ROOT = Tests/Wifi
+WIFI_TEST_PREFIX = $(WIFI_PREFIX)Test_
+WIFI_TEST_OBJ = $(WIFI_OBJ)Test_
 OBJECTS_WIFI_TEST := \
   $(WIFI_TEST_OBJ)APListTest.o \
-  $(WIFI_TEST_OBJ)Connection.o
+  $(WIFI_TEST_OBJ)ConnectionTest.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_WIFI := $(OBJECTS_WIFI) $(OBJECTS_WIFI_TEST)
@@ -266,9 +265,9 @@ $(WIFI_OBJ)StatusIcon.o : \
     $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)StatusIcon.cpp
   
 $(WIFI_TEST_OBJ)APListTest.o : \
-    $(WIFI_TEST_ROOT)/APListTest.cpp
-$(WIFI_TEST_OBJ)Connection.o : \
-    $(WIFI_TEST_ROOT)/Wifi_Connection.cpp
+    $(WIFI_TEST_ROOT)/$(WIFI_TEST_PREFIX)APListTest.cpp
+$(WIFI_TEST_OBJ)ConnectionTest.o : \
+    $(WIFI_TEST_ROOT)/$(WIFI_TEST_PREFIX)ConnectionTest.cpp
 
 $(WIFI_OBJ)Resource.o : \
     $(WIFI_ROOT)/$(WIFI_PREFIX)Resource.cpp
