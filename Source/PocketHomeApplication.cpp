@@ -4,7 +4,6 @@
 #include "Audio.h"
 #include "XWindowInterface.h"
 #include "TempTimer.h"
-#include "ScopeTimer.h"
 #include "ScopeTimerRecords.h"
 
 /* Milliseconds to wait between window focus attempts: */
@@ -61,7 +60,6 @@ static void focusAppWindow()
  */
 void PocketHomeApplication::initialise(const juce::String &commandLine)
 {
-    ScopeTimer initTimer("PocketHomeApplication::initialise");
     using namespace juce;
     using std::cerr;
     StringArray args;
