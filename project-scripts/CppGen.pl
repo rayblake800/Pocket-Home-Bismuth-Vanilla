@@ -20,9 +20,6 @@ use BlockSearch;
 use constant FALSE => 0;
 use constant TRUE  => 1;
 
-# Base #include directory::
-use constant INCLUDE_DIR  => "Source/";
-
 # Maximum line length:
 use constant MAX_LINE_LENGTH => 80;
 
@@ -437,10 +434,6 @@ sub formatFunction
 my $inFileName  = $ARGV[0];
 my $outFileName = $ARGV[1];
 
-if(index($inFileName, INCLUDE_DIR) != 0)
-{
-    die "Header does not start in #include directory!\n";
-}
 if(-e $outFileName)
 {
     my $input = "";
@@ -646,8 +639,16 @@ while($parseIndex < length($headerFile))
 }
 
 # Include the source header:
-my $includeStatement = "#include \""
-    .substr($inFileName, length(INCLUDE_DIR))."\""; 
+
+my $includeFile = $inFileName;
+my $lastPathCharIdx = rindex($includeFile, "/");
+if($lastPathCharIdx >= 0)
+{
+    $includeFile = substr($includeFile, $lastPathCharIdx + 1);
+}
+
+my $includeStatement = "#include \"$includeFile\"";
+# Make sure the #include statement is followed by a new line:
 if($cppOutput =~ /^\v?[^\v]/)
 {
     $includeStatement = $includeStatement."\n";
