@@ -97,13 +97,7 @@ public:
     Client(NMClient* toAssign, DeviceLender* deviceLender,
             ConnectionLender* connectionLender);
 
-    virtual ~Client()
-    {
-        if(getReferenceCount() == 1)
-        {
-            DBG("Destroying LibNM::Client");
-        }
-    }
+    virtual ~Client() { }
 
     /**
      * @brief  Gets all wifi devices from the network manager.
