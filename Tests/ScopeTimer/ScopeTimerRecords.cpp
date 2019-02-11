@@ -208,8 +208,11 @@ void ScopeTimerRecords::printRecords()
 {
     using std::cout;
     const juce::ScopedLock recordLock(recordGuard);
-    cout << "\nPrinting timer records for " << timeRecords.size() 
-            << " threads:\n";
+    if(!timeRecords.empty())
+    {
+        cout << "\nPrinting timer records for " << timeRecords.size() 
+                << " threads:\n";
+    }
     for(auto threadRecords : timeRecords)
     {
         cout << "\nThread " << threadRecords.first << ":\n";
