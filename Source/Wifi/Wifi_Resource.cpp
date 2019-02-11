@@ -79,8 +79,6 @@ Wifi::Resource::~Resource()
     apList.reset(nullptr);
     savedConnections.reset(nullptr);
     deviceTracker.reset(nullptr);
-    DBG("Wifi::Resource::~Resource(): Stopping LibNM thread:");
-    nmThread->stopResourceThread();
     nmThread.reset(nullptr);
 }
 

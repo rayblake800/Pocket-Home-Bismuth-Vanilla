@@ -32,7 +32,8 @@ public:
     Thread(const juce::String name);
 
     /**
-     * @brief  Ensures the thread stops running before it is destroyed.
+     * @brief  Checks that the thread has successfully stopped before 
+     *         destruction.
      */
     virtual ~Thread();
 
@@ -48,7 +49,7 @@ public:
 
     /**
      * @brief  Stops the Thread object, waiting until the thread completely
-     *         stops running and deletes its ThreadLock.
+     *         stops running and starts to delete its ThreadLock.
      */
     void stopThreadAndWait();
 

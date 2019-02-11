@@ -24,7 +24,7 @@ public:
     Resource();
 
     /**
-     * @brief  Shuts down all Wifi resource modules and stops the Wifi thread.
+     * @brief  Shuts down all Wifi resource modules.
      */
     virtual ~Resource();
 };

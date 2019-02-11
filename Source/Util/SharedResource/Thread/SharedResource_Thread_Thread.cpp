@@ -3,6 +3,11 @@
 /* Number of milliseconds to wait before forcibly terminating the thread: */
 static const constexpr int timeoutMilliseconds = 5000;
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "SharedResource::Thread::Thread::";
+#endif
+
 namespace ThreadResource = SharedResource::Thread;
 
 /*
@@ -12,17 +17,22 @@ ThreadResource::Thread::Thread(const juce::String name) :
         juce::Thread(name) { }
 
 /*
- * Ensures the thread stops running before it is destroyed.
+ * Checks that the thread has successfully stopped before destruction.
  */
 ThreadResource::Thread::~Thread()
 {
-    stopResourceThread();
-    // Force the thread to stop if it refuses on its own for some reason.
-    stopThread(timeoutMilliseconds);
+    /*  The Thread object should only be destroyed with its associated resource,
+     * and its resource should never be destroyed while the thread is running.
+     *
+     *  If the thread is running at this step, that means that the Thread object
+     * was destroyed early, the Resource was destroyed before all of its 
+     * Reference objects were destroyed, or the thread is restarting when it
+     * should have been stopped for the last time. */
+    jassert(!isThreadRunning());
 }
 
 /*
- * Starts the Thread's thread if it isn't already running.
+ * Starts the Thread object's thread if it isn't already running.
  */
 void ThreadResource::Thread::startResourceThread()
 {
@@ -34,14 +44,10 @@ void ThreadResource::Thread::startResourceThread()
             std::unique_lock<std::mutex> stopLock(stopMutex);
             if(threadLock != nullptr)
             {
-                DBG("SharedResource::Thread::Thread::" << __func__ 
-                        << ": Waiting for last thread instance to finish "
-                        << "cleanup.");
                 stopCondition.wait(stopLock);
             }
         }
         // Create the thread lock before starting the thread:
-        DBG(getThreadName() << ": Creating thread lock:");
         threadLock.reset(new Lock(getThreadResourceKey()));
         startThread();
         startCondition.wait(startLock);
@@ -60,8 +66,6 @@ void ThreadResource::Thread::stopResourceThread()
     {
         signalThreadShouldExit();
         notify();
-        DBG("SharedResource::Thread::Thread::" << __func__ << ": Thread \""
-                << getThreadName() << "\" is stopping.");
     }
 }
 
@@ -92,13 +96,11 @@ void ThreadResource::Thread::run()
         startCondition.notify_all();
     }
 
-    DBG("SharedResource::Thread::Thread::" << __func__ 
-            << ": Initializing thread \"" << getThreadName()
+    DBG(dbgPrefix << __func__ << ": Initializing thread \"" << getThreadName()
             << "\".");
     init(*threadLock);
 
-    DBG("SharedResource::Thread::Thread::" << __func__ 
-            << ": Thread \"" << getThreadName()
+    DBG(dbgPrefix<< __func__ << ": Thread \"" << getThreadName()
             << "\" running main action loop.");
     while(!threadShouldExit())
     {
@@ -113,39 +115,60 @@ void ThreadResource::Thread::run()
 
         if(threadShouldWait() && !threadShouldExit())
         {
-            DBG("SharedResource::Thread::Thread::" << __func__ << ": Thread \""
-                    << getThreadName() << "\" is waiting.");
+            DBG(dbgPrefix << __func__ << ": Thread \"" << getThreadName() 
+                    << "\" is waiting.");
             wait(-1);
-            DBG("SharedResource::Thread::Thread::" << __func__ << ": Thread \""
-                    << getThreadName() << "\" is resuming.");
+            DBG(dbgPrefix << __func__ << ": Thread \"" << getThreadName() 
+                    << "\" is resuming.");
         }
     }
         
-    DBG("SharedResource::Thread::Thread::" << __func__ 
-            << ": Running cleanup for thread \"" << getThreadName() << "\".");
+    DBG(dbgPrefix << __func__ << ": Running cleanup for thread \"" 
+            << getThreadName() << "\".");
     cleanup(*threadLock);
         
-    DBG("SharedResource::Thread::Thread::" << __func__ << ": Thread \""
-                << getThreadName() << "\" finished running.");
+    DBG(dbgPrefix << __func__ << ": Thread \"" << getThreadName() 
+            << "\" finished running.");
 
     // Delete the lock outside of the thread, just in case deleting the lock
     // also deletes the thread.
     std::function<void()> lockDelete = [this]()
     {
-        std::unique_lock<std::mutex> stopLock(stopMutex);
-        DBG("SharedResource::Thread::Thread: Asynchronously deleting "
-                << "ThreadLock after thread exits.");
+        /* Make sure the thread has finished running before doing anything 
+           else: */
         if(threadShouldExit())
         {
+            DBG(dbgPrefix << __func__ << ": Thread \"" << getThreadName() 
+                    << "\" hasn't finished stopping yet, wait for it.");
             notify();
             waitForThreadToExit(-1);
         }
-        threadLock.reset(nullptr);
-        stopCondition.notify_all();
+
+        /* Transfer the threadLock to a local unique_ptr while the stopLock is
+           held, just in case the another thread is trying to replace it: */
+        std::unique_ptr<Lock> tempLockHolder(nullptr);
+        {
+            std::unique_lock<std::mutex> stopLock(stopMutex);
+            tempLockHolder.swap(threadLock);
+        
+            /* Before deleting the ThreadLock, threads waiting on the 
+             * stopCondition must be notified, and this function must release 
+             * its lock on the Thread object's stopMutex. Otherwise, the thread 
+             * will freeze if deleting the ThreadLock causes the Thread object 
+             * to be deleted. */
+            stopCondition.notify_all();
+        }
+
+        DBG(dbgPrefix << __func__ << ": Asynchronously deleting ThreadLock on"
+                << " stopped thread \"" << getThreadName() << "\"");
+
+        /* The threadLock will now be deleted automatically when tempLockHolder 
+           goes out of scope and is destroyed. */
     };
 
-    // The MessageManager thread shouldn't be used, as it might be stopping or 
-    // waiting for the lock to be deleted.
+    /* In most circumstances, the juce::MessageManager thread is used to handle
+     * asynchronous function calls. In this case, it shouldn't be used, as it 
+     * might be stopping or waiting for the lock to be deleted. */
     juce::Thread::launch(lockDelete);
 }
 
