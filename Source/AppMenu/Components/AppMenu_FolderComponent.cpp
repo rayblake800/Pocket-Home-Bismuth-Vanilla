@@ -14,7 +14,7 @@ AppMenu::FolderComponent::FolderComponent(MenuItem folderItem) :
 folderItem(folderItem) 
 {
     DBG(dbgPrefix << __func__ << ": Creating folder component holding "
-            folderItem.getFolderSize() << " folder items.");
+            << folderItem.getFolderSize() << " folder items.");
     folderItem.addListener(this);
     setWantsKeyboardFocus(false);
 }
