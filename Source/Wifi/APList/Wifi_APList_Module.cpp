@@ -12,22 +12,18 @@
 #include "Wifi_LibNM_Thread_Module.h"
 #include <map>
 
-namespace WifiAPList = Wifi::APList;
-namespace WifiNM = Wifi::LibNM;
-
 /* All visible Wifi::AccessPoint objects, mapped by hash value. */
-static std::map<WifiNM::APHash, Wifi::AccessPoint> wifiAccessPoints;
+static std::map<Wifi::LibNM::APHash, Wifi::AccessPoint> wifiAccessPoints;
 
 /* All visible LibNM::AccessPoint objects, mapped by hash value. */
-static std::map<WifiNM::APHash, juce::Array<WifiNM::AccessPoint>> 
+static std::map<Wifi::LibNM::APHash, juce::Array<Wifi::LibNM::AccessPoint>> 
         nmAccessPoints;
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before debug messages: */
+/* Print the full class name before all debug output: */
 static const constexpr char* dbgPrefix = "Wifi::APList::Module::";
-
 /**
- * @brief Prints the access point list's data maps for debugging.
+ * @brief  Prints the access point list's data maps for debugging.
  */
 void printAPList()
 {
@@ -43,9 +39,10 @@ void printAPList()
 #endif
 
 /*
- * Reads initial access point data from LibNM.
+ * Reads initial access point data from LibNM, using it to construct the access
+ * point list.
  */
-WifiAPList::Module::Module(Resource& wifiResource) : 
+Wifi::APList::Module::Module(Resource& wifiResource) : 
     SharedResource::Modular::Module<Resource>(wifiResource) 
 { 
     DBG(dbgPrefix << __func__ << ": Creating Wifi::APList module.");
@@ -54,7 +51,7 @@ WifiAPList::Module::Module(Resource& wifiResource) :
 /*
  * Clears all access point data on destruction.
  */
-WifiAPList::Module::~Module()
+Wifi::APList::Module::~Module()
 {
     wifiAccessPoints.clear();
     nmAccessPoints.clear();
@@ -62,10 +59,10 @@ WifiAPList::Module::~Module()
 }
 
 /*
- * Gets Wifi::AccessPoint objects for all visible access points.
+ * Gets AccessPoint objects for all visible access points.
  */
 juce::Array<Wifi::AccessPoint> 
-WifiAPList::Module::getAccessPoints() const
+Wifi::APList::Module::getAccessPoints() const
 {
     juce::Array<Wifi::AccessPoint> accessPoints;
     for(auto apIterator : wifiAccessPoints)
@@ -76,10 +73,10 @@ WifiAPList::Module::getAccessPoints() const
 }
 
 /*
- * Finds a single Wifi::AccessPoint
+ * Finds a single AccessPoint using its hash value.
  */
 Wifi::AccessPoint 
-WifiAPList::Module::getAccessPoint(LibNM::APHash apHash) const
+Wifi::APList::Module::getAccessPoint(LibNM::APHash apHash) const
 {
     try
     {
@@ -102,10 +99,10 @@ WifiAPList::Module::getAccessPoint(LibNM::APHash apHash) const
 }
 
 /*
- * Gets the strongest visible LibNM::AccessPoint that matches a
- * Wifi::AccessPoint.
+ * Gets the strongest visible LibNM::AccessPoint represented by an AccessPoint 
+ * object.
  */
-WifiNM::AccessPoint WifiAPList::Module::getStrongestNMAccessPoint
+Wifi::LibNM::AccessPoint Wifi::APList::Module::getStrongestNMAccessPoint
 (const AccessPoint accessPoint) const
 {
     ASSERT_NM_CONTEXT;
@@ -131,10 +128,9 @@ WifiNM::AccessPoint WifiAPList::Module::getStrongestNMAccessPoint
 }
 
 /*
- * Gets LibNM::AccessPoint objects for all access point devices visible through
- * the Wifi device.
+ * Gets the list of all LibNM::AccessPoint objects provided by LibNM.
  */
-juce::Array<WifiNM::AccessPoint> WifiAPList::Module::getNMAccessPoints() 
+juce::Array<Wifi::LibNM::AccessPoint> Wifi::APList::Module::getNMAccessPoints() 
         const
 {
     ASSERT_NM_CONTEXT;
@@ -147,9 +143,10 @@ juce::Array<WifiNM::AccessPoint> WifiAPList::Module::getNMAccessPoints()
 }
 
 /*
- * Gets all LibNM::AccessPoint objects described by a Wifi::AccessPoint.
+ * Gets all LibNM::AccessPoint objects that are represented by an AccessPoint 
+ * object.
  */
-juce::Array<WifiNM::AccessPoint> WifiAPList::Module::getNMAccessPoints
+juce::Array<Wifi::LibNM::AccessPoint> Wifi::APList::Module::getNMAccessPoints
 (const AccessPoint accessPoint) const
 {
     ASSERT_NM_CONTEXT;
@@ -164,10 +161,10 @@ juce::Array<WifiNM::AccessPoint> WifiAPList::Module::getNMAccessPoints
 }
 
 /*
- * Adds a new LibNM::AccessPoint to the list, constructing a matching
- * Wifi::AccessPoint if one does not yet exist.
+ * Adds a new LibNM::AccessPoint to the list, creating an AccessPoint object to
+ * represent it if necessary. 
  */
-void WifiAPList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
+void Wifi::APList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
 {
     ASSERT_NM_CONTEXT;
     jassert(!addedAP.isNull());
@@ -207,10 +204,9 @@ void WifiAPList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
 }
 
 /*
- * Removes a LibNM::AccessPoint from the list, removing the matching
- * Wifi::AccessPoint if it no longer has any matching LibNM::AccessPoints.
+ * Removes a LibNM::AccessPoint from the list.
  */
-void WifiAPList::Module::removeAccessPoint
+void Wifi::APList::Module::removeAccessPoint
 (const LibNM::AccessPoint removedAP)
 {
     const LibNM::APHash apHash = removedAP.generateHash();
@@ -228,10 +224,10 @@ void WifiAPList::Module::removeAccessPoint
 }
 
 /*
- * Updates the signal strength of an AccessPoint, setting it to the strongest
- * signal strength of its LibNM::AccessPoints.
+ * Updates the signal strength of an AccessPoint, setting it to the strongest 
+ * signal strength of any matching LibNM::AccessPoint object.
  */
-void WifiAPList::Module::updateSignalStrength(AccessPoint toUpdate)
+void Wifi::APList::Module::updateSignalStrength(AccessPoint toUpdate)
 {
     const LibNM::APHash apHash = toUpdate.getHashValue();
     const unsigned int oldSignalStrength 
@@ -255,9 +251,9 @@ void WifiAPList::Module::updateSignalStrength(AccessPoint toUpdate)
 }
 
 /*
- * Removes all saved Wifi::AccessPoints and LibNM::AccessPoints.
+ * Clears the list of saved AccessPoint and LibNM::AccessPoint objects.
  */
-void WifiAPList::Module::clearAccessPoints()
+void Wifi::APList::Module::clearAccessPoints()
 {
     getSiblingModule<LibNM::Thread::Module>()->call([]()
     {
@@ -267,10 +263,10 @@ void WifiAPList::Module::clearAccessPoints()
 }
 
 /*
- * Reloads all LibNM::AccessPoints from the NetworkResource, updating
- * Wifi::AccessPoints as necessary.
+ * Reloads all LibNM::AccessPoint objects from LibNM, updating the list of 
+ * AccessPoint objects as necessary.
  */
-void WifiAPList::Module::updateAllAccessPoints()
+void Wifi::APList::Module::updateAllAccessPoints()
 {
     LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
     nmThread->call([this, nmThread]()
@@ -288,7 +284,7 @@ void WifiAPList::Module::updateAllAccessPoints()
 /*
  * Removes all LibNM::AccessPoint objects that are no longer valid.
  */
-void WifiAPList::Module::removeInvalidatedAccessPoints()
+void Wifi::APList::Module::removeInvalidatedAccessPoints()
 {
     getSiblingModule<LibNM::Thread::Module>()->call([this]()
     {
