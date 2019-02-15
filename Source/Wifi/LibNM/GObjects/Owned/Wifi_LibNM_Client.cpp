@@ -270,6 +270,9 @@ struct Wifi::LibNM::Client::CallbackData
 
     CallbackData(Client& client, ConnectionHandler* const handler) :
          client(client), handler(handler) { }
+
+private:
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::Client::CallbackData);
 };
 
 
@@ -335,15 +338,17 @@ void Wifi::LibNM::Client::activateCallback(
         CallbackData* callbackData)
 {
     ASSERT_NM_CONTEXT;
-    ActiveConnection activeConnection = callbackData->client.connectionLender
+    DBG("Running activate callback");
+    std::unique_ptr<CallbackData> dataPtr(callbackData);
+    ActiveConnection activeConnection = dataPtr->client.connectionLender
             ->borrowObject(G_OBJECT(connection));
     if(error != nullptr)
     {
-        callbackData->handler->openingConnectionFailed(activeConnection, error);
+        dataPtr->handler->openingConnectionFailed(activeConnection, error);
     }
     else
     {
-        callbackData->handler->openingConnection(activeConnection);
+        dataPtr->handler->openingConnection(activeConnection);
     } 
 }
 
