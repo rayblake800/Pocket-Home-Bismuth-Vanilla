@@ -6,6 +6,11 @@
 #include "Wifi_Resource.h"
 #include "Config_MainFile.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Wifi::LibNM::Thread::Module::";
+#endif
+
 namespace NMThread = Wifi::LibNM::Thread;
 
 /*
@@ -25,7 +30,7 @@ Wifi::LibNM::Client NMThread::Module::getClient()
     GLib::SharedContextPtr nmContext = getContext();
     if(!g_main_context_is_owner(*nmContext))
     {
-        DBG("Wifi::LibNM::Thread::Module::" << __func__ << 
+        DBG(dbgPrefix << __func__ << 
                 ": Tried to get Client outside of the LibNM event loop!");
         jassertfalse;
         return Client();
@@ -43,7 +48,7 @@ Wifi::LibNM::DeviceWifi NMThread::Module::getWifiDevice()
     GLib::SharedContextPtr nmContext = getContext();
     if(!g_main_context_is_owner(*nmContext))
     {
-        DBG("Wifi::LibNM::Thread::Module::" << __func__ << 
+        DBG(dbgPrefix << __func__ << 
                 ": Tried to get DeviceWifi outside of the LibNM event loop!");
         jassertfalse;
         return DeviceWifi();
@@ -78,6 +83,7 @@ void NMThread::Module::initClient()
     ASSERT_NM_CONTEXT;
     if(networkClient.isNull())
     {
+        DBG(dbgPrefix << __func__ << ": Creating new NMClient*");
         networkClient = Client(nm_client_new(), &wifiDeviceLender,
                 &wifiConnectionLender);
     }
@@ -106,6 +112,7 @@ void NMThread::Module::initWifiDevice()
     }
     if(wifiDevice.isNull() || !wifiDevice.isManaged())
     {
+        DBG(dbgPrefix << __func__ << ": Finding valid NMDeviceWifi*");
         Array<LibNM::DeviceWifi> devices = networkClient.getWifiDevices();
         for(const DeviceWifi& device : devices)
         {
@@ -118,14 +125,12 @@ void NMThread::Module::initWifiDevice()
     }
     if(wifiDevice.isNull())
     {
-        DBG("Wifi::LibNM::Thread::Module::ThreadResource: "
-                << "Couldn't find managed wifi device.");
+        DBG(dbgPrefix << __func__ << ": Couldn't find managed wifi device.");
         missingWifiDevice = true;
     }
     else
     {
-        DBG("Wifi::LibNM::Thread::Module::ThreadResource: "
-                << "Initialized Wifi device with interface "
+        DBG(dbgPrefix << __func__ << ": Initialized Wifi device with interface "
                 << wifiDevice.getInterface() << ", path="
                 << wifiDevice.getPath());
         wifiDevice.setLenders(&wifiConnectionLender, &accessPointLender);
