@@ -36,15 +36,7 @@ Wifi::AccessPoint::AccessPoint(const AccessPoint& rhs) : Nullable(rhs) { }
  */
 bool Wifi::AccessPoint::operator==(const AccessPoint& rhs) const
 {
-    if(isNull())
-    {
-        return rhs.isNull();
-    }
-    if(rhs.isNull())
-    {
-        return false;
-    }
-    return *getData() == *rhs.getData();
+    return getHashValue() == rhs.getHashValue();
 }
 
 /*
@@ -52,7 +44,7 @@ bool Wifi::AccessPoint::operator==(const AccessPoint& rhs) const
  */
 bool Wifi::AccessPoint::operator!=(const AccessPoint& rhs) const
 {
-    return !(*this == rhs);
+    return getHashValue() != rhs.getHashValue();
 }
 
 /*
@@ -68,7 +60,7 @@ bool Wifi::AccessPoint::operator<(const AccessPoint& rhs) const
     {
         return true;
     }
-    return *getData() < *rhs.getData();
+    return getHashValue() < rhs.getHashValue();
 }
 
 /*
@@ -153,8 +145,7 @@ Wifi::LibNM::APHash Wifi::AccessPoint::getHashValue() const
 {
     if(isNull())
     {
-        return LibNM::APHash(nullptr, LibNM::APMode::unknown,
-                LibNM::SecurityType::unsecured); 
+        return LibNM::APHash();
     }
     return getData()->getHashValue();
 }

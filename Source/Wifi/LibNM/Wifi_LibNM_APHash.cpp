@@ -13,7 +13,7 @@ Wifi::LibNM::APHash::APHash(const GByteArray* ssid,
 {
     if(ssid == nullptr)
     {
-        hashValue = juce::Identifier::null;
+        hashValue = juce::String();
         jassertfalse;
         return;
     }
@@ -76,7 +76,7 @@ bool Wifi::LibNM::APHash::operator<(const APHash& rhs) const
  */
 bool Wifi::LibNM::APHash::isNull() const
 {
-    return hashValue.isNull();
+    return hashValue.isEmpty();
 }
 
 /*
@@ -84,5 +84,5 @@ bool Wifi::LibNM::APHash::isNull() const
  */
 juce::String Wifi::LibNM::APHash::toString() const
 {
-    return hashValue.toString();
+    return hashValue;
 }

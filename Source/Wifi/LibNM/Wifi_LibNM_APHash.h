@@ -110,6 +110,5 @@ public:
     juce::String toString() const;
 
 private:
-    /* The fixed hash value. */
-    juce::Identifier hashValue;
+    juce::String hashValue;
 };
