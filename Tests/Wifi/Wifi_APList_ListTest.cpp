@@ -1,7 +1,7 @@
 /**
- * @file  Wifi_Test_APListTest.h
+ * @file  Wifi_APList_ListTest.h
  *
- * @brief  Tests the Wifi resource module's APList submodule.
+ * @brief  Tests the Wifi resource's APList module.
  */
 
 #define WIFI_IMPLEMENTATION
@@ -9,26 +9,41 @@
 #include "Wifi_APList_Reader.h"
 #include "Wifi_APList_NMReader.h"
 #include "Wifi_APList_Writer.h"
+#include "Wifi_Device_Controller.h"
 #include "Wifi_AccessPoint.h"
 #include "Wifi_LibNM_Thread_Handler.h"
 #include "Wifi_LibNM_AccessPoint.h"
+#include "Wifi_TestUtils_Waiting.h"
 #include "SharedResource_Handler.h"
+#include "DelayUtils.h"
 
-namespace Wifi { namespace Test { class APListTest; } }
+namespace Wifi { namespace APList { class ListTest; } }
 
-class Wifi::Test::APListTest : public juce::UnitTest
+/**
+ * @brief  Tests the Wifi::APList::Module class.
+ */
+class Wifi::APList::ListTest : public juce::UnitTest
 {
 public:
-    APListTest() : juce::UnitTest("Wifi::APList Testing",
+    ListTest() : juce::UnitTest("Wifi::APList Testing",
             "Wifi") {}
     
     void runTest() override
     {
         beginTest("APList Reading Test");
+        // Make sure Wifi is turned on:
+        Device::Controller wifiController;
+        wifiController.setEnabled(true);
+
+        logMessage("Waiting for access points to load...");
+        expect(TestUtils::Waiting::waitForAccessPoints(),
+                "Failed to find multiple access points.");
+
         APList::Reader listReader;
         juce::Array<AccessPoint> visibleAPs = listReader.getAccessPoints();
         logMessage(juce::String("Found ") + juce::String(visibleAPs.size())
                 + " access points.");
+
         for(AccessPoint& visibleAP : visibleAPs)
         {
             DBG(visibleAP.toString());
@@ -87,5 +102,5 @@ public:
     }
 };
 
-static Wifi::Test::APListTest listTest;
+static Wifi::APList::ListTest listTest;
 

@@ -1,7 +1,7 @@
 /**
  * @file  Wifi_Test_ConnectionTest.cpp
  *
- * @brief  Tests the Wifi module's ability to control Wifi connections.
+ * @brief  Tests the Wifi resources's ability to control Wifi connections.
  */
 #define WIFI_IMPLEMENTATION
 #include "Wifi_Connection_Control_Handler.h"
@@ -9,6 +9,7 @@
 #include "Wifi_Connection_Record_Writer.h"
 #include "Wifi_Connection_Record_Listener.h"
 #include "Wifi_Connection_Event.h"
+#include "Wifi_Device_Controller.h"
 #include "Wifi_APList_Reader.h"
 #include "Wifi_AccessPoint.h"
 #include "Files/JSONFile.h"
@@ -49,6 +50,20 @@ namespace TestKeys
     }
 }
 
+/* Number of milliseconds to wait for access points to load: */
+static const constexpr int apLoadingPeriod = 12000;
+
+/* Frequency in milliseconds to check access points when waiting for them to 
+ * load: */
+static const constexpr int apCheckFrequency = 1000;
+
+/* Number of milliseconds to wait for connection events to occur: */
+static const constexpr int connectionWaitPeriod = 6500;
+
+/* Frequency in milliseconds to check if an expected connection event has 
+ * occurred: */
+static const constexpr int connectionCheckFrequency = 100;
+
 /* Holds access point test data: */
 struct APTestData
 {
@@ -79,7 +94,8 @@ private:
     {
         const juce::ScopedLock eventLock(eventControl);
         lastEvent = Wifi::Connection::Event(eventAP, eventType);
-        DBG("New Event:" << lastEvent.toString());
+        DBG("Wifi::Test::Listener::updateLastEvent: New Event:" 
+                << lastEvent.toString());
     }
 
 public:
@@ -104,14 +120,14 @@ public:
     virtual void connected
     (const Wifi::AccessPoint connectedAP) override
     {
-        const juce::ScopedLock eventLock(eventControl);
+        updateLastEvent(connectedAP, EventType::connected);
     }
 
     /* Update the last event when a connection is closed: */
     virtual void disconnected
     (const Wifi::AccessPoint disconnectedAP) override
     {
-        const juce::ScopedLock eventLock(eventControl);
+        updateLastEvent(disconnectedAP, EventType::disconnected);
     }
 
     /**
@@ -130,16 +146,83 @@ private:
     Wifi::Connection::Event lastEvent;
 };
 
+/**
+ * @brief  Tests the Wifi::Connection::Control module.
+ */
 class Wifi::Test::ConnectionTest : public juce::UnitTest
 {
 public:
     ConnectionTest() : juce::UnitTest("Wifi::Connection Testing",
-            "Wifi") {}
+            "Wiffi") {}
+
+    /**
+     * @brief  Tests if the next Wifi event to occur has a specific event type
+     *         and access point.
+     * 
+     *  If the last recorded connection event already matches the expected 
+     * event right away, the tests will immediately pass. Otherwise, the 
+     * function will wait for the next registered event, and tests will pass
+     * only if that event occurs before the connection wait period ends, and it
+     * has the correct event type and access point. 
+     *
+     * @param expectedEventType  The type of connection event that should occur.
+     *
+     * @param expectedEventAP    The access point that should be used by the
+     *                           event.
+     *
+     * @param updateListener     The listener used to track event updates.
+     */
+    void checkForWifiEvent( Connection::EventType expectedEventType,
+            AccessPoint expectedEventAP, Listener& updateListener)
+    {
+        using namespace Wifi::Connection;
+        using juce::String;
+        Record::Reader recordReader;
+        Event lastEvent = updateListener.getLatestEvent();
+        if(lastEvent.getEventType() == expectedEventType
+                && lastEvent.getEventAP() == expectedEventAP)
+        {
+            // Event already happened, no need to wait
+            return;
+        }
+        
+        Event nextEvent;
+        expect(DelayUtils::idleUntil([&lastEvent, &nextEvent, &updateListener]()
+        {
+            nextEvent = updateListener.getLatestEvent();
+            return nextEvent != lastEvent;
+        }, 100, 6500), 
+                String("Waiting for event with EventType=")
+                + eventTypeString(expectedEventType)
+                + " but no new event occurred.");
+
+        expect(nextEvent == updateListener.getLatestEvent(), 
+                "Failed to add event to record resource properly!");
+        expect(nextEvent.getEventType() == expectedEventType,
+                String("Unexpected new event type. Expected:")
+                + eventTypeString(expectedEventType) + ", event:"
+                + nextEvent.toString());
+        expect(nextEvent.getEventAP() == expectedEventAP,
+                String("Unexpected new event access point. Expected: ") 
+                + expectedEventAP.toString() + ", event:"
+                + nextEvent.toString());
+    }
     
     void runTest() override
     {
         using namespace Wifi::Connection;
         using juce::String;
+
+        // Make sure Wifi is enabled and disconnected:
+        Device::Controller deviceController;
+        Control::Handler connectionController;
+        Record::Reader recordReader;
+        deviceController.setEnabled(true);
+        connectionController.disconnect();
+        DelayUtils::idleUntil([&recordReader]()
+        {
+            return !recordReader.isConnected();
+        }, 200, 1000);
         
         /* Read in test data from the test JSON file: */
         APTestData firstSaved;
@@ -197,49 +280,31 @@ public:
             return;
         }
 
-        Test::Listener updateListener;
-        Control::Handler connectionController;
-        Record::Reader recordReader;
-        Wifi::APList::Reader apListReader;
-        
-        beginTest("Valid saved connection control test");
+        beginTest("Valid saved connection test");
         Wifi::LibNM::APHash savedHash(firstSaved.hashString);
 
-        Wifi::AccessPoint savedAP = apListReader.getAccessPoint(savedHash);
-        expect(!savedAP.isNull(), 
+        Wifi::APList::Reader apListReader;
+        Listener updateListener;
+        expect(!recordReader.isConnected(), 
+                "Failed to disconnect from Wifi connection before tests");
+
+        Wifi::AccessPoint savedAP; 
+        expect(DelayUtils::idleUntil(
+                [this, &savedAP, &savedHash, &apListReader]()
+        {
+            logMessage("Scanning for matching access point...");
+            savedAP = apListReader.getAccessPoint(savedHash);
+            return !savedAP.isNull();
+
+        }, 1000, 10000),
                 String("Failed to find saved AP from hash string, ensure ")
                 + testFilePath + " provides valid test hash values.");
 
-        if(recordReader.isConnected())
-        {
-            connectionController.disconnect();
-            DelayUtils::idleUntil([&recordReader]()->bool
-            {
-                return !recordReader.isConnected();
-            }, 100, 6500);
-        }
-        expect(!recordReader.isConnected(), "Failed to disconnect!");
-
-        juce::int64 beforeConnection = juce::Time::currentTimeMillis();
-        expect(recordReader.getLatestEvent().getEventTime().toMilliseconds()
-                < beforeConnection, "Found invalid future connection event!");
         connectionController.connectToAccessPoint(savedAP);
-        DelayUtils::idleUntil([&updateListener, &beforeConnection]()->bool
-        {
-            return updateListener.getLatestEvent().getEventTime()
-                    .toMilliseconds() > beforeConnection;
-        }, 100, 6500);
-
-        expect(updateListener.getLatestEvent().getEventTime().toMilliseconds()
-                    > beforeConnection, "No event recorded!");
-        Event lastEvent = recordReader.getLatestEvent();
-        expect(lastEvent == updateListener.getLatestEvent(), 
-                "Failed to add event to record resource properly!");
-        expect(lastEvent.getEventType() == EventType::connected,
-                "Last event type was not a connection event!");
-        expect(lastEvent.getEventAP() == savedAP,
-                String("Last event had unexpected AP ") 
-                + lastEvent.getEventAP().toString());
+        waitForWifiEvent(EventType::startedConnecting, savedAP, updateListener);
+        waitForWifiEvent(EventType::connected, savedAP, updateListener);
+        connectionController.disconnect();
+        waitForWifiEvent(EventType::disconnected, savedAP, updateListener);
     }
 };
 

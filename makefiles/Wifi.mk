@@ -148,11 +148,19 @@ OBJECTS_WIFI := \
   $(OBJECTS_WIFI_COMPONENT)
 
 WIFI_TEST_ROOT = Tests/Wifi
-WIFI_TEST_PREFIX = $(WIFI_PREFIX)Test_
-WIFI_TEST_OBJ = $(WIFI_OBJ)Test_
+
+WIFI_TESTUTILS_ROOT := $(WIFI_TEST_ROOT)/TestUtils
+WIFI_TESTUTILS_PREFIX := $(WIFI_PREFIX)TestUtils_
+WIFI_TESTUTILS_OBJ := $(WIFI_OBJ)TestUtils_
+
+OBJECTS_WIFI_TESTUTILS := \
+  $(WIFI_TESTUTILS_OBJ)ConnectionListener.o \
+  $(WIFI_TESTUTILS_OBJ)Waiting.o
+                          
 OBJECTS_WIFI_TEST := \
-  $(WIFI_TEST_OBJ)APListTest.o \
-  $(WIFI_TEST_OBJ)ConnectionTest.o
+  $(OBJECTS_WIFI_TESTUTILS) \
+  $(WIFI_OBJ)APList_ListTest.o \
+  $(WIFI_OBJ)Connection_Control_ControlTest.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_WIFI := $(OBJECTS_WIFI) $(OBJECTS_WIFI_TEST)
@@ -264,10 +272,15 @@ $(WIFI_OBJ)SettingsPage.o : \
 $(WIFI_OBJ)StatusIcon.o : \
     $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)StatusIcon.cpp
   
-$(WIFI_TEST_OBJ)APListTest.o : \
-    $(WIFI_TEST_ROOT)/$(WIFI_TEST_PREFIX)APListTest.cpp
-$(WIFI_TEST_OBJ)ConnectionTest.o : \
-    $(WIFI_TEST_ROOT)/$(WIFI_TEST_PREFIX)ConnectionTest.cpp
+$(WIFI_TESTUTILS_OBJ)ConnectionListener.o : \
+    $(WIFI_TESTUTILS_ROOT)/$(WIFI_TESTUTILS_PREFIX)ConnectionListener.cpp
+$(WIFI_TESTUTILS_OBJ)Waiting.o : \
+    $(WIFI_TESTUTILS_ROOT)/$(WIFI_TESTUTILS_PREFIX)Waiting.cpp
+
+$(WIFI_OBJ)APList_ListTest.o : \
+    $(WIFI_TEST_ROOT)/$(WIFI_PREFIX)APList_ListTest.cpp
+$(WIFI_OBJ)Connection_Control_ControlTest.o : \
+    $(WIFI_TEST_ROOT)/$(WIFI_PREFIX)Connection_Control_ControlTest.cpp
 
 $(WIFI_OBJ)Resource.o : \
     $(WIFI_ROOT)/$(WIFI_PREFIX)Resource.cpp
