@@ -193,16 +193,12 @@ void NMSignal::DeviceHandler::accessPointAdded
     ASSERT_NM_CONTEXT;
     apHandler.connectAllSignals(addedAP);
 
-    // Ignore access points with null SSIDs.
-    // TODO: Find out why access points without SSIDs are showing up at all
-    //       Are they hidden? Have the SSIDs just not loaded yet?
-    if(addedAP.getSSID() != nullptr)
-    {
-        APList::Writer listWriter;
-        DBG(dbgPrefix << __func__ << ": Added Wifi AP " 
-                << addedAP.getSSIDText());
-        listWriter.addAccessPoint(addedAP);
-    }
+    // The apAddedCallback should be filtering out APs with null SSIDs
+    jassert(addedAP.getSSID() != nullptr);
+
+    APList::Writer listWriter;
+    DBG(dbgPrefix << __func__ << ": Added Wifi AP " << addedAP.getSSIDText());
+    listWriter.addAccessPoint(addedAP);
 }
 
 /*
@@ -330,8 +326,17 @@ void NMSignal::DeviceHandler::apAddedCallback(
         GLib::Signal::CallbackData<DeviceWifi>* data) 
 { 
     ASSERT_NM_CONTEXT;
-    if(data != nullptr)
+    if(device != nullptr && ap != nullptr && data != nullptr)
     {
+        // Ignore access points with null SSIDs.
+        // TODO: Find out why access points without SSIDs are showing up at all
+        //       Are they hidden? Have the SSIDs just not loaded yet?
+        if(nm_access_point_get_ssid(ap) == nullptr)
+        {
+            DBG(dbgPrefix << __func__ << ": Ignoring AP with null SSID.");
+            return;
+        }
+
         DeviceWifi wifiDevice = data->getSignalSource();
         DeviceHandler* deviceHandler = dynamic_cast<DeviceHandler*>
                 (data->getSignalHandler());
