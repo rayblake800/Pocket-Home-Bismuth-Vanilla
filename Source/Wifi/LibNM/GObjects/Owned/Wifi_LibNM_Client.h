@@ -279,4 +279,6 @@ private:
     /* Holds ActiveConnection objects for all valid NMActiveConnection* values
        taken from the Client. */
     ConnectionLender* connectionLender = nullptr;
+
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::Client);
 };

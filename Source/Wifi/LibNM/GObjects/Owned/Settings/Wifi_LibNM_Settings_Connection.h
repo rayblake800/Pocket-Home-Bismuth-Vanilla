@@ -66,4 +66,6 @@ public:
      *          completely.
      */
     juce::Time getTimestamp() const;
+
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::Settings::Connection);
 };

@@ -204,4 +204,6 @@ private:
      * @return  The object's LibNM device object data pointer.
      */
     NMDevice* getDevicePtr() const;
+
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::DeviceWifi);
 };

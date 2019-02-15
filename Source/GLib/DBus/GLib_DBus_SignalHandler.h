@@ -164,6 +164,8 @@ private:
      */
     static void handleCallback(Signal::CallbackData<ProxyType>* data,
             SignalAction signalAction);
+
+    JUCE_LEAK_DETECTOR(GLib::DBus::SignalHandler);
 };
 
 

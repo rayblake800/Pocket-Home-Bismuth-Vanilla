@@ -135,4 +135,6 @@ private:
     /* Holds a weak reference to the GObject stored in this Object. This 
        prevents attempts to access GObject data after it is deleted. */
     WeakRef objectRef;
+
+    JUCE_LEAK_DETECTOR(GLib::Owned::Object);
 };

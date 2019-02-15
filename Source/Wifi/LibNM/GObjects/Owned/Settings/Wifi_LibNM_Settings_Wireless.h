@@ -99,4 +99,7 @@ public:
      *                  hidden.
      */
     void setHidden(const bool isHidden);
+
+private:
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::Settings::Wireless);
 };

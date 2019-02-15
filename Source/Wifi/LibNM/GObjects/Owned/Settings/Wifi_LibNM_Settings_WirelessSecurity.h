@@ -67,4 +67,6 @@ public:
      * @return  The type of security used by this object's connection. 
      */
     SecurityType getSecurityType() const;
+
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::Settings::WirelessSecurity);
 };

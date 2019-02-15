@@ -84,4 +84,6 @@ private:
      *          type.
      */
     NMActiveConnection* getNMObjectPtr() const;
+
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::ActiveConnection);
 };

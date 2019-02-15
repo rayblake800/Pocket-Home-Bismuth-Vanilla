@@ -43,4 +43,6 @@ private:
      * @return   The ThreadResource object's reference count.
      */
     virtual int getThreadReferenceCount() const override;
+
+    JUCE_LEAK_DETECTOR(GLib::DBus::ThreadResource);
 };

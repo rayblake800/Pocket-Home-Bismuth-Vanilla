@@ -112,5 +112,5 @@ private:
     /* Holds the borrowed GObject* data. */
     SharedContainer::Ptr objectContainer;
     
-    JUCE_LEAK_DETECTOR(Object);
+    JUCE_LEAK_DETECTOR(GLib::Borrowed::Object);
 };

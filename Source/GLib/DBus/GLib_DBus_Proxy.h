@@ -175,5 +175,5 @@ protected:
     GVariant* callMethod(const char* methodName, GVariant* params = nullptr,
             GError** error = nullptr) const;
 
-    JUCE_LEAK_DETECTOR(Proxy);
+    JUCE_LEAK_DETECTOR(GLib::DBus::Proxy);
 };

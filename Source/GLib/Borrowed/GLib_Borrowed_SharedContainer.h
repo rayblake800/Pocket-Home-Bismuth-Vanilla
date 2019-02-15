@@ -49,7 +49,7 @@ public:
      */
     void clearData();
 
-    JUCE_LEAK_DETECTOR(SharedContainer);
+    JUCE_LEAK_DETECTOR(GLib::Borrowed::SharedContainer);
 };
 
 

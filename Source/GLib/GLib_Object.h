@@ -190,5 +190,5 @@ private:
     /* Holds the GObject type used by this Object */
     const GType objectType;
 
-    JUCE_LEAK_DETECTOR(Object);
+    JUCE_LEAK_DETECTOR(GLib::Object);
 };

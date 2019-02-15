@@ -151,5 +151,5 @@ private:
      */
     NMAccessPoint* getNMObjectPtr() const;
 
-    JUCE_LEAK_DETECTOR(AccessPoint);
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::AccessPoint);
 };

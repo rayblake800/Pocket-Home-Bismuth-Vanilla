@@ -42,4 +42,6 @@ public:
     Object(const GType settingType);
 
     virtual ~Object() { }
+
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::Settings::Object);
 };

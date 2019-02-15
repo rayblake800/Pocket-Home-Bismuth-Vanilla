@@ -213,4 +213,7 @@ private:
      *                     with the given type.
      */
     NMSetting* getSetting(GType settingType) const;
+
+
+    JUCE_LEAK_DETECTOR(Wifi::LibNM::Connection);
 };

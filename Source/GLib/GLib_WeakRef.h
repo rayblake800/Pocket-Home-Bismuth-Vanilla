@@ -108,5 +108,5 @@ private:
        Lock for writing when initializing or clearing the reference. */
     juce::ReadWriteLock referenceLock;
 
-    JUCE_LEAK_DETECTOR(WeakRef);
+    JUCE_LEAK_DETECTOR(GLib::WeakRef);
 };
