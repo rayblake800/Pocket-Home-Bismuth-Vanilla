@@ -12,7 +12,7 @@
 #include "Wifi_LibNM_Thread_Module.h"
 #include <map>
 
-/* All visible Wifi::AccessPoint objects, mapped by hash value. */
+/* All visible AccessPoint objects, mapped by hash value. */
 static std::map<Wifi::LibNM::APHash, Wifi::AccessPoint> wifiAccessPoints;
 
 /* All visible LibNM::AccessPoint objects, mapped by hash value. */
@@ -39,8 +39,9 @@ void printAPList()
 #endif
 
 /*
- * Reads initial access point data from LibNM, using it to construct the access
- * point list.
+ * Creates the APList module. The constructed list module will be empty, and 
+ * should be initialized with the updateAllAccessPoints method from within the 
+ * LibNM thread.
  */
 Wifi::APList::Module::Module(Resource& wifiResource) : 
     SharedResource::Modular::Module<Resource>(wifiResource) 
@@ -65,9 +66,14 @@ juce::Array<Wifi::AccessPoint>
 Wifi::APList::Module::getAccessPoints() const
 {
     juce::Array<Wifi::AccessPoint> accessPoints;
-    for(auto apIterator : wifiAccessPoints)
+    for(auto& apIterator : wifiAccessPoints)
     {
-        accessPoints.add(apIterator.second);
+        /* Ignore access points with no signal strength, they are not currently
+           visible or valid. */
+        if(apIterator.second.getSignalStrength() > 0)
+        {
+            accessPoints.add(apIterator.second);
+        }
     }
     return accessPoints;
 }
@@ -82,9 +88,12 @@ Wifi::APList::Module::getAccessPoint(LibNM::APHash apHash) const
     {
         jassert(!apHash.isNull());
         AccessPoint matchingAP = wifiAccessPoints.at(apHash);
-        jassert(!matchingAP.isNull());
-        jassert(matchingAP.getHashValue() == apHash);
-        return matchingAP;
+        /* Ignore access points with no signal strength, they are not currently
+           visible or valid. */
+        if(matchingAP.getSignalStrength() > 0)
+        {
+            return matchingAP;
+        }
     }
     catch(std::out_of_range e)
     {
@@ -94,8 +103,8 @@ Wifi::APList::Module::getAccessPoint(LibNM::APHash apHash) const
 #ifdef JUCE_DEBUG
         printAPList();
 #endif
-        return Wifi::AccessPoint();
     }
+    return AccessPoint();
 }
 
 /*
@@ -151,7 +160,7 @@ juce::Array<Wifi::LibNM::AccessPoint> Wifi::APList::Module::getNMAccessPoints
 {
     ASSERT_NM_CONTEXT;
     juce::Array<LibNM::AccessPoint>& matchingAPs
-        = nmAccessPoints[accessPoint.getHashValue()];
+            = nmAccessPoints[accessPoint.getHashValue()];
     matchingAPs.removeIf([](LibNM::AccessPoint ap) 
     { 
         return ap.isNull(); 
@@ -170,7 +179,11 @@ void Wifi::APList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
     jassert(!addedAP.isNull());
     const LibNM::APHash apHash = addedAP.generateHash();
     jassert(!apHash.isNull());
+
+    const bool newConnectionVisible = nmAccessPoints[apHash].isEmpty();
     nmAccessPoints[apHash].addIfNotAlreadyThere(addedAP);
+
+    // Create a matching AccessPoint object if one doesn't already exist:
     if(wifiAccessPoints.count(apHash) == 0)
     {
         Connection::Saved::Module* savedConnections
@@ -180,21 +193,32 @@ void Wifi::APList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
         jassert(!newWifiAP.isNull());
         jassert(newWifiAP.getHashValue() == apHash);
         wifiAccessPoints[apHash] = newWifiAP;
-        foreachHandler<UpdateInterface>([&newWifiAP]
-                (UpdateInterface* updateHandler)
-        {
-            updateHandler->accessPointAdded(newWifiAP);
-        });
     }
     
-    // Update signal strength if necessary.
+    // Update signal strength if necessary:
     AccessPoint& wifiAP = wifiAccessPoints[apHash];
     const unsigned int newSignalStrength = addedAP.getSignalStrength();
+    const bool signalStrengthChanged 
+            = (newSignalStrength > wifiAP.getSignalStrength());
     if(newSignalStrength > wifiAP.getSignalStrength())
     {
         static_cast<APInterface::SignalStrength*>(&wifiAP)->setSignalStrength
                 (newSignalStrength);
-        AccessPoint updatedAP = wifiAccessPoints[apHash];
+    }
+
+    // If relevant updates were made, share those updates with the appropriate
+    // Listener objects:
+    AccessPoint updatedAP = wifiAccessPoints[apHash];
+    if(newConnectionVisible)
+    {
+        foreachHandler<UpdateInterface>([&updatedAP]
+                (UpdateInterface* updateHandler)
+        {
+            updateHandler->accessPointAdded(updatedAP);
+        });
+    }
+    else if(signalStrengthChanged)
+    {
         foreachHandler<AP::UpdateInterface>([&updatedAP]
                 (AP::UpdateInterface* updateHandler)
         {
@@ -209,18 +233,10 @@ void Wifi::APList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
 void Wifi::APList::Module::removeAccessPoint
 (const LibNM::AccessPoint removedAP)
 {
+    ASSERT_NM_CONTEXT;
     const LibNM::APHash apHash = removedAP.generateHash();
     nmAccessPoints[apHash].removeAllInstancesOf(removedAP);
-    if(nmAccessPoints[apHash].isEmpty())
-    {
-        const AccessPoint toRemove = wifiAccessPoints[apHash];
-        wifiAccessPoints.erase(apHash);
-        foreachHandler<UpdateInterface>([&toRemove]
-                (UpdateInterface* updateHandler)
-        {
-            updateHandler->accessPointRemoved(toRemove);
-        });
-    }
+    updateAPIfLost(wifiAccessPoints[apHash]);
 }
 
 /*
@@ -229,9 +245,10 @@ void Wifi::APList::Module::removeAccessPoint
  */
 void Wifi::APList::Module::updateSignalStrength(AccessPoint toUpdate)
 {
+    ASSERT_NM_CONTEXT;
     const LibNM::APHash apHash = toUpdate.getHashValue();
     const unsigned int oldSignalStrength 
-        = wifiAccessPoints[apHash].getSignalStrength();
+            = wifiAccessPoints[apHash].getSignalStrength();
     unsigned int bestSignalStrength = 0;
     for(LibNM::AccessPoint accessPoint : nmAccessPoints[apHash])
     {
@@ -271,8 +288,8 @@ void Wifi::APList::Module::updateAllAccessPoints()
     LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
     nmThread->call([this, nmThread]()
     {
+        removeInvalidatedAccessPoints();
         LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice(); 
-        nmAccessPoints.clear();
         juce::Array<LibNM::AccessPoint> nmAPs = wifiDevice.getAccessPoints();
         for(LibNM::AccessPoint& nmAccessPoint : nmAPs)
         {
@@ -288,22 +305,36 @@ void Wifi::APList::Module::removeInvalidatedAccessPoints()
 {
     getSiblingModule<LibNM::Thread::Module>()->call([this]()
     {
-        juce::Array<LibNM::APHash> toClear;
         for(auto& iter : nmAccessPoints)
         {
             iter.second.removeIf([](LibNM::AccessPoint& nmAP)->bool
             {
                 return nmAP.isNull();
             });
-            if(iter.second.isEmpty())
-            {
-                toClear.add(iter.first);
-            }
         }
-        for(const LibNM::APHash hashValue : toClear)
+        for(auto& iter : wifiAccessPoints)
         {
-            wifiAccessPoints.erase(hashValue);
-            nmAccessPoints.erase(hashValue);
+            updateAPIfLost(iter.second);
         }
     });
+}
+
+/*
+ * Sets an AccessPoint object's signal strength to zero and notifies all 
+ * listeners that it has been removed, if and only if all LibNM::AccessPoint
+ * objects represented by the access point have been removed.
+ */
+void Wifi::APList::Module::updateAPIfLost(AccessPoint toCheck)
+{
+    LibNM::APHash apHash = toCheck.getHashValue();
+    if(nmAccessPoints[apHash].isEmpty())
+    {
+        static_cast<APInterface::SignalStrength*>(&toCheck)
+                ->setSignalStrength(0);
+        foreachHandler<UpdateInterface>([&toCheck]
+                (UpdateInterface* updateHandler)
+        {
+            updateHandler->accessPointRemoved(toCheck);
+        });
+    }
 }
