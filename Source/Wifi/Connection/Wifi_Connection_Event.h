@@ -10,10 +10,23 @@
  */
 #include "Wifi_AccessPoint.h"
 
-namespace Wifi { namespace Connection { class Event; } }
-namespace Wifi { namespace Connection { enum class EventType; } }
+namespace Wifi 
+{ 
+    namespace Connection 
+    { 
+        class Event; 
+        enum class EventType;
 
-namespace WifiConnect = Wifi::Connection;
+        /**
+         * @brief  Gets a string representation of a Wifi connection event type.
+         *
+         * @param type  The event type to convert.
+         *
+         * @return      The event type's string representation.
+         */
+        juce::String eventTypeString(const EventType type);
+    } 
+}
 
 /**
  * @brief  All types of event tracked using Connection::Event.
@@ -37,7 +50,8 @@ enum class Wifi::Connection::EventType
     invalid
 };
 
-class WifiConnect::Event
+
+class Wifi::Connection::Event
 {
 public:
     /**

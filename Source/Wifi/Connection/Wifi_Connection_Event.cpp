@@ -4,6 +4,32 @@
 namespace WifiConnect = Wifi::Connection;
 
 /*
+ * Gets a string representation of a Wifi connection event type.
+ */
+juce::String Wifi::Connection::eventTypeString(const EventType type)
+{
+    switch(type)
+    {
+        case EventType::connected:
+            return "connected";
+        case EventType::connectionRequested:
+            return "connectionRequested";
+        case EventType::connectionFailed:
+            return "connectionFailed";
+        case EventType::connectionAuthFailed:
+            return "connectionAuthFailed";
+        case EventType::disconnected:
+            return "disconnected";
+        case EventType::startedConnecting:
+            return "startedConnecting";
+        case EventType::invalid:
+            return "invalid";
+    }
+    jassertfalse;
+    return "invalid Wifi::Connection::EventType value";
+}
+
+/*
  * Creates a new connection event with initial connection data.
  */
 WifiConnect::Event::Event(
@@ -111,40 +137,17 @@ juce::String WifiConnect::Event::toString() const
     juce::String eventString = "AP:[";
     if(eventAP.isNull())
     {
-        eventString += "Null AP";
+        eventString << "Null AP";
     }
     else
     {
-        eventString += eventAP.getSSID().toString();
+        eventString << eventAP.getSSID().toString();
     }
-    eventString += "], Type:[";
-    switch(eventType)
-    {
-        case WifiConnect::EventType::connected:
-            eventString += "connected";
-            break;
-        case WifiConnect::EventType::connectionRequested:
-            eventString += "connectionRequested";
-            break;
-        case WifiConnect::EventType::connectionFailed:
-            eventString += "connectionFailed";
-            break;
-        case WifiConnect::EventType::connectionAuthFailed:
-            eventString += "connectionAuthFailed";
-            break;
-        case WifiConnect::EventType::disconnected:
-            eventString += "disconnected";
-            break;
-        case WifiConnect::EventType::startedConnecting:
-            eventString += "startedConnecting";
-            break;
-        case WifiConnect::EventType::invalid:
-            eventString += "invalid";
-    }
-    eventString += "], Time:[";
-    eventString += eventTime.toString(true, true, true, true);
-    eventString += " (";
-    eventString += juce::String(eventTime.toMilliseconds());
-    eventString += " ms)]";
+    eventString << "], Type:[" << eventTypeString(eventType)
+                << "], Time:["
+                << eventTime.toString(true, true, true, true)
+                << " ("
+                << juce::String(eventTime.toMilliseconds())
+                << " ms)]";
     return eventString;
 }
