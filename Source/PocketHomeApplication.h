@@ -1,4 +1,10 @@
 #pragma once
+/**
+ * @file  PocketHomeApplication.h
+ * 
+ * @brief  Initializes and shuts down the Juce application.
+ */
+
 #include "JuceHeader.h"
 #include "Theme_LookAndFeel.h"
 #include "Config_MainFile.h"
@@ -6,12 +12,11 @@
 #include "Theme_Colour_ConfigFile.h"
 #include "Theme_Image_ConfigFile.h"
 
-/**
- * @file PocketHomeApplication.h
- * 
- * @brief The base class that initializes and shuts down the program.
- */
 
+/**
+ * @brief  Controls how the Juce library initializes and shuts down the
+ *         application.
+ */
 class PocketHomeApplication : public juce::JUCEApplication
 {
 public:
@@ -20,48 +25,52 @@ public:
     virtual ~PocketHomeApplication() { }
     
 private:
-    
     /**
-     * This is called by the Juce framework to initialize the program.
-     * This will initialize audio and create the program window.
+     * @brief  Performs all required initialization when the application is
+     *         first launched.
+     *
+     * This will be called by the Juce library immediately when the application
+     * starts. 
      * 
-     * @param commandLine  This will contain the full command used to launch
-     *                      the program, so that any command line parameters
-     *                      can be processed.
+     * @param commandLine   The full command used to launch the application.
      */
     void initialise(const juce::String &commandLine) override;
 
     /**
-     * This is called by the Juce framework to safely shut down the program.
+     * @brief  Performs all necessary cleanup steps before the application can
+     *         be safely closed.
+     *
+     *  This will be called by the Juce framework shortly before the application
+     * exits.
      */
     void shutdown() override;
 
     /**
-     * @return the application name set in Juce project files.
+     * @brief  Gets the name of this application.
+     *
+     * @return  The name the Juce library uses to identify this application.
      */
-    const juce::String getApplicationName() override
-    {
-        return ProjectInfo::projectName;
-    }
+    const juce::String getApplicationName() override;
 
     /**
-     * @return the application version set in Juce project files.
+     * @brief  Gets the application's version string.
+     *
+     * @return  The application version string tracked by the Juce Library.
      */
-    const juce::String getApplicationVersion() override
-    {
-        return ProjectInfo::versionString;
-    }
+    const juce::String getApplicationVersion() override;
 
     /**
-     * @return false, it is very unlikely that anyone actually has reason to
-     *          run multiple instances of this application.
+     * @brief  Checks if multiple versions of this application may run
+     *         simultaneously.
+     *
+     * @return  False, since there's no good reason to run multiple instances of
+     *          this application, and any attempt to do so is probably 
+     *          accidental.
      */
-    bool moreThanOneInstanceAllowed() override
-    {
-        return false;
-    }
+    bool moreThanOneInstanceAllowed() override;
     
     /* Application resource objects: 
+     *
      *  These objects remain allocated as long as one instance of them exists
      * somewhere. Declaring them here ensures that they will remain allocated
      * as long as the application is running.
@@ -77,7 +86,7 @@ private:
     Theme::Colour::ConfigFile colourConfig;
 
     /* These resources are dynamically allocated because they should be created 
-     * in the order they are listed here. */
+     * in the order listed here, and destroyed in the opposite order. */
 
     /* The program appearance manager: */
     std::unique_ptr<Theme::LookAndFeel> lookAndFeel = nullptr;

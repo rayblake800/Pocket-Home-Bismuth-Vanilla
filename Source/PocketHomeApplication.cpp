@@ -6,67 +6,88 @@
 #include "TempTimer.h"
 #include "ScopeTimerRecords.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "PocketHomeApplication::";
+#endif
+
 /* Milliseconds to wait between window focus attempts: */
 static const constexpr int focusWaitMs = 200;
 
-/* Sets if tests should run after the window initializes. */
+/* Sets if tests should run after the window is created and focused. */
 static bool runTests = false;
+
+/* Sets if tests should print all output. */
 static bool verboseTesting = false;
+
 /* Specific test categories to run: */
 static juce::StringArray testCategories;
 
 /**
- * Attempts to activate the application window and grab keyboard focus.  This
- * may fail if the window isn't fully initialized, so it will repeatedly call
- * itself on a timer until the action succeeds.
+ * @brief  Runs application tests and shuts down the application.
+ *
+ *  The application window should be created and focused before this function is
+ * called.
+ */
+static void runApplicationTests()
+{
+    juce::UnitTestRunner tester;
+    tester.setPassesAreLogged(verboseTesting);
+    if(testCategories.isEmpty())
+    {
+        DBG(dbgPrefix << __func__ << ": Running all pocket-home tests.");
+        tester.runAllTests();
+    }
+    else
+    {
+        for(const juce::String& category : testCategories)
+        {
+            DBG(dbgPrefix << __func__ << ": Running test category: " 
+                    << category);
+            tester.runTestsInCategory(category);
+        }
+    }
+    DBG(dbgPrefix << __func__ << ": Finished running application tests.");
+    juce::JUCEApplication::getInstance()->systemRequestedQuit();
+}
+
+/**
+ * @brief  Attempts to activate the application window and grab keyboard focus.  
+ *
+ *  This may fail if the window isn't fully initialized, so it will repeatedly 
+ * call itself on a timer until the action succeeds.
  */
 static void focusAppWindow()
 {
-    using namespace juce;
     XWindowInterface xWindows;
     Window appWindow = xWindows.getPocketHomeWindow();
     xWindows.activateWindow(appWindow);
-    Component * rootComponent = Desktop::getInstance().getComponent(0);
+    juce::Component * rootComponent 
+            = juce::Desktop::getInstance().getComponent(0);
     rootComponent->grabKeyboardFocus();
     if(runTests && xWindows.isActiveWindow(appWindow))
     {
-        UnitTestRunner tester;
-        tester.setPassesAreLogged(verboseTesting);
-        if(testCategories.isEmpty())
-        {
-            DBG("Running all pocket-home tests:");
-            tester.runAllTests();
-        }
-        else
-        {
-            for(const juce::String& category : testCategories)
-            {
-                DBG("Running test category: " << category);
-                tester.runTestsInCategory(category);
-            }
-        }
-        JUCEApplication::getInstance()->systemRequestedQuit();
+        DBG(dbgPrefix << __func__ 
+                << ": Window focused, running pocket-home tests:");
+        runApplicationTests();
     }
     else if(!WindowFocus::isFocused())
     {
         TempTimer::initTimer(focusWaitMs, focusAppWindow);
     }
-    
 }
 
-/**
- * This is called by the Juce framework to initialize the program.
- * This will initialize audio and create the program window.
+/*
+ * Performs all required initialization when the application is first launched.
  */
 void PocketHomeApplication::initialise(const juce::String &commandLine)
 {
-    using namespace juce;
-    using std::cerr;
-    StringArray args;
+    juce::StringArray args;
     args.addTokens(commandLine, true);
 
     if (args.contains("--help"))
     {
+        using std::cerr;
         cerr << "arguments:" << std::endl;
         cerr << "  --help	         Print usage help\n";
         cerr << "  --fakeWifi	     Use fake WifiStatus\n";
@@ -77,20 +98,16 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         return;
     }
 
-    // open sound handle
     if (!Audio::chipAudioInit())
     {
         DBG("PocketHomeApplication::" << __func__
-                << ": Sound failed to initialize");
+                << ": PocketC.H.I.P audio setup failed");
     }
-    runTests = args.contains("--test");
     lookAndFeel.reset(new Theme::LookAndFeel);
-    LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
-    if(!runTests)
-    {
-        homeWindow.reset(new PocketHomeWindow(getApplicationName()));
-    }
-    else
+    juce::LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
+
+    runTests = args.contains("--test");
+    if(runTests)
     {
         verboseTesting = args.contains("-v");
         int categoryIndex = args.indexOf("-categories");
@@ -101,28 +118,58 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
                 testCategories.add(args[i]);
             }
         }
-        //Use an empty window and don't initialize signal thread when testing
-        homeWindow.reset(new DocumentWindow(getApplicationName(), 
-                Colours::dimgrey, DocumentWindow::allButtons));
+
+        // Use an empty window when testing.
+        homeWindow.reset(new juce::DocumentWindow(getApplicationName(), 
+                juce::Colours::dimgrey, juce::DocumentWindow::allButtons));
         homeWindow->setBounds(0,0,50,50);
-        homeWindow->setLookAndFeel(&LookAndFeel::getDefaultLookAndFeel());
+        homeWindow->setLookAndFeel(&juce::LookAndFeel::getDefaultLookAndFeel());
         homeWindow->setUsingNativeTitleBar(true);
         homeWindow->setResizable(true, false);
         homeWindow->setVisible(true);
         homeWindow->addToDesktop();
+    }
+    else
+    {
+        homeWindow.reset(new PocketHomeWindow(getApplicationName()));
     }           
     focusAppWindow();
 }
 
 /*
- * This is called by the Juce framework to safely shut down the application.
+ * Performs all necessary cleanup steps before the application can be safely 
+ * closed.
  */
 void PocketHomeApplication::shutdown()
 {
-    DBG("PocketHomeApplication::shutdown(): Closing application resources.");
+    DBG(dbgPrefix << __func__ << ": Closing application resources.");
     ShutdownBroadcaster::broadcastShutdown();
     homeWindow.reset(nullptr);
     juce::LookAndFeel::setDefaultLookAndFeel(nullptr);
     lookAndFeel.reset(nullptr);
     ScopeTimerRecords::printRecords();
+}
+
+/*
+ * Gets the name of this application.
+ */
+const juce::String PocketHomeApplication::getApplicationName()
+{
+    return ProjectInfo::projectName;
+}
+
+/*
+ * Gets the application's version string.
+ */
+const juce::String PocketHomeApplication::getApplicationVersion()
+{
+    return ProjectInfo::versionString;
+}
+
+/*
+ * Checks if multiple versions of this application may run simultaneously.
+ */
+bool PocketHomeApplication::moreThanOneInstanceAllowed()
+{
+    return false;
 }
