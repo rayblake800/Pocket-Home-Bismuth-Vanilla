@@ -60,6 +60,42 @@ void GLib::SharedThread::callAsync(std::function<void()> toCall,
 }
 
 /*
+ * Runs an asynchronous callback function on the thread after safely acquiring 
+ * the thread's resource lock.
+ */
+void GLib::SharedThread::lockForAsyncCallback(
+        const SharedResource::LockType lockType,
+        const std::function<void()> lockedAction)
+{
+
+    SharedResource::Thread::Lock* threadLock = getThreadLock();
+    /* If this assertion fails, the method is being called outside the event
+     * loop. */
+    jassert(threadLock != nullptr);
+    const bool acquiredLock = (lockType == SharedResource::LockType::read) ?
+            threadLock->tryEnterRead() : threadLock->tryEnterWrite();
+    if(acquiredLock)
+    {
+        lockedAction();
+        if(lockType == SharedResource::LockType::read)
+        {
+            threadLock->exitRead();
+        }
+        else
+        {
+            threadLock->exitWrite();
+        }
+    }
+    else
+    {
+        callAsync([this, lockType, lockedAction]()
+        {
+            lockForAsyncCallback(lockType, lockedAction);
+        });
+    }
+}
+
+/*
  * Gets the thread's context.
  */
 GLib::SharedContextPtr GLib::SharedThread::getContext() const

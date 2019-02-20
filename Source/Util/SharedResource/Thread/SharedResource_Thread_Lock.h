@@ -62,6 +62,22 @@ public:
      */
     void exitWrite() const;
 
+    /**
+     * @brief  Attempts to lock the thread for reading, without blocking the
+     *         calling thread if the lock can't be acquired.
+     *
+     * @return  Whether the lock was successfully acquired.
+     */
+    bool tryEnterRead() const;
+
+    /**
+     * @brief  Attempts to lock the thread for writing, without blocking the
+     *         calling thread if the lock can't be acquired.
+     *
+     * @return  Whether the lock was successfully acquired.
+     */
+    bool tryEnterWrite() const;
+
 private:
     /* Allow the SharedResource::Thread scoped lock classes to access the 
        resource's ReadWriteLock. */

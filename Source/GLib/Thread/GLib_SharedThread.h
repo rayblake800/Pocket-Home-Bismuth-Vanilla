@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file GLib_SharedThread.h
+ * @file  GLib_SharedThread.h
  * 
  * @brief  Runs a GLib event loop on a shared thread resource. 
  */
@@ -82,6 +82,31 @@ public:
      */
     void callAsync(std::function<void()> toCall,
             std::function<void()> onFailure = std::function<void()>());
+
+    /**
+     * @brief  Runs an asynchronous callback function on the thread after safely 
+     *         acquiring the thread's resource lock.
+     *
+     *  If an asynchronous callback function attempts to acquire the thread's
+     * resource lock normally, the thread will remain inactive until the lock is
+     * acquired. This will cause a deadlock will occur if another thread is 
+     * trying to use the SharedThread::call method while it holds the resource 
+     * lock.
+     * 
+     *  If lockFromAsyncCallback fails to immediately acquire the lock, instead
+     * of waiting for the lock to be released, it postpones the asynchronous
+     * action so the thread that already holds the lock can run code on the 
+     * SharedThread if necessary. The lockedAction will be rescheduled as many
+     * times as is necessary until it can finally acquire the lock.
+     *
+     * @param lockType       Selects whether the thread's Resource should be
+     *                       locked for reading or for writing.
+     *
+     * @param lockedAction   An asynchronous action that should run once the
+     *                       lock is acquired.
+     */
+    void lockFromAsyncCallback(const SharedResource::LockType lockType,
+            const std::function<void()> lockedAction);
     
     /**
      * @brief  Gets the thread's context.
@@ -105,7 +130,6 @@ public:
      */
     void notifyThread();
 
-protected:
     /**
      * @brief  Grants the SharedThread access to its ThreadLock within the
      *         GLib event loop.

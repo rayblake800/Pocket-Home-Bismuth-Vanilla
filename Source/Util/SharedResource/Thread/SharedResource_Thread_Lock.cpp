@@ -40,3 +40,21 @@ void SharedResource::Thread::Lock::exitWrite() const
 {
     getResourceLock().exitWrite();
 }
+
+/*
+ * Attempts to lock the thread for reading, without blocking the calling thread 
+ * if the lock can't be acquired.
+ */
+bool SharedResource::Thread::Lock::tryEnterRead() const
+{
+    return getResourceLock().tryEnterRead();
+}
+
+/*
+ * Attempts to lock the thread for writing, without blocking the calling thread 
+ * if the lock can't be acquired.
+ */
+bool SharedResource::Thread::Lock::tryEnterWrite() const
+{
+    return getResourceLock().tryEnterWrite();
+}
