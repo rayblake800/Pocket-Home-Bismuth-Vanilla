@@ -108,7 +108,7 @@ SettingsListPage::SettingsList::SettingsList()
 /*
  * Gets the total number of page buttons.
  */
-unsigned int SettingsListPage::SettingsList::getListSize()
+unsigned int SettingsListPage::SettingsList::getListSize() const
 {
     return Password::isPasswordSet() ? 6 : 5;
 }

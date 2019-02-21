@@ -1,5 +1,15 @@
 #include "PagedList.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "PagedList::";
+#endif
+
+    
+/* Default animation duration(milliseconds) when scrolling between list 
+ * pages: */
+static const constexpr unsigned int defaultAnimDuration = 300;
+
 PagedList::PagedList() : 
 upButton(NavButton::up),
 downButton(NavButton::down)        
@@ -11,11 +21,37 @@ downButton(NavButton::down)
     setInterceptsMouseClicks(false, true);
 }
 
-/**
- * Provides the weight value used to set each list item's relative
- * height. All list items have vertical weight 1 by default.  Subclasses
- * should override this method if they need to have rows of varying
- * heights.
+/*
+ * Changes the current selected list page, updating the list layout to show the 
+ * selected page.
+ */
+void PagedList::setPageIndex
+(const unsigned int newIndex, const bool animate, const unsigned int duration)
+{
+    using Transition= Layout::Transition::Type;
+    if(newIndex < 0 || newIndex >= getPageCount())
+    {
+        DBG(dbgPrefix << __func__ << ": can't set page to invalid index "
+                << (int) newIndex);
+        return;
+    }
+    else if(newIndex == pageIndex)
+    {
+        DBG(dbgPrefix << __func__ << ": tried to move to page " 
+                << (int) newIndex << " but that's already the selected page.");
+        return;
+    }
+    const Transition animationType = animate ?
+        ((newIndex > pageIndex) ? Transition::moveUp : Transition::moveDown)
+        : Transition::none;
+    const unsigned int animationDuration = animate ? duration : 0;
+    pageIndex = newIndex;
+    refreshListContent(animationType, animationDuration);
+    pageSelectionChanged();
+}
+
+/*
+ * Provides the weight value used to set each list item's relative height. 
  */
 unsigned int PagedList::getListItemWeight(const unsigned int index)
 {
@@ -25,7 +61,7 @@ unsigned int PagedList::getListItemWeight(const unsigned int index)
 /*
  * Sets the number of list items that are displayed at one time.
  */
-void PagedList::setItemsPerPage(int perPage)
+void PagedList::setItemsPerPage(const unsigned int perPage)
 {
     if(perPage != itemsPerPage)
     {
@@ -45,13 +81,25 @@ unsigned int PagedList::getItemsPerPage() const
     return itemsPerPage;
 }
 
-
+/*
+ * Gets the number of pages in the list.
+ */
+unsigned int PagedList::getPageCount() const
+{
+    const unsigned int listSize = getListSize();
+    unsigned int pageCount = listSize / itemsPerPage;
+    if((listSize % itemsPerPage) > 0)
+    {
+        pageCount++;
+    }
+    return pageCount;
+}
     
 /*
  * Sets the fraction of the list height that should be placed between list
  * items.
  */
-void PagedList::setYPaddingFraction(float paddingFraction)
+void PagedList::setYPaddingFraction(const float paddingFraction)
 {
     yPaddingFraction = paddingFraction;
     if(getParentComponent() != nullptr && !getBounds().isEmpty())
@@ -64,16 +112,14 @@ void PagedList::setYPaddingFraction(float paddingFraction)
  * Reloads list content, running updateListItem for each visible
  * list item.
  */
-void PagedList::refreshListContent(Layout::Transition::Type transition,
-        unsigned int duration)
+void PagedList::refreshListContent(const Layout::Transition::Type transition,
+        const unsigned int duration)
 {
     Layout::Group::RelativeLayout layout;
     unsigned int listSize = getListSize();
-    while((pageIndex * itemsPerPage) > listSize)
-    {
-        pageIndex--;
-    }
+    pageIndex = std::min(pageIndex, getPageCount() - 1);
     int componentsSaved = listComponents.size();
+    // Update the list layout:
     for(int i = 0; i < itemsPerPage; i++)
     {
         int itemIndex = i + pageIndex * itemsPerPage;
@@ -88,14 +134,11 @@ void PagedList::refreshListContent(Layout::Transition::Type transition,
         }
         layout.addRow(row);
     }
-    upButton.setVisible(showNavButtons && pageIndex > 0);
-    downButton.setVisible(showNavButtons
-            && listSize > ((pageIndex + 1) * itemsPerPage));
     layout.setYPaddingFraction(yPaddingFraction);
     layout.setYMarginFraction(std::max(upButton.yMarginFractionNeeded(),
             downButton.yMarginFractionNeeded()));
     layoutManager.transitionLayout(layout, this, transition, duration);
-    //update recycled components
+    // Update individual list components:
     for(int i = 0; i < itemsPerPage; i++)
     {
         int itemIndex = i + pageIndex * itemsPerPage;
@@ -105,43 +148,42 @@ void PagedList::refreshListContent(Layout::Transition::Type transition,
         }
         updateListItem(listComponents[i], itemIndex);
     }
+    updateNavButtonVisibility(showNavButtons);
 }
 
 /*
- * Shows or hides the list page navigation buttons.
+ * Updates the list page navigation button visibility.
  */
-void PagedList::setNavButtonsVisible(bool buttonsVisible)
+void PagedList::updateNavButtonVisibility(const bool buttonsVisible)
 {
-    if(buttonsVisible != showNavButtons)
-    {
-        showNavButtons = buttonsVisible;
-        upButton.setVisible(showNavButtons && pageIndex > 0);
-        downButton.setVisible(showNavButtons
-               && getListSize() > ((pageIndex + 1) * itemsPerPage));
-    }
+    showNavButtons = buttonsVisible;
+    upButton.setVisible(showNavButtons && pageIndex > 0);
+    downButton.setVisible(showNavButtons && pageIndex < (getPageCount() - 1));
 }
-
 
 /*
  * Scrolls the list when the navigation buttons are clicked.  
  */
 void PagedList::buttonClicked(juce::Button* button)
 {
+    int newIndex = pageIndex;
     if(button == &upButton)
     {
-        if(pageIndex > 0)
-        {
-            pageIndex--;
-        }
-        refreshListContent(Layout::Transition::Type::moveDown, animDuration);
+        newIndex--;
     }
     else if(button == &downButton)
     {
-        if(getListSize() > ((pageIndex + 1) * itemsPerPage))
-        {
-            pageIndex++;
-        }
-        refreshListContent(Layout::Transition::Type::moveUp, animDuration);
+        newIndex++;
+    }
+    else
+    {
+        DBG(dbgPrefix << __func__ << ": Unexpected button \""
+                << button->getName() << "\" captured by PagedList!"); 
+        return;
+    }
+    if(newIndex >= 0 && newIndex < getPageCount())
+    {
+        setPageIndex(newIndex, true, defaultAnimDuration);
     }
 }
 

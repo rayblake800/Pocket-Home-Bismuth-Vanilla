@@ -50,7 +50,7 @@ private:
          * 
          * @return  The number of page buttons. 
          */
-        virtual unsigned int getListSize();
+        virtual unsigned int getListSize() const;
         
         /**
          * Updates or creates a page TextButton for a specific button index.

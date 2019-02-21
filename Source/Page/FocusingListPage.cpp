@@ -182,7 +182,7 @@ void FocusingListPage::FocusingList::updateList(
             = dynamic_cast<FocusingListPage*>(getParentComponent());
     if(parentPage != nullptr)
     {
-        setNavButtonsVisible(parentPage->getSelectedIndex() < 0);
+        updateNavButtonVisibility(parentPage->getSelectedIndex() < 0);
         refreshListContent(transition, duration);
     }
 }
@@ -190,7 +190,7 @@ void FocusingListPage::FocusingList::updateList(
 /*
  * Reads the number of list items from the parent FocusingListPage
  */
-unsigned int FocusingListPage::FocusingList::getListSize() 
+unsigned int FocusingListPage::FocusingList::getListSize() const
 { 
     FocusingListPage* parentPage 
             = dynamic_cast<FocusingListPage*>(getParentComponent());

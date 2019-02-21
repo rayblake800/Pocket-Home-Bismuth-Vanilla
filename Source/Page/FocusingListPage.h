@@ -232,7 +232,7 @@ private:
          * 
          * @return  The number of items in the list.
          */
-        virtual unsigned int getListSize() override;
+        virtual unsigned int getListSize() const override;
 
         /**
          * @brief  Updates a list item, loading and applying its layout from the

@@ -27,7 +27,21 @@ public:
      * 
      * @return  The number of Component objects in the list.
      */
-    virtual unsigned int getListSize() = 0;
+    virtual unsigned int getListSize() const = 0;
+
+    /**
+     * @brief  Changes the current selected list page, updating the list layout
+     *         to show the selected page.
+     *
+     * @param newIndex  The new page index to show. No action will be taken if
+     *                  this is not a valid page index.
+     * 
+     * @param animate   Whether any list item transition should be animated.
+     * 
+     * @param duration  Duration in milliseconds to run transition animations.
+     */
+    void setPageIndex(const unsigned int newIndex, const bool animate,
+            const unsigned int duration);
     
 protected:
     /**
@@ -66,7 +80,7 @@ protected:
      * 
      * @param perPage  The number of Components to display per list page.
      */
-    void setItemsPerPage(int perPage);
+    void setItemsPerPage(const unsigned int perPage);
     
     /**
      * @brief  Gets the number of list items shown on the page at one time.
@@ -76,13 +90,21 @@ protected:
     unsigned int getItemsPerPage() const;
 
     /**
+     * @brief  Gets the number of pages in the list.
+     *
+     * @return  The number of pages that can be displayed with the current list
+     *          size and items per page.
+     */
+    unsigned int getPageCount() const;
+
+    /**
      * @brief  Sets the fraction of the list height that should be placed 
      *         between list items.
      * 
      * @param paddingFraction  The fraction of the height used to determine
      *                         padding size.
      */
-    void setYPaddingFraction(float paddingFraction);
+    void setYPaddingFraction(const float paddingFraction);
     
     /**
      * @brief  Reloads list content, running updateListItem for each visible
@@ -93,24 +115,33 @@ protected:
      * 
      * @param duration    Duration in milliseconds to run transition animations.
      */
-    void refreshListContent(Layout::Transition::Type transition
-            = Layout::Transition::Type::none, unsigned int duration = 0);
+    void refreshListContent(
+            const Layout::Transition::Type transition
+                    = Layout::Transition::Type::none, 
+            const unsigned int duration = 0);
         
     /**
-     * @brief  Shows or hides the list page navigation buttons. 
+     * @brief  Updates the list page navigation button visibility.
      *
-     * By default, navigation buttons will be visible. Even if navigation 
-     * buttons are currently set as visible, the up navigation button will still
-     * be hidden on the first list page, and the down navigation button will 
-     * still be hidden on the last list page.
+     *  The up navigation button will always be hidden on the first page, and
+     * the down navigation button will always be hidden on the last page.
      *
      * @param buttonsVisible  If true, navigation buttons will be shown when
      *                        relevant. If false, navigation buttons will always
      *                        be hidden.
      */
-    void setNavButtonsVisible(bool buttonsVisible);
+    void updateNavButtonVisibility(const bool buttonsVisible);
 
 private:
+    /**
+     * @brief  Performs some action whenever the selected page index changes.
+     *
+     *  By default, this takes no action. PagedList subclasses should override 
+     * this method if they need to do something whenever the page selection 
+     * changes.
+     */
+    virtual void pageSelectionChanged() { }
+
     /**
      * @brief  Scrolls the list when the navigation buttons are clicked.  
      *
@@ -145,7 +176,4 @@ private:
     
     /* The fraction of the list height to place between each list item pair: */
     float yPaddingFraction = 0.05;
-    
-    /* Animation duration(milliseconds) when scrolling between list pages: */
-    static const constexpr unsigned int animDuration = 300;
 };
