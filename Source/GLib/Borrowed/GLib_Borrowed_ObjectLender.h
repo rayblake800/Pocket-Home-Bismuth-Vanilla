@@ -135,6 +135,7 @@ public:
         if(borrowedObjects.count(objectData) > 0)
         {
             borrowedObjects[objectData].invalidateObject();
+            borrowedObjects.erase(objectData);
         }
     }
 
