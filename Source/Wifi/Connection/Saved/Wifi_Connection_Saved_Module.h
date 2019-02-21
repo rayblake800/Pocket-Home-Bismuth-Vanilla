@@ -7,7 +7,7 @@
  *
  * @brief  Reads and removes saved Wifi connections.
  */
-#include "SharedResource_Modular_Module.h"
+#include "Wifi_Module.h"
 #include "Wifi_LibNM_DBus_SavedConnectionLoader.h"
 
 namespace Wifi 
@@ -27,16 +27,15 @@ namespace Wifi
  * connection objects, reads the last time that they were active, and allows
  * them to be deleted.
  */
-class Wifi::Connection::Saved::Module : 
-    public SharedResource::Modular::Module<Resource>
+class Wifi::Connection::Saved::Module : public Wifi::Module
 {
 public:
     /**
      * @brief  Loads all connections saved by NetworkManager.
      *
-     * @param wifiResource  The modular resource object creating this Module.
+     * @param parentResource  The Wifi::Resource object instance.
      */
-    Module(Resource& wifiResource);
+    Module(Resource& parentResource);
 
     virtual ~Module() { }
     
@@ -109,7 +108,6 @@ public:
      */
     void updateSavedAPData(AccessPoint toUpdate);
 
-private:
     /**
      * @brief  Gets all saved connections compatible with a particular 
      *         AccessPoint object.
@@ -124,6 +122,21 @@ private:
     juce::Array<LibNM::DBus::SavedConnection> getMatchingConnections
     (const Wifi::AccessPoint toMatch);
 
+    /**
+     * @brief  Gets all saved connections compatible with a particular 
+     *         LibNM::AccessPoint object.
+     *
+     * This method must be called within the LibNM::ThreadResource.
+     *
+     * @param toMatch  The access point to search for.
+     *
+     * @return         All saved connections that could have used the provided
+     *                 AccessPoint parameter.
+     */
+    juce::Array<LibNM::DBus::SavedConnection> getMatchingConnections
+    (const Wifi::LibNM::AccessPoint toMatch);
+
+private:
     /* Reads and removes saved network connections: */
     LibNM::DBus::SavedConnectionLoader savedConnections;
 };
