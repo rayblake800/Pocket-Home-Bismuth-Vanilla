@@ -87,13 +87,16 @@ public:
      * @brief  Runs an asynchronous callback function on the thread after safely 
      *         acquiring the thread's resource lock.
      *
+     *  Only call this method from within an asynchronous callback function that
+     * is already running within the thread's event loop.
+     *
      *  If an asynchronous callback function attempts to acquire the thread's
      * resource lock normally, the thread will remain inactive until the lock is
      * acquired. This will cause a deadlock will occur if another thread is 
      * trying to use the SharedThread::call method while it holds the resource 
      * lock.
      * 
-     *  If lockFromAsyncCallback fails to immediately acquire the lock, instead
+     *  If lockForAsyncCallback fails to immediately acquire the lock, instead
      * of waiting for the lock to be released, it postpones the asynchronous
      * action so the thread that already holds the lock can run code on the 
      * SharedThread if necessary. The lockedAction will be rescheduled as many
@@ -105,7 +108,7 @@ public:
      * @param lockedAction   An asynchronous action that should run once the
      *                       lock is acquired.
      */
-    void lockFromAsyncCallback(const SharedResource::LockType lockType,
+    void lockForAsyncCallback(const SharedResource::LockType lockType,
             const std::function<void()> lockedAction);
     
     /**
