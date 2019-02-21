@@ -16,9 +16,9 @@ namespace NMThread = Wifi::LibNM::Thread;
 /*
  * Initializes the NMThread with the default GLib context.
  */
-NMThread::Module::Module(Resource& wifiResource) : GLib::SharedThread
-        (Resource::resourceKey.toString(),g_main_context_default()),
-SharedResource::Modular::Module<Resource>(wifiResource),
+NMThread::Module::Module(Resource& parentResource) : 
+GLib::SharedThread(Resource::resourceKey.toString(), g_main_context_default()),
+Wifi::Module(parentResource),
 networkClient() { }
         
 /*
@@ -134,7 +134,6 @@ void NMThread::Module::initWifiDevice()
                 << wifiDevice.getInterface() << ", path="
                 << wifiDevice.getPath());
         wifiDevice.setLenders(&wifiConnectionLender, &accessPointLender);
-        wifiDevice.requestScan();
     }
 }
 

@@ -33,7 +33,21 @@ Wifi::LibNM::DeviceWifi NMThread::Handler::getWifiDevice() const
             = getWriteLockedResource();
     return nmThread->getWifiDevice();
 }
+
+/*
+ * Schedules a function to run asynchronously within the LibNM thread module's 
+ * event loop.
+ */
+void NMThread::Handler::callAsync(std::function<void()> toCall) const
+{
+    GLib::ThreadHandler<SharedResource::Modular::Handler<Resource, Module>>
+            ::callAsync(toCall);
+}
     
+/*
+ * Calls a function within the LibNM thread module's event loop, waiting until 
+ * the function finishes executing.
+ */
 void NMThread::Handler::call(std::function<void()> toCall) const
 {
     GLib::ThreadHandler<SharedResource::Modular::Handler<Resource, Module>>

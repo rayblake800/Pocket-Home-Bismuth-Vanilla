@@ -8,11 +8,11 @@
  */
 
 #include "GLib_SharedThread.h"
+#include "Wifi_Module.h"
 #include "Wifi_LibNM_Client.h"
 #include "Wifi_LibNM_DeviceWifi.h"
 #include "Wifi_LibNM_AccessPoint.h"
 #include "Wifi_LibNM_ActiveConnection.h"
-#include "SharedResource_Thread_Module.h"
 #include "GLib_Borrowed_ObjectLender.h"
 
 namespace Wifi { namespace LibNM { namespace Thread { class Module; } } }
@@ -25,15 +25,15 @@ namespace Wifi { class Resource; }
  * needed, and not saved for future use.
  */
 class Wifi::LibNM::Thread::Module : public GLib::SharedThread,
-        public SharedResource::Modular::Module<Resource>
+        public Wifi::Module
 {
 public:
     /**
      * @brief  Initializes the ThreadResource with the default GLib context.
      *
-     * @param wifiResource  The main Wifi::Resource object.
+     * @param parentResource  The main Wifi::Resource object.
      */
-    Module(Resource& wifiResource);
+    Module(Resource& parentResource);
 
     virtual ~Module() { }
 

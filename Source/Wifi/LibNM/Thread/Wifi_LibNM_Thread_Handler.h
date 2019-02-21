@@ -51,5 +51,19 @@ public:
      */
     DeviceWifi getWifiDevice() const;
 
+    /**
+     * @brief  Schedules a function to run asynchronously within the LibNM 
+     *         thread module's event loop.
+     *
+     * @param toCall  A function to call within the thread's event loop.
+     */
+    void callAsync(std::function<void()> toCall) const;
+
+    /**
+     * @brief  Calls a function within the LibNM thread module's event loop,
+     *         waiting until the function finishes executing.
+     *
+     * @param toCall  A function to call within the thread's event loop.
+     */
     void call(std::function<void()> toCall) const;
 };
