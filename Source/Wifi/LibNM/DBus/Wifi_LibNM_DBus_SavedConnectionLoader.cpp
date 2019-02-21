@@ -124,7 +124,7 @@ NMDBus::SavedConnectionLoader::getConnectionPaths() const
 }
 
 /*
- * Checks if a saved connection exists that is compatible with a
+ * Checks if a saved connection exists that is compatible with an access point.
  */
 bool NMDBus::SavedConnectionLoader::matchingConnectionExists
 (const AccessPoint& accessPoint) const
