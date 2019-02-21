@@ -9,7 +9,11 @@ GLib::ErrorPtr::ErrorPtr(std::function<void(GError*)> errorHandler) :
 /*
  * Creates an error pointer to manage an existing error value.
  */
-GLib::ErrorPtr::ErrorPtr(GError* error) : error(error) { }
+GLib::ErrorPtr::ErrorPtr(GError* error) : error(error),
+errorHandler([](GError* error)
+{ 
+    DBG("Error: " << juce::String(error->message)); 
+}) { }
 
 /*
  * Handles and frees the stored error structure if it is non-null.
@@ -36,7 +40,10 @@ void GLib::ErrorPtr::handleError()
 {
     if(error != nullptr)
     {
-        errorHandler(error);
+        if(errorHandler)
+        {
+            errorHandler(error);
+        }
         g_clear_error(&error);
     }
 }
