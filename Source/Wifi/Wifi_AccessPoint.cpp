@@ -11,19 +11,12 @@
 /*
  * Creates new access point data from a LibNM access point object.
  */
-Wifi::AccessPoint::AccessPoint(const LibNM::AccessPoint nmAccessPoint)
+Wifi::AccessPoint::AccessPoint(const LibNM::SSID ssid,
+            const LibNM::APHash apHash,
+            const LibNM::SecurityType securityType,
+            const int strength)
 {
-    ASSERT_NM_CONTEXT
-    if(!nmAccessPoint.isNull())
-    {
-        const LibNM::SSID ssid = nmAccessPoint.getSSID();
-        const LibNM::APHash hash = nmAccessPoint.generateHash();
-        const LibNM::SecurityType securityType
-                = nmAccessPoint.getSecurityType();
-        const int signalStrength = nmAccessPoint.getSignalStrength();
-        getDataReference() = new AP::Data(ssid, hash, securityType, 
-                signalStrength);
-    }
+    getDataReference() = new AP::Data(ssid, apHash, securityType, strength);
 }
 
 /*
@@ -45,6 +38,23 @@ bool Wifi::AccessPoint::operator==(const AccessPoint& rhs) const
 bool Wifi::AccessPoint::operator!=(const AccessPoint& rhs) const
 {
     return getHashValue() != rhs.getHashValue();
+}
+
+/*
+ * Checks if this AccessPoint represents a particular LibNM::AccessPoint.
+ */
+bool Wifi::AccessPoint::operator==(const LibNM::AccessPoint& rhs) const
+{
+    return getHashValue() == rhs.generateHash();
+}
+
+/*
+ * Checks if this AccessPoint does not represent a particular 
+ * LibNM::AccessPoint.
+ */
+bool Wifi::AccessPoint::operator!=(const LibNM::AccessPoint& rhs) const
+{
+    return getHashValue() != rhs.generateHash();
 }
 
 /*

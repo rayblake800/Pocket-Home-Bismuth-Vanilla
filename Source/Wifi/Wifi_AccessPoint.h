@@ -24,11 +24,14 @@ namespace Wifi
     enum class SecurityType;
     namespace APList { class Module; }
     namespace Connection { namespace Saved { class Module; } }
+    namespace Signal { class DeviceModule; }
     namespace LibNM
     {
+        class SSID;
+        class APHash;
+        enum class SecurityType;
         class Connection;
         class AccessPoint;
-        namespace Signal { class DeviceHandler; }
     }
     
     /* Restricted property update interfaces used by the AccessPoint class: */
@@ -54,7 +57,7 @@ protected:
 
 /**
  * @brief  Allows only the Connection::Saved::Module and the 
- *         LibNM::Signal::DeviceHandler to update AccessPoint saved connection 
+ *         Signal::DeviceModule to update AccessPoint saved connection 
  *         state.
  */
 class Wifi::APInterface::SavedConnection
@@ -64,7 +67,7 @@ public:
 protected:
     SavedConnection() { }
     friend class Connection::Saved::Module;
-    friend class LibNM::Signal::DeviceHandler;
+    friend class Signal::DeviceModule;
     virtual void setHasSavedConnection(const bool isSaved) = 0;
     virtual void setLastConnectionTime(const juce::int64 newTime) = 0;
 };
@@ -88,11 +91,19 @@ class Wifi::AccessPoint :
 public:
 
     /**
-     * @brief  Creates new access point data from a LibNM access point object.
+     * @brief  Creates the access point object from LibNM access point data.
      *
-     * @param nmAccessPoint    The LibNM access point the data should represent.
+     * @param ssid             The access point's SSID.
+     *
+     * @param apHash           The access point's hash value.
+     *
+     * @param securityType     The type of security settings used by the access
+     *                         point.
+     *
+     * @param strength         The access point's initial signal strength.
      */
-    AccessPoint(const LibNM::AccessPoint nmAccessPoint);
+    AccessPoint(const LibNM::SSID ssid, const LibNM::APHash apHash,
+            const LibNM::SecurityType securityType, const int strength);
 
     /**
      * @brief  Initializes the AccessPoint with another AccessPoint's data.
@@ -126,7 +137,29 @@ public:
      * @return     Whether this and rhs do not have identical hash values.
      */
     bool operator!=(const AccessPoint& rhs) const;
+
+    /**
+     * @brief  Checks if this AccessPoint represents a particular 
+     *         LibNM::AccessPoint.
+     *
+     * @param rhs  A LibNM access point to check against this AccessPoint.
+     *
+     * @return     Whether rhs is one of the LibNM::AccessPoint objects
+     *             represented by this AccessPoint.
+     */
+    bool operator==(const LibNM::AccessPoint& rhs) const;
     
+    /**
+     * @brief  Checks if this AccessPoint does not represent a particular 
+     *         LibNM::AccessPoint.
+     *
+     * @param rhs  A LibNM access point to check against this AccessPoint.
+     *
+     * @return     Whether rhs is not one of the LibNM::AccessPoint objects
+     *             represented by this AccessPoint.
+     */
+    bool operator!=(const LibNM::AccessPoint& rhs) const;
+
     /**
      * @brief  Compares AccessPoint objects using their hash values so they can 
      *         be sorted.
