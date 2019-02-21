@@ -5,8 +5,8 @@
 /**
  * @file  Wifi_LibNM_Signal_APHandler.h
  *
- * @brief  Sends Wifi access point signal strength changes to the access point
- *         list.
+ * @brief  Receives signal strength update notifications from connected 
+ *         LibNM::AccessPoint objects.
  */
 
 #include "SharedResource_Handler.h"
@@ -40,11 +40,15 @@ public:
      * 
      * @param source  A LibNM::AccessPoint signal source.
      */
-    virtual void connectAllSignals(AccessPoint& source) final override;
+    virtual void connectAllSignals(const AccessPoint source) final override;
 
 private:
     /**
-     * @brief  Passes signal strength updates to the access point list.
+     * @brief  Notifies the signal handler of a change in access point signal
+     *         strength.
+     *
+     *  This method does nothing by default. APHandler classes should override 
+     * it to handle signal strength change events.
      *
      * @param updatedAP    The LibNM::AccessPoint that had its signal strength
      *                     change.
@@ -52,7 +56,7 @@ private:
      * @param newStrength  The new strength of the access point, as a value
      *                     between zero and one hundred, inclusive.
      */
-    void signalStrengthChanged(LibNM::AccessPoint& updatedAP,
+    virtual void signalStrengthChanged(const AccessPoint updatedAP,
             unsigned int newStrength);
         
     /**
@@ -65,5 +69,5 @@ private:
      * @param property  The updated property type.
      */
     virtual void propertyChanged
-    (AccessPoint& source, juce::String property) override;
+    (const AccessPoint source, juce::String property) override;
 };

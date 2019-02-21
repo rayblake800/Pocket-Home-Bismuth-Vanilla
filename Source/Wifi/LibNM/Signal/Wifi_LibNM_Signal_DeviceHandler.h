@@ -10,7 +10,6 @@
  */
 
 #include "GLib_Signal_Handler.h"
-#include "Wifi_LibNM_Signal_APHandler.h"
 #include <nm-device-wifi.h>
 
 namespace Wifi 
@@ -19,6 +18,7 @@ namespace Wifi
     { 
         namespace Signal { class DeviceHandler; } 
         class DeviceWifi;
+        class AccessPoint;
         class ActiveConnection;
     } 
 }
@@ -31,80 +31,75 @@ public:
 
     virtual ~DeviceHandler() { }
 
+protected:
     /**
-     * @brief  Starts tracking the LibNM thread's DeviceWifi object.
-     *
-     * Signals will not be received until the signal handler is connected.
-     */
-    void connect();
-
-    /**
-     * @brief  Stops tracking the LibNM thread's DeviceWifi object.
+     * @brief  Subscribes to all relevant signals from a single GObject 
+     *         signal source.
      * 
-     * Signals will not be received after the signal handler is disconnected 
-     * until it is connected again.
+     * @param source  A NMDeviceWifi GObject this signal handler should 
+     *                track.
      */
-    void disconnect();
+    virtual void connectAllSignals(const DeviceWifi source) override;
 
-private:
-   /**
-    * @brief  Subscribes to all relevant signals from a single GObject 
-    *         signal source.
-    * 
-    * @param source  A NMDeviceWifi GObject this signal handler should 
-    *                track.
-    */
-    virtual void connectAllSignals(DeviceWifi& source) override;
-
-   /**
-    * @brief  Handles Wifi device state changes.
-    *
-    * @param newState  The new device state value.
-    *
-    * @param oldState  The previous device state value.
-    *
-    * @param reason    The reason for the change in device state.
-    */
-    void stateChanged(NMDeviceState newState,
+    /**
+     * @brief  Handles Wifi device state changes.
+     *
+     *  This takes no action by default. Subclasses should override this method
+     * to define how Wifi device state changes should be handled.
+     *
+     * @param newState  The new device state value.
+     *
+     * @param oldState  The previous device state value.
+     *
+     * @param reason    The reason for the change in device state.
+     */
+    virtual void stateChanged(NMDeviceState newState,
             NMDeviceState oldState,
             NMDeviceStateReason reason);
 
     /**
-     * @brief  Updates the access point list whenever a new access point is
-     *         detected.
+     * @brief  Handles newly detected Wifi access points.
+     *
+     *  This takes no action by default. Subclasses should override this method
+     * to define how new access points should be handled.
      *
      * @param addedAP  The new access point's LibNM object.
      */
-    void accessPointAdded(LibNM::AccessPoint addedAP);
+    virtual void accessPointAdded(LibNM::AccessPoint addedAP);
 
     /**
-     * @brief  Updates the access point list whenever a previously seen access
-     *         point is lost.
+     * @brief  Signals that a saved access point is no longer visible.
+     *
+     *  This takes no action by default. Subclasses should override this method
+     * to define how removed access points should be handled.
      */
-    void accessPointRemoved();
+    virtual void accessPointRemoved();
 
-   /**
-    * @brief  Updates the connection record when the active network connection
-    *         changes.
-    * 
-    * @param activeConnection   The new active Wifi connection. If the device 
-    *                           has disconnected, this will be a null object.
-    */
-    void activeConnectionChanged(ActiveConnection activeConnection);
+    /**
+     * @brief  Handles changes to the active network connection.
+     *
+     *  This takes no action by default. Subclasses should override this method
+     * to define how new active connections should be handled.
+     * 
+     * @param activeConnection   The new active Wifi connection. If the device 
+     *                           has disconnected, this will be a null object.
+     */
+    virtual void activeConnectionChanged(ActiveConnection activeConnection);
         
-   /**
-    * @brief  Converts generic property change notifications into 
-    *         activeConnectionChanged calls.
-    * 
-    * @param source    The GObject that emitted the signal. This should be a
-    *                  NMDeviceWifi object.
-    * 
-    * @param property  This should be the active connection property, 
-    *                  "active-connection"
-    */
-    virtual void propertyChanged(DeviceWifi& source,
+    /**
+     * @brief  Converts generic property change notifications into 
+     *         activeConnectionChanged calls.
+     * 
+     * @param source    The GObject that emitted the signal. This should be a
+     *                  NMDeviceWifi object.
+     * 
+     * @param property  This should be the active connection property, 
+     *                  "active-connection"
+     */
+    virtual void propertyChanged(const DeviceWifi source,
             juce::String property) override;
 
+private:
     /**
      * @brief  The GCallback method called directly by LibNM code when sending 
      *         state-changed signals.  
@@ -124,7 +119,7 @@ private:
      */
     static void stateChangeCallback(
             NMDevice* device,
-	        NMDeviceState newState,
+            NMDeviceState newState,
             NMDeviceState oldState,
             NMDeviceStateReason reason,
             GLib::Signal::CallbackData<DeviceWifi>* data);
@@ -145,7 +140,7 @@ private:
      */
     static void apAddedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
             GLib::Signal::CallbackData<DeviceWifi>* data);
-    
+
     /**
      * @brief  The GCallback method called directly by LibNM code when sending 
      *         access-point-removed signals.  
@@ -162,7 +157,4 @@ private:
      */
     static void apRemovedCallback(NMDeviceWifi* device, NMAccessPoint* ap,
             GLib::Signal::CallbackData<DeviceWifi>* data);
-
-    /* Tracks all access point signal strengths. */
-    APHandler apHandler;
 };

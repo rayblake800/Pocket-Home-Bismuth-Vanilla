@@ -5,8 +5,8 @@
 /**
  * @file  Wifi_LibNM_Signal_ClientHandler.h
  *
- * @brief  Notifies the Wifi device tracker whenever wireless networking is
- *         enabled or disabled.
+ * @brief  Receives a signal whenever wireless networking is enabled or 
+ *         disabled.
  */
 
 #include "GLib_Signal_Handler.h"
@@ -27,39 +27,27 @@ public:
 
     virtual ~ClientHandler() { }
 
-    /**
-     * @brief  Starts tracking the LibNM::ThreadResource's Client object.
-     *
-     * wirelessStateChange() notifications will not be received until the signal
-     * handler is connected.
-     */
-    void connect();
-
-    /**
-     * @brief  Stops tracking the LibNM::ThreadResource's Client object.
-     * 
-     * wirelessStateChange() notifications will not be received after the signal
-     * handler is disconnected until it is connected again.
-     */
-    void disconnect();
-
-private:
+protected:
    /**
     * @brief  Subscribes to all relevant signals from a single Client signal 
     *         source.
     * 
     * @param source  A Client object this signal handler should track.
     */
-    virtual void connectAllSignals(Client& source) override; 
+    virtual void connectAllSignals(const Client source) override; 
 
+private:
     /**
-     * @brief  Notifies the Device::TrackingModule when wireless networking is
-     *         enabled or disabled.
+     * @brief  Notifies the ClientHandler when wireless networking is enabled or
+     *         disabled.
+     *
+     *  This method does nothing by default, ClientHandler subclasses should
+     * override it to define how to handle wireless state changes.
      *
      * @param wifiEnabled  True if Wifi was just enabled, false if Wifi was just
      *                     disabled.
      */
-    void wirelessStateChange(bool wifiEnabled);
+    virtual void wirelessStateChange(bool wifiEnabled);
         
     /**
      * @brief  Converts generic propertyChanged calls to class-specific 
@@ -69,6 +57,6 @@ private:
      * 
      * @param property  This should always be the "wireless-enabled" property.
      */
-    virtual void propertyChanged(Client& source, juce::String property) 
+    virtual void propertyChanged(const Client source, juce::String property) 
             override;  
 };

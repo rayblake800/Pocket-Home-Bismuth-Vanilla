@@ -10,7 +10,11 @@
 
 #include "SharedResource_Modular_Resource.h"
 
-namespace Wifi { class Resource; }
+namespace Wifi 
+{ 
+    class Resource; 
+    class Module;
+}
 
 class Wifi::Resource : public SharedResource::Modular::Resource<>
 {
@@ -27,6 +31,24 @@ public:
      * @brief  Shuts down all Wifi resource modules.
      */
     virtual ~Resource();
+
+private:
+    friend class Module;
+
+    /**
+     * @brief  Packages an asynchronous action so that it will check if the 
+     *         Wifi::Resource instance that created it is still valid.  
+     *
+     *  If it is valid, the Resource instance will be locked and the action will
+     * be executed.
+     *
+     * @param lockType     Sets how the resource will be locked while the action
+     *                     function runs.
+     *
+     * @param action       A function to call if the Resource still exists.
+     */
+    std::function<void()> buildAsyncFunction(SharedResource::LockType lockType, 
+            std::function<void()> action);
 };
 
 /* Resource module class declarations: */
@@ -40,6 +62,12 @@ namespace Wifi
         namespace Saved { class Module; }
         namespace Record { class Module; }
         namespace Control { class Module; }
+    }
+    namespace Signal
+    {
+        class APModule;
+        class DeviceModule;
+        class ClientModule;
     }
 }
 
@@ -67,6 +95,15 @@ SharedResource::Modular::Resource<>::getModule
 template<> template<> Wifi::APList::Module* 
 SharedResource::Modular::Resource<>::getModule <Wifi::APList::Module>();
 
+template<> template<> Wifi::Signal::APModule* 
+SharedResource::Modular::Resource<>::getModule <Wifi::Signal::APModule>();
+
+template<> template<> Wifi::Signal::DeviceModule* 
+SharedResource::Modular::Resource<>::getModule <Wifi::Signal::DeviceModule>();
+
+template<> template<> Wifi::Signal::ClientModule* 
+SharedResource::Modular::Resource<>::getModule <Wifi::Signal::ClientModule>();
+
 template<> template<> const Wifi::LibNM::Thread::Module*
 SharedResource::Modular::Resource<>::getModule
         <const Wifi::LibNM::Thread::Module>();
@@ -88,5 +125,17 @@ SharedResource::Modular::Resource<>::getModule
 
 template<> template<> const Wifi::APList::Module* 
 SharedResource::Modular::Resource<>::getModule<const Wifi::APList::Module>();
+
+template<> template<> const Wifi::Signal::APModule* 
+SharedResource::Modular::Resource<>::getModule 
+        <const Wifi::Signal::APModule>();
+
+template<> template<> const Wifi::Signal::DeviceModule* 
+SharedResource::Modular::Resource<>::getModule 
+        <const Wifi::Signal::DeviceModule>();
+
+template<> template<> const Wifi::Signal::ClientModule* 
+SharedResource::Modular::Resource<>::getModule 
+        <const Wifi::Signal::ClientModule>();
 
 } } // Close SharedResource::Modular namespace

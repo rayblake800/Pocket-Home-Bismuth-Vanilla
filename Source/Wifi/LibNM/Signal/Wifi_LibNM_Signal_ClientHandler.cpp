@@ -7,79 +7,25 @@
 #include "Wifi_LibNM_Thread_Handler.h"
 #include "Wifi_LibNM_Thread_Module.h"
 #include "Wifi_LibNM_ContextTest.h"
+#include "Wifi_Connection_Control_ModuleUpdater.h"
 #include "SharedResource_Modular_Handler.h"
+
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Wifi::LibNM::Signal::ClientHandler::";
+#endif
 
 namespace NMSignal = Wifi::LibNM::Signal;
 
-/**
- * @brief  A private handler class used to update the tracking module.
- */
-class TrackingUpdater : 
-    public SharedResource::Modular::Handler
-    <Wifi::Resource, Wifi::Device::Module>
-{
-public:
-    TrackingUpdater() { }
-
-    virtual ~TrackingUpdater() { }
-
-    /**
-     * @brief  Updates the TrackingModule's saved wifi device state.
-     *
-     * @param exists   Indicates if a managed Wifi device is present.
-     *
-     * @param enabled  Indicates if the Wifi device is enabled.
-     */
-    void updateDeviceState(const bool exists, const bool enabled)
-    {
-        using namespace Wifi;
-        SharedResource::Modular::LockedPtr<Resource, Device::Module> 
-                deviceTracker = getWriteLockedResource();
-        deviceTracker->updateDeviceState(exists, enabled);
-    }
-};
-
 /*
- * Starts tracking the LibNM::ThreadResource's Client object.
+ * Notifies the ClientHandler when wireless networking is enabled or disabled.
  */
-void NMSignal::ClientHandler::connect()
-{
-    const LibNM::Thread::Handler nmThreadHandler;
-    nmThreadHandler.call([this, &nmThreadHandler]()
-    {
-        LibNM::Client networkClient = nmThreadHandler.getClient();
-        connectAllSignals(networkClient);
-    });
-}
-
-/*
- * Stops tracking the LibNM::ThreadResource's Client object.
- */
-void NMSignal::ClientHandler::disconnect()
-{
-    unsubscribeAll();
-}
-
-/*
- * Notifies the Wifi::DeviceTrackingModule when wireless networking is enabled or
- * disabled.
- */
-void NMSignal::ClientHandler::wirelessStateChange(bool wifiEnabled)
-{
-    ASSERT_NM_CONTEXT;
-    DBG("Wifi::LibNM::Signal::ClientHandler::" << __func__ 
-            << ": Wireless state changed to "
-            << (wifiEnabled ? "enabled" : "disabled"));
-    TrackingUpdater trackingUpdater;
-    const Thread::Handler nmThreadHandler;
-    trackingUpdater.updateDeviceState(!nmThreadHandler.getWifiDevice().isNull(),
-            wifiEnabled);
-}
+void NMSignal::ClientHandler::wirelessStateChange(bool wifiEnabled) { }
 
 /*
  * Subscribes to all relevant signals from a single Client signal source.
  */
-void NMSignal::ClientHandler::connectAllSignals(Client& source)
+void NMSignal::ClientHandler::connectAllSignals(const Client source)
 {
     ASSERT_NM_CONTEXT;
     if(!source.isNull())
@@ -93,7 +39,7 @@ void NMSignal::ClientHandler::connectAllSignals(Client& source)
  * calls.
  */
 void NMSignal::ClientHandler::propertyChanged
-(Client& source, juce::String property)
+(const Client source, juce::String property)
 { 
     ASSERT_NM_CONTEXT;
     if(!source.isNull() && property == NM_CLIENT_WIRELESS_ENABLED)

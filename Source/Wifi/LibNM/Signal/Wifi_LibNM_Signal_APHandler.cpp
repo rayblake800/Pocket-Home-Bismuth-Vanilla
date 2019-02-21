@@ -7,43 +7,35 @@
 
 namespace NMSignal = Wifi::LibNM::Signal;
 
-/**
- * @brief  Disconnects the signal handler from all access points.
+/*
+ * Disconnects the signal handler from all access points.
  */
 void NMSignal::APHandler::disconnect()
 {
-    unsubscribeAll();
+    disconnectAll();
 }
 
 /*
  * Subscribes to signal strength signals from a single AccessPoint.
  */
-void NMSignal::APHandler::connectAllSignals(AccessPoint& source)
+void NMSignal::APHandler::connectAllSignals(const AccessPoint source)
 {
     ASSERT_NM_CONTEXT;
     createPropertyConnection(NM_ACCESS_POINT_STRENGTH, source);
 }
 
 /*
- * Passes signal strength updates to the access point list.
+ * Notifies the signal handler of a change in access point signal strength.
  */
 void NMSignal::APHandler::signalStrengthChanged
-(LibNM::AccessPoint& updatedAP, unsigned int newStrength)
-{
-    ASSERT_NM_CONTEXT;
-    DBG("Wifi::LibNM::Signal::APHandler::" << __func__ 
-            << ": Signal strength change for " << updatedAP.getSSIDText()
-            << " to strength " << (int) newStrength);
-    APList::Writer apListWriter;
-    apListWriter.updateSignalStrength(updatedAP);
-}
+(const AccessPoint updatedAP, unsigned int newStrength) { }
 
 /*
  * Builds signalStrengthChanged() calls from generic property change 
  * notifications.
  */
 void NMSignal::APHandler::propertyChanged
-(AccessPoint& source, juce::String property) 
+(const AccessPoint source, juce::String property) 
 { 
     ASSERT_NM_CONTEXT;
     if(property == NM_ACCESS_POINT_STRENGTH)
