@@ -18,25 +18,20 @@ namespace Wifi { namespace TestUtils { class ConnectionListener; } }
 class Wifi::TestUtils::ConnectionListener : 
     public Wifi::Connection::Record::Listener
 {
-private:
-    typedef Wifi::Connection::EventType EventType;
-
-    /**
-     * @brief  Updates the last recorded connection event when updates are
-     *         received.
-     *
-     * @param eventAP    The access point associated with the event.
-     *
-     * @param eventType  The type of event that occured.
-     */
-    void updateLastRecordedEvent(const Wifi::AccessPoint eventAP,
-            const EventType eventType);
-
 public:
     ConnectionListener() { }
 
     virtual ~ConnectionListener() { }
 
+    /**
+     * @brief  Handles the addition of a new event to the 
+     *         Connection::Record::Module.
+     *
+     * @param newEvent  The new Wifi event registered to the connection record.
+     */
+    virtual void eventAdded(const Wifi::Connection::Event newEvent) = 0;
+
+protected:
     /**
      * @brief  Updates the last recorded event when a new Wifi connection starts 
      *         opening.
@@ -86,6 +81,12 @@ public:
     }
 
 private:
+    /**
+     * @brief  Updates the last recorded connection event when updates are
+     *         received.
+     */
+    void updateLastRecordedEvent();
+
     /* Allows threads to safely share access to the listener: */
     juce::CriticalSection eventControl;
     /* Stores the last Wifi connection event the listener received: */

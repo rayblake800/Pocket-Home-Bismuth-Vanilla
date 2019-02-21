@@ -1,5 +1,6 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_TestUtils_ConnectionListener.h"
+#include "Wifi_Connection_Record_Reader.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -10,12 +11,13 @@ static const constexpr char* dbgPrefix
 /*
  * Updates the last recorded connection event when updates are received.
  */
-void Wifi::TestUtils::ConnectionListener::updateLastRecordedEvent
-(const Wifi::AccessPoint eventAP, const EventType eventType)
+void Wifi::TestUtils::ConnectionListener::updateLastRecordedEvent()
 {
     const juce::ScopedLock eventLock(eventControl);
-    lastEvent = Wifi::Connection::Event(eventAP, eventType);
+    Connection::Record::Reader recordReader;
+    lastEvent = recordReader.getLatestEvent();
     DBG(dbgPrefix << __func__ << ": New Event:" << lastEvent.toString());
+    eventAdded(lastEvent);
 }
 
 /*
@@ -24,7 +26,7 @@ void Wifi::TestUtils::ConnectionListener::updateLastRecordedEvent
 void Wifi::TestUtils::ConnectionListener::startedConnecting
 (const Wifi::AccessPoint connectingAP)
 {
-    updateLastRecordedEvent(connectingAP, EventType::startedConnecting);
+    updateLastRecordedEvent();
 }
 
 /*
@@ -33,7 +35,7 @@ void Wifi::TestUtils::ConnectionListener::startedConnecting
 void Wifi::TestUtils::ConnectionListener::connectionAuthFailed
 (const Wifi::AccessPoint failedAP)
 {
-    updateLastRecordedEvent(failedAP, EventType::connectionAuthFailed);
+    updateLastRecordedEvent();
 }
 
 /*
@@ -42,7 +44,7 @@ void Wifi::TestUtils::ConnectionListener::connectionAuthFailed
 void Wifi::TestUtils::ConnectionListener::connected
 (const Wifi::AccessPoint connectedAP)
 {
-    updateLastRecordedEvent(connectedAP, EventType::connected);
+    updateLastRecordedEvent();
 }
 
 /*
@@ -51,5 +53,5 @@ void Wifi::TestUtils::ConnectionListener::connected
 void Wifi::TestUtils::ConnectionListener::disconnected
 (const Wifi::AccessPoint disconnectedAP)
 {
-    updateLastRecordedEvent(disconnectedAP, EventType::disconnected);
+    updateLastRecordedEvent();
 }

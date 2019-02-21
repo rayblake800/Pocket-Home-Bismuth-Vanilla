@@ -70,7 +70,7 @@ public:
             APList::NMReader nmReader;
             for(AccessPoint& accessPoint : visibleAPs)
             {
-            Wifi::LibNM::AccessPoint strongestAP 
+                Wifi::LibNM::AccessPoint strongestAP 
                         = nmReader.getStrongestNMAccessPoint(accessPoint);
                 expect(!strongestAP.isNull(), 
                         juce::String("Couldn't find nmAP for access point ")
