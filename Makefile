@@ -179,6 +179,10 @@ CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 .PHONY: build devInstall debug release clean strip uninstall
 build : $(JUCE_OUTDIR)/$(JUCE_TARGET_APP)
 
+# Include makefiles defining each module:
+include $(shell pwd)/JuceLibraryCode/Makefile
+include $(shell pwd)/makefiles/*.mk
+
 OBJECTS_MAIN := \
   $(JUCE_OBJDIR)/Main.o \
   $(JUCE_OBJDIR)/PocketHomeApplication.o \
@@ -195,10 +199,6 @@ MODULES := $(MODULES) main
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_MAIN)
 main : $(OBJECTS_MAIN)
 	@echo "Built pocket-home"
-
-# Include makefiles defining each module:
-include $(shell pwd)/JuceLibraryCode/Makefile
-include $(shell pwd)/makefiles/*.mk
 
 $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(MODULES) $(RESOURCES)
 	@echo Linking "pocket-home - App"
