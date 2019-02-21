@@ -5,7 +5,8 @@
  * @brief  Updates, adds, and removes both current and saved Wifi connections.
  */
 
-#include "SharedResource_Modular_Module.h"
+#include "Wifi_Module.h"
+#include "Wifi_LibNM_ConnectionHandler.h"
 #include <gio/gio.h>
 
 namespace Wifi 
@@ -15,19 +16,27 @@ namespace Wifi
     class AccessPoint;
     namespace LibNM
     {
+        class AccessPoint;
         class ConnectionHandler;
         class ActiveConnection;
-        class AccessPoint;
     }
 }
 
-class Wifi::Connection::Control::Module : 
-        public SharedResource::Modular::Module<Resource>
+class Wifi::Connection::Control::Module : public Wifi::Module,
+        public LibNM::ConnectionHandler, protected juce::Timer
 {
 public:
+    /**
+     * @brief  Connects the module to its Resource.
+     *
+     * @param parentResource  The Wifi::Resource object instance.
+     */
     Module(Resource& parentResource);
 
-    virtual ~Module() { }
+    /**
+     * @brief  Ensures all pending connection data is removed.
+     */
+    virtual ~Module();
 
     /**
      * @brief  Attempts to open a Wifi network connection using a nearby access
@@ -36,17 +45,29 @@ public:
      * @param toConnect          The access point to use in the attempted 
      *                           connection.
      *
-     * @param connectionHandler  The object that will handle LibNM connection
-     *                           callbacks.
-     *
      * @param securityKey        An optional security key to use when opening 
      *                           the connection. This will be ignored if it 
      *                           equals the empty string or if the access point
      *                           is unsecured.
      */
     void connectToAccessPoint(const AccessPoint toConnect,
-            LibNM::ConnectionHandler* connectionHandler,
             juce::String securityKey = juce::String());
+
+    /**
+     * @brief  Continues the connection attempt if a pending connection is 
+     *         currently in progress.
+     *
+     *  This method should only be called within the LibNM::Thread::Module's
+     * thread.
+     */
+    void continueConnectionAttempt();
+
+    /**
+     * @brief 
+     *
+     * @return 
+     */
+    bool isConnecting() const;
 
     /**
      * @brief  Disconnects the active Wifi connection. If there is no active
@@ -55,52 +76,83 @@ public:
     void disconnect();
 
     /**
-     * @brief  This function will be called whenever starting to activate a 
-     *         connection succeeds.
+     * @brief  Notifies the Control::Module that a new access point was spotted,
+     *         just in case it is needed to establish a connection.
+     *
+     * @param addedAP  An access point object that was just added.
+     */
+    void signalAPAdded(LibNM::AccessPoint newAP);
+
+    /**
+     * @brief  Notifies the Control::Module that wireless networking was
+     *         disabled.
+     */
+    void signalWifiDisabled();
+
+    /**
+     * @brief  Notifies the Control::Module that the Wifi device state has
+     *         changed.
+     *
+     * @param newState  The new Wifi device state.
+     *
+     * @param oldState  The last state of the Wifi device before the change.
+     *
+     * @param reason    The reason for the change in state.
+     */
+    void signalWifiStateChange(
+            NMDeviceState newState,
+            NMDeviceState oldState,
+            NMDeviceStateReason reason);
+
+private:
+    /**
+     * @brief  Clears all saved data being used for an ongoing Wifi connection
+     *         attempt.
+     */
+    void clearPendingConnectionData();
+
+    /**
+     * @brief  Cancels any pending connection attempt.
+     */
+    void cancelPendingConnection();
+
+    /**
+     * @brief  Cancels a pending connection event if it doesn't finish within
+     *         a timeout period.
+     */
+    virtual void timerCallback() override;
+
+    /**
+     * @brief  Signals that a connection is being opened.
      * 
      * @param connection  A new active connection object representing the 
      *                    added connection. This connection object might not
      *                    be completely connected yet.
      */
-    void openingConnection(LibNM::ActiveConnection connection);
+    virtual void openingConnection(LibNM::ActiveConnection connection) override;
     
     /**
-     * @brief  This function will be called whenever starting to activate a
-     *         connection fails.
+     * @brief   Signals that an attempt to open a connection failed.
      * 
      * @param connection  The connection that failed to activate. This may 
      *                    be a null connection.
      * 
-     * @param error       A GError object describing the problem. This error
-     *                    object must be freed by the ConnectionHandler.
+     * @param error       A GError object describing the problem. 
      */
-    void openingConnectionFailed(LibNM::ActiveConnection connection, 
-            GError* error);
+    virtual void openingConnectionFailed(LibNM::ActiveConnection connection, 
+            GError* error) override;
 
-private:
-    /**
-     * @brief  Gets the LibNM::AccessPoint object used to establish an active 
-     *         connection.
-     *
-     * @param connection  An active connection object.
-     *
-     * @return            The LibNM access point used to activate the 
-     *                    connection, or a null access point if the connection 
-     *                    is null.
-     */
-    LibNM::AccessPoint getActiveConnectionNMAP
-    (const LibNM::ActiveConnection connection);
+    /* Pending connection data: */
 
-    /**
-     * @brief  Gets the Wifi::AccessPoint object used to establish an active 
-     *         connection.
-     *
-     * @param connection  An active connection object.
-     *
-     * @return            The access point used to activate the connection, or a 
-     *                    null access point if the connection is null.
-     */
-    Wifi::AccessPoint getActiveConnectionAP
-    (const Wifi::LibNM::ActiveConnection connection);
+    /* Whether the module is attempting to open a connection: */
+    bool connectionStarted = false;
 
+    /* Whether a connection is currently being activated: */
+    bool connectionActivating = false;
+
+    /* The security key used to establish the connection: */
+    juce::String pendingPSK;
+
+    /* Whether a new connection is being used to open the connection: */
+    bool creatingNewConnection = false;
 };

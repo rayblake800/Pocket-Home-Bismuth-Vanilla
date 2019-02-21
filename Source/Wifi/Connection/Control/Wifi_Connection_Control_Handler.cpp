@@ -18,7 +18,7 @@ void WifiConnect::Control::Handler::connectToAccessPoint
 {
     SharedResource::Modular::LockedPtr<Resource, Module> controller
             = getWriteLockedResource();
-    controller->connectToAccessPoint(toConnect, this, securityKey);
+    controller->connectToAccessPoint(toConnect, securityKey);
 }
 
 /*
@@ -31,28 +31,3 @@ void WifiConnect::Control::Handler::disconnect()
             = getWriteLockedResource();
     controller->disconnect();
 }
-
-/*
- * Signals that a connection is being opened.
- */
-void WifiConnect::Control::Handler::openingConnection
-(LibNM::ActiveConnection connection)
-{
-    ASSERT_NM_CONTEXT;
-    SharedResource::Modular::LockedPtr<Resource, Module> controller
-            = getWriteLockedResource();
-    controller->openingConnection(connection);
-}
-
-/*
- * Signals that an attempt to open a connection failed.
- */
-void WifiConnect::Control::Handler::openingConnectionFailed
-(LibNM::ActiveConnection connection, GError* error)
-{
-    ASSERT_NM_CONTEXT;
-    SharedResource::Modular::LockedPtr<Resource, Module> controller
-            = getWriteLockedResource();
-    controller->openingConnectionFailed(connection, error);
-}
-

@@ -1,7 +1,5 @@
 #pragma once
 #include "SharedResource_Modular_Handler.h"
-#include "Wifi_LibNM_ConnectionHandler.h"
-
 
 namespace Wifi 
 { 
@@ -16,8 +14,7 @@ namespace Wifi
 }
 
 class Wifi::Connection::Control::Handler : 
-        public SharedResource::Modular::Handler<Resource, Module>,
-        public LibNM::ConnectionHandler
+        public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     Handler();
@@ -44,28 +41,4 @@ public:
      *         wifi connection, no action is taken.
      */
     void disconnect();
-
-private:
-    /**
-     * @brief  This function will be called whenever starting to activate a 
-     *         connection succeeds.
-     * 
-     * @param connection  A new active connection object representing the 
-     *                    added connection. This connection object might not
-     *                    be completely connected yet.
-     */
-    virtual void openingConnection(LibNM::ActiveConnection connection) override;
-    
-    /**
-     * @brief  This function will be called whenever starting to activate a
-     *         connection fails.
-     * 
-     * @param connection  The connection that failed to activate. This may 
-     *                    be a null connection.
-     * 
-     * @param error       A GError object describing the problem. This error
-     *                    object must be freed by the ConnectionHandler.
-     */
-    virtual void openingConnectionFailed(LibNM::ActiveConnection connection, 
-            GError* error) override;
 };
