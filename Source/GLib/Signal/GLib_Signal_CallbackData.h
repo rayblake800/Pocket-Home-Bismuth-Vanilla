@@ -31,7 +31,7 @@ public:
      *
      * @param handler  The object handling signals from that source.
      */
-    CallbackData(SourceType& source, Handler<SourceType>* handler) :
+    CallbackData(const SourceType source, Handler<SourceType>* handler) :
         signalSource(source), signalHandler(handler) { }
 
     virtual ~CallbackData() { }

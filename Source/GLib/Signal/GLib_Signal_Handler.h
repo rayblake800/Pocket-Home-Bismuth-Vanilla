@@ -30,7 +30,7 @@ public:
      * 
      * @param source  A GLib::Object this signal handler should track.
      */
-    virtual void connectAllSignals(SourceType& source) = 0;
+    virtual void connectAllSignals(const SourceType source) = 0;
     
     /**
      * @brief  Unsubscribes this signal handler from all signals emitted by a 
@@ -41,7 +41,7 @@ public:
      * @return        True if the signal source was removed, false if the signal
      *                handler was not subscribed to this object's signals.
      */
-    bool disconnectSignals(SourceType& source)
+    bool disconnectSignals(const SourceType source)
     {
         ObjectPtr sourcePtr(source);
         return disconnectSignals(sourcePtr);
@@ -94,7 +94,7 @@ public:
      *
      * @return        Whether this signal handler is connected to the GObject.
      */
-    bool isConnected(SourceType& source) const
+    bool isConnected(const SourceType source) const
     {
         ObjectPtr sourcePtr(source);
         return isConnected(sourcePtr);
@@ -148,7 +148,7 @@ protected:
      * @param signalSource
      */
     void createPropertyConnection(const juce::String propertyName,
-            SourceType& signalSource)
+            const SourceType signalSource)
     {
         ObjectPtr sourceObject(signalSource);
         if(sourceObject != nullptr)
@@ -160,10 +160,10 @@ protected:
     }
 
     /**
-     * @brief  Unsubscribes the signal handler from all signal sources, and 
+     * @brief  Disconnects the signal handler from all signal sources, and 
      *         removes any held references to signal sources.
      */
-    void unsubscribeAll()
+    void disconnectAll()
     {
         connections.clear();
     }
@@ -180,7 +180,8 @@ private:
      * 
      * @param property  The name of the object property that changed.
      */
-    virtual void propertyChanged(SourceType& source, juce::String property) { }
+    virtual void propertyChanged(const SourceType source,
+            juce::String property) { }
     
     /**
      * @brief  Removes all tracked signal sources that are no longer valid.
