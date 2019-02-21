@@ -25,7 +25,7 @@ GLib::Owned::Object(G_OBJECT(toAssign), GTEST_TYPE_OBJECT) { }
 /*
  * Gets the object's testString value.
  */
-juce::String GLib::Test::OwnedObject::getTestString()
+juce::String GLib::Test::OwnedObject::getTestString() const
 {
     juce::String value;
     if(!isNull())
@@ -44,7 +44,7 @@ juce::String GLib::Test::OwnedObject::getTestString()
 /*
  * Gets the object's testInt value. 
  */
-int GLib::Test::OwnedObject::getTestInt()
+int GLib::Test::OwnedObject::getTestInt() const
 {
     int value = 0;
     if(!isNull())
@@ -81,7 +81,8 @@ GLib::Test::OwnedObject::Listener::~Listener() { }
 /*
  * Connects to property change signals from a GTestObject.
  */
-void GLib::Test::OwnedObject::Listener::connectAllSignals(OwnedObject& source)
+void GLib::Test::OwnedObject::Listener::connectAllSignals
+(const OwnedObject source)
 {
     if(!source.isNull())
     {
@@ -98,7 +99,7 @@ void GLib::Test::OwnedObject::Listener::connectAllSignals(OwnedObject& source)
  * valid.
  */
 void GLib::Test::OwnedObject::Listener::propertyChanged
-(OwnedObject& source, juce::String property)
+(const OwnedObject source, juce::String property)
 {
     using namespace juce;
     ObjectPtr sourcePtr(source);

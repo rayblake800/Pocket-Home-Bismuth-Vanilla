@@ -43,14 +43,14 @@ public:
      * @return  The testString value, or the empty string if this object is
      *          null.
      */
-    juce::String getTestString();
+    juce::String getTestString() const;
     
     /**
      * @brief  Gets the object's testInt value. 
      *
      * @return  The testInt value, or -1 if this object is null.
      */
-    int getTestInt();
+    int getTestInt() const;
 
     /**
      * @brief  Changes the object's testString value, or does nothing if this 
@@ -88,7 +88,7 @@ public:
          *
          * @param source  An OwnedObject to connect.
          */
-        virtual void connectAllSignals(OwnedObject& source) override;
+        virtual void connectAllSignals(const OwnedObject source) override;
 
     private:
         /**
@@ -99,7 +99,7 @@ public:
          *
          * @param property  The updated GTestObject property.
          */
-        virtual void propertyChanged(OwnedObject& source, 
+        virtual void propertyChanged(const OwnedObject source, 
                 juce::String property) override;
 
         std::map<GObject*, juce::String> trackedStrings;
