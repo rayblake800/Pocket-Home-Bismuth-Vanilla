@@ -85,7 +85,7 @@ OBJECTS_WIFI_ACCESS_POINT_LIST := \
   $(WIFI_AP_LIST_OBJ)NMReader.o \
   $(WIFI_AP_LIST_OBJ)Writer.o
 
-################ Connection Submodule ################
+################ Connection Submodules ################
 
 WIFI_CONNECTION_ROOT := $(WIFI_ROOT)/Connection
 WIFI_CONNECTION_PREFIX := $(WIFI_PREFIX)Connection_
@@ -121,6 +121,8 @@ OBJECTS_WIFI_CONNECTION := \
   $(OBJECTS_WIFI_CONNECTION_SAVED) \
   $(OBJECTS_WIFI_CONNECTION_CONTROL) \
 
+################ Device Submodule ################
+
 WIFI_DEVICE_ROOT := $(WIFI_ROOT)/Device
 WIFI_DEVICE_PREFIX := $(WIFI_PREFIX)Device_
 WIFI_DEVICE_OBJ := $(WIFI_OBJ)Device_
@@ -130,21 +132,37 @@ OBJECTS_WIFI_DEVICE := \
   $(WIFI_DEVICE_OBJ)Listener.o \
   $(WIFI_DEVICE_OBJ)Reader.o
 
+################ Signal Handlers  ################
+
+WIFI_SIGNAL_ROOT := $(WIFI_ROOT)/Signal
+WIFI_SIGNAL_PREFIX := $(WIFI_PREFIX)Signal_
+WIFI_SIGNAL_OBJ := $(WIFI_OBJ)Signal_
+OBJECTS_WIFI_SIGNAL := \
+  $(WIFI_SIGNAL_OBJ)APModule.o \
+  $(WIFI_SIGNAL_OBJ)DeviceModule.o \
+  $(WIFI_SIGNAL_OBJ)ClientModule.o
+
+################ UI Components  ################
+
 WIFI_COMPONENT_ROOT := $(WIFI_ROOT)/Component
 OBJECTS_WIFI_COMPONENT := \
   $(WIFI_OBJ)ControlWidget.o \
   $(WIFI_OBJ)StatusIcon.o \
   $(WIFI_OBJ)SettingsPage.o
 
+################ Main Wifi Module  ################
+
 OBJECTS_WIFI := \
   $(WIFI_OBJ)Resource.o \
+  $(WIFI_OBJ)Module.o \
   $(WIFI_OBJ)AccessPoint.o \
+  $(WIFI_OBJ)DebugOutput.o \
   $(OBJECTS_NM) \
   $(OBJECTS_WIFI_ACCESS_POINT) \
   $(OBJECTS_WIFI_ACCESS_POINT_LIST) \
   $(OBJECTS_WIFI_CONNECTION) \
   $(OBJECTS_WIFI_DEVICE) \
-  $(OBJECTS_WIFI_SIGNAL_HANDLER) \
+  $(OBJECTS_WIFI_SIGNAL) \
   $(OBJECTS_WIFI_COMPONENT)
 
 WIFI_TEST_ROOT = Tests/Wifi
@@ -253,6 +271,8 @@ $(WIFI_CONNECTION_SAVED_OBJ)Deleter.o : \
 
 $(WIFI_CONNECTION_CONTROL_OBJ)Module.o : \
     $(WIFI_CONNECTION_CONTROL_ROOT)/$(WIFI_CONNECTION_CONTROL_PREFIX)Module.cpp
+$(WIFI_CONNECTION_CONTROL_OBJ)ModuleUpdater.o : \
+    $(WIFI_CONNECTION_CONTROL_ROOT)/$(WIFI_CONNECTION_CONTROL_PREFIX)ModuleUpdater.cpp
 $(WIFI_CONNECTION_CONTROL_OBJ)Handler.o : \
     $(WIFI_CONNECTION_CONTROL_ROOT)/$(WIFI_CONNECTION_CONTROL_PREFIX)Handler.cpp
 
@@ -265,13 +285,20 @@ $(WIFI_DEVICE_OBJ)Module.o : \
 $(WIFI_DEVICE_OBJ)Reader.o : \
     $(WIFI_DEVICE_ROOT)/$(WIFI_DEVICE_PREFIX)Reader.cpp
 
+$(WIFI_SIGNAL_OBJ)APModule.o : \
+    $(WIFI_SIGNAL_ROOT)/$(WIFI_SIGNAL_PREFIX)APModule.cpp
+$(WIFI_SIGNAL_OBJ)DeviceModule.o : \
+    $(WIFI_SIGNAL_ROOT)/$(WIFI_SIGNAL_PREFIX)DeviceModule.cpp
+$(WIFI_SIGNAL_OBJ)ClientModule.o : \
+    $(WIFI_SIGNAL_ROOT)/$(WIFI_SIGNAL_PREFIX)ClientModule.cpp
+
 $(WIFI_OBJ)ControlWidget.o : \
     $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)ControlWidget.cpp
 $(WIFI_OBJ)SettingsPage.o : \
     $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)SettingsPage.cpp
 $(WIFI_OBJ)StatusIcon.o : \
     $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)StatusIcon.cpp
-  
+
 $(WIFI_TESTUTILS_OBJ)ConnectionListener.o : \
     $(WIFI_TESTUTILS_ROOT)/$(WIFI_TESTUTILS_PREFIX)ConnectionListener.cpp
 $(WIFI_TESTUTILS_OBJ)Waiting.o : \
@@ -284,7 +311,11 @@ $(WIFI_OBJ)Connection_Control_ControlTest.o : \
 
 $(WIFI_OBJ)Resource.o : \
     $(WIFI_ROOT)/$(WIFI_PREFIX)Resource.cpp
+$(WIFI_OBJ)Module.o : \
+    $(WIFI_ROOT)/$(WIFI_PREFIX)Module.cpp
 $(WIFI_OBJ)ThreadHandler.o : \
     $(WIFI_OBJ)/$(WIFI_PREFIX)ThreadHandler.cpp
 $(WIFI_OBJ)AccessPoint.o : \
     $(WIFI_ROOT)/$(WIFI_PREFIX)AccessPoint.cpp
+$(WIFI_OBJ)DebugOutput.o : \
+    $(WIFI_ROOT)/$(WIFI_PREFIX)DebugOutput.cpp
