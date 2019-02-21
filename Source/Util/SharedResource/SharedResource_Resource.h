@@ -38,8 +38,8 @@ protected:
      * @brief  Packages an asynchronous action so that it will check if the 
      *         SharedResource instance that created it is still valid.  
      *
-     *  If it is valid,  the SharedResource instance will be locked and the 
-     *  action will be executed.
+     *  If it is valid, the SharedResource instance will be locked and the 
+     * action will be executed.
      *
      * @param lockType     Sets how the resource will be locked while the 
      *                     action function runs.
