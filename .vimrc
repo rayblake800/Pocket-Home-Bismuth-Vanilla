@@ -63,7 +63,11 @@ inoremap jj <ESC>
 command -nargs=1 Nametag %s/\(\*\/[\n\r][a-zA-Z_:\-]\+ \)\([a-zA-Z_-]\+(\)/\1<args>::\2/gc
 
 " build tools and project settings
-set syntax=cpp.doxygen
+augroup cpp_files
+    au!
+    autocmd BufNewFile,BufRead *.h,*.cpp set syntax=cpp.doxygen
+augroup END
+
 set makeprg=make
 " set comments+=s:/**,mb:\s*,ex:\s*/
 " set comments+=s:/*,mb:\s*,ex:\s*/
