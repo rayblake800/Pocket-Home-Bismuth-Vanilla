@@ -13,8 +13,8 @@
 #include "SharedResource_Modular_Handler.h"
 
 #ifdef JUCE_DEBUG
-    /* Used in all debug output messages: */
-    static const constexpr char* className = "Wifi::LibNM::Client::";
+    /* Print the full class name before all debug output: */
+    static const constexpr char* dbgPrefix = "Wifi::LibNM::Client::";
 #endif
 
 /*
@@ -301,7 +301,7 @@ void Wifi::LibNM::Client::activateConnection(
             GLib::ObjectPtr connectionDataPtr(connection);
             if(isNew)
             {
-                DBG(className << __func__ << ": adding new connection.");
+                DBG(dbgPrefix << __func__ << ": adding new connection.");
                 nm_client_add_and_activate_connection(
                         toClientPtr(clientDataPtr),
                         NM_CONNECTION((GObject*) connectionDataPtr),
@@ -313,7 +313,7 @@ void Wifi::LibNM::Client::activateConnection(
             }
             else
             {
-                DBG(className << __func__ << ": activating saved connection.");
+                DBG(dbgPrefix << __func__ << ": activating saved connection.");
                 nm_client_activate_connection(
                         toClientPtr(clientDataPtr),
                         NM_CONNECTION((GObject*) connectionDataPtr),
@@ -338,7 +338,6 @@ void Wifi::LibNM::Client::activateCallback(
         CallbackData* callbackData)
 {
     ASSERT_NM_CONTEXT;
-    DBG("Running activate callback");
     std::unique_ptr<CallbackData> dataPtr(callbackData);
     ActiveConnection activeConnection = dataPtr->client.connectionLender
             ->borrowObject(G_OBJECT(connection));

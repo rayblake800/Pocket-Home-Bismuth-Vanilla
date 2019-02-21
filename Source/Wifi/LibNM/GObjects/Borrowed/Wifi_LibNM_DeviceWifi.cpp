@@ -1,5 +1,3 @@
-// Required to implement the Wifi device's private ThreadHandler class. */
-#define LIB_NM_THREAD_IMPLEMENTATION
 #define WIFI_IMPLEMENTATION
 
 #include "Wifi_LibNM_DeviceWifi.h"
@@ -9,7 +7,13 @@
 #include "Wifi_LibNM_ContextTest.h"
 #include "Wifi_Resource.h"
 #include "GLib_ThreadHandler.h"
+#include "GLib_ErrorPtr.h"
 #include "SharedResource_Modular_Handler.h"
+
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Wifi::LibNM::DeviceWifi::";
+#endif
 
 /*
  * Gets a pointer to the container holding ActiveConnection objects managed 
@@ -220,11 +224,31 @@ Wifi::LibNM::DeviceWifi::getAccessPoints() const
     
     // Invalidate any objects in the AccessPointSet not found in the updated
     // list.
+#ifdef JUCE_DEBUG
+    if(!removedAccessPoints.isEmpty())
+    {
+        DBG(dbgPrefix << __func__ << ": Found " << currentAccessPoints.size()
+                << " APs, and removing " << removedAccessPoints.size()
+                << " APs that are no longer visible");
+    }
+#endif
     for(AccessPoint& invalidAP : removedAccessPoints)
     {
         getAPLender()->invalidateObject(invalidAP.getGObject());
     }
     return currentAccessPoints;
+}
+
+static void postScanCallback(NMDeviceWifi* device, GError* error, 
+        gpointer user_data)
+{
+        DBG(dbgPrefix << __func__ << ": scanned for visible access points.");
+        GLib::ErrorPtr errorManager(error); 
+        if(error != nullptr)
+        {
+            DBG(dbgPrefix << __func__ << ": Scanning error: "
+                    << (char *) error->message);
+        }
 }
 
 /*
@@ -235,7 +259,9 @@ void Wifi::LibNM::DeviceWifi::requestScan() const
     ASSERT_NM_CONTEXT;
     if(!isNull())
     {
-        nm_device_wifi_request_scan_simple(getWifiDevicePtr(), nullptr,
+        DBG(dbgPrefix << __func__ 
+                << ": requesting scan for visible access points.");
+        nm_device_wifi_request_scan_simple(getWifiDevicePtr(), postScanCallback,
                 nullptr);
     }
 }
