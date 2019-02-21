@@ -33,8 +33,7 @@ GLIB_DBUS_ROOT := $(GLIB_ROOT)/DBus
 GLIB_DBUS_PREFIX := $(GLIB_PREFIX)DBus_
 GLIB_DBUS_OBJ := $(GLIB_OBJ)DBus_
 OBJECTS_GLIB_DBUS := \
-  $(GLIB_DBUS_OBJ)Proxy.o \
-  $(GLIB_DBUS_OBJ)ThreadResource.o 
+  $(GLIB_DBUS_OBJ)Proxy.o
 
 GLIB_VAR_ROOT := $(GLIB_DBUS_ROOT)/Variant
 OBJECTS_GLIB_VAR := \
@@ -99,8 +98,6 @@ $(GLIB_OBJ)ErrorPtr.o : \
 $(GLIB_OBJ)SharedContextPtr.o : \
     $(GLIB_PTR_ROOT)/$(GLIB_PREFIX)SharedContextPtr.cpp
 
-$(GLIB_DBUS_OBJ)ThreadResource.o : \
-    $(GLIB_DBUS_ROOT)/$(GLIB_DBUS_PREFIX)ThreadResource.cpp
 $(GLIB_DBUS_OBJ)Proxy.o : \
     $(GLIB_DBUS_ROOT)/$(GLIB_DBUS_PREFIX)Proxy.cpp
 

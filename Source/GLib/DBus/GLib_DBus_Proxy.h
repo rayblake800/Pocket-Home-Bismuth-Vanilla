@@ -6,10 +6,8 @@
  */
 
 #include "GLib_Owned_Object.h"
-#include "GLib_ThreadHandler.h"
 #include "GLib_Signal_Handler.h"
 #include "GLib_VariantConverter.h"
-#include "SharedResource_Handler.h"
 #include "JuceHeader.h"
 #include <gio/gio.h>
 
@@ -34,8 +32,7 @@ namespace GLib
  *  DBus Proxy objects are not meant to be interacted with directly. Each DBus
  * interface type should be implemented as a class inheriting DBus::Proxy.
  */
-class GLib::DBus::Proxy : public GLib::Owned::Object, public GLib::ThreadHandler
-        <SharedResource::Handler<ThreadResource>>
+class GLib::DBus::Proxy : public GLib::Owned::Object 
 {
 protected:
     /**
@@ -77,10 +74,10 @@ protected:
     /**
      * @brief  Checks if the DBus object has a property with a particular name.
      * 
-     * @propertyName  A string value to search for as a property name.
+     * @param propertyName  A string value to search for as a property name.
      * 
-     * @return        Whether the DBus object is connected and has a property 
-     *                with the given name.
+     * @return              Whether the DBus object is connected and has a 
+     *                      property with the given name.
      */
     bool hasProperty(const char*  propertyName) const;
 
@@ -147,7 +144,7 @@ protected:
     /**
      * @brief  Calls one of the methods provided by this DBus interface.
      *
-     * Any non-null value returned by this method should eventually be freed 
+     *  Any non-null value returned by this method should eventually be freed 
      * with g_variant_unref.
      * 
      * @param methodName  The ID of a method to call on the DBus object.
