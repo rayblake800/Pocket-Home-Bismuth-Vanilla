@@ -40,10 +40,10 @@ public:
 } eventSorter;
 
 /*
- * Reads NetworkManager data to build the initial set of connection records.
+ * Connects the module to its Resource.
  */
-WifiRecord::Module::Module(Resource& wifiResource) : 
-SharedResource::Modular::Module<Resource>(wifiResource) { }
+WifiRecord::Module::Module(Resource& parentResource) : 
+Wifi::Module(parentResource) { }
 
 /*
  * Checks if the system has an active, established Wifi network connection.
@@ -85,30 +85,30 @@ void WifiRecord::Module::addConnectionEvent(const Event newEvent)
 {
     if(!newEvent.isNull())
     {
-       DBG(dbgPrefix << __func__ << ": adding " << newEvent.toString());
-       connectionEvents.addSorted(eventSorter, newEvent);
-       foreachHandler<UpdateInterface>([this, &newEvent]
-               (UpdateInterface* listener)
-       {
-           switch(newEvent.getEventType())
-           {
-               case EventType::connectionRequested:
-               case EventType::startedConnecting:
-                   listener->startedConnecting(newEvent.getEventAP());
-                   break;
-               case EventType::connectionAuthFailed:
-                   listener->connectionAuthFailed(newEvent.getEventAP());
-                   break;
-               case EventType::connected:
-                   listener->connected(newEvent.getEventAP());
-                   break;
-               case EventType::connectionFailed:
-               case EventType::disconnected:
-                   listener->disconnected(newEvent.getEventAP());
-                   break;
-               case EventType::invalid:
-                   // Invalid events shouldn't be added!
-                   jassertfalse;
+        DBG(dbgPrefix << __func__ << ": adding " << newEvent.toString());
+        connectionEvents.addSorted(eventSorter, newEvent);
+        foreachModuleHandler<UpdateInterface>([this, newEvent]
+                (UpdateInterface* listener)
+        {
+            switch(newEvent.getEventType())
+            {
+                case EventType::connectionRequested:
+                case EventType::startedConnecting:
+                    listener->startedConnecting(newEvent.getEventAP());
+                    break;
+                case EventType::connectionAuthFailed:
+                    listener->connectionAuthFailed(newEvent.getEventAP());
+                    break;
+                case EventType::connected:
+                    listener->connected(newEvent.getEventAP());
+                    break;
+                case EventType::connectionFailed:
+                case EventType::disconnected:
+                    listener->disconnected(newEvent.getEventAP());
+                    break;
+                case EventType::invalid:
+                    // Invalid events shouldn't be added!
+                    jassertfalse;
             }
         });
     }
@@ -139,8 +139,8 @@ void WifiRecord::Module::addEventIfNotDuplicate(const Event newEvent)
 void WifiRecord::Module::updateRecords()
 {
     connectionEvents.clear();
-    auto* nmThread = getSiblingModule<LibNM::Thread::Module>();
-    nmThread->call([this, nmThread]()
+    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    nmThread->call([this, &nmThread]()
     {
         const LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
         const LibNM::Client networkClient = nmThread->getClient();

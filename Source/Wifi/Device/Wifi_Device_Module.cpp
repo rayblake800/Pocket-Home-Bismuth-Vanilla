@@ -9,8 +9,8 @@
 /*
  * Checks the initial Wifi device state.
  */ 
-Wifi::Device::Module::Module(Resource& wifiResource) : 
-    SharedResource::Modular::Module<Resource>(wifiResource) { } 
+Wifi::Device::Module::Module(Resource& parentResource) : 
+    Wifi::Module(parentResource) { } 
 
 /*
  * Checks if a Wifi device managed by NetworkManager exists.
@@ -42,17 +42,15 @@ bool Wifi::Device::Module::isDeviceStateChanging() const
  */
 void Wifi::Device::Module::updateDeviceState(const bool notifyListeners)
 {
-    bool exists = deviceExists;
-    bool enabled = deviceEnabled;
     LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
-    nmThread->call([this, nmThread, &exists, &enabled]()
+    nmThread->call([this, notifyListeners, &nmThread]()
     {
         LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
-        exists = !wifiDevice.isNull();
+        bool exists = !wifiDevice.isNull();
         LibNM::Client client = nmThread->getClient();
-        enabled = client.wirelessEnabled();
+        bool enabled = client.wirelessEnabled();
+        updateDeviceState(exists, enabled, notifyListeners);
     });
-    updateDeviceState(exists, enabled, notifyListeners);
 }
 
 /*
@@ -69,8 +67,8 @@ void Wifi::Device::Module::updateDeviceState
     const bool isEnabled = wifiDeviceEnabled();
     if(isEnabled != wasEnabled && notifyListeners)
     {
-        foreachHandler<UpdateInterface>([isEnabled]
-            (UpdateInterface* listener)
+        foreachModuleHandler<UpdateInterface>([isEnabled]
+        (UpdateInterface* listener)
         {
             if(isEnabled)
             {

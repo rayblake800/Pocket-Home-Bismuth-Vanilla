@@ -9,7 +9,7 @@
  *         whenever Wifi is enabled or disabled. 
  */
 
-#include "SharedResource_Modular_Module.h"
+#include "Wifi_Module.h"
 
 
 namespace Wifi { namespace Device { class Module; } }
@@ -21,16 +21,15 @@ namespace Wifi { class Resource; }
  * Whenever this status changes, the TrackingModule notifies all 
  * Wifi::Device::Listener objects of the change. 
  */
-class Wifi::Device::Module 
-        : public SharedResource::Modular::Module<Resource>
+class Wifi::Device::Module : public Wifi::Module
 {
 public:
     /**
-     * @brief  Checks the initial Wifi device state.
+     * @brief  Connects the module to its Resource.
      *
-     * @param wifiResource  The modular resource object creating this Module.
+     * @param parentResource  The Wifi::Resource object instance.
      */
-    Module(Resource& wifiResource);
+    Module(Resource& parentResource);
 
     virtual ~Module() { }
 

@@ -14,7 +14,7 @@ Wifi::Device::Controller::Controller() { }
 void Wifi::Device::Controller::setEnabled(const bool enableWifi)
 {
     const LibNM::Thread::Handler nmThreadHandler;
-    nmThreadHandler.call([this, &nmThreadHandler, enableWifi]()
+    nmThreadHandler.call([this, enableWifi, &nmThreadHandler]()
     {
         SharedResource::Modular::LockedPtr<Resource, Module> deviceModule 
                 = getWriteLockedResource();

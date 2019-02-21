@@ -7,7 +7,7 @@
  *
  * @brief  Tracks all major Wifi connection events.
  */
-#include "SharedResource_Modular_Module.h"
+#include "Wifi_Module.h"
 
 namespace Wifi { namespace Connection { namespace Record { class Module; } } }
 namespace Wifi { namespace Connection { class Event; }  }
@@ -21,17 +21,15 @@ namespace Wifi { class AccessPoint; }
  * shares the most recent connection events, optionally filtering by access 
  * point or event type.
  */
-class Wifi::Connection::Record::Module : 
-    public SharedResource::Modular::Module<Resource>
+class Wifi::Connection::Record::Module final : public Wifi::Module
 {
 public:
     /**
-     * @brief  Reads NetworkManager data to build the initial set of connection 
-     *         records.
+     * @brief  Connects the module to its Resource.
      *
-     * @param wifiResource  The modular resource object creating this Module.
+     * @param parentResource  The Wifi::Resource object instance.
      */
-    Module(Resource& wifiResource);
+    Module(Resource& parentResource);
 
     virtual ~Module() { }
 

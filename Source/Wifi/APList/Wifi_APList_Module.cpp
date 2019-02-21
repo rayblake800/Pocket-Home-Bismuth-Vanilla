@@ -22,6 +22,7 @@ static std::map<Wifi::LibNM::APHash, juce::Array<Wifi::LibNM::AccessPoint>>
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
 static const constexpr char* dbgPrefix = "Wifi::APList::Module::";
+
 /**
  * @brief  Prints the access point list's data maps for debugging.
  */
@@ -44,7 +45,7 @@ void printAPList()
  * LibNM thread.
  */
 Wifi::APList::Module::Module(Resource& wifiResource) : 
-    SharedResource::Modular::Module<Resource>(wifiResource) 
+    Wifi::Module(wifiResource) 
 { 
     DBG(dbgPrefix << __func__ << ": Creating Wifi::APList module.");
 }
@@ -188,7 +189,10 @@ void Wifi::APList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
     {
         Connection::Saved::Module* savedConnections
                 = getSiblingModule<Connection::Saved::Module>();
-        AccessPoint newWifiAP(addedAP);
+        AccessPoint newWifiAP(addedAP.getSSID(),
+                addedAP.generateHash(),
+                addedAP.getSecurityType(),
+                addedAP.getSignalStrength());
         savedConnections->updateSavedAPData(newWifiAP);
         jassert(!newWifiAP.isNull());
         jassert(newWifiAP.getHashValue() == apHash);
@@ -211,7 +215,7 @@ void Wifi::APList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
     AccessPoint updatedAP = wifiAccessPoints[apHash];
     if(newConnectionVisible)
     {
-        foreachHandler<UpdateInterface>([&updatedAP]
+        foreachModuleHandler<UpdateInterface>([updatedAP]
                 (UpdateInterface* updateHandler)
         {
             updateHandler->accessPointAdded(updatedAP);
@@ -219,7 +223,7 @@ void Wifi::APList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
     }
     else if(signalStrengthChanged)
     {
-        foreachHandler<AP::UpdateInterface>([&updatedAP]
+        foreachModuleHandler<AP::UpdateInterface>([updatedAP]
                 (AP::UpdateInterface* updateHandler)
         {
             updateHandler->signalStrengthChanged(updatedAP);
@@ -259,7 +263,7 @@ void Wifi::APList::Module::updateSignalStrength(AccessPoint toUpdate)
     {
         static_cast<APInterface::SignalStrength*>(&toUpdate)->setSignalStrength
                 (bestSignalStrength);
-        foreachHandler<AP::UpdateInterface>([&toUpdate]
+        foreachModuleHandler<AP::UpdateInterface>([toUpdate]
                 (AP::UpdateInterface* updateHandler)
         {
             updateHandler->signalStrengthChanged(toUpdate);
@@ -296,6 +300,9 @@ void Wifi::APList::Module::updateAllAccessPoints()
             addAccessPoint(nmAccessPoint);
         }
     });
+    DBG(dbgPrefix << __func__ << ": List contains " << wifiAccessPoints.size()
+            << " AP objects representing " << nmAccessPoints.size()
+            << " LibNM AP objects");
 }
 
 /*
@@ -303,20 +310,18 @@ void Wifi::APList::Module::updateAllAccessPoints()
  */
 void Wifi::APList::Module::removeInvalidatedAccessPoints()
 {
-    getSiblingModule<LibNM::Thread::Module>()->call([this]()
+    ASSERT_NM_CONTEXT;
+    for(auto& iter : nmAccessPoints)
     {
-        for(auto& iter : nmAccessPoints)
+        iter.second.removeIf([](LibNM::AccessPoint& nmAP)->bool
         {
-            iter.second.removeIf([](LibNM::AccessPoint& nmAP)->bool
-            {
-                return nmAP.isNull();
-            });
-        }
-        for(auto& iter : wifiAccessPoints)
-        {
-            updateAPIfLost(iter.second);
-        }
-    });
+            return nmAP.isNull();
+        });
+    }
+    for(auto& iter : wifiAccessPoints)
+    {
+        updateAPIfLost(iter.second);
+    }
 }
 
 /*
@@ -331,7 +336,7 @@ void Wifi::APList::Module::updateAPIfLost(AccessPoint toCheck)
     {
         static_cast<APInterface::SignalStrength*>(&toCheck)
                 ->setSignalStrength(0);
-        foreachHandler<UpdateInterface>([&toCheck]
+        foreachModuleHandler<UpdateInterface>([toCheck]
                 (UpdateInterface* updateHandler)
         {
             updateHandler->accessPointRemoved(toCheck);

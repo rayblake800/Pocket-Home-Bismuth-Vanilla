@@ -8,7 +8,7 @@
  * @brief  Creates and updates a list of visible Wifi access points.
  */
 
-#include "SharedResource_Modular_Module.h"
+#include "Wifi_Module.h"
 
 namespace Wifi 
 { 
@@ -52,19 +52,17 @@ namespace Wifi
  * these object pointers, wrapped in LibNM::AccessPoint objects. These should
  * only be requested and used within the LibNM::Thread::Module thread.
  */
-class Wifi::APList::Module : 
-    public SharedResource::Modular::Module<Wifi::Resource>
+class Wifi::APList::Module : public Wifi::Module
 {
 public:
     /**
      * @brief  Creates the APList module. The constructed list module will be 
      *         empty, and should be initialized with the updateAllAccessPoints
      *         method from within the LibNM thread.
-     *         the access point list.
      *
-     * @param wifiResource  The modular resource object creating this Module.
+     * @param parentResource  The Wifi::Resource object instance.
      */
-    Module(Resource& wifiResource);
+    Module(Resource& parentResource);
 
     /**
      * @brief  Clears all access point data on destruction.
