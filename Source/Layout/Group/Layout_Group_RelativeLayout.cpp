@@ -303,6 +303,36 @@ void GroupLayout::RelativeLayout::addRow(const GroupLayout::Row row)
 }
 
 /*
+ * Removes a row from the layout.
+ */
+void GroupLayout::RelativeLayout::removeRow(const unsigned int rowIndex,
+        const bool removeComponentsFromParent)
+{
+    if(rowIndex < rows.size())
+    {
+        if(removeComponentsFromParent)
+        {
+            Row& toRemove = rows[rowIndex];
+            for(int i = 0; i < toRemove.itemCount(); i++)
+            {
+                const RowItem& rowItem = toRemove.getRowItem(i);
+                juce::Component* rowComponent = rowItem.getComponent();
+                if(rowComponent != nullptr)
+                {
+                    juce::Component* parent 
+                            = rowComponent->getParentComponent();
+                    if(parent != nullptr)
+                    {
+                        parent->removeChildComponent(rowComponent);
+                    }
+                }
+            }
+        }
+        rows.erase(rows.begin() + rowIndex);
+    }
+}
+
+/*
  * Checks if this layout and another are equivalent.
  */
 bool GroupLayout::RelativeLayout::operator==(const RelativeLayout& rhs) const

@@ -468,6 +468,20 @@ public:
     void addRow(const Row row);
 
     /**
+     * @brief  Removes a row from the layout.
+     *
+     * @param rowIndex                    The index of the row to remove. If
+     *                                    this is not a valid row index, no
+     *                                    action is taken.
+     *
+     * @param removeComponentsFromParent  Whether components in the removed row
+     *                                    should also be removed from their
+     *                                    parent component.
+     */
+    void removeRow(const unsigned int rowIndex,
+            const bool removeComponentsFromParent = false);
+
+    /**
      * @brief  Checks if this layout and another are equivalent.  
      *
      * RelativeLayouts are equivalent if they have the same margin and padding 
