@@ -41,14 +41,15 @@ void Wifi::StatusIcon::setIcon(const APIcon selectedIcon)
  */
 void Wifi::StatusIcon::signalStrengthUpdate(const AccessPoint updatedAP) 
 {
+    const int signalStrength = updatedAP.getSignalStrength();
     const int minStrengthIdx = (int) APIcon::wifiStrength0;
     const int maxStrengthIdx = (int) APIcon::wifiStrength3;
-    const int range = maxStrengthIdx - minStrengthIdx;
-    const int strengthLevel = updatedAP.getSignalStrength() * range / 100;
-    const int index = minStrengthIdx + strengthLevel;
-    juce::MessageManager::callAsync([this, index]
+    const int numStrengthImages = 1 + maxStrengthIdx - minStrengthIdx;
+    const int strengthIndex = std::min<int>(maxStrengthIdx,
+            minStrengthIdx + signalStrength / (100 / numStrengthImages));
+    juce::MessageManager::callAsync([this, strengthIndex]
     {
-        setImageAssetIndex(index);
+        setImageAssetIndex(strengthIndex);
     });
 }
 
