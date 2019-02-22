@@ -66,6 +66,16 @@ public:
         applyImageAssets();
     }
 
+    /**
+     * @brief  Gets the number of image assets available to the Component.
+     *
+     * @return  The image asset file count.
+     */
+    int getImageAssetCount() const
+    {
+        return assetList.getImageFiles().size();
+    }
+
 protected:
     /**
      * @brief  Reloads the image file and sets the image colors.
