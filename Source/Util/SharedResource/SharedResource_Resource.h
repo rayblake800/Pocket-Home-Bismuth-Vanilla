@@ -69,12 +69,20 @@ protected:
     template<class HandlerType>
     void foreachHandler(const std::function<void(HandlerType*)> handlerAction)
     {
-        foreachReference([&handlerAction](ReferenceInterface* reference)
+        /* Through template shenanigans, it is possible for one object to
+         * inherit from multiple Handler subclasses that are all connected to
+         * this resource. Tracking notified HandlerType* object here is
+         * necessary to prevent these objects from being acted upon multiple
+         * times. */
+        juce::Array<HandlerType*> alreadyActedOn;
+        foreachReference([&handlerAction, &alreadyActedOn]
+                (ReferenceInterface* reference)
         {
             HandlerType* handler = dynamic_cast<HandlerType*>(reference);
-            if(handler != nullptr)
+            if(handler != nullptr && !alreadyActedOn.contains(handler))
             {
                 handlerAction(handler);
+                alreadyActedOn.add(handler);
             }
         });
     }
