@@ -5,19 +5,19 @@
 static const constexpr char* dbgPrefix = "PagedList::";
 #endif
 
-    
 /* Default animation duration(milliseconds) when scrolling between list 
  * pages: */
 static const constexpr unsigned int defaultAnimDuration = 300;
 
 PagedList::PagedList() : 
 upButton(NavButton::up),
-downButton(NavButton::down)        
+downButton(NavButton::down),
+navButtonListener(*this)
 {
     addAndMakeVisible(upButton);
     addAndMakeVisible(downButton);
-    upButton.addListener(this);
-    downButton.addListener(this);
+    upButton.addListener(&navButtonListener);
+    downButton.addListener(&navButtonListener);
     setInterceptsMouseClicks(false, true);
 }
 
@@ -53,9 +53,26 @@ void PagedList::setPageIndex
 /*
  * Provides the weight value used to set each list item's relative height. 
  */
-unsigned int PagedList::getListItemWeight(const unsigned int index)
+unsigned int PagedList::getListItemWeight(const unsigned int index) const
 {
     return 1;
+}
+
+/*
+ * Finds the index of a list item Component within the list.
+ */
+int PagedList::getListItemIndex(juce::Component* listItem) const
+{
+    int itemIndex = listComponents.indexOf(listItem);
+    if(itemIndex >= 0)
+    {
+        itemIndex += itemsPerPage * pageIndex;
+        if(itemIndex >= getListSize())
+        {
+            itemIndex = -1;
+        }
+    }
+    return itemIndex;
 }
 
 /*
@@ -162,32 +179,6 @@ void PagedList::updateNavButtonVisibility(const bool buttonsVisible)
 }
 
 /*
- * Scrolls the list when the navigation buttons are clicked.  
- */
-void PagedList::buttonClicked(juce::Button* button)
-{
-    int newIndex = pageIndex;
-    if(button == &upButton)
-    {
-        newIndex--;
-    }
-    else if(button == &downButton)
-    {
-        newIndex++;
-    }
-    else
-    {
-        DBG(dbgPrefix << __func__ << ": Unexpected button \""
-                << button->getName() << "\" captured by PagedList!"); 
-        return;
-    }
-    if(newIndex >= 0 && newIndex < getPageCount())
-    {
-        setPageIndex(newIndex, true, defaultAnimDuration);
-    }
-}
-
-/*
  * Re-positions list items and navigation buttons when the list is resized.
  */
 void PagedList::resized()
@@ -199,4 +190,30 @@ void PagedList::resized()
             upButton.getBounds()));
     downButton.setBounds(getLocalArea(getParentComponent(),
             downButton.getBounds()));
+}
+
+/*
+ * Scrolls the list when the navigation buttons are clicked.  
+ */
+void PagedList::NavButtonListener::buttonClicked(juce::Button* button)
+{
+    int newIndex = pagedList.pageIndex;
+    if(button == &pagedList.upButton)
+    {
+        newIndex--;
+    }
+    else if(button == &pagedList.downButton)
+    {
+        newIndex++;
+    }
+    else
+    {
+        DBG(dbgPrefix << __func__ << ": Unexpected button \""
+                << button->getName() << "\" captured by PagedList!"); 
+        return;
+    }
+    if(newIndex >= 0 && newIndex < pagedList.getPageCount())
+    {
+        pagedList.setPageIndex(newIndex, true, defaultAnimDuration);
+    }
 }

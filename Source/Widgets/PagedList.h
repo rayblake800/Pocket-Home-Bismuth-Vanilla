@@ -15,7 +15,7 @@
  * ownership of all Components in the list. When scrolling through the list, 
  * existing Components are reused and updated.
  */
-class PagedList : public juce::Component, private juce::Button::Listener
+class PagedList : public juce::Component
 {
 public:
     PagedList();
@@ -45,7 +45,8 @@ public:
     
 protected:
     /**
-     * @brief  Updates a component so it can be used as a specific list item.
+     * @brief  Creates or updates a component to be used as a specific list 
+     *         item.
      * 
      * @param listItem  A list item Component to update. This parameter may be
      *                  null, in which case a new Component should be created.
@@ -73,7 +74,17 @@ protected:
      * @return       The weight value that should be used to determine the 
      *               relative height of this row index.
      */
-    virtual unsigned int getListItemWeight(const unsigned int index);    
+    virtual unsigned int getListItemWeight(const unsigned int index) const;    
+
+    /**
+     * @brief  Finds the index of a list item Component within the list.
+     *
+     * @param listItem  A component that may be an item in the list.
+     *
+     * @return          The component's index in the list, or -1 if the
+     *                  component is not a visible list item component.
+     */
+    int getListItemIndex(juce::Component* listItem) const;
     
     /**
      * @brief  Sets the number of list items that are displayed at one time.
@@ -141,26 +152,46 @@ private:
      * changes.
      */
     virtual void pageSelectionChanged() { }
-
-    /**
-     * @brief  Scrolls the list when the navigation buttons are clicked.  
-     *
-     * @param button  One of the two page navigation buttons.
-     */
-    virtual void buttonClicked(juce::Button* button) final override;
     
     /**
      * @brief  Repositions list items and navigation buttons when the list is 
      *         resized.
      */
     virtual void resized() override;
-    
-    /* Handles the list item layout: */
-    Layout::Group::Manager layoutManager;
-    
+
     /* Navigation buttons used to scroll through the list: */
     NavButton upButton;
     NavButton downButton;
+    
+    /**
+     * @brief  Handles navigation button events.
+     */
+    class NavButtonListener : public juce::Button::Listener
+    {
+    public:
+        /**
+         * @brief  Connects the listener to the PagedList that owns it.
+         *
+         * @param pagedList  The PagedList object holding this listener.
+         */
+        NavButtonListener(PagedList& pagedList) : pagedList(pagedList) { }
+
+        virtual ~NavButtonListener() { }
+
+    private:
+        /**
+         * @brief  Scrolls the list when the navigation buttons are clicked.  
+         *
+         * @param button  One of the two page navigation buttons.
+         */
+        virtual void buttonClicked(juce::Button* button) final override;
+
+        PagedList& pagedList;
+    };
+    NavButtonListener navButtonListener;
+    
+    /* Handles the list item layout: */
+    Layout::Group::Manager layoutManager;
     
     /* Tracks if navigation buttons should be shown: */
     bool showNavButtons = true;
