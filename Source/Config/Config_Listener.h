@@ -13,7 +13,7 @@ namespace Config { template <class ResourceClass> class Listener; }
 
 template <class ResourceClass>
 class Config::Listener : public ListenerInterface,
-    protected SharedResource::Handler<ResourceClass>
+    public SharedResource::Handler<ResourceClass>
 {
 private:
     /* Tracks all keys this listener follows. */

@@ -135,14 +135,22 @@ public:
         if(updateProperty<ValueType>(key, newValue))
         {
             configJson.writeChanges();
+            int nListeners = 0;
+            int nTracked = 0;
             foreachHandler<ListenerInterface>(
-                [this, &key] (ListenerInterface* listener)
+                [this, &key, &nListeners, & nTracked] (ListenerInterface* listener)
             {
+                nListeners++;
                 if(listener->isKeyTracked(key))
                 {
+                    nTracked++;
                     listener->configValueChanged(key);
                 }
             });
+            DBG("Config::FileResource::SetConfigValue: Value with key \""
+                    << key.toString() << "\" changed. Found "
+                    << nListeners << " listeners, and notified "
+                    << nTracked << " listeners that were tracking that key.");
             return true;
         }
         return false;

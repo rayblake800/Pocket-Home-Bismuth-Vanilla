@@ -13,7 +13,7 @@ namespace Theme { namespace Colour { class ConfigListener; } }
 namespace Theme { namespace Colour { class JSONResource; } }
 
 class Theme::Colour::ConfigListener : public ListenerInterface,
-    protected Config::Listener<JSONResource>
+    public Config::Listener<JSONResource>
 {
 friend class JSONResource;
 protected:
