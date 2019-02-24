@@ -1,7 +1,7 @@
 #pragma once
 #include "LoginPage.h"
-#include "PageFactory.h"
-#include "PageStackComponent.h"
+#include "Page_Factory.h"
+#include "Page_StackComponent.h"
 #include "WindowFocus.h"
 
 /**
@@ -33,10 +33,10 @@ private:
     void resized() override;
 
     //Factory object for creating all UI pages
-    PageFactory pageFactory;
+    Page::Factory pageFactory;
     
     //Holds all page components, besides the login page
-    PageStackComponent pageStack;
+    Page::StackComponent pageStack;
 
     //LoginPage will be initially shown instead of the pageStack if a password
     //has been set.
