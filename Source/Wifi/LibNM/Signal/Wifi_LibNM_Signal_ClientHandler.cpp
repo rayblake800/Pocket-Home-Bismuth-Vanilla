@@ -7,7 +7,6 @@
 #include "Wifi_LibNM_Thread_Handler.h"
 #include "Wifi_LibNM_Thread_Module.h"
 #include "Wifi_LibNM_ContextTest.h"
-#include "Wifi_Connection_Control_ModuleUpdater.h"
 #include "SharedResource_Modular_Handler.h"
 
 #ifdef JUCE_DEBUG
