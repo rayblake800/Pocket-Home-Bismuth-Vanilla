@@ -243,7 +243,6 @@ static void postScanCallback(NMDeviceWifi* device, GError* error,
         gpointer user_data)
 {
         DBG(dbgPrefix << __func__ << ": scanned for visible access points.");
-        GLib::ErrorPtr errorManager(error); 
         if(error != nullptr)
         {
             DBG(dbgPrefix << __func__ << ": Scanning error: "

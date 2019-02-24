@@ -472,7 +472,6 @@ void WifiConnect::Control::Module::openingConnectionFailed
     nmThread->lockForAsyncCallback(SharedResource::LockType::write,
             [this, connection, error]()
     {
-        GLib::ErrorPtr connectionError(error);
         DBG(dbgPrefix << __func__ << ": Error " << error->code << ":" 
                 << error->message);
 
