@@ -315,7 +315,7 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
         else
         DBG(dbgPrefix << __func__ << ": Connecting to "
                 << selectedAP.getSSID().toString());
-        ontrolComponent.connect();
+        controlComponent.connect();
     }
     else if(button == &controlComponent.savedConnectionDeleteButton)
     {
