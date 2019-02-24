@@ -36,6 +36,13 @@ static const juce::Identifier settingsListBtn
         ("settings list button");
 static const juce::Identifier spinner
         ("loading spinner");
+static const juce::Identifier lockIcon
+        ("lock icon");
+static const juce::Identifier loginPage
+        ("login page");
+static const juce::Identifier loginImage
+        ("login image");
+
 
 static const juce::Array<juce::Identifier> components =
 {
@@ -50,6 +57,9 @@ static const juce::Array<juce::Identifier> components =
     pageUp,
     pageDown,
     settingsListBtn,
-    spinner
+    spinner,
+    lockIcon,
+    loginPage,
+    loginImage
 };
 }}}

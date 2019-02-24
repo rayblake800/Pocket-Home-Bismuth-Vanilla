@@ -122,5 +122,25 @@
             "component assets/Spinner/spinner6.svg",
             "component assets/Spinner/spinner7.svg"
         ]
+    },
+    "lock icon": {
+        "colours": [
+            "0xffffffff"
+        ],
+        "image files": [
+            "component assets/WifiIcon/lock.svg"
+        ]
+    },
+
+    "login page": {
+        "image files": [
+            "login/background.png"
+        ]
+    },
+
+    "login image": {
+        "image files" : [
+            "login/chipVector.svg"
+        ]
     }
 }
