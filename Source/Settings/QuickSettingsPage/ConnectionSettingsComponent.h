@@ -1,6 +1,5 @@
 #pragma once
 #include "JuceHeader.h"
-#include "PageComponent.h"
 #include "SwitchComponent.h"
 #include "Spinner.h"
 #include "DrawableImageComponent.h"
@@ -26,7 +25,7 @@ public:
      * @param name                The internal component name.
      */
     ConnectionSettingsComponent(
-            std::function<void() > openConnectionPage,
+            std::function<void()> openConnectionPage,
             const juce::String& name = juce::String());
 
     virtual ~ConnectionSettingsComponent() { }

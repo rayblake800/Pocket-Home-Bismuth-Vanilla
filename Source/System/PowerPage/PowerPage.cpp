@@ -1,4 +1,5 @@
 #include "PowerPage.h"
+#include "Page_Type.h"
 #include "Layout_Transition_Animator.h"
 #include "SystemCommands.h"
 #include "Utils.h"
@@ -17,7 +18,7 @@ static const juce::Identifier versionTextKey       = "version";
 static const juce::Identifier flashSoftwareTextKey = "flashSoftware";
 
 PowerPage::PowerPage() : Locale::TextUser(localeClassKey),
-PageComponent("PowerPage"),
+pageListener(*this),
 powerOffButton(localeText(shutdownTextKey)),
 rebootButton(localeText(rebootTextKey)),
 sleepButton(localeText(sleepTextKey)),
@@ -29,6 +30,9 @@ lockscreen([this]()
     hideLockscreen();
 })
 {
+#ifdef JUCE_DEBUG
+    setName("PowerPage");
+#endif
     using namespace Layout::Group;
     RelativeLayout layout({
         Row(6, { RowItem(&versionLabel) }),
@@ -40,7 +44,7 @@ lockscreen([this]()
     });
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(4);
-    setBackButton(PageComponent::rightBackButton);
+    setBackButton(BackButtonType::right);
     setLayout(layout);
  
     versionLabel.setJustificationType(juce::Justification::centred);
@@ -58,10 +62,10 @@ lockscreen([this]()
     buildLabel.setJustificationType(juce::Justification::centred);
     buildLabel.setText(buildText, juce::NotificationType::dontSendNotification);
 
-    powerOffButton.addListener(this);
-    sleepButton.addListener(this);
-    rebootButton.addListener(this);
-    felButton.addListener(this);
+    powerOffButton.addListener(&pageListener);
+    sleepButton.addListener(&pageListener);
+    rebootButton.addListener(&pageListener);
+    felButton.addListener(&pageListener);
     addChildComponent(overlaySpinner);
     addAndShowLayoutComponents();
 }
@@ -123,30 +127,30 @@ void PowerPage::pageResized()
 /*
  * Handles all button clicks.
  */
-void PowerPage::pageButtonClicked(juce::Button *button)
+void PowerPage::PageListener::buttonClicked(juce::Button *button)
 {
-    using namespace juce;
-    if (button == &felButton)
+    if (button == &powerPage.felButton)
     {
-        pushPageToStack(PageType::Fel, Layout::Transition::Type::moveRight);
+        powerPage.pushPageToStack(Page::Type::fel,
+                Layout::Transition::Type::moveRight);
         return;
     }
-    if (button == &sleepButton)
+    if (button == &powerPage.sleepButton)
     {
-        startSleepMode();
+        powerPage.startSleepMode();
         return;
     }
 
     SystemCommands systemCommands;
-    if (button == &powerOffButton)
+    if (button == &powerPage.powerOffButton)
     {
-        showPowerSpinner();
+        powerPage.showPowerSpinner();
         systemCommands.runActionCommand
             (SystemCommands::ActionCommand::shutdown);
     }
-    else if (button == &rebootButton)
+    else if (button == &powerPage.rebootButton)
     {
-        showPowerSpinner();
+        powerPage.showPowerSpinner();
         systemCommands.runActionCommand
             (SystemCommands::ActionCommand::restart);
     }

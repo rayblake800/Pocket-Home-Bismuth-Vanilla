@@ -1,35 +1,60 @@
 #pragma once
-#include "ScalingLabel.h"
-#include "Locale/TextUser.h"
-#include "PageComponent.h"
-
 /**
- * @file FelPage.h
+ * @file  FelPage.h
  * 
- * @brief  Assists the user in re-flashing the PocketCHIP.
- *
- * FelPage gives the user the option to either reboot into Fel
- * (flashing) mode, or cancel and return to the last page.  If the system is
- * not a PocketCHIP or the i2c bus is otherwise inaccessible, nothing will
- * happen if the user clicks the confirmation button.
+ * @brief  Assists the user in flashing the PocketCHIP.
  */
 
+#include "ScalingLabel.h"
+#include "Locale/TextUser.h"
+#include "Page_Component.h"
 
-class FelPage : public PageComponent, public Locale::TextUser
+/**
+ * @brief  Provides component controls for putting PocketCHIP systems into Fel
+ *         mode.
+ *
+ * FelPage gives the user the option to either reboot into Fel (flashing) mode, 
+ * or cancel and return to the last page. If the system is not a PocketCHIP or 
+ * the i2c bus is otherwise inaccessible, nothing will happen if the user clicks
+ * the confirmation button.
+ */
+class FelPage : public Page::Component, public Locale::TextUser
 {
 public:
+    /**
+     * @brief  Loads the page layout on construction.
+     */
     FelPage();
 
-    ~FelPage() { }
-private:
+    virtual ~FelPage() { }
 
+private:
     /**
-     * @brief  Handles button clicks, either restarting into Fel mode or closing
-     *         the  page.
-     * 
-     * @param button  This should be either &yesButton or &noButton.
+     * @brief  Handles all button click events for the FelPage.
      */
-    void pageButtonClicked(juce::Button* button) override;
+    class PageListener final : public juce::Button::Listener
+    {
+    public:
+        PageListener(FelPage& felPage): felPage(felPage) { }
+
+        virtual ~PageListener() { }
+
+    private:
+        /**
+         * @brief  Handles button click events for the Fel page, either 
+         *         restarting into Fel mode or closing the page.
+         * 
+         * @param button  This should be either yesButton or noButton.
+         */
+        void buttonClicked(juce::Button* button) override;
+
+        FelPage& felPage;
+    };
+    PageListener pageListener;
+
+    /* If true, the yes button was clicked already and further clicks should
+       be ignored. */
+    bool debounce = false;
 
     /* Ask for confirmation */
     ScalingLabel infoLine1;
@@ -39,9 +64,6 @@ private:
     juce::TextButton yesButton;
     /* Cancel, and close this page */
     juce::TextButton noButton;
-    /* If true, the yes button was clicked already and further clicks should
-       be ignored. */
-    bool debounce = false;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FelPage)
 };

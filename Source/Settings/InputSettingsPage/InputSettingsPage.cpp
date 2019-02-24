@@ -15,7 +15,7 @@ static const juce::Identifier visibleTextKey       = "visible";
 
 InputSettingsPage::InputSettingsPage() :
 Locale::TextUser(localeClassKey),
-PageComponent("InputSettingsPage"),
+pageListener(*this),
 title("settings", localeText(inputSettingsTextKey)),
 chooseMode("chooseMode"),
 calibrating(localeText(calibrateTextKey)),
@@ -24,7 +24,7 @@ cursorVisible("cursorVisible", localeText(showCursorTextKey))
 #    if JUCE_DEBUG
     setName("InputSettingsPage");
 #    endif
-    setBackButton(PageComponent::leftBackButton);
+    setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout({
         Row(30,
@@ -52,7 +52,7 @@ cursorVisible("cursorVisible", localeText(showCursorTextKey))
     //ComboBox
     chooseMode.addItem(localeText(notVisibleTextKey), 1);
     chooseMode.addItem(localeText(visibleTextKey), 2);
-    chooseMode.addListener(this);
+    chooseMode.addListener(&pageListener);
     Config::MainFile mainConfig;
     if (mainConfig.getShowCursor())
     {
@@ -70,9 +70,9 @@ cursorVisible("cursorVisible", localeText(showCursorTextKey))
  * Re-applies the Xmodmap file or runs Xinput Calibrator, depending on 
  * which button was pressed.
  */
-void InputSettingsPage::pageButtonClicked(juce::Button* button)
+void InputSettingsPage::PageListener::buttonClicked(juce::Button* button)
 {
-    if (button == &calibrating)
+    if (button == &settingsPage.calibrating)
     {
         SystemCommands systemCommands;
         systemCommands.runActionCommand
@@ -83,10 +83,10 @@ void InputSettingsPage::pageButtonClicked(juce::Button* button)
 /*
  * Changes the cursor visibility settings.
  */
-void InputSettingsPage::comboBoxChanged(juce::ComboBox* box)
+void InputSettingsPage::PageListener::comboBoxChanged(juce::ComboBox* box)
 {
     Config::MainFile mainConfig;
-    if (box != &chooseMode) return;
+    if (box != &settingsPage.chooseMode) return;
     bool cursorVisible = (box->getSelectedId() == 2);
     mainConfig.setShowCursor(cursorVisible);
 }

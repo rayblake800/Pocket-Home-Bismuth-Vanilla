@@ -2,24 +2,26 @@
 /**
  * @file  HomePage.h
  * 
- * @brief  The application's main Page Component.
+ * @brief  Creates the application's primary UI page.
  */
 
 #include "OverlaySpinner.h"
 #include "DesktopEntry_Loader.h"
 #include "Icon_Loader.h"
-#include "PageComponent.h"
+#include "Page_Component.h"
 #include "Config_MainListener.h"
 #include "Theme_Image_Component.h"
 #include "DrawableImageButton.h"
 #include "Layout_Component_Manager.h"
 #include "ClockLabel.h"
-#include "Wifi_StatusIcon.h"
+#include "Wifi_SignalIcon.h"
 #include "BatteryIcon.h"
 #include "SystemCommands.h"
 #include "AppMenu/AppMenu.h"
 
 /**
+ * @brief  The root Page::Component within the application.
+ *
  *  HomePage displays the application menu, time, battery percentage, and Wifi
  * connection state. HomePage also provides navigation buttons used to access 
  * the power and settings pages.
@@ -28,7 +30,7 @@
  * except perhaps the login page. The HomePage will continue to exist as long as
  * Pocket-Home is running.
  */
-class HomePage : public PageComponent, public Config::MainListener
+class HomePage : public Page::Component, public Config::MainListener
 {
 public:
     /**
@@ -37,6 +39,7 @@ public:
     HomePage();
     
     virtual ~HomePage() { }
+
 protected:
     /**
      * @brief  Tracks page background changes. 
@@ -50,14 +53,6 @@ protected:
 
 private:
     /**
-     * @brief  Opens the power page or the quick settings page, depending on 
-     *         which button was clicked.
-     * 
-     * @param button  The page button that was clicked.
-     */
-    void pageButtonClicked(juce::Button* button) override;
-
-    /**
      * @brief  Grabs keyboard focus when the page becomes visible.
      */
     void visibilityChanged() override;
@@ -66,6 +61,24 @@ private:
      * @brief  Updates all child component bounds when the page is resized.
      */
     void pageResized() override;
+
+    class PageListener: public juce::Button::Listener
+    {
+    public:
+        PageListener(HomePage& homePage) : homePage(homePage) { }
+
+    private:
+        /**
+         * @brief  Opens the power page or the quick settings page, depending on 
+         *         which button was clicked.
+         * 
+         * @param button  The page button that was clicked.
+         */
+        void buttonClicked(juce::Button* button) override;
+
+        HomePage& homePage;
+    };
+    PageListener pageListener;
 
     /* Loads system commands.  This resource should exist as long as the home
        page exists. */
@@ -90,7 +103,7 @@ private:
     BatteryIcon batteryIcon;
     
     /* Displays the current wifi status. */
-    Wifi::StatusIcon wifiIcon;
+    Wifi::SignalIcon wifiIcon;
 
     /* Opens the power page when clicked. */
     Theme::Image::Component<DrawableImageButton> powerButton;

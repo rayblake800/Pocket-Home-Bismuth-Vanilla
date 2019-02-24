@@ -34,7 +34,7 @@ static const juce::Identifier polkitMissingTextKey      = "polkitMissing";
 
 SetPasswordPage::SetPasswordPage() :
 Locale::TextUser(localeClassKey),
-PageComponent("SetPasswordPage"),
+pageListener(*this),
 title("Title", localeText(changePasswordTextKey)),
 curLabel("CurLabel", localeText(currentPasswordTextKey)),
 curPassword("Current", 0x2022),
@@ -47,7 +47,7 @@ confirmPassword("Confirmation", 0x2022)
 #    if JUCE_DEBUG
     setName("SetPasswordPage");
 #    endif
-    setBackButton(PageComponent::leftBackButton);
+    setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout({
         Row(20, { RowItem(&title)}),
@@ -74,7 +74,7 @@ confirmPassword("Confirmation", 0x2022)
 
     title.setJustificationType(juce::Justification::centred);
     setPassword.setButtonText(localeText(applyTextKey));
-    setPassword.addListener(this);
+    setPassword.addListener(&pageListener);
     bool passwordSet = Password::isPasswordSet();
     addAndShowLayoutComponents();
     curLabel.setVisible(passwordSet);
@@ -95,25 +95,25 @@ confirmPassword("Confirmation", 0x2022)
  * and all text fields on the page will be cleared.  If the password was
  * set successully, the page will be closed.
  */
-void SetPasswordPage::pageButtonClicked(juce::Button* button)
+void SetPasswordPage::PageListener::buttonClicked(juce::Button* button)
 {
-    if (button != &setPassword)
+    if (button != &passwordPage.setPassword)
     {
         DBG("SetPasswordPage::" << __func__ << ": button " << button->getName()
                 << " should not be triggering this function!");
-        clearAllFields();
+        passwordPage.clearAllFields();
         return;
     }
-    else if (newPassword.getText() != confirmPassword.getText())
+    else if (passwordPage.newPassword.getText() != passwordPage.confirmPassword.getText())
     {
-        showErrorMessage(localeText(confirmationFailedTextKey),
-                localeText(fieldsDontMatchTextKey));
+        passwordPage.showErrorMessage(passwordPage.localeText(confirmationFailedTextKey),
+                passwordPage.localeText(fieldsDontMatchTextKey));
     }
     else
     {
         juce::String title, message;
-        switch (Password::changePassword(curPassword.getText(),
-                newPassword.getText()))
+        switch (Password::changePassword(passwordPage.curPassword.getText(),
+                passwordPage.newPassword.getText()))
         {
             case Password::passwordRemoveSuccess:
             case Password::fileDeleteFailed:
@@ -125,51 +125,51 @@ void SetPasswordPage::pageButtonClicked(juce::Button* button)
                 DBG("SetPasswordPage::" << __func__ << ": paswordSetSuccess");
                 juce::AlertWindow::showMessageBoxAsync(
                         juce::AlertWindow::AlertIconType::InfoIcon,
-                        localeText(successTextKey),
-                        localeText(passwordUpdatedTextKey),
+                        passwordPage.localeText(successTextKey),
+                        passwordPage.localeText(passwordUpdatedTextKey),
                         "",
                         nullptr,
                         juce::ModalCallbackFunction::create([this](int i)
                         {
-                            removeFromStack();
+                            passwordPage.removeFromStack();
                         }));
-                clearAllFields();
+                passwordPage.clearAllFields();
                 return;
             case Password::missingNewPassword:
                 DBG("SetPasswordPage::" << __func__ << ": missingNewPassword");
-                title = localeText(missingPasswordTextKey);
-                message = localeText(askToEnterNewTextKey);
+                title = passwordPage.localeText(missingPasswordTextKey);
+                message = passwordPage.localeText(askToEnterNewTextKey);
                 break;
             case Password::wrongPasswordError:
                 DBG("SetPasswordPage::" << __func__ << ": wrongPasswordError");
-                title = localeText(Password::isPasswordSet() ?
+                title = passwordPage.localeText(Password::isPasswordSet() ?
                         failedSetTextKey : failedUpdateTextKey);
-                message = localeText(wrongPasswordTextKey);
+                message = passwordPage.localeText(wrongPasswordTextKey);
                 break;
             case Password::fileCreateFailed:
                 DBG("SetPasswordPage::" << __func__ << ": fileCreateFailed");
-                title = localeText(failedSetTextKey);
-                message = localeText(checkAgentAndRootTextKey);
+                title = passwordPage.localeText(failedSetTextKey);
+                message = passwordPage.localeText(checkAgentAndRootTextKey);
                 break;
             case Password::fileWriteFailed:
                 DBG("SetPasswordPage::" << __func__ << ": fileWriteFailed");
-                title = localeText(failedUpdateTextKey);
-                message = localeText(checkAgentAndRootTextKey);
+                title = passwordPage.localeText(failedUpdateTextKey);
+                message = passwordPage.localeText(checkAgentAndRootTextKey);
                 break;
             case Password::fileSecureFailed:
                 DBG("SetPasswordPage::" << __func__ << ": fileSecureFailed");
-                title = localeText(errorTextKey);
-                message = localeText(securingFailedTextKey);
+                title = passwordPage.localeText(errorTextKey);
+                message = passwordPage.localeText(securingFailedTextKey);
                 break;
             case Password::noPasswordScript:
                 DBG("SetPasswordPage::" << __func__ << ": noPasswordScript");
-                title = localeText(errorTextKey);
-                message = localeText(filesMissingTextKey);
+                title = passwordPage.localeText(errorTextKey);
+                message = passwordPage.localeText(filesMissingTextKey);
                 break;
             case Password::noPKExec:
                 DBG("SetPasswordPage::" << __func__ << ": noPKExec");
-                title = localeText(errorTextKey);
-                message = localeText(polkitMissingTextKey);
+                title = passwordPage.localeText(errorTextKey);
+                message = passwordPage.localeText(polkitMissingTextKey);
                 break;
         }
         juce::AlertWindow::showMessageBoxAsync(
@@ -178,7 +178,7 @@ void SetPasswordPage::pageButtonClicked(juce::Button* button)
                 message,
                 "",
                 nullptr);
-        clearAllFields();
+        passwordPage.clearAllFields();
     }
 }
 

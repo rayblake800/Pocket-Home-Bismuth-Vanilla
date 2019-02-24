@@ -10,11 +10,11 @@
 #include "FileSelectTextEditor.h"
 #include "ScalingLabel.h"
 #include "CounterComponent.h"
-#include "PageComponent.h"
+#include "Page_Component.h"
 #include "Utils.h"
 #include "Locale/TextUser.h"
 
-class HomeSettingsPage : public PageComponent, public Locale::TextUser,
+class HomeSettingsPage : public Page::Component, public Locale::TextUser,
     private juce::ComboBox::Listener, private FileSelectTextEditor::Listener
 {
 public:

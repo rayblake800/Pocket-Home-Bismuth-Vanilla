@@ -2,7 +2,7 @@
 #include "JuceHeader.h"
 #include "Locale/TextUser.h"
 #include "ScalingLabel.h"
-#include "PageComponent.h"
+#include "Page_Component.h"
 
 /**
  * @file RemovePasswordPage.h
@@ -12,7 +12,7 @@
  * password.
  */
 
-class RemovePasswordPage : public PageComponent, public Locale::TextUser
+class RemovePasswordPage : public Page::Component, public Locale::TextUser
 {
 public:
     RemovePasswordPage();
@@ -21,13 +21,24 @@ public:
 
 private:
 
-    /**
-     * Attempts to delete the Pocket-Home password when deleteButton is pressed.
-     * If this succeeds, the page will close after showing an AlertWindow.
-     * 
-     * @param button  This should always be deleteButton
-     */
-    void pageButtonClicked(juce::Button* button) override;
+    class PageListener : public juce::Button::Listener
+    {
+    public:
+        PageListener(RemovePasswordPage& passwordPage) 
+                : passwordPage(passwordPage) { }
+
+    private:
+        /**
+         * Attempts to delete the Pocket-Home password when deleteButton is pressed.
+         * If this succeeds, the page will close after showing an AlertWindow.
+         * 
+         * @param button  This should always be deleteButton
+         */
+        void buttonClicked(juce::Button* button) override;
+
+        RemovePasswordPage& passwordPage;
+    };
+    PageListener pageListener;
 
     //Title of the page
     ScalingLabel titleLabel;

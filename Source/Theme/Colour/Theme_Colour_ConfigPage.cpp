@@ -7,7 +7,6 @@
 namespace ColourTheme = Theme::Colour;
 
 ColourTheme::ConfigPage::ConfigPage() :
-PageComponent("ColourPage"),
 listModel(),
 colourList("colourList", &listModel)
 {
@@ -22,7 +21,7 @@ colourList("colourList", &listModel)
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(3);
     layout.setXPaddingWeight(3);
-    setBackButton(PageComponent::BackButtonType::leftBackButton);
+    setBackButton(BackButtonType::left);
     setLayout(layout);
     colourList.setOutlineThickness(2);
     colourPicker.setSelectionCallback([this](juce::Colour newColour)

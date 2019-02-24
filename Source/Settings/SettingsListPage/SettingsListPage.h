@@ -1,17 +1,20 @@
 #pragma once
-#include "PageComponent.h"
+/**
+ * @file SettingsListPage.h
+ * 
+ * @brief  Provides an interface for accessing all other settings pages.
+ */
+
+#include "Page_Component.h"
 #include "Locale/TextUser.h"
 #include "NavButton.h"
 #include "ScalingLabel.h"
 #include "PagedList.h"
 
 /**
- * @file SettingsListPage.h
- * 
- * @brief A navigation page containing buttons that open other settings pages.
+ * @brief  A navigation page containing buttons that open other settings pages.
  */
-
-class SettingsListPage : public PageComponent, public Locale::TextUser
+class SettingsListPage : public Page::Component, public Locale::TextUser
 {
 public:
     SettingsListPage();
@@ -19,25 +22,41 @@ public:
     virtual ~SettingsListPage() { }
 
 private:
-    
     /**
-     * Gets button titles for all page buttons.
+     * @brief  Gets button titles for all page buttons.
      *
      * @return  Titles for all page buttons, in order.
      */
     juce::StringArray getButtonTitles();
 
     /**
-     * Reloads page layout whenever the page becomes visible.
+     * @brief Reloads page layout whenever the page becomes visible.
      */
     void visibilityChanged() override;
 
+    class PageListener : public juce::Button::Listener
+    {
+    public:
+        /**
+         * @brief  Connects this listener to its page component.
+         *
+         * @param listPage  The SettingsListPage that owns this listener.
+         */
+        PageListener(SettingsListPage& listPage) : listPage(listPage) { }
+
+    private:
+        /**
+         * @brief  Handles button clicks to open menu pages.
+         */
+        void buttonClicked(juce::Button* button) override;
+
+        SettingsListPage& listPage;
+    };
+    PageListener pageListener;
+    
     /**
-     * Handle button clicks to open menu pages
+     * @brief  The list component providing all settings page buttons. 
      */
-    void pageButtonClicked(juce::Button* button) override;
-    
-    
     class SettingsList : public PagedList
     {
     public:
@@ -53,7 +72,8 @@ private:
         virtual unsigned int getListSize() const;
         
         /**
-         * Updates or creates a page TextButton for a specific button index.
+         * @brief  Updates or creates a page TextButton for a specific button 
+         *         index.
          * 
          * @param listItem  Either nullptr, or a recycled TextButton to update.
          * 
@@ -62,18 +82,19 @@ private:
          * @return  The updated list Component. 
          */
         virtual Component* updateListItem(Component* listItem,
-                unsigned int index);
+                const unsigned int index);
         
         /**
-         * Refresh list components.
+         * @brief  Refreshes all list components.
          */
         void refresh();
+
     private:
         static const constexpr float yPaddingFraction = 0.04;
     };
     SettingsList buttonList;
 
-    //Number of page buttons to show on the screen at a time
+    /* Number of page buttons to show on the screen at a time: */
     static const constexpr int buttonsPerPage = 5;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsListPage)

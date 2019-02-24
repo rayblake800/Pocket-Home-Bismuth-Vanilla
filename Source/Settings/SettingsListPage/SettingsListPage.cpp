@@ -1,4 +1,5 @@
 #include "SettingsListPage.h"
+#include "Page_Type.h"
 #include "Password.h"
 
 /* Localized object class key: */
@@ -15,13 +16,13 @@ static const juce::Identifier inputSettingsTitleKey  = "inputSettings";
 
 SettingsListPage::SettingsListPage() :
 Locale::TextUser(localeClassKey),
-PageComponent("SettingsListPage")
+pageListener(*this)
 {
 
 #    if JUCE_DEBUG
     setName("SettingsListPage");
 #    endif
-    setBackButton(PageComponent::leftBackButton);
+    setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout(
     {
@@ -70,7 +71,7 @@ void SettingsListPage::visibilityChanged()
  * Handle button clicks to open menu pages, close this page, or 
  * scroll the list of page buttons.
  */
-void SettingsListPage::pageButtonClicked(juce::Button * button)
+void SettingsListPage::PageListener::buttonClicked(juce::Button * button)
 {
     using namespace juce;
     TextButton * textButton = dynamic_cast<TextButton*>(button);
@@ -80,22 +81,22 @@ void SettingsListPage::pageButtonClicked(juce::Button * button)
         return;
     }
     
-    Array<PageComponent::PageType> pageTypes;
-    pageTypes.add(PageComponent::PageType::HomeSettings);
-    pageTypes.add(PageComponent::PageType::ColourSettings);
-    pageTypes.add(PageComponent::PageType::SetPassword);
+    Array<Page::Type> pageTypes;
+    pageTypes.add(Page::Type::homeSettings);
+    pageTypes.add(Page::Type::colourSettings);
+    pageTypes.add(Page::Type::setPassword);
     if(Password::isPasswordSet())
     {
-        pageTypes.add(PageComponent::PageType::RemovePassword);
+        pageTypes.add(Page::Type::removePassword);
     }
-    pageTypes.add(PageComponent::PageType::DateTime);
-    pageTypes.add(PageComponent::PageType::InputSettings);
+    pageTypes.add(Page::Type::dateTime);
+    pageTypes.add(Page::Type::inputSettings);
     
-    StringArray pageNames = getButtonTitles();
+    StringArray pageNames = listPage.getButtonTitles();
     int typeIndex = pageNames.indexOf(textButton->getButtonText());
     if(typeIndex >= 0 && typeIndex < pageTypes.size())
     {
-        pushPageToStack(pageTypes[typeIndex]);
+        listPage.pushPageToStack(pageTypes[typeIndex]);
     }
 }
 
@@ -127,7 +128,7 @@ juce::Component* SettingsListPage::SettingsList::updateListItem
     if(textButton == nullptr)
     {
         textButton = new TextButton();
-        textButton->addListener(parent);
+        textButton->addListener(&parent->pageListener);
     }
     textButton->setButtonText(title);
     textButton->setName(title);

@@ -6,21 +6,23 @@
 static const juce::Identifier localeClassKey = "FelPage";
 
 /* localized text keys: */
-static const juce::Identifier rebootTextKey       = "reboot";
-static const juce::Identifier yesTextKey          = "yes";
-static const juce::Identifier noTextKey           = "no";
-static const juce::Identifier flashingInfoTextKey = "flashingInfo";
+namespace TextKey
+{
+    static const juce::Identifier reboot       = "reboot";
+    static const juce::Identifier yes          = "yes";
+    static const juce::Identifier no           = "no";
+    static const juce::Identifier flashingInfo = "flashingInfo";
+}
 
 FelPage::FelPage() :
 Locale::TextUser(localeClassKey),
-PageComponent("FelPage"),
+pageListener(*this),
 debounce(false),
-infoLine1("infoLine1", localeText(rebootTextKey)),
-yesButton(localeText(yesTextKey)),
-noButton(localeText(noTextKey)),
-infoLine2("infoLine2", localeText(flashingInfoTextKey))
+infoLine1("infoLine1", localeText(TextKey::reboot)),
+yesButton(localeText(TextKey::yes)),
+noButton(localeText(TextKey::no)),
+infoLine2("infoLine2", localeText(TextKey::flashingInfo))
 {
-    using namespace juce;
 #    if JUCE_DEBUG
     setName("FelPage");
 #    endif
@@ -46,26 +48,25 @@ infoLine2("infoLine2", localeText(flashingInfoTextKey))
     layout.setYPaddingWeight(3);
     setLayout(layout);
                 
-    infoLine1.setJustificationType(Justification::centred);
-    infoLine2.setJustificationType(Justification::centred);
-    yesButton.addListener(this);
-    noButton.addListener(this);
+    infoLine1.setJustificationType(juce::Justification::centred);
+    infoLine2.setJustificationType(juce::Justification::centred);
+    yesButton.addListener(&pageListener);
+    noButton.addListener(&pageListener);
     addAndShowLayoutComponents();
 }
 
-/**
- * Handle button clicks, either restarting into Fel mode or closing the 
- * page.
+/*
+ * Handles button click events for the Fel page.
  */
-void FelPage::pageButtonClicked(juce::Button* button)
+void FelPage::PageListener::buttonClicked(juce::Button* button)
 {
-    if (button == &noButton)
+    if (button == &felPage.noButton)
     {
-        removeFromStack(Layout::Transition::Type::moveRight);
+        felPage.removeFromStack(Layout::Transition::Type::moveRight);
     }
-    else if (button == &yesButton && !debounce)
+    else if (button == &felPage.yesButton && !felPage.debounce)
     {
-        debounce = true;
+        felPage.debounce = true;
         try
         {
             I2CBus i2c;

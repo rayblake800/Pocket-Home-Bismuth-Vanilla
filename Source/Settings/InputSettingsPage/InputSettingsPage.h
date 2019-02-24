@@ -9,32 +9,43 @@
 #include "DrawableImageButton.h"
 #include "Locale/TextUser.h"
 #include "ScalingLabel.h"
-#include "PageComponent.h"
+#include "Page_Component.h"
 
-class InputSettingsPage : public PageComponent, public Locale::TextUser,
-private juce::ComboBox::Listener
+class InputSettingsPage : public Page::Component, public Locale::TextUser
 {
 public:
     InputSettingsPage();
 
     virtual ~InputSettingsPage() { }
 
-    /**
-     * @brief  Runs the display calibration command when the calibration button
-     *         is clicked.
-     * 
-     * @param button  The calibration button.
-     */
-    void pageButtonClicked(juce::Button* button) override;
-
-    /**
-     * @brief  Changes the cursor visibility settings.
-     * 
-     * @param box
-     */
-    void comboBoxChanged(juce::ComboBox* box) override;
-
 private:
+    class PageListener : public juce::Button::Listener, 
+            public juce::ComboBox::Listener
+    {
+    public:
+        PageListener(InputSettingsPage& settingsPage) : 
+            settingsPage(settingsPage) { }
+
+    private:
+        /**
+         * @brief  Runs the display calibration command when the calibration 
+         *         button is clicked.
+         * 
+         * @param button  The calibration button.
+         */
+        void buttonClicked(juce::Button* button) override;
+
+        /**
+         * @brief  Changes the cursor visibility settings.
+         * 
+         * @param box  The cursor visibility selection component.
+         */
+        void comboBoxChanged(juce::ComboBox* box) override;
+
+        InputSettingsPage& settingsPage;
+    };
+    PageListener pageListener;
+
     //Title of the page
     ScalingLabel title;
 

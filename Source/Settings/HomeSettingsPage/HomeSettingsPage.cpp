@@ -35,7 +35,6 @@ static const constexpr int scrollingMenuID   = 2;
 
 HomeSettingsPage::HomeSettingsPage() :
 Locale::TextUser(localeClassKey),
-PageComponent("HomeSettingsPage"),
 title("personalizeTitle", localeText(titleTextKey)),
 bgTypeLabel("bgLabel", localeText(backgroundTextKey)),
 bgTypePicker("bgTypePicker"),
@@ -52,7 +51,7 @@ rowCounter(1, 1, 9)
 #    if JUCE_DEBUG
     setName("HomeSettingsPage");
 #    endif
-    setBackButton(PageComponent::leftBackButton);
+    setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout({
         Row(30,
@@ -272,7 +271,7 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
         {
             case defaultBackgroundID:
                 mainConfig.setHomeBackground(
-                         findColour(PageComponent::backgroundColourId)
+                         findColour(Page::Component::backgroundColourId)
                          .toString());
                 bgEditor.setVisible(false);
                 bgLabel.setVisible(false);

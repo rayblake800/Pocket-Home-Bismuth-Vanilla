@@ -23,7 +23,7 @@ static const juce::Identifier polkitMissingTextKey      = "polkitMissing";
     
 RemovePasswordPage::RemovePasswordPage() :
 Locale::TextUser(localeClassKey),
-PageComponent("RemovePasswordPage"),
+pageListener(*this),
 curPwdLabel("CurLabel", localeText(currentPasswordTextKey)),
 curPassword("Current", 0x2022),
 titleLabel("Title", localeText(removePasswordTextKey))
@@ -31,7 +31,7 @@ titleLabel("Title", localeText(removePasswordTextKey))
 #    if JUCE_DEBUG
     setName("RemovePasswordPage");
 #    endif
-    setBackButton(PageComponent::leftBackButton);
+    setBackButton(BackButtonType::left);
 
     using namespace Layout::Group;
     RelativeLayout layout({
@@ -53,7 +53,7 @@ titleLabel("Title", localeText(removePasswordTextKey))
     
     titleLabel.setJustificationType(juce::Justification::centred);
     deleteButton.setButtonText(localeText(applyTextKey));
-    deleteButton.addListener(this);
+    deleteButton.addListener(&pageListener);
     addAndShowLayoutComponents();
 }
 
@@ -61,19 +61,19 @@ titleLabel("Title", localeText(removePasswordTextKey))
  * Attempts to delete the Pocket-Home password when deleteButton is pressed.
  * If this succeeds, the page will close after showing an AlertWindow.
  */
-void RemovePasswordPage::pageButtonClicked(juce::Button* button)
+void RemovePasswordPage::PageListener::buttonClicked(juce::Button* button)
 {
     using juce::AlertWindow;
-    if (button != &deleteButton)
+    if (button != &passwordPage.deleteButton)
     {
         DBG("RemovePasswordPage::" << __func__ << ": button "
                 << button->getName()
                 << " should not be triggering this function!");
-        curPassword.clear();
+        passwordPage.curPassword.clear();
         return;
     }
     juce::String title, message;
-    switch (Password::removePassword(curPassword.getText()))
+    switch (Password::removePassword(passwordPage.curPassword.getText()))
     {
         case Password::missingNewPassword:
         case Password::paswordSetSuccess:
@@ -87,31 +87,31 @@ void RemovePasswordPage::pageButtonClicked(juce::Button* button)
         case Password::passwordRemoveSuccess:
             AlertWindow::showMessageBoxAsync(
                     AlertWindow::AlertIconType::InfoIcon,
-                    localeText(successTextKey),
-                    localeText(passwordRemovedTextKey),
+                    passwordPage.localeText(successTextKey),
+                    passwordPage.localeText(passwordRemovedTextKey),
                     "",
                     nullptr,
                     juce::ModalCallbackFunction::create([this](int i)
                     {
-                        removeFromStack();
+                        passwordPage.removeFromStack();
                     }));
-            curPassword.clear();
+            passwordPage.curPassword.clear();
             return;
         case Password::wrongPasswordError:
-            title = localeText(cantRemovePasswordTextKey);
-            message = localeText(wrongPasswordTextKey);
+            title = passwordPage.localeText(cantRemovePasswordTextKey);
+            message = passwordPage.localeText(wrongPasswordTextKey);
             break;
         case Password::fileDeleteFailed:
-            title = localeText(cantRemovePasswordTextKey);
-            message = localeText(checkAgentTextKey);
+            title = passwordPage.localeText(cantRemovePasswordTextKey);
+            message = passwordPage.localeText(checkAgentTextKey);
             break;
         case Password::noPasswordScript:
-            title = localeText(errorTextKey);
-            message = localeText(filesMissingTextKey);
+            title = passwordPage.localeText(errorTextKey);
+            message = passwordPage.localeText(filesMissingTextKey);
             break;
         case Password::noPKExec:
-            title = localeText(errorTextKey);
-            message = localeText(polkitMissingTextKey);
+            title = passwordPage.localeText(errorTextKey);
+            message = passwordPage.localeText(polkitMissingTextKey);
             break;
     }
     AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,

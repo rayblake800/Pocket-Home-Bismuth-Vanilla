@@ -1,21 +1,23 @@
 #pragma once
 /**
- * @file  PowerPageComponent.h
+ * @file  PowerPage.h
  * 
- * @brief  A UI menu page that shows buttons that perform actions related to
- *         system power state.  
+ * @brief  Provides the system power control page.
  */
 
-#include "PageComponent.h"
+#include "Page_Component.h"
 #include "OverlaySpinner.h"
 #include "LoginPage.h"
 #include "Locale/TextUser.h"
 
 /**
+ * @brief  A UI menu page that shows buttons that perform actions related to
+ *         system power state.
+ *
  * From this page, the user can shut down the system, reboot the system, turn 
  * off the display, or enter PocketCHIP flashing mode.
  */
-class PowerPage : public PageComponent, private Locale::TextUser
+class PowerPage : public Page::Component, private Locale::TextUser
 {
 public:
     
@@ -40,34 +42,49 @@ private:
      *         is restarting or shutting down.
      */
     void showPowerSpinner();
-    
-    /**
-     * @brief  Handles all button clicks.
-     *
-     * @param button  A button component on the page that was clicked.
-     */
-    virtual void pageButtonClicked(juce::Button* button) override;
 
     /**
      * @brief  Resizes the lock screen and overlay spinner to fit the page.
      */
     virtual void pageResized() override;
 
-    /* Identifies this pocket-home build */
+    class PageListener : public juce::Button::Listener
+    {
+    public:
+        /**
+         * @brief  Connects the listener to its power page.
+         *
+         * @param powerPage  The PowerPage that owns this PageListener.
+         */
+        PageListener(PowerPage& powerPage) : powerPage(powerPage) { }
+
+    private:
+        /**
+         * @brief  Handles all button clicks within the power page.
+         *
+         * @param button  A button component on the power page that was clicked.
+         */
+        virtual void buttonClicked(juce::Button* button) override;
+
+        PowerPage& powerPage;
+    };
+    PageListener pageListener;
+
+    /* Identifies this pocket-home build: */
     ScalingLabel buildLabel;
-    /* Turns off the system using the shutdown command in the MainConfigFile. */
+    /* Turns off the system: */
     juce::TextButton powerOffButton;
-    /* Starts sleep mode with startSleepMode() */
+    /* Starts sleep mode: */
     juce::TextButton sleepButton;
-    /* Restarts the system using the reboot command in the MainConfigFile. */
+    /* Restarts the system: */
     juce::TextButton rebootButton;
-    /* Shows a page that gives the user the option to enter flashing mode. */
+    /* Shows a page that gives the user the option to enter flashing mode: */
     juce::TextButton felButton;
-    /* Identifies the pocket-home version */
+    /* Identifies the pocket-home version:*/
     ScalingLabel versionLabel;
-    /* Spinner to indicate that the system is rebooting/shutting down */
+    /* Spinner to indicate that the system is rebooting/shutting down: */
     OverlaySpinner overlaySpinner;
-    /* The lock screen is displayed after entering sleep mode. */
+    /* The lock screen to display after entering sleep mode: */
     LoginPage lockscreen;   
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPage)

@@ -3,7 +3,7 @@
 #include "Locale/TextUser.h"
 #include "DrawableImageButton.h"
 #include "ScalingLabel.h"
-#include "PageComponent.h"
+#include "Page_Component.h"
 
 /**
  * @file DateTimePage.h
@@ -12,8 +12,7 @@
  * the clock display mode and adjust system time.
  */
 
-class DateTimePage : public PageComponent, public Locale::TextUser,
-private juce::ComboBox::Listener
+class DateTimePage : public Page::Component, public Locale::TextUser
 {
 public:
     DateTimePage();
@@ -21,21 +20,32 @@ public:
     virtual ~DateTimePage() { }
 
 private:
-    /**
-     * Runs reconfigureCommand in the terminal to update system time when
-     * the user presses the reconfigure button.
-     * 
-     * @param button
-     */
-    void pageButtonClicked(juce::Button* button) override;
+    class PageListener : public juce::Button::Listener,
+            public juce::ComboBox::Listener
+    {
+    public:
+        PageListener(DateTimePage& dateTimePage) 
+                : dateTimePage(dateTimePage) { }
+    private:
+        /**
+         * Runs reconfigureCommand in the terminal to update system time when
+         * the user presses the reconfigure button.
+         * 
+         * @param button
+         */
+        void buttonClicked(juce::Button* button) override;
 
-    /**
-     * Changes the clock mode saved in the ComponentConfigFile when the
-     * user selects a new mode with the setClockMode combo box.
-     * 
-     * @param comboBox
-     */
-    void comboBoxChanged(juce::ComboBox* comboBox) override;
+        /**
+         * Changes the clock mode saved in the ComponentConfigFile when the
+         * user selects a new mode with the setClockMode combo box.
+         * 
+         * @param comboBox
+         */
+        void comboBoxChanged(juce::ComboBox* comboBox) override;
+
+        DateTimePage& dateTimePage;
+    };
+    PageListener pageListener;
 
     //page title label
     ScalingLabel titleLabel;

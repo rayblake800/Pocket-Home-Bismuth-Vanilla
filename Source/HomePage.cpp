@@ -6,12 +6,13 @@
 #include "AssetFiles.h"
 #include "AppMenu.h"
 #include "AppMenu_ConfigFile.h"
+#include "Page_Type.h"
 
 /*
  * Initializes all page components and creates the AppMenu.
  */
 HomePage::HomePage() :
-PageComponent("HomePage"),
+pageListener(*this),
 frame(Theme::Image::JSONKeys::menuFrame, 0,
         juce::RectanglePlacement::stretchToFit),
 powerButton(Theme::Image::JSONKeys::powerButton),
@@ -35,11 +36,11 @@ settingsButton(Theme::Image::JSONKeys::settingsButton)
     addAndMakeVisible(batteryIcon);
     addAndMakeVisible(wifiIcon);
 
-    powerButton.addListener(this);
+    powerButton.addListener(&pageListener);
     powerButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(powerButton);
 
-    settingsButton.addListener(this);
+    settingsButton.addListener(&pageListener);
     settingsButton.setWantsKeyboardFocus(false);
     addAndMakeVisible(settingsButton);
     
@@ -93,15 +94,15 @@ void HomePage::configValueChanged(const juce::Identifier& key)
  * Opens the power page or the settings page, depending on which button
  * was clicked.
  */
-void HomePage::pageButtonClicked(juce::Button * button)
+void HomePage::PageListener::buttonClicked(juce::Button * button)
 {
-    if (button == &settingsButton)
+    if (button == &homePage.settingsButton)
     {
-        pushPageToStack(PageComponent::PageType::QuickSettings);
+        homePage.pushPageToStack(Page::Type::quickSettings);
     }
-    else if (button == &powerButton)
+    else if (button == &homePage.powerButton)
     {
-        pushPageToStack(PageComponent::PageType::Power,
+        homePage.pushPageToStack(Page::Type::power,
                 Layout::Transition::Type::moveRight);
     }
 }

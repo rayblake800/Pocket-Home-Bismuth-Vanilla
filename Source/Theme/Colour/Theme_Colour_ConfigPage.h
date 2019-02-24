@@ -7,11 +7,11 @@
 
 #include "Theme_Colour_ConfigListener.h"
 #include "ColourPicker.h"
-#include "PageComponent.h"
+#include "Page_Component.h"
 
 namespace Theme { namespace Colour { class ConfigPage; } }
 
-class Theme::Colour::ConfigPage : public PageComponent
+class Theme::Colour::ConfigPage : public Page::Component
 {
 public:
     ConfigPage();

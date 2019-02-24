@@ -5,6 +5,7 @@
 #include "Theme_LookAndFeel.h"
 #include "Theme_Image_JSONKeys.h"
 #include "Layout_Component_JSONKeys.h"
+#include "Page_Type.h"
 
 /* Slider image assets.  TODO: define these in components.json. */
 static const constexpr char* brightnessLowIcon = "brightnessIconLo.svg";
@@ -14,10 +15,10 @@ static const constexpr char* volumeHighIcon = "volumeIconHi.svg";
 
 QuickSettingsPage::QuickSettingsPage() :
 WindowFocusedTimer("QuickSettingsPage"),
-PageComponent("QuickSettingsPage"),
+pageListener(*this),
 wifiComponent([this]()
 {
-    pushPageToStack(PageType::WifiSettings);
+    pushPageToStack(Page::Type::wifiConnection);
 }),
 //bluetoothComponent([this]
 //{
@@ -34,7 +35,7 @@ listButtonManager(&settingsListBtn,
 #    if JUCE_DEBUG
     setName("QuickSettingsPage");
 #    endif
-    setBackButton(PageComponent::leftBackButton);
+    setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout(
     {
@@ -52,13 +53,13 @@ listButtonManager(&settingsListBtn,
     setLayout(layout);
     
     addAndMakeVisible(settingsListBtn);
-    settingsListBtn.addListener(this);
+    settingsListBtn.addListener(&pageListener);
     screenBrightnessSlider.setRange(1, 10, 1);
     screenBrightnessSlider.setValue(Display::getBrightness());
-    screenBrightnessSlider.addListener(this);
+    screenBrightnessSlider.addListener(&pageListener);
     volumeSlider.setRange(0, 100, 1);
     volumeSlider.setValue(Audio::getVolumePercent());
-    volumeSlider.addListener(this);
+    volumeSlider.addListener(&pageListener);
 }
 
 /*
@@ -100,33 +101,33 @@ void QuickSettingsPage::pageResized()
 /*
  * Opens the advanced settings page when its button is clicked.
  */
-void QuickSettingsPage::pageButtonClicked(juce::Button *button)
+void QuickSettingsPage::PageListener::buttonClicked(juce::Button *button)
 {
-    if (button == &settingsListBtn)
+    if (button == &settingsPage.settingsListBtn)
     {
-        pushPageToStack(PageType::SettingsList);
+        settingsPage.pushPageToStack(Page::Type::settingsList);
     }
 }
 
 /*
  * Starts a timer to update the slider values as its being dragged.
  */
-void QuickSettingsPage::sliderDragStarted(juce::Slider* slider)
+void QuickSettingsPage::PageListener::sliderDragStarted(juce::Slider* slider)
 {
-    if (!isTimerRunning())
+    if (!settingsPage.isTimerRunning())
     {
-        changingSlider = slider;
-        startTimer(200);
+        settingsPage.changingSlider = slider;
+        settingsPage.startTimer(200);
     }
 }
 
 /*
  * Stops the timer and immediately updates slider values.
  */
-void QuickSettingsPage::sliderDragEnded(juce::Slider* slider)
+void QuickSettingsPage::PageListener::sliderDragEnded(juce::Slider* slider)
 {
-    changingSlider = slider;
-    timerCallback();
-    stopTimer();
-    changingSlider = nullptr;
+    settingsPage.changingSlider = slider;
+    settingsPage.timerCallback();
+    settingsPage.stopTimer();
+    settingsPage.changingSlider = nullptr;
 }

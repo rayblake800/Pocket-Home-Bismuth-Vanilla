@@ -1,18 +1,15 @@
 #pragma once
-#include "ScalingLabel.h"
-#include "PageComponent.h"
-#include "Locale/TextUser.h"
-#include "JuceHeader.h"
-
 /**
  * @file SetPasswordPage.h
  * 
- * Allows the user to set or change a password for this application.  Honestly,
- * this isn't really much of a security measure, but it's enough to keep the
- * average person from using this particular application.
+ * @brief  Allows the user to set or change a password for this application.
  */
+#include "ScalingLabel.h"
+#include "Page_Component.h"
+#include "Locale/TextUser.h"
+#include "JuceHeader.h"
 
-class SetPasswordPage : public PageComponent, public Locale::TextUser
+class SetPasswordPage : public Page::Component, public Locale::TextUser
 {
 public:
     SetPasswordPage();
@@ -20,16 +17,6 @@ public:
     virtual ~SetPasswordPage() { }
 
 private:
-    /**
-     * If the setPassword button is clicked, attempts to set a new application
-     * password.  The result of this operation will be displayed in a message box,
-     * and all text fields on the page will be cleared.  If the password was
-     * set successfully, the page will be closed.
-     * 
-     * @param button  Should only ever be the setPassword button.
-     */
-    void pageButtonClicked(juce::Button* button) override;
-
     /**
      * Opens a message box to display an error message, and clears all text entry
      * fields on the page.
@@ -44,6 +31,27 @@ private:
      * Clears the text in all text entry fields on the page.
      */
     void clearAllFields();
+
+    class PageListener : public juce::Button::Listener
+    {
+    public:
+        PageListener(SetPasswordPage& passwordPage) 
+                : passwordPage(passwordPage) { }
+
+    private:
+        /**
+         * If the setPassword button is clicked, attempts to set a new 
+         * application password. The result of this operation will be displayed
+         * in a message box, and all text fields on the page will be cleared.
+         * If the password was set successfully, the page will be closed.
+         * 
+         * @param button  Should only ever be the setPassword button.
+         */
+        void buttonClicked(juce::Button* button) override;
+
+        SetPasswordPage& passwordPage;
+    };
+    PageListener pageListener;
 
     //Page title
     ScalingLabel title;

@@ -18,7 +18,7 @@ static const juce::Identifier checkCommandTextKey   = "checkCommand";
 
 DateTimePage::DateTimePage() :
 Locale::TextUser(localeClassKey),
-PageComponent("DateTimePage"),
+pageListener(*this),
 titleLabel("dateTimeTitle", localeText(dateTimeTitleKey)),
 setClockMode("setClockMode"),
 reconfigureBtn(localeText(setSystemClockTextKey)),
@@ -28,7 +28,7 @@ clockModeLabel("modeLabel", localeText(clockModeTextKey))
 #    if JUCE_DEBUG
     setName("DateTimePage");
 #    endif
-    setBackButton(PageComponent::leftBackButton);
+    setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout(
     {
@@ -44,13 +44,13 @@ clockModeLabel("modeLabel", localeText(clockModeTextKey))
     layout.setYPaddingWeight(3);
     setLayout(layout);
     
-    reconfigureBtn.addListener(this);
+    reconfigureBtn.addListener(&pageListener);
     titleLabel.setJustificationType(Justification::centred);
 
     setClockMode.addItem(localeText(Mode24HourTextKey), 1);
     setClockMode.addItem(localeText(mode12HourTextKey), 2);
     setClockMode.addItem(localeText(hideClockTextKey), 3);
-    setClockMode.addListener(this);
+    setClockMode.addListener(&pageListener);
     Config::MainFile mainConfig;
     if (mainConfig.getShowClock())
     {
@@ -75,10 +75,10 @@ clockModeLabel("modeLabel", localeText(clockModeTextKey))
  * Runs reconfigureCommand in the terminal to update system time when
  * the user presses the reconfigure button.
  */
-void DateTimePage::pageButtonClicked(juce::Button* button)
+void DateTimePage::PageListener::buttonClicked(juce::Button* button)
 {
     using juce::String;
-    if (button == &reconfigureBtn)
+    if (button == &dateTimePage.reconfigureBtn)
     {
         Config::MainFile mainConfig;
         String configureTime = mainConfig.getTermLaunchPrefix()
@@ -88,10 +88,10 @@ void DateTimePage::pageButtonClicked(juce::Button* button)
         {
             juce::AlertWindow::showMessageBox(
                     juce::AlertWindow::WarningIcon,
-                    localeText(failedLaunchTextKey),
-                    localeText(failedToRunTextKey)
+                    dateTimePage.localeText(failedLaunchTextKey),
+                    dateTimePage.localeText(failedToRunTextKey)
                     + "\n" + configureTime + "\n"
-                    + localeText(checkCommandTextKey));
+                    + dateTimePage.localeText(checkCommandTextKey));
         }
     }
 }
@@ -100,9 +100,9 @@ void DateTimePage::pageButtonClicked(juce::Button* button)
  * Changes the clock mode saved in the ComponentConfigFile when the
  * user selects a new mode with the setClockMode combo box.
  */
-void DateTimePage::comboBoxChanged(juce::ComboBox* comboBox)
+void DateTimePage::PageListener::comboBoxChanged(juce::ComboBox* comboBox)
 {
-    if (comboBox != &setClockMode)
+    if (comboBox != &dateTimePage.setClockMode)
     {
         DBG("DateTimePage::" << __func__ << ": responding to ComboBox "
                 << comboBox->getName() << ", this should not happen!");
