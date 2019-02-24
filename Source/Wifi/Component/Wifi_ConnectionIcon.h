@@ -1,55 +1,30 @@
 #pragma once
 /**
- * @file  Wifi_StatusIcon.h
+ * @file  Wifi_ConnectionIcon.h
  * 
  * @brief  Displays an icon indicating Wifi connection signal strength.
  */
 
-#include "Theme_Image_Component.h"
-#include "DrawableImageComponent.h"
+#include "Wifi_SignalIcon.h"
 #include "Wifi_Device_Listener.h"
 #include "Wifi_AP_StrengthListener.h"
 #include "Wifi_Connection_Record_Listener.h"
-#include "Wifi_Connection_Record_Reader.h"
 
-namespace Wifi { class StatusIcon; }
+namespace Wifi { class ConnectionIcon; }
 
 
-class Wifi::StatusIcon : 
-    public Theme::Image::Component<DrawableImageComponent>, 
+class Wifi::ConnectionIcon : 
+    public SignalIcon,
     public AP::StrengthListener, 
     public Connection::Record::Listener,
     public Device::Listener
 {
 public:
-    StatusIcon();
+    ConnectionIcon();
 
-    virtual ~StatusIcon() { }
+    virtual ~ConnectionIcon() { }
 
 private:
-    Connection::Record::Reader connectionReader;
-
-    /**
-     * All wifi state icons.  Each should correspond to an image asset file 
-     * defined in components.json
-     */
-    enum class APIcon
-    {
-        wifiOff,
-        wifiStrength0,
-        wifiStrength1,
-        wifiStrength2,
-        wifiStrength3
-    };
-
-    /**
-     * @brief  Sets the displayed WiFi connection icon.
-     * 
-     * @param selectedIcon  The wifi icon that matches the current connection
-     *                      state.
-     */
-    void setIcon(const APIcon selectedIcon);
-    
     /**
      * @brief  Updates the selected icon when the active connection's signal
      *         strength changes.

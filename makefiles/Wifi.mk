@@ -145,10 +145,20 @@ OBJECTS_WIFI_SIGNAL := \
 ################ UI Components  ################
 
 WIFI_COMPONENT_ROOT := $(WIFI_ROOT)/Component
+
+WIFI_CONNECTION_LIST_ROOT := $(WIFI_COMPONENT_ROOT)/ConnectionList
+WIFI_CONNECTION_LIST_PREFIX := $(WIFI_PREFIX)ConnectionList_
+WIFI_CONNECTION_LIST_OBJ := $(WIFI_OBJ)ConnectionList_
+OBJECTS_WIFI_CONNECTION_LIST := \
+  $(WIFI_CONNECTION_LIST_OBJ)ListButton.o \
+  $(WIFI_CONNECTION_LIST_OBJ)ControlComponent.o \
+  $(WIFI_CONNECTION_LIST_OBJ)ListComponent.o
+
 OBJECTS_WIFI_COMPONENT := \
   $(WIFI_OBJ)ControlWidget.o \
-  $(WIFI_OBJ)StatusIcon.o \
-  $(WIFI_OBJ)SettingsPage.o
+  $(WIFI_OBJ)SignalIcon.o \
+  $(WIFI_OBJ)ConnectionIcon.o \
+  $(OBJECTS_WIFI_CONNECTION_LIST)
 
 ################ Main Wifi Module  ################
 
@@ -292,12 +302,19 @@ $(WIFI_SIGNAL_OBJ)DeviceModule.o : \
 $(WIFI_SIGNAL_OBJ)ClientModule.o : \
     $(WIFI_SIGNAL_ROOT)/$(WIFI_SIGNAL_PREFIX)ClientModule.cpp
 
+$(WIFI_CONNECTION_LIST_OBJ)ControlComponent.o : \
+    $(WIFI_CONNECTION_LIST_ROOT)/$(WIFI_CONNECTION_LIST_PREFIX)ControlComponent.cpp
+$(WIFI_CONNECTION_LIST_OBJ)ListButton.o : \
+    $(WIFI_CONNECTION_LIST_ROOT)/$(WIFI_CONNECTION_LIST_PREFIX)ListButton.cpp
+$(WIFI_CONNECTION_LIST_OBJ)ListComponent.o : \
+    $(WIFI_CONNECTION_LIST_ROOT)/$(WIFI_CONNECTION_LIST_PREFIX)ListComponent.cpp
+
 $(WIFI_OBJ)ControlWidget.o : \
     $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)ControlWidget.cpp
-$(WIFI_OBJ)SettingsPage.o : \
-    $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)SettingsPage.cpp
-$(WIFI_OBJ)StatusIcon.o : \
-    $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)StatusIcon.cpp
+$(WIFI_OBJ)SignalIcon.o : \
+    $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)SignalIcon.cpp
+$(WIFI_OBJ)ConnectionIcon.o : \
+    $(WIFI_COMPONENT_ROOT)/$(WIFI_PREFIX)ConnectionIcon.cpp
 
 $(WIFI_TESTUTILS_OBJ)ConnectionListener.o : \
     $(WIFI_TESTUTILS_ROOT)/$(WIFI_TESTUTILS_PREFIX)ConnectionListener.cpp
