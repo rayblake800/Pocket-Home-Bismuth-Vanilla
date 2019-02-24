@@ -110,6 +110,7 @@ NMDBus::SavedConnection::getNMConnection()
                         keyStr.toRawUTF8(),
                         byteArray,
                         nullptr);
+                g_byte_array_unref(byteArray);
             }
             else
             {

@@ -33,6 +33,7 @@ Wifi::LibNM::APHash::APHash(const GByteArray* ssid,
     char* hashString = g_compute_checksum_for_data
             (G_CHECKSUM_MD5, input, sizeof (input));
     hashValue = hashString;
+    g_free(hashString);
 }
 
 /*
