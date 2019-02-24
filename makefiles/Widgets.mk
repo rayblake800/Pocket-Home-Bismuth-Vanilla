@@ -8,6 +8,7 @@ OBJECTS_WIDGET := \
   $(WIDGET_PREFIX)DrawableImage.o \
   $(WIDGET_PREFIX)DrawableImageButton.o \
   $(WIDGET_PREFIX)PagedList.o \
+  $(WIDGET_PREFIX)FocusingPagedList.o \
   $(WIDGET_PREFIX)NavButton.o \
   $(WIDGET_PREFIX)IconSlider.o \
   $(WIDGET_PREFIX)ListEditor.o \
@@ -43,6 +44,8 @@ $(WIDGET_PREFIX)DrawableImageButton.o : \
     $(WIDGET_ROOT)/DrawableImageButton.cpp
 $(WIDGET_PREFIX)PagedList.o : \
     $(WIDGET_ROOT)/PagedList.cpp
+$(WIDGET_PREFIX)FocusingPagedList.o : \
+    $(WIDGET_ROOT)/FocusingPagedList.cpp
 $(WIDGET_PREFIX)NavButton.o : \
     $(WIDGET_ROOT)/NavButton.cpp
 $(WIDGET_PREFIX)IconSlider.o : \

@@ -36,7 +36,8 @@ int FocusingPagedList::getSelectedIndex() const
  */
 void FocusingPagedList::setSelectedIndex(const int index)
 {
-    if(index >= 0 && index < getListSize() && index != selectedIndex)
+    if((index >= -1) && (index < (int) getListSize()) 
+            && (index != selectedIndex))
     {
         selectedIndex = index;
         selectionChanged();
@@ -52,13 +53,7 @@ void FocusingPagedList::setSelectedIndex(const int index)
  */
 void FocusingPagedList::deselect() 
 {
-    if(selectedIndex >= 0)
-    {
-        selectedIndex = -1;
-        updateNavButtonVisibility(true);
-        refreshListContent(Layout::Transition::Type::toDestination,
-                focusDuration);
-    }
+    setSelectedIndex(-1);
 }
 
 /*
