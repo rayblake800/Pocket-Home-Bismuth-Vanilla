@@ -34,7 +34,10 @@
         "imagePath"       : "Image path:",
         "invalidColor"    : "Invalid color",
         "chooseBG"        : "Choose the new background",
-        "chooseBGImage"   : "Please choose your new background image",
+        "chooseBGImage"   : "Please choose your new background image"
+    },
+    "AppMenu_SettingsComponents":
+    {
         "menuType"        : "Application menu:",
         "scrollingMenu"   : "Scrolling menu",
         "pagedMenu"       : "Paged menu",

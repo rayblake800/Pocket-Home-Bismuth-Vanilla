@@ -9,43 +9,41 @@
 
 #include "FileSelectTextEditor.h"
 #include "ScalingLabel.h"
-#include "CounterComponent.h"
 #include "Page_Component.h"
+#include "AppMenu_SettingsComponents.h"
 #include "Utils.h"
 #include "Locale/TextUser.h"
 
+/**
+ * @brief  The page component used to hold all HomePage and AppMenu settings
+ *         control components.
+ */
 class HomeSettingsPage : public Page::Component, public Locale::TextUser,
     private juce::ComboBox::Listener, private FileSelectTextEditor::Listener
 {
 public:
+    /**
+     * @brief  Initializes the page layout.
+     */
     HomeSettingsPage();
 
     /**
-     * @brief  Updates AppMenu dimensions when the page closes.
+     * @brief  Updates AppMenu settings when the page closes.
      */
     virtual ~HomeSettingsPage();
 
 private:
     /**
-     * @brief  Initializes the background and AppMenuType combo boxes with 
-     *         values loaded from Config resources and updates their labels to 
-     *         match.
+     * @brief  Initializes the background combo box with values loaded from 
+     *         the main config file, and updates its labels to match.
      */
     void updateComboBox();
-
-    /**
-     * @brief  Updates the menu row counter, and shows or hides the menu column
-     *         counter based on the selected menu format and saved menu
-     *         dimensions.
-     */
-    void updateMenuCounters();
     
     /**
-     * @brief  Handles ComboBox selections.
+     * @brief  Handles background ComboBox selections.
      *
      * If the background type ComboBox is updated, clear the background text
-     * field, and update its labels. If the menu type ComboBox is updated,
-     * save the changed value to the MainConfigFile
+     * field, and update its labels.
      */
     void comboBoxChanged(juce::ComboBox* box) override;
 
@@ -58,34 +56,19 @@ private:
      */
     virtual void fileSelected(FileSelectTextEditor* edited) override;
 
-    //page title label
+    /* Page title label: */
     ScalingLabel title;
     
-    //select the HomePage background type
+    /* Used to select the HomePage background type: */
     ScalingLabel bgTypeLabel;
     juce::ComboBox bgTypePicker;
     
-    //enter a hex color or select an image path
+    /* Used to set the HomePage's background color or image: */
     ScalingLabel bgLabel;
     FileSelectTextEditor bgEditor;
 
-    //Choose the AppMenu type to use
-    ScalingLabel menuPickerLabel;
-    juce::ComboBox menuTypePicker;
-
-    //Set the max column count for AppMenu grids
-    ScalingLabel columnCountLabel;
-    CounterComponent columnCounter;
-
-    //Set the max row count for AppMenu grids
-    ScalingLabel rowCountLabel;
-    CounterComponent rowCounter;
-    
-    // Don't forget to update these if adding/removing/re-ordering menu types!
-    // Keep in the same order used in MainConfigFile::menuTypes
-    static const constexpr char * scrolling_menu = "scrolling_menu";
-    static const constexpr char * paged_menu = "paged_menu";
-    
+    /* Used to select AppMenu format settings: */
+    AppMenu::SettingsComponents menuComponents;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomeSettingsPage)
 };

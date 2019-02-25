@@ -8,49 +8,39 @@
 static const juce::Identifier localeClassKey = "HomeSettingsPage";
 
 /* Localized text value keys: */
-static const juce::Identifier titleTextKey         = "title";
-static const juce::Identifier backgroundTextKey    = "background";
-static const juce::Identifier defaultBGOptionKey   = "defaultBGOption";
-static const juce::Identifier colorBGOptionKey     = "colorBGOption";
-static const juce::Identifier imageBGOptionKey     = "imageBGOption";
-static const juce::Identifier hexValueTextKey      = "hexValue";
-static const juce::Identifier imagePathTextKey     = "imagePath";
-static const juce::Identifier invalidColorTextKey  = "invalidColor";
-static const juce::Identifier chooseBGTextKey      = "chooseBG";
-static const juce::Identifier chooseBGImageTextKey = "chooseBGImage";
-static const juce::Identifier menuTypeTextKey      = "menuType";
-static const juce::Identifier scrollingMenuTextKey = "scrollingMenu";
-static const juce::Identifier pagedMenuTextKey     = "pagedMenu";
-static const juce::Identifier menuColumnsTextKey   = "menuColumns";
-static const juce::Identifier menuRowsTextKey      = "menuRows";
+namespace TextKey
+{
+    static const juce::Identifier title           = "title";
+    static const juce::Identifier background      = "background";
+    static const juce::Identifier defaultBGOption = "defaultBGOption";
+    static const juce::Identifier colorBGOption   = "colorBGOption";
+    static const juce::Identifier imageBGOption   = "imageBGOption";
+    static const juce::Identifier hexValue        = "hexValue";
+    static const juce::Identifier imagePath       = "imagePath";
+    static const juce::Identifier invalidColor    = "invalidColor";
+    static const juce::Identifier chooseBG        = "chooseBG";
+    static const juce::Identifier chooseBGImage   = "chooseBGImage";
+}
 
 /* Background selection menu indices: */
 static const constexpr int defaultBackgroundID = 1;
 static const constexpr int colorBackgroundID   = 2;
 static const constexpr int imageBackgroundID   = 3;
 
-/* AppMenu format selection menu indices: */
-static const constexpr int pagedMenuID       = 1;
-static const constexpr int scrollingMenuID   = 2;
-
+/*
+ * Initializes the page layout.
+ */
 HomeSettingsPage::HomeSettingsPage() :
 Locale::TextUser(localeClassKey),
-title("personalizeTitle", localeText(titleTextKey)),
-bgTypeLabel("bgLabel", localeText(backgroundTextKey)),
+title("personalizeTitle", localeText(TextKey::title)),
+bgTypeLabel("bgLabel", localeText(TextKey::background)),
 bgTypePicker("bgTypePicker"),
 bgLabel("bgTitle", ""),
-bgEditor(localeText(chooseBGTextKey), localeText(chooseBGImageTextKey)),
-menuPickerLabel("menuPickerLabel", localeText(menuTypeTextKey)),
-menuTypePicker("menuTypePicker"),
-columnCountLabel("columnCountLabel", localeText(menuColumnsTextKey)),
-rowCountLabel("rowCountLabel", localeText(menuRowsTextKey)),
-columnCounter(1, 1, 9),
-rowCounter(1, 1, 9)
+bgEditor(localeText(TextKey::chooseBG), localeText(TextKey::chooseBGImage))
 {
-    using namespace juce;
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("HomeSettingsPage");
-#    endif
+#endif
     setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout({
@@ -70,18 +60,18 @@ rowCounter(1, 1, 9)
         }),
         Row(20,
         {
-            RowItem(&menuPickerLabel, 10),
-            RowItem(&menuTypePicker, 10)
+            RowItem(menuComponents.getMenuFormatLabel(), 10),
+            RowItem(menuComponents.getMenuFormatPicker(), 10)
         }),
         Row(20,
         {
-            RowItem(&rowCountLabel, 20),
-            RowItem(&rowCounter, 10)
+            RowItem(menuComponents.getRowCountLabel(), 20),
+            RowItem(menuComponents.getRowCounter(), 10)
         }),
         Row(20,
         {
-            RowItem(&columnCountLabel, 20),
-            RowItem(&columnCounter, 10)
+            RowItem(menuComponents.getColumnCountLabel(), 20),
+            RowItem(menuComponents.getColumnCounter(), 10)
         })
     });
     layout.setYMarginFraction(0.05);
@@ -89,51 +79,30 @@ rowCounter(1, 1, 9)
     layout.setYPaddingWeight(3);
     setLayout(layout);
 
-    title.setJustificationType(Justification::centred);
-    bgTypePicker.addItem(localeText(defaultBGOptionKey),
+    title.setJustificationType(juce::Justification::centred);
+    bgTypePicker.addItem(localeText(TextKey::defaultBGOption),
             defaultBackgroundID);
-    bgTypePicker.addItem(localeText(colorBGOptionKey),
+    bgTypePicker.addItem(localeText(TextKey::colorBGOption),
             colorBackgroundID);
-    bgTypePicker.addItem(localeText(imageBGOptionKey), 
+    bgTypePicker.addItem(localeText(TextKey::imageBGOption), 
             imageBackgroundID);
     bgTypePicker.addListener(this);
 
-    bgEditor.setColour(TextEditor::ColourIds::textColourId,
-            Colour::greyLevel(0.f));
+    bgEditor.setColour(juce::TextEditor::ColourIds::textColourId,
+            juce::Colour::greyLevel(0.f));
     bgEditor.addFileSelectListener(this);
-
-    menuTypePicker.addItem(localeText(pagedMenuTextKey), 
-            pagedMenuID);
-    menuTypePicker.addItem(localeText(scrollingMenuTextKey), 
-            scrollingMenuID);
-    menuTypePicker.addListener(this);
 
     updateComboBox();
     addAndShowLayoutComponents();
-    updateMenuCounters();
+    menuComponents.updateForCurrentSettings();
 }
 
-/**
- * Update AppMenu dimensions when the page closes.
+/*
+ * Updates AppMenu settings when the page closes.
  */
 HomeSettingsPage::~HomeSettingsPage()
 {
-    AppMenu::ConfigFile appConfig;
-    AppMenu::Format menuFormat = appConfig.getMenuFormat();
-    if(menuFormat == AppMenu::Format::Paged)
-    {
-        appConfig.setPagedMenuRows(rowCounter.getValue());
-        appConfig.setPagedMenuColumns(columnCounter.getValue());
-    }
-    else if(menuFormat == AppMenu::Format::Scrolling)
-    {
-        appConfig.setScrollingMenuRows(rowCounter.getValue());
-    }
-    else
-    {
-        // Invalid menu format!
-        jassertfalse;
-    }
+    menuComponents.applySettingsChanges();
 }
 
 /**
@@ -160,7 +129,7 @@ static bool validColorString(const juce::String colorString)
         }
         charIndex = 2;
     }
-    for(;charIndex < length; charIndex++)
+    for(; charIndex < length; charIndex++)
     {
         char c = colorString[charIndex];
         if(!((c >= '0' && c <= '9')
@@ -173,9 +142,9 @@ static bool validColorString(const juce::String colorString)
     return true;
 }
 
-/**
- * Initializes the background and AppMenuType combo boxes with values
- * loaded from the MainConfigFile, and updates their labels to match.
+/*
+ * Initializes the background combo box with values loaded from the main config 
+ * file, and updates its labels to match.
  */
 void HomeSettingsPage::updateComboBox()
 {
@@ -205,59 +174,11 @@ void HomeSettingsPage::updateComboBox()
     }
     bgEditor.setVisible(display);
     bgLabel.setVisible(display);
-
-    AppMenu::ConfigFile appConfig;
-    AppMenu::Format menuType = appConfig.getMenuFormat();
-    int menuIndex;
-    switch(menuType)
-    {
-        case AppMenu::Format::Scrolling:
-            menuIndex = scrollingMenuID - 1;
-            break;
-        case AppMenu::Format::Paged:
-            menuIndex = pagedMenuID - 1;
-            break;
-        case AppMenu::Format::Invalid:
-            DBG("HomeSettingsPage::" << __func__ << "No valid menu format!");
-            return;
-    } 
-    menuTypePicker.setSelectedItemIndex(menuIndex, 
-            juce::NotificationType::dontSendNotification);
 }
 
-/*
- * Updates the menu row counter, and shows or hides the menu column counter 
- * based on the selected menu format and saved menu dimensions.
- */
-void HomeSettingsPage::updateMenuCounters()
-{
-    AppMenu::ConfigFile appConfig;
-    AppMenu::Format menuFormat = appConfig.getMenuFormat();
-    bool showColumns = false;
-    if(menuFormat == AppMenu::Format::Paged)
-    {
-        rowCounter.setValue(appConfig.getPagedMenuRows());
-        columnCounter.setValue(appConfig.getPagedMenuColumns());
-        showColumns = true;
-    }
-    else if(menuFormat == AppMenu::Format::Scrolling)
-    {
-        rowCounter.setValue(appConfig.getScrollingMenuRows());
-    }
-    else
-    {
-        // Invalid menu format!
-        jassertfalse;
-    }
-    columnCountLabel.setVisible(showColumns);
-    columnCounter.setVisible(showColumns);
-    columnCounter.setEnabled(showColumns);
-}
 
 /*
- * If the background type ComboBox is updated, clear the background text
- * field, and update its labels. If the menu type ComboBox is updated,
- * save the changed value to the MainConfigFile
+ * Handles background ComboBox selections.
  */
 void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
 {
@@ -279,62 +200,42 @@ void HomeSettingsPage::comboBoxChanged(juce::ComboBox* box)
             case colorBackgroundID:
                 bgLabel.setVisible(true);
                 bgLabel.setText(
-                        localeText(hexValueTextKey),
+                        localeText(TextKey::hexValue),
                         juce::NotificationType::dontSendNotification);
                 bgEditor.showFileSelectButton(false);
                 break;
             case imageBackgroundID:
                 bgLabel.setVisible(true);
                 bgLabel.setText(
-                        localeText(imagePathTextKey),
+                        localeText(TextKey::imagePath),
                         juce::NotificationType::dontSendNotification);
                 bgEditor.showFileSelectButton(true);
         }
         bgEditor.setVisible(true);
         bgTypeLabel.setVisible(true);
     }
-    else if (box == &menuTypePicker) 
-    {
-        AppMenu::ConfigFile appConfig;
-        AppMenu::Format selectedFormat = AppMenu::Format::Invalid;
-        switch(box->getSelectedId())
-        {
-            case scrollingMenuID:
-                selectedFormat = AppMenu::Format::Scrolling;
-                break;
-            case pagedMenuID:
-                selectedFormat = AppMenu::Format::Paged;
-        }
-        // All selections should correspond to valid formats
-        jassert(selectedFormat != AppMenu::Format::Invalid);
-        appConfig.setMenuFormat(selectedFormat);
-        updateMenuCounters();
-    }
 }
 
-/**
- * When a value is set in the background editor, attempt to set a new
- * color or image value for the background, depending on the state of
- * bgTypePicker.
+/*
+ * When a value is set in the background editor, attempt to set a new color or 
+ * image value for the background, depending on the state of bgTypePicker.
  */
 void HomeSettingsPage::fileSelected(FileSelectTextEditor * edited)
 {
-    using juce::String;
-    String value = edited->getText();
+    juce::String value = edited->getText();
     Config::MainFile mainConfig;
-    //color value
-    if (bgTypePicker.getSelectedId() == colorBackgroundID)
+    if(bgTypePicker.getSelectedId() == colorBackgroundID)
     {
-        if (validColorString(value))
+        if(validColorString(value))
         {
-            bgEditor.setText(localeText(invalidColorTextKey), false);
+            bgEditor.setText(localeText(TextKey::invalidColor), false);
         }
         else
         {
             mainConfig.setHomeBackground(value);
         }
     }
-    else if (bgTypePicker.getSelectedId() == imageBackgroundID)
+    else if(bgTypePicker.getSelectedId() == imageBackgroundID)
     {
         mainConfig.setHomeBackground(value);
     }

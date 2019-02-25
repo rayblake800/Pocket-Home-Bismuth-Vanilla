@@ -1,63 +1,66 @@
 ############################ AppMenu Module ####################################
-APPMENU_PREFIX := $(JUCE_OBJDIR)/AppMenu_
 APPMENU_ROOT = Source/AppMenu
-APPMENU_TEST_ROOT = Tests/AppMenu
+APPMENU_PREFIX := AppMenu_
+APPMENU_OBJ := $(JUCE_OBJDIR)/$(APPMENU_PREFIX)
 
 APPMENU_COMPONENT_DIR := $(APPMENU_ROOT)/Components
 APPMENU_EDITOR_DIR := $(APPMENU_COMPONENT_DIR)/Editors
 APPMENU_CONTROL_DIR := $(APPMENU_ROOT)/Control
 APPMENU_DATA_DIR := $(APPMENU_ROOT)/Data
-APPMENU_PAGED_DIR := $(APPMENU_ROOT)/Formats/Paged
-APPMENU_SCROLLING_DIR := $(APPMENU_ROOT)/Formats/Scrolling
 
 OBJECTS_APPMENU_DATA := \
-  $(APPMENU_PREFIX)MenuJSON.o \
-  $(APPMENU_PREFIX)ConfigJSON.o \
-  $(APPMENU_PREFIX)MenuFile.o \
-  $(APPMENU_PREFIX)MenuItem.o \
-  $(APPMENU_PREFIX)EntryData.o \
-  $(APPMENU_PREFIX)EntryActions.o \
-  $(APPMENU_PREFIX)EntryLoader.o \
-  $(APPMENU_PREFIX)EntryUpdater.o \
-  $(APPMENU_PREFIX)ConfigData.o \
-  $(APPMENU_PREFIX)ItemData.o
+  $(APPMENU_OBJ)MenuJSON.o \
+  $(APPMENU_OBJ)ConfigJSON.o \
+  $(APPMENU_OBJ)MenuFile.o \
+  $(APPMENU_OBJ)MenuItem.o \
+  $(APPMENU_OBJ)EntryData.o \
+  $(APPMENU_OBJ)EntryActions.o \
+  $(APPMENU_OBJ)EntryLoader.o \
+  $(APPMENU_OBJ)EntryUpdater.o \
+  $(APPMENU_OBJ)ConfigData.o \
+  $(APPMENU_OBJ)ItemData.o
 
 OBJECTS_APPMENU_COMPONENT := \
-  $(APPMENU_PREFIX)MenuButton.o \
-  $(APPMENU_PREFIX)FolderComponent.o \
-  $(APPMENU_PREFIX)MenuComponent.o \
-  $(APPMENU_PREFIX)MainComponent.o 
+  $(APPMENU_OBJ)MenuButton.o \
+  $(APPMENU_OBJ)FolderComponent.o \
+  $(APPMENU_OBJ)MenuComponent.o \
+  $(APPMENU_OBJ)MainComponent.o 
 
 OBJECTS_APPMENU_CONTROL := \
-  $(APPMENU_PREFIX)Controller.o \
-  $(APPMENU_PREFIX)InputHandler.o 
+  $(APPMENU_OBJ)Controller.o \
+  $(APPMENU_OBJ)InputHandler.o 
 
 OBJECTS_APPMENU_EDITOR := \
-  $(APPMENU_PREFIX)NewConfigItemEditor.o \
-  $(APPMENU_PREFIX)NewDesktopAppEditor.o \
-  $(APPMENU_PREFIX)ExistingItemEditor.o \
-  $(APPMENU_PREFIX)CategoryEditor.o \
-  $(APPMENU_PREFIX)PopupEditor.o
+  $(APPMENU_OBJ)NewConfigItemEditor.o \
+  $(APPMENU_OBJ)NewDesktopAppEditor.o \
+  $(APPMENU_OBJ)ExistingItemEditor.o \
+  $(APPMENU_OBJ)CategoryEditor.o \
+  $(APPMENU_OBJ)PopupEditor.o
 
-SCROLLING_MENU_PREFIX := $(APPMENU_PREFIX)Scrolling_
+APPMENU_SCROLLING_ROOT := $(APPMENU_ROOT)/Formats/Scrolling
+APPMENU_SCROLLING_PREFIX := $(APPMENU_PREFIX)Scrolling_
+APPMENU_SCROLLING_OBJ := $(APPMENU_OBJ)Scrolling_
 OBJECTS_APPMENU_SCROLLING := \
-  $(SCROLLING_MENU_PREFIX)Initializer.o \
-  $(SCROLLING_MENU_PREFIX)MenuButton.o \
-  $(SCROLLING_MENU_PREFIX)FolderComponent.o \
-  $(SCROLLING_MENU_PREFIX)MenuComponent.o \
-  $(SCROLLING_MENU_PREFIX)InputHandler.o 
+  $(APPMENU_SCROLLING_OBJ)Initializer.o \
+  $(APPMENU_SCROLLING_OBJ)MenuButton.o \
+  $(APPMENU_SCROLLING_OBJ)FolderComponent.o \
+  $(APPMENU_SCROLLING_OBJ)MenuComponent.o \
+  $(APPMENU_SCROLLING_OBJ)InputHandler.o 
 
-PAGED_MENU_PREFIX := $(APPMENU_PREFIX)Paged_
+APPMENU_PAGED_ROOT := $(APPMENU_ROOT)/Formats/Paged
+APPMENU_PAGED_PREFIX := $(APPMENU_PREFIX)Paged_
+APPMENU_PAGED_OBJ := $(APPMENU_OBJ)Paged_
 OBJECTS_APPMENU_PAGED := \
-  $(PAGED_MENU_PREFIX)MenuButton.o \
-  $(PAGED_MENU_PREFIX)FolderComponent.o \
-  $(PAGED_MENU_PREFIX)MenuComponent.o \
-  $(PAGED_MENU_PREFIX)InputHandler.o \
-  $(PAGED_MENU_PREFIX)Initializer.o 
+  $(APPMENU_PAGED_OBJ)MenuButton.o \
+  $(APPMENU_PAGED_OBJ)FolderComponent.o \
+  $(APPMENU_PAGED_OBJ)MenuComponent.o \
+  $(APPMENU_PAGED_OBJ)InputHandler.o \
+  $(APPMENU_PAGED_OBJ)Initializer.o 
 
 OBJECTS_APPMENU := \
-  $(APPMENU_PREFIX)AppMenu.o \
-  $(APPMENU_PREFIX)ConfigFile.o \
+  $(APPMENU_OBJ)AppMenu.o \
+  $(APPMENU_OBJ)ConfigFile.o \
+  $(APPMENU_OBJ)SettingsComponents.o \
   $(OBJECTS_APPMENU_DATA) \
   $(OBJECTS_APPMENU_COMPONENT) \
   $(OBJECTS_APPMENU_CONTROL) \
@@ -65,14 +68,12 @@ OBJECTS_APPMENU := \
   $(OBJECTS_APPMENU_SCROLLING) \
   $(OBJECTS_APPMENU_PAGED)  
 
+APPMENU_TEST_ROOT = Tests/AppMenu
+APPMENU_TEST_PREFIX := $(APPMENU_PREFIX)Test_
+APPMENU_TEST_OBJ := $(APPMENU_OBJ)Test_
 OBJECTS_APPMENU_TEST := \
-  $(APPMENU_PREFIX)Test_AppMenu.o \
-  $(APPMENU_PREFIX)Test_ConfigFile.o \
-  $(APPMENU_PREFIX)Test_Controller.o \
-  $(APPMENU_PREFIX)Test_InputHandler.o \
-  $(APPMENU_PREFIX)Test_MenuComponent.o \
-  $(APPMENU_PREFIX)Test_PagedMenu.o \
-  $(APPMENU_PREFIX)Test_ScrollingMenu.o
+  $(APPMENU_TEST_OBJ)AppMenu.o \
+  $(APPMENU_TEST_OBJ)ConfigFile.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_APPMENU := $(OBJECTS_APPMENU) $(OBJECTS_APPMENU_TEST)
@@ -85,93 +86,85 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_APPMENU)
 appMenu : $(OBJECTS_APPMENU)
 	@echo "Built AppMenu module"
 
-$(SCROLLING_MENU_PREFIX)MenuButton.o: \
-	$(APPMENU_SCROLLING_DIR)/AppMenu_Scrolling_MenuButton.cpp
-$(SCROLLING_MENU_PREFIX)FolderComponent.o: \
-	$(APPMENU_SCROLLING_DIR)/AppMenu_Scrolling_FolderComponent.cpp
-$(SCROLLING_MENU_PREFIX)MenuComponent.o: \
-	$(APPMENU_SCROLLING_DIR)/AppMenu_Scrolling_MenuComponent.cpp
-$(SCROLLING_MENU_PREFIX)InputHandler.o: \
-	$(APPMENU_SCROLLING_DIR)/AppMenu_Scrolling_InputHandler.cpp
-$(SCROLLING_MENU_PREFIX)Initializer.o: \
-	$(APPMENU_SCROLLING_DIR)/AppMenu_Scrolling_Initializer.cpp
+$(APPMENU_SCROLLING_OBJ)MenuButton.o: \
+	$(APPMENU_SCROLLING_ROOT)/$(APPMENU_SCROLLING_PREFIX)MenuButton.cpp
+$(APPMENU_SCROLLING_OBJ)FolderComponent.o: \
+	$(APPMENU_SCROLLING_ROOT)/$(APPMENU_SCROLLING_PREFIX)FolderComponent.cpp
+$(APPMENU_SCROLLING_OBJ)MenuComponent.o: \
+	$(APPMENU_SCROLLING_ROOT)/$(APPMENU_SCROLLING_PREFIX)MenuComponent.cpp
+$(APPMENU_SCROLLING_OBJ)InputHandler.o: \
+	$(APPMENU_SCROLLING_ROOT)/$(APPMENU_SCROLLING_PREFIX)InputHandler.cpp
+$(APPMENU_SCROLLING_OBJ)Initializer.o: \
+	$(APPMENU_SCROLLING_ROOT)/$(APPMENU_SCROLLING_PREFIX)Initializer.cpp
 
-$(PAGED_MENU_PREFIX)MenuButton.o: \
-	$(APPMENU_PAGED_DIR)/AppMenu_Paged_MenuButton.cpp
-$(PAGED_MENU_PREFIX)FolderComponent.o: \
-	$(APPMENU_PAGED_DIR)/AppMenu_Paged_FolderComponent.cpp
-$(PAGED_MENU_PREFIX)MenuComponent.o: \
-	$(APPMENU_PAGED_DIR)/AppMenu_Paged_MenuComponent.cpp
-$(PAGED_MENU_PREFIX)InputHandler.o: \
-	$(APPMENU_PAGED_DIR)/AppMenu_Paged_InputHandler.cpp
-$(PAGED_MENU_PREFIX)Initializer.o: \
-	$(APPMENU_PAGED_DIR)/AppMenu_Paged_Initializer.cpp
+$(APPMENU_PAGED_OBJ)MenuButton.o: \
+	$(APPMENU_PAGED_ROOT)/$(APPMENU_PAGED_PREFIX)MenuButton.cpp
+$(APPMENU_PAGED_OBJ)FolderComponent.o: \
+	$(APPMENU_PAGED_ROOT)/$(APPMENU_PAGED_PREFIX)FolderComponent.cpp
+$(APPMENU_PAGED_OBJ)MenuComponent.o: \
+	$(APPMENU_PAGED_ROOT)/$(APPMENU_PAGED_PREFIX)MenuComponent.cpp
+$(APPMENU_PAGED_OBJ)InputHandler.o: \
+	$(APPMENU_PAGED_ROOT)/$(APPMENU_PAGED_PREFIX)InputHandler.cpp
+$(APPMENU_PAGED_OBJ)Initializer.o: \
+	$(APPMENU_PAGED_ROOT)/$(APPMENU_PAGED_PREFIX)Initializer.cpp
 
-$(APPMENU_PREFIX)MenuButton.o: \
-    $(APPMENU_COMPONENT_DIR)/AppMenu_MenuButton.cpp
-$(APPMENU_PREFIX)FolderComponent.o: \
-    $(APPMENU_COMPONENT_DIR)/AppMenu_FolderComponent.cpp
-$(APPMENU_PREFIX)MenuComponent.o: \
-    $(APPMENU_COMPONENT_DIR)/AppMenu_MenuComponent.cpp
-$(APPMENU_PREFIX)MainComponent.o: \
-    $(APPMENU_COMPONENT_DIR)/AppMenu_MainComponent.cpp
+$(APPMENU_OBJ)MenuButton.o: \
+    $(APPMENU_COMPONENT_DIR)/$(APPMENU_PREFIX)MenuButton.cpp
+$(APPMENU_OBJ)FolderComponent.o: \
+    $(APPMENU_COMPONENT_DIR)/$(APPMENU_PREFIX)FolderComponent.cpp
+$(APPMENU_OBJ)MenuComponent.o: \
+    $(APPMENU_COMPONENT_DIR)/$(APPMENU_PREFIX)MenuComponent.cpp
+$(APPMENU_OBJ)MainComponent.o: \
+    $(APPMENU_COMPONENT_DIR)/$(APPMENU_PREFIX)MainComponent.cpp
 
-$(APPMENU_PREFIX)Controller.o: \
-    $(APPMENU_CONTROL_DIR)/AppMenu_Controller.cpp
-$(APPMENU_PREFIX)InputHandler.o: \
-    $(APPMENU_CONTROL_DIR)/AppMenu_InputHandler.cpp
+$(APPMENU_OBJ)Controller.o: \
+    $(APPMENU_CONTROL_DIR)/$(APPMENU_PREFIX)Controller.cpp
+$(APPMENU_OBJ)InputHandler.o: \
+    $(APPMENU_CONTROL_DIR)/$(APPMENU_PREFIX)InputHandler.cpp
 
-$(APPMENU_PREFIX)NewConfigItemEditor.o: \
-    $(APPMENU_EDITOR_DIR)/AppMenu_NewConfigItemEditor.cpp
-$(APPMENU_PREFIX)NewDesktopAppEditor.o: \
-    $(APPMENU_EDITOR_DIR)/AppMenu_NewDesktopAppEditor.cpp
-$(APPMENU_PREFIX)ExistingItemEditor.o: \
-    $(APPMENU_EDITOR_DIR)/AppMenu_ExistingItemEditor.cpp
-$(APPMENU_PREFIX)PopupEditor.o: \
-    $(APPMENU_EDITOR_DIR)/AppMenu_PopupEditor.cpp
-$(APPMENU_PREFIX)CategoryEditor.o: \
-    $(APPMENU_EDITOR_DIR)/AppMenu_CategoryEditor.cpp
+$(APPMENU_OBJ)NewConfigItemEditor.o: \
+    $(APPMENU_EDITOR_DIR)/$(APPMENU_PREFIX)NewConfigItemEditor.cpp
+$(APPMENU_OBJ)NewDesktopAppEditor.o: \
+    $(APPMENU_EDITOR_DIR)/$(APPMENU_PREFIX)NewDesktopAppEditor.cpp
+$(APPMENU_OBJ)ExistingItemEditor.o: \
+    $(APPMENU_EDITOR_DIR)/$(APPMENU_PREFIX)ExistingItemEditor.cpp
+$(APPMENU_OBJ)PopupEditor.o: \
+    $(APPMENU_EDITOR_DIR)/$(APPMENU_PREFIX)PopupEditor.cpp
+$(APPMENU_OBJ)CategoryEditor.o: \
+    $(APPMENU_EDITOR_DIR)/$(APPMENU_PREFIX)CategoryEditor.cpp
 
-$(APPMENU_PREFIX)MenuJSON.o: \
-    $(APPMENU_DATA_DIR)/JSON/AppMenu_MenuJSON.cpp
-$(APPMENU_PREFIX)ConfigJSON.o: \
-    $(APPMENU_DATA_DIR)/JSON/AppMenu_ConfigJSON.cpp
-$(APPMENU_PREFIX)MenuFile.o: \
-    $(APPMENU_DATA_DIR)/JSON/AppMenu_MenuFile.cpp
-$(APPMENU_PREFIX)ConfigData.o: \
-    $(APPMENU_DATA_DIR)/JSON/AppMenu_ConfigData.cpp
+$(APPMENU_OBJ)MenuJSON.o: \
+    $(APPMENU_DATA_DIR)/JSON/$(APPMENU_PREFIX)MenuJSON.cpp
+$(APPMENU_OBJ)ConfigJSON.o: \
+    $(APPMENU_DATA_DIR)/JSON/$(APPMENU_PREFIX)ConfigJSON.cpp
+$(APPMENU_OBJ)MenuFile.o: \
+    $(APPMENU_DATA_DIR)/JSON/$(APPMENU_PREFIX)MenuFile.cpp
+$(APPMENU_OBJ)ConfigData.o: \
+    $(APPMENU_DATA_DIR)/JSON/$(APPMENU_PREFIX)ConfigData.cpp
 
-$(APPMENU_PREFIX)EntryData.o: \
-    $(APPMENU_DATA_DIR)/DesktopEntry/AppMenu_EntryData.cpp
-$(APPMENU_PREFIX)EntryActions.o: \
-    $(APPMENU_DATA_DIR)/DesktopEntry/AppMenu_EntryActions.cpp
-$(APPMENU_PREFIX)EntryLoader.o: \
-    $(APPMENU_DATA_DIR)/DesktopEntry/AppMenu_EntryLoader.cpp
-$(APPMENU_PREFIX)EntryUpdater.o: \
-    $(APPMENU_DATA_DIR)/DesktopEntry/AppMenu_EntryUpdater.cpp
+$(APPMENU_OBJ)EntryData.o: \
+    $(APPMENU_DATA_DIR)/DesktopEntry/$(APPMENU_PREFIX)EntryData.cpp
+$(APPMENU_OBJ)EntryActions.o: \
+    $(APPMENU_DATA_DIR)/DesktopEntry/$(APPMENU_PREFIX)EntryActions.cpp
+$(APPMENU_OBJ)EntryLoader.o: \
+    $(APPMENU_DATA_DIR)/DesktopEntry/$(APPMENU_PREFIX)EntryLoader.cpp
+$(APPMENU_OBJ)EntryUpdater.o: \
+    $(APPMENU_DATA_DIR)/DesktopEntry/$(APPMENU_PREFIX)EntryUpdater.cpp
 
-$(APPMENU_PREFIX)MenuItem.o: \
-    $(APPMENU_DATA_DIR)/AppMenu_MenuItem.cpp
-$(APPMENU_PREFIX)ItemData.o: \
-    $(APPMENU_DATA_DIR)/AppMenu_ItemData.cpp
+$(APPMENU_OBJ)MenuItem.o: \
+    $(APPMENU_DATA_DIR)/$(APPMENU_PREFIX)MenuItem.cpp
+$(APPMENU_OBJ)ItemData.o: \
+    $(APPMENU_DATA_DIR)/$(APPMENU_PREFIX)ItemData.cpp
 
-$(APPMENU_PREFIX)AppMenu.o: \
+$(APPMENU_OBJ)AppMenu.o: \
     $(APPMENU_ROOT)/AppMenu.cpp
-$(APPMENU_PREFIX)ConfigFile.o: \
-    $(APPMENU_ROOT)/AppMenu_ConfigFile.cpp
+$(APPMENU_OBJ)ConfigFile.o: \
+    $(APPMENU_ROOT)/$(APPMENU_PREFIX)ConfigFile.cpp
+$(APPMENU_OBJ)SettingsComponents.o: \
+    $(APPMENU_ROOT)/$(APPMENU_PREFIX)SettingsComponents.cpp
 
 # Tests:
-$(APPMENU_PREFIX)Test_AppMenu.o: \
+$(APPMENU_TEST_OBJ)AppMenu.o: \
     $(APPMENU_TEST_ROOT)/AppMenu.cpp
-$(APPMENU_PREFIX)Test_ConfigFile.o: \
+$(APPMENU_TEST_OBJ)ConfigFile.o: \
     $(APPMENU_TEST_ROOT)/ConfigFile.cpp
-$(APPMENU_PREFIX)Test_Controller.o: \
-    $(APPMENU_TEST_ROOT)/Controller.cpp
-$(APPMENU_PREFIX)Test_InputHandler.o: \
-    $(APPMENU_TEST_ROOT)/InputHandler.cpp
-$(APPMENU_PREFIX)Test_MenuComponent.o: \
-    $(APPMENU_TEST_ROOT)/MenuComponent.cpp
-$(APPMENU_PREFIX)Test_PagedMenu.o: \
-    $(APPMENU_TEST_ROOT)/PagedMenu.cpp
-$(APPMENU_PREFIX)Test_ScrollingMenu.o: \
-    $(APPMENU_TEST_ROOT)/ScrollingMenu.cpp
