@@ -10,11 +10,7 @@ OBJECTS_DESKTOP_ENTRY := \
   $(DESKTOP_ENTRY_PREFIX)UpdateListener.o \
   $(DESKTOP_ENTRY_PREFIX)Loader.o
 
-OBJECTS_DESKTOP_ENTRY_TEST := \
-  $(DESKTOP_ENTRY_PREFIX)Test_FileUtils.o \
-  $(DESKTOP_ENTRY_PREFIX)Test_EntryFile.o \
-  $(DESKTOP_ENTRY_PREFIX)Test_LoadingThread.o \
-  $(DESKTOP_ENTRY_PREFIX)Test_Loader.o
+OBJECTS_DESKTOP_ENTRY_TEST :=
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_DESKTOP_ENTRY := $(OBJECTS_DESKTOP_ENTRY) \
@@ -38,13 +34,3 @@ $(DESKTOP_ENTRY_PREFIX)UpdateListener.o : \
 	$(DESKTOP_ENTRY_ROOT)/DesktopEntry_UpdateListener.cpp
 $(DESKTOP_ENTRY_PREFIX)Loader.o: \
 	$(DESKTOP_ENTRY_ROOT)/DesktopEntry_Loader.cpp
-
-# Tests:
-$(DESKTOP_ENTRY_PREFIX)Test_FileUtils.o: \
-    $(DESKTOP_ENTRY_TEST_ROOT)/FileUtils.cpp
-$(DESKTOP_ENTRY_PREFIX)Test_EntryFile.o: \
-	$(DESKTOP_ENTRY_TEST_ROOT)/EntryFile.cpp
-$(DESKTOP_ENTRY_PREFIX)Test_LoadingThread.o: \
-	$(DESKTOP_ENTRY_TEST_ROOT)/LoadingThread.cpp
-$(DESKTOP_ENTRY_PREFIX)Test_Loader.o: \
-	$(DESKTOP_ENTRY_TEST_ROOT)/Loader.cpp

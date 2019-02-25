@@ -11,10 +11,7 @@ OBJECTS_CONFIG := \
   $(CONFIG_PREFIX)MainFile.o \
   $(CONFIG_PREFIX)MainListener.o
 
-
-OBJECTS_CONFIG_TEST := \
-  $(CONFIG_PREFIX)Test_FileResource.o \
-  $(CONFIG_PREFIX)Test_FileHandler.o
+OBJECTS_CONFIG_TEST :=
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_CONFIG := $(OBJECTS_CONFIG) $(OBJECTS_CONFIG_TEST)
@@ -39,9 +36,3 @@ $(CONFIG_PREFIX)MainFile.o: \
     $(CONFIG_ROOT)/Config_MainFile.cpp
 $(CONFIG_PREFIX)MainListener.o: \
     $(CONFIG_ROOT)/Config_MainListener.cpp
-
-# Tests:
-$(CONFIG_PREFIX)Test_FileResource.o: \
-    $(CONFIG_TEST_ROOT)/FileResource.cpp
-$(CONFIG_PREFIX)Test_FileHandler.o: \
-    $(CONFIG_TEST_ROOT)/FileHandler.cpp
