@@ -14,6 +14,8 @@ juce::Label("clockLabel", "00:00")
     addTrackedKey(Config::MainKeys::use24HrModeKey);
     addTrackedKey(Config::MainKeys::showClockKey);
     setJustificationType(juce::Justification::centredRight);
+    setColour(juce::Label::textColourId,
+            findColour(textColourId));
     loadAllConfigProperties();
     startTimer(1);
 }

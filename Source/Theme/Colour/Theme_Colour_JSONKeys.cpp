@@ -88,7 +88,9 @@ static const std::map<int, juce::Identifier> colourIdKeys =
     {colourPicker::outline,           
             "Color picker color outline"},
     {colourPicker::focusedOutline, 
-            "Color picker focused color outline"}
+            "Color picker focused color outline"},
+    {clockLabel::text,                "ClockLabel text"},
+    {batteryIcon::text,               "BatteryIcon text"}
 };
 
 /*
@@ -161,7 +163,9 @@ static const std::map<juce::Identifier, int> colourIds
             colourPicker::checkerboardDark},
     {"Color picker color outline", colourPicker::outline},
     {"Color picker focused color outline",
-            colourPicker::focusedOutline}
+            colourPicker::focusedOutline},
+    {"ClockLabel text",             clockLabel::text},
+    {"BatteryIcon text",            batteryIcon::text}
 };
 
 
@@ -746,6 +750,14 @@ static const std::map<int, Theme::Colour::UICategory> idCategories =
     {
         colourPicker::focusedOutline,
         UICategory::focusedOutline        
+    },
+    {
+        clockLabel::text,
+        UICategory::text
+    },
+    {
+        batteryIcon::text,
+        UICategory::text
     }
 };
 

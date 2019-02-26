@@ -21,6 +21,8 @@ batteryPercentLayout(&batteryPercent,
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
     batteryPercent.setJustificationType(juce::Justification::centredLeft);
+    batteryPercent.setColour(juce::Label::textColourId,
+            findColour(textColourId));
     addAndMakeVisible(batteryPercent);
     addAndMakeVisible(batteryImage);
     startTimer(1);

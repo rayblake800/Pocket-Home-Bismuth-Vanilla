@@ -526,4 +526,20 @@ namespace Theme { namespace Colour { namespace ColourIds
       };
     }
 
+    namespace clockLabel
+    {
+        enum
+        {
+            text = 0x1900700
+        };
+    }
+
+    namespace batteryIcon
+    {
+        enum
+        {
+            text = 0x1900800
+        };
+    }
+
 } } }

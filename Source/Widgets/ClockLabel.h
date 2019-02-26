@@ -18,6 +18,11 @@ public:
     
     virtual ~ClockLabel() { }
 
+    /* Juce ColourId values: */
+    enum ColourIds
+    {
+        textColourId = 0x1900700
+    };
 private:
     /**
      * @brief Updates the displayed time each minute.

@@ -4,27 +4,36 @@
 #include "Wifi_Device_Reader.h"
 #include "Wifi_Connection_Record_Reader.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Wifi::ConnectionIcon::";
+#endif
+
 Wifi::ConnectionIcon::ConnectionIcon()
 {
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("Wifi::ConnectionIcon");
-#    endif
+#endif
     const Connection::Record::Reader connectionRecords;
     if(connectionRecords.isConnected())
     {
         AccessPoint connectedAP = connectionRecords.getActiveAP();
         setTrackedAccessPoint(connectedAP);
         setSignalStrengthImage(connectedAP.getSignalStrength());
+        DBG(dbgPrefix << __func__ << ": Initializing with connected AP "
+                << connectedAP.getSSID().toString());
         return;
     }
 
     const Device::Reader deviceReader;
     if(deviceReader.wifiDeviceEnabled())
     {
+        DBG(dbgPrefix << __func__ << ": Initializing with wifi disconnected.");
         setSignalStrengthImage(0);
     }
     else
     {
+        DBG(dbgPrefix << __func__ << ": Initializing with wifi disabled.");
         setWifiDisabledImage();
     }
 }
@@ -46,6 +55,8 @@ void Wifi::ConnectionIcon::connected(const AccessPoint connectedAP)
 {
     setTrackedAccessPoint(connectedAP);
     setSignalStrengthImage(connectedAP.getSignalStrength());
+    DBG(dbgPrefix << __func__ << ": Now tracking connected AP "
+            << connectedAP.getSSID().toString());
 }
 
 /*
@@ -56,6 +67,7 @@ void Wifi::ConnectionIcon::disconnected(const AccessPoint disconnectedAP)
 {
     ignoreAllUpdates();
     setSignalStrengthImage(0);
+    DBG(dbgPrefix << __func__ << ": Removing old tracked AP");
 }
 
 /*
