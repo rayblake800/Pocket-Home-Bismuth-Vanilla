@@ -45,7 +45,7 @@ public:
     /**
      * @brief  Attempts to terminate the application process.
      * 
-     * @return  True iff this successfully terminates the process.
+     * @return  Whether this successfully terminates the process.
      */
     bool kill();
     

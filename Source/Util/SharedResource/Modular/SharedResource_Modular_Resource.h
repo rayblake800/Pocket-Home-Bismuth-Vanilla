@@ -17,7 +17,7 @@ namespace SharedResource { namespace Modular {
  *  Modular::Resource is a basis for shared resource classes that divide their
  * responsibilities between several Modular::Module classes. Each
  * Modular::Resource holds a single object instance of each Module class
- * associated with it. These modules are accessed as if they each were seperate 
+ * associated with it. These modules are accessed as if they each were separate 
  * Resource types, but all of them are initialized and destroyed together, and
  * all of them share a single lock. This approach allows Resources that perform
  * a large number of interconnected tasks to be divided up without the risk of

@@ -121,7 +121,7 @@ public:
     /**
      * @brief  Exits the GLib event loop before stopping the thread normally.
      *
-     *  The caller must aquire the thread resource's lock for writing before
+     *  The caller must acquire the thread resource's lock for writing before
      * calling this method. The lock will be unlocked and then relocked
      * as the thread exits.
      */

@@ -74,7 +74,7 @@ protected:
      *
      * @tparam ModuleType  The type of Module to get from the resource.
      *
-     * @return             A pointer to thhe Resource object's instance of the 
+     * @return             A pointer to the Resource object's instance of the 
      *                     requested module type, or nullptr if the Resource 
      *                     doesn't have a module of type ModuleType.
      */
@@ -90,7 +90,7 @@ protected:
      *
      * @tparam ModuleType  The type of Module to get from the resource.
      *
-     * @return             A constant pointer to thhe Resource object's instance
+     * @return             A constant pointer to the Resource object's instance
      *                     of the requested module type, or nullptr if the 
      *                     Resource doesn't have a module of type ModuleType.
      */

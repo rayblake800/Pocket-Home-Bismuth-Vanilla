@@ -93,7 +93,7 @@ confirmPassword("Confirmation", 0x2022)
  * If the setPassword button is clicked, attempts to set a new application
  * password.  The result of this operation will be displayed in a message box,
  * and all text fields on the page will be cleared.  If the password was
- * set successully, the page will be closed.
+ * set successfully, the page will be closed.
  */
 void SetPasswordPage::PageListener::buttonClicked(juce::Button* button)
 {
@@ -104,9 +104,11 @@ void SetPasswordPage::PageListener::buttonClicked(juce::Button* button)
         passwordPage.clearAllFields();
         return;
     }
-    else if (passwordPage.newPassword.getText() != passwordPage.confirmPassword.getText())
+    else if (passwordPage.newPassword.getText() 
+            != passwordPage.confirmPassword.getText())
     {
-        passwordPage.showErrorMessage(passwordPage.localeText(confirmationFailedTextKey),
+        passwordPage.showErrorMessage(
+                passwordPage.localeText(confirmationFailedTextKey),
                 passwordPage.localeText(fieldsDontMatchTextKey));
     }
     else
@@ -121,8 +123,8 @@ void SetPasswordPage::PageListener::buttonClicked(juce::Button* button)
                         << ": Illegal result returned!");
                 jassertfalse;
                 return;
-            case Password::paswordSetSuccess:
-                DBG("SetPasswordPage::" << __func__ << ": paswordSetSuccess");
+            case Password::passwordSetSuccess:
+                DBG("SetPasswordPage::" << __func__ << ": passwordSetSuccess");
                 juce::AlertWindow::showMessageBoxAsync(
                         juce::AlertWindow::AlertIconType::InfoIcon,
                         passwordPage.localeText(successTextKey),

@@ -109,7 +109,7 @@ static Password::ChangeResult runPasswordScript
     {
         return passwordFileExists() ? fileDeleteFailed : passwordRemoveSuccess;
     }
-    return paswordSetSuccess;
+    return passwordSetSuccess;
 }
 
 /**
@@ -125,7 +125,7 @@ Password::ChangeResult Password::changePassword
         return missingNewPassword;
     }
     ChangeResult result = runPasswordScript(currentPass, newPass);
-    if(result != paswordSetSuccess)
+    if(result != passwordSetSuccess)
     {
         return result;
     }
@@ -141,7 +141,7 @@ Password::ChangeResult Password::changePassword
     if(!checkPassword(newPass)){
         result = fileWriteFailed;
     }
-    if(result == paswordSetSuccess)
+    if(result == passwordSetSuccess)
     {
         return result;
     }

@@ -1,7 +1,7 @@
 ## Config Module Documentation ##
 
  The Config module defines an interface for reading and writing application 
-configuration settings from user-accessable JSON files. Config allows easy,
+configuration settings from user-accessible JSON files. Config allows easy,
 threadsafe access to configuration data, minimizing the amount of necessary file
 IO. Config also defines Listener objects, which are notified whenever 
 configuration data they track is changed at any point.
@@ -23,7 +23,7 @@ subclass should be implemented for each JSON configuration file.
 # Config/FileHandler.h #
  An abstract basis for classes that access JSON file resources. Each
 Config::FileResource subclass should have at least one Config::FileHandler
-subclass defided to provide controlled access to the file resource. 
+subclass defined to provide controlled access to the file resource. 
 
 # Config/DataKey.h #
  The key and type of a basic data value stored in a FileResource. These should
@@ -49,4 +49,4 @@ JSON file.
 in main.json. 
 
 # Config/MainListener.h #
- Listens for changest to valued defined in the main.json file.
+ Listens for changes to values defined in the main.json file.

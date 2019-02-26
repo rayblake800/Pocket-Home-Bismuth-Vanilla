@@ -76,7 +76,7 @@ void RemovePasswordPage::PageListener::buttonClicked(juce::Button* button)
     switch (Password::removePassword(passwordPage.curPassword.getText()))
     {
         case Password::missingNewPassword:
-        case Password::paswordSetSuccess:
+        case Password::passwordSetSuccess:
         case Password::fileCreateFailed:
         case Password::fileWriteFailed:
         case Password::fileSecureFailed:

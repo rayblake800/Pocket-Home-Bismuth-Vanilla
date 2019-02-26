@@ -10,7 +10,7 @@ Instance(resourceKey) { }
 
 /*
  * Packages an asynchronous action so that it will check if the 
- * SharedResource instance that created it stil valid, and if so,
+ * SharedResource instance that created it still valid, and if so,
  * ensure it remains valid while the action is executed.
  */
 std::function<void()> SharedResource::Resource::buildAsyncFunction(

@@ -16,7 +16,7 @@ namespace AppMenu { class MenuItem; }
 /**
  *  MenuItem is a nullable interface for AppMenu::ItemData objects of any type.  
  * MenuItems mirror the ItemData interface, allowing them to be used 
- * interchangably no matter what type of ItemData they contain.
+ * interchangeably no matter what type of ItemData they contain.
  *
  *  MenuItem also takes care of memory management issues with ItemData objects.
  * All MenuItem methods check if their ItemData is null before dereferencing it,

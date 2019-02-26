@@ -57,7 +57,7 @@ private:
      * @brief  Checks if this button will fill in its background with its 
      *         background color.
      *
-     * @return  True, as the scrolling menu alwas draws button backgrounds.
+     * @return  True, as the scrolling menu always draws button backgrounds.
      */
     virtual bool shouldFillBackground() const final override;
     

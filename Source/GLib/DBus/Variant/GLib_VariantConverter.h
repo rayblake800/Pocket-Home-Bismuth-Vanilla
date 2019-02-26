@@ -115,7 +115,7 @@ namespace GLib { namespace VariantConverter
      * @param variant  The GVariant to extract data from.
      * 
      * @return         The GValue containing the stored data, or G_VALUE_INIT if
-     *                 the value could not be transfered. 
+     *                 the value could not be transferred. 
      */
     GValue getGValue(GVariant* variant);
     

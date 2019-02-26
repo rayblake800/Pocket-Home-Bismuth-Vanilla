@@ -88,7 +88,7 @@ private:
          * @brief  Whenever a new connection event is added, tests if that
          *         event was expected.
          *
-         * @param newEvent  The lastest event added to the Record::Resource.
+         * @param newEvent  The latest event added to the Record::Resource.
          */
         virtual void eventAdded(const Wifi::Connection::Event newEvent)
         {

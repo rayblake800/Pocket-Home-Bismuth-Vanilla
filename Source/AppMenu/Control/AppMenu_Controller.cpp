@@ -10,7 +10,7 @@
 /* Localized object class key: */
 static const juce::Identifier localeClassKey        = "AppMenu::Controller";
 
-/* Localixed text value keys: */
+/* Localized text value keys: */
 static const juce::Identifier editTextKey           = "edit";
 static const juce::Identifier deleteTextKey         = "delete";
 static const juce::Identifier pinItemTextKey        = "pinItem";

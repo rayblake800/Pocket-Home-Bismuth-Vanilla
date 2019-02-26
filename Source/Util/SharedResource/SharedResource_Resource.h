@@ -18,7 +18,7 @@ namespace SharedResource { class Resource; }
  * be accessed through these Handler classes.
  *
  * Each concrete Resource subclass must declare a unique, constant identifying
- * key, publically available as a juce::Identifier named resourceKey. Resource
+ * key, publicly available as a juce::Identifier named resourceKey. Resource
  * subclasses must also only use the default constructor.
  */
 class SharedResource::Resource : public Instance

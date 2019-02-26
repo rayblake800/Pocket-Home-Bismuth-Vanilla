@@ -512,7 +512,7 @@ static const std::map<int, Theme::Colour::UICategory> idCategories =
         UICategory::text
     },
     {
-        resizableWindow::background,
+        resizeableWindow::background,
         UICategory::windowBackground
     },
     {

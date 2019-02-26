@@ -114,7 +114,7 @@ bool WifiNMSettings::Wireless::isHidden() const
 }
 
 /*
- * Changes the SSID saved to tbe Wifi settings.
+ * Changes the SSID saved to the Wifi settings.
  */
 void WifiNMSettings::Wireless::setSSID(const SSID newSSID)
 {

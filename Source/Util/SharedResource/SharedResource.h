@@ -11,7 +11,7 @@
  *
  * Each Resource subclass has at most one object instance. Resources may only be
  * directly interacted with through subclasses of the SharedResource::Handler 
- * class.  Sharing a single object like this ensures that concurrent acccess to 
+ * class.  Sharing a single object like this ensures that concurrent access to 
  * system resources can be controlled, and expensive objects are not duplicated 
  * unnecessarily.
  *
@@ -30,7 +30,7 @@
  * or while another thread is already making changes.  This allows Handler 
  * objects across multiple threads to share a single resource object safely.  
  * To prevent deadlocks, Handler objects with different resources should 
- * interact with eachother very carefully, taking extra care not to introduce
+ * interact with each other very carefully, taking extra care not to introduce
  * circular dependencies. 
  *
  * Resources are able to selectively apply functions to all of their Handler

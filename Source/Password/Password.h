@@ -42,7 +42,7 @@ namespace Password
         fileCreateFailed,
         fileDeleteFailed,
         fileSecureFailed,
-        paswordSetSuccess,
+        passwordSetSuccess,
         passwordRemoveSuccess,
     };
 

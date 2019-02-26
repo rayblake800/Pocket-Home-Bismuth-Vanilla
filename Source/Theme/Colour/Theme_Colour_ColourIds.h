@@ -301,7 +301,7 @@ namespace Theme { namespace Colour { namespace ColourIds
         };
     }
 
-    namespace resizableWindow
+    namespace resizeableWindow
     {
         enum
         {

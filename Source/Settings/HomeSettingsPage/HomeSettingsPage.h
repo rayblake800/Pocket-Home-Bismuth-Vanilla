@@ -48,7 +48,7 @@ private:
     void comboBoxChanged(juce::ComboBox* box) override;
 
     /**
-     * @brief  Atttempt to set a new color or image value for the background 
+     * @brief  Attempts to set a new color or image value for the background 
      *         when the background editor is updated, depending on the state of
      *         bgTypePicker.
      * 

@@ -153,7 +153,7 @@ class Wifi::Test::ConnectionTest : public juce::UnitTest
 {
 public:
     ConnectionTest() : juce::UnitTest("Wifi::Connection Testing",
-            "Wiffi") {}
+            "Wifi") {}
 
     /**
      * @brief  Tests if the next Wifi event to occur has a specific event type

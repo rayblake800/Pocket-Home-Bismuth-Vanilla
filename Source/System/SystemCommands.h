@@ -129,7 +129,7 @@ public:
      * @param args         Arguments to pass to the command process.
      *
      * @return             All text printed by the command process, or the empty
-     *                     string if the commandi was not defined, or did not 
+     *                     string if the command was not defined, or did not 
      *                     terminate normally with an exit code of 0.
      */
     juce::String runTextCommand(const TextCommand commandType,

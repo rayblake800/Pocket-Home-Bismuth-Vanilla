@@ -46,7 +46,7 @@ public:
     /**
      * @brief  Sets a single AccessPoint this Listener will track.
      *
-     * @param toTrack  The only AccessPoint this Listener needs to recieve
+     * @param toTrack  The only AccessPoint this Listener needs to receive
      *                 signal strength updates from.
      */
     void setTrackedAccessPoint(const AccessPoint toTrack);

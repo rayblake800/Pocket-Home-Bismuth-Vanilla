@@ -118,7 +118,7 @@ public:
      *
      * @param rhs  Another saved Event.
      *
-     * @return     Whether both Event objectss have identical AccessPoint
+     * @return     Whether both Event objects have identical AccessPoint
      *             objects, event times, and event types.
      */
     bool operator==(const Event& rhs) const;
@@ -129,7 +129,7 @@ public:
      *
      * @param rhs  Another saved Event object.
      *
-     * @return     Whether the Event objectss have different AccessPoint
+     * @return     Whether the Event objects have different AccessPoint
      *             objects, event times, or event types.
      */
     bool operator!=(const Event& rhs) const;

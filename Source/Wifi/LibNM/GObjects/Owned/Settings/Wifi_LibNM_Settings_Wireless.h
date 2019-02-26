@@ -79,7 +79,7 @@ public:
     bool isHidden() const;
 
     /**
-     * @brief  Changes the SSID saved to tbe Wifi settings.
+     * @brief  Changes the SSID saved to the Wifi settings.
      *
      * @param newSSID  The new connection ID value to save to Wifi settings.
      */

@@ -124,7 +124,7 @@ private:
     ControlListener controlListener;
 
     /* Handles Wifi connection actions, and ensures the Wifi::Resource remains
-     * avalable: */
+     * available: */
     Wifi::Connection::Control::Handler connectionController;
 
     /* Manages the layout of all child components: */
