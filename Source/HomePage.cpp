@@ -25,6 +25,7 @@ settingsButton(Theme::Image::JSONKeys::settingsButton)
 
     using namespace Layout::Component;
     layoutManagers.add(Manager(&wifiIcon, JSONKeys::wifiIcon));
+    layoutManagers.add(Manager(&clock, JSONKeys::clockLabel));
     layoutManagers.add(Manager(&powerButton, JSONKeys::powerButton));
     layoutManagers.add(Manager(&settingsButton, JSONKeys::settingsButton));
     layoutManagers.add(Manager(&frame, JSONKeys::menuFrame));

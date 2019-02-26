@@ -14,7 +14,7 @@
 #include "DrawableImageButton.h"
 #include "Layout_Component_Manager.h"
 #include "ClockLabel.h"
-#include "Wifi_SignalIcon.h"
+#include "Wifi_ConnectionIcon.h"
 #include "BatteryIcon.h"
 #include "SystemCommands.h"
 #include "AppMenu/AppMenu.h"
@@ -103,7 +103,7 @@ private:
     BatteryIcon batteryIcon;
     
     /* Displays the current wifi status. */
-    Wifi::SignalIcon wifiIcon;
+    Wifi::ConnectionIcon wifiIcon;
 
     /* Opens the power page when clicked. */
     Theme::Image::Component<DrawableImageButton> powerButton;
