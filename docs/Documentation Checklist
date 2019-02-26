@@ -1,10 +1,14 @@
 ## Documenting Header Files
+  # At the top of the file:
     -List the file name under the @file tag.
-    -Describe the module's purpose in one sentence under the @brief tag.
-    -Explain everything the module can be used for.
+    -Describe the file's purpose in one sentence under the @brief tag.
+
+  # Above the file's main class:
+    -Describe the class in one sentence under the @brief tag.
+    -Explain everything the class can be used for.
         -List the most significant functions.
         -Describe any significant conditions or limitations of those functions.
-    -Expand on the module's purpose, if necessary.
+    -Expand on the class's purpose, if necessary.
         -What is its purpose within the greater project?
         -If other options exist, what advantages does it provide over those?
         -Are there notable alternate reasons to use it?
@@ -34,5 +38,3 @@
         -Are there any return values that have special connotations?
     -List each possible exception under a @throws tag.
         -When will the function throw that exception?
-        
-

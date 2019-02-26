@@ -46,7 +46,7 @@ X /Source/AppMenu/Implementation
 X /Source/Config/Config
 X /Source/Config/DataKey
 X /Source/Config/FileHandler
-/Source/Config/FileResource
+X /Source/Config/FileResource
 /Source/Config/MainFile
 /Source/Config/MainKeys
 /Source/Config/MainResource

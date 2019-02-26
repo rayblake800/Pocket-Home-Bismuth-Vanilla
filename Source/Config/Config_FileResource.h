@@ -17,16 +17,17 @@ namespace Config { class FileResource; }
 namespace Config { struct DataKey; }
 
 /**
- *  FileResource provides an abstract base for classes that read and write JSON 
- * configuration files. Each FileResource subclass is responsible for a single
- * JSON file containing data that can be altered by the user. Along with 
- * reading and writing data, FileResource allows objects to be defined as 
- * listener objects, which will receive notifications whenever data keys they 
- * select are changed.
+ *  @brief  Provides an abstract base for classes that read and write JSON 
+ *          configuration files. 
+ *  
+ *  Each FileResource subclass is responsible for a single JSON file containing 
+ * data that can be altered by the user. Along with reading and writing data, 
+ * FileResource allows objects to be defined as Listener objects, which will 
+ * receive notifications whenever data keys they select are changed.
  * 
  *  As an implementation of the SharedResource class, each FileResource subclass
  * will have only one object instance at a time, to prevent concurrent access
- * to the JSON file, and limit the amount of file I/O necessary. Each
+ * to the JSON file, and limit the amount of file I/O necessary. Each 
  * FileResource subclass should be accessed only through a ConfigFile subclass
  * specific to that FileResource.
  *
@@ -43,7 +44,7 @@ class Config::FileResource : public SharedResource::Resource
 {
 protected:
     /**
-     * @brief Creates the FileResource resource, and prepares to read JSON data.
+     * @brief  Loads the resource's JSON data files.
      *
      * @param resourceKey     The SharedResource object key for the specific
      *                        FileResource variant being created.
@@ -127,7 +128,6 @@ public:
     template<typename ValueType>
     bool setConfigValue(const juce::Identifier& key, ValueType newValue)
     {
-        using namespace juce;
         if(!isValidKey(key))
         {
             throw BadKeyException(key);
@@ -138,7 +138,8 @@ public:
             int nListeners = 0;
             int nTracked = 0;
             foreachHandler<ListenerInterface>(
-                [this, &key, &nListeners, & nTracked] (ListenerInterface* listener)
+                [this, &key, &nListeners, & nTracked] 
+            (ListenerInterface* listener)
             {
                 nListeners++;
                 if(listener->isKeyTracked(key))
@@ -159,8 +160,8 @@ public:
     /**
      * @brief  Sets a configuration data value back to its default setting. 
      *
-     * If this changes the value, listeners will be notified and changes will be
-     * saved.
+     *  If this changes the value, listeners will be notified and changes will 
+     * be saved.
      * 
      * @param key                A key value defined in the config file.
      * 
@@ -172,23 +173,31 @@ public:
     /**
      * @brief  Restores all values in the configuration file to their defaults. 
      *
-     * All updated values will notify their Listeners and be written to the JSON
-     * file.
+     *  All updated values will notify their Listeners and be written to the 
+     * JSON file.
      */
     virtual void restoreDefaultValues();
      
     /**
-     * Signals an attempt to access an invalid config value in a FileResource.
+     * @brief  Signals an attempt to access an invalid config value in a 
+     *         FileResource.
      */
     struct BadKeyException : public std::exception
     {
     public:
         /**
+         * @brief  Creates a new exception object to represent a key error.
+         *
          * @param invalidKey  The invalid key string that caused this exception.
          */
         BadKeyException(const juce::Identifier& invalidKey) : 
         invalidKey(invalidKey) { }
         
+        /**
+         * @brief  Gets the invalid key string that caused this exception.
+         *
+         * @return  The invalid JSON key value.
+         */
         virtual const char* what() const noexcept override
         {
             return juce::CharPointer_UTF8(invalidKey);
@@ -197,7 +206,7 @@ public:
         /**
          * @brief  Gets the invalid key that caused the exception.
          * 
-         * @return  The unexpected key value.
+         * @return  The invalid JSON key value.
          */
         const juce::Identifier& getInvalidKey()
         {
@@ -228,8 +237,8 @@ protected:
     virtual bool isValidKey(const juce::Identifier& key) const;
     
     /**
-     * Get the set of all basic (non-array, non-object) properties tracked by
-     * this FileResource.
+     * @brief  Get the set of all basic (non-array, non-object) properties 
+     *         tracked by this FileResource.
      * 
      * @return  The keys to all variables tracked in this config file.
      */
@@ -242,12 +251,12 @@ protected:
      *  If the value is not found or has an invalid type, the property will be 
      * copied from the default config file.
      * 
-     * @param key  The key string of a parameter that should be defined in this
-     *             config file.
+     * @param key                       The key string of a parameter that 
+     *                                  should be defined in this config file.
      * 
-     * @tparam T   The expected type of the JSON property.
+     * @tparam T                        The expected type of the JSON property.
      * 
-     * @return  The initialized property value.
+     * @return                          The initialized property value.
      * 
      * @throws JSONFile::TypeException  If any data value is missing or has an
      *                                  incorrect type in both the config file 
@@ -275,7 +284,7 @@ protected:
         }
         catch (JSONFile::FileException e)
         {
-            //Failed to read from .json file
+            // Failed to read from .json file
             DBG("FileResource::" << __func__ << ": " << e.what());
         }
         catch(JSONFile::TypeException e)
@@ -293,7 +302,7 @@ protected:
     /**
      * @brief  Updates a property in the JSON config file.  
      *
-     * This will not check key validity, immediately write any changes, or 
+     *  This will not check key validity, immediately write any changes, or 
      * notify listeners.
      * 
      * @param key        The key string that maps to the value being updated.
@@ -302,8 +311,8 @@ protected:
      * 
      * @tparam T         The value data type.
      * 
-     * @return  True if JSON data changed, false if newValue was identical to
-     *          the old value with the same key.
+     * @return           True if JSON data changed, false if newValue was 
+     *                   identical to the old value with the same key.
      */
     template<typename T>
     bool updateProperty(const juce::Identifier& key, T newValue)
@@ -314,7 +323,7 @@ protected:
         }
         catch (JSONFile::FileException e)
         {
-            //Failed to write to .json file
+            // Failed to write to .json file
             DBG("FileResource::" << __func__ << ": " << e.what());
         }
         catch(JSONFile::TypeException e)
@@ -336,7 +345,7 @@ private:
      * @brief  Sets a configuration data value back to its default setting, 
      *         notifying listeners if the value changes.
      *
-     * This does not ensure that the key is valid for this ConfigFile.  An
+     *  This does not ensure that the key is valid for this ConfigFile. An
      * AlertWindow will be shown if any problems occur while accessing JSON
      * data.
      *
@@ -347,18 +356,18 @@ private:
     /**
      * @brief  Writes any custom object or array data back to the JSON file.
      *
-     * FileResource subclasses with custom object or array data must override 
+     *  FileResource subclasses with custom object or array data must override 
      * this method to write that data back to the file.
      */
     virtual void writeDataToJSON() { }
     
-    /* The name of this JSON config file. */
+    /* The name of this JSON config file: */
     const juce::String filename;
 
-    /* Holds configuration values read from the file. */
+    /* Configuration values read from the file: */
     JSONFile configJson;
     
-    /* Holds default config file values. */
+    /* Default config file values: */
     JSONFile defaultJson; 
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FileResource)

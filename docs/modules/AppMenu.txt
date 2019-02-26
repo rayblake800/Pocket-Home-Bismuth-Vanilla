@@ -11,7 +11,7 @@ and child folders. Folders may also have a list of application categories. All
 desktop entries that share application categories with a folder will be added to
 that folder as additional menu items.
 
-  The menu structure is highly configurable, both through the appMenu.json
+  The menu structure is fully configurable, both through the appMenu.json
 configuration file, and directly through the menu interface. The user may right 
 click or use a keyboard shortcut to create popup context menus, which can change 
 the order of menu items, add new items, delete menu items, or edit any of the 
@@ -24,16 +24,18 @@ JSON file.
 defines the layout of the menu, and controls how user input events are applied 
 to the menu. The selected format may be dynamically changed. Through the 
 AppMenu::ConfigFile interface, other objects may change the menu format, and 
-adjust various display properties for each menu format. This is used by the Home
-Settings Page to allow the user to edit the menu format.
+adjust various display properties for each menu format. AppMenu provides the
+AppMenu::SettingsComponents class to generate UI components that allow the user
+to directly change AppMenu display settings within the application.
 
 ## Public Interface ##
 
 # AppMenu/AppMenu.h #
   Creates the AppMenu, returning it as a generic juce::Component pointer.
 
-# AppMenu/Format.h #
-  Defines the list of alternate menu display formats.
-
 # AppMenu/ConfigFile.h #
   Gets and sets the menu format and menu display properties.
+
+# AppMenu/SettingsComponents.h #
+  Provides UI components that allow the user to view and change menu format
+  options.

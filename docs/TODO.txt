@@ -1,36 +1,13 @@
 # Pocket-home: Bismuth Edition Task List
 
-1/21:
-    -Fix Wifi deadlocks when checking saved connections within NM callbacks.
-        -Is this a problem with SharedResource::Handler notifications that can
-         be fixed?
-        -Even if it is, reduce LibNM interaction by tracking saved connection
-         state in Wifi::AccessPoint
-    -Fix over-enthusiastic Wifi::SettingsPage sorting
-    -Fix scrolling list animations; old list items aren't animated when
-     scrolling out
-    -Continue building Wifi test classes
-    -Update this document
-
 ### Documentation
-    -Priority:  Change list is out of date, check commit messages and update it.
-
-    1. Create a list of all code files, and use it to systematically check
-       existing documentation.
-    2. Create a Markdown page outlining the entire project structure.
-    3. Create pages documenting each code group.
-    4. Document all config files and options.
-    5. Generate UML diagrams.
+    1. Create pages documenting each module.
+    2. Document all config files and options.
+    3. Generate UML diagrams.
         
 ## Misc. bug fixes and improvements
     -Define missing ColourId values for custom component classes.
     -Figure out why the "file" label in the file selection window gets cut off.
-
-#### Known documentation issues for individual classes
-    -AppMenu helper classes are missing full documentation.
-    -PokeLookAndFeel.h is missing some @param tags.
-
-### Version Management
 
 # Task list for release 0.10
 
@@ -40,26 +17,10 @@
     3. Show error alerts for desktop entry exceptions.
 
 ## Wifi Improvements
-    1. JSONWifiInterface really isn't helpful, and accomodating it creates
-       unacceptable design complexity.  Get rid of it.
-        -Eventually it should be replaced with a fake Wifi control library
-         that copies LibNM's interface.
-    2. The level of interaction between GLibSignalThread and NetworkInterface
-       creates way too many opportunities for deadlocks.  Merge GLibSignalThread
-       and NetworkInterface into a single SharedResource, and ensure GLib::Objects
-       do not use that thread if they're not part of LibNM.
-    3. Using GLib SignalHandlers outside of the Wifi thread is not safe with
-       this version of LibNM.  Remove internal NMPPAccessPoint objects from
-       WifiAccessPoints and make WifiAccessPoint get that data through the
-       WifiStateManager.
-    4. Update the HomePage wifi icon to better use new wifi features.
-       1. Add a Listener interface to WifiAccessPoint objects.
-       2. Have the wifi icon extend WifiAccessPoint::Listener.
-    5. Add a "Forget saved connection" button to saved wifi access points.
-    6. Continue implementing test classes.
+    1. Continue implementing test classes.
 
 ## FreeDesktop Standards/ DesktopEntry Improvements
-    1. Fix problems with re-creating hidden entries.
+    1. Fix problems with recreating hidden entries.
     2. Add support for launching applications through d-bus when desktop entries
        request it.
     3. Research the FreeDesktop standard for tracking launched applications, and
@@ -72,11 +33,6 @@
 ## Configuration Improvements
     1. Add config. option for enabling/disabling that PocketCHIP audio hack. 
     2. Recreate config test class.
-
-## Project Structure Improvements
-    1. Restructure project into Namespace packages
-    2. Don't recursively include all source directories in all files
-    3. Sort makefile *.o list by package
 
 ## Settings Page Improvements
 

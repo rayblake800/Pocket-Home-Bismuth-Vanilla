@@ -1,5 +1,10 @@
 #include "Config_FileResource.h"
 #include "AssetFiles.h"
+
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Config::FileResource::";
+#endif
     
 /* The directory where all config files will be located. */
 static const constexpr char* configPath = "~/.pocket-home/";
@@ -8,7 +13,7 @@ static const constexpr char* configPath = "~/.pocket-home/";
 static const constexpr char* defaultAssetPath = "configuration/";
 
 /*
- * Creates the FileResource resource, and prepares to read JSON data.
+ * Loads the resource's JSON data files.
  */
 Config::FileResource::FileResource(
         const juce::Identifier& resourceKey,
@@ -27,13 +32,11 @@ Config::FileResource::~FileResource()
 }
 
 /*
- * Sets a configuration data value back to its default setting.  If this
- * changes the value, listeners will be notified and changes will be saved.
+ * Sets a configuration data value back to its default setting.
  */
 void Config::FileResource::restoreDefaultValue(const juce::Identifier& key)
 {
-    using namespace juce;
-    //Check key validity, find expected data type
+    // Check key validity, find expected data type:
     const std::vector<DataKey>& keys = getConfigKeys();
     for(const DataKey& configKey : keys)
     {
@@ -43,19 +46,16 @@ void Config::FileResource::restoreDefaultValue(const juce::Identifier& key)
             return;
         }
     }
-    DBG("FileResource::" << __func__ << ": Key \"" << key 
+    DBG(dbgPrefix << __func__ << ": Key \"" << key 
                 << "\" is not expected in " << filename);
     throw BadKeyException(key);
 }
 
 /*
- * Restores all values in the configuration file to their defaults. All 
- * updated values will notify their Listeners and be written to the JSON
- * file.
+ * Restores all values in the configuration file to their defaults.
  */
 void Config::FileResource::restoreDefaultValues()
 {
-    using namespace juce;
     const std::vector<DataKey>& keys = getConfigKeys();
     for(const DataKey& key : keys)
     {
@@ -65,14 +65,10 @@ void Config::FileResource::restoreDefaultValues()
 }
 
 /*
- * Loads all initial configuration data from the JSON config file. This checks 
- * for all expected data keys, and replaces any missing or invalid values with 
- * ones from the default config file. FileResource subclasses should call this 
- * once, after they load any custom object or array data.
+ * Loads all initial configuration data from the JSON config file.
  */
 void Config::FileResource::loadJSONData()
 {
-    using namespace juce;
     const std::vector<DataKey>& keys = getConfigKeys();
     for (const DataKey& key : keys)
     {
@@ -81,7 +77,7 @@ void Config::FileResource::loadJSONData()
             switch (key.dataType)
             {
                 case DataKey::stringType:
-                    initProperty<String>(key);
+                    initProperty<juce::String>(key);
                     break;
                 case DataKey::intType:
                     initProperty<int>(key);
@@ -93,18 +89,17 @@ void Config::FileResource::loadJSONData()
                     initProperty<double>(key);
                     break;
                 default:
-                    DBG("FileResource::" << __func__ 
-                            << ": Unexpected type for key \"" << key.key
-                            << "\n in file " << filename);
+                    DBG(dbgPrefix << __func__ << ": Unexpected type for key \"" 
+                            << key.key << "\" in file " << filename);
             }
         }
         catch(JSONFile::FileException e)
         {
-            DBG("FileResource::" << __func__ << ": " << e.what());
+            DBG(dbgPrefix << __func__ << ": Caught FileException:" << e.what());
         }
         catch(JSONFile::TypeException e)
         {
-            DBG("FileResource::" << __func__ << ": " << e.what());
+            DBG(dbgPrefix << __func__ << ": Caught TypeException:" << e.what());
         }
     }
     writeChanges();
@@ -127,12 +122,11 @@ bool Config::FileResource::isValidKey(const juce::Identifier& key) const
 }
 
 /*
- * Re-writes all data back to the config file, as long as there are
- * changes to write.
+ * Re-writes all data back to the config file, as long as there are changes to 
+ * write.
  */
 void Config::FileResource::writeChanges()
 {
-    using namespace juce;
     writeDataToJSON();
     try
     {
@@ -140,11 +134,11 @@ void Config::FileResource::writeChanges()
     }
     catch(JSONFile::FileException e)
     {
-        DBG("FileResource::" << __func__ << ": " << e.what());
+        DBG(dbgPrefix << __func__ << ": Caught FileException:" << e.what());
     }
     catch(JSONFile::TypeException e)
     {
-        DBG("FileResource::" << __func__ << ": " << e.what());
+        DBG(dbgPrefix << __func__ << ": Caught TypeException:" << e.what());
     }
 }
 
@@ -154,14 +148,13 @@ void Config::FileResource::writeChanges()
  */
 void Config::FileResource::restoreDefaultValue(const DataKey& key)
 {
-    using namespace juce;
     try
     {
         switch(key.dataType)
         {
             case DataKey::stringType:
-                setConfigValue<String>(key,
-                        defaultJson.getProperty<String>(key));
+                setConfigValue<juce::String>(key,
+                        defaultJson.getProperty<juce::String>(key));
                 return;
             case DataKey::intType:
                 setConfigValue<int>(key,
@@ -178,13 +171,10 @@ void Config::FileResource::restoreDefaultValue(const DataKey& key)
     }
     catch(JSONFile::FileException e)
     {
-        DBG("FileResource::" << __func__ << ": " << e.what());
+        DBG(dbgPrefix << __func__ << ": Caught FileException:" << e.what());
     }
     catch(JSONFile::TypeException e)
     {
-        DBG("FileResource::" << __func__ << ": " << e.what());
+        DBG(dbgPrefix << __func__ << ": Caught TypeException:" << e.what());
     }
 }
-
-
-
