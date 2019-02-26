@@ -25,6 +25,9 @@ Plugin 'lifepillar/vim-cheat40'
 Plugin 'scrooloose/nerdtree'
 " pretty status bar
 Plugin 'itchyny/lightline.vim'
+" Markdown editing
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
 call vundle#end()
 
 " Open NERDtree when opening vim without picking a file
