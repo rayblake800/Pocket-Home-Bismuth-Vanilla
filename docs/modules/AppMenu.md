@@ -1,4 +1,4 @@
-## AppMenu Module Documentation ##
+# AppMenu Module Documentation
 
   The AppMenu module displays an application launching menu. This menu displays 
 application shortcuts loaded from standard desktop entry files, and from a JSON 
@@ -28,14 +28,137 @@ adjust various display properties for each menu format. AppMenu provides the
 AppMenu::SettingsComponents class to generate UI components that allow the user
 to directly change AppMenu display settings within the application.
 
-## Public Interface ##
+## Public Interface
 
-# AppMenu/AppMenu.h #
+#### [AppMenu](../../Source/AppMenu/AppMenu.h)
   Creates the AppMenu, returning it as a generic juce::Component pointer.
 
-# AppMenu/ConfigFile.h #
+#### [AppMenu::ConfigFile](../../Source/AppMenu/AppMenu_ConfigFile.h)
   Gets and sets the menu format and menu display properties.
 
-# AppMenu/SettingsComponents.h #
+#### [AppMenu::SettingsComponents](../../Source/AppMenu/AppMenu_SettingsComponents.h)
   Provides UI components that allow the user to view and change menu format
   options.
+
+## Implementation
+
+### Menu Behavior
+
+#### [AppMenu::Initializer](../..Source/AppMenu/Control/AppMenu_Initializer.h)
+   Creates and initializes the main menu component.
+
+#### [AppMenu::Controller](../..Source/AppMenu/Control/AppMenu_Controller.h)
+   Implements core menu functionality. This includes opening and closing folders, creating menu editors, handling popup context menus, and launching application shortcuts.
+
+#### [AppMenu::InputHandler](../..Source/AppMenu/Control/AppMenu_InputHandler.h)
+   Captures key, mouse, and window focus input events, and defines how they are applied to the menu.
+
+### UI Components
+
+#### [AppMenu::MainComponent](../../Source/AppMenu/Components/AppMenu_MainComponent.h)
+   The main UI component used to hold all menu content.
+
+#### [AppMenu::MenuComponent](../../Source/AppMenu/Components/AppMenu_MenuComponent.h)
+   Creates and displays the menu's folder components.
+
+#### [AppMenu::FolderComponent](../../Source/AppMenu/Components/AppMenu_FolderComponent.h)
+   Creates and displays menu buttons for all menu items in a single menu folder.
+
+#### [AppMenu::MenuButton](../../Source/AppMenu/Components/AppMenu_MenuButton.h)
+   A button used to show and activate a single item in the menu.
+
+### Editors
+
+#### [AppMenu::PopupEditor](../../Source/AppMenu/Components/Editors/AppMenu_PopupEditor.h)
+   An abstract basis for all menu item editor components.
+
+#### [AppMenu::CategoryEditor](../..Source/AppMenu/Components/Editors/AppMenu_CategoryEditor.h)
+   A UI component used to edit a list of application categories.
+
+#### [AppMenu::ExistingItemEditor](../..Source/AppMenu/Components/Editors/AppMenu_ExistingItemEditor.h)
+   Updates existing menu items.
+
+#### [AppMenu::NewDesktopAppEditor](../..Source/AppMenu/Components/Editors/AppMenu_NewDesktopAppEditor.h)
+   Creates new .desktop application shortcut files for the current user.
+
+#### [AppMenu::NewConfigItemEditor](../..Source/AppMenu/Components/Editors/AppMenu_NewConfigItemEditor.h)
+   Adds new application shortcuts or folders to the active menu folder.
+
+### Menu Data
+
+#### [AppMenu::ConfigJSON](../..Source/AppMenu/Data/JSON/AppMenu_ConfigJSON.h)
+   Reads and writes menu format settings from a configurable JSON file.
+
+#### [AppMenu::ConfigKeys](../..Source/AppMenu/Data/JSON/AppMenu_ConfigKeys.h)
+   Defines the JSON keys used within the ConfigJSON object's configuration file.
+
+#### [AppMenu::ItemData](../..Source/AppMenu/Data/AppMenu_ItemData.h)
+   A reference-counted internal data object that holds all menu data for a single item in the menu.
+
+#### [AppMenu::MenuItem](../..Source/AppMenu/Data/AppMenu_MenuItem.h)
+   A nullable interface used to share and interact with any type of ItemData object. 
+
+#### [AppMenu::MenuJSON](../..Source/AppMenu/Data/JSON/AppMenu_MenuJSON.h)
+   Reads from and writes to the main menu structure within a configurable JSON file.
+
+#### [AppMenu::MenuFile](../..Source/AppMenu/Data/JSON/AppMenu_MenuFile.h)
+   Safely reads from and writes to the menu's shared AppMenu::MenuJSON object.
+
+#### [AppMenu::MenuKeys](../..Source/AppMenu/Data/JSON/AppMenu_MenuKeys.h)
+   Defines the JSON keys used within the menu JSON file.
+
+#### [AppMenu::ConfigData](../..Source/AppMenu/Data/JSON/AppMenu_ConfigData.h)
+   An AppMenu::ItemData subclass that gets its data from the MenuJSON object's configuration file.
+
+#### [AppMenu::EntryLoader](../..Source/AppMenu/Data/DesktopEntry/AppMenu_EntryLoader.h)
+   Connects with the DesktopEntry module to load DesktopEntry objects for .desktop application shortcut files.
+
+#### [AppMenu::EntryActions](../..Source/AppMenu/Data/DesktopEntry/AppMenu_EntryActions.h)
+   Provides convenience functions for working with groups of DesktopEntry objects.
+
+#### [AppMenu::EntryData](../..Source/AppMenu/Data/DesktopEntry/AppMenu_EntryData.h)
+   An AppMenu::ItemData subclass that gets its data from a .desktop application shortcut file, accessed through a DesktopEntry object.
+
+#### [AppMenu::EntryUpdater](../..Source/AppMenu/Data/DesktopEntry/AppMenu_EntryUpdater.h)
+   Listens for updates to loaded .desktop files and applies them to the application menu.
+
+### Menu Formats
+
+#### [AppMenu::Format](../..Source/AppMenu/Formats/AppMenu_Format.h)
+   Defines all available menu formats.
+
+### Scrolling Menu Format
+   Displays the application menu as scrolling vertical lists of applications.
+
+#### [AppMenu::Scrolling::Initializer](../..Source/AppMenu/Formats/Scrolling/AppMenu_Scrolling_Initializer.h)
+   Creates the AppMenu using the scrolling menu format.
+
+#### [AppMenu::Scrolling::InputHandler](../..Source/AppMenu/Formats/Scrolling/AppMenu_Scrolling_InputHandler.h)
+   Defines how user input events are applied to the scrolling menu.
+
+#### [AppMenu::Scrolling::MenuComponent](../..Source/AppMenu/Formats/Scrolling/AppMenu_Scrolling_MenuComponent.h)
+   Defines how the scrolling menu format displays and arranges folder components.
+
+#### [AppMenu::Scrolling::FolderComponent](../..Source/AppMenu/Formats/Scrolling/AppMenu_Scrolling_FolderComponent.h)
+   Defines how the scrolling menu format arranges menu items within each folder.
+
+#### [AppMenu::Scrolling::MenuButton](../..Source/AppMenu/Formats/Scrolling/AppMenu_Scrolling_MenuButton.h)
+   Defines how the scrolling menu format displays individual menu items.
+
+### Paged Menu Format
+   Displays the application menu as a grid of menu items divided into different pages.
+
+#### [AppMenu::Paged::Initializer](../..Source/AppMenu/Formats/Paged/AppMenu_Paged_Initializer.h)
+   Creates the AppMenu using the paged menu format.
+
+#### [AppMenu::Paged::InputHandler](../..Source/AppMenu/Formats/Paged/AppMenu_Paged_InputHandler.h)
+   Defines how user input events are applied to the paged menu.
+
+#### [AppMenu::Paged::MenuComponent](../..Source/AppMenu/Formats/Paged/AppMenu_Paged_MenuComponent.h)
+   Defines how the paged menu format displays and arranges folder components.
+
+#### [AppMenu::Paged::FolderComponent](../..Source/AppMenu/Formats/Paged/AppMenu_Paged_FolderComponent.h)
+   Defines how the scrolling menu format arranges menu items within each folder.
+
+#### [AppMenu::Paged::MenuButton](../..Source/AppMenu/Formats/Paged/AppMenu_Paged_MenuButton.h)
+   Defines how the scrolling menu format displays individual menu items.

@@ -23,10 +23,12 @@ namespace AppMenu { class MainComponent; }
 namespace AppMenu { class Initializer; }
 
 /**
- *  The MainComponent is a container component that holds the AppMenu's menu
- * component, along with the menu's loading spinner. When the menu is created 
- * by AppMenu::createAppMenu, the generic juce::Component pointer returned by
- * that function is actually an AppMenu::MainComponent.
+ *  @brief  A container component that holds the AppMenu's menu component, along
+ *          with the menu's loading spinner. 
+ *
+ *  When the menu is created by AppMenu::createAppMenu, the generic 
+ * juce::Component pointer returned by that function is actually an 
+ * AppMenu::MainComponent.
  *
  *  The MainComponent's main responsibility is to initialize the menu component
  * in a particular AppMenu format, and automatically update the menu whenever

@@ -18,10 +18,11 @@ namespace AppMenu { class InputHandler; }
 namespace AppMenu { class FolderComponent; }
 
 /**
- *  InputHandler captures key and mouse events for the MenuComponent and its 
- * FolderComponent and MenuButton child components. These events are sorted 
- * based on their type and target, and used to call various virtual methods that
- * InputHandler subclasses may override.
+ *  @brief  Captures key and mouse events for the MenuComponent and its 
+ *          FolderComponent and MenuButton child components. 
+ *
+ *  These events are sorted based on their type and target, and used to call 
+ * various virtual methods that InputHandler subclasses may override.
  *
  *  A default implementation for handling mouse clicks is provided. This
  * activates selected menu items, selects un-selected menu items, sets clicked

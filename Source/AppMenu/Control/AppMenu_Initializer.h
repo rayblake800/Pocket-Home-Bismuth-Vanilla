@@ -17,6 +17,8 @@ namespace AppMenu { class Controller; }
 namespace AppMenu { class InputHandler; }
 
 /**
+ * @brief  Creates and initializes the main AppMenu component.
+ *
  *  Each AppMenu format must provide its own implementation of 
  * AppMenu::Initializer.  Each format's initializer will need to be added to the
  * switch statement within the createInitializer function in AppMenu.cpp.

@@ -5,9 +5,9 @@
 /**
  * @file  AppMenu_Controller.h
  *
- * @brief  Implements core menu functionality, opening and closing folders,
- *         creating menu editors, handling popup context menus, and launching 
- *         application shortcuts.
+ * @brief  Implements core menu functionality. This includes opening and closing
+ *         folders, creating menu editors, handling popup context menus, and 
+ *         launching application shortcuts.
  */
 
 #include "Locale/TextUser.h"
@@ -22,11 +22,12 @@ namespace AppMenu { class MenuItem; }
 namespace AppMenu { class PopupEditor; }
 
 /**
- *   The Controller is responsible for implementing all menu functionality not
- *  related to menu display or input handling. The controller defines the
- *  behavior of activated menu items, launches applications, opens or closes
- *  menu folders, creates and handles popup context menus, and creates 
- *  appropriate popup editors when necessary.
+ *  @brief  Implements all menu functionality not related to menu display or 
+ *          input handling. 
+ *
+ *  The controller defines the behavior of activated menu items, launches 
+ * applications, opens or closes menu folders, creates and handles popup context
+ * menus, and creates appropriate popup editors when necessary.
  */
 
 class AppMenu::Controller : public Locale::TextUser
