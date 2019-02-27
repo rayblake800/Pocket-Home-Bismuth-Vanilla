@@ -1,4 +1,18 @@
 {  
+    "home page background"   : "wallpaper/chipBackground.png",
+    "login page background" : "login/background.png",
+    "default icon"          : "icons/chip.png",
+    "login image"           : "login/chipVector.svg",
+
+    "menu frame": {
+        "colours": [
+            "0xffb88e47",
+            "0xffb8b8b8"
+        ],
+        "image files": [
+            "component assets/MenuFrame/frame.svg"
+        ]
+    },
     "battery": {
         "colours": [
             "0xffeb008b",
@@ -17,15 +31,18 @@
             "component assets/BatteryIcon/noBattery.svg"
         ]
     },
-    "menu frame": {
+    "wifi": {
         "colours": [
-            "0xffb88e47",
-            "0xffb8b8b8"
+            "0xffeb008b"
         ],
         "image files": [
-            "component assets/MenuFrame/frame.svg"
+            "component assets/WifiIcon/wifiOff.svg",
+            "component assets/WifiIcon/wifiStrength0.svg",
+            "component assets/WifiIcon/wifiStrength1.svg",
+            "component assets/WifiIcon/wifiStrength2.svg",
+            "component assets/WifiIcon/wifiStrength3.svg"
         ]
-    },
+    },  
     "power button": {
         "colours": [
             "0xffeb008b"
@@ -42,23 +59,6 @@
             "component assets/SettingsButton/settingsIcon.svg"
         ]
     },
-    "time": {
-        "colours": [
-            "0xffffffff"
-        ]
-    },
-    "wifi": {
-        "colours": [
-            "0xffeb008b"
-        ],
-        "image files": [
-            "component assets/WifiIcon/wifiOff.svg",
-            "component assets/WifiIcon/wifiStrength0.svg",
-            "component assets/WifiIcon/wifiStrength1.svg",
-            "component assets/WifiIcon/wifiStrength2.svg",
-            "component assets/WifiIcon/wifiStrength3.svg"
-        ]
-    },  
     "popup menu": {
         "colours": [
             "0xffb88e47",
@@ -131,16 +131,22 @@
             "component assets/WifiIcon/lock.svg"
         ]
     },
-
-    "login page": {
-        "image files": [
-            "login/background.png"
+    "volume slider" : {
+        "colours": [
+            "0xffffffff"
+        ],
+        "image files" : [
+            "component assets/VolumeSlider/volumeIconLo.svg",
+            "component assets/VolumeSlider/volumenIconHi.svg"
         ]
     },
-
-    "login image": {
+    "brightness slider" : {
+        "colours" : [
+            "0xffffffff"
+        ],
         "image files" : [
-            "login/chipVector.svg"
+            "component assets/BrightnessSlider/brightnessIconLo.svg",
+            "component assets/BrightnessSlider/brightnessIconHi.svg"
         ]
     }
 }

@@ -6,9 +6,33 @@
  *         defined in the imageResource.json configuration file.
  */
 
-#include "JuceHeader.h"
+#include "Config_DataKey.h"
 
 namespace Theme { namespace Image { namespace JSONKeys {
+
+/* Background image used on the HomePage: */
+static const Config::DataKey homeBackground
+    ("home page background", Config::DataKey::stringType);
+
+/* Background image used on the LoginPage: */
+static const Config::DataKey loginBackground
+    ("login page background", Config::DataKey::stringType);
+
+/* Default AppMenu icon image: */
+static const Config::DataKey defaultIcon
+    ("default icon", Config::DataKey::stringType);
+
+/* Image displayed on the LoginPage: */
+static const Config::DataKey loginImage
+    ("login image", Config::DataKey::stringType);
+
+static const std::vector<Config::DataKey> imageKeys
+{
+    homeBackground,
+    loginBackground,
+    defaultIcon,
+    loginImage
+};
 
 //######################### UI Component Data ##############################
 //Defines all component types managed in the config file
@@ -38,11 +62,10 @@ static const juce::Identifier spinner
         ("loading spinner");
 static const juce::Identifier lockIcon
         ("lock icon");
-static const juce::Identifier loginPage
-        ("login page");
-static const juce::Identifier loginImage
-        ("login image");
-
+static const juce::Identifier volumeSlider
+        ("volume slider");
+static const juce::Identifier brightnessSlider
+        ("brightness slider");
 
 static const juce::Array<juce::Identifier> components =
 {
@@ -59,7 +82,7 @@ static const juce::Array<juce::Identifier> components =
     settingsListBtn,
     spinner,
     lockIcon,
-    loginPage,
-    loginImage
+    volumeSlider,
+    brightnessSlider,
 };
 }}}

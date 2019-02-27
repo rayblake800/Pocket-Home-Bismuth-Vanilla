@@ -2,7 +2,6 @@
 #include "Theme_Image_JSONKeys.h"
 
 namespace ThemeImages = Theme::Image;
-namespace ComponentKeys = Theme::Image::JSONKeys;
 
 /* SharedResource object key */
 const juce::Identifier ThemeImages::JSONResource::resourceKey
@@ -16,7 +15,7 @@ Config::FileResource(resourceKey, configFilename)
 {
     using juce::DynamicObject;
     using juce::Identifier;
-    const juce::Array<Identifier> keys = ComponentKeys::components;
+    const juce::Array<Identifier> keys = JSONKeys::components;
     for (const Identifier& key : keys)
     {
 	    DynamicObject::Ptr listData = initProperty<DynamicObject*>(key);
@@ -41,7 +40,7 @@ void ThemeImages::JSONResource::writeDataToJSON()
 {
     using juce::DynamicObject;
     using juce::Identifier;
-    const juce::Array<Identifier>& keys = ComponentKeys::components;
+    const juce::Array<Identifier>& keys = JSONKeys::components;
     for (const Identifier& key : keys)
     {
         if(assetLists.count(key) != 0)
@@ -59,8 +58,5 @@ void ThemeImages::JSONResource::writeDataToJSON()
 const std::vector<Config::DataKey>& ThemeImages::JSONResource::getConfigKeys()
         const  
 {
-    // imageResource.json doesn't have any basic values, it only holds 
-    // ComponentSettings objects.
-    static const std::vector<Config::DataKey> emptyList;
-    return emptyList;
+    return JSONKeys::imageKeys;
 }

@@ -32,4 +32,78 @@ public:
      * @return              The image asset list defined for that component.
      */
     AssetList getAssetList(const juce::Identifier& componentKey) const;
+
+    /**
+     * @brief  Gets the path to the HomePage background image.
+     *
+     * @return  The HopePage background path. This may be either a global path,
+     *          or relative to the application's assets folder. This may be
+     *          the empty string.
+     */
+    juce::String getHomeBackgroundPath() const;
+
+    /**
+     * @brief  Gets the path to the LoginPage background image.
+     *
+     * @return  The LoginPage background path. This may be either a global path,
+     *          or relative to the application's assets folder. This may be
+     *          the empty string.
+     */
+    juce::String getLoginBackgroundPath() const;
+
+    /**
+     * @brief  Gets the path to the default AppMenu icon image.
+     *
+     * @return  The default icon path. This may be either a global path,
+     *          or relative to the application's assets folder. This may be
+     *          the empty string.
+     */
+    juce::String getDefaultIconPath() const;
+
+    /**
+     * @brief  Gets the path to the image displayed in the center of the 
+     *         LoginPage.
+     *
+     * @return  The LoginPage path. This may be either a global path,
+     *          or relative to the application's assets folder. This may be
+     *          the empty string.
+     */
+    juce::String getLoginImagePath() const;
+
+    /**
+     * @brief  Sets the path to the HomePage background image.
+     *
+     * @param newPath  The new image path, either global or relative to the
+     *                 assets directory, or the empty string to disable this
+     *                 image.
+     */
+    void setHomeBackgroundPath(const juce::String newPath);
+
+    /**
+     * @brief  Sets the path to the LoginPage background image.
+     *
+     * @param newPath  The new image path, either global or relative to the
+     *                 assets directory, or the empty string to disable this
+     *                 image.
+     */
+    void setLoginBackgroundPath(const juce::String newPath);
+
+    /**
+     * @brief  Sets the path to the default AppMenu icon image.
+     *
+     * @param newPath  The new image path, either global or relative to the
+     *                 assets directory, or the empty string to disable this
+     *                 image.
+     */
+    void setDefaultIconPath(const juce::String newPath);
+
+    /**
+     * @brief  Sets the path to the image displayed in the center of the
+     *         LoginPage.
+     *
+     * @param newPath  The new image path, either global or relative to the
+     *                 assets directory, or the empty string to disable this
+     *                 image.
+     */
+    void setLoginImagePath(const juce::String newPath);
 };

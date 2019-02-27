@@ -40,8 +40,7 @@ private:
      * @brief   Gets the key string and data type for each basic value stored in
      *          imageAsset.json.
      * 
-     * @return  The empty list, as imageAsset.json only stores AssetList 
-     *          objects.
+     * @return  Keys to all basic image paths stored in the JSON file.
      */
     virtual const std::vector<Config::DataKey>& getConfigKeys() 
         const final override;
