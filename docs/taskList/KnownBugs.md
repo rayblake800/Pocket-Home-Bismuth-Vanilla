@@ -1,5 +1,9 @@
 ## Known Issues
 
+### AppMenu Module
+    - Editor changes are applied inconsistantly on the Pocket-Chip build.
+    - Changes are applied to the menu but not saved to JSON.
+
 ### Icon Module
     - .xpm icon files are not supported by the Juce library's Image class.
     - Juce .svg rendering fails to correctly render some .svg files.

@@ -1,6 +1,8 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_PopupEditor.h"
 #include "Layout_Component_ConfigFile.h"
+#include "Layout_Component_Manager.h"
+#include "Layout_Component_JSONKeys.h"
 #include "Layout_Component_TextSize.h"
 #include "Icon_Loader.h"
 #include "Utils.h"
@@ -225,11 +227,23 @@ void AppMenu::PopupEditor::editorButtonClicked(juce::Button* button)
     using juce::StringArray;
     if (button == &categoryEditButton)
     {
-        categoryEditor = new CategoryEditor(categories, 
+        categoryEditor.reset(new CategoryEditor(categories, 
                 [this](StringArray newCategories)
         {
             categories = newCategories;
-        });
-        addAndMakeVisible(categoryEditor);
+        }));
+        categoryEditor->setBounds(getLocalBounds());
+        addAndMakeVisible(categoryEditor.get());
+    }
+}
+
+/*
+ * Ensures that the CategoryEditor bounds always match the main editor bounds.
+ */
+void AppMenu::PopupEditor::editorResized()
+{
+    if(categoryEditor != nullptr)
+    {
+        categoryEditor->setBounds(getLocalBounds());
     }
 }

@@ -137,8 +137,8 @@ protected:
      * @brief  Saves editor field values back to the application menu.
      */
     virtual void commitEdits() = 0;
-private:
 
+private:
     /**
      * @brief  Triggers whenever the icon field is set to a new value.
      * 
@@ -152,6 +152,12 @@ private:
      * @param button  The category editor button.
      */
     virtual void editorButtonClicked(juce::Button* button) override;
+
+    /**
+     * @brief  Ensures that the CategoryEditor bounds always match the main 
+     *         editor bounds.
+     */
+    virtual void editorResized() final override;
 
     /* Used to cancel pending icon requests on destruction. */
     Icon::RequestID iconRequestID;
@@ -171,7 +177,7 @@ private:
     /* Launches a category editor pop-up */
     juce::TextButton categoryEditButton; 
     /* Holds the category editor when it's launched. */
-    juce::ScopedPointer<CategoryEditor> categoryEditor;
+    std::unique_ptr<CategoryEditor> categoryEditor;
     /* List of editable categories associated with this application/folder: */
     juce::StringArray categories;
 

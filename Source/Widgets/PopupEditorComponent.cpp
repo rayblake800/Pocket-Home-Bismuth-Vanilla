@@ -131,6 +131,7 @@ void PopupEditorComponent::resized()
 {
     DrawableImageComponent::resized();
     layoutManager.layoutComponents(getLocalBounds());
+    editorResized();
 }
 
 /*

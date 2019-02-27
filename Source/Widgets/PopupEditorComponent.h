@@ -97,6 +97,14 @@ protected:
 
 private:
     /**
+     * @brief  Runs whenever the Component object's bounds change.
+     *
+     *  Subclasses should override this function instead of resized to handle
+     * resize events.
+     */
+    virtual void editorResized() { }
+
+    /**
      * Manages the cancel and confirm buttons, passing all other button events
      * to editorButtonClicked().
      * 
