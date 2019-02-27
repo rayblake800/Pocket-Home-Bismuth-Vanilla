@@ -384,6 +384,7 @@ void AppMenu::MenuItem::saveChanges()
 {
     if(!isNull())
     {
-        getData()->saveChanges();
+        ItemData* data = getData();
+        data->saveChanges();
     }
 }

@@ -85,12 +85,17 @@ public:
             MenuItem& parentFolder,
             const int index);
 
-private:
     /**
-     * @brief  Copies all menu data back to the JSON configuration file.
+     * @brief  Copies all menu data back to the resource's cached JSON data.
      */
     void writeDataToJSON() override final;
+    
+    /**
+     * @brief  Writes all menu changes back to the menu JSON file.
+     */
+    void writeMenuChanges();
 
+private:
     /**
      * @brief   Gets all parameters with basic data types tracked by this
      *          ConfigFile.

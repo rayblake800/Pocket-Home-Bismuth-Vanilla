@@ -82,4 +82,10 @@ public:
             const juce::StringArray& categories,
             MenuItem& parentFolder,
             const int index);
+
+    /**
+     * @brief  Write all changes to the menu structure back to the menu's JSON
+     *         file.
+     */
+    void saveChanges();
 };

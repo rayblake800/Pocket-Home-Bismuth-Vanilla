@@ -1,6 +1,7 @@
 #define APPMENU_IMPLEMENTATION
-#include "AppMenu_MenuKeys.h"
 #include "AppMenu_ConfigData.h"
+#include "AppMenu_MenuKeys.h"
+#include "AppMenu_MenuFile.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::ConfigData";
@@ -192,8 +193,7 @@ bool AppMenu::ConfigData::isMovable() const
 /*
  * Gets an appropriate title to use for a deletion confirmation window.
  */
-juce::String 
-AppMenu::ConfigData::getConfirmDeleteTitle() const
+juce::String AppMenu::ConfigData::getConfirmDeleteTitle() const
 {
     if(isFolder())
     {

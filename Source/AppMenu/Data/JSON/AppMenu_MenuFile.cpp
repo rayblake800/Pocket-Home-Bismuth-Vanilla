@@ -34,3 +34,11 @@ AppMenu::MenuItem AppMenu::MenuFile::addMenuItem(
     return parentFolder.getFolderItem(index);
 }
 
+/*
+ * Write all changes to the menu structure back to the menu's JSON file.
+ */
+void AppMenu::MenuFile::saveChanges()
+{
+    SharedResource::LockedPtr<MenuJSON> appJSON = getWriteLockedResource();
+    appJSON->writeMenuChanges();
+}

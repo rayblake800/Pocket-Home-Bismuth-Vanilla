@@ -109,6 +109,14 @@ void AppMenu::MenuJSON::writeDataToJSON()
 }
 
 /*
+ * Writes all menu changes back to the menu JSON file.
+ */
+void AppMenu::MenuJSON::writeMenuChanges()
+{
+    writeChanges();
+}
+
+/*
  * Gets all parameters with basic data types tracked by this ConfigFile.
  */
 const std::vector<Config::DataKey>& AppMenu::MenuJSON::getConfigKeys() const 
@@ -191,6 +199,6 @@ AppMenu::MenuJSON::ConfigData::createChildItem()
 void AppMenu::MenuJSON::ConfigData::JSONWriter::writeChanges()
 {
     auto appJSON = getWriteLockedResource();
-    appJSON->writeDataToJSON();
+    appJSON->writeMenuChanges();
 }
 
