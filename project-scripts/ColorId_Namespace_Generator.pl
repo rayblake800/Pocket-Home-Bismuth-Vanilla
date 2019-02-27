@@ -1,4 +1,5 @@
-#
+#!/usr/bin/perl
+
 # ColourIds Namespace Generator
 #
 # usage: 
@@ -18,7 +19,8 @@ use File::Slurp;
 
 if(!defined($ARGV[0]) || !defined($ARGV[1]))
 {
-    die "usage: perl ColorIDs_Namespace_Generator.pl [project directory] [output file]\n";}
+    die "usage: ./ColorIDs_Namespace_Generator.pl [project directory] [output file]\n";
+}
 
 my $colourIds = "namespace ColourIds\n{\n";
 

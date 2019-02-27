@@ -15,6 +15,8 @@ namespace Page
     enum class Type;
 }
 
+class LoginPage;
+
 /**
  * @brief  Creates all new Page::Component objects, and allows pages to create
  *         other pages.

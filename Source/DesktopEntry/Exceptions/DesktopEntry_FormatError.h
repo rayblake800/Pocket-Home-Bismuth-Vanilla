@@ -1,15 +1,21 @@
 #pragma once
+/**
+ * @file  DesktopEntry_FormatError.h
+ *
+ * @brief  Helps prevent invalid data from being added to desktop entry files.
+ */
+
 #include <exception>
 #include "JuceHeader.h"
+
+namespace DesktopEntry { struct FormatError; }
 
 /**
  * @file  DesktopEntry_FormatError.h
  *
- * @brief  Signals that an attempt was made to add invalid data to a
- *         DesktopEntry object.
+ * @brief  Signals that an attempt was made to add invalid data to an EntryFile 
+ *         object.
  */
-namespace DesktopEntry { struct FormatError; }
-
 struct DesktopEntry::FormatError : public std::exception
 {
 public:

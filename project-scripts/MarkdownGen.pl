@@ -24,7 +24,7 @@ sub findFiles
     my $fullPath = $File::Find::name;
     if($fullPath =~ /^.+\.h$/)
 	{
-        my $relativePath = "../..".$fullPath;
+        my $relativePath = "../../".$fullPath;
         my $name = $_;
         $name = substr($name, 0, length($name) - 2);
         $name =~ s/_/::/g;

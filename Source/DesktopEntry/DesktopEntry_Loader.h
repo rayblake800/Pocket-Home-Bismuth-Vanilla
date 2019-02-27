@@ -1,16 +1,21 @@
 #pragma once
-#include "DesktopEntry_CallbackID.h"
-#include "SharedResource_Handler.h"
-
 /** 
  * @file  DesktopEntry_Loader.h
  *
- * @brief  Finds and caches all desktop entry file data.
+ * @brief  Provides an interface for accessing shared desktop entry data.
  */
+
+#include "DesktopEntry_CallbackID.h"
+#include "SharedResource_Handler.h"
+
 namespace DesktopEntry { class Loader; }
 namespace DesktopEntry { class LoadingThread; }
 namespace DesktopEntry { class EntryFile; }
 
+/**
+ * @brief  Connects to the DesktopEntry::LoadingThread to read and update
+ *         desktop entry data.
+ */
 class DesktopEntry::Loader : public SharedResource::Handler<LoadingThread>
 {
 public:

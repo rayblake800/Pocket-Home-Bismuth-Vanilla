@@ -1,25 +1,27 @@
 #pragma once
 /** 
- * @file  DesktopEntry/EntryFile.h
+ * @file  DesktopEntry_EntryFile.h
  * 
- * @brief  Reads in standardized .desktop application shortcut files.
+ * @brief  Reads and writes standardized .desktop application shortcut files.
  */
 
 #include "JuceHeader.h"
 #include <map>
 
 /** 
+ * @brief  Represents a .desktop application shortcut file.
+ *
  *  Desktop entry files store all the information needed to create application
  * shortcuts to display in menus.  Each EntryFile loads and shares the data from
  * one of these files, or collects the data needed to create a new desktop entry
  * file.
  *
- * EntryFile objects follow the desktop entry standard defined at 
+ *  EntryFile objects follow the desktop entry standard defined at 
  * freedesktop.org, ignoring invalid data when reading files, and preventing
  * invalid data from being added to desktop entry files. Invalid actions are
  * prevented through the use of DesktopEntry::FormatError exceptions.
  * 
- * Although .directory files are part of the desktop entry standard, they are
+ *  Although .directory files are part of the desktop entry standard, they are
  * not relevant to this module and will be ignored.
  */
 namespace DesktopEntry { class EntryFile; }
@@ -92,8 +94,8 @@ public:
      *
      * @param toCompare  Another desktop entry to compare with this one.
      *
-     * @return  True if this entry's name comes before toCompare's name
-     *          alphabetically, false otherwise.
+     * @return           True if this entry's name comes before toCompare's name
+     *                   alphabetically, false otherwise.
      */
     bool operator<(const EntryFile& toCompare) const;
 
@@ -212,8 +214,8 @@ public:
      *
      * @param actionID  The string identifying a desktop entry action.
      *
-     * @return       The action's launch command, or the empty string if the
-     *               index is invalid.
+     * @return          The action's launch command, or the empty string if the
+     *                  index is invalid.
      */
     juce::String getActionLaunchCommand(const juce::String actionID) const;
 
@@ -413,93 +415,92 @@ private:
        mapped to functions for importing and exporting that key's data.  */
     static const std::map<juce::Identifier, DataConverter> keyGuide;
 
-    /* The source .desktop file. */
+    /* The source .desktop file: */
     juce::File file;
 
-    /* The desktop entry's desktop file ID. */
+    /* The desktop entry's desktop file ID: */
     juce::String desktopFileID;
     
-    /* The desktop entry's type. */
+    /* The desktop entry's type: */
     Type type = Type::application;
 
-    /* Specific name of the entry's application. */
+    /* Specific name of the entry's application: */
     juce::String name;
 
-    /* Generic name of the entry's application. */
+    /* Generic name of the entry's application: */
     juce::String genericName;
 
-    /* Sets if the entry should appear in menus */
+    /* Sets if the entry should appear in menus: */
     bool noDisplay = false;
 
-    /* Tooltip describing the entry. */
+    /* Tooltip describing the entry: */
     juce::String comment;
 
-    /* The entry icon's name or path. */
+    /* The entry icon's name or path: */
     juce::String icon;
 
     /* If not empty, defines the only desktop environments that should show the
        entry. */
     juce::StringArray onlyShowIn;
 
-    /* The list of desktop environments where the entry should not appear. */
+    /* The list of desktop environments where the entry should not appear: */
     juce::StringArray notShowIn;
 
     /* Sets if this entry is an application that should be activated over
-       D-Bus */
+       D-Bus. */
     bool dBusActivatable = false;
 
     /* Path to an executable file on disk used to determine if the program is
-       actually installed. */
+       actually installed: */
     juce::String tryExec;
 
-    /* Program to execute, possibly with arguments. */
+    /* Program to execute, possibly with arguments: */
     juce::String exec;
 
     /* If the entry is an application, the working directory where the program
-       should run. */
+       should run: */
     juce::String path;
 
-    /* Whether this entry's program runs in a terminal window. */
+    /* Whether this entry's program runs in a terminal window: */
     bool terminal = false;
 
-    /* An alternate action the entry can perform. */
+    /* An alternate action the entry can perform: */
     struct Action
     {
-        /* The action's title */
+        /* The action's title: */
         juce::String title;
-        /* The action's icon name or path. */
+        /* The action's icon name or path: */
         juce::String icon;
-        /* The command to execute the action. */
+        /* The command to execute the action: */
         juce::String exec;
     };
 
-    /* Names identifying application actions. */
+    /* Names identifying application actions: */
     juce::StringArray actionTypes;
     
     /* Maps Action ID strings to Action data. */
     std::map<juce::String, Action> actions;
 
-    /* MIME types supported by this entry's application. */
+    /* MIME types supported by this entry's application:. */
     juce::StringArray mimeTypes;
 
-    /* Categories in which this entry should be shown. */
+    /* Categories in which this entry should be shown: */
     juce::StringArray categories;
 
-    /* A list of interfaces that this entry's application implements. */
+    /* A list of interfaces that this entry's application implements: */
     juce::StringArray implements;
 
-    /* A list of strings describing the entry. */
+    /* A list of strings describing the entry: */
     juce::StringArray keywords;
 
-    /* Whether the entry's application is known to support startup notification
-     */
+    /* Whether the entry's application is known to support startup 
+     * notifications: */
     bool startupNotify;
 
     /* If specified, it is known that the entry's application will map to a 
        window with this string as its WM class or name hint. */
     juce::String startupWMClass;
 
-    /* The URL used if this entry is a link. */
+    /* The URL used if this entry is a link: */
     juce::String url;
 };
-

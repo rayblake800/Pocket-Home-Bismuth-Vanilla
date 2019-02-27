@@ -4,9 +4,13 @@
 #include "XWindowInterface.h"
 #include <cstdint>
 
-/*
- * If a juce::ChildProcess crashes, attempts to wait for it to terminate will
- * wait forever if not given a timeout period.  Instead of waiting indefinitely,
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "LaunchedProcess::";
+#endif
+
+/* If a juce::ChildProcess crashes, attempts to wait for it to terminate will
+ * wait forever if not given a timeout period. Instead of waiting indefinitely,
  * LaunchedProcess will repeatedly wait for processCheckInterval milliseconds,
  * checking the process state between waiting periods.
  */
@@ -19,10 +23,9 @@ static const constexpr int processCheckInterval = 500;
 LaunchedProcess::LaunchedProcess(juce::String launchCommand) :
 launchCommand(launchCommand) 
 {
-    using namespace juce;
     if(childProcess.start(launchCommand))
     {
-        Array<ProcessUtils::ProcessData> childProcs
+        juce::Array<ProcessUtils::ProcessData> childProcs
                 = ProcessUtils::getChildProcesses(ProcessUtils::getProcessId());
         jassert(!childProcs.isEmpty());
         for(const ProcessUtils::ProcessData process : childProcs)
@@ -36,8 +39,7 @@ launchCommand(launchCommand)
     }
     else
     {
-        DBG("LaunchedProcess::" << __func__ << ": Failed to launch "
-                            << launchCommand);
+        DBG(dbgPrefix << __func__ << ": Failed to launch " << launchCommand);
         outputValid = false;
     }
 }
@@ -60,7 +62,7 @@ bool LaunchedProcess::isRunning()
     {
         ProcessUtils::ProcessData process 
                 = ProcessUtils::getProcessData(processId);
-        DBG("LaunchedProcess::" << __func__ << ": process " << launchCommand
+        DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " is in state " 
                 << ProcessUtils::processStateString(process.lastState));
         if(process.lastState == ProcessUtils::ProcessState::dead
@@ -88,9 +90,8 @@ bool LaunchedProcess::kill()
  */
 void LaunchedProcess::waitForProcessToFinish(int timeoutMs)
 {
-    using namespace juce;
     bool indefiniteWait = (timeoutMs == -1);
-    uint32 endTime = juce::Time::getMillisecondCounter() + timeoutMs;
+    juce::uint32 endTime = juce::Time::getMillisecondCounter() + timeoutMs;
     ProcessUtils::ProcessData process = ProcessUtils::getProcessData(processId);
     while(childProcess.isRunning()
             && process.lastState != ProcessUtils::ProcessState::zombie
@@ -105,7 +106,8 @@ void LaunchedProcess::waitForProcessToFinish(int timeoutMs)
         int waitTime = processCheckInterval;
         if(!indefiniteWait)
         {
-            uint32 timeLeft = endTime - juce::Time::getMillisecondCounter();
+            juce::uint32 timeLeft = endTime 
+                    - juce::Time::getMillisecondCounter();
             if(timeLeft < waitTime)
             {
                 waitTime = timeLeft;
@@ -114,12 +116,15 @@ void LaunchedProcess::waitForProcessToFinish(int timeoutMs)
         childProcess.waitForProcessToFinish(waitTime);
         process = ProcessUtils::getProcessData(processId);
     }
-    if(childProcess.isRunning())
+#ifdef JUCE_DEBUG
+    if(juce::Time::getMillisecondCounter() >= endTime
+            && childProcess.isRunning())
     {
-        DBG("LaunchedProcess::" << __func__ << ": process " << launchCommand
+        DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " did not finish, process state="
                 << ProcessUtils::processStateString(process.lastState));
     }
+#endif
 }
 
 /*
@@ -127,10 +132,9 @@ void LaunchedProcess::waitForProcessToFinish(int timeoutMs)
  */
 juce::String LaunchedProcess::getProcessOutput()
 {
-    using namespace juce;
     if(!outputValid)
     {
-        return String();
+        return juce::String();
     }
     if(!isRunning())
     {
@@ -140,15 +144,13 @@ juce::String LaunchedProcess::getProcessOutput()
     {    
         ProcessUtils::ProcessData process 
                 = ProcessUtils::getProcessData(processId);
-        DBG("LaunchedProcess::" << __func__ << ": process " << launchCommand
+        DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " is still active in state " 
                 << ProcessUtils::processStateString(process.lastState)
                 << ", can't get output");
-        return String();
+        return juce::String();
     }
 }
-
-
     
 /*
  * If the process is finished, return its exit code.
@@ -168,36 +170,34 @@ juce::uint32 LaunchedProcess::getExitCode()
  */
 void LaunchedProcess::activateWindow()
 {
-    using namespace juce;
     if(!isRunning())
     {
-        DBG("LaunchedProcess::" << __func__ << ": application is not running!");
+        DBG(dbgPrefix << __func__ << ": application is not running!");
         return;
     }
     if(processId == -1)
     {
-        DBG("LaunchedProcess::" << __func__ << ": process is not found!");
+        DBG(dbgPrefix << __func__ << ": process is not found!");
         return;
     }
         
     XWindowInterface xWindows;
-    Array<Window> appWindows = xWindows.getMatchingWindows([this, &xWindows]
-        (Window window)
-        {
-            return xWindows.getWindowPID(window) == processId
-                    && xWindows.getWindowName(window).isNotEmpty()
-                    && xWindows.getWindowDesktop(window) != -1;
-        }, false);
+    juce::Array<Window> appWindows = xWindows.getMatchingWindows(
+            [this, &xWindows] (Window window)
+    {
+        return xWindows.getWindowPID(window) == processId
+                && xWindows.getWindowName(window).isNotEmpty()
+                && xWindows.getWindowDesktop(window) != -1;
+    }, false);
     if(appWindows.isEmpty())
     {
-        DBG("LaunchedProcess::" << __func__ << ": no windows found!");
+        DBG(dbgPrefix << __func__ << ": no windows found!");
         return;
     }
     for(const Window& window : appWindows)
     {
-        DBG("LaunchedProcess::" << __func__ << ": Activating window for " 
+        DBG(dbgPrefix << __func__ << ": Activating window for " 
                 << launchCommand);
         xWindows.activateWindow(window);
     }
-    
 }
