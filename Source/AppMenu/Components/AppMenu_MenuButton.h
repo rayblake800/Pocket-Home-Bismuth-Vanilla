@@ -86,6 +86,14 @@ public:
      */
     int getTitleWidth() const;
 
+    /**
+     * @brief  Updates the component if necessary whenever its menu data
+     *         changes.
+     *
+     * @param changedField  The updated data field.
+     */
+    virtual void dataChanged(MenuItem::DataField changedField) final override;
+
 protected:
     /**
      * @brief  Recalculates and saves the menu button title bounds.
@@ -180,14 +188,6 @@ private:
      *           the text bounds.
      */
     virtual juce::Justification getTextJustification() const = 0;
-
-    /**
-     * @brief  Updates the component if necessary whenever its menu data
-     *         changes.
-     *
-     * @param changedField  The updated data field.
-     */
-    virtual void dataChanged(MenuItem::DataField changedField) final override;
 
     /**
      * @brief  Reloads the button icon image if necessary.

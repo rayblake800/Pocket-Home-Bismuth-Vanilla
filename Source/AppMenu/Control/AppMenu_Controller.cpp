@@ -307,18 +307,34 @@ void AppMenu::Controller::createNewEntryEditor(const MenuItem categorySource)
 void AppMenu::Controller::createExistingItemEditor(MenuItem toEdit)
 {
     juce::StringArray oldCategories = toEdit.getCategories();
+    juce::String oldIcon = toEdit.getIconName();
     PopupEditor* newEditor = new ExistingItemEditor(toEdit, 
-    [this, oldCategories, toEdit]()
+    [this, oldCategories, oldIcon, toEdit]()
     {
+        // Refresh desktop entry items if folder categories change.
         if(toEdit.isFolder() && oldCategories != toEdit.getCategories())
         {
-            // Categories changed, refresh desktop entry items
             for(int i = toEdit.getFolderSize() - 1;
                     i >= toEdit.getMovableChildCount(); i--)
             {
                toEdit.getFolderItem(i).remove(false); 
             }
             entryLoader.loadFolderEntries(toEdit);
+        }
+        // Force the menu button to reload the icon if the icon changes.
+        if(oldIcon != toEdit.getIconName())
+        {
+            int folderIndex = 0;
+            for(MenuItem m = toEdit.getParentFolder();
+                    !m.getParentFolder().isNull();
+                    m = m.getParentFolder())
+            {
+                folderIndex++;
+            }
+            FolderComponent* folder = menuComponent->getOpenFolder(folderIndex);
+            MenuButton* editedButton 
+                    = folder->getButtonComponent(toEdit.getIndex());
+            editedButton->dataChanged(MenuItem::DataField::icon);
         }
         menuComponent->removeEditor();
     });

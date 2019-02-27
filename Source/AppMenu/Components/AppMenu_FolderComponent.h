@@ -105,7 +105,6 @@ public:
      */
     virtual void updateButtonLayout() = 0;
 
-protected:
     /**
      * @brief  Gets the button component of a child menu item in this folder.
      *

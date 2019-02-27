@@ -63,6 +63,23 @@ int AppMenu::MenuButton::getTitleWidth() const
 }
 
 /*
+ * Updates the component if necessary whenever its menu data changes.
+ */
+void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
+{
+    using DataField = MenuItem::DataField;
+    if(changedField == DataField::title)
+    {
+        updateTitleBounds();
+        repaint();
+    }
+    else if(changedField == DataField::icon)
+    {
+        loadIcon();
+    }
+}
+
+/*
  * Recalculates and saves the menu button title bounds.
  */
 void AppMenu::MenuButton::updateTitleBounds()
@@ -110,22 +127,6 @@ int AppMenu::MenuButton::findTitleBGWidth
     return width;
 }
 
-/*
- * Updates the component if necessary whenever its menu data changes.
- */
-void AppMenu::MenuButton::dataChanged(MenuItem::DataField changedField)
-{
-    using DataField = MenuItem::DataField;
-    if(changedField == DataField::title)
-    {
-        updateTitleBounds();
-        repaint();
-    }
-    else if(changedField == DataField::icon)
-    {
-        loadIcon();
-    }
-}
 
 
 /*
@@ -136,7 +137,10 @@ void AppMenu::MenuButton::loadIcon()
     using juce::Image;
     if(!iconBounds.isEmpty() && !iconCallbackID)
     {
-        icon = AssetFiles::loadImageAsset("appIcons/default.png");
+        if(!icon.isValid())
+        {
+            icon = AssetFiles::loadImageAsset("appIcons/default.png");
+        }
         Icon::Loader iconLoader;
 
         iconCallbackID = iconLoader.loadIcon(
