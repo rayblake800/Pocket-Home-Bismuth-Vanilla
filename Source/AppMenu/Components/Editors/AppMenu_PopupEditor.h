@@ -163,12 +163,12 @@ private:
     Icon::RequestID iconRequestID;
 
     /* Label text: "Name:" */
-    ScalingLabel nameLabel;     
+    Widgets::BoundedLabel nameLabel;     
     /* Edits the application/folder display name. */
     juce::TextEditor titleEditor;
 
     /* Label text: "Icon path:" */
-    ScalingLabel iconLabel; 
+    Widgets::BoundedLabel iconLabel; 
     /* Draws a preview of the selected icon. */
     DrawableImageComponent iconPreview;
     /* Edits the application/folder icon */
@@ -182,12 +182,12 @@ private:
     juce::StringArray categories;
 
     /* Label text: "Command:" */
-    ScalingLabel commandLabel;
+    Widgets::BoundedLabel commandLabel;
     /* Edits the application launch command */
     juce::TextEditor commandEditor;
 
     /* Label text: "Run in terminal:" */
-    ScalingLabel terminalCheckboxLabel;
+    Widgets::BoundedLabel terminalCheckboxLabel;
     /* Sets if this application launches as a terminal application: */
     SwitchComponent terminalCheckbox;
     

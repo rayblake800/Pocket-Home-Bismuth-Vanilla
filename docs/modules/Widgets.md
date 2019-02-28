@@ -1,5 +1,9 @@
 # Widgets Module Documentation
 
+#### [Widgets::BoundedLabel](../../Source/Widgets/Widgets_BoundedLabel.h)
+
+#### [Widgets::Bounded::TextButton](../../Source/Widgets/Bounded/TextButton.h)
+
 #### [SwitchComponent](../../Source/Widgets/SwitchComponent.h)
 
 #### [ClockLabel](../../Source/Widgets/ClockLabel.h)
@@ -26,11 +30,8 @@
 
 #### [PagedList](../../Source/Widgets/PagedList.h)
 
-#### [ScalingLabel](../../Source/Widgets/ScalingLabel.h)
-
 #### [PopupEditorComponent](../../Source/Widgets/PopupEditorComponent.h)
 
-#### [ScalingTextButton](../../Source/Widgets/ScalingTextButton.h)
 
 #### [NavButton](../../Source/Widgets/NavButton.h)
 

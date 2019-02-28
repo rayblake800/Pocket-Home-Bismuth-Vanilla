@@ -4,7 +4,7 @@
  * 
  * @brief  Allows the user to set or change a password for this application.
  */
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "Page_Component.h"
 #include "Locale/TextUser.h"
 #include "JuceHeader.h"
@@ -54,18 +54,18 @@ private:
     PageListener pageListener;
 
     //Page title
-    ScalingLabel title;
+    Widgets::BoundedLabel title;
     
     //Text field for the current password (if there is one)
-    ScalingLabel curLabel;
+    Widgets::BoundedLabel curLabel;
     juce::TextEditor curPassword;
 
     //Text field for the new password
-    ScalingLabel newLabel;
+    Widgets::BoundedLabel newLabel;
     juce::TextEditor newPassword;
 
     //Text field for the confirmation of the new password
-    ScalingLabel confirmLabel;
+    Widgets::BoundedLabel confirmLabel;
     juce::TextEditor confirmPassword;
 
     //Button for applying the settings

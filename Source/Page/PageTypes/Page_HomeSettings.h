@@ -8,7 +8,7 @@
  */
 
 #include "Page_Component.h"
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "AppMenu_SettingsComponents.h"
 #include "Theme_Image_HomeBackgroundPicker.h"
 #include "Utils.h"
@@ -35,10 +35,10 @@ public:
 
 private:
     /* Page title label: */
-    ScalingLabel title;
+    Widgets::BoundedLabel title;
     
     /* Used to set the HomePage's background image: */
-    ScalingLabel bgLabel;
+    Widgets::BoundedLabel bgLabel;
     Theme::Image::HomeBackgroundPicker homeBGPicker;
 
     /* Used to select AppMenu format settings: */

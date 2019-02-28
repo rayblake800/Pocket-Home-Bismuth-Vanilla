@@ -8,7 +8,7 @@
 #include "Theme_Image_Component.h"
 #include "DrawableImageButton.h"
 #include "Locale/TextUser.h"
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "Page_Component.h"
 
 class InputSettingsPage : public Page::Component, public Locale::TextUser
@@ -47,10 +47,10 @@ private:
     PageListener pageListener;
 
     //Title of the page
-    ScalingLabel title;
+    Widgets::BoundedLabel title;
 
     //Set cursor visibility
-    ScalingLabel cursorVisible;
+    Widgets::BoundedLabel cursorVisible;
     juce::ComboBox chooseMode;
 
     //Button for calibrating

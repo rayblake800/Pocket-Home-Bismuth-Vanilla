@@ -12,7 +12,6 @@
 #include "Page_Component.h"
 #include "WindowFocusedTimer.h"
 #include "Wifi_ControlWidget.h"
-#include "ScalingTextButton.h"
 #include "Theme_Image_Component.h"
 
 
@@ -100,10 +99,6 @@ private:
     /* Turns wifi on or off, shows connection state, and opens the wifi page. */
     Wifi::ControlWidget wifiComponent;
 
-    /* Turns bluetooth on or off, shows connection state, and opens the 
-       bluetooth page. */
-    //BluetoothSettingsComponent bluetoothComponent;
-
     /* Sets the display brightness */
     IconSliderComponent screenBrightnessSlider;
 
@@ -112,6 +107,7 @@ private:
 
     /* Opens the settings list page */
     Theme::Image::Component<DrawableImageButton> settingsListBtn;
+
     /* Sets the bounds of the settings list button: */
     Layout::Component::Manager listButtonManager; 
 };

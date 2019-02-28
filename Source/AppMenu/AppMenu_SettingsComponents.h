@@ -6,7 +6,7 @@
  */
 
 #include "Locale/TextUser.h"
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "CounterComponent.h"
 #include "AppMenu_ConfigFile.h"
 #include "JuceHeader.h"
@@ -119,14 +119,14 @@ private:
     ConfigFile formatConfig;
 
     /* Used to select the AppMenu format: */
-    ScalingLabel menuFormatLabel;
+    Widgets::BoundedLabel menuFormatLabel;
     juce::ComboBox menuFormatPicker;
 
     /* Used to select the maximum column count for AppMenu grids: */
-    ScalingLabel columnCountLabel;
+    Widgets::BoundedLabel columnCountLabel;
     CounterComponent columnCounter;
 
     /* Used to select the maximum row count for AppMenu grids: */
-    ScalingLabel rowCountLabel;
+    Widgets::BoundedLabel rowCountLabel;
     CounterComponent rowCounter;
 };

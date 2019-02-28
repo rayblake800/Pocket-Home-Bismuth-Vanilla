@@ -6,7 +6,7 @@
  */
 
 #include "JuceHeader.h"
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "Wifi_SignalIcon.h"
 #include "Theme_Image_Component.h"
 #include "Wifi_AccessPoint.h"
@@ -82,7 +82,7 @@ private:
     Layout::Group::Manager layoutManager;
 
     /* Prints the access point name: */
-    ScalingLabel apNameLabel;
+    Widgets::BoundedLabel apNameLabel;
 
     /* Shows an image representing signal strength: */
     Wifi::SignalIcon signalIcon;

@@ -7,7 +7,7 @@
 
 #include "JuceHeader.h"
 #include "Locale/TextUser.h"
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "DrawableImageComponent.h"
 #include "Theme_Image_ConfigFile.h"
 #include "Page_Component.h"
@@ -104,7 +104,7 @@ private:
 
     /* Page child components: */
     juce::TextButton loginButton;
-    ScalingLabel passwordLabel;
+    Widgets::BoundedLabel passwordLabel;
     juce::TextEditor passwordField;
     DrawableImageComponent loginImage;
 

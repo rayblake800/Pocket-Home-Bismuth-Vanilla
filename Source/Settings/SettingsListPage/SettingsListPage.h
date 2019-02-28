@@ -8,7 +8,6 @@
 #include "Page_Component.h"
 #include "Locale/TextUser.h"
 #include "NavButton.h"
-#include "ScalingLabel.h"
 #include "PagedList.h"
 
 /**

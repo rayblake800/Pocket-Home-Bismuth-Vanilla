@@ -1,7 +1,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "Locale/TextUser.h"
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "Page_Component.h"
 
 /**
@@ -41,10 +41,10 @@ private:
     PageListener pageListener;
 
     //Title of the page
-    ScalingLabel titleLabel;
+    Widgets::BoundedLabel titleLabel;
 
     //Text field for the current password
-    ScalingLabel curPwdLabel;
+    Widgets::BoundedLabel curPwdLabel;
     juce::TextEditor curPassword;
 
     //Triggers the attempted password removal

@@ -71,7 +71,7 @@ private:
     PageListener pageListener;
 
     /* Identifies this pocket-home build: */
-    ScalingLabel buildLabel;
+    Widgets::BoundedLabel buildLabel;
     /* Turns off the system: */
     juce::TextButton powerOffButton;
     /* Starts sleep mode: */
@@ -81,7 +81,7 @@ private:
     /* Shows a page that gives the user the option to enter flashing mode: */
     juce::TextButton felButton;
     /* Identifies the pocket-home version:*/
-    ScalingLabel versionLabel;
+    Widgets::BoundedLabel versionLabel;
     /* Spinner to indicate that the system is rebooting/shutting down: */
     OverlaySpinner overlaySpinner;
     /* The lock screen to display after entering sleep mode: */

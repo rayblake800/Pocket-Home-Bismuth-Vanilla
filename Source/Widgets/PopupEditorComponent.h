@@ -1,5 +1,5 @@
 #pragma once
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "DrawableImageButton.h"
 #include "Layout_Component_Manager.h"
 #include "Layout_Group_Manager.h"
@@ -136,7 +136,7 @@ private:
     void visibilityChanged() override;
 
     //Displays the editor title.
-    ScalingLabel titleLabel;
+    Widgets::BoundedLabel titleLabel;
 
     //Closes the editor without saving changes.
     DrawableImageButton cancelButton;

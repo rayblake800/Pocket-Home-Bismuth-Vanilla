@@ -9,7 +9,7 @@
 #include "Locale/TextUser.h"
 #include "Wifi_AccessPoint.h"
 #include "Layout_Group_Manager.h"
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "Spinner.h"
 #include "Wifi_Connection_Control_Handler.h"
 #include "JuceHeader.h"
@@ -134,19 +134,19 @@ private:
     AccessPoint selectedAP;
 
     /* Displays an access point's last connection time if applicable. */
-    ScalingLabel lastConnectionLabel;
+    Widgets::BoundedLabel lastConnectionLabel;
 
     /* Allows the user to delete all saved connections linked to the access
      * point. */
     juce::TextButton savedConnectionDeleteButton;
 
     /* Used for entering a password for a secured access point. */
-    ScalingLabel passwordLabel;
+    Widgets::BoundedLabel passwordLabel;
     juce::TextEditor passwordEditor;
 
     /* Clicked to connect or disconnect. */
     ConnectionButton connectionButton;
 
     /* Shows an error message if the connection fails. */
-    ScalingLabel errorLabel;
+    Widgets::BoundedLabel errorLabel;
 };

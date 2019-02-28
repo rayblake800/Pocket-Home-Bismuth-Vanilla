@@ -1,17 +1,20 @@
 #pragma once
-#include "JuceHeader.h"
-#include "ScalingLabel.h"
-#include "Spinner.h"
-
 /**
  * @file OverlaySpinner.h
  * 
- * @brief A UI component displaying a Spinner and optional loading text over
- *        a full-screen overlay.
- * 
- * @see Spinner.h
+ * @brief  Provides an overlay component that displays a loading spinner and
+ *         optional loading text.
  */
 
+#include "Spinner.h"
+#include "JuceHeader.h"
+#include "Widgets_BoundedLabel.h"
+
+
+/**
+ * @brief A UI component displaying a Spinner and optional loading text over
+ *        a full-screen overlay.
+ */
 class OverlaySpinner : public juce::Component
 {
 public:
@@ -54,7 +57,7 @@ private:
     void resized() override;
 
     //Displays optional loading text below the spinner.
-    ScalingLabel loadingText;
+    Widgets::BoundedLabel loadingText;
     
     Spinner spinner;
     

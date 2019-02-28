@@ -5,7 +5,7 @@
  * @brief  Assists the user in flashing the PocketCHIP.
  */
 
-#include "ScalingLabel.h"
+#include "Widgets_BoundedLabel.h"
 #include "Locale/TextUser.h"
 #include "Page_Component.h"
 
@@ -57,9 +57,9 @@ private:
     bool debounce = false;
 
     /* Ask for confirmation */
-    ScalingLabel infoLine1;
+    Widgets::BoundedLabel infoLine1;
     /* Tell the user where to find flashing instructions. */
-    ScalingLabel infoLine2;
+    Widgets::BoundedLabel infoLine2;
     /* Confirm, and reboot into Fel mode */
     juce::TextButton yesButton;
     /* Cancel, and close this page */

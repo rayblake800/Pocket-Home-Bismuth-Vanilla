@@ -7,7 +7,6 @@
 #include "ListEditor.h"
 #include "FileSelectTextEditor.h"
 #include "OverlaySpinner.h"
-#include "ScalingTextButton.h"
 
 Theme::LookAndFeel::LookAndFeel() :
 seguibl(juce::Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
@@ -177,15 +176,6 @@ void Theme::LookAndFeel::drawButtonText(
     Layout::Component::ConfigFile layoutConfig;
     int fontHeight = layoutConfig.getFontHeight
             (textBounds, button.getButtonText());
-    //Check if the TextButton is actually a ScalingTextButton with a maximum
-    //height scale set.
-    ScalingTextButton* scalingBtn = dynamic_cast<ScalingTextButton*>(&button);
-    if(scalingBtn != nullptr 
-       && scalingBtn->getMaxTextScale() != TextSize::largeText)
-    {
-        fontHeight = std::min(fontHeight,
-                layoutConfig.getFontHeight(scalingBtn->getMaxTextScale()));
-    }
     font.setHeight(fontHeight);
     g.setFont(font);
     
