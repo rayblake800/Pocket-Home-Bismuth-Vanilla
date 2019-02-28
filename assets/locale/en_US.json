@@ -26,15 +26,7 @@
     "HomeSettingsPage": 
     {
         "title"           : "Homepage Settings",
-        "background"      : "Background:",
-        "defaultBGOption" : "Default",
-        "colorBGOption"   : "Color",
-        "imageBGOption"   : "Image",
-        "hexValue"        : "Hex value:",
-        "imagePath"       : "Image path:",
-        "invalidColor"    : "Invalid color",
-        "chooseBG"        : "Choose the new background",
-        "chooseBGImage"   : "Please choose your new background image"
+        "background"      : "Background image:"
     },
     "AppMenu_SettingsComponents":
     {

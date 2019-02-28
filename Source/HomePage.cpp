@@ -1,8 +1,6 @@
 #include "HomePage.h"
 #include "Layout_Component_JSONKeys.h"
 #include "Theme_Image_JSONKeys.h"
-#include "Config_MainFile.h"
-#include "Config_MainKeys.h"
 #include "AssetFiles.h"
 #include "AppMenu.h"
 #include "AppMenu_ConfigFile.h"
@@ -18,10 +16,10 @@ frame(Theme::Image::JSONKeys::menuFrame, 0,
 powerButton(Theme::Image::JSONKeys::powerButton),
 settingsButton(Theme::Image::JSONKeys::settingsButton)
 {
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("HomePage");
-#    endif
-    addTrackedKey(Config::MainKeys::backgroundKey);
+#endif
+    addTrackedKey(Theme::Image::JSONKeys::homeBackground);
 
     using namespace Layout::Component;
     layoutManagers.add(Manager(&wifiIcon, JSONKeys::wifiIcon));
@@ -68,21 +66,10 @@ void HomePage::configValueChanged(const juce::Identifier& key)
 {
     using juce::String;
     using juce::Image;
-    using juce::Colour;
-    Config::MainFile mainConfig;
-    if (key == Config::MainKeys::backgroundKey)
+    if(key == Theme::Image::JSONKeys::homeBackground)
     {
-        String background = mainConfig.getHomeBackground();
-        if (background.containsOnly("0123456789ABCDEFXabcdefx"))
-        {
-            setBackgroundImage(Image());
-            Colour bgFill(background.getHexValue32());
-            setColour(backgroundColourId, bgFill.withAlpha(1.0f));
-        }
-        else
-        {
-            setBackgroundImage(AssetFiles::loadImageAsset(background));
-        }
+        String background = imageConfig.getHomeBackgroundPath();
+        setBackgroundImage(AssetFiles::loadImageAsset(background));
     }
     else
     {

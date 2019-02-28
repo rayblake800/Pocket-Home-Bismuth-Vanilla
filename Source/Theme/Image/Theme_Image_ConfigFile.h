@@ -71,6 +71,15 @@ public:
     juce::String getLoginImagePath() const;
 
     /**
+     * @brief  Gets the path to the Wifi::ControlWidget object's Wifi icon.
+     *
+     * @return  The Wifi icon path. This may be either a global path,
+     *          or relative to the application's assets folder. This may be
+     *          the empty string.
+     */
+    juce::String getWifiIconPath() const;
+
+    /**
      * @brief  Sets the path to the HomePage background image.
      *
      * @param newPath  The new image path, either global or relative to the

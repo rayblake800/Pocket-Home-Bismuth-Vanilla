@@ -24,6 +24,8 @@
 
 #### [Theme::Image::ConfigFile](../../Source/Theme/Image/Theme_Image_ConfigFile.h)
 
+#### [Theme::Image::ConfigListener](../../Source/Theme/Image/Theme_Image_ConfigListener.h)
+
 #### [Theme::Image::Component](../../Source/Theme/Image/Theme_Image_Component.h)
 
 #### [Theme::Image::AssetList](../../Source/Theme/Image/Theme_Image_AssetList.h)
@@ -31,4 +33,7 @@
 #### [Theme::Image::JSONKeys](../../Source/Theme/Image/Theme_Image_JSONKeys.h)
 
 #### [Theme::Image::JSONResource](../../Source/Theme/Image/Theme_Image_JSONResource.h)
+
+#### [Theme::Image::HomeBackgroundPicker](../../Source/Theme/Image/Theme_Image_HomeBackgroundPicker.h)
+
 

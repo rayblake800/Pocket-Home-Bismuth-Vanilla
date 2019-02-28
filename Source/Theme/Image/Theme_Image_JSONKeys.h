@@ -26,12 +26,17 @@ static const Config::DataKey defaultIcon
 static const Config::DataKey loginImage
     ("login image", Config::DataKey::stringType);
 
+/* ControlWidget wifi icon: */
+static const Config::DataKey controlWidgetWifi
+    ("ControlWidget wifi icon", Config::DataKey::stringType);
+
 static const std::vector<Config::DataKey> imageKeys
 {
     homeBackground,
     loginBackground,
     defaultIcon,
-    loginImage
+    loginImage,
+    controlWidgetWifi
 };
 
 //######################### UI Component Data ##############################

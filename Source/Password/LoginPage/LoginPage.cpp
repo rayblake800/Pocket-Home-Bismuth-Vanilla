@@ -3,7 +3,6 @@
 #include "AssetFiles.h"
 #include "Password.h"
 #include "Theme_Image_JSONKeys.h"
-#include "Theme_Image_ConfigFile.h"
 #include "Theme_Image_AssetList.h"
 #include "Layout_Component_ConfigFile.h"
 
@@ -27,7 +26,6 @@ namespace TextKey
 LoginPage::LoginPage(std::function<void () > loginCallback) :
 Locale::TextUser(localeClassKey),
 pageListener(*this),
-loginImage(Theme::Image::JSONKeys::loginImage),
 passwordLabel("passwordLabel", localeText(TextKey::passwordLabel)),
 passwordField("passwordField", 0x2022),
 loginButton(localeText(TextKey::logIn), "loginButton"),
@@ -64,11 +62,11 @@ foundPassword(false)
     layout.setYPaddingWeight(2);
     setLayout(layout);
     
-    Theme::Image::ConfigFile imageConfig;
-    juce::String bgImagePath 
-            = imageConfig.getAssetList(Theme::Image::JSONKeys::loginPage)
-            .getImageFiles()[0];
+    const juce::String bgImagePath = imageConfig.getLoginBackgroundPath();
     setBackgroundImage(AssetFiles::loadImageAsset(bgImagePath));
+    const juce::String loginImagePath = imageConfig.getLoginImagePath();
+    loginImage.setImage(loginImagePath);
+
     loginButton.addListener(&pageListener);   
     
     Layout::Component::ConfigFile config;

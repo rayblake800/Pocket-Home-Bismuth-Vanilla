@@ -28,22 +28,21 @@ public:
     /**
      * @brief  Loads the image asset list on creation.
      *
-     * @param componentKey  One of the component keys defined in
-     *                      Theme::Image::JSONKeys.
+     * @param assetKey    One of the component asset keys defined in
+     *                    Theme::Image::JSONKeys.
      * 
-     * @param assetIndex    Selects which component asset file should be loaded 
-     *                      on initialization.
+     * @param assetIndex  Selects which component image asset file should be 
+     *                    loaded on initialization.
      * 
-     * @param placement     Defines how the image will be scaled.
+     * @param placement   Defines how the image will be scaled.
      */
-    Component(const juce::Identifier& componentKey,
-            const int assetIndex = 0,
+    Component(const juce::Identifier& assetKey, const int assetIndex = 0,
             const juce::RectanglePlacement placement 
                     = juce::RectanglePlacement::centred) :
     DrawableImageType(placement),
     assetIndex(assetIndex) 
     {
-        assetList = assetConfig.getAssetList(componentKey);
+        assetList = assetConfig.getAssetList(assetKey);
         applyImageAssets();
     }
 

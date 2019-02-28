@@ -1,8 +1,9 @@
 {  
-    "home page background"   : "wallpaper/chipBackground.png",
-    "login page background" : "login/background.png",
-    "default icon"          : "icons/chip.png",
-    "login image"           : "login/chipVector.svg",
+    "home page background"    : "wallpaper/chipBackground.png",
+    "login page background"   : "login/background.png",
+    "default icon"            : "icons/chip.png",
+    "login image"             : "login/chipVector.svg",
+    "ControlWidget wifi icon" : "component assets/WifiIcon/wifiIcon.svg",
 
     "menu frame": {
         "colours": [
@@ -133,16 +134,16 @@
     },
     "volume slider" : {
         "colours": [
-            "0xffffffff"
+            "0xffbc3662"
         ],
         "image files" : [
             "component assets/VolumeSlider/volumeIconLo.svg",
-            "component assets/VolumeSlider/volumenIconHi.svg"
+            "component assets/VolumeSlider/volumeIconHi.svg"
         ]
     },
     "brightness slider" : {
         "colours" : [
-            "0xffffffff"
+            "0xffbc3662"
         ],
         "image files" : [
             "component assets/BrightnessSlider/brightnessIconLo.svg",

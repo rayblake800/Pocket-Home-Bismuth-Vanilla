@@ -14,14 +14,6 @@ int Config::MainFile::getWifiScanFrequency() const
 }
 
 /*
- * Gets the HomePage background image or color.
- */
-juce::String Config::MainFile::getHomeBackground() const
-{
-    return getConfigValue<juce::String>(MainKeys::backgroundKey);
-}
-
-/*
  * Gets the prefix to place before system commands when they should be launched
  * within a new terminal window.
  */
@@ -85,12 +77,4 @@ void Config::MainFile::setShowClock(const bool showClock)
 void Config::MainFile::set24HourEnabled(const bool use24HourMode)
 {
     setConfigValue<bool>(MainKeys::use24HrModeKey, use24HourMode);
-}
-
-/*
- * Sets the background used by the HomePage component.
- */
-void Config::MainFile::setHomeBackground(const juce::String background)
-{
-    setConfigValue<juce::String>(MainKeys::backgroundKey, background);
 }

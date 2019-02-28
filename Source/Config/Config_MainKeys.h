@@ -16,12 +16,8 @@ namespace Config
            points while the Wifi page is open. */
         static const DataKey wifiScanFreqKey
             ("Wifi AP scan frequency", DataKey::intType);
-
         
         //####################### String value keys: ###########################
-        /* Sets the HomePage background color or image. */
-        static const DataKey backgroundKey
-            ("background", DataKey::stringType);
         /* Sets the command prefix used to launch applications in a new terminal
            window: */
         static const DataKey termLaunchCommandKey
@@ -29,7 +25,6 @@ namespace Config
         /* Sets the name of the wifi interface */
         static const DataKey wifiInterfaceKey
             ("Wifi interface", DataKey::stringType);
-
         
         //######################## Boolean value keys: #########################
         /* Sets if the cursor should be shown */
@@ -45,7 +40,6 @@ namespace Config
         static const std::vector<DataKey> allKeys
         {
             wifiScanFreqKey,
-            backgroundKey,
             termLaunchCommandKey,
             wifiInterfaceKey,
             showCursorKey,

@@ -1,4 +1,5 @@
 #include "Icon_ThreadResource.h"
+#include "Theme_Image_ConfigFile.h"
 #include "AssetFiles.h"
 #include "XDGDirectories.h"
 #include "Utils.h"
@@ -14,10 +15,6 @@ const juce::Identifier Icon::ThreadResource::resourceKey
 
 /* Resource thread name: */
 static const juce::String threadName = "Icon_ThreadResource";
-
-/* Path to the default icon file: TODO: Define this in config files */
-static const constexpr char* defaultIconPath 
-        = "/usr/share/pocket-home/appIcons/chip.png";
 
 /* Legacy application icon directory: */
 static const constexpr char* pixmapIconPath = "/usr/share/pixmaps";
@@ -43,8 +40,7 @@ static const constexpr char* pocketHomeIconPath
         = "/usr/share/pocket-home/icons";
 
 Icon::ThreadResource::ThreadResource() : 
-SharedResource::Thread::Resource(resourceKey, ::threadName),
-defaultIcon(AssetFiles::loadImageAsset(defaultIconPath))
+SharedResource::Thread::Resource(resourceKey, ::threadName)
 { 
     using juce::StringArray;
     using juce::String;
@@ -180,6 +176,22 @@ Icon::RequestID Icon::ThreadResource::addRequest(IconRequest request)
     else
     {
         // Assign the default icon for now:
+        if(!defaultIcon.isValid())
+        {
+            const Theme::Image::ConfigFile imageConfig;
+            const juce::String iconPath = imageConfig.getDefaultIconPath();
+            if(!iconPath.isEmpty())
+            {
+                defaultIcon = AssetFiles::loadImageAsset(iconPath);
+            }
+            else
+            {
+                // Create an empty valid image so it doesn't keep trying to find
+                // a default:
+                defaultIcon = juce::Image(juce::Image::ARGB, request.size,
+                        request.size, true);
+            }
+        }
         request.loadingCallback(defaultIcon);
 
         /* Send the request to the icon loading thread, unless it has tried and

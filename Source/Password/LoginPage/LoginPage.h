@@ -8,7 +8,8 @@
 #include "JuceHeader.h"
 #include "Locale/TextUser.h"
 #include "ScalingLabel.h"
-#include "Theme_Image_Component.h"
+#include "DrawableImageComponent.h"
+#include "Theme_Image_ConfigFile.h"
 #include "Page_Component.h"
 
 /**
@@ -97,11 +98,15 @@ private:
     /* Whether a password is needed to log in: */
     bool foundPassword;
 
+    /* Loads image asset paths, and ensures the JSON image path resource remains
+     * available: */
+    const Theme::Image::ConfigFile imageConfig;
+
     /* Page child components: */
     juce::TextButton loginButton;
     ScalingLabel passwordLabel;
     juce::TextEditor passwordField;
-    Theme::Image::Component<> loginImage;
+    DrawableImageComponent loginImage;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LoginPage)
 };

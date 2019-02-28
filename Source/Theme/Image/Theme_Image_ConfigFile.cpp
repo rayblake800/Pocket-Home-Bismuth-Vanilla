@@ -57,6 +57,16 @@ juce::String Theme::Image::ConfigFile::getLoginImagePath() const
 }
 
 /*
+ * Gets the path to the Wifi::ControlWidget object's Wifi icon.
+ */
+juce::String Theme::Image::ConfigFile::getWifiIconPath() const
+{
+    SharedResource::LockedPtr<const JSONResource> config 
+            = getReadLockedResource();
+    return config->getConfigValue<juce::String>(JSONKeys::controlWidgetWifi);
+}
+
+/*
  * Sets the path to the HomePage background image.
  */
 void Theme::Image::ConfigFile::setHomeBackgroundPath

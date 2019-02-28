@@ -137,12 +137,7 @@ void AppMenu::MenuButton::loadIcon()
     using juce::Image;
     if(!iconBounds.isEmpty() && !iconCallbackID)
     {
-        if(!icon.isValid())
-        {
-            icon = AssetFiles::loadImageAsset("appIcons/default.png");
-        }
         Icon::Loader iconLoader;
-
         iconCallbackID = iconLoader.loadIcon(
                 getMenuItem().getIconName(),
                 iconBounds.toNearestInt().getWidth(),

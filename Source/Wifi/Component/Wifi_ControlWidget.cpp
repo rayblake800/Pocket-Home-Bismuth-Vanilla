@@ -5,6 +5,8 @@
 #include "Wifi_Device_Controller.h"
 #include "Wifi_Connection_Record_Reader.h"
 #include "Wifi_Connection_Event.h"
+#include "Theme_Image_ConfigFile.h"
+#include "Theme_Image_AssetList.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "Wifi::ControlWidget";
@@ -66,14 +68,13 @@ bool Wifi::ControlWidget::connectionPageAvailable()
         && !recordReader.isConnecting();
 }
 
-
 /*
  * Gets the wifi icon path.
  */
 juce::String Wifi::ControlWidget::getIconAsset()
 {
-    //TODO: define in JSON file
-    return "wifiIcon.svg";
+    const Theme::Image::ConfigFile imageConfig;
+    return imageConfig.getWifiIconPath();
 }
 
 /**

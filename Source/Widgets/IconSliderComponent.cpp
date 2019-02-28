@@ -1,18 +1,17 @@
 #include "Utils.h"
 #include "IconSliderComponent.h"
 
-IconSliderComponent::IconSliderComponent
-(juce::String lowImgAsset, juce::String highImgAsset) :
-lowIcon(lowImgAsset, juce::RectanglePlacement::stretchToFit),
-highIcon(highImgAsset, juce::RectanglePlacement::stretchToFit)
+/*
+ * Creates a slider with a default range of 0-100.
+ */
+IconSliderComponent::IconSliderComponent(const juce::Identifier& imageKey) :
+lowIcon(imageKey, 0, juce::RectanglePlacement::stretchToFit),
+highIcon(imageKey, 1, juce::RectanglePlacement::stretchToFit)
 {
-    using namespace juce;
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("IconSliderComponent");
-#    endif
-    Colour imageColour = findColour(Slider::trackColourId);
-    lowIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
-    highIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
+#endif
+    using juce::Slider;
     slider.setSliderStyle(Slider::LinearHorizontal);
     slider.setTextBoxStyle(Slider::NoTextBox, false, 0, 0);
     slider.setRange(0, 100);
@@ -21,7 +20,7 @@ highIcon(highImgAsset, juce::RectanglePlacement::stretchToFit)
     addAndMakeVisible(highIcon);
 }
 
-/**
+/*
  * Changes the slider's stored value.
  */
 void IconSliderComponent::setValue
@@ -30,60 +29,46 @@ void IconSliderComponent::setValue
     slider.setValue(newValue, notification);
 }
 
-/**
- * @return the current slider position value, between 0 and 100.
+/*
+ * Gets the slider's stored value.
  */
 double IconSliderComponent::getValue() const
 {
     return slider.getValue();
 }
 
-/**
- * @param listener   This will receive updates whenever the slider value
- *                    changes.
+/*
+ * Subscribes a slider listener object to changes in the slider's value.
  */
 void IconSliderComponent::addListener(juce::Slider::Listener* listener)
 {
     slider.addListener(listener);
 }
 
-/**
- * Use this to determine which IconSliderComponent is responsible for
- * a slider callback.
+/*
+ * Compares a raw slider pointer to this object.
  */
-bool IconSliderComponent::ownsSlider(juce::Slider * sliderPtr)
+bool IconSliderComponent::operator==(const juce::Slider* sliderPtr) const
 {
     return sliderPtr == &slider;
 }
 
-/** Sets the limits that the slider's value can take.
+/* 
+ * Sets the slider value's limits.
  */
-void IconSliderComponent::setRange(double newMinimum,
-        double newMaximum,
+void IconSliderComponent::setRange(double newMinimum, double newMaximum,
         double newInterval)
 {
     slider.setRange(newMinimum, newMaximum, newInterval);
 }
 
-/**
- * Update the icons and slider to fit the component bounds.
+/*
+ * Updates the icons and slider to fit the component bounds.
  */
 void IconSliderComponent::resized()
 {
-    using namespace juce;
-    Rectangle<int> bounds = getLocalBounds();
+    juce::Rectangle<int> bounds = getLocalBounds();
     lowIcon.setBounds(bounds.withWidth(bounds.getHeight()));
     highIcon.setBounds(bounds.withLeft(bounds.getRight() - bounds.getHeight()));
     slider.setBounds(bounds.reduced(bounds.getHeight(), 0));
-}
-
-/**
- * Update the icon color if slider color changes
- */
-void IconSliderComponent::colourChanged()
-{
-    using namespace juce;
-    Colour imageColour = findColour(Slider::trackColourId);
-    lowIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
-    highIcon.setColour(DrawableImageComponent::imageColour0Id, imageColour);
 }

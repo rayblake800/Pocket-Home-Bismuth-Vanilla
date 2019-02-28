@@ -1,20 +1,20 @@
 #pragma once
-#include "IconSliderComponent.h"
-#include "SwitchComponent.h"
-#include "Theme_Image_Component.h"
-#include "Layout_Component_Manager.h"
-#include "Page_Component.h"
-#include "WindowFocusedTimer.h"
-#include "Wifi_ControlWidget.h"
-#include "ScalingTextButton.h"
-//#include "BluetoothSettingsComponent.h"
-
 /**
  * @file  QuickSettingsPage.h
  * 
  * @brief  Provides wireless device controls, brightness and volume sliders, and 
  *         a button to open additional settings pages.
  */
+
+#include "IconSliderComponent.h"
+#include "SwitchComponent.h"
+#include "Layout_Component_Manager.h"
+#include "Page_Component.h"
+#include "WindowFocusedTimer.h"
+#include "Wifi_ControlWidget.h"
+#include "ScalingTextButton.h"
+#include "Theme_Image_Component.h"
+
 
 class QuickSettingsPage : public Page::Component, public WindowFocusedTimer
 {

@@ -7,12 +7,6 @@
 #include "Layout_Component_JSONKeys.h"
 #include "Page_Type.h"
 
-/* Slider image assets.  TODO: define these in components.json. */
-static const constexpr char* brightnessLowIcon = "brightnessIconLo.svg";
-static const constexpr char* brightnessHighIcon = "brightnessIconHi.svg";
-static const constexpr char* volumeLowIcon = "volumeIconLo.svg";
-static const constexpr char* volumeHighIcon = "volumeIconHi.svg";
-
 QuickSettingsPage::QuickSettingsPage() :
 WindowFocusedTimer("QuickSettingsPage"),
 pageListener(*this),
@@ -20,27 +14,20 @@ wifiComponent([this]()
 {
     pushPageToStack(Page::Type::wifiConnection);
 }),
-//bluetoothComponent([this]
-//{
-//
-//    pushPageToStack(PageType::BluetoothSettings);
-//}),
-screenBrightnessSlider(brightnessLowIcon, brightnessHighIcon),
-volumeSlider(volumeLowIcon, volumeHighIcon),
+screenBrightnessSlider(Theme::Image::JSONKeys::brightnessSlider),
+volumeSlider(Theme::Image::JSONKeys::volumeSlider),
 settingsListBtn(Theme::Image::JSONKeys::settingsListBtn),
 listButtonManager(&settingsListBtn, 
         Layout::Component::JSONKeys::settingsListBtn)
 {
-
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("QuickSettingsPage");
-#    endif
+#endif
     setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout(
     {
         Row(10, { RowItem(&wifiComponent) } ),
-        //Row(10, { RowItem(&bluetoothComponent) } ),
         Row(10, { RowItem(&screenBrightnessSlider) } ),
         Row(10, { RowItem(&volumeSlider) } )
     });
@@ -79,11 +66,11 @@ void QuickSettingsPage::visibilityChanged()
  */
 void QuickSettingsPage::timerCallback()
 {
-    if (screenBrightnessSlider.ownsSlider(changingSlider))
+    if (screenBrightnessSlider == changingSlider)
     {
         Display::setBrightness(changingSlider->getValue());
     }
-    if (volumeSlider.ownsSlider(changingSlider))
+    else if(volumeSlider == changingSlider)
     {
         Audio::setVolume(changingSlider->getValue());
     }

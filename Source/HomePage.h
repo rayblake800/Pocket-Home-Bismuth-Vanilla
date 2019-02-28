@@ -9,15 +9,16 @@
 #include "DesktopEntry_Loader.h"
 #include "Icon_Loader.h"
 #include "Page_Component.h"
-#include "Config_MainListener.h"
 #include "Theme_Image_Component.h"
+#include "Theme_Image_ConfigFile.h"
+#include "Theme_Image_ConfigListener.h"
 #include "DrawableImageButton.h"
 #include "Layout_Component_Manager.h"
 #include "ClockLabel.h"
 #include "Wifi_ConnectionIcon.h"
 #include "BatteryIcon.h"
 #include "SystemCommands.h"
-#include "AppMenu/AppMenu.h"
+#include "AppMenu.h"
 
 /**
  * @brief  The root Page::Component within the application.
@@ -30,7 +31,7 @@
  * except perhaps the login page. The HomePage will continue to exist as long as
  * Pocket-Home is running.
  */
-class HomePage : public Page::Component, public Config::MainListener
+class HomePage : public Page::Component, public Theme::Image::ConfigListener
 {
 public:
     /**
@@ -92,29 +93,33 @@ private:
        exists. */
     Icon::Loader iconLoader;
     
-    /* Displays the time. */
+    /* Displays the time: */
     ClockLabel clock;
    
     /* The application menu. This is automatically updated whenever the menu 
        type preference changes in MainConfigFile. */
     std::unique_ptr<juce::Component> appMenu;
     
-    /* Displays the current battery status. */
+    /* Displays the current battery status: */
     BatteryIcon batteryIcon;
     
-    /* Displays the current wifi status. */
+    /* Displays the current wifi status: */
     Wifi::ConnectionIcon wifiIcon;
 
-    /* Opens the power page when clicked. */
+    /* Loads the background image and ensures the image asset JSON resource
+     * remains available: */
+    const Theme::Image::ConfigFile imageConfig;
+
+    /* Opens the power page when clicked: */
     Theme::Image::Component<DrawableImageButton> powerButton;
     
-    /* Opens the settings page when clicked. */
+    /* Opens the settings page when clicked: */
     Theme::Image::Component<DrawableImageButton> settingsButton;
 
     /* Page frame image. This component is entirely decorative. */
     Theme::Image::Component<DrawableImageComponent> frame;
 
-    /* Manages the layouts of configurable components. */ 
+    /* Manages the layouts of configurable components: */ 
     juce::Array<Layout::Component::Manager> layoutManagers;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);
