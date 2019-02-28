@@ -6,7 +6,7 @@
 
 #### [SwitchComponent](../../Source/Widgets/SwitchComponent.h)
 
-#### [ClockLabel](../../Source/Widgets/ClockLabel.h)
+#### [Widgets::Clock](../../Source/Widgets/Widgets_Clock.h)
 
 #### [IconSliderComponent](../../Source/Widgets/IconSliderComponent.h)
 

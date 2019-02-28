@@ -16,9 +16,9 @@ OBJECTS_WIDGET := \
   $(WIDGET_OBJ)OverlaySpinner.o \
   $(WIDGET_OBJ)Switch.o \
   $(WIDGET_OBJ)ColourPicker.o \
-  $(WIDGET_OBJ)ClockLabel.o \
+  $(WIDGET_OBJ)Clock.o \
   $(WIDGET_OBJ)PopupEditor.o \
-  $(WIDGET_OBJ)FileSelectTextEditor.o \
+  $(WIDGET_OBJ)FilePathEditor.o \
   $(WIDGET_OBJ)Counter.o 
 
 OBJECTS_WIDGET_TEST :=
@@ -58,11 +58,11 @@ $(WIDGET_OBJ)Switch.o : \
     $(WIDGET_ROOT)/SwitchComponent.cpp
 $(WIDGET_OBJ)ColourPicker.o : \
     $(WIDGET_ROOT)/ColourPicker.cpp
-$(WIDGET_OBJ)ClockLabel.o : \
-    $(WIDGET_ROOT)/ClockLabel.cpp
+$(WIDGET_OBJ)Clock.o : \
+    $(WIDGET_ROOT)/$(WIDGET_PREFIX)Clock.cpp
 $(WIDGET_OBJ)PopupEditor.o : \
     $(WIDGET_ROOT)/PopupEditorComponent.cpp
-$(WIDGET_OBJ)FileSelectTextEditor.o : \
+$(WIDGET_OBJ)FilePathEditor.o : \
     $(WIDGET_ROOT)/FileSelectTextEditor.cpp
 $(WIDGET_OBJ)Counter.o : \
     $(WIDGET_ROOT)/CounterComponent.cpp

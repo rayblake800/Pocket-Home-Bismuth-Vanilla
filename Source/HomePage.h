@@ -14,7 +14,7 @@
 #include "Theme_Image_ConfigListener.h"
 #include "DrawableImageButton.h"
 #include "Layout_Component_Manager.h"
-#include "ClockLabel.h"
+#include "Widgets_Clock.h"
 #include "Wifi_ConnectionIcon.h"
 #include "BatteryIcon.h"
 #include "SystemCommands.h"
@@ -94,7 +94,7 @@ private:
     Icon::Loader iconLoader;
     
     /* Displays the time: */
-    ClockLabel clock;
+    Widgets::Clock clock;
    
     /* The application menu. This is automatically updated whenever the menu 
        type preference changes in MainConfigFile. */
