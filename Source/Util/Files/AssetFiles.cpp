@@ -1,9 +1,13 @@
 #include "AssetFiles.h"
 
 #ifdef JUCE_DEBUG
-/* Print namespace before debug output: */
+/* Print namespace before all debug output: */
 static const constexpr char* dbgPrefix = "AssetFiles::";
 #endif
+
+// TODO: Select this using XDGDirectories:
+static const constexpr char* assetFolder = "/usr/share/pocket-home/";
+
 
 /**
  * @brief  Locates a file from an absolute or local path.
@@ -35,15 +39,15 @@ juce::File AssetFiles::findAssetFile
 #ifdef JUCE_DEBUG
     if(!assetFile.exists())
     {
-        DBG(dbgPrefix << __func__ << ": Failed to find asset file" 
-                << assetName);
+        DBG(dbgPrefix << __func__ << ": Failed to find asset file \"" 
+                << assetName << "\"");
     }
 #endif
     return assetFile;
 }
 
 /*
- * Create an Image object from an asset file.
+ * Creates an Image object from an asset file.
  */
 juce::Image AssetFiles::loadImageAsset
 (const juce::String& assetName, bool lookOutsideAssets)
@@ -80,14 +84,16 @@ juce::Drawable * AssetFiles::loadSVGDrawable
     juce::File svgFile = findAssetFile(assetName, lookOutsideAssets);
     if (!svgFile.existsAsFile() || svgFile.getFileExtension() != ".svg")
     {
+        DBG(dbgPrefix << __func__ << ": File \"" << svgFile.getFileName() 
+                << "\" not found.");
         return nullptr;
     }
     std::unique_ptr<juce::XmlElement> svgElement 
             (juce::XmlDocument::parse(svgFile));
     if (svgElement == nullptr)
     {
-        DBG(dbgPrefix << __func__ << ": " << svgFile.getFileName() 
-                << " is not a valid svg file.");
+        DBG(dbgPrefix << __func__ << ": File \"" << svgFile.getFileName() 
+                << "\" is not a valid svg file.");
         return nullptr;
     }
     return juce::Drawable::createFromSVG(*svgElement);
