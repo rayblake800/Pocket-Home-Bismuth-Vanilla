@@ -30,7 +30,9 @@ juce::Rectangle<float> AppMenu::Paged::MenuButton::findIconBounds() const
     using namespace Layout::Component;
     ConfigFile config;
     const int textHeight = config.getFontHeight(TextSize::smallText); 
-    return getLocalBounds().reduced(0, textHeight).toFloat();
+    const int iconSize = std::min(getHeight() - textHeight, getWidth());
+    return juce::Rectangle<float>((getWidth() - iconSize) / 2, 0,
+            iconSize, iconSize);
 }
 
 /*
@@ -46,7 +48,8 @@ bool AppMenu::Paged::MenuButton::shouldDrawBorder() const
  */
 bool AppMenu::Paged::MenuButton::shouldFillBackground() const 
 {
-    return isSelected();
+    return true;
+    //return isSelected();
 }
 
 /*

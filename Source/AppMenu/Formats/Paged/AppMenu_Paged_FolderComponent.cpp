@@ -17,7 +17,7 @@ static const constexpr float buttonXPaddingFraction = 0.05;
 
 /* Amount of empty space to leave on the top and bottom of each menu button, as
    a fraction of the button's height. */
-static const constexpr float buttonYPaddingFraction = 0.05;
+static const constexpr float buttonYPaddingFraction = 0.09;
 
 /*
  * Creates a new paged folder component.

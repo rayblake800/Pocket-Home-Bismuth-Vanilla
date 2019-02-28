@@ -7,7 +7,7 @@ static const constexpr char* dbgPrefix = "AppMenu::SettingsComponents::";
 #endif
 
 /* Localized object class key */
-static const juce::Identifier localeClassKey = "AppMenu_SettingsComponents";
+static const juce::Identifier localeClassKey = "AppMenu::SettingsComponents";
 
 /* Localized text value keys: */
 namespace TextKeys

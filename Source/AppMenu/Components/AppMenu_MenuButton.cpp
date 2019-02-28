@@ -185,7 +185,6 @@ void AppMenu::MenuButton::paintButton
     if (shouldFillBackground())
     {
         g.fillRoundedRectangle(border.toFloat(), border.getHeight() / 6);
-        //g.fillRect(border);
     }
     else
     {
@@ -195,9 +194,22 @@ void AppMenu::MenuButton::paintButton
     }
     // Draw icon:
     g.setOpacity(1);
+    RectanglePlacement iconPlacement;
+    if(icon.getWidth() > icon.getHeight())
+    {
+        iconPlacement = RectanglePlacement::xMid | RectanglePlacement::yTop 
+                | RectanglePlacement::yBottom;
+    }
+    else
+    {
+        iconPlacement = RectanglePlacement::yMid | RectanglePlacement::xLeft 
+                | RectanglePlacement::xRight;
+    }
     g.drawImageWithin(icon, iconBounds.getX(), iconBounds.getY(),
             iconBounds.getWidth(), iconBounds.getHeight(),
-            RectanglePlacement::xMid | RectanglePlacement::yTop, false);
+            iconPlacement,
+            //RectanglePlacement::xMid | RectanglePlacement::yTop,
+            false);
     // Draw title:
     g.setColour(findColour(textColourId));
     g.setFont(titleFont);
@@ -207,6 +219,5 @@ void AppMenu::MenuButton::paintButton
     {
         g.setColour(findColour(borderColourId));
         g.drawRoundedRectangle(border.toFloat(), border.getHeight() / 6, 2);
-        g.drawRect(border, 2);
     }
 }
