@@ -30,10 +30,13 @@ private:
     juce::StringArray getButtonTitles();
 
     /**
-     * @brief Reloads page layout whenever the page becomes visible.
+     * @brief  Reloads page layout whenever the page becomes visible.
      */
     void visibilityChanged() override;
 
+    /**
+     * @brief  Handles button clicks within the page.
+     */
     class PageListener : public juce::Button::Listener
     {
     public:
@@ -65,7 +68,7 @@ private:
         virtual ~SettingsList() { }
         
         /**
-         * Gets the total number of page buttons.
+         * @brief Gets the total number of page buttons.
          * 
          * @return  The number of page buttons. 
          */
@@ -90,12 +93,8 @@ private:
         void refresh();
 
     private:
-        static const constexpr float yPaddingFraction = 0.04;
     };
     SettingsList buttonList;
-
-    /* Number of page buttons to show on the screen at a time: */
-    static const constexpr int buttonsPerPage = 5;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsListPage)
 };

@@ -12,6 +12,8 @@
 
 #### [Page::WifiConnection](../../Source/Page/PageTypes/Page_WifiConnection.h)
 
+#### [Page::HomeSettings](../../Source/Page/PageTypes/Page_HomeSettings.h)
+
 ## Internal Interface Classes
 
 #### [Page::Interface::Component](../../Source/Page/Interface/Page_Interface_Component.h)

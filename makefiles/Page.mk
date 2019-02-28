@@ -5,7 +5,8 @@ PAGE_OBJ := $(JUCE_OBJDIR)/$(PAGE_PREFIX)
 
 PAGE_TYPES_ROOT := $(PAGE_ROOT)/PageTypes
 OBJECTS_PAGE_TYPES := \
-  $(PAGE_OBJ)WifiConnection.o 
+  $(PAGE_OBJ)WifiConnection.o \
+  $(PAGE_OBJ)HomeSettings.o 
 
 PAGE_INTERFACE_ROOT := $(PAGE_ROOT)/Interface
 PAGE_INTERFACE_PREFIX := $(PAGE_PREFIX)Interface_
@@ -34,6 +35,8 @@ page : $(OBJECTS_PAGE)
 
 $(PAGE_OBJ)WifiConnection.o : \
     $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)WifiConnection.cpp
+$(PAGE_OBJ)HomeSettings.o : \
+    $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)HomeSettings.cpp
 
 $(PAGE_INTERFACE_OBJ)Component.o : \
     $(PAGE_INTERFACE_ROOT)/$(PAGE_INTERFACE_PREFIX)Component.cpp

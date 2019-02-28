@@ -1,35 +1,37 @@
 #pragma once
 /**
- * @file  HomeSettingsPage.h
+ * @file  Page_HomeSettings.h
  * 
  * @brief  Allows the user to configure the HomePage, setting the page 
  *         background, the application menu type, and the application menu 
  *         dimensions.
  */
 
-#include "ScalingLabel.h"
 #include "Page_Component.h"
+#include "ScalingLabel.h"
 #include "AppMenu_SettingsComponents.h"
 #include "Theme_Image_HomeBackgroundPicker.h"
 #include "Utils.h"
 #include "Locale/TextUser.h"
 
+namespace Page { class HomeSettings; }
+
 /**
  * @brief  The page component used to hold all HomePage and AppMenu settings
  *         control components.
  */
-class HomeSettingsPage : public Page::Component, public Locale::TextUser
+class Page::HomeSettings : public Component, public Locale::TextUser
 {
 public:
     /**
      * @brief  Initializes the page layout.
      */
-    HomeSettingsPage();
+    HomeSettings();
 
     /**
      * @brief  Updates AppMenu settings when the page closes.
      */
-    virtual ~HomeSettingsPage();
+    virtual ~HomeSettings();
 
 private:
     /* Page title label: */
@@ -42,5 +44,5 @@ private:
     /* Used to select AppMenu format settings: */
     AppMenu::SettingsComponents menuComponents;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomeSettingsPage)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomeSettings)
 };

@@ -22,6 +22,5 @@ enum class Page::Type
     setPassword,
     removePassword,
     colourSettings,
-    dateTime,
     homeSettings
 };

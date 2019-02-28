@@ -11,8 +11,7 @@
 #include "SetPasswordPage.h"
 #include "RemovePasswordPage.h"
 #include "Theme_Colour_ConfigPage.h"
-#include "DateTimePage.h"
-#include "HomeSettingsPage.h"
+#include "Page_HomeSettings.h"
 
 /*
  * Creates an instance of the application's home page.
@@ -68,11 +67,8 @@ Page::Component* Page::Factory::createPage(const Type pageType)
         case Type::colourSettings:
             newPage = new Theme::Colour::ConfigPage;
             break;
-        case Type::dateTime:
-            newPage = new DateTimePage;
-            break;
         case Type::homeSettings:
-            newPage = new HomeSettingsPage;
+            newPage = new HomeSettings;
     }
     if(newPage != nullptr)
     {

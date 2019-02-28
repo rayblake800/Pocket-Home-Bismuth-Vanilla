@@ -1,11 +1,11 @@
+#include "Page_HomeSettings.h"
 #include "Config_MainFile.h"
 #include "Config_MainKeys.h"
 #include "AppMenu_ConfigFile.h"
 #include "AppMenu_Format.h"
-#include "HomeSettingsPage.h"
 
 /* Localized object class key */
-static const juce::Identifier localeClassKey = "HomeSettingsPage";
+static const juce::Identifier localeClassKey = "Page::HomeSettings";
 
 /* Localized text value keys: */
 namespace TextKey
@@ -17,7 +17,7 @@ namespace TextKey
 /*
  * Initializes the page layout.
  */
-HomeSettingsPage::HomeSettingsPage() :
+Page::HomeSettings::HomeSettings() :
 Locale::TextUser(localeClassKey),
 title("personalizeTitle", localeText(TextKey::title)),
 bgLabel("bgLabel", localeText(TextKey::background))
@@ -66,7 +66,7 @@ bgLabel("bgLabel", localeText(TextKey::background))
 /*
  * Updates AppMenu settings when the page closes.
  */
-HomeSettingsPage::~HomeSettingsPage()
+Page::HomeSettings::~HomeSettings()
 {
     menuComponents.applySettingsChanges();
 }

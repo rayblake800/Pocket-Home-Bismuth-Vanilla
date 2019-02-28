@@ -4,8 +4,6 @@ SETTINGS_ROOT = Source/Settings
 
 OBJECTS_SETTINGS := \
   $(SETTINGS_PREFIX)QuickPage.o \
-  $(SETTINGS_PREFIX)DateTimePage.o \
-  $(SETTINGS_PREFIX)HomePage.o \
   $(SETTINGS_PREFIX)InputPage.o \
   $(SETTINGS_PREFIX)ConnectionComponent.o \
   $(SETTINGS_PREFIX)ListPage.o 
@@ -25,10 +23,6 @@ settings : $(OBJECTS_SETTINGS)
 
 $(SETTINGS_PREFIX)QuickPage.o : \
     $(SETTINGS_ROOT)/QuickSettingsPage/QuickSettingsPage.cpp
-$(SETTINGS_PREFIX)DateTimePage.o : \
-    $(SETTINGS_ROOT)/DateTimePage/DateTimePage.cpp
-$(SETTINGS_PREFIX)HomePage.o : \
-    $(SETTINGS_ROOT)/HomeSettingsPage/HomeSettingsPage.cpp
 $(SETTINGS_PREFIX)InputPage.o : \
     $(SETTINGS_ROOT)/InputSettingsPage/InputSettingsPage.cpp
 $(SETTINGS_PREFIX)ConnectionComponent.o : \

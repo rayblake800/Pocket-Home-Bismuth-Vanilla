@@ -23,12 +23,12 @@
         "retryPassword" : "Wrong password, try again",
         "closeButton"   : "Ok"
     },
-    "HomeSettingsPage": 
+    "Page::HomeSettings": 
     {
         "title"           : "Homepage Settings",
         "background"      : "Background image:"
     },
-    "AppMenu_SettingsComponents":
+    "AppMenu::SettingsComponents":
     {
         "menuType"        : "Application menu:",
         "scrollingMenu"   : "Scrolling menu",

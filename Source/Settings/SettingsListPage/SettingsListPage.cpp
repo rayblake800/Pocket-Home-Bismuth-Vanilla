@@ -6,22 +6,29 @@
 static const juce::Identifier localeClassKey = "SettingsListPage";
 
 /* Localized text value keys: */
-static const juce::Identifier homeSettingsTitleKey   = "homeSettings";
-static const juce::Identifier colorSettingsTitleKey  = "colorSettings";
-static const juce::Identifier setPasswordTitleKey    = "setPassword";
-static const juce::Identifier changePasswordTitleKey = "changePassword";
-static const juce::Identifier removePasswordTitleKey = "removePassword";
-static const juce::Identifier dateTimeTitleKey       = "dateTime";
-static const juce::Identifier inputSettingsTitleKey  = "inputSettings";
+namespace TextKey
+{
+    static const juce::Identifier homeSettings   = "homeSettings";
+    static const juce::Identifier colorSettings  = "colorSettings";
+    static const juce::Identifier setPassword    = "setPassword";
+    static const juce::Identifier changePassword = "changePassword";
+    static const juce::Identifier removePassword = "removePassword";
+    static const juce::Identifier inputSettings  = "inputSettings";
+}
+
+/* Number of page buttons to show on the screen at a time: */
+static const constexpr int buttonsPerPage = 4;
+
+/* List vertical padding fraction: */
+static const constexpr float listPaddingFraction = 0.04;
 
 SettingsListPage::SettingsListPage() :
 Locale::TextUser(localeClassKey),
 pageListener(*this)
 {
-
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("SettingsListPage");
-#    endif
+#endif
     setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout(
@@ -34,29 +41,30 @@ pageListener(*this)
     setLayout(layout);
 }
 
-/*
- * Gets button titles for all page buttons.
+/**
+ * @brief  Gets button titles for all page buttons.
+ *
+ * @return  Titles for all page buttons, in order.
  */
 juce::StringArray SettingsListPage::getButtonTitles()
 {
     juce::StringArray titleList;
-    titleList.add(localeText(homeSettingsTitleKey));
-    titleList.add(localeText(colorSettingsTitleKey));
+    titleList.add(localeText(TextKey::homeSettings));
+    titleList.add(localeText(TextKey::colorSettings));
     if (Password::isPasswordSet())
     {
-        titleList.add(localeText(changePasswordTitleKey));
-        titleList.add(localeText(removePasswordTitleKey));
+        titleList.add(localeText(TextKey::changePassword));
+        titleList.add(localeText(TextKey::removePassword));
     }
     else
     {
-        titleList.add(localeText(setPasswordTitleKey));
+        titleList.add(localeText(TextKey::setPassword));
     }
-    titleList.add(localeText(dateTimeTitleKey));
-    titleList.add(localeText(inputSettingsTitleKey));
+    titleList.add(localeText(TextKey::inputSettings));
     return titleList;
 }
 
-/**
+/*
  * Reloads page layout whenever the page becomes visible.
  */
 void SettingsListPage::visibilityChanged()
@@ -67,7 +75,7 @@ void SettingsListPage::visibilityChanged()
     }
 }
 
-/**
+/*
  * Handle button clicks to open menu pages, close this page, or 
  * scroll the list of page buttons.
  */
@@ -89,7 +97,6 @@ void SettingsListPage::PageListener::buttonClicked(juce::Button * button)
     {
         pageTypes.add(Page::Type::removePassword);
     }
-    pageTypes.add(Page::Type::dateTime);
     pageTypes.add(Page::Type::inputSettings);
     
     StringArray pageNames = listPage.getButtonTitles();
@@ -103,7 +110,7 @@ void SettingsListPage::PageListener::buttonClicked(juce::Button * button)
 SettingsListPage::SettingsList::SettingsList()
 {
     setItemsPerPage(buttonsPerPage);
-    setYPaddingFraction(yPaddingFraction);
+    setYPaddingFraction(listPaddingFraction);
 }
      
 /*
@@ -111,7 +118,7 @@ SettingsListPage::SettingsList::SettingsList()
  */
 unsigned int SettingsListPage::SettingsList::getListSize() const
 {
-    return Password::isPasswordSet() ? 6 : 5;
+    return Password::isPasswordSet() ? 5 : 4;
 }
 
 /*
