@@ -11,6 +11,7 @@
 #include "Config_DataKey.h"
 #include "JSONFile.h"
 #include "JuceHeader.h"
+#include <iostream>
 #include <map>
 
 namespace Config { class FileResource; }
@@ -71,12 +72,6 @@ public:
      * 
      * @tparam ValueType                The value's data type.
      * 
-     * @throws BadKeyException          If the key parameter was not a valid 
-     *                                  key string for this FileResource.
-     * 
-     * @throws JSONFile::TypeException  If the key does not map to a value of 
-     *                                  type ValueType in this config file.
-     * 
      * @return                          The value read from the config file.
      */
     template<typename ValueType >
@@ -84,7 +79,10 @@ public:
     {      
         if(!isValidKey(key))
         {
-            throw BadKeyException(key);
+            DBG("Config::FileResource::" << __func__ 
+                    << ": Attempted changing invalid key \"" << key.toString());
+            jassertfalse;
+            return ValueType();
         }
         try
         {
@@ -92,18 +90,16 @@ public:
         }
         catch(JSONFile::TypeException e)
         {
-            DBG("FileResource::" << __func__ 
-                    << ": Failed to load key \"" 
-                    << e.getPropertyKey()
-                    <<"\" , expected type:" << e.getExpectedType()
-                    <<", actual type: "  << e.getFoundType()
-                    << ", error = " << e.what());
-            throw e;
+            std::cerr << "Config::FileResource::" << __func__ 
+                << ": Failed to load key \"" << e.getPropertyKey().toString() 
+                << "\" in file \"" << filename << "\", expected type: " 
+                << e.getExpectedType() <<", actual type: " << e.getFoundType()
+                << ", exception = " << e.what();
         }
         catch (JSONFile::FileException e)
         {
-            //Failed to access .json file
-            DBG("FileResource::" << __func__ << ": " << e.what());
+            DBG("FileResource::" << __func__ << ": Failed to access file \"" 
+                    << filename << "\", exception = " << e.what());
         }
         return ValueType();
     }
@@ -118,9 +114,6 @@ public:
      * @param newValue          The new value to save to the file.
      * 
      * @tparam ValueType        The value data type.
-     * 
-     * @throws BadKeyException  If the key parameter was not a valid key string
-     *                          for this FileResource.
      *
      * @return                  True if the value changed, false if the new
      *                          value matched the old value.
@@ -130,7 +123,10 @@ public:
     {
         if(!isValidKey(key))
         {
-            throw BadKeyException(key);
+            DBG("Config::FileResource::" << __func__ 
+                    << ": Attempted changing invalid key \"" << key.toString());
+            jassertfalse;
+            return false;
         }
         if(updateProperty<ValueType>(key, newValue))
         {
@@ -148,10 +144,11 @@ public:
                     listener->configValueChanged(key);
                 }
             });
-            DBG("Config::FileResource::SetConfigValue: Value with key \""
-                    << key.toString() << "\" changed. Found "
-                    << nListeners << " listeners, and notified "
-                    << nTracked << " listeners that were tracking that key.");
+            DBG("Config::FileResource::" << __func__ << ": Value with key \""
+                    << key.toString() << "\" changed in file \"" << filename 
+                    << "\". Found " << nListeners 
+                    << " listener(s), and notified " << nTracked 
+                    << " listener(s) tracking that key.");
             return true;
         }
         return false;
@@ -163,10 +160,7 @@ public:
      *  If this changes the value, listeners will be notified and changes will 
      * be saved.
      * 
-     * @param key                A key value defined in the config file.
-     * 
-     * @throws BadKeyException   If the key parameter was not a valid key string
-     *                           for this FileResource.
+     * @param key  A key value defined in the config file.
      */
     virtual void restoreDefaultValue(const juce::Identifier& key);
 
@@ -178,44 +172,6 @@ public:
      */
     virtual void restoreDefaultValues();
      
-    /**
-     * @brief  Signals an attempt to access an invalid config value in a 
-     *         FileResource.
-     */
-    struct BadKeyException : public std::exception
-    {
-    public:
-        /**
-         * @brief  Creates a new exception object to represent a key error.
-         *
-         * @param invalidKey  The invalid key string that caused this exception.
-         */
-        BadKeyException(const juce::Identifier& invalidKey) : 
-        invalidKey(invalidKey) { }
-        
-        /**
-         * @brief  Gets the invalid key string that caused this exception.
-         *
-         * @return  The invalid JSON key value.
-         */
-        virtual const char* what() const noexcept override
-        {
-            return juce::CharPointer_UTF8(invalidKey);
-        }
-        
-        /**
-         * @brief  Gets the invalid key that caused the exception.
-         * 
-         * @return  The invalid JSON key value.
-         */
-        const juce::Identifier& getInvalidKey()
-        {
-            return invalidKey;
-        }
-    private:
-        const juce::Identifier& invalidKey;
-    };
-
 protected:
     /**
      * @brief  Loads all initial configuration data from the JSON config file. 
@@ -268,12 +224,13 @@ protected:
         {
             if(!configJson.propertyExists<T>(key))
             {
-                DBG("FileResource::" << __func__ << ": Key \"" << key
-                        << "\" not found in " << filename 
-                        << ", checking default config file");
+                DBG("Config::FileResource::" << __func__ << ": Key \"" 
+                        << key.toString() << "\" not found in file \"" 
+                        << filename << "\", checking default config file");
                 if(!defaultJson.propertyExists<T>(key))
                 {
-                    DBG("FileResource::" << __func__ << ": Key \"" << key 
+                    DBG("FileResource::" << __func__ << ": Key \"" 
+                            << key.toString()
                             << "\" missing in config and default config!");
                 }
                 T property = defaultJson.getProperty<T>(key);
@@ -284,17 +241,18 @@ protected:
         }
         catch (JSONFile::FileException e)
         {
-            // Failed to read from .json file
-            DBG("FileResource::" << __func__ << ": " << e.what());
+            DBG("Config::FileResource::" << __func__ 
+                    << ": Failed to access file \"" << filename
+                    << "\" exception = " << e.what());
         }
         catch(JSONFile::TypeException e)
         {
-            DBG("FileResource::" << __func__ 
-                    << ": Failed to load default value for " 
-                    << e.getPropertyKey()
-                    <<", expected type:" << e.getExpectedType()
-                    <<", actual type: "  << e.getFoundType()
-                    << ", error = " << e.what());
+            DBG("Config::FileResource::" << __func__ 
+                    << ": Failed to load default value for \""
+                    << e.getPropertyKey().toString() << "\" in file " 
+                    << filename <<"\", expected type: " << e.getExpectedType()
+                    <<", actual type: "  << e.getFoundType() << ", exception = " 
+                    << e.what());
         }
         return T();
     }
@@ -323,12 +281,18 @@ protected:
         }
         catch (JSONFile::FileException e)
         {
-            // Failed to write to .json file
-            DBG("FileResource::" << __func__ << ": " << e.what());
+            DBG("Config::FileResource::" << __func__ 
+                    << ": Failed to access file \"" << filename
+                    << "\" exception = " << e.what());
         }
         catch(JSONFile::TypeException e)
         {
-            DBG("FileResource::" << __func__ << ": " << e.what());
+            DBG("Config::FileResource::" << __func__ 
+                    << ": Failed to change value with key \"" 
+                    << e.getPropertyKey().toString() << "\" in file " 
+                    << filename << "\", expected type: " << e.getExpectedType() 
+                    << ", actual type: "  << e.getFoundType() 
+                    << ", exception = " << e.what());
         }
         return false;
     }
@@ -340,7 +304,6 @@ protected:
     void writeChanges();
 
 private:
-     
     /**
      * @brief  Sets a configuration data value back to its default setting, 
      *         notifying listeners if the value changes.

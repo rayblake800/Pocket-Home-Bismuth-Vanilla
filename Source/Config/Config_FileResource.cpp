@@ -46,9 +46,9 @@ void Config::FileResource::restoreDefaultValue(const juce::Identifier& key)
             return;
         }
     }
-    DBG(dbgPrefix << __func__ << ": Key \"" << key 
+    DBG(dbgPrefix << __func__ << ": Key \"" << key.toString()
                 << "\" is not expected in " << filename);
-    throw BadKeyException(key);
+    jassertfalse;
 }
 
 /*
