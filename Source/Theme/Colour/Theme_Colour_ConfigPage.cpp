@@ -99,20 +99,21 @@ void ColourTheme::ConfigPage::ColourListModel::paintListBoxItem(
     juce::Rectangle<int> fillArea(0, 0, width, height);
     float checkSize = fillArea.getHeight() / 4;
     graphics.fillCheckerBoard(fillArea.toFloat(), checkSize, checkSize,
-            config.getColour(ColourPicker::checkerboardLight),
-            config.getColour(ColourPicker::checkerboardDark));
+            config.getColour(Widgets::ColourPicker::checkerboardLight),
+            config.getColour(Widgets::ColourPicker::checkerboardDark));
     graphics.setColour(colours[rowNumber]);
     graphics.fillRect(fillArea);
     fillArea.reduce(height / 5, height / 5);
     graphics.setColour((colours[rowNumber].getAlpha() < 0x88) ?
-            config.getColour(ColourPicker::checkerboardLight).contrasting() 
+            config.getColour(Widgets::ColourPicker::checkerboardLight)
+                    .contrasting() 
             : colours[rowNumber].contrasting());
     if (rowIsSelected)
     {
         graphics.fillRoundedRectangle(fillArea.toFloat(), textHeight / 5);
         graphics.setColour((colours[rowNumber].getAlpha() < 0x88) ?     
-            config.getColour(ColourPicker::checkerboardLight)
-            : colours[rowNumber]);
+                config.getColour(Widgets::ColourPicker::checkerboardLight)
+                : colours[rowNumber]);
     }
     graphics.setOpacity(1);
     graphics.setFont(juce::Font(textHeight));

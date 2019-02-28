@@ -57,7 +57,7 @@ $(WIDGET_OBJ)OverlaySpinner.o : \
 $(WIDGET_OBJ)Switch.o : \
     $(WIDGET_ROOT)/SwitchComponent.cpp
 $(WIDGET_OBJ)ColourPicker.o : \
-    $(WIDGET_ROOT)/ColourPicker.cpp
+    $(WIDGET_ROOT)/$(WIDGET_PREFIX)ColourPicker.cpp
 $(WIDGET_OBJ)Clock.o : \
     $(WIDGET_ROOT)/$(WIDGET_PREFIX)Clock.cpp
 $(WIDGET_OBJ)PopupEditor.o : \

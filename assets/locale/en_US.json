@@ -25,8 +25,12 @@
     },
     "Page::HomeSettings": 
     {
-        "title"           : "Homepage Settings",
-        "background"      : "Background image:"
+        "title"         : "Homepage Settings",
+        "background"    : "Background image:",
+        "clockMode"     : "Select the display mode for the clock:",
+        "mode24Hour"    : "24h mode",
+        "mode12Hour"    : "AM/PM mode",
+        "hideClock"     : "Don't show clock"
     },
     "AppMenu::SettingsComponents":
     {
@@ -35,18 +39,6 @@
         "pagedMenu"       : "Paged menu",
         "menuColumns"     : "Menu columns:",
         "menuRows"        : "Menu rows:"
-    },
-    "DateTimePage": 
-    {
-        "dateTimeTitle"  : "Date and time settings",
-        "clockMode"      : "Select the display mode for the clock:",
-        "mode24Hour"     : "24h mode",
-        "mode12Hour"     : "AM/PM mode",
-        "hideClock"      : "Don't show clock",
-        "setSystemClock" : "Reconfigure system clock",
-        "failedLaunch"   : "Failed to launch terminal:",
-        "failedToRun"    : "Failed command:",
-        "checkCommand"   : "Is the terminal launch command set correctly?"
     },
     "SettingsListPage": 
     {
@@ -58,7 +50,7 @@
         "dateTime"       : "Date and time",
         "inputSettings"  : "Input settings"
     },
-    "Wifi_ConnectionList": 
+    "Wifi::ConnectionList": 
     {
         "password"         : "Password:",
         "connect"          : "Connect",
@@ -188,9 +180,9 @@
         "willRemoveFolder" : "This will permanently remove this folder from the menu.",
         "editFolder"       : "Edit Folder"
     },
-    "ColourPicker" : 
+    "Widgets::ColourPicker" : 
     {
-	    "setColor" : "Set Color"
+	    "setColour" : "Set Color"
     },
     "Locale::Time":
     {

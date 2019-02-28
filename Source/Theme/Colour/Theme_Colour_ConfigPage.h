@@ -6,7 +6,7 @@
  */
 
 #include "Theme_Colour_ConfigListener.h"
-#include "ColourPicker.h"
+#include "Widgets_ColourPicker.h"
 #include "Page_Component.h"
 
 namespace Theme { namespace Colour { class ConfigPage; } }
@@ -86,7 +86,7 @@ private:
 
     ColourListModel listModel;
     juce::ListBox colourList;
-    ColourPicker colourPicker;
+    Widgets::ColourPicker colourPicker;
 
 };
 

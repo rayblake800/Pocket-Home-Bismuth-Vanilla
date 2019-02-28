@@ -24,7 +24,7 @@
 
 #### [ListEditor](../../Source/Widgets/ListEditor.h)
 
-#### [ColourPicker](../../Source/Widgets/ColourPicker.h)
+#### [Widgets::ColourPicker](../../Source/Widgets/Widgets_ColourPicker.h)
 
 #### [Spinner](../../Source/Widgets/Spinner.h)
 
