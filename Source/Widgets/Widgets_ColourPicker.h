@@ -80,7 +80,7 @@ private:
     void setSlidersToColour();
 
     /**
-     * @brief  Set the text field to the current colour's 8 digit hex value.
+     * @brief  Sets the text field to the current colour's 8 digit hex value.
      */
     void setEditorText();
 
@@ -134,7 +134,8 @@ private:
     {
     public: 
         /**
-         * @brief  Sets how the ColourBox is initially drawn.
+         * @brief  Optionally sets the component's color and border on
+         *         construction.
          *
          * @param colour      The colour used to fill the component.
          *
@@ -184,8 +185,7 @@ private:
     {
     public:
         /**
-         * @brief  Creates the button, optionally setting an initial colour 
-         *         value.
+         * @brief  Optionally sets an initial colour value on construction.
          *
          * @param colour  The button's initial colour value.
          */
@@ -266,11 +266,12 @@ private:
         virtual ~SliderBackground() { }
         
         /**
-         * @brief  Sets the colour component used to draw this slider background.
+         * @brief  Sets the colour component used to draw this slider 
+         *         background.
          * 
          * @param colourMask  The sliderColourMask of this component's slider.
          */
-        void setColourComponent(juce::uint32 colourMask);
+        void setColourComponent(const juce::uint32 colourMask);
         
         /**
          * @brief  Updates this component with the current selected colour 
@@ -279,7 +280,7 @@ private:
          * @param colour  The colour selected by the ColourPicker holding this
          *                component.
          */
-        void setColour(juce::Colour colour);
+        void setColour(const juce::Colour colour);
         
     private:     
         /**

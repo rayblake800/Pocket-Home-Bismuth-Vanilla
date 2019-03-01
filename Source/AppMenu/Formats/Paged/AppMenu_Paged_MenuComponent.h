@@ -12,7 +12,7 @@
 #include "AppMenu_MenuComponent.h"
 #include "AppMenu_ConfigFile.h"
 #include "Layout_Component_Manager.h"
-#include "NavButton.h"
+#include "Widgets_NavButton.h"
 
 namespace AppMenu { namespace Paged { class MenuComponent; } }
 
@@ -124,9 +124,9 @@ private:
     Layout::Component::Manager boundsManager;
 
     /* Navigation button that closes the active folder: */
-    NavButton upButton;
+    Widgets::NavButton upButton;
     /* Navigation button that decrements the selected folder page: */
-    NavButton leftButton;
+    Widgets::NavButton leftButton;
     /* Navigation button the increments the selected folder page: */
-    NavButton rightButton;
+    Widgets::NavButton rightButton;
 };

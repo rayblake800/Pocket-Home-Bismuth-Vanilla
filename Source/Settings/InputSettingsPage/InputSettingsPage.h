@@ -6,8 +6,8 @@
  */
 
 #include "Theme_Image_Component.h"
-#include "DrawableImageButton.h"
 #include "Locale/TextUser.h"
+#include "Widgets_DrawableImageButton.h"
 #include "Widgets_BoundedLabel.h"
 #include "Page_Component.h"
 

@@ -1,16 +1,21 @@
 #pragma once
 /**
- * @file  IconSliderComponent.h
+ * @file  Widgets_IconSlider.h
  * 
- * @brief  A horizontal slider component that draws icons on its left and right 
- *         sides.
+ * @brief  Provides a slider UI component with images drawn on either side to
+ *         show the slider's purpose.
  */
 
 #include "Theme_Image_Component.h"
 #include "JuceHeader.h"
 
+namespace Widgets { class IconSlider; }
 
-class IconSliderComponent : public juce::Component
+/*
+ * @brief  A horizontal slider component that draws icons on its left and right 
+ *         sides.
+ */
+class Widgets::IconSlider : public juce::Component
 {
 public:
     /**
@@ -19,9 +24,9 @@ public:
      * @param imageKey  The key to the slider's image assets within the image
      *                  asset configuration file.
      */
-    IconSliderComponent(const juce::Identifier& imageKey);
+    IconSlider(const juce::Identifier& imageKey);
 
-    virtual ~IconSliderComponent() { }
+    virtual ~IconSlider() { }
 
     /**
      * @brief  Changes the slider's stored value.
@@ -93,5 +98,5 @@ private:
     /* Internal slider component: */
     juce::Slider slider;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconSliderComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(IconSlider)
 };

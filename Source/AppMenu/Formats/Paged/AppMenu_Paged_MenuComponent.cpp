@@ -12,9 +12,9 @@ static const constexpr int animationMS = 300;
  */
 AppMenu::Paged::MenuComponent::MenuComponent() :
     boundsManager(this, Layout::Component::JSONKeys::pagedAppMenu), 
-    upButton(NavButton::WindowEdge::up),
-    leftButton(NavButton::WindowEdge::left),
-    rightButton(NavButton::WindowEdge::right)
+    upButton(Widgets::NavButton::WindowEdge::up),
+    leftButton(Widgets::NavButton::WindowEdge::left),
+    rightButton(Widgets::NavButton::WindowEdge::right)
 { 
     ConfigFile formatConfig;
     addTrackedKey(ConfigKeys::pagedMenuColumnsKey);

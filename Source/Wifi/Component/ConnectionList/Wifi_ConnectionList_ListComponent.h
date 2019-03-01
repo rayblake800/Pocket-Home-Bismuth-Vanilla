@@ -6,7 +6,7 @@
  *        controls for connecting to or disconnecting from those access points.
  */
 
-#include "FocusingPagedList.h"
+#include "Widgets_FocusingPagedList.h"
 #include "Wifi_AP_StrengthListener.h"
 #include "Wifi_APList_Listener.h"
 #include "Wifi_Connection_Record_Listener.h"
@@ -14,7 +14,7 @@
 
 namespace Wifi { namespace ConnectionList { class ListComponent; } }
 
-class Wifi::ConnectionList::ListComponent : public FocusingPagedList,
+class Wifi::ConnectionList::ListComponent : public Widgets::FocusingPagedList,
         public Wifi::APList::Listener,
         public Wifi::AP::StrengthListener,
         public Wifi::Connection::Record::Listener

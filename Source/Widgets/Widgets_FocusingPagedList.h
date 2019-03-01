@@ -1,14 +1,16 @@
 #pragma once
 /**
- * @file  FocusingPagedList.h
+ * @file  Widgets_FocusingPagedList.h
  * 
  * @brief Shows a scrolling list of items. List items can be selected, causing
  *        the list to focus on them and potentially display additional content
  *        relevant to the selected item.
  */
 
-#include "PagedList.h"
+#include "Widgets_PagedList.h"
 #include "Layout_Group_Manager.h"
+
+namespace Widgets { class FocusingPagedList; }
 
 /**
  * @brief  An abstract PagedList component that allows its list items to be
@@ -19,9 +21,13 @@
  * FocusingPagedList are responsible for providing and updating list item 
  * components.
  */
-class FocusingPagedList : public PagedList
+class Widgets::FocusingPagedList : public PagedList
 {
 public:
+    /**
+     * @brief  Constructs the list with default list item margins and items per
+     *         page.
+     */
     FocusingPagedList();
 
     virtual ~FocusingPagedList() { }

@@ -25,7 +25,7 @@ AppMenu::PopupEditor::PopupEditor(
         std::function<void() > onConfirm,
         bool showCategoryList,
         bool showCommandField) :
-PopupEditorComponent([this, onConfirm](PopupEditorComponent* e)
+Widgets::PopupEditor([this, onConfirm](Widgets::PopupEditor* e)
 {
     commitEdits();
     onConfirm();
@@ -214,7 +214,7 @@ void AppMenu::PopupEditor::loadIconPreview()
 /*
  * Triggers whenever the icon field is set to a new value.
  */
-void AppMenu::PopupEditor::fileSelected(FileSelectTextEditor* iconEditor)
+void AppMenu::PopupEditor::fileSelected(Widgets::FilePathEditor* iconEditor)
 {
     loadIconPreview();
 }

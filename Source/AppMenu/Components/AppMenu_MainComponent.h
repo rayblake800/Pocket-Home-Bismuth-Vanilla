@@ -15,7 +15,7 @@
 #include "AppMenu_EntryUpdater.h"
 #include "AppMenu_MenuFile.h"
 #include "AppMenu_Controller.h"
-#include "OverlaySpinner.h"
+#include "Widgets_OverlaySpinner.h"
 #include "Icon_Loader.h"
 #include "JuceHeader.h"
 
@@ -117,7 +117,7 @@ private:
     const Icon::Loader iconLoader;
 
     /* The menu's loading spinner. */
-    OverlaySpinner loadingSpinner;
+    Widgets::OverlaySpinner loadingSpinner;
 
     /* Handles the appearance and layout of the menu. */
     std::unique_ptr<MenuComponent> menuComponent;

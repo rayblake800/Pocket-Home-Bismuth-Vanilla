@@ -6,8 +6,8 @@
  *         a button to open additional settings pages.
  */
 
-#include "IconSliderComponent.h"
-#include "SwitchComponent.h"
+#include "Widgets_IconSlider.h"
+#include "Widgets_Switch.h"
 #include "Layout_Component_Manager.h"
 #include "Page_Component.h"
 #include "WindowFocusedTimer.h"
@@ -100,13 +100,13 @@ private:
     Wifi::ControlWidget wifiComponent;
 
     /* Sets the display brightness */
-    IconSliderComponent screenBrightnessSlider;
+    Widgets::IconSlider screenBrightnessSlider;
 
     /* Sets system volume levels */
-    IconSliderComponent volumeSlider;
+    Widgets::IconSlider volumeSlider;
 
     /* Opens the settings list page */
-    Theme::Image::Component<DrawableImageButton> settingsListBtn;
+    Theme::Image::Component<Widgets::DrawableImageButton> settingsListBtn;
 
     /* Sets the bounds of the settings list button: */
     Layout::Component::Manager listButtonManager; 

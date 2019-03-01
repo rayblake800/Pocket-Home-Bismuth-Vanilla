@@ -1,28 +1,30 @@
-#include "AssetFiles.h"
-#include "Spinner.h"
+#include "Widgets_Spinner.h"
 #include "Theme_Image_Component.h"
 #include "Theme_Image_ConfigFile.h"
 #include "Theme_Image_JSONKeys.h"
+    
+/* The amount of time in milliseconds between switching image frames: */
+static const constexpr int timerInterval = 500;
 
-Spinner::Spinner(int secondsToTimeout) :
-WindowFocusedTimer("SpinnerFrame"),
-Theme::Image::Component<DrawableImageComponent>(Theme::Image::JSONKeys::spinner,
-        0, juce::RectanglePlacement::fillDestination),
+Widgets::Spinner::Spinner(const int secondsToTimeout) :
+WindowFocusedTimer("Widgets::Spinner"),
+Theme::Image::Component<>(Theme::Image::JSONKeys::spinner, 0,
+        juce::RectanglePlacement::fillDestination),
 timeout(secondsToTimeout)
 {
-#    if JUCE_DEBUG
-    setName("spinner");
-#    endif
+#if JUCE_DEBUG
+    setName("Widgets::Spinner");
+#endif
     Theme::Image::ConfigFile config;
     numImages = config.getAssetList(Theme::Image::JSONKeys::spinner)
             .getImageFiles().size();
 }
 
 /*
- * Disables animation when losing visibility, and enables animation when gaining
- * visibility.
+ * Disables the animation when visibility is lost, and enables it when 
+ * visibility is gained.
  */
-void Spinner::visibilityChanged()
+void Widgets::Spinner::visibilityChanged()
 {
     if (isVisible())
     {
@@ -38,7 +40,7 @@ void Spinner::visibilityChanged()
  * Shows the next frame of the spinner animation, and disables the spinner if
  * runtime exceeds the timeout period.
  */
-void Spinner::timerCallback()
+void Widgets::Spinner::timerCallback()
 {
     runtime += getTimerInterval();
     if (runtime > timeout && timeout > 0)

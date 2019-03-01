@@ -8,7 +8,7 @@
 #include "JuceHeader.h"
 #include "Locale/TextUser.h"
 #include "Widgets_BoundedLabel.h"
-#include "DrawableImageComponent.h"
+#include "Widgets_DrawableImage.h"
 #include "Theme_Image_ConfigFile.h"
 #include "Page_Component.h"
 
@@ -106,7 +106,7 @@ private:
     juce::TextButton loginButton;
     Widgets::BoundedLabel passwordLabel;
     juce::TextEditor passwordField;
-    DrawableImageComponent loginImage;
+    Widgets::DrawableImage loginImage;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LoginPage)
 };

@@ -7,7 +7,7 @@
 
 #include "Locale/TextUser.h"
 #include "Widgets_BoundedLabel.h"
-#include "CounterComponent.h"
+#include "Widgets_Counter.h"
 #include "AppMenu_ConfigFile.h"
 #include "JuceHeader.h"
 
@@ -124,9 +124,9 @@ private:
 
     /* Used to select the maximum column count for AppMenu grids: */
     Widgets::BoundedLabel columnCountLabel;
-    CounterComponent columnCounter;
+    Widgets::Counter columnCounter;
 
     /* Used to select the maximum row count for AppMenu grids: */
     Widgets::BoundedLabel rowCountLabel;
-    CounterComponent rowCounter;
+    Widgets::Counter rowCounter;
 };

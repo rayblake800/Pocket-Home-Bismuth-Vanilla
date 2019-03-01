@@ -10,7 +10,7 @@
 #include "Layout_Group_Manager.h"
 #include "Layout_Group_RelativeLayout.h"
 #include "Layout_Transition_Type.h"
-#include "NavButton.h"
+#include "Widgets_NavButton.h"
 #include "JuceHeader.h"
 
 namespace Page 
@@ -183,7 +183,7 @@ private:
     virtual void paint(juce::Graphics& graphics) override;
 
     /* A button that removes the page from the page stack may be held here: */
-    std::unique_ptr<NavButton> backButton = nullptr;
+    std::unique_ptr<Widgets::NavButton> backButton = nullptr;
 
     /* Manages the relative layout of page child components: */
     Layout::Group::Manager layoutManager;

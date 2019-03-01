@@ -7,8 +7,8 @@
 
 #include "Page_Component.h"
 #include "Locale/TextUser.h"
-#include "NavButton.h"
-#include "PagedList.h"
+#include "Widgets_NavButton.h"
+#include "Widgets_PagedList.h"
 
 /**
  * @brief  A navigation page containing buttons that open other settings pages.
@@ -59,7 +59,7 @@ private:
     /**
      * @brief  The list component providing all settings page buttons. 
      */
-    class SettingsList : public PagedList
+    class SettingsList : public Widgets::PagedList
     {
     public:
         SettingsList();

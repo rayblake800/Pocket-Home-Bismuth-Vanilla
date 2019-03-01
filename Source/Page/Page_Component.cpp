@@ -12,11 +12,13 @@ static const constexpr char* dbgPrefix = "Page::Component::";
  */
 void Page::Component::setLayout(Layout::Group::RelativeLayout layout)
 {
+    using Widgets::NavButton;
     layoutManager.clearLayout(true);
     // Make sure layout margins fit the back button:
     if(backButton != nullptr) 
     {
-        float minMargin = backButton->xMarginFractionNeeded();
+        float minMargin 
+                = NavButton::xMarginFractionNeeded(backButton->getEdge());
         layout.setXMarginFraction(std::max(layout.getXMarginFraction(),
                 minMargin));
     }   
@@ -32,14 +34,15 @@ void Page::Component::setLayout(Layout::Group::RelativeLayout layout)
  */
 void Page::Component::setBackButton(const BackButtonType buttonType)
 {
-    NavButton::WindowEdge newEdge = NavButton::down;
+    using Widgets::NavButton;
+    NavButton::WindowEdge newEdge = NavButton::WindowEdge::down;
     if(buttonType == BackButtonType::left)
     {
-        newEdge = NavButton::left;
+        newEdge = NavButton::WindowEdge::left;
     }
     else if(buttonType == BackButtonType::right)
     {
-        newEdge = NavButton::right;
+        newEdge = NavButton::WindowEdge::right;
     }
     if(backButton != nullptr)
     {
@@ -60,10 +63,11 @@ void Page::Component::setBackButton(const BackButtonType buttonType)
     backButton->addListener(this);
     
     Layout::Group::RelativeLayout layout = layoutManager.getLayout();
-    if(!layout.isEmpty()
-       && layout.getXMarginFraction() < backButton->xMarginFractionNeeded())
+    if(!layout.isEmpty() && layout.getXMarginFraction() 
+            < NavButton::xMarginFractionNeeded(backButton->getEdge()))
     {
-        layout.setXMarginFraction(backButton->xMarginFractionNeeded());
+        layout.setXMarginFraction(NavButton::xMarginFractionNeeded
+                (backButton->getEdge()));
         layoutManager.setLayout(layout);
     }
 }
@@ -151,9 +155,13 @@ void Page::Component::buttonClicked(juce::Button* button)
     {
         if(!overrideBackButton())
         {
-            removeFromStack(backButton->getEdge() == NavButton::right ?
-                Layout::Transition::Type::moveLeft 
-                : Layout::Transition::Type::moveRight);
+            Layout::Transition::Type transition 
+                    = Layout::Transition::Type::moveRight;
+            if(backButton->getEdge() == Widgets::NavButton::WindowEdge::right)
+            {
+                transition = Layout::Transition::Type::moveLeft;
+            }
+            removeFromStack(transition);
         }
     }
 }

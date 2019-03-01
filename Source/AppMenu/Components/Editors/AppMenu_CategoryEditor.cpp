@@ -14,16 +14,15 @@ static const juce::Identifier editCategoryTitleKey = "editCategoryTitle";
 AppMenu::CategoryEditor::CategoryEditor(juce::StringArray categories,
         std::function<void(juce::StringArray) > onConfirm) :
 Locale::TextUser(localeClassKey),
-PopupEditorComponent( [this, onConfirm](PopupEditorComponent* thisPopup)
+Widgets::PopupEditor( [this, onConfirm](Widgets::PopupEditor* thisPopup)
 {
     onConfirm(categoryList.getListItems());
 }),
 categoryList(categories)
 {
-
-#    if JUCE_DEBUG
-    setName("categoryEditor");
-#    endif
+#if JUCE_DEBUG
+    setName("AppMenu::CategoryEditor");
+#endif
     setEditorTitle(localeText(editCategoryTitleKey));
 
     using namespace Layout::Group;

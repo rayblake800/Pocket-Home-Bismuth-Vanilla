@@ -5,13 +5,13 @@
  * @brief  Provides UI controls for selecting the HomePage background image.
  */
 
-#include "FileSelectTextEditor.h"
+#include "Widgets_FilePathEditor.h"
 #include "Theme_Image_ConfigFile.h"
 
 namespace Theme { namespace Image { class HomeBackgroundPicker; } }
 
-class Theme::Image::HomeBackgroundPicker : public FileSelectTextEditor,
-        public FileSelectTextEditor::Listener
+class Theme::Image::HomeBackgroundPicker : public Widgets::FilePathEditor,
+        public Widgets::FilePathEditor::Listener
 {
 public:
     /**
@@ -28,7 +28,7 @@ private:
      * @param thisEditor  The updated editor. This should always be the
      *                    HomeBackgroundPicker.
      */
-    virtual void fileSelected(FileSelectTextEditor* thisEditor) override;
+    virtual void fileSelected(Widgets::FilePathEditor* thisEditor) override;
 
     /* Reads and writes the background image, and ensures the image JSON file
      * resource remains available. */

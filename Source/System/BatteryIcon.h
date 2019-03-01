@@ -7,7 +7,7 @@
  */
 
 #include "Theme_Image_Component.h"
-#include "DrawableImageComponent.h"
+#include "Widgets_DrawableImage.h"
 #include "Layout_Component_Manager.h"
 #include "WindowFocusedTimer.h"
 #include "BatteryMonitor.h"
@@ -84,7 +84,7 @@ private:
     virtual void timerCallback() override;
 
     /* Shows the battery icon */
-    Theme::Image::Component<DrawableImageComponent> batteryImage;
+    Theme::Image::Component<> batteryImage;
     Layout::Component::Manager batteryImageLayout;
     
     /* Shows battery percentage text */

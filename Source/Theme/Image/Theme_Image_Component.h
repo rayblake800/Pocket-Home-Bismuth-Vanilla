@@ -8,20 +8,20 @@
 
 #include "Theme_Image_AssetList.h"
 #include "Theme_Image_ConfigFile.h"
-#include "DrawableImageComponent.h"
+#include "Widgets_DrawableImage.h"
 
 namespace Theme { namespace Image { template <class ComponentType> 
     class Component; } }
 
 /**
- * @brief  A subclass of DrawableImageComponent with image assets and colors
+ * @brief  A subclass of Widgets::DrawableImage with image assets and colors
  *         defined by an AssetList object.
  *
  * @tparam DrawableImageType  The Component's parent class. This should be 
- *                            either DrawableImageComponent or one of its 
- *                            subclasses.
+ *                            either Widgets::DrawableImageComponent or one of 
+ *                            its subclasses.
  */
-template <class DrawableImageType = DrawableImageComponent>
+template <class DrawableImageType = Widgets::DrawableImage>
 class Theme::Image::Component : public DrawableImageType
 {
 public:
@@ -88,7 +88,7 @@ protected:
         }
         else
         {
-            DBG("ThemeImages::Component::" << __func__
+            DBG("Theme::Image::Component::" << __func__
                     << ": couldn't load asset index " << assetIndex
                     << ", asset count is " << filenames.size());
             assetIndex = -1;
@@ -97,16 +97,16 @@ protected:
         const juce::Array<juce::Colour>& colours = assetList.getImageColours();
         for (int i = 0; i < colours.size(); i++)
         {
-            int colourId = DrawableImageType::imageColour0Id + i;
+            int colourId = Widgets::DrawableImage::imageColour0Id + i;
             DrawableImageType::setColour(colourId, colours[i]);
         }
     }
 
 private:
-    /* current selected image asset index. */
+    /* Current selected image asset index: */
     int assetIndex = 0;
 
-    /* The list of available image assets, and custom image colors. */
+    /* The list of available image assets and custom image colors: */
     AssetList assetList;
 
     /* Gets image assets and keeps the image asset list loaded: */

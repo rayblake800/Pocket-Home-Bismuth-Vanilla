@@ -7,28 +7,36 @@
 #include "Config_MainFile.h"
 #include "Utils.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "AppMenu::Controller::";
+#endif
+
 /* Localized object class key: */
-static const juce::Identifier localeClassKey        = "AppMenu::Controller";
+static const juce::Identifier localeClassKey = "AppMenu::Controller";
 
 /* Localized text value keys: */
-static const juce::Identifier editTextKey           = "edit";
-static const juce::Identifier deleteTextKey         = "delete";
-static const juce::Identifier pinItemTextKey        = "pinItem";
-static const juce::Identifier moveBackTextKey       = "moveBack";
-static const juce::Identifier moveForwardTextKey    = "moveForward";
-static const juce::Identifier newShortcutTextKey    = "newShortcut";
-static const juce::Identifier newEntryTextKey       = "newEntry";
-static const juce::Identifier newFolderTextKey      = "newFolder";
-static const juce::Identifier launchingAPPTextKey   = "launchingAPP";
+namespace TextKey
+{
+    static const juce::Identifier edit           = "edit";
+    static const juce::Identifier deleteItem     = "delete";
+    static const juce::Identifier pinItem        = "pinItem";
+    static const juce::Identifier moveBack       = "moveBack";
+    static const juce::Identifier moveForward    = "moveForward";
+    static const juce::Identifier newShortcut    = "newShortcut";
+    static const juce::Identifier newEntry       = "newEntry";
+    static const juce::Identifier newFolder      = "newFolder";
+    static const juce::Identifier launchingAPP   = "launchingAPP";
+}
 
 /*
  * Creates a new menu controller.
  */
 AppMenu::Controller::Controller
-(MenuComponent* menuComponent, OverlaySpinner& loadingSpinner) : 
-    menuComponent(menuComponent), 
-    loadingSpinner(loadingSpinner),
-    Locale::TextUser(localeClassKey) { } 
+(MenuComponent* menuComponent, Widgets::OverlaySpinner& loadingSpinner) : 
+menuComponent(menuComponent), 
+loadingSpinner(loadingSpinner),
+Locale::TextUser(localeClassKey) { } 
 
 /*
  * Displays a context menu with options for editing an open menu folder.
@@ -44,11 +52,11 @@ void AppMenu::Controller::showContextMenu
     juce::PopupMenu contextMenu;
     jassert(!folderItem.isNull());
     contextMenu.addItem(int(OptionCode::NewShortcut), 
-            localeText(newShortcutTextKey));
+            localeText(TextKey::newShortcut));
     contextMenu.addItem(int(OptionCode::NewFolder), 
-            localeText(newFolderTextKey));
+            localeText(TextKey::newFolder));
     contextMenu.addItem(int(OptionCode::NewDesktopEntry), 
-            localeText(newEntryTextKey));
+            localeText(TextKey::newEntry));
     handleContextMenuAction(OptionCode(contextMenu.show()), folderItem,
             insertIndex);
 }
@@ -66,8 +74,9 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     juce::PopupMenu contextMenu;
     jassert(!menuItem.isNull());
 
-    contextMenu.addItem(int(OptionCode::Edit), localeText(editTextKey));
-    contextMenu.addItem(int(OptionCode::Delete), localeText(deleteTextKey));
+    contextMenu.addItem(int(OptionCode::Edit), localeText(TextKey::edit));
+    contextMenu.addItem(int(OptionCode::Delete),
+            localeText(TextKey::deleteItem));
     
     MenuFile appConfig;
     const MenuItem rootFolder = appConfig.getRootFolderItem();
@@ -75,13 +84,13 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     if(parent != rootFolder)
     {
         contextMenu.addItem(int(OptionCode::PinToRoot), 
-                localeText(pinItemTextKey));
+                localeText(TextKey::pinItem));
     }
 
     if(menuItem.isFolder())
     {
         contextMenu.addItem(int(OptionCode::NewShortcut), 
-                localeText(newShortcutTextKey));
+                localeText(TextKey::newShortcut));
     }
 
     // The menu item parameter should always have a valid parent and index.
@@ -93,12 +102,12 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
         if(menuItem.getIndex() != 0)
         {
             contextMenu.addItem(int(OptionCode::MoveBack), 
-                    localeText(moveBackTextKey));
+                    localeText(TextKey::moveBack));
         }
         if(menuItem.getIndex() != lastMovableIndex)
         {
             contextMenu.addItem(int(OptionCode::MoveForward), 
-                    localeText(moveForwardTextKey));
+                    localeText(TextKey::moveForward));
         }
     }
     handleContextMenuAction(OptionCode(contextMenu.show()), menuItem,
@@ -134,8 +143,8 @@ void AppMenu::Controller::activateMenuItem(const MenuItem clickedItem)
     }
     else
     {
-        const juce::String loadingText = localeText(launchingAPPTextKey) + " "
-            + clickedItem.getTitle();
+        const juce::String loadingText = localeText(TextKey::launchingAPP) 
+            + " " + clickedItem.getTitle();
         setLoadingState(true, loadingText);
         launchOrFocusApplication(clickedItem);
     }
@@ -209,9 +218,8 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
                 ((selectedOption == OptionCode::MoveBack) ? -1 : 1);
             if(!parent.swapChildren(itemIndex, swapIndex))
             {
-                DBG("AppMenu::Controller::" << __func__
-                        << ": Couldn't swap indices " << itemIndex
-                        << " and " << swapIndex);
+                DBG(dbgPrefix << __func__ << ": Couldn't swap indices " 
+                        << itemIndex << " and " << swapIndex);
             }
             break;
         }
@@ -225,8 +233,8 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             createNewEntryEditor(editedItem);
             break;
         default:
-            DBG("AppMenu::ContextMenu::" << __func__ 
-                    << ": Unhandled menu option " << int(selectedOption));
+            DBG(dbgPrefix << __func__ << ": Unhandled menu option " 
+                    << int(selectedOption));
             jassertfalse;
     }
 }

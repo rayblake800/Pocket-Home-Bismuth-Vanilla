@@ -25,7 +25,7 @@ pageButton(name + "Button")
     addAndMakeVisible(pageButton);
     addChildComponent(spinner);
     juce::Colour iconColour = findColour(juce::Label::textColourId);
-    icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
+    icon.setColour(Widgets::DrawableImage::imageColour0Id, iconColour);
 }
 
 /*
@@ -81,7 +81,7 @@ void ConnectionSettingsComponent::resized()
 void ConnectionSettingsComponent::colourChanged()
 {
     juce::Colour iconColour = findColour(juce::Label::textColourId);
-    icon.setColour(DrawableImageComponent::imageColour0Id, iconColour);
+    icon.setColour(Widgets::DrawableImage::imageColour0Id, iconColour);
 }
 
 /*

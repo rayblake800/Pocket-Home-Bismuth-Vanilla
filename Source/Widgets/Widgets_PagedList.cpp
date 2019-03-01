@@ -1,17 +1,20 @@
-#include "PagedList.h"
+#include "Widgets_PagedList.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
-static const constexpr char* dbgPrefix = "PagedList::";
+static const constexpr char* dbgPrefix = "Widgets::PagedList::";
 #endif
 
 /* Default animation duration(milliseconds) when scrolling between list 
  * pages: */
 static const constexpr unsigned int defaultAnimDuration = 300;
 
-PagedList::PagedList() : 
-upButton(NavButton::up),
-downButton(NavButton::down),
+/*
+ * Initializes list navigation buttons when the list is constructed.
+ */
+Widgets::PagedList::PagedList() : 
+upButton(NavButton::WindowEdge::up),
+downButton(NavButton::WindowEdge::down),
 navButtonListener(*this)
 {
     addAndMakeVisible(upButton);
@@ -25,10 +28,10 @@ navButtonListener(*this)
  * Changes the current selected list page, updating the list layout to show the 
  * selected page.
  */
-void PagedList::setPageIndex
+void Widgets::PagedList::setPageIndex
 (const unsigned int newIndex, const bool animate, const unsigned int duration)
 {
-    using Transition= Layout::Transition::Type;
+    using Transition = Layout::Transition::Type;
     if(newIndex < 0 || newIndex >= getPageCount())
     {
         DBG(dbgPrefix << __func__ << ": can't set page to invalid index "
@@ -53,7 +56,8 @@ void PagedList::setPageIndex
 /*
  * Provides the weight value used to set each list item's relative height. 
  */
-unsigned int PagedList::getListItemWeight(const unsigned int index) const
+unsigned int Widgets::PagedList::getListItemWeight
+(const unsigned int index) const
 {
     return 1;
 }
@@ -61,7 +65,7 @@ unsigned int PagedList::getListItemWeight(const unsigned int index) const
 /*
  * Finds the index of a list item Component within the list.
  */
-int PagedList::getListItemIndex(juce::Component* listItem) const
+int Widgets::PagedList::getListItemIndex(juce::Component* listItem) const
 {
     int itemIndex = listComponents.indexOf(listItem);
     if(itemIndex >= 0)
@@ -78,7 +82,7 @@ int PagedList::getListItemIndex(juce::Component* listItem) const
 /*
  * Sets the number of list items that are displayed at one time.
  */
-void PagedList::setItemsPerPage(const unsigned int perPage)
+void Widgets::PagedList::setItemsPerPage(const unsigned int perPage)
 {
     if(perPage != itemsPerPage)
     {
@@ -93,7 +97,7 @@ void PagedList::setItemsPerPage(const unsigned int perPage)
 /*
  * Gets the number of list items shown on the page at one time.
  */
-unsigned int PagedList::getItemsPerPage() const
+unsigned int Widgets::PagedList::getItemsPerPage() const
 {
     return itemsPerPage;
 }
@@ -101,7 +105,7 @@ unsigned int PagedList::getItemsPerPage() const
 /*
  * Gets the number of pages in the list.
  */
-unsigned int PagedList::getPageCount() const
+unsigned int Widgets::PagedList::getPageCount() const
 {
     const unsigned int listSize = getListSize();
     unsigned int pageCount = listSize / itemsPerPage;
@@ -116,7 +120,7 @@ unsigned int PagedList::getPageCount() const
  * Sets the fraction of the list height that should be placed between list
  * items.
  */
-void PagedList::setYPaddingFraction(const float paddingFraction)
+void Widgets::PagedList::setYPaddingFraction(const float paddingFraction)
 {
     yPaddingFraction = paddingFraction;
     if(getParentComponent() != nullptr && !getBounds().isEmpty())
@@ -129,8 +133,8 @@ void PagedList::setYPaddingFraction(const float paddingFraction)
  * Reloads list content, running updateListItem for each visible
  * list item.
  */
-void PagedList::refreshListContent(const Layout::Transition::Type transition,
-        const unsigned int duration)
+void Widgets::PagedList::refreshListContent
+(const Layout::Transition::Type transition, const unsigned int duration)
 {
     Layout::Group::RelativeLayout layout;
     unsigned int listSize = getListSize();
@@ -152,8 +156,9 @@ void PagedList::refreshListContent(const Layout::Transition::Type transition,
         layout.addRow(row);
     }
     layout.setYPaddingFraction(yPaddingFraction);
-    layout.setYMarginFraction(std::max(upButton.yMarginFractionNeeded(),
-            downButton.yMarginFractionNeeded()));
+    layout.setYMarginFraction(std::max(
+            NavButton::yMarginFractionNeeded(NavButton::WindowEdge::up),
+            NavButton::yMarginFractionNeeded(NavButton::WindowEdge::down)));
     layoutManager.transitionLayout(layout, this, transition, duration);
     // Update individual list components:
     for(int i = 0; i < itemsPerPage; i++)
@@ -171,7 +176,7 @@ void PagedList::refreshListContent(const Layout::Transition::Type transition,
 /*
  * Updates the list page navigation button visibility.
  */
-void PagedList::updateNavButtonVisibility(const bool buttonsVisible)
+void Widgets::PagedList::updateNavButtonVisibility(const bool buttonsVisible)
 {
     showNavButtons = buttonsVisible;
     upButton.setVisible(showNavButtons && pageIndex > 0);
@@ -179,9 +184,9 @@ void PagedList::updateNavButtonVisibility(const bool buttonsVisible)
 }
 
 /*
- * Re-positions list items and navigation buttons when the list is resized.
+ * Repositions list items and navigation buttons when the list is resized.
  */
-void PagedList::resized()
+void Widgets::PagedList::resized()
 {
     layoutManager.layoutComponents(getLocalBounds());
     upButton.applyConfigBounds();
@@ -195,7 +200,7 @@ void PagedList::resized()
 /*
  * Scrolls the list when the navigation buttons are clicked.  
  */
-void PagedList::NavButtonListener::buttonClicked(juce::Button* button)
+void Widgets::PagedList::NavButtonListener::buttonClicked(juce::Button* button)
 {
     int newIndex = pagedList.pageIndex;
     if(button == &pagedList.upButton)

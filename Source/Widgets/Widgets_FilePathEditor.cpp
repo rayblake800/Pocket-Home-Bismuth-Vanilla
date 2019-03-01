@@ -1,23 +1,23 @@
 #include "Utils.h"
 #include "Layout_Component_ConfigFile.h"
-#include "FileSelectTextEditor.h"
+#include "Widgets_FilePathEditor.h"
 
 /* Default file filter, allowing image types: */
-const juce::WildcardFileFilter FileSelectTextEditor::imageFilter
+const juce::WildcardFileFilter Widgets::FilePathEditor::imageFilter
 ("*.png;*.jpg;*.jpeg;*.svg;*.gif;*.xpm", "", "Image files");
 
 /* Class localized text key: */
-static const juce::Identifier localeClassKey = "FileSelectTextEditor";
+static const juce::Identifier localeClassKey = "FilePathEditor";
 
 /* Localized text value keys: */
 static const juce::Identifier defaultTitleKey       = "defaultTitle";
 static const juce::Identifier defaultDescriptionKey = "defaultDescription";
 
 /*
- * Creates a new FileSelectTextEditor, optionally setting its initial 
+ * Creates a new FilePathEditor, optionally setting its initial 
  * properties.
  */
-FileSelectTextEditor::FileSelectTextEditor(
+Widgets::FilePathEditor::FilePathEditor(
         const juce::String& selectionTitle,
         const juce::String& selectionText,
         const juce::WildcardFileFilter fileFilter) :
@@ -28,7 +28,7 @@ selectionText(selectionText),
 fileSelectButton("...")
 {
 #if JUCE_DEBUG
-    setName("FileSelectTextEditor");
+    setName("Widgets::FilePathEditor");
 #endif
     if(selectionTitle.isEmpty())
     {
@@ -50,7 +50,7 @@ fileSelectButton("...")
 /*
  * Sets the text value held by this editor.
  */
-void FileSelectTextEditor::setText
+void Widgets::FilePathEditor::setText
 (const juce::String newText, const bool shouldNotify)
 {
     filePath.setText(newText, shouldNotify);
@@ -63,7 +63,7 @@ void FileSelectTextEditor::setText
 /*
  * Gets the text value held by this editor.
  */
-juce::String FileSelectTextEditor::getText() const
+juce::String Widgets::FilePathEditor::getText() const
 {
     return filePath.getText();
 }
@@ -71,7 +71,7 @@ juce::String FileSelectTextEditor::getText() const
 /*
  * Sets the visibility of the editor's file selection button.
  */
-void FileSelectTextEditor::showFileSelectButton(const bool shouldShow)
+void Widgets::FilePathEditor::showFileSelectButton(const bool shouldShow)
 {
     if(shouldShow == fileSelectButton.isShowing())
     {
@@ -93,7 +93,7 @@ void FileSelectTextEditor::showFileSelectButton(const bool shouldShow)
 /*
  * Adds a Listener to the list of Listeners that will be notified of changes.
  */
-void FileSelectTextEditor::addFileSelectListener(Listener * listener)
+void Widgets::FilePathEditor::addFileSelectListener(Listener * listener)
 {
     listeners.insert(listener);
 }
@@ -101,19 +101,18 @@ void FileSelectTextEditor::addFileSelectListener(Listener * listener)
 /*
  * Signals to all listeners that editor data has updated.
  */
-void FileSelectTextEditor::notifyListeners()
+void Widgets::FilePathEditor::notifyListeners()
 {
-    for (std::set<Listener*>::iterator it = listeners.begin();
-         it != listeners.end(); it++)
+    for (auto iter = listeners.begin(); iter != listeners.end(); iter++)
     {
-        (*it)->fileSelected(this);
+        (*iter)->fileSelected(this);
     }
 }
 
 /*
  * Calls notifyListeners when the editor loses focus.
  */
-void FileSelectTextEditor::textEditorFocusLost(juce::TextEditor& editor)
+void Widgets::FilePathEditor::textEditorFocusLost(juce::TextEditor& editor)
 {
     if (editor.getText().isNotEmpty())
     {
@@ -125,7 +124,8 @@ void FileSelectTextEditor::textEditorFocusLost(juce::TextEditor& editor)
  * Calls notifyListeners when the editor is focused and the return key is 
  * pressed.
  */
-void FileSelectTextEditor::textEditorReturnKeyPressed(juce::TextEditor & editor)
+void Widgets::FilePathEditor::textEditorReturnKeyPressed
+(juce::TextEditor & editor)
 {
     if (editor.getText().isNotEmpty())
     {
@@ -136,36 +136,40 @@ void FileSelectTextEditor::textEditorReturnKeyPressed(juce::TextEditor & editor)
 /*
  * Opens the file selection window when the file selection button is clicked.
  */
-void FileSelectTextEditor::buttonClicked(juce::Button* button)
+void Widgets::FilePathEditor::buttonClicked(juce::Button* button)
 {
-    using namespace juce;
+    using juce::FileBrowserComponent;
+    using juce::FileChooserDialogBox;
     FileBrowserComponent browser(FileBrowserComponent::canSelectFiles |
             FileBrowserComponent::openMode,
-            File(),
+            juce::File(),
             &fileFilter,
             &imagePreview);
-    FileChooserDialogBox dialogBox(selectionTitle,
+    FileChooserDialogBox dialogBox(
+            selectionTitle,
             selectionText,
             browser,
             false,
             findColour(fileWindowColourId));
-    dialogBox.setColour(FileChooserDialogBox::titleTextColourId, Colours::red);
-    jassert(dialogBox.isColourSpecified(FileChooserDialogBox::titleTextColourId));
-    Rectangle<int> size = getWindowBounds();
+    dialogBox.setColour(FileChooserDialogBox::titleTextColourId,
+            juce::Colours::red);
+    jassert(dialogBox.isColourSpecified
+            (FileChooserDialogBox::titleTextColourId));
+    juce::Rectangle<int> size = getWindowBounds();
     if (dialogBox.show(size.getWidth(), size.getHeight()))
     {
-        File selectedFile = browser.getSelectedFile(0);
+        juce::File selectedFile = browser.getSelectedFile(0);
         setText(selectedFile.getFullPathName());
         notifyListeners();
     }
 }
 
-/**
- * Resize child components to fit within the parent component.
+/*
+ * Resizes child components to fit within the parent component.
  */
-void FileSelectTextEditor::resized()
+void Widgets::FilePathEditor::resized()
 {
-    using namespace juce;
+    using juce::Rectangle;
     Rectangle<int> bounds = getLocalBounds();
     if (!fileSelectButton.isVisible())
     {

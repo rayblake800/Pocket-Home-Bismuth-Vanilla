@@ -6,7 +6,7 @@
  */
 
 #include "Page_Component.h"
-#include "OverlaySpinner.h"
+#include "Widgets_OverlaySpinner.h"
 #include "LoginPage.h"
 #include "Locale/TextUser.h"
 
@@ -83,7 +83,7 @@ private:
     /* Identifies the pocket-home version:*/
     Widgets::BoundedLabel versionLabel;
     /* Spinner to indicate that the system is rebooting/shutting down: */
-    OverlaySpinner overlaySpinner;
+    Widgets::OverlaySpinner overlaySpinner;
     /* The lock screen to display after entering sleep mode: */
     LoginPage lockscreen;   
     

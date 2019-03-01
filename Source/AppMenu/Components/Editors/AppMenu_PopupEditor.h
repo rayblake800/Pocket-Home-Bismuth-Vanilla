@@ -10,26 +10,27 @@
  */
 
 #include "Locale/TextUser.h"
-#include "Widgets/FileSelectTextEditor.h"
-#include "Widgets/PopupEditorComponent.h"
-#include "Widgets/SwitchComponent.h"
+#include "Widgets_FilePathEditor.h"
+#include "Widgets_PopupEditor.h"
+#include "Widgets_Switch.h"
 #include "Icon_RequestID.h"
 #include "AppMenu_CategoryEditor.h"
 
 namespace AppMenu { class PopupEditor; }
 
 /**
- *  The PopupEditor provides editor components for setting all relevant menu 
- * item properties of a new or existing menu item. The user may edit any of 
- * these data fields, then press the cancel button to discard all changes, or 
- * the confirm button to save changes.
+ *  @brief  Provides editor components for setting all relevant menu item 
+ *          properties of a new or existing menu item. 
+ *
+ *  The user may edit any of these data fields, then press the cancel button to 
+ * discard all changes, or the confirm button to save changes.
  *
  *  All saved changes are applied by the abstract commitEdits function, which
  * subclasses should implement to create or edit whatever types of menu items
  * they handle.
  */
-class AppMenu::PopupEditor : public PopupEditorComponent,
-    public FileSelectTextEditor::Listener, public Locale::TextUser
+class AppMenu::PopupEditor : public Widgets::PopupEditor,
+    public Widgets::FilePathEditor::Listener, public Locale::TextUser
 {
 public:
     /**
@@ -144,7 +145,7 @@ private:
      * 
      * @param iconEditor  The icon name editor.
      */
-    virtual void fileSelected(FileSelectTextEditor* iconEditor) override;
+    virtual void fileSelected(Widgets::FilePathEditor* iconEditor) override;
 
     /**
      * @brief  Triggers whenever the category editor button is clicked.
@@ -170,9 +171,9 @@ private:
     /* Label text: "Icon path:" */
     Widgets::BoundedLabel iconLabel; 
     /* Draws a preview of the selected icon. */
-    DrawableImageComponent iconPreview;
+    Widgets::DrawableImage iconPreview;
     /* Edits the application/folder icon */
-    FileSelectTextEditor iconNameEditor;
+    Widgets::FilePathEditor iconNameEditor;
 
     /* Launches a category editor pop-up */
     juce::TextButton categoryEditButton; 
@@ -189,7 +190,7 @@ private:
     /* Label text: "Run in terminal:" */
     Widgets::BoundedLabel terminalCheckboxLabel;
     /* Sets if this application launches as a terminal application: */
-    SwitchComponent terminalCheckbox;
+    Widgets::Switch terminalCheckbox;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopupEditor)
 };

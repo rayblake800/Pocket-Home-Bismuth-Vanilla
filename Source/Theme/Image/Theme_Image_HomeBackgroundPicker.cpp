@@ -13,7 +13,7 @@ Theme::Image::HomeBackgroundPicker::HomeBackgroundPicker()
  * Updates the selected image when a new file is selected.
  */
 void Theme::Image::HomeBackgroundPicker::fileSelected
-(FileSelectTextEditor* thisEditor)
+(FilePathEditor* thisEditor)
 {
     jassert(thisEditor == this);
     imageConfig.setHomeBackgroundPath(getText());

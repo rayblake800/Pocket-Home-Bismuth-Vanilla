@@ -69,36 +69,15 @@
             "component assets/PopupEditor/popupFrame.svg"
         ]
     },
-    "left arrow button": {
+    "navigation buttons": {
         "colours": [
             "0xffeb008b"
         ],
         "image files": [
-            "component assets/NavButton/backIcon.svg"
-        ]
-    },
-    "right arrow button": {
-        "colours": [
-            "0xffeb008b"
-        ],
-        "image files": [
-            "component assets/NavButton/nextIcon.svg"
-        ]
-    },
-    "up arrow button": {
-        "colours": [
-            "0xffeb008b"
-        ],
-        "image files": [
-            "component assets/NavButton/pageUpIcon.svg"
-        ]
-    },
-    "down arrow button": {
-        "colours": [
-            "0xffeb008b"
-        ],
-        "image files": [
-            "component assets/NavButton/pageDownIcon.svg"
+            "component assets/NavButton/upIcon.svg",
+            "component assets/NavButton/downIcon.svg",
+            "component assets/NavButton/leftIcon.svg",
+            "component assets/NavButton/rightIcon.svg"
         ]
     },
     "settings list button": {

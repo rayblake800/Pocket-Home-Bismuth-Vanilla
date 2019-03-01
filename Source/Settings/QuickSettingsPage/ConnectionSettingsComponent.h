@@ -1,8 +1,8 @@
 #pragma once
 #include "JuceHeader.h"
-#include "SwitchComponent.h"
-#include "Spinner.h"
-#include "DrawableImageComponent.h"
+#include "Widgets_Switch.h"
+#include "Widgets_Spinner.h"
+#include "Widgets_DrawableImage.h"
 
 /**
  * @file  ConnectionSettingsComponent.h
@@ -175,11 +175,11 @@ private:
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionButton)
     };
     /* Icon indicating the connection type and/or status */
-    DrawableImageComponent icon;
+    Widgets::DrawableImage icon;
     /* Shown when the connection is busy updating */
-    Spinner spinner;
+    Widgets::Spinner spinner;
     /* Switch to enable/disable the connection */
-    SwitchComponent toggle;
+    Widgets::Switch toggle;
     /* Can be clicked to open the connection page */
     ConnectionButton pageButton;
     /* Callback function that opens the connection page */

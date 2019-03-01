@@ -3,7 +3,7 @@
 #include "AppMenu_Paged_MenuComponent.h"
 #include "AppMenu_Paged_FolderComponent.h"
 #include "Layout_Transition_Animator.h"
-#include "NavButton.h"
+#include "Widgets_NavButton.h"
 
 /*
  * Initializes the InputHandler, setting it to handle the menu component's input
@@ -160,6 +160,7 @@ bool AppMenu::Paged::InputHandler::keyPressed
  */
 void AppMenu::Paged::InputHandler::buttonClicked(juce::Button* button)
 {
+    using Widgets::NavButton;
     NavButton* navButton = static_cast<NavButton*>(button);
     int activeFolderIndex = getMenuComponent()->openFolderCount() - 1; 
     switch(navButton->getEdge())

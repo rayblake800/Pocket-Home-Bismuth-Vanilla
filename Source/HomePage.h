@@ -5,16 +5,16 @@
  * @brief  Creates the application's primary UI page.
  */
 
-#include "OverlaySpinner.h"
+#include "Widgets_OverlaySpinner.h"
 #include "DesktopEntry_Loader.h"
 #include "Icon_Loader.h"
 #include "Page_Component.h"
 #include "Theme_Image_Component.h"
 #include "Theme_Image_ConfigFile.h"
 #include "Theme_Image_ConfigListener.h"
-#include "DrawableImageButton.h"
-#include "Layout_Component_Manager.h"
+#include "Widgets_DrawableImageButton.h"
 #include "Widgets_Clock.h"
+#include "Layout_Component_Manager.h"
 #include "Wifi_ConnectionIcon.h"
 #include "BatteryIcon.h"
 #include "SystemCommands.h"
@@ -111,13 +111,13 @@ private:
     const Theme::Image::ConfigFile imageConfig;
 
     /* Opens the power page when clicked: */
-    Theme::Image::Component<DrawableImageButton> powerButton;
+    Theme::Image::Component<Widgets::DrawableImageButton> powerButton;
     
     /* Opens the settings page when clicked: */
-    Theme::Image::Component<DrawableImageButton> settingsButton;
+    Theme::Image::Component<Widgets::DrawableImageButton> settingsButton;
 
     /* Page frame image. This component is entirely decorative. */
-    Theme::Image::Component<DrawableImageComponent> frame;
+    Theme::Image::Component<> frame;
 
     /* Manages the layouts of configurable components: */ 
     juce::Array<Layout::Component::Manager> layoutManagers;

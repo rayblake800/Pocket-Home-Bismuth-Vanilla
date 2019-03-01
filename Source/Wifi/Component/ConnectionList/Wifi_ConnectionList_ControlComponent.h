@@ -10,7 +10,7 @@
 #include "Wifi_AccessPoint.h"
 #include "Layout_Group_Manager.h"
 #include "Widgets_BoundedLabel.h"
-#include "Spinner.h"
+#include "Widgets_Spinner.h"
 #include "Wifi_Connection_Control_Handler.h"
 #include "JuceHeader.h"
 
@@ -79,7 +79,7 @@ private:
         virtual void resized() override;
         
         /* The loading spinner component: */
-        Spinner spinner;
+        Widgets::Spinner spinner;
 
         /* Holds the button text while the spinner is enabled. */
         juce::String savedText;

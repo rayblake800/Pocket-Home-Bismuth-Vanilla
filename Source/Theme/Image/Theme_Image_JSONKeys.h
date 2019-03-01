@@ -53,14 +53,8 @@ static const juce::Identifier settingsButton
         ("settings button");
 static const juce::Identifier popupMenu
         ("popup menu");
-static const juce::Identifier pageLeft
-        ("left arrow button");
-static const juce::Identifier pageRight
-        ("right arrow button");
-static const juce::Identifier pageUp
-        ("up arrow button");
-static const juce::Identifier pageDown
-        ("down arrow button");
+static const juce::Identifier navButton
+        ("navigation buttons");
 static const juce::Identifier settingsListBtn
         ("settings list button");
 static const juce::Identifier spinner
@@ -80,10 +74,7 @@ static const juce::Array<juce::Identifier> components =
     powerButton,
     settingsButton,
     popupMenu,
-    pageLeft,
-    pageRight,
-    pageUp,
-    pageDown,
+    navButton,
     settingsListBtn,
     spinner,
     lockIcon,

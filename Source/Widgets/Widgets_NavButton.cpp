@@ -1,19 +1,32 @@
-#include "NavButton.h"
+#include "Widgets_NavButton.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Layout_Component_JSONKeys.h"
+#include "Theme_Image_JSONKeys.h"
 
-NavButton::NavButton(NavButton::WindowEdge edge) : 
-Theme::Image::Component<DrawableImageButton>(getEdgeComponentKey(edge)),
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Widgets::NavButton::";
+#endif
+    
+/* Extra space to add to button margins: */
+static const constexpr float marginPadding = 0.02;
+
+/*
+ * Constructs the navigation button to sit on particular window edge.
+ */
+Widgets::NavButton::NavButton(const WindowEdge edge) : 
+Theme::Image::Component<DrawableImageButton>(Theme::Image::JSONKeys::navButton),
 boundsManager(this, getEdgeComponentKey(edge)),
 edge(edge)
 { 
+    setImageAssetIndex((int) edge);
     setWantsKeyboardFocus(false);
 }
  
 /*
  * Gets the window edge assigned to this NavButton. 
  */
-NavButton::WindowEdge NavButton::getEdge()
+Widgets::NavButton::WindowEdge Widgets::NavButton::getEdge() const
 {
     return edge;
 }
@@ -22,7 +35,8 @@ NavButton::WindowEdge NavButton::getEdge()
  * Gets the amount of horizontal margin space needed to keep window
  * content from overlapping with a NavButton.
  */
-float NavButton::xMarginFractionNeeded(NavButton::WindowEdge edge)
+float Widgets::NavButton::xMarginFractionNeeded
+(const NavButton::WindowEdge edge)
 {
     Layout::Component::ConfigFile config;
     Layout::Component::ConfigLayout layout 
@@ -35,7 +49,7 @@ float NavButton::xMarginFractionNeeded(NavButton::WindowEdge edge)
  * Gets the amount of vertical margin space needed to keep window
  * content from overlapping with a NavButton.
  */
-float NavButton::yMarginFractionNeeded(NavButton::WindowEdge edge)
+float Widgets::NavButton::yMarginFractionNeeded(NavButton::WindowEdge edge)
 {
     Layout::Component::ConfigFile config;
     Layout::Component::ConfigLayout layout 
@@ -45,48 +59,32 @@ float NavButton::yMarginFractionNeeded(NavButton::WindowEdge edge)
 }
 
 /*
- * Gets the amount of horizontal margin space needed to keep window
- * content from overlapping with this NavButton.
+ * Applies the navigation button bounds defined in the Layout::Component 
+ * configuration file.
  */
-float NavButton::xMarginFractionNeeded() const
-{
-    return NavButton::xMarginFractionNeeded(edge);
-}
-
-/*
- * Gets the amount of vertical margin space needed to keep window
- * content from overlapping with this NavButton.
- */
-float NavButton::yMarginFractionNeeded() const
-{
-    return NavButton::yMarginFractionNeeded(edge);
-}
-
-/*
- * Applies the navigation button bounds defined in the layout.json file.
- */
-void NavButton::applyConfigBounds()
+void Widgets::NavButton::applyConfigBounds()
 {
     boundsManager.applyConfigBounds();
 }
 
 /*
- * Given a window edge, return the component key string for the
- * corresponding NavButton type.
+ * Given a window edge, return the component key string for the corresponding 
+ * NavButton type.
  */
-const juce::Identifier& NavButton::getEdgeComponentKey(const WindowEdge edge)
+const juce::Identifier& Widgets::NavButton::getEdgeComponentKey
+(const WindowEdge edge)
 {
     switch(edge)
     {
-        case up:
+        case WindowEdge::up:
             return Layout::Component::JSONKeys::pageUp;
-        case down:
+        case WindowEdge::down:
             return Layout::Component::JSONKeys::pageDown;
-        case left:
+        case WindowEdge::left:
             return Layout::Component::JSONKeys::pageLeft;
-        case right:
+        case WindowEdge::right:
             return Layout::Component::JSONKeys::pageRight;
     }
-    DBG("NavButton::" << __func__ << ": Unknown edge value!");
+    DBG(dbgPrefix << __func__ << ": Unknown edge value!");
     return juce::Identifier::null;
 }

@@ -1,23 +1,29 @@
 #pragma once
 /**
- * @file PagedList.h
+ * @file  Widgets_PagedList.h
  * 
  * @brief  An abstract interface for classes arranging components in a vertical 
  *         scrolling list.
  */
 
-#include "NavButton.h"
+#include "Widgets_NavButton.h"
 #include "Layout_Group_Manager.h"
 
+namespace Widgets { class PagedList; }
+
 /**
- *  PagedList evenly spaces juce::Component objects in a vertical list, using up
- * and down NavButtons to scroll the list one page at a time. PagedList takes 
- * ownership of all Components in the list. When scrolling through the list, 
- * existing Components are reused and updated.
+ *  @brief  Evenly spaces juce::Component objects in a vertical list, using up
+ *          and down NavButtons to scroll the list one page at a time. 
+ *
+ *  PagedList takes ownership of all Components in the list. When scrolling 
+ * through the list, existing Component list items are reused and updated.
  */
-class PagedList : public juce::Component
+class Widgets::PagedList : public juce::Component
 {
 public:
+    /**
+     * @brief  Initializes list navigation buttons when the list is constructed.
+     */
     PagedList();
 
     virtual ~PagedList() { }
@@ -112,10 +118,10 @@ protected:
      * @brief  Sets the fraction of the list height that should be placed 
      *         between list items.
      * 
-     * @param paddingFraction  The fraction of the height used to determine
-     *                         padding size.
+     * @param marginFraction  The fraction of the list height places between
+     *                        each pair of list items.
      */
-    void setYPaddingFraction(const float paddingFraction);
+    void setYPaddingFraction(const float marginFraction);
     
     /**
      * @brief  Reloads list content, running updateListItem for each visible

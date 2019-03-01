@@ -1,24 +1,31 @@
 #pragma once
-#include <set>
-#include "Locale/TextUser.h"
-#include "JuceHeader.h"
-
 /**
- * @file  FileSelectTextEditor.h
- * 
- * @brief  A file selection UI component.
- * 
- * This component allows a user to either type in a text value, or click a
- * button to open a file picker and choose a file/directory path.
+ * @file  Widgets_FilePathEditor.h
+ *
+ * @brief  Provides a file selection UI component.
  */
 
-class FileSelectTextEditor : public juce::Component, 
+#include "Locale/TextUser.h"
+#include "JuceHeader.h"
+#include <set>
+
+namespace Widgets { class FilePathEditor; }
+
+/**
+ * @brief  A file selection UI component.
+ * 
+ *  This component allows a user to either type in a text value, or click a
+ * button to open a file picker and choose a file/directory path. The component
+ * selects only image files by default, but may be changed to select other file 
+ * types.
+ */
+class Widgets::FilePathEditor : public juce::Component, 
     public Locale::TextUser,
     public juce::TextEditor::Listener, 
     public juce::Button::Listener
 {
 public:
-    /* Juce component ColourId values: */
+    /* Juce Component ColourId values: */
     enum ColourIds
     {
         fileWindowColourId = 0x1900300,
@@ -26,34 +33,34 @@ public:
     };
     
     /**
-     * @brief  Creates a new FileSelectTextEditor, optionally setting its 
+     * @brief  Creates a new FilePathEditor, optionally setting its 
      *         initial properties.
      *
      * @param selectionTitle  Sets the title displayed in the file selection 
-     *                        window.  If left empty, this will use the default
+     *                        window. If left empty, this will use the default
      *                        image selection title.
      * 
      * @param selectionText   Sets the short description displayed in the file
-     *                        selection window.  If left empty, this will use
+     *                        selection window. If left empty, this will use
      *                        the default image selection text.
      * 
-     * @param fileFilter      Sets what types of files may be selected.  By
+     * @param fileFilter      Sets what types of files may be selected. By
      *                        default, this selects image files.
      */
-    FileSelectTextEditor(
+    FilePathEditor(
             const juce::String& selectionTitle = juce::String(),
             const juce::String& selectionText  = juce::String(),
             const juce::WildcardFileFilter fileFilter = imageFilter);
     
-    virtual ~FileSelectTextEditor() { }
+    virtual ~FilePathEditor() { }
 
     /**
      * @brief  Sets the text value held by this editor.
      * 
      * @param newText       The new text value.
      * 
-     * @param shouldNotify  Sets whether Listener objects will be notified of 
-     *                      this change.
+     * @param shouldNotify  Whether Listener objects will be notified of this 
+     *                      change.
      */
     void setText(const juce::String newText, const bool shouldNotify = true);
 
@@ -87,9 +94,9 @@ public:
          *         selected, the return key is pressed while editing, or focus 
          *         is lost.
          * 
-         * @param edited   The updated editor notifying this listener.
+         * @param edited  The updated editor notifying this listener.
          */
-        virtual void fileSelected(FileSelectTextEditor* edited) = 0;
+        virtual void fileSelected(FilePathEditor* edited) = 0;
     };
     
     /**
@@ -158,8 +165,8 @@ private:
     /* Image preview component to use in the file selection window. */
     juce::ImagePreviewComponent imagePreview;
 
-    /* Default file filter, limiting file selection to image files. */
+    /* Default file filter, allowing image types: */
     static const juce::WildcardFileFilter imageFilter;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FileSelectTextEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FilePathEditor)
 };

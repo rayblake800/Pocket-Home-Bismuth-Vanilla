@@ -41,7 +41,7 @@ Wifi::ConnectionList::ListButton::ListButton() :
     initialLayout.setXMarginFraction(xMarginFraction);
     initialLayout.setYMarginFraction(yMarginFraction);
     layoutManager.setLayout(initialLayout, this);
-    lockIcon.setColour(DrawableImageComponent::ColourIds::imageColour0Id,
+    lockIcon.setColour(Widgets::DrawableImage::ColourIds::imageColour0Id,
             findColour(juce::Label::ColourIds::textColourId));
     apNameLabel.setInterceptsMouseClicks(false, false);
     lockIcon.setInterceptsMouseClicks(false, false);

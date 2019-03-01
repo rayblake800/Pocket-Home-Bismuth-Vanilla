@@ -13,7 +13,7 @@
 #include "Locale/TextUser.h"
 #include "AppMenu_MenuComponent.h"
 #include "AppMenu_EntryLoader.h"
-#include "OverlaySpinner.h"
+#include "Widgets_OverlaySpinner.h"
 #include "AppLauncher.h"
 #include "JuceHeader.h"
 
@@ -42,7 +42,8 @@ public:
      * @param loadingSpinner  The overlay spinner used to show to the user that
      *                        the Controller is working and input is disabled.
      */
-    Controller(MenuComponent* menuComponent, OverlaySpinner& loadingSpinner);
+    Controller(MenuComponent* menuComponent,
+            Widgets::OverlaySpinner& loadingSpinner);
 
     virtual ~Controller() { }
 
@@ -192,7 +193,7 @@ private:
             const int insertIndex);
 
     /* Holds a reference to the loading spinner */
-    OverlaySpinner& loadingSpinner;
+    Widgets::OverlaySpinner& loadingSpinner;
 
     /* The main menu component */
     MenuComponent* const menuComponent;

@@ -2,11 +2,14 @@
 #include "Theme_Colour_JSONKeys.h"
 #include "Config_MainKeys.h"
 #include "Layout_Component_ConfigFile.h"
-#include "SwitchComponent.h"
-#include "DrawableImageComponent.h"
-#include "ListEditor.h"
-#include "FileSelectTextEditor.h"
-#include "OverlaySpinner.h"
+#include "Widgets_Switch.h"
+#include "Widgets_DrawableImage.h"
+#include "Widgets_ListEditor.h"
+#include "Widgets_FilePathEditor.h"
+#include "Widgets_OverlaySpinner.h"
+
+// TODO: Get rid of all the inline magic numbers used for calculating sizes,
+//       make them into proper constexpr values defined up here.
 
 Theme::LookAndFeel::LookAndFeel() :
 seguibl(juce::Typeface::createSystemTypefaceFor(BinaryData::LatoRegular_ttf,
@@ -158,6 +161,10 @@ void Theme::LookAndFeel::drawButtonText(
         bool isMouseOverButton,
         bool isButtonDown)
 {
+    if(button.getButtonText().isEmpty() || button.getBounds().isEmpty())
+    {
+        return;
+    }
     using juce::jmin;
     using juce::Font;
     using juce::TextButton;

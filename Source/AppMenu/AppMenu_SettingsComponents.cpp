@@ -87,12 +87,12 @@ void AppMenu::SettingsComponents::applySettingsChanges()
     {
         case scrollingMenuID:
             formatConfig.setMenuFormat(Format::Scrolling);
-            formatConfig.setScrollingMenuRows(rowCounter.getValue());
+            formatConfig.setScrollingMenuRows(rowCounter.getCount());
             break;
         case pagedMenuID:
             formatConfig.setMenuFormat(Format::Paged);
-            formatConfig.setPagedMenuColumns(columnCounter.getValue());
-            formatConfig.setPagedMenuRows(rowCounter.getValue());
+            formatConfig.setPagedMenuColumns(columnCounter.getCount());
+            formatConfig.setPagedMenuRows(rowCounter.getCount());
             break;
         default:
             DBG(dbgPrefix << __func__ << ": Found invalid format selection ID "
@@ -169,13 +169,13 @@ void AppMenu::SettingsComponents::updateCountersForSelectedFormat()
     switch(selectedId)
     {
         case scrollingMenuID:
-            rowCounter.setValue(formatConfig.getScrollingMenuRows());
+            rowCounter.setCount(formatConfig.getScrollingMenuRows());
             columnCountLabel.setVisible(false);
             columnCounter.setVisible(false);
             break;
         case pagedMenuID:
-            rowCounter.setValue(formatConfig.getPagedMenuRows());
-            columnCounter.setValue(formatConfig.getPagedMenuColumns());
+            rowCounter.setCount(formatConfig.getPagedMenuRows());
+            columnCounter.setCount(formatConfig.getPagedMenuColumns());
             columnCountLabel.setVisible(true);
             columnCounter.setVisible(true);
             break;
