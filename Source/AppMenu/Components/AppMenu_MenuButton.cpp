@@ -206,9 +206,9 @@ void AppMenu::MenuButton::paintButton
                 | RectanglePlacement::xRight;
     }
     g.drawImageWithin(icon, iconBounds.getX(), iconBounds.getY(),
-            iconBounds.getWidth(), iconBounds.getHeight(),
+            std::max<int>(0, iconBounds.getWidth()),
+            std::max<int>(0, iconBounds.getHeight()),
             iconPlacement,
-            //RectanglePlacement::xMid | RectanglePlacement::yTop,
             false);
     // Draw title:
     g.setColour(findColour(textColourId));

@@ -140,8 +140,8 @@ void ConnectionSettingsComponent::ConnectionButton::paintButton
     {
         g.drawRoundedRectangle(bounds.getX() + borderSize,
                 bounds.getY() + borderSize,
-                bounds.getWidth() - 2 * borderSize,
-                bounds.getHeight() - 2 * borderSize,
+                std::max(0, bounds.getWidth() - 2 * borderSize),
+                std::max(0, bounds.getHeight() - 2 * borderSize),
                 1, borderSize);
     }
     g.setFont(textHeight);

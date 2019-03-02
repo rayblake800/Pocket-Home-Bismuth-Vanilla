@@ -1,4 +1,11 @@
 # GLib Module Documentation
+    The GLib module simplifies interaction with GLib-based libraries.
+
+    GLib is a set of low-level C libraries used mainly to implement other libraries. Among other things, it provides a reference-counted object system, an event loop, and tools for inter-process communication over D-Bus. Interacting with GLib is currently only necessary within the Wifi module, but it will eventually be needed for Bluetooth device management and D-Bus application launching.
+
+    The GLib module provides C++ object wrappers for GLib data types. As a C-Based library, GLib requires a lot of manual management of memory and reference counts. The GLib module's object wrappers automatically handle all reference count and memory management through RAII techniques. These wrapper objects are also useful for providing simplified interfaces to that GLib data.
+
+    Besides these basic wrapper classes, the GLib module provides tools to simplify the use of GLib's event loop, object signals, and D-Bus communication features.
 
 #### [GLib::Object](../../Source/GLib/GLib_Object.h)
 

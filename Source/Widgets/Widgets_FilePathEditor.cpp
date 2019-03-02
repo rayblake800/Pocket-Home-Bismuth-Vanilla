@@ -7,7 +7,7 @@ const juce::WildcardFileFilter Widgets::FilePathEditor::imageFilter
 ("*.png;*.jpg;*.jpeg;*.svg;*.gif;*.xpm", "", "Image files");
 
 /* Class localized text key: */
-static const juce::Identifier localeClassKey = "FilePathEditor";
+static const juce::Identifier localeClassKey = "Widgets::FilePathEditor";
 
 /* Localized text value keys: */
 static const juce::Identifier defaultTitleKey       = "defaultTitle";
@@ -43,6 +43,10 @@ fileSelectButton("...")
     Layout::Component::ConfigFile config;
     filePath.setFont(juce::Font(config.getFontHeight
             (Layout::Component::TextSize::smallText)));
+    using juce::Justification;
+    const Justification pathJustification(Justification::bottom
+            | Justification::left);
+    filePath.setJustification(pathJustification);
     addAndMakeVisible(filePath);
     addAndMakeVisible(fileSelectButton);
 }
@@ -184,4 +188,9 @@ void Widgets::FilePathEditor::resized()
 
     filePath.setBounds(textBounds);
     fileSelectButton.setBounds(buttonBounds);
+    Layout::Component::ConfigFile componentConfig;
+    int fontSize = componentConfig.getFontHeight
+            (Layout::Component::TextSize::smallText);
+    fontSize = std::min(fontSize, textBounds.getHeight());
+    filePath.applyFontToAllText(juce::Font(fontSize));
 }

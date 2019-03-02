@@ -163,7 +163,8 @@ void GroupLayout::Manager::layoutComponents(const juce::Rectangle<int>& bounds,
         int height = 0;
         if(yWeightSum > 0)
         {
-            height = row.getWeight() * weightedHeight / yWeightSum;
+            height = std::max<int>(0,
+                    row.getWeight() * weightedHeight / yWeightSum);
         }
         const int& xWeightSum = xWeightSums[rowNum];
         int xPaddingCount = 0;
@@ -202,7 +203,8 @@ void GroupLayout::Manager::layoutComponents(const juce::Rectangle<int>& bounds,
             int width = 0;
             if(xWeightSum > 0)
             {
-                width = rowItem.getWeight() * weightedWidth / xWeightSum;
+                width = std::max<int>(0,
+                        rowItem.getWeight() * weightedWidth / xWeightSum);
             }
             if (!rowItem.isEmpty())
             {

@@ -57,8 +57,8 @@ juce::Rectangle<int> ComponentLayout::ConfigLayout::getBounds() const
     return Rectangle<int>(
             x * window.getWidth(),
             y * window.getHeight(),
-            width * window.getWidth(),
-            height * window.getHeight());
+            std::max<int>(0, width * window.getWidth()),
+            std::max<int>(0, height * window.getHeight()));
 }
 
 /*

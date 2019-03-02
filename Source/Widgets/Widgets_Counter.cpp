@@ -3,7 +3,7 @@
 #include "Layout_Component_TextSize.h"
 #include "Utils.h"
 
-/* The fixed width:height ratio of all Counter objects. */
+/* The minimum width:height ratio of all Counter objects. */
 static const constexpr int widthToHeightRatio = 3;
 
 /*
@@ -136,12 +136,7 @@ void Widgets::Counter::resized()
     }
     const float currentRatio = (float) bounds.getWidth() 
             / (float) bounds.getHeight();
-    if(currentRatio > widthToHeightRatio) // Too wide, reduce width:
-    {
-        bounds = bounds.withSizeKeepingCentre(getHeight() * widthToHeightRatio,
-                getHeight());
-    }
-    else if(currentRatio < widthToHeightRatio) // Too tall, reduce height:
+    if(currentRatio < widthToHeightRatio) // Too tall, reduce height:
     {
         bounds = bounds.withSizeKeepingCentre(getWidth(),
                 getWidth() / widthToHeightRatio);
@@ -159,8 +154,7 @@ void Widgets::Counter::resized()
     // Update text size:
     Layout::Component::ConfigFile layoutConfig;
     const float fontSize 
-          = getHeight() - 2;
-    //    = layoutConfig.getFontHeight(bounds, textField.getText());
+          = layoutConfig.getFontHeight(bounds, textField.getText());
     juce::Font newFont(fontSize);
-    textField.setFont(newFont);
+    textField.applyFontToAllText(newFont);
 }

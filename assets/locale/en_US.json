@@ -10,7 +10,7 @@
         "checkPermissions" : "Make sure you have permission to write to this file.",
         "saveError"        : "Error saving configuration:"
     },
-    "FileSelectTextEditor": 
+    "Widgets::FilePathEditor": 
     {
         "defaultTitle"       : "Select an image file",
         "defaultDescription" : "Please select an image file"

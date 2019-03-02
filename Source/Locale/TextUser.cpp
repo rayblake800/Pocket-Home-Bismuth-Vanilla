@@ -85,7 +85,7 @@ juce::String Locale::TextUser::localeText
     if(!localeData.count(className))
     {
         DBG("Locale::TextUser::" << __func__ << ": Couldn't find text values "
-                << "for TextUser with key \"" << className.toString());
+                << "for TextUser with key \"" << className.toString() << "\"");
         return juce::String();
     }
     std::map<juce::Identifier, juce::String>& userStrings 

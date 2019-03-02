@@ -173,11 +173,13 @@ void Theme::LookAndFeel::drawButtonText(
 
     int leftIndent = 2 + cornerSize / (button.isConnectedOnLeft() ? 4 : 2);
     int rightIndent = 2 + cornerSize / (button.isConnectedOnRight() ? 4 : 2);
+    juce::Rectangle<int> textBounds = button.getLocalBounds();
+    int width = std::max(0, textBounds.getWidth() - leftIndent - rightIndent);
+    int height = std::max(0, textBounds.getHeight() - 2 * yIndent);
     Font font(getTextButtonFont(button, button.getHeight()));
     font.setExtraKerningFactor(0.06f);
-    juce::Rectangle<int> textBounds = button.getLocalBounds();
-    textBounds.setWidth(textBounds.getWidth() - leftIndent - rightIndent);
-    textBounds.setHeight(textBounds.getHeight() - 2 * yIndent);
+    textBounds.setWidth(width);
+    textBounds.setHeight(height);
 
     using TextSize = Layout::Component::TextSize;
     Layout::Component::ConfigFile layoutConfig;
@@ -199,9 +201,7 @@ void Theme::LookAndFeel::drawButtonText(
     g.setColour(buttonColour);
 
     g.drawFittedText(button.getButtonText(), leftIndent, yIndent,
-            button.getWidth() - leftIndent - rightIndent,
-            button.getHeight() - yIndent * 2,
-            juce::Justification::centred, 2);
+            width, height, juce::Justification::centred, 2);
 }
 
 /*
