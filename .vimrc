@@ -28,7 +28,14 @@ Plugin 'itchyny/lightline.vim'
 " Markdown editing
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
+" Preview markdown files with Ctrl-P
+Plugin 'JamshedVesuna/vim-markdown-preview'
 call vundle#end()
+
+" Use github-style markdown, previewed in firefox.
+let vim_markdown_preview_github=1
+let vim_markdown_preview_browser='Mozilla Firefox'
+let vim_markdown_preview_use_xdg_open=1
 
 " Open NERDtree when opening vim without picking a file
 autocmd StdinReadPre * let s:std_in=1
