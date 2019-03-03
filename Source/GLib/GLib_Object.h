@@ -33,7 +33,7 @@ public:
     /**
      * @brief  Checks if this object is an Owned object that manages its own
      *         life cycle, or a Borrowed object that has its life cycle managed
-     *         by a GLib librarycode.
+     *         by a GLib library.
      *
      * @return  Whether this object is Owned.
      */

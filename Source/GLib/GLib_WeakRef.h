@@ -8,6 +8,21 @@
 #include <glib-object.h>
 #include "JuceHeader.h"
 
+/**
+ * @brief  Manages a GWeakRef data structure, used to safely access GObject
+ *         data without preventing it from being destroyed.
+ *
+ *  Each WeakRef can serve as a weak reference to one GObject* at a time. When
+ * requesting a GObject* held by a WeakRef, the WeakRef will only return the 
+ * held value if the object is still valid. If the GObject data has been 
+ * destroyed, it will instead return null. If the WeakRef returns a non-null 
+ * value, the object's reference count will have been incremented, ensuring 
+ * that the returned value will remain valid at least until the caller 
+ * dereferences it.
+ *
+ *  WeakRef objects should never be used with GLib::Borrowed::Object classes,
+ * as they cannot prevent a Borrowed::Object from being invalidated.
+ */
 namespace GLib { class WeakRef; }
 
 class GLib::WeakRef
