@@ -2,23 +2,27 @@
 /**
  * @file  GLib_Borrowed_Object.h
  *
- * @brief  A C++ interface for borrowed GLib GObject* data.
+ * @brief  A C++ object interface for borrowed GLib GObject* data.
  */
 
 #include "GLib_Object.h"
 #include "GLib_Borrowed_SharedContainer.h"
 
-namespace GLib { namespace Borrowed { class Object; } }
-namespace GLib { namespace Borrowed { template <class BorrowedType>
-    class ObjectLender; } }
-namespace GLib { namespace Borrowed { template <class BorrowedType>
-    class SingleObjectLender; } }
+namespace GLib 
+{ 
+    namespace Borrowed 
+    { 
+        class Object; 
+        template <class BorrowedType> class ObjectLender;
+    } 
+}
 
 /**
- *  GLib::Borrowed::Object manages Borrowed GLib GObject* data.  Borrowed 
- * GObject* data is GLib object data that belongs to an external library.
- * The lifecycle of borrowed GObject* data is controlled by its library owner.
- * Borrowed GObject* data may be deleted by its library owner at any time,
+ *  @brief Manages borrowed GLib GObject data pointers.  
+ *
+ *  Borrowed GObject* data is GLib object data that belongs to an external 
+ * library. The lifecycle of borrowed GObject* data is controlled by its 
+ * library. Borrowed GObject* data may be deleted by its library at any time,
  * regardless of its reference count.
  */
 class GLib::Borrowed::Object : public GLib::Object

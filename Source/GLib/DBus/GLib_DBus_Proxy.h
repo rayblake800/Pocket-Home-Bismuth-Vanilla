@@ -86,16 +86,14 @@ protected:
      * 
      * @tparam T            The property type to read. This must be one of the 
      *                      property types supported by 
-     *                      GVariantConverter::getValue
+     *                      GLib::VariantConverter::getValue
      * 
      * @param propertyName  The name of the property value to read.
      * 
      * @return              The interface property value, or the default value 
      *                      of type T if the property couldn't be read.
-     * 
-     * @see GVariantConverter.h
      */
-    template<typename T> T getProperty(const char*  propertyName) const
+    template<typename T> T getProperty(const char* propertyName) const
     {
         GDBusProxy * proxy = G_DBUS_PROXY(getGObject());
         if(proxy == nullptr)
@@ -119,17 +117,15 @@ protected:
      * 
      * @tparam T            The property type to set. This must be one of the 
      *                      property types supported by 
-     *                      GVariantConverter::getVariant
+     *                      GLib::VariantConverter::getVariant
      * 
      * @param propertyName  The name of a property of type T defined by the DBus
      *                      object's interface.
      * 
      * @param newVal        The value to apply to the property selected by 
      *                      propertyName.
-     * 
-     * @see GVariantConverter.h
      */
-    template<typename T> void setProperty(const char*  propertyName, T newVal)
+    template<typename T> void setProperty(const char* propertyName, T newVal)
     {
         GDBusProxy * proxy = G_DBUS_PROXY(getGObject());
         if(proxy != nullptr)

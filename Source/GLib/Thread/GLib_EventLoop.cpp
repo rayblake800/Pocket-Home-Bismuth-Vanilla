@@ -1,5 +1,10 @@
 #include "GLib_EventLoop.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "GLib::EventLoop::";
+#endif
+
 /*
  * Creates the event loop with an initial GMainContext.
  */
@@ -42,9 +47,9 @@ GLib::SharedContextPtr GLib::EventLoop::getContext() const
 void GLib::EventLoop::runLoop()
 {
     g_main_context_push_thread_default(*context);
-    DBG("GLib::EventLoop: entering GLib main loop");
+    DBG(dbgPrefix << __func__ << ": entering GLib main loop");
     g_main_loop_run(eventLoop);
-    DBG("GLib::EventLoop: exiting GLib main loop");
+    DBG(dbgPrefix << __func__ << ": exiting GLib main loop");
     g_main_context_pop_thread_default(*context);
 }
 

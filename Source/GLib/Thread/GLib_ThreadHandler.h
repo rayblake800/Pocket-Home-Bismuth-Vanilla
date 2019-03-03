@@ -8,9 +8,19 @@
 #include "SharedResource_Handler.h"
 #include "GLib_SharedContextPtr.h"
 
-namespace GLib { template <class ResourceType> class ThreadHandler; }
-namespace GLib { class SharedContextPtr; }
+namespace GLib 
+{ 
+    template <class ResourceType> class ThreadHandler; 
+    class SharedContextPtr;
+}
 
+/**
+ * @brief  Safely shares access to a Resource build using a GLib::SharedThread.
+ *
+ * @tparam HandlerType  The type of SharedResource::Handler or
+ *                      SharedResource::Modular::Handler needed to access the
+ *                      SharedThread.
+ */
 template <class HandlerType>
 class GLib::ThreadHandler : public HandlerType
 {

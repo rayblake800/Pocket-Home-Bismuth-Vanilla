@@ -1,5 +1,10 @@
 #include "GLib_ContextCaller.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "GLib::ContextCaller::";
+#endif
+
 /*
  * Initializes the ContextCaller, setting its GLib main context.
  */
@@ -56,7 +61,7 @@ void GLib::ContextCaller::call(std::function<void()> toCall,
     {
         if(contextPtr == nullptr)
         {
-            DBG("GLib::EventLoop::" << __func__ << ": GLib context is null!");
+            DBG(dbgPrefix << __func__ << ": GLib context is null!");
             jassertfalse;
             return;
         }

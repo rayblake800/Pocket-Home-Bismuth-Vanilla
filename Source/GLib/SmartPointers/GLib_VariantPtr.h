@@ -1,8 +1,8 @@
 #pragma once
 /**
- * @file  GLib/SmartPointers/VariantPtr.h
+ * @file  GLib_VariantPtr.h
  *
- * @brief  Defines a ScopedGPointer that holds a GVariant*. 
+ * @brief  Provides a ScopedGPointer class that holds GVariant data pointers. 
  */
 
 #include "GLib_ScopedGPointer.h"

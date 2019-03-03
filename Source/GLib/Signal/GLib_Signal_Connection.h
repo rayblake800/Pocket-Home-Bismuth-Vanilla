@@ -155,9 +155,15 @@ public:
     }
 
 private:
-    SourceType nullSource;
+    /* Holds the signal source copy and signal handler pointer, possibly with
+     * other relevant callback data: */
     std::unique_ptr<CallbackData<SourceType>> signalData;
+    /* The name of the connected signal: */
     juce::String signalName;
+    /* An ID that may be used to cancel the connection: */
     gulong connectionID = 0;
+    /* Alternate null source to return if the original source is invalid: */
+    SourceType nullSource;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Connection);
 };

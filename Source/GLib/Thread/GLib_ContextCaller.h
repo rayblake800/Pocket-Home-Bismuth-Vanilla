@@ -16,6 +16,9 @@
 namespace GLib { class ContextCaller; }
 
 /**
+ * @brief  Holds a GMainContext data pointer, and uses it to call functions
+ *         within an associated GLib event loop.
+ *
  *  The ContextCaller will not run the event loop itself, or ensure that the 
  * GLib context even has an associated EventLoop. That should be handled 
  * elsewhere, probably by a GLib::ThreadResource object.

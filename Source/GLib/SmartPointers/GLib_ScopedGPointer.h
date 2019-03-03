@@ -2,8 +2,8 @@
 /**
  * @file  GLib_ScopedGPointer.h
  *
- * @brief  An immutable GObject pointer that automatically unreferences any 
- *         non-null value it holds on destruction.
+ * @brief  A template class for holding temporary GLib values that automatically
+ *         unreferences or frees its held value on destruction if necessary.
  */
 
 #include <glib-object.h>
@@ -12,6 +12,9 @@ namespace GLib { template <typename GPointerType, typename Unreferencer>
     class ScopedGPointer; }
 
 /**
+ * @brief  An immutable GLib data pointer that automatically unreferences any 
+ *         non-null value it holds on destruction.
+ *
  *  The GLib library introduces many useful reference counted data structures 
  * and pseudo-objects. However, as GLib is written entirely in C, these 
  * structures must be explicitly unreferenced. ScopedObjectPtrs serve as 

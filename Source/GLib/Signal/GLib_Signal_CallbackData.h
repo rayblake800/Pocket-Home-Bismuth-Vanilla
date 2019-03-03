@@ -5,6 +5,8 @@
  * @brief  Holds extra data used when handling a GLib object signal.
  */
 
+#include <glib-object.h>
+
 namespace GLib
 {
     namespace Signal
@@ -14,10 +16,25 @@ namespace GLib
     }
 }
 
-#include <glib-object.h>
 
 /**
+ * @brief  Saves a copy of the signal source object and a signal handler pointer
+ *         to use as callback data when handling GLib object signals.
+ *
  * @tparam SourceType  The GLib::Object subclass of the signal source. 
+ *
+ *  Whenever a GObject emits a signal, if a Signal::Handler is connected for
+ * that signal type and signal source, a CallbackData object is passed in as an
+ * argument to a static callback function provided by the signal hander class.
+ * The CallbackData object contains the address of the signal handler, and a 
+ * copy of the GLib::Object containing the GObject signal source. The static 
+ * callback function should use the CallbackData to call an appropriate signal 
+ * handling method on the signal handler, optionally passing in the GLib::Object
+ * containing the signal source as a parameter.
+ *
+ *  Signal handlers must create and provide a new CallbackData object for each
+ * connection they have with a signal source. Signal handlers may create and
+ * use subclasses of CallbackData to provide additional signal handling data.
  */
 template <class SourceType> 
 class GLib::Signal::CallbackData
@@ -58,6 +75,8 @@ public:
     }
 
 private:
+    /* A copy of the GLib::Object signal source container: */
     SourceType signalSource;
+    /* A pointer to the Signal::Handler that created this CallbackData: */
     Handler<SourceType>* signalHandler;
 };

@@ -2,7 +2,8 @@
 /**
  * @file  GLib_ContextPtr.h
  *
- * @brief  Defines a ScopedGPointer that holds a GMainContext*. 
+ * @brief  Provides a ScopedGPointer class that holds GMainContext data 
+ *         pointers. 
  */
 
 #include "GLib_ScopedGPointer.h"

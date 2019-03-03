@@ -1,6 +1,11 @@
 #include "GLib_VariantConverter.h"
 #include "JuceHeader.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full namespace before all debug output: */
+static const constexpr char* dbgPrefix = "GLib::VariantConverter::";
+#endif
+
 /*
  * Removes and returns a GVariant* value from a GVariant* container if and 
  * only if that value was the only item in the container.
@@ -160,8 +165,7 @@ template<> GVariant* getVariant(juce::StringArray value)
     const char ** array = new (std::nothrow) const char*[value.size()];
     if (array == nullptr)
     {
-        DBG("GLib::VariantConverter::" << __func__ 
-                << ": Failed to allocate memory!");
+        DBG(dbgPrefix << __func__ << ": Failed to allocate memory!");
         return nullptr;
     }
     for (int i = 0; i < value.size(); i++)
@@ -285,8 +289,7 @@ GType GLib::VariantConverter::getGType(GVariant* variant)
         case unsupported:
             return G_TYPE_INVALID;
     }
-    DBG("GLib::VariantConverter::" << __func__ 
-            << ": Ignoring unhandled variant type \""
+    DBG(dbgPrefix << __func__ << ": Ignoring unhandled variant type \""
             << g_variant_get_type_string(variant) << "\"");
     return G_TYPE_INVALID;
 }
@@ -348,9 +351,6 @@ GValue GLib::VariantConverter::getGValue(GVariant* variant)
             if (array != nullptr)
             {
                 g_value_take_boxed(&value, array);
-                char* debug = g_strdup_value_contents(&value);
-                DBG("Array GValue:" << debug);
-                g_free(debug);
             }
             break;
         }
@@ -359,8 +359,7 @@ GValue GLib::VariantConverter::getGValue(GVariant* variant)
                     g_variant_get_strv(variant, nullptr));
             break;
         default:
-            DBG("GLib::VariantConverter::" << __func__ 
-                    << ": Ignoring unhandled variant type \""
+            DBG(dbgPrefix << __func__ << ": Ignoring unhandled variant type \""
                     << g_variant_get_type_string(variant) << "\"");
     }
     return value;
@@ -541,8 +540,7 @@ void GLib::VariantConverter::iterateArray(GVariant* array,
 {
     if(!g_variant_is_container(array))
     {
-        DBG("GLib::VariantConverter::" << __func__ 
-                << ": variant is not a container!");
+        DBG(dbgPrefix << __func__ << ": variant is not a container!");
         #ifdef JUCE_DEBUG
         std::cout << "\tVariant= " << toString(array) << "\n";
         #endif
@@ -568,8 +566,7 @@ void GLib::VariantConverter::iterateDict(GVariant* dict,
 {
     if(!g_variant_is_of_type(dict, G_VARIANT_TYPE_DICTIONARY))
     {
-        DBG("GLib::VariantConverter::" << __func__ 
-                << ": variant is not a dictionary!");
+        DBG(dbgPrefix << __func__ << ": variant is not a dictionary!");
         #ifdef JUCE_DEBUG
         std::cout << "\tVariant= " << toString(dict) << "\n";
         #endif

@@ -92,7 +92,7 @@ public:
     /**
      * @brief  Assigns a new GLib context pointer to this SharedContextPtr. 
      *
-     * If this assignment replaces a non-null GMainContext*, the old 
+     *  If this assignment replaces a non-null GMainContext*, the old 
      * GMainContext* will be unreferenced before it is removed.
      *
      * @param rhs  A new GMainContext* for the SharedContextPtr to hold. If
@@ -106,7 +106,7 @@ public:
     /**
      * @brief  Assigns a new GLib context pointer to this SharedContextPtr. 
      *
-     * If this assignment replaces a non-null GMainContext*, the old 
+     *  If this assignment replaces a non-null GMainContext*, the old 
      * GMainContext* will be unreferenced before it is removed.
      *
      * @param rhs  Another SharedContextPtr, holding the GMainContext* value

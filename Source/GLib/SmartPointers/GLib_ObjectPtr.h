@@ -2,9 +2,8 @@
 /**
  * @file GLib_ObjectPtr.h
  *
- * @brief  An immutable smart pointer used to access the internal GObject data 
- *         stored in a GLib::Object, automatically unreferencing it on
- *         destruction if necessary.
+ * @brief  Provides a way to directly access a GLib::Object's stored data 
+ *         pointer without having to manually manage GLib reference counts. 
  */
 
 #include <glib-object.h>
@@ -13,10 +12,12 @@ namespace GLib { class Object; }
 namespace GLib { class ObjectPtr; }
 
 /**
- *  GLib::ObjectPtr provides a way to directly access a GLib::Object's stored
- * data pointer without having to manually manage GLib reference counts. 
- * ObjectPtrs are only intended for temporary use and should not be created
- * outside of function scope.
+ * @brief  An immutable smart pointer used to access the internal GObject data 
+ *         stored in a GLib::Object, automatically unreferencing it on
+ *         destruction if necessary.
+ *
+ * ObjectPtr instancess are only intended for temporary use and should not be 
+ * created outside of function scope.
  */
 class GLib::ObjectPtr
 {
@@ -32,9 +33,9 @@ public:
     /**
      * @brief  Creates an ObjectPtr to hold a GObject* value.
      *
-     * This constructor assumes that the dataSource will need to be unreferenced
-     * on destruction, as otherwise there's no reason to store it in an 
-     * ObjectPtr.
+     *  This constructor assumes that the dataSource will need to be 
+     * unreferenced on destruction, as otherwise there's no reason to store it 
+     * in an ObjectPtr.
      *
      * @param dataSource  A GLib object data pointer the ObjectPtr will hold.
      */

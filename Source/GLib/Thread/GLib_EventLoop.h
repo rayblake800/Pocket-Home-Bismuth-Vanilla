@@ -43,7 +43,7 @@ public:
      */
     SharedContextPtr getContext() const;
     
-    /*
+    /**
      * @brief  Runs the GLib main loop. 
      */
     void runLoop();

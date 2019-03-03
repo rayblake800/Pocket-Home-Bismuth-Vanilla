@@ -16,6 +16,8 @@
 namespace GLib { class SharedThread; }
 
 /**
+ * @brief  A thread resource class used to run and access a GLib event loop.
+ *
  *  On creation, this starts up a GLib event thread to handle events associated
  * with a GMainContext provided on creation. This GMainContext will be set as
  * the thread default context. This context will be available through the 

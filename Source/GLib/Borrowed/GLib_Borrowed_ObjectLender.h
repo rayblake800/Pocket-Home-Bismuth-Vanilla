@@ -1,5 +1,4 @@
 #pragma once
-
 /**
  * @file  GLib_Borrowed_ObjectLender.h
  *
@@ -168,5 +167,5 @@ public:
         borrowedObjects.clear();
     }
  
-JUCE_LEAK_DETECTOR(ObjectLender);
+    JUCE_LEAK_DETECTOR(ObjectLender);
 };

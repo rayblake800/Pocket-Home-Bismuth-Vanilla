@@ -9,7 +9,7 @@
 #include <gio/gio.h>
 
 /**
- * The GLib::VariantConverter namespace contains methods to convert different 
+ *  The GLib::VariantConverter namespace contains methods to convert different 
  * data types to and from the GVariant type. GVariant is a flexible data
  * container object used to interact with DBus objects.
  *
@@ -17,7 +17,8 @@
  */
 namespace GLib { namespace VariantConverter
 {
-    enum VariantType{
+    enum VariantType
+    {
         booleanType = 0,
         byteType,
         int16Type,

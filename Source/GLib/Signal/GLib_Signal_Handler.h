@@ -11,6 +11,26 @@
 #include "JuceHeader.h"
 #include <glib-object.h>
 
+/**
+ * @brief  Handles signals emitted by a specific GLib object type.
+ *
+ * @tparam SourceType  That GLib::Object subclass that holds the type of GObject
+ *                     signal source that this signal handler will use.
+ *
+ *  GLib objects create signals to notify relevant objects that some event has
+ * occurred. By default, signals are created by GObjects every time one of their
+ * properties changes, specifying exactly which property has changed. GObject 
+ * classes may provide new signal types to signal whatever events are relevant
+ * to them.
+ *
+ *  Signal::Handler objects connect to GObject signal sources held within
+ * GLib::Object subclass instances. They define exactly which signals are
+ * relevant to them.  Once connected, the signal source will call a static
+ * callback function provided by the signal handler every time it emits the
+ * connected signal type. Using a CallbackData object provided by the signal
+ * handler on connection, that static callback function accesses the connected
+ * signal handler, and calls an appropriate method to handle the signal event.
+ */
 template <class SourceType>
 class GLib::Signal::Handler
 {      
@@ -128,11 +148,17 @@ public:
 
 protected:
     /**
-     * @brief 
+     * @brief  Creates a connection to a signal source in order to receive a
+     *         specific signal type.
      *
-     * @param signal
-     * @param callback
-     * @param callbackData
+     * @param signal         The name of the signal this Handler should receive.
+     *
+     * @param callback       A static callback function that will be called when
+     *                       the signal is emitted.
+     *
+     * @param callbackData   Callback data created using the signal source and
+     *                       signal handler, to be passed to the callback
+     *                       function when the signal is emitted.
      */
     void createConnection(const juce::String signal, GCallback callback,
             CallbackData<SourceType>* callbackData)
@@ -142,10 +168,13 @@ protected:
     }
     
     /**
-     * @brief 
+     * @brief  Creates a connection to a signal source in order to receive
+     *         property update signals when a specific object property changes.
      *
-     * @param propertyName
-     * @param signalSource
+     * @param propertyName  The signal source object property the signal handler
+     *                      should track.
+     *
+     * @param signalSource  The signal source to connect.
      */
     void createPropertyConnection(const juce::String propertyName,
             const SourceType signalSource)
@@ -173,7 +202,7 @@ private:
      * @brief  A callback function for handling property change notification 
      *         signals.
      *
-     * Signal handlers should override this to handle all specific property 
+     *  Signal handlers should override this to handle all specific property 
      * change notifications that they support.
      * 
      * @param source    Holds the GObject that emitted the signal.

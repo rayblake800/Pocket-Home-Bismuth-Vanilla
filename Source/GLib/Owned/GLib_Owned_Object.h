@@ -12,10 +12,11 @@
 namespace GLib { namespace Owned { class Object; } }
 
 /**
- *  GLib::Owned::Object manages Owned GLib GObject* data. Owned GObject* data 
- * is GLib object data that solely belongs to GLib::Object instances. Owned
- * GObject* data will only be deleted when every GLib::Object that holds it has 
- * been destroyed or reassigned.
+ * @brief  Manages Owned GLib GObject* data. 
+ *
+ *  Owned GObject* data is GLib object data that solely belongs to GLib::Object 
+ * instances. Owned GObject* data will only be deleted when every GLib::Object 
+ * that holds it has been destroyed or reassigned.
  */
 class GLib::Owned::Object : public GLib::Object
 {
@@ -100,14 +101,14 @@ protected:
     /**
      * @brief  Assigns new GObject data to this Object. 
      *
-     * Unless the new GObject to assign is already held by this Object, any 
+     *  Unless the new GObject to assign is already held by this Object, any 
      * references to the Object's previous GObject data will be removed.
      * 
      * @param toAssign  GObject data to store in this Object.  If this GObject* 
      *                  has a floating reference, the Object will sink the 
      *                  reference.  Otherwise, a new reference will be added.  
      * 
-     *                  If the GType of this object is invalid, or the same 
+     *                   If the GType of this object is invalid, or the same 
      *                  GObject* is already held by this Object, the object's 
      *                  reference count will not be changed.
      */
@@ -116,7 +117,7 @@ protected:
     /**
      * @brief  Assigns new GObject data to this Object.  
      *
-     * Unless the new GObject to assign is already held by this Object, any 
+     *  Unless the new GObject to assign is already held by this Object, any 
      * references to the Object's previous GObject data will be removed.
      * 
      * @param toCopy  Any other Object. If toCopy holds the same data as this 

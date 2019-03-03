@@ -1,7 +1,12 @@
 #include "GLib_WeakRef.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "GLib::WeakRef::";
+#endif
+
 /*
- *  Creates a weak reference with no initial data.
+ * Creates a weak reference with no initial data.
  */
 GLib::WeakRef::WeakRef()
 {
@@ -55,16 +60,14 @@ GLib::WeakRef& GLib::WeakRef::operator=(const WeakRef& rhs)
  */
 GLib::WeakRef& GLib::WeakRef::operator=(const GObject* rhs)
 {
-
-    using namespace juce;
-    const ScopedReadLock assignLock(referenceLock);
+    const juce::ScopedReadLock assignLock(referenceLock);
     if(!refInitialized)
     {
-        DBG("GLib::WeakRef::" << __func__ << ": weak reference not initialized!");
+        DBG(dbgPrefix << __func__ << ": weak reference not initialized!");
     }
     else if(refCleared)
     {
-        DBG("GLib::WeakRef::" << __func__ 
+        DBG(dbgPrefix << __func__ 
                 << ": weak reference already cleared!");
     }
     else
@@ -106,12 +109,12 @@ GObject* GLib::WeakRef::getObject() const
     const juce::ScopedReadLock assignLock(referenceLock);
     if(!refInitialized)
     {
-        DBG("GLib::WeakRef::" << __func__ 
+        DBG(dbgPrefix << __func__ 
                 << ": weak reference not initialized!");
     }
     else if(refCleared)
     {
-        DBG("GLib::WeakRef::" << __func__ 
+        DBG(dbgPrefix << __func__ 
                 << ": weak reference already cleared!");
     }
     else

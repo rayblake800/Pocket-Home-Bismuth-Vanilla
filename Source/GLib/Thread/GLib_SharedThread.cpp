@@ -1,6 +1,5 @@
 #include "GLib_SharedThread.h"
 
-
 /*
  * Creates the thread with an initial GMainContext.
  */

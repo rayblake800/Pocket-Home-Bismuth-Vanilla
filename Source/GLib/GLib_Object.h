@@ -11,8 +11,8 @@
 namespace GLib { class Object; }
 
 /**
- *  GLib::Object holds a GObject*, providing methods for accessing object data,
- * and setting and getting object properties.
+ * @brief  Holds a GObject*, providing methods for accessing object data,
+ *         and setting and getting object properties.
  * 
  *  GLib::Object subclasses should each handle a single type of GObject, 
  * providing methods to interact with that object type. 
@@ -120,7 +120,7 @@ protected:
     /**
      * @brief  Assigns new GObject data to this Object. 
      *
-     * Unless the new GObject to assign is already held by this Object, any 
+     *  Unless the new GObject to assign is already held by this Object, any 
      * references to the Object's previous GObject data will be removed.
      * 
      * @param toAssign  GObject data to store in this Object.
@@ -130,7 +130,7 @@ protected:
     /**
      * @brief  Assigns new GObject data to this Object.  
      *
-     * Unless the new GObject to assign is already held by this Object, any 
+     *  Unless the new GObject to assign is already held by this Object, any 
      * references to the Object's previous GObject data will be removed.
      * 
      * @param toCopy  Any other Object. If toCopy holds the same data as this 
