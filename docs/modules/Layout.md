@@ -26,7 +26,7 @@ TextSize lists all font size options defined in the component configuration file
 ConfigFile objects access the component file resource to load component layouts and calculate appropriate font sizes.
 
 #### [Layout::Component::JSONResource](../../Source/Layout/Component/Layout_Component_JSONResource.h)
-The shared JSONResource instance manages the configuration file where component layouts and font sizes are defined.
+The shared JSONResource object manages the configuration file where component layouts and font sizes are defined.
 
 #### [Layout::Component::JSONKeys](../../Source/Layout/Component/Layout_Component_JSONKeys.h)
 JSONKeys provides the keys used to access font sizes and component layouts within the component file resource.
