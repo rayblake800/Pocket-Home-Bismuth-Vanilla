@@ -1,23 +1,35 @@
 ########################### Layout Module ######################################
-LAYOUT_PREFIX := $(JUCE_OBJDIR)/Layout_
-LAYOUT_COMPONENT_PREFIX := $(LAYOUT_PREFIX)Component_
-LAYOUT_GROUP_PREFIX := $(LAYOUT_PREFIX)Group_
 LAYOUT_ROOT = Source/Layout
+LAYOUT_PREFIX := Layout_
+LAYOUT_OBJ := $(JUCE_OBJDIR)/$(LAYOUT_PREFIX)
 
+
+LAYOUT_COMPONENT_ROOT := $(LAYOUT_ROOT)/Component
+LAYOUT_COMPONENT_PREFIX := $(LAYOUT_PREFIX)Component_
+LAYOUT_COMPONENT_OBJ := $(LAYOUT_OBJ)Component_
 OBJECTS_LAYOUT_COMPONENT := \
-  $(LAYOUT_COMPONENT_PREFIX)ConfigLayout.o \
-  $(LAYOUT_COMPONENT_PREFIX)JSONResource.o \
-  $(LAYOUT_COMPONENT_PREFIX)ConfigFile.o \
-  $(LAYOUT_COMPONENT_PREFIX)Manager.o
+  $(LAYOUT_COMPONENT_OBJ)ConfigLayout.o \
+  $(LAYOUT_COMPONENT_OBJ)JSONResource.o \
+  $(LAYOUT_COMPONENT_OBJ)ConfigFile.o \
+  $(LAYOUT_COMPONENT_OBJ)Manager.o
 
+LAYOUT_GROUP_ROOT := $(LAYOUT_ROOT)/Group
+LAYOUT_GROUP_PREFIX := $(LAYOUT_PREFIX)Group_
+LAYOUT_GROUP_OBJ := $(LAYOUT_OBJ)Group_
 OBJECTS_LAYOUT_GROUP := \
-  $(LAYOUT_GROUP_PREFIX)RelativeLayout.o \
-  $(LAYOUT_GROUP_PREFIX)Manager.o
+  $(LAYOUT_GROUP_OBJ)RelativeLayout.o \
+  $(LAYOUT_GROUP_OBJ)Manager.o
+
+LAYOUT_TRANSITION_ROOT := $(LAYOUT_ROOT)/Transition
+LAYOUT_TRANSITION_PREFIX := $(LAYOUT_PREFIX)Transition_
+LAYOUT_TRANSITION_OBJ := $(LAYOUT_OBJ)Transition_
+OBJECTS_LAYOUT_TRANSITION := \
+  $(LAYOUT_TRANSITION_OBJ)Animator.o 
 
 OBJECTS_LAYOUT := \
   $(OBJECTS_LAYOUT_COMPONENT) \
   $(OBJECTS_LAYOUT_GROUP) \
-  $(LAYOUT_PREFIX)Transition_Animator.o 
+  $(OBJECTS_LAYOUT_TRANSITION)
 
 OBJECTS_LAYOUT_TEST :=
 
@@ -32,19 +44,19 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_LAYOUT)
 layout : $(OBJECTS_LAYOUT)
 	@echo "Built Layout module"
 
-$(LAYOUT_COMPONENT_PREFIX)ConfigLayout.o : \
-    $(LAYOUT_ROOT)/Component/Layout_Component_ConfigLayout.cpp
-$(LAYOUT_COMPONENT_PREFIX)JSONResource.o : \
-    $(LAYOUT_ROOT)/Component/Layout_Component_JSONResource.cpp
-$(LAYOUT_COMPONENT_PREFIX)ConfigFile.o : \
-    $(LAYOUT_ROOT)/Component/Layout_Component_ConfigFile.cpp
-$(LAYOUT_COMPONENT_PREFIX)Manager.o : \
-    $(LAYOUT_ROOT)/Component/Layout_Component_Manager.cpp
+$(LAYOUT_COMPONENT_OBJ)ConfigLayout.o : \
+    $(LAYOUT_COMPONENT_ROOT)/$(LAYOUT_COMPONENT_PREFIX)ConfigLayout.cpp
+$(LAYOUT_COMPONENT_OBJ)JSONResource.o : \
+    $(LAYOUT_COMPONENT_ROOT)/$(LAYOUT_COMPONENT_PREFIX)JSONResource.cpp
+$(LAYOUT_COMPONENT_OBJ)ConfigFile.o : \
+    $(LAYOUT_COMPONENT_ROOT)/$(LAYOUT_COMPONENT_PREFIX)ConfigFile.cpp
+$(LAYOUT_COMPONENT_OBJ)Manager.o : \
+    $(LAYOUT_COMPONENT_ROOT)/$(LAYOUT_COMPONENT_PREFIX)Manager.cpp
 
-$(LAYOUT_GROUP_PREFIX)RelativeLayout.o : \
-    $(LAYOUT_ROOT)/Group/Layout_Group_RelativeLayout.cpp
-$(LAYOUT_GROUP_PREFIX)Manager.o : \
-    $(LAYOUT_ROOT)/Group/Layout_Group_Manager.cpp
+$(LAYOUT_GROUP_OBJ)RelativeLayout.o : \
+    $(LAYOUT_GROUP_ROOT)/$(LAYOUT_GROUP_PREFIX)RelativeLayout.cpp
+$(LAYOUT_GROUP_OBJ)Manager.o : \
+    $(LAYOUT_GROUP_ROOT)/$(LAYOUT_GROUP_PREFIX)Manager.cpp
 
-$(LAYOUT_PREFIX)Transition_Animator.o : \
-    $(LAYOUT_ROOT)/Transition/Layout_Transition_Animator.cpp
+$(LAYOUT_TRANSITION_OBJ)Animator.o : \
+    $(LAYOUT_TRANSITION_ROOT)/$(LAYOUT_TRANSITION_PREFIX)Animator.cpp
