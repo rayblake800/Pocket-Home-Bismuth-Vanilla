@@ -5,7 +5,7 @@
  * @brief  Provides a file selection UI component.
  */
 
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "JuceHeader.h"
 #include <set>
 

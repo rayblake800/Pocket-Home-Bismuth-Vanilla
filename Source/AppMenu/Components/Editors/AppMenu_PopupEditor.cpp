@@ -11,12 +11,15 @@
 static const juce::Identifier localeClassKey = "AppMenu::PopupEditor";
 
 /* Localized text value keys: */
-static const juce::Identifier nameTextKey         = "name";
-static const juce::Identifier iconTextKey         = "icon";
-static const juce::Identifier selectIconTextKey   = "selectIcon";
-static const juce::Identifier editCategoryTextKey = "editCategory";
-static const juce::Identifier commandTextKey      = "command";
-static const juce::Identifier runInTermTextKey    = "runInTerm";
+namespace TextKey
+{
+    static const juce::Identifier name         = "name";
+    static const juce::Identifier icon         = "icon";
+    static const juce::Identifier selectIcon   = "selectIcon";
+    static const juce::Identifier editCategory = "editCategory";
+    static const juce::Identifier command      = "command";
+    static const juce::Identifier runInTerm    = "runInTerm";
+}
 
 /*
  * Creates a new editor component for an application menu item.
@@ -31,14 +34,14 @@ Widgets::PopupEditor([this, onConfirm](Widgets::PopupEditor* e)
     onConfirm();
 }),
 Locale::TextUser(localeClassKey),
-nameLabel("nameLabel", localeText(nameTextKey)),
+nameLabel("nameLabel", localeText(TextKey::name)),
 titleEditor("titleEditor"),
-iconLabel("iconLabel", localeText(iconTextKey)),
-iconNameEditor(localeText(selectIconTextKey)),
-categoryEditButton(localeText(editCategoryTextKey)),
-commandLabel("commandLabel", localeText(commandTextKey)),
+iconLabel("iconLabel", localeText(TextKey::icon)),
+iconNameEditor(localeText(TextKey::selectIcon)),
+categoryEditButton(localeText(TextKey::editCategory)),
+commandLabel("commandLabel", localeText(TextKey::command)),
 commandEditor("commandEditor"),
-terminalCheckboxLabel("runInTermLabel", localeText(runInTermTextKey))
+terminalCheckboxLabel("runInTermLabel", localeText(TextKey::runInTerm))
 {
     categoryEditButton.addListener(this);
     iconNameEditor.addFileSelectListener(this);

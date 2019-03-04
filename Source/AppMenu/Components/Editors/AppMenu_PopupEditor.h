@@ -9,7 +9,7 @@
  *         and editing application menu items.
  */
 
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "Widgets_FilePathEditor.h"
 #include "Widgets_PopupEditor.h"
 #include "Widgets_Switch.h"

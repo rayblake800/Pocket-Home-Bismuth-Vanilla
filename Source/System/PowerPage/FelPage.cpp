@@ -23,9 +23,9 @@ yesButton(localeText(TextKey::yes)),
 noButton(localeText(TextKey::no)),
 infoLine2("infoLine2", localeText(TextKey::flashingInfo))
 {
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("FelPage");
-#    endif
+#endif
     using namespace Layout::Group;
     RelativeLayout layout({
         Row(10, { RowItem(&infoLine1) } ),

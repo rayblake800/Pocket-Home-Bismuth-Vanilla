@@ -11,7 +11,7 @@
 
 #include "Widgets_PopupEditor.h"
 #include "Widgets_ListEditor.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 
 namespace AppMenu { class CategoryEditor; }
 

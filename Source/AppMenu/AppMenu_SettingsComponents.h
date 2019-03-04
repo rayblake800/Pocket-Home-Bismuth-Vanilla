@@ -5,7 +5,7 @@
  * @brief  Provides a set of UI components used to control AppMenu settings.
  */
 
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "Widgets_BoundedLabel.h"
 #include "Widgets_Counter.h"
 #include "AppMenu_ConfigFile.h"

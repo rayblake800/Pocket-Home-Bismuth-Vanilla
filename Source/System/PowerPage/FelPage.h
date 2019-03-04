@@ -6,7 +6,7 @@
  */
 
 #include "Widgets_BoundedLabel.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "Page_Component.h"
 
 /**

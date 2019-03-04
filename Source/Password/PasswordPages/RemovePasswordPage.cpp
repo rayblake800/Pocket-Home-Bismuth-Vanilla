@@ -2,35 +2,43 @@
 #include "Password.h"
 #include "Layout_Component_ConfigFile.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "RemovePasswordPage::";
+#endif
+
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "RemovePasswordPage";
 
 /* Localized text value keys: */
-static const juce::Identifier currentPasswordTextKey    = "currentPassword";
-static const juce::Identifier removePasswordTextKey     = "removePassword";
-static const juce::Identifier applyTextKey              = "apply";
+namespace TextKey
+{
+    static const juce::Identifier currentPassword    = "currentPassword";
+    static const juce::Identifier removePassword     = "removePassword";
+    static const juce::Identifier apply              = "apply";
 
-static const juce::Identifier successTextKey            = "success";
-static const juce::Identifier passwordRemovedTextKey    = "passwordRemoved";
+    static const juce::Identifier success            = "success";
+    static const juce::Identifier passwordRemoved    = "passwordRemoved";
 
-static const juce::Identifier cantRemovePasswordTextKey = "cantRemovePassword";
-static const juce::Identifier wrongPasswordTextKey      = "wrongPassword";
-static const juce::Identifier checkAgentTextKey         = "checkAgent";
+    static const juce::Identifier cantRemovePassword = "cantRemovePassword";
+    static const juce::Identifier wrongPassword      = "wrongPassword";
+    static const juce::Identifier checkAgent         = "checkAgent";
 
-static const juce::Identifier errorTextKey              = "error";
-static const juce::Identifier filesMissingTextKey       = "filesMissing";
-static const juce::Identifier polkitMissingTextKey      = "polkitMissing";
+    static const juce::Identifier error              = "error";
+    static const juce::Identifier filesMissing       = "filesMissing";
+    static const juce::Identifier polkitMissing      = "polkitMissing";
+}
     
 RemovePasswordPage::RemovePasswordPage() :
 Locale::TextUser(localeClassKey),
 pageListener(*this),
-curPwdLabel("CurLabel", localeText(currentPasswordTextKey)),
+curPwdLabel("CurLabel", localeText(TextKey::currentPassword)),
 curPassword("Current", 0x2022),
-titleLabel("Title", localeText(removePasswordTextKey))
+titleLabel("Title", localeText(TextKey::removePassword))
 {
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("RemovePasswordPage");
-#    endif
+#endif
     setBackButton(BackButtonType::left);
 
     using namespace Layout::Group;
@@ -52,7 +60,7 @@ titleLabel("Title", localeText(removePasswordTextKey))
             (Layout::Component::TextSize::smallText)));
     
     titleLabel.setJustificationType(juce::Justification::centred);
-    deleteButton.setButtonText(localeText(applyTextKey));
+    deleteButton.setButtonText(localeText(TextKey::apply));
     deleteButton.addListener(&pageListener);
     addAndShowLayoutComponents();
 }
@@ -66,8 +74,7 @@ void RemovePasswordPage::PageListener::buttonClicked(juce::Button* button)
     using juce::AlertWindow;
     if (button != &passwordPage.deleteButton)
     {
-        DBG("RemovePasswordPage::" << __func__ << ": button "
-                << button->getName()
+        DBG(dbgPrefix << __func__ << ": button " << button->getName()
                 << " should not be triggering this function!");
         passwordPage.curPassword.clear();
         return;
@@ -80,15 +87,14 @@ void RemovePasswordPage::PageListener::buttonClicked(juce::Button* button)
         case Password::fileCreateFailed:
         case Password::fileWriteFailed:
         case Password::fileSecureFailed:
-            DBG("RemovePasswordPage::" << __func__
-                    << ": Illegal result returned!");
+            DBG(dbgPrefix << __func__ << ": Illegal result returned!");
             jassertfalse;
             return;
         case Password::passwordRemoveSuccess:
             AlertWindow::showMessageBoxAsync(
                     AlertWindow::AlertIconType::InfoIcon,
-                    passwordPage.localeText(successTextKey),
-                    passwordPage.localeText(passwordRemovedTextKey),
+                    passwordPage.localeText(TextKey::success),
+                    passwordPage.localeText(TextKey::passwordRemoved),
                     "",
                     nullptr,
                     juce::ModalCallbackFunction::create([this](int i)
@@ -98,20 +104,20 @@ void RemovePasswordPage::PageListener::buttonClicked(juce::Button* button)
             passwordPage.curPassword.clear();
             return;
         case Password::wrongPasswordError:
-            title = passwordPage.localeText(cantRemovePasswordTextKey);
-            message = passwordPage.localeText(wrongPasswordTextKey);
+            title = passwordPage.localeText(TextKey::cantRemovePassword);
+            message = passwordPage.localeText(TextKey::wrongPassword);
             break;
         case Password::fileDeleteFailed:
-            title = passwordPage.localeText(cantRemovePasswordTextKey);
-            message = passwordPage.localeText(checkAgentTextKey);
+            title = passwordPage.localeText(TextKey::cantRemovePassword);
+            message = passwordPage.localeText(TextKey::checkAgent);
             break;
         case Password::noPasswordScript:
-            title = passwordPage.localeText(errorTextKey);
-            message = passwordPage.localeText(filesMissingTextKey);
+            title = passwordPage.localeText(TextKey::error);
+            message = passwordPage.localeText(TextKey::filesMissing);
             break;
         case Password::noPKExec:
-            title = passwordPage.localeText(errorTextKey);
-            message = passwordPage.localeText(polkitMissingTextKey);
+            title = passwordPage.localeText(TextKey::error);
+            message = passwordPage.localeText(TextKey::polkitMissing);
             break;
     }
     AlertWindow::showMessageBoxAsync(AlertWindow::AlertIconType::WarningIcon,

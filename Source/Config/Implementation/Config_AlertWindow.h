@@ -6,7 +6,7 @@
  *        or writing JSON configuration files.
  */
 
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "JuceHeader.h"
 
 namespace Config { class AlertWindow; }

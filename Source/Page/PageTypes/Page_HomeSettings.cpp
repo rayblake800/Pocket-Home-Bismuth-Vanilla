@@ -10,8 +10,8 @@ static const juce::Identifier localeClassKey = "Page::HomeSettings";
 /* Localized text value keys: */
 namespace TextKey
 {
-    static const juce::Identifier title           = "title";
-    static const juce::Identifier background      = "background";
+    static const juce::Identifier title      = "title";
+    static const juce::Identifier background = "background";
 }
 
 /*

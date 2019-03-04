@@ -5,14 +5,22 @@
 #include "DesktopEntry_FileError.h"
 #include "Utils.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "AppMenu::EntryData::";
+#endif
+
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::EntryData";
 
 /* Localized text value keys: */
-static const juce::Identifier removeLinkToTextKey  = "removeLinkTo";
-static const juce::Identifier questionMarkTextKey  = "questionMark";
-static const juce::Identifier willHideEntryTextKey = "willHideEntry";
-static const juce::Identifier editAppTextKey       = "editApp";
+namespace TextKey
+{
+    static const juce::Identifier removeLinkTo  = "removeLinkTo";
+    static const juce::Identifier questionMark  = "questionMark";
+    static const juce::Identifier willHideEntry = "willHideEntry";
+    static const juce::Identifier editApp       = "editApp";
+}
 
 /*
  * Creates menu item data from a desktop entry. 
@@ -80,8 +88,7 @@ void AppMenu::EntryData::setTitle(const juce::String& title)
     }
     catch(DesktopEntry::FormatError e)
     {
-        DBG("EntryData::" << __func__
-                << ": Invalid title " << title);
+        DBG(dbgPrefix << __func__ << ": Invalid title " << title);
     }
 }
 
@@ -97,8 +104,7 @@ void AppMenu::EntryData::setIconName(const juce::String& iconName)
     }
     catch(DesktopEntry::FormatError e)
     {
-        DBG("EntryData::" << __func__
-                << ": Invalid icon " << iconName);
+        DBG(dbgPrefix << __func__ << ": Invalid icon " << iconName);
     }
 }
 
@@ -114,7 +120,7 @@ void AppMenu::EntryData::setCommand(const juce::String& newCommand)
     }
     catch(DesktopEntry::FormatError e)
     {
-        DBG("EntryData::" << __func__
+        DBG(dbgPrefix << __func__
                 << ": Invalid launch command " << newCommand);
     }
 }
@@ -140,7 +146,7 @@ void AppMenu::EntryData::setCategories(const juce::StringArray& categories)
     }
     catch(DesktopEntry::FormatError e)
     {
-        DBG("EntryData::" << __func__
+        DBG(dbgPrefix << __func__
                 << ": Invalid categories " << categories.joinIntoString(";"));
     }
 }
@@ -172,12 +178,12 @@ void AppMenu::EntryData::saveChanges()
     }
     catch(DesktopEntry::FileError e)
     {
-        DBG("EntryData::" << __func__ << ": Failed to write changes:"
+        DBG(dbgPrefix << __func__ << ": Failed to write changes:"
                 << e.what());
     }
     catch(DesktopEntry::FormatError e)
     {
-        DBG("EntryData::" << __func__ << ": Failed to write changes:"
+        DBG(dbgPrefix << __func__ << ": Failed to write changes:"
                 << e.what());
     }
     DesktopEntry::Loader entryLoader;
@@ -189,8 +195,8 @@ void AppMenu::EntryData::saveChanges()
  */
 juce::String AppMenu::EntryData::getConfirmDeleteTitle() const
 {
-    return localeText(removeLinkToTextKey) 
-            + getTitle() + localeText(questionMarkTextKey);
+    return localeText(TextKey::removeLinkTo) 
+            + getTitle() + localeText(TextKey::questionMark);
 }
 
 /*
@@ -198,7 +204,7 @@ juce::String AppMenu::EntryData::getConfirmDeleteTitle() const
  */
 juce::String AppMenu::EntryData::getConfirmDeleteMessage() const
 {
-    return localeText(willHideEntryTextKey);
+    return localeText(TextKey::willHideEntry);
 }
 
 /*
@@ -206,7 +212,7 @@ juce::String AppMenu::EntryData::getConfirmDeleteMessage() const
  */
 juce::String AppMenu::EntryData::getEditorTitle() const
 {
-    return localeText(editAppTextKey);
+    return localeText(TextKey::editApp);
 }
 
 /*
@@ -231,12 +237,10 @@ void AppMenu::EntryData::deleteFromSource()
     }
     catch(DesktopEntry::FileError e)
     {
-        DBG("EntryData::" << __func__
-                << ": Failed to hide entry:" << e.what());
+        DBG(dbgPrefix << __func__ << ": Failed to hide entry:" << e.what());
     }
     catch(DesktopEntry::FormatError e)
     {
-        DBG("EntryData::" << __func__
-                << ": Failed to hide entry:" << e.what());
+        DBG(dbgPrefix << __func__ << ": Failed to hide entry:" << e.what());
     }
 }

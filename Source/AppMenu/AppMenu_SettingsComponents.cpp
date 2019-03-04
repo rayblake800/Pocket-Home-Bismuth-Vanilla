@@ -10,7 +10,7 @@ static const constexpr char* dbgPrefix = "AppMenu::SettingsComponents::";
 static const juce::Identifier localeClassKey = "AppMenu::SettingsComponents";
 
 /* Localized text value keys: */
-namespace TextKeys
+namespace TextKey
 {
     static const juce::Identifier menuType      = "menuType";
     static const juce::Identifier scrollingMenu = "scrollingMenu";
@@ -38,16 +38,16 @@ static const constexpr int scrollingMenuID = 2;
  */
 AppMenu::SettingsComponents::SettingsComponents() : 
 Locale::TextUser(localeClassKey),
-menuFormatLabel("menuFormatLabel", localeText(TextKeys::menuType)),
+menuFormatLabel("menuFormatLabel", localeText(TextKey::menuType)),
 menuFormatPicker("menuFormatPicker"),
-columnCountLabel("columnCountLabel", localeText(TextKeys::menuColumns)),
+columnCountLabel("columnCountLabel", localeText(TextKey::menuColumns)),
 columnCounter(minColumns, minColumns, maxColumns),
-rowCountLabel("rowCountLabel", localeText(TextKeys::menuRows)),
+rowCountLabel("rowCountLabel", localeText(TextKey::menuRows)),
 rowCounter(minRows, minRows, maxRows)
 {
-    menuFormatPicker.addItem(localeText(TextKeys::scrollingMenu),
+    menuFormatPicker.addItem(localeText(TextKey::scrollingMenu),
             scrollingMenuID);
-    menuFormatPicker.addItem(localeText(TextKeys::pagedMenu),
+    menuFormatPicker.addItem(localeText(TextKey::pagedMenu),
             pagedMenuID);
     menuFormatPicker.addListener(this);
     updateForCurrentSettings();

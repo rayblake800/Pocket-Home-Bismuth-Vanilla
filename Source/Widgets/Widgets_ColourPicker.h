@@ -6,7 +6,7 @@
  */
 
 #include "Layout_Group_Manager.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "JuceHeader.h"
 
 namespace Widgets { class ColourPicker; }

@@ -6,7 +6,7 @@
  */
 
 #include "Page_Component.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "Widgets_NavButton.h"
 #include "Widgets_PagedList.h"
 

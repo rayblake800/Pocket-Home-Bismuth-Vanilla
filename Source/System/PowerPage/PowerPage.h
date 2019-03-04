@@ -8,7 +8,7 @@
 #include "Page_Component.h"
 #include "Widgets_OverlaySpinner.h"
 #include "LoginPage.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 
 /**
  * @brief  A UI menu page that shows buttons that perform actions related to

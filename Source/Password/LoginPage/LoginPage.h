@@ -6,7 +6,7 @@
  */
 
 #include "JuceHeader.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "Widgets_BoundedLabel.h"
 #include "Widgets_DrawableImage.h"
 #include "Theme_Image_ConfigFile.h"

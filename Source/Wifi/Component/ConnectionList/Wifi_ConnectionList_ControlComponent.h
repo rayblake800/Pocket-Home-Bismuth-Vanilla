@@ -6,7 +6,7 @@
  *         access point.
  */
 
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "Wifi_AccessPoint.h"
 #include "Layout_Group_Manager.h"
 #include "Widgets_BoundedLabel.h"

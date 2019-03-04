@@ -5,7 +5,7 @@
 #include "Wifi_Connection_Control_Handler.h"
 #include "Wifi_Connection_Saved_Deleter.h"
 #include "Layout_Component_ConfigFile.h"
-#include "Locale/Time.h"
+#include "Locale_Time.h"
 #include "Utils.h"
 
 #ifdef JUCE_DEBUG

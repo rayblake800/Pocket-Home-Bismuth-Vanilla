@@ -12,7 +12,7 @@
 #include "AppMenu_SettingsComponents.h"
 #include "Theme_Image_HomeBackgroundPicker.h"
 #include "Utils.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 
 namespace Page { class HomeSettings; }
 

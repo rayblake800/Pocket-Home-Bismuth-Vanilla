@@ -9,7 +9,7 @@
 #include "Settings/QuickSettingsPage/ConnectionSettingsComponent.h"
 #include "Wifi_Device_Listener.h"
 #include "Wifi_Connection_Record_Listener.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 
 namespace Wifi { class ControlWidget; }
 namespace Wifi { class AccessPoint; }

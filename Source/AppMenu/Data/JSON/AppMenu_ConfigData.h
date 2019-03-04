@@ -9,7 +9,7 @@
  *         configuration file.
  */
 
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "AppMenu_ItemData.h"
 
 /** 

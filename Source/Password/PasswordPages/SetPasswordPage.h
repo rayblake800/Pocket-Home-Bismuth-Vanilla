@@ -6,7 +6,7 @@
  */
 #include "Widgets_BoundedLabel.h"
 #include "Page_Component.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "JuceHeader.h"
 
 class SetPasswordPage : public Page::Component, public Locale::TextUser

@@ -1,9 +1,4 @@
 #pragma once
-#include "JuceHeader.h"
-#include "Locale/TextUser.h"
-#include "Widgets_BoundedLabel.h"
-#include "Page_Component.h"
-
 /**
  * @file RemovePasswordPage.h
  * 
@@ -11,6 +6,12 @@
  * user must enter in the existing Pocket-Home password, along with their root
  * password.
  */
+
+#include "JuceHeader.h"
+#include "Locale_TextUser.h"
+#include "Widgets_BoundedLabel.h"
+#include "Page_Component.h"
+
 
 class RemovePasswordPage : public Page::Component, public Locale::TextUser
 {
@@ -29,7 +30,9 @@ private:
 
     private:
         /**
-         * Attempts to delete the Pocket-Home password when deleteButton is pressed.
+         * @brief  Attempts to remove the Pocket-Home password when the delete
+         *         button is pressed.
+         *
          * If this succeeds, the page will close after showing an AlertWindow.
          * 
          * @param button  This should always be deleteButton

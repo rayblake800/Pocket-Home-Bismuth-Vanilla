@@ -2,7 +2,7 @@
 #include <functional>
 #include <map>
 #include "LaunchedProcess.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
 

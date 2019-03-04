@@ -3,21 +3,32 @@
 #include "AppMenu_MenuKeys.h"
 #include "AppMenu_MenuFile.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "AppMenu::ConfigData::";
+#endif
+
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::ConfigData";
 
 /* Localized text value keys: */
-// Application shortcuts:
-static const juce::Identifier removeAPPTextKey      = "removeAPP";
-static const juce::Identifier fromMenuTextKey       = "fromMenu";
-static const juce::Identifier willRemoveAppTextKey  = "willRemoveApp";
-static const juce::Identifier editAppTextKey        = "editApp";
-
-// Folders:
-static const juce::Identifier deleteNAMETextKey       = "deleteNAME";
-static const juce::Identifier folderTextKey           = "folder";
-static const juce::Identifier willRemoveFolderTextKey = "willRemoveFolder";
-static const juce::Identifier editFolderTextKey       = "editFolder";
+namespace TextKey
+{
+    namespace App
+    {
+        static const juce::Identifier remove     = "removeAPP";
+        static const juce::Identifier fromMenu   = "fromMenu";
+        static const juce::Identifier willRemove = "willRemoveApp";
+        static const juce::Identifier edit       = "editApp";
+    }
+    namespace Folder
+    {
+        static const juce::Identifier remove     = "deleteNAME";
+        static const juce::Identifier folder     = "folder";
+        static const juce::Identifier willRemove = "willRemoveFolder";
+        static const juce::Identifier edit       = "editFolder";
+    }
+}
 
 /*
  * Creates a new menu item that initially holds no data.
@@ -34,14 +45,13 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
     using juce::String;
     if(initialized)
     {
-        DBG("AppMenu::ConfigData::" << __func__ <<
-                ": initialization called more than once!");
+        DBG(dbgPrefix << __func__ << ": initialization called more than once!");
         return;
     }
     initialized = true;
     if(menuData.isVoid())
     {
-        DBG("AppMenu::ConfigData::" << __func__ << ": Menu data is void");
+        DBG(dbgPrefix << __func__ << ": Menu data is void");
         return;
     }
 
@@ -68,8 +78,8 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
     }
     if(folderItems.isArray())
     {
-        DBG("AppMenu::ConfigData::" << __func__
-                << ": Initializing " << folderItems.size() << " folder items.");
+        DBG(dbgPrefix << __func__ << ": Initializing " << folderItems.size() 
+                << " folder items.");
         for(var& folderItem : *folderItems.getArray())
         {
             ItemData::Ptr child = createChildItem();
@@ -197,41 +207,37 @@ juce::String AppMenu::ConfigData::getConfirmDeleteTitle() const
 {
     if(isFolder())
     {
-        return localeText(deleteNAMETextKey) + getTitle() 
-            + localeText(folderTextKey);
+        return localeText(TextKey::Folder::remove) + getTitle() 
+            + localeText(TextKey::Folder::folder);
     }
     else
     {
-        return localeText(removeAPPTextKey) + getTitle() 
-            + localeText(fromMenuTextKey);
+        return localeText(TextKey::App::remove) + getTitle() 
+            + localeText(TextKey::App::fromMenu);
     }
 }
 
 /*
  * Gets appropriate descriptive text for a deletion confirmation window.
  */
-juce::String 
-AppMenu::ConfigData::getConfirmDeleteMessage() const
+juce::String AppMenu::ConfigData::getConfirmDeleteMessage() const
 {
     return localeText(isFolder() 
-            ? willRemoveFolderTextKey : willRemoveAppTextKey);
+            ? TextKey::Folder::willRemove : TextKey::App::willRemove);
 }
 
 /*
  * Gets an appropriate title to use for a menu item editor.
  */
-juce::String 
-AppMenu::ConfigData::getEditorTitle() const
+juce::String AppMenu::ConfigData::getEditorTitle() const
 {
-    return localeText(isFolder() ? editFolderTextKey : editAppTextKey);
+    return localeText(isFolder() ? TextKey::Folder::edit : TextKey::App::edit);
 }
 
 /*
  * Checks if a data field within this menu item can be edited.
  */
-bool 
-AppMenu::ConfigData::isEditable
-(const DataField dataField) const
+bool AppMenu::ConfigData::isEditable(const DataField dataField) const
 {
     switch(dataField)
     {

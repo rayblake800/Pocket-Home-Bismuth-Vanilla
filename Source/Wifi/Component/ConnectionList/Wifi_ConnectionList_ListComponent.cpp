@@ -7,7 +7,7 @@
 #include "Wifi_APList_Reader.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Wifi_LibNM_SecurityType.h"
-#include "Locale/Time.h"
+#include "Locale_Time.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before debug output: */

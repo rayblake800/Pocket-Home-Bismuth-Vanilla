@@ -10,20 +10,23 @@
 static const juce::Identifier localeClassKey = "PowerPage";
 
 /* Localized text keys: */
-static const juce::Identifier shutdownTextKey      = "shutdown";
-static const juce::Identifier rebootTextKey        = "reboot";
-static const juce::Identifier sleepTextKey         = "sleep";
-static const juce::Identifier buildTextKey         = "build";
-static const juce::Identifier versionTextKey       = "version";
-static const juce::Identifier flashSoftwareTextKey = "flashSoftware";
+namespace TextKey
+{
+    static const juce::Identifier shutdown      = "shutdown";
+    static const juce::Identifier reboot        = "reboot";
+    static const juce::Identifier sleep         = "sleep";
+    static const juce::Identifier build         = "build";
+    static const juce::Identifier version       = "version";
+    static const juce::Identifier flashSoftware = "flashSoftware";
+}
 
 PowerPage::PowerPage() : Locale::TextUser(localeClassKey),
 pageListener(*this),
-powerOffButton(localeText(shutdownTextKey)),
-rebootButton(localeText(rebootTextKey)),
-sleepButton(localeText(sleepTextKey)),
-felButton(localeText(flashSoftwareTextKey)),
-versionLabel(localeText(versionTextKey) 
+powerOffButton(localeText(TextKey::shutdown)),
+rebootButton(localeText(TextKey::reboot)),
+sleepButton(localeText(TextKey::sleep)),
+felButton(localeText(TextKey::flashSoftware)),
+versionLabel(localeText(TextKey::version) 
 + juce::JUCEApplication::getInstance()->getApplicationVersion()),
 lockscreen([this]()
 {
@@ -48,16 +51,14 @@ lockscreen([this]()
     setLayout(layout);
  
     versionLabel.setJustificationType(juce::Justification::centred);
-    versionLabel.setText(localeText(versionTextKey) 
+    versionLabel.setText(localeText(TextKey::version) 
         + juce::JUCEApplication::getInstance()->getApplicationVersion(),
             juce::NotificationType::dontSendNotification);
     
     // Determine release label contents
-    juce::String buildText = localeText(buildTextKey) + " ";
+    juce::String buildText = localeText(TextKey::build) + " ";
 #ifdef BUILD_NAME
     buildText += juce::String(BUILD_NAME);
-#else
-    buildText += juce::String("unset");
 #endif
     buildLabel.setJustificationType(juce::Justification::centred);
     buildLabel.setText(buildText, juce::NotificationType::dontSendNotification);

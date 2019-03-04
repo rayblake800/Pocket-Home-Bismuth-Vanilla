@@ -10,16 +10,19 @@
  *         launching application shortcuts.
  */
 
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 #include "AppMenu_MenuComponent.h"
 #include "AppMenu_EntryLoader.h"
 #include "Widgets_OverlaySpinner.h"
 #include "AppLauncher.h"
 #include "JuceHeader.h"
 
-namespace AppMenu { class Controller; }
-namespace AppMenu { class MenuItem; }
-namespace AppMenu { class PopupEditor; }
+namespace AppMenu 
+{ 
+    class Controller; 
+    class MenuItem;
+    class PopupEditor;
+}
 
 /**
  *  @brief  Implements all menu functionality not related to menu display or 

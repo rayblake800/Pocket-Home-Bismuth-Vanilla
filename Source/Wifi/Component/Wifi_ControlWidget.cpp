@@ -12,12 +12,15 @@
 static const juce::Identifier localeClassKey = "Wifi::ControlWidget";
 
 /* Localized text keys: */
-static const juce::Identifier wifiNotFoundTextKey      = "wifiNotFound";
-static const juce::Identifier wifiDisabledTextKey      = "wifiDisabled";
-static const juce::Identifier notConnectedTextKey      = "notConnected";
-static const juce::Identifier connectingAPTextKey      = "connectingAP";
-static const juce::Identifier missingPSKTextKey        = "missingPSK";
-static const juce::Identifier disconnectingTextKey     = "disconnecting";
+namespace TextKey
+{
+    static const juce::Identifier wifiNotFound  = "wifiNotFound";
+    static const juce::Identifier wifiDisabled  = "wifiDisabled";
+    static const juce::Identifier notConnected  = "notConnected";
+    static const juce::Identifier connectingAP  = "connectingAP";
+    static const juce::Identifier missingPSK    = "missingPSK";
+    static const juce::Identifier disconnecting = "disconnecting";
+}
     
 Wifi::ControlWidget::ControlWidget(std::function<void() > openWifiPage) :
 ConnectionSettingsComponent(openWifiPage, localeClassKey.toString()),
@@ -94,18 +97,18 @@ juce::String Wifi::ControlWidget::updateButtonText()
     const Device::Reader deviceReader;
     if(!deviceReader.wifiDeviceExists())
     {
-        return localeText(wifiNotFoundTextKey);
+        return localeText(TextKey::wifiNotFound);
     }
     if(!deviceReader.wifiDeviceEnabled())
     {
-        return localeText(wifiDisabledTextKey);
+        return localeText(TextKey::wifiDisabled);
     }
 
     const Connection::Record::Reader recordReader;
     if(recordReader.getLatestEvent().getEventType()
             == Connection::EventType::connectionAuthFailed)
     {
-        return localeText(missingPSKTextKey);
+        return localeText(TextKey::missingPSK);
     }
 
     const bool isConnected = recordReader.isConnected();
@@ -117,10 +120,10 @@ juce::String Wifi::ControlWidget::updateButtonText()
                 = recordReader.getActiveAP().getSSID().toString();
         jassert(apName.isNotEmpty());
         return isConnected ? apName :
-            (localeText(connectingAPTextKey) + apName);
+            (localeText(TextKey::connectingAP) + apName);
     }
 
-    return localeText(notConnectedTextKey);
+    return localeText(TextKey::notConnected);
 }
 
 /*

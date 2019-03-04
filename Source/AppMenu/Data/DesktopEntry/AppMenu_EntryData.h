@@ -12,7 +12,7 @@
 
 #include "DesktopEntry_EntryFile.h"
 #include "AppMenu_ItemData.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
 
 namespace AppMenu { class EntryData; }
 
