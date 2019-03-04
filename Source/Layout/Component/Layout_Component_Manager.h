@@ -14,6 +14,8 @@ class Layout::Component::Manager
 {
 public:
     /**
+     * @brief  Sets the layout manager's component and layout on construction.
+     *
      * @param component     The juce::Component to be positioned by this
      *                      Manager.
      *

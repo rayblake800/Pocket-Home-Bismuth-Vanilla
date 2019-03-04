@@ -4,9 +4,13 @@
 
 namespace ComponentLayout = Layout::Component;
 
-ComponentLayout::Manager::Manager(juce::Component* component,
-        const juce::Identifier& layoutKey) :
-component(component), layoutKey(layoutKey)
+/*
+ * Sets the layout manager's component and layout on construction.
+ */
+ComponentLayout::Manager::Manager
+(juce::Component* component, const juce::Identifier& layoutKey) :
+component(component),
+layoutKey(layoutKey)
 {
     ConfigFile layoutReader;
     layout = layoutReader.getLayout(layoutKey);
@@ -19,23 +23,11 @@ void ComponentLayout::Manager::applyConfigBounds()
 {
     if(component != nullptr)
     {
-        juce::Rectangle<int> newBounds = layout.getBounds();
-        if (newBounds.getX() < 0)
-        {
-            newBounds.setX(component->getX());
-        }
-        if (newBounds.getY() < 0)
-        {
-            newBounds.setY(component->getY());
-        }
-        if (newBounds.getWidth() < 0)
-        {
-            newBounds.setWidth(component->getWidth());
-        }
-        if (newBounds.getHeight() < 0)
-        {
-            newBounds.setHeight(component->getHeight());
-        }
+        juce::Rectangle<int> newBounds = component->getBounds();
+        newBounds.setX(layout.getX(newBounds.getX()));
+        newBounds.setY(layout.getY(newBounds.getY()));
+        newBounds.setWidth(layout.getWidth(newBounds.getWidth()));
+        newBounds.setHeight(layout.getHeight(newBounds.getHeight()));
         component->setBounds(newBounds);
     }
 }

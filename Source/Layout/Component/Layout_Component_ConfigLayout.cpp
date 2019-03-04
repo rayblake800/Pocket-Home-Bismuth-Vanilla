@@ -3,23 +3,120 @@
 
 namespace ComponentLayout = Layout::Component;
 
-ComponentLayout::ConfigLayout::ConfigLayout() :
-x(0), y(0), width(0), height(0) { }
+/**
+ * @brief  Provides the keys used to load each stored value from JSON.
+ */
+static const juce::Identifier valueKeys [4] =
+{
+    "x",
+    "y",
+    "width",
+    "height"
+};
+
+ComponentLayout::ConfigLayout::ConfigLayout() { }
 
 /*
  * Initializes the layout from JSON data.
  */
 ComponentLayout::ConfigLayout::ConfigLayout(juce::DynamicObject* jsonObj)
 {
-    x = jsonObj->hasProperty("x") ?
-	   double(jsonObj->getProperty("x")) : -1.0;
-    y = jsonObj->hasProperty("y") ?
-	   double(jsonObj->getProperty("y")) : -1.0;
-    width = jsonObj->hasProperty("width") ?
-	   double(jsonObj->getProperty("width")) : -1.0;
-    height = jsonObj->hasProperty("height") ?
-	   double(jsonObj->getProperty("height")) : -1.0;
+    for(int i = 0; i < 4; i++)
+    {
+        if(jsonObj->hasProperty(valueKeys[i]))
+        {
+            layoutValues[i].value = jsonObj->getProperty(valueKeys[i]);
+            layoutValues[i].defined = true;
+        }
+    }
+}
 
+/*
+ * Gets the layout's x-coordinate value.
+ */
+int ComponentLayout::ConfigLayout::getX(const int defaultValue) const
+{
+    return getAbsoluteValue(ValueType::xPos, defaultValue);
+}
+
+/*
+ * Gets the layout's y-coordinate value.
+ */
+int ComponentLayout::ConfigLayout::getY(const int defaultValue) const
+{
+    return getAbsoluteValue(ValueType::yPos, defaultValue);
+}
+
+/*
+ * Gets the layout's width value.
+ */
+int ComponentLayout::ConfigLayout::getWidth(const int defaultValue) const
+{
+    return getAbsoluteValue(ValueType::width, defaultValue);
+}
+
+/*
+ * Gets the layout's height value.
+ */
+int ComponentLayout::ConfigLayout::getHeight(const int defaultValue) const
+{
+    return getAbsoluteValue(ValueType::height, defaultValue);
+}
+
+/*
+ * Gets the component's x-coordinate as a fraction of the window's width.
+ */
+float ComponentLayout::ConfigLayout::getXFraction
+(const float defaultValue) const
+{
+    return getRelativeValue(ValueType::xPos, defaultValue);
+}
+
+/*
+ * Gets the component's y-coordinate as a fraction of the window's height.
+ */
+float ComponentLayout::ConfigLayout::getYFraction
+(const float defaultValue) const
+{
+    return getRelativeValue(ValueType::yPos, defaultValue);
+}
+
+/*
+ * Gets the component's width as a fraction of the window's width.
+ */
+float ComponentLayout::ConfigLayout::getWidthFraction
+(const float defaultValue) const
+{
+    return getRelativeValue(ValueType::width, defaultValue);
+}
+
+/*
+ * Gets the component's height as a fraction of the window's height.
+ */
+float ComponentLayout::ConfigLayout::getHeightFraction
+(const float defaultValue) const
+{
+    return getRelativeValue(ValueType::height, defaultValue);
+}
+
+/*
+ * Compares this layout with another layout object.
+ */
+bool ComponentLayout::ConfigLayout::operator==(const ConfigLayout& rhs) const
+{
+    for(int i = 0; i < 4; i++)
+    {
+        if(layoutValues[i].defined != rhs.layoutValues[i].defined)
+        {
+            return false;
+        }
+        if(layoutValues[i].defined 
+                && layoutValues[i].value != rhs.layoutValues[i].value)
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 /*
@@ -28,104 +125,52 @@ ComponentLayout::ConfigLayout::ConfigLayout(juce::DynamicObject* jsonObj)
 juce::DynamicObject* ComponentLayout::ConfigLayout::getDynamicObject() const
 {
     juce::DynamicObject* componentObject = new juce::DynamicObject();
-    if (x != -1)
+    for(int i = 0; i < 4; i++)
     {
-        componentObject->setProperty("x", x);
-    }
-    if (y != -1)
-    {
-        componentObject->setProperty("y", y);
-    }
-    if (width != -1)
-    {
-        componentObject->setProperty("width", width);
-    }
-    if (height != -1)
-    {
-        componentObject->setProperty("height", height);
+        const LayoutValue& layoutValue = layoutValues[i];
+        if(layoutValue.defined)
+        {
+            componentObject->setProperty(valueKeys[i], layoutValue.value);
+        }
     }
     return componentObject;
 }
 
 /*
- * Gets the component bounds defined by this object.
+ * Gets a value defined by this layout as a fraction of the application window's
+ * size.
  */
-juce::Rectangle<int> ComponentLayout::ConfigLayout::getBounds() const
+float ComponentLayout::ConfigLayout::getRelativeValue
+(const ValueType type, const float defaultValue) const
 {
-    using juce::Rectangle;
-    Rectangle<int> window = getWindowBounds();
-    return Rectangle<int>(
-            x * window.getWidth(),
-            y * window.getHeight(),
-            std::max<int>(0, width * window.getWidth()),
-            std::max<int>(0, height * window.getHeight()));
+    const LayoutValue& v = layoutValues[(int) type];
+    return v.defined ? v.value : defaultValue;
 }
 
 /*
- * Applies position and size settings to a UI component.
+ * Gets a value defined by this layout as an absolute measurement in pixels.
  */
-void ComponentLayout::ConfigLayout::applyBounds
-(juce::Component * component) const
+int ComponentLayout::ConfigLayout::getAbsoluteValue
+(const ValueType type, const int defaultValue) const
 {
-    juce::Rectangle<int> bounds = getBounds();
-    if (x == -1)
-    {
-        bounds.setX(component->getX());
-    }
-    if (y == -1)
-    {
-        bounds.setY(component->getY());
-    }
-    if (width == -1)
-    {
-        bounds.setWidth(component->getWidth());
-    }
-    if (height == -1)
-    {
-        bounds.setHeight(component->getHeight());
-    }
-    component->setBounds(bounds);
+    const LayoutValue& v = layoutValues[(int) type];
+    return v.defined ? (v.value * getWindowDimension(type)) : defaultValue;
 }
 
 /*
- * Gets the component's x-coordinate as a fraction of the window's width.
+ * Given a layout value type, return the application window dimension used to 
+ * find that value's size in pixels.
  */
-float ComponentLayout::ConfigLayout::getXFraction() const
+int ComponentLayout::ConfigLayout::getWindowDimension
+(const ValueType layoutValueType)
 {
-    return x;
-}
-
-/*
- * Gets the component's y-coordinate as a fraction of the window's height.
- */
-float ComponentLayout::ConfigLayout::getYFraction() const
-{
-    return y;
-}
-
-/*
- * Gets the component's width as a fraction of the window's width.
- */
-float ComponentLayout::ConfigLayout::getWidthFraction() const
-{
-    return width;
-}
-
-/*
- * Gets the component's height as a fraction of the window's height.
- */
-float ComponentLayout::ConfigLayout::getHeightFraction() const
-{
-    return height;
-}
-
-/*
- * Compares this layout with another layout object.
- */
-bool ComponentLayout::ConfigLayout::operator==(const ConfigLayout& rhs) const
-{
-    return x == rhs.x &&
-           y == rhs.y &&
-           width == rhs.width &&
-           height == rhs.height;
+   const juce::Rectangle<int> windowBounds = getWindowBounds();
+   if(layoutValueType == ValueType::xPos || layoutValueType == ValueType::width)
+   {
+       return windowBounds.getWidth();
+   }
+   else
+   {
+       return windowBounds.getHeight();
+   }
 }
