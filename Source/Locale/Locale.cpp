@@ -1,12 +1,23 @@
-#define LOCALE_IMPLEMENTATION
-#include "Locale/Locale.h"
+#include "Locale.h"
+#include "JuceHeader.h"
+
+/* Default locale to use if no other is found: */
+static const constexpr char* defaultLocale = "en_US"; 
 
 /*
  * Get the name of the system locale.
  */
 juce::String Locale::getLocaleName()
 {
-    using namespace juce;
     std::locale l("");
-    return String(l.name()).initialSectionNotContaining(".");
+    return juce::String(l.name()).initialSectionNotContaining(".");
+}
+
+/*
+ * Gets a default locale to use when the system locale is undefined or 
+ * unsupported.
+ */
+juce::String Locale::getDefaultLocale()
+{
+    return defaultLocale;
 }

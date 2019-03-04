@@ -1,13 +1,12 @@
 #pragma once
-#include "JuceHeader.h"
-
-
 /**
  * @file  Locale.h
  *
- * @brief  Handles localization tasks, loading localized display text and time
- *         strings.
+ * @brief  Gets the system's selected locale.
  */
+
+namespace juce { class String; }
+
 namespace Locale
 {
     /**
@@ -19,25 +18,11 @@ namespace Locale
     juce::String getLocaleName();
 
     /**
-     * @brief  An interface for classes that load localized text strings.
+     * @brief  Gets a default locale to use when the system locale is undefined
+     *         or unsupported.
      *
-     * @see Locale/TextUser.h
+     * @return  The American English locale name, to use by default if more
+     *          appropriate localization data is unavailable.
      */
-    class TextUser;
-
-    /**
-     * @brief  Loads localized time strings.
-     *
-     * @see Locale/Time.h
-     */
-    class Time;
-
-    /**
-     * @brief  The private SharedResource class that reads locale files.  This
-     *         may not be included outside of TextUser.h
-     *
-     * @see Locale/TextFile.h
-     */
-    class TextFile;
-
+    juce::String getDefaultLocale();
 }

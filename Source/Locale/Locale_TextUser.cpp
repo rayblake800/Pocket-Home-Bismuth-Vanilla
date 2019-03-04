@@ -1,17 +1,25 @@
 #include "AssetFiles.h"
 #include "Config_MainFile.h"
 #include "Config_MainKeys.h"
-#include "Locale/TextUser.h"
+#include "Locale_TextUser.h"
+
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Locale::TextUser::";
+#endif
 
 /* Localized text data loaded from a JSON locale file: */
 std::map<juce::Identifier, std::map<juce::Identifier, juce::String>> 
 Locale::TextUser::localeData;
 
-/* Default locale to use if no other is found: */
-static const juce::String defaultLocale = "en_US"; 
-
-/* The default POSIX locale, returned by the system when no locale is set. */
+/* The default POSIX locale, returned by the system when no locale is set: */
 static const juce::String unsetLocale = "C";
+
+/* The directory in the assets folder where locale files are placed: */
+static const juce::String localeDir = "locale/";
+
+/* The file extension shared by locale files: */
+static const juce::String fileExtension = ".json";
 
 /*
  * Initializes all localized text data.
@@ -29,19 +37,18 @@ Locale::TextUser::TextUser(const juce::Identifier& className) :
     const juce::StringArray filesToTry = 
     {
         getLocaleName(),
-        defaultLocale
+        getDefaultLocale()
     };
 
     juce::var jsonData;
-    for(const String& filename : filesToTry)
+    for(const String& localeName : filesToTry)
     {
-        //don't bother checking empty strings or the default (unset) locale
-        if(filename.isEmpty() || filename == "C")
+        if(localeName.isEmpty() || localeName == unsetLocale)
         {
             continue;
         }
-        jsonData = AssetFiles::loadJSONAsset
-                (String("locale/")+filename+".json",false);
+        jsonData = AssetFiles::loadJSONAsset(localeDir + localeName 
+                + fileExtension, false);
         if(!jsonData.isVoid())
         {
             break;
@@ -59,13 +66,12 @@ Locale::TextUser::TextUser(const juce::Identifier& className) :
     {
         if(!group->value.isObject())
         {
-            DBG("Locale::TextUser::TextUser: no data found in group "
+            DBG(dbgPrefix << __func__ << ": no data found in group "
                     << group->name);
             continue;
         }
         NamedValueSet& groupStrings 
             = group->value.getDynamicObject()->getProperties();
-        auto& groupMap = localeData[className];
         for(auto textValue = groupStrings.begin();
                 textValue != groupStrings.end(); textValue++)
         {
@@ -76,15 +82,15 @@ Locale::TextUser::TextUser(const juce::Identifier& className) :
 }
 
 
-/**
- * Look up a piece of text for the current locale.
+/*
+ * Looks up a localized text string associated with this class.
  */
 juce::String Locale::TextUser::localeText
 (const juce::Identifier& textKey) const
 {
     if(!localeData.count(className))
     {
-        DBG("Locale::TextUser::" << __func__ << ": Couldn't find text values "
+        DBG(dbgPrefix << __func__ << ": Couldn't find text values "
                 << "for TextUser with key \"" << className.toString() << "\"");
         return juce::String();
     }
@@ -92,11 +98,10 @@ juce::String Locale::TextUser::localeText
         = localeData[className];
     if(!userStrings.count(textKey))
     {
-        DBG("Locale::TextFile::" << __func__ << ": Couldn't find text value \""
+        DBG(dbgPrefix << __func__ << ": Couldn't find text value \""
                 << textKey.toString() << "\" for TextUser with key \""
                 << className.toString() << "\"");
         return juce::String();
     }
     return userStrings[textKey];
 }
-

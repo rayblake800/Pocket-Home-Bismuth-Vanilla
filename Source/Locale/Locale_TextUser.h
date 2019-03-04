@@ -1,14 +1,19 @@
 #pragma once
-#include "Locale/Locale.h"
-#include "JuceHeader.h"
-#include <map>
-
 /**
- * @file  Locale/TextUser.h
+ * @file  Locale_TextUser.h
  *
  * @brief  Provides access to all localized text strings by class.
  */
 
+#include "Locale/Locale.h"
+#include "JuceHeader.h"
+#include <map>
+
+namespace Locale { class TextUser; }
+
+/**
+ * @brief  Loads a set of localized strings from an appropriate locale file.
+ */
 class Locale::TextUser
 {
 public:
@@ -25,7 +30,7 @@ public:
 
 protected:
     /**
-     * @brief  Looks up a piece of text for the current locale.
+     * @brief  Looks up a localized text string associated with this class.
      * 
      * @param key  One of this object's text keys.
      * 
@@ -38,7 +43,7 @@ private:
     /* The key to all localized strings that belong to this class: */
     const juce::Identifier& className;
 
-    /* Localized text data loaded from a JSON locale file: */
+    /* All localized text data loaded from the JSON locale file: */
     static std::map<juce::Identifier, 
         std::map<juce::Identifier, juce::String>> localeData;
 };
