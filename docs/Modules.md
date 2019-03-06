@@ -19,6 +19,9 @@
 #### [GLib](./modules/GLib.md)
  Provides tools for managing the GLib library's C-based custom object system, simplifying interaction with libraries build using GLib.
 
+#### [Icon](./modules/Icon.md)
+ Locates, loads, and caches icon files using the system's icon theme.
+
 #### [Layout](./modules/Layout.md)
  Provides tools for arranging UI components within the window, and for animating transitions between different component layouts.
 
@@ -26,8 +29,7 @@
  Provides localized display text throughout the application.
 
 #### [Page](./modules/Page.md)
- Provides the layout of all UI pages, and handles transitions between those 
-pages.
+ Provides the layout of all UI pages, and handles transitions between those pages.
 
 #### [Password](./modules/Password.md)
  Securely creates, validates, and updates the Pocket-Home application password.
@@ -39,8 +41,7 @@ pages.
  Provides UI components for managing application and system settings.
 
 #### [SharedResource](./modules/SharedResource.md)
- Provides a system for safely creating, accessing, and destroying shared
-application resources.
+ Provides a system for safely creating, accessing, and destroying shared application resources.
 
 #### [System](./modules/System.md)
  Handles miscellaneous system tasks related to file IO, window management, power management, and general system controls.
