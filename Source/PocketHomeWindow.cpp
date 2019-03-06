@@ -1,4 +1,5 @@
 #include "PocketHomeWindow.h"
+#include "Password.h"
 #include "Utils.h"
 
 #ifdef JUCE_DEBUG
@@ -9,13 +10,13 @@ static const constexpr int dbgWidth = 480;
 static const constexpr int dbgHeight = 272;
 #endif
 
-
 /*
  * Creates and shows the main application window.
  */
 PocketHomeWindow::PocketHomeWindow(juce::String windowName) :
 WindowFocus::BroadcastWindow(windowName, juce::Colours::darkgrey,
-        juce::DocumentWindow::allButtons)
+        juce::DocumentWindow::allButtons),
+loginScreen([this](){ setContentNonOwned(&pageStack, true); })
 {
     juce::Rectangle<int> screenSize = getDisplaySize();
 #if JUCE_DEBUG
@@ -32,21 +33,36 @@ WindowFocus::BroadcastWindow(windowName, juce::Colours::darkgrey,
     setVisible(true);
     setWantsKeyboardFocus(false);
 
-    loginPage.reset(new LoginPage([this]()
+    loginScreen.setBounds(getLocalBounds());
+    if(Password::isPasswordSet())
     {
-        setContentNonOwned(&pageStack, true);
-    }));
-    loginPage->setBounds(getBounds());
-    if (loginPage->hasPassword())
-    {
-        setContentNonOwned(loginPage.get(), true);
-        loginPage->textFocus();
+        showLoginScreen();
     }
     else
     {
         setContentNonOwned(&pageStack, true);
     }
-    pageStack.setRootPage(pageFactory.createHomePage());
+    pageStack.setRootPage((Page::Interface::Component*) 
+            pageFactory.createHomePage());
+}
+
+/*
+ * Gets a pointer to the current open window object.
+ */
+PocketHomeWindow* PocketHomeWindow::getOpenWindow()
+{
+    juce::Component* rootComponent 
+            = juce::Desktop::getInstance().getComponent(0);
+    return dynamic_cast<PocketHomeWindow*>(rootComponent);
+}
+
+/*
+ * Fills the main application window with the login screen component.
+ */
+void PocketHomeWindow::showLoginScreen()
+{
+    setContentNonOwned(&loginScreen, true);
+    loginScreen.getKeyboardFocus();
 }
 
 /*
@@ -64,9 +80,6 @@ void PocketHomeWindow::resized()
 {
     const juce::Rectangle<int> bounds = getLocalBounds();
     pageStack.setBounds(bounds);
-    if (loginPage != nullptr)
-    {
-        loginPage->setBounds(bounds);
-    }
+    loginScreen.setBounds(bounds);
 }
 

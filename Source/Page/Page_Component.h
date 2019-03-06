@@ -6,7 +6,7 @@
  */
 
 #include "Page_Interface_Component.h"
-#include "Page_Interface_Factory.h"
+#include "Page_Interface_FactoryHolder.h"
 #include "Layout_Group_Manager.h"
 #include "Layout_Group_RelativeLayout.h"
 #include "Layout_Transition_Type.h"
@@ -20,9 +20,11 @@ namespace Page
 }
 
 /**
- * @brief  A container component that organizes and manages one screen
- * of the program UI. Page::Component objects fill the entire program window, so 
- * that only one can be visible at a time.
+ * @brief  A container component that organizes and manages one screen of the 
+ *         program UI. 
+ *
+ *  Page::Component objects fill the entire program window, so that only one can 
+ * be visible at a time.
  *
  *  Active pages are held in a stack, with the topmost page visible. The top 
  * page on the stack may add another page to the stack above it. It may also 
@@ -59,7 +61,7 @@ public:
     /**
      * @brief  Sets the layout of the page component.  
      *
-     * If the page layout was set previously, the old layout will be cleared, 
+     *  If the page layout was set previously, the old layout will be cleared, 
      * and its components will be removed from the page.
      * 
      * @param layout  Defines the layout of all child components within the 
@@ -166,7 +168,7 @@ private:
      * @brief  Updates component layout and back button bounds when the page
      *         is resized.
      */
-    void resized() final override;
+    virtual void resized() final override;
 
     /**
      * @brief  Closes the page when the back button is clicked.

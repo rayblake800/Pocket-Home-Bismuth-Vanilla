@@ -35,16 +35,6 @@ public:
      */
     Page::Component* createHomePage();
 
-    /**
-     * @brief  Creates a login page instance.
-     * 
-     * @param loginCallback  A callback function for the page to run when the 
-     *                       user successfully logs in.
-     *
-     * @return               A pointer to the new login page.
-     */
-    Page::Component* createLoginPage(const std::function<void()> loginCallback);
-
 private:
     /**
      * @brief  Creates a new page to push on top of the page stack.

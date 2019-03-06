@@ -5,10 +5,10 @@
  * @brief  Creates the main application window.
  */
 
-#include "LoginPage.h"
+#include "WindowFocus.h"
 #include "Page_Factory.h"
 #include "Page_StackComponent.h"
-#include "WindowFocus.h"
+#include "Password_LoginScreen.h"
 
 /**
  * @brief The sole application window object and the root component in the 
@@ -25,6 +25,24 @@ public:
     PocketHomeWindow(juce::String windowName);
 
     virtual ~PocketHomeWindow() { }
+
+    /**
+     * @brief  Gets a pointer to the current open window object.
+     *
+     * @return  The application window pointer, or nullptr if the window is
+     *          not currently open.
+     */
+    static PocketHomeWindow* getOpenWindow();
+
+    /**
+     * @brief  Fills the main application window with the login screen 
+     *         component.
+     *
+     *  This replaces the usual window contents with a login screen. All other
+     * application content will remain inaccessable until the user uses the
+     * login screen controls to log in.
+     */
+    void showLoginScreen();
 
 private:
     /**
@@ -43,9 +61,8 @@ private:
     /* Holds all page components besides the login page: */
     Page::StackComponent pageStack;
 
-    /* LoginPage will be initially shown instead of the pageStack if a password
-     * has been set: */
-    std::unique_ptr<LoginPage> loginPage;
+    /* Replaces application content until the user logs in: */
+    Password::LoginScreen loginScreen;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PocketHomeWindow)
 };

@@ -1,17 +1,16 @@
 #include "Page_Factory.h"
 #include "Page_Type.h"
+#include "Page_HomeSettings.h"
+#include "Page_PasswordEditor.h"
+#include "Page_PasswordRemover.h"
+#include "Page_WifiConnection.h"
 #include "HomePage.h"
-#include "LoginPage.h"
 #include "PowerPage.h"
 #include "FelPage.h"
 #include "QuickSettingsPage.h"
-#include "Page_WifiConnection.h"
 #include "SettingsListPage.h"
 #include "InputSettingsPage.h"
-#include "SetPasswordPage.h"
-#include "RemovePasswordPage.h"
 #include "Theme_Colour_ConfigPage.h"
-#include "Page_HomeSettings.h"
 
 /*
  * Creates an instance of the application's home page.
@@ -21,15 +20,6 @@ Page::Component* Page::Factory::createHomePage()
     Component* homePage = new HomePage;
     homePage->setFactoryInterface(this);
     return homePage;
-}
-
-/*
- * Creates a login page instance.
- */
-Page::Component* Page::Factory::createLoginPage
-(const std::function<void()> loginCallback)
-{
-    return new LoginPage(loginCallback);
 }
 
 /*
@@ -59,10 +49,10 @@ Page::Component* Page::Factory::createPage(const Type pageType)
             newPage = new InputSettingsPage;
             break;
         case Type::setPassword:
-            newPage = new SetPasswordPage;
+            newPage = new PasswordEditor;
             break;
         case Type::removePassword:
-            newPage = new RemovePasswordPage;
+            newPage = new PasswordRemover;
             break;
         case Type::colourSettings:
             newPage = new Theme::Colour::ConfigPage;

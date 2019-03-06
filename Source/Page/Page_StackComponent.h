@@ -1,15 +1,13 @@
 #pragma once
-
 /**
  * @file  Page_StackComponent.h
  * 
  * @brief  Manages all open page components within the application.
- * PageStackComponent implements PageComponent::PageStackInterface to manage
+ *
+ *  PageStackComponent implements PageComponent::PageStackInterface to manage
  * the stack of open pages.  It takes ownership of new pages, and allows them
  * to add new pages above themselves or remove and delete themselves from the
  * top of the stack.
- * 
- * @see PageComponent.h
  */
 
 #include "Page_Interface_Stack.h"

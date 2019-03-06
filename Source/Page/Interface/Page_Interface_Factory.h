@@ -10,10 +10,8 @@ namespace Page
     namespace Interface 
     { 
         class Factory; 
-        class FactoryHolder;
     } 
     class Component;
-    class Factory;
     enum class Type;
 }
 
@@ -36,39 +34,4 @@ protected:
      * @param PageType  The type of page to create.
      */
     virtual Component* createPage(const Type pageType) = 0;
-};
-
-/**
- * @brief  Creates the connection between the page and its factory.
- */
-class Page::Interface::FactoryHolder
-{
-public:
-    FactoryHolder() { }
-
-    virtual ~FactoryHolder() { }
-
-protected:
-    /**
-     * @brief  Gets the factory holder's interface to the page factory.
-     *
-     * @return   The factory interface pointer, or nullptr if the factory holder
-     *           was not created by a Page::Factory.
-     */
-    Factory* getFactoryInterface();
-
-private:
-    friend Page::Factory;
-
-    /**
-     * @brief  Sets the factory holder's factory interface pointer.
-     *
-     *  The Page::Factory must use this method to pass itself to each 
-     * FactoryHolder it creates that needs to access the factory.
-     *
-     * @param pageFactory  The factory interface pointer to set.
-     */
-    void setFactoryInterface(Factory* pageFactory);
-
-    Factory* factoryInterface = nullptr;
 };

@@ -2,35 +2,34 @@
 #include "JuceHeader.h"
 
 /**
- * @file Password.h
+ * @file  Password.h
  * 
- * Password provides functions for hashing password strings and checking
- * hash values against the current application password.
+ * @brief  Provides functions for securely setting, removing, or checking the
+ *         application password.
  */
 
 namespace Password
 {
 
     /**
-     * Checks if a string matches the existing password.
+     * @brief  Checks if a string matches the existing password.
      * 
      * @param password  A string value to check against the password.
      * 
-     * @return         True iff the hashed string matches the saved password
-     *                 hash value.
+     * @return          Whether the string matches the application password.
      */
-    bool checkPassword(const juce::String& password);
+    bool checkPassword(const juce::String password);
 
     /**
-     * Checks if a password has been set for the application.
+     * @brief  Checks if a password has been set for the application.
      * 
-     * @return  true iff a password has been set.
+     * @return  Whether a password has been set.
      */
     bool isPasswordSet();
 
     /**
-     * This covers all possible results of an attempt to change/remove
-     * a password.
+     * @brief  All possible results of an attempt to change or remove a 
+     *         password.
      */
     enum ChangeResult
     {
@@ -47,30 +46,28 @@ namespace Password
     };
 
     /**
-     * Attempts to set or change the current pocket-home password, if possible.
+     * @brief  Attempts to set or change the current application password.
      * 
-     * @param currentPass  If a password is set, this must match the current
-     *                      password, or the operation will fail.
+     * @param currentPassword  A string to check against the current password 
+     *                         before allowing the password to be changed.
      * 
-     * @param newPass      The new password to set.  If this is the empty
-     *                      string, the operation will fail.
+     * @param newPassword      The new password to set. If this is the empty 
+     *                         string, the operation will fail.
      * 
-     * @return  the ChangeResult that best describes the result of this
-     *           operation.
+     * @return                 The ChangeResult that best describes the result 
+     *                         of the password update attempt.
      */
-    ChangeResult changePassword
-    (const juce::String& currentPass, const juce::String& newPass);
+    ChangeResult changePassword(const juce::String currentPassword,
+            const juce::String newPassword);
 
     /**
-     * Attempts to remove the current pocket-home password.
+     * @brief  Attempts to remove the current pocket-home password.
      *
+     * @param currentPassword  A string to check against the current password 
+     *                         before allowing the password to be removed.
      * 
-     * @param currentPass  If a password is set, this must match the current
-     *                      password, or the operation will fail.
-     *  
-     * @return  the ChangeResult that best describes the result of this
-     *           operation.
+     * @return                 The ChangeResult that best describes the result 
+     *                         of the password removal attempt.
      */
-    ChangeResult removePassword(const juce::String& currentPass);
-
+    ChangeResult removePassword(const juce::String currentPassword);
 }

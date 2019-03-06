@@ -1,6 +1,7 @@
 #include "Page_Component.h"
 #include "Page_Type.h"
 #include "Page_Interface_Stack.h"
+#include "Page_Interface_Factory.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
