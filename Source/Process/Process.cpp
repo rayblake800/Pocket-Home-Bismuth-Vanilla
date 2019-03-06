@@ -1,4 +1,4 @@
-#include "ProcessUtils.h"
+#include "Process.h"
 #include <unistd.h>
 
 //Indices of process data members within the process stat file
@@ -9,78 +9,83 @@ static const constexpr int parentIdIndex  = 3;
 static const constexpr int startTimeIndex = 21;
 
 #ifdef JUCE_DEBUG
-juce::String ProcessUtils::processStateString
-(ProcessUtils::ProcessState ps)
+
+/*
+ * Gets a string representation of a process state for debugging.
+ */
+juce::String Process::stateString(const Process::State state)
 {
-    switch(ps)
+    switch(state)
     {
-        case running:
+        case State::running:
             return "running";
-        case sleeping:
+        case State::sleeping:
             return "sleeping";
-        case diskSleep:
+        case State::diskSleep:
             return "diskSleep";
-        case zombie:
+        case State::zombie:
             return "zombie";
-        case stopped:
+        case State::stopped:
             return "stopped";
-        case tracingStop:
+        case State::tracingStop:
             return "tracingStop";
-        case paging:
+        case State::paging:
             return "paging";
-        case dead:
+        case State::dead:
             return "dead";
-        case wakeKill:
+        case State::wakeKill:
             return "wakeKill";
-        case parked:
+        case State::parked:
             return "parked";
-        case idle:
+        case State::idle:
             return "idle";
-        case unknown:
+        case State::unknown:
             return "unknown";
-        case invalid:
+        case State::invalid:
             return "invalid";
     }
-    return "[un-handled ProcessState!]";
+    return "[unhandled State!]";
 }
 #endif
 
 /*
- * Gets the id of the current process.
+ * Gets the ID of the current process.
  */
-int ProcessUtils::getProcessId()
+int Process::getProcessId()
 {
     return getpid();
 }
 
 /**
- * Looks up information on a process using its process path.
+ * @brief Looks up information on a process using its process path.
  * 
  * @param processPath  The full path of a process directory in /proc
  * 
  * @return  Data describing the process, or an empty value if no process exists at
  *          the given path.
  */
-static ProcessUtils::ProcessData getPathProcessData(juce::String processPath)
+static Process::Data getPathData(juce::String processPath)
 {
-    using namespace juce;
-    ProcessUtils::ProcessData process =
+    using namespace Process;
+    Data process =
     {
         .processId = -1,
         .parentId = -1,
         .executableName = "",
-        .lastState = ProcessUtils::invalid
+        .lastState = State::invalid
     };
     
-    File statFile(processPath + "/stat");
+    juce::File statFile(processPath + "/stat");
     if(statFile.existsAsFile())
     {
-        StringArray statItems 
-                = StringArray::fromTokens(statFile.loadFileAsString(), true);
+        // Parse process info from stat file strings:
+        juce::StringArray statItems = juce::StringArray::fromTokens(
+                statFile.loadFileAsString(), true);
         process.processId = statItems[idIndex].getIntValue();
         process.executableName = statItems[nameIndex].removeCharacters("()");
         process.parentId = statItems[parentIdIndex].getIntValue();
-        //juce Strings have no getUInt64 method, unfortunately
+
+        //juce::String has no getUInt64 method, unfortunately
         process.startTime = 0;
         for(int i = 0; i < statItems[startTimeIndex].length(); i++)
         {
@@ -92,63 +97,60 @@ static ProcessUtils::ProcessData getPathProcessData(juce::String processPath)
         {
             case 'R':
             case 'C':
-                process.lastState = ProcessUtils::running;
+                process.lastState = State::running;
                 break;
             case 'S':
-                process.lastState = ProcessUtils::sleeping;
+                process.lastState = State::sleeping;
                 break;
             case 'D':
-                process.lastState = ProcessUtils::diskSleep;
+                process.lastState = State::diskSleep;
                 break;
             case 'Z':
-                process.lastState = ProcessUtils::zombie;
+                process.lastState = State::zombie;
                 break;
             case 'T':
-                process.lastState = ProcessUtils::stopped;
+                process.lastState = State::stopped;
                 break;
             case 't':
-                process.lastState = ProcessUtils::tracingStop;
+                process.lastState = State::tracingStop;
                 break;
             case 'W':
-                process.lastState = ProcessUtils::paging;
+                process.lastState = State::paging;
                 break;
             case 'X':
             case 'x':
-                process.lastState = ProcessUtils::dead;
+                process.lastState = State::dead;
                 break;
             case 'K':
-                process.lastState = ProcessUtils::wakeKill;
+                process.lastState = State::wakeKill;
                 break;
             case 'P':
-                process.lastState = ProcessUtils::parked;
+                process.lastState = State::parked;
                 break;
             default:
-                process.lastState = ProcessUtils::unknown;
+                process.lastState = State::unknown;
         }
     }
     return process;   
 }
 
 /*
- * Looks up information on a process using its process id.
+ * Looks up information on a process using its process ID.
  */
-ProcessUtils::ProcessData ProcessUtils::getProcessData
-(int processId)
+Process::Data Process::getProcessData(const int processId)
 {
-    using namespace juce;
-    String path("/proc/");
-    path += String(processId);
-    return getPathProcessData(path); 
+    juce::String path("/proc/");
+    path += juce::String(processId);
+    return getPathData(path); 
 }
 
-/**
+/*
  * Sorts processes by launch time, newest first.
  */
 class
 {
 public:
-    static int compareElements
-    (ProcessUtils::ProcessData first, ProcessUtils::ProcessData second)
+    static int compareElements(Process::Data first, Process::Data second)
     {
         return second.startTime - first.startTime;
     }
@@ -159,16 +161,16 @@ public:
 /*
  * Gets all processes that are direct child processes of a specific process.
  */
-juce::Array<ProcessUtils::ProcessData> ProcessUtils::getChildProcesses
-(int processId)
+juce::Array<Process::Data> Process::getChildProcesses(const int processId)
 {
-    using namespace juce;
+    using juce::File;
+    using juce::Array;
     File proc("/proc");
     Array<File> childDirs = proc.findChildFiles(File::findDirectories, false);
-    Array<ProcessData> childProcs;
+    Array<Data> childProcs;
     for(const File& dir : childDirs)
     {
-        ProcessData processData = getPathProcessData(dir.getFullPathName());
+        Data processData = getPathData(dir.getFullPathName());
         if(processData.parentId == processId)
         {
             childProcs.add(processData);

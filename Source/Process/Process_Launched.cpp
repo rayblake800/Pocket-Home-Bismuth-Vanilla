@@ -1,12 +1,12 @@
-#include "LaunchedProcess.h"
+#include "Process_Launched.h"
+#include "Process.h"
 #include "JuceHeader.h"
-#include "ProcessUtils.h"
 #include "XWindowInterface.h"
 #include <cstdint>
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
-static const constexpr char* dbgPrefix = "LaunchedProcess::";
+static const constexpr char* dbgPrefix = "Process::Launched::";
 #endif
 
 /* If a juce::ChildProcess crashes, attempts to wait for it to terminate will
@@ -17,18 +17,16 @@ static const constexpr char* dbgPrefix = "LaunchedProcess::";
 static const constexpr int processCheckInterval = 500;
 
 /*
- * Creates a LaunchedProcess object, running an application launch command in a
- * new child process.
+ * Runs an application launch command in a new child process on construction.
  */
-LaunchedProcess::LaunchedProcess(juce::String launchCommand) :
+Process::Launched::Launched(const juce::String launchCommand) :
 launchCommand(launchCommand) 
 {
     if(childProcess.start(launchCommand))
     {
-        juce::Array<ProcessUtils::ProcessData> childProcs
-                = ProcessUtils::getChildProcesses(ProcessUtils::getProcessId());
-        jassert(!childProcs.isEmpty());
-        for(const ProcessUtils::ProcessData process : childProcs)
+        juce::Array<Data> childProcesses = getChildProcesses(getProcessId());
+        jassert(!childProcesses.isEmpty());
+        for(const Data& process : childProcesses)
         {
             if(launchCommand.contains(process.executableName))
             {
@@ -47,7 +45,7 @@ launchCommand(launchCommand)
 /*
  * Gets the launch command used to start the process.
  */
-juce::String LaunchedProcess::getLaunchCommand()
+juce::String Process::Launched::getLaunchCommand() const
 {
     return launchCommand;
 }
@@ -55,18 +53,17 @@ juce::String LaunchedProcess::getLaunchCommand()
 /*
  * Checks if the launched application is still running.
  */
-bool LaunchedProcess::isRunning()
+bool Process::Launched::isRunning()
 {
     bool processRunning = childProcess.isRunning();
     if(processRunning)
     {
-        ProcessUtils::ProcessData process 
-                = ProcessUtils::getProcessData(processId);
+        Data processData = getProcessData(processId);
         DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " is in state " 
-                << ProcessUtils::processStateString(process.lastState));
-        if(process.lastState == ProcessUtils::ProcessState::dead
-           || process.lastState == ProcessUtils::ProcessState::invalid )
+                << stateString(processData.lastState));
+        if(processData.lastState == State::dead 
+                || processData.lastState == State::invalid)
         {
             bool killed = kill();
             jassert(killed);
@@ -79,7 +76,7 @@ bool LaunchedProcess::isRunning()
 /*
  * Attempts to terminate the application process.
  */
-bool LaunchedProcess::kill()
+bool Process::Launched::kill()
 {
     outputValid = false;
     return childProcess.kill();
@@ -88,17 +85,17 @@ bool LaunchedProcess::kill()
 /*
  * Waits for the application process to end.
  */
-void LaunchedProcess::waitForProcessToFinish(int timeoutMs)
+void Process::Launched::waitForProcessToFinish(const int timeoutMs)
 {
     bool indefiniteWait = (timeoutMs == -1);
     juce::uint32 endTime = juce::Time::getMillisecondCounter() + timeoutMs;
-    ProcessUtils::ProcessData process = ProcessUtils::getProcessData(processId);
+    Data process= getProcessData(processId);
     while(childProcess.isRunning()
-            && process.lastState != ProcessUtils::ProcessState::zombie
-            && process.lastState != ProcessUtils::ProcessState::stopped
-            && process.lastState != ProcessUtils::ProcessState::dead
-            && process.lastState != ProcessUtils::ProcessState::unknown
-            && process.lastState != ProcessUtils::ProcessState::invalid
+            && process.lastState != State::zombie
+            && process.lastState != State::stopped
+            && process.lastState != State::dead
+            && process.lastState != State::unknown
+            && process.lastState != State::invalid
             && (indefiniteWait
                 || juce::Time::getMillisecondCounter() < endTime))
 
@@ -114,7 +111,7 @@ void LaunchedProcess::waitForProcessToFinish(int timeoutMs)
             }
         }
         childProcess.waitForProcessToFinish(waitTime);
-        process = ProcessUtils::getProcessData(processId);
+        process = getProcessData(processId);
     }
 #ifdef JUCE_DEBUG
     if(juce::Time::getMillisecondCounter() >= endTime
@@ -122,7 +119,7 @@ void LaunchedProcess::waitForProcessToFinish(int timeoutMs)
     {
         DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " did not finish, process state="
-                << ProcessUtils::processStateString(process.lastState));
+                << stateString(process.lastState));
     }
 #endif
 }
@@ -130,7 +127,7 @@ void LaunchedProcess::waitForProcessToFinish(int timeoutMs)
 /*
  * Gets all text output by the process to stdout and stderr.
  */
-juce::String LaunchedProcess::getProcessOutput()
+juce::String Process::Launched::getProcessOutput()
 {
     if(!outputValid)
     {
@@ -142,20 +139,18 @@ juce::String LaunchedProcess::getProcessOutput()
     }
     else
     {    
-        ProcessUtils::ProcessData process 
-                = ProcessUtils::getProcessData(processId);
+        Data process = getProcessData(processId);
         DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " is still active in state " 
-                << ProcessUtils::processStateString(process.lastState)
-                << ", can't get output");
+                << stateString(process.lastState) << ", can't get output");
         return juce::String();
     }
 }
     
 /*
- * If the process is finished, return its exit code.
+ * Gets the exit code from the launched process.
  */
-juce::uint32 LaunchedProcess::getExitCode()
+juce::uint32 Process::Launched::getExitCode()
 {
     if(isRunning())
     {
@@ -168,7 +163,7 @@ juce::uint32 LaunchedProcess::getExitCode()
  * Moves the application's windows in front of all other windows and focuses
  * them.
  */
-void LaunchedProcess::activateWindow()
+void Process::Launched::activateWindow()
 {
     if(!isRunning())
     {

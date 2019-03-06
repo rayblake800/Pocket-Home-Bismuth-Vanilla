@@ -1,7 +1,7 @@
 #include "JuceHeader.h"
 #include "WindowFocus.h"
-#include "ProcessUtils.h"
-#include "AppLauncher.h"
+#include "Process.h"
+#include "Process_Launcher.h"
 #include "XWindowInterface.h"
 #include "DelayUtils.h"
 
@@ -13,6 +13,7 @@ public:
     
     void runTest() override
     {
+        using namespace Process;
         using namespace juce;
         beginTest("Home Window Tests");
         XWindowInterface xwin;
@@ -33,7 +34,7 @@ public:
         String testApp;
         for(const String& app : testApps)
         {
-            if(AppLauncher::testCommand(app))
+            if(Launcher::testCommand(app))
             {
                 logMessage(String("Test application:") + app);
                 testApp = app;
@@ -54,10 +55,10 @@ public:
         int windowProcess = -1;
         std::function<bool()> findProcess = [&windowProcess, testApp]()->bool
         {
-            Array<ProcessUtils::ProcessData> childProcs 
-                    = ProcessUtils::getChildProcesses
-                    (ProcessUtils::getProcessId());
-            for(const ProcessUtils::ProcessData& process : childProcs)
+            Array<Process::Data> childProcs 
+                    = Process::getChildProcesses
+                    (Process::getProcessId());
+            for(const Process::Data& process : childProcs)
             {
                 if(process.executableName.containsIgnoreCase(testApp))
                 {

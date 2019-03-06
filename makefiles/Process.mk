@@ -1,15 +1,16 @@
 ############################### Process Module #################################
-PROCESS_PREFIX := $(JUCE_OBJDIR)/Process_
 PROCESS_ROOT = Source/Process
-PROCESS_TEST_ROOT = Tests/Process
+PROCESS_PREFIX := Process_
+PROCESS_OBJ := $(JUCE_OBJDIR)/$(PROCESS_PREFIX)
 
 OBJECTS_PROCESS := \
-  $(PROCESS_PREFIX)Reader.o \
-  $(PROCESS_PREFIX)Launched.o \
-  $(PROCESS_PREFIX)Launcher.o  
+  $(PROCESS_OBJ)Process.o \
+  $(PROCESS_OBJ)Launched.o \
+  $(PROCESS_OBJ)Launcher.o  
 
+PROCESS_TEST_ROOT = Tests/Process
 OBJECTS_PROCESS_TEST := \
-  $(PROCESS_PREFIX)Test_Launched.o
+  $(PROCESS_OBJ)LaunchedTest.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_PROCESS := $(OBJECTS_PROCESS) $(OBJECTS_PROCESS_TEST)
@@ -22,15 +23,13 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_PROCESS)
 process : $(OBJECTS_PROCESS)
 	@echo "Built Process module"
 
-$(PROCESS_PREFIX)Reader.o : \
-    $(PROCESS_ROOT)/ProcessUtils.cpp
-$(PROCESS_PREFIX)Launched.o : \
-    $(PROCESS_ROOT)/LaunchedProcess.cpp
-$(PROCESS_PREFIX)Launcher.o : \
-    $(PROCESS_ROOT)/AppLauncher.cpp
-$(PROCESS_PREFIX)Launched.o : \
-    $(PROCESS_ROOT)/LaunchedProcess.cpp
+$(PROCESS_OBJ)Process.o : \
+    $(PROCESS_ROOT)/Process.cpp
+$(PROCESS_OBJ)Launched.o : \
+    $(PROCESS_ROOT)/$(PROCESS_PREFIX)Launched.cpp
+$(PROCESS_OBJ)Launcher.o : \
+    $(PROCESS_ROOT)/$(PROCESS_PREFIX)Launcher.cpp
 
 # Tests:
-$(PROCESS_PREFIX)Test_Launched.o : \
-    $(PROCESS_TEST_ROOT)/LaunchedProcess.cpp
+$(PROCESS_OBJ)LaunchedTest.o : \
+    $(PROCESS_TEST_ROOT)/$(PROCESS_PREFIX)LaunchedTest.cpp

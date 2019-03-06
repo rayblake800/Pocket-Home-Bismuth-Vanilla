@@ -1,38 +1,43 @@
 /**
- * @file LaunchedProcess.h
+ * @file  Process_Launched.h
  * 
- * @brief  Handles an application launched within a child process.
- * 
- * Creating a new LaunchedProcess object will immediately start a new process
- * running a command passed in on construction.  The LaunchedProcess object can
- * then be used to raise and focus the application's window, stop the 
- * application, or read the application's output.
- * 
- * Destroying the LaunchedProcess object does not stop the associated child
- * process.
+ * @brief  Creates and manages a child process to launch an application.
  */
 #pragma once
+
 #include "JuceHeader.h"
 
-class LaunchedProcess
+namespace Process { class Launched; }
+
+/**
+ * @brief  Represents a launched process it creates on construction.
+ * 
+ *  Creating a new Launched object will immediately start a new process running 
+ * a command passed in on construction. The object can then be used to raise and
+ * focus the application's window, stop the application, or read the 
+ * application's output.
+ * 
+ *  Destroying the Launched object does not stop the associated child process.
+ */
+class Process::Launched
 {
 public:
     /**
-     * @brief  Creates a LaunchedProcess object, running an application launch 
-     *         command in a new child process.
+     * @brief  Runs an application launch command in a new child process on
+     *         construction.
      * 
      * @param launchCommand  The command used to launch an application.
      */
-    LaunchedProcess(juce::String launchCommand);
+    Launched(const juce::String launchCommand);
     
-    ~LaunchedProcess() { }
+    virtual ~Launched() { }
     
     /**
      * @brief  Gets the launch command used to start the process.
      * 
      * @return  The launch command provided when the process was created.
      */
-    juce::String getLaunchCommand();
+    juce::String getLaunchCommand() const;
     
     /**
      * @brief  Checks if the launched application is still running.
@@ -56,7 +61,7 @@ public:
      *                   If this value is negative, it will wait as long as 
      *                   necessary.
      */
-    void waitForProcessToFinish(int timeoutMs = -1);
+    void waitForProcessToFinish(const int timeoutMs = -1);
     
     /**
      * @brief  Gets all text output by the process to stdout and stderr.
@@ -66,15 +71,15 @@ public:
     juce::String getProcessOutput();
     
     /**
-     * @brief  If the process is finished, return its exit code.
+     * @brief  Gets the exit code from the launched process.
      * 
      * @return  The exit code, or UINT32_MAX if the process is still running.
      */
     juce::uint32 getExitCode();
     
     /**
-     * @brief  Moves the application's windows in front of all other windows and
-     *         focuses them.
+     * @brief  Moves the launched application's windows in front of all other 
+     *         windows and focuses them.
      */
     void activateWindow();
     
@@ -85,8 +90,8 @@ private:
     juce::String launchCommand;
     /* The application's system process ID. */
     int processId = -1;
-    /* Iff true, the process is in a state where valid output cannot be read. */
+    /* Whether the process is in a state where valid output can be read. */
     bool outputValid = true;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LaunchedProcess)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Launched)
 };

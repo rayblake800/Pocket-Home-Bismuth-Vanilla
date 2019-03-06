@@ -1,44 +1,47 @@
 #pragma once
+/**
+ * @file  Process_Launcher.h
+ * 
+ * @brief Launches and tracks new application processes, automatically
+ *        switching window focus to the launched application.
+ */
+
 #include <functional>
 #include <map>
-#include "LaunchedProcess.h"
+#include "Process_Launched.h"
 #include "Locale_TextUser.h"
 #include "JuceHeader.h"
 #include "WindowFocusedTimer.h"
 
+namespace Process { class Launcher; }
+
 /**
- * @file AppLauncher.h
- * 
- * @brief Launches and tracks new application processes, automatically
- *        switching window focus to the launched application.
- *
- * AppLauncher is responsible for launching and managing independant windowed 
- * applications.  It runs application launch commands in new child processes,
+ *  Launcher is responsible for launching and managing independant windowed 
+ * applications. It runs application launch commands in new child processes,
  * monitoring them so that any errors can be handled appropriately.  
  *
- * AppLauncher attempts to avoid creating multiple processes simultaneously
- * running the same command.  When given a launch command, if AppLauncher
- * already created a process with that command, and that process is still
- * running, AppLauncher will attempt to find and focus an application window
- * belonging to that process, rather than creating a new process.
+ * Launcher attempts to avoid creating multiple processes simultaneously running
+ * the same command. When given a launch command, if Launcher already created a 
+ * process with that command, and that process is still running, Launcher will 
+ * attempt to find and focus an application window belonging to that process, 
+ * rather than creating a new process.
  *
- * If AppLauncher is given an invalid launch command, or the launched process
+ *  If Launcher is given an invalid launch command, or the launched process
  * dies before it gains window focus while still within a launch timeout period,
- * the launch is considered a failure.  If a callback function was set using
+ * the launch is considered a failure. If a callback function was set using
  * setLaunchFailureCallback, that callback function will run once each time an
- * application launch fails.  If the launch fails because the launch command was
+ * application launch fails. If the launch fails because the launch command was
  * invalid, an AlertWindow will also be created to explain the failure to the
  * user.
  *
  * TODO: Read timeout periods from a ConfigFile.
  */
-
-class AppLauncher : public WindowFocusedTimer, private Locale::TextUser
+class Process::Launcher : public WindowFocusedTimer, private Locale::TextUser
 {
 public:
-    AppLauncher();
+    Launcher();
 
-    virtual ~AppLauncher() { }
+    virtual ~Launcher() { }
 
     /**
      * @brief  Assigns a function to call if launching an application fails.
@@ -46,10 +49,7 @@ public:
      * @param failureCallback   A function to run if an application fails to 
      *                          launch.
      */
-    void setLaunchFailureCallback(const std::function<void()> failureCallback)
-    {
-        launchFailureCallback = failureCallback;
-    }
+    void setLaunchFailureCallback(const std::function<void()> failureCallback);
 
     /**
      * @brief  Launches a new application, or focuses its window if the 
@@ -81,7 +81,7 @@ private:
      * @return          A pointer to the object representing the application 
      *                  process, or nullptr if the command was invalid.
      */
-    LaunchedProcess* startApp(const juce::String& command);
+    Launched* startApp(const juce::String& command);
 
     /**
      * @brief  Checks if the last launched application started successfully, 
@@ -99,11 +99,11 @@ private:
     std::function<void()> launchFailureCallback;
 
     /* Holds all running process objects created by the AppLauncher. */
-    juce::OwnedArray<LaunchedProcess> runningApps;
+    juce::OwnedArray<Launched> runningApps;
 
     /* Last application launch time from Time::getMillisecondCounter() */
     juce::uint32 lastLaunch = 0;
 
     /* Process to check up on when the timer finishes. */
-    LaunchedProcess * timedProcess = nullptr;
+    Launched* timedProcess = nullptr;
 };

@@ -1,5 +1,5 @@
 #include "JSONFile.h"
-#include "LaunchedProcess.h"
+#include "Process_Launched.h"
 #include "SharedResource_Resource.h"
 #include "SystemCommands.h"
 
@@ -201,7 +201,7 @@ juce::String SystemCommands::runTextCommand(const TextCommand commandType,
     {
         return String();
     }
-    LaunchedProcess commandProcess(command);
+    Process::Launched commandProcess(command);
     commandProcess.waitForProcessToFinish();
     return commandProcess.getProcessOutput();
 }

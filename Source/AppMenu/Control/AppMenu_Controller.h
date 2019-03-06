@@ -14,7 +14,7 @@
 #include "AppMenu_MenuComponent.h"
 #include "AppMenu_EntryLoader.h"
 #include "Widgets_OverlaySpinner.h"
-#include "AppLauncher.h"
+#include "Process_Launcher.h"
 #include "JuceHeader.h"
 
 namespace AppMenu 
@@ -202,7 +202,7 @@ private:
     MenuComponent* const menuComponent;
 
     /* Launches or focuses applications from the menu */
-    AppLauncher appLauncher;
+    Process::Launcher appLauncher;
 
     /* Updates desktop entry folder items after changing folder categories */
     EntryLoader entryLoader;

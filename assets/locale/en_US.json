@@ -1,5 +1,5 @@
 {
-    "AppLauncher": 
+    "Process::Launcher": 
     {
         "couldNotOpen"    : "Couldn't open application",
         "notValidCommand" : " is not a valid command."
