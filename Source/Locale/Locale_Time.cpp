@@ -87,4 +87,6 @@ juce::String Locale::Time::approxTimePassed() const
                 + localeText(TextKey::timeUnits[i * 2 + 1]);
         }
     }
+    jassertfalse; // the for loop should always return before it can finish.
+    return String();
 }
