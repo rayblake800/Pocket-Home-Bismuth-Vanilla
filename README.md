@@ -74,3 +74,4 @@
 
 [Design Overview](./docs/taskList/Modules.md)
 
+[Library References](./docs/Libraries.md)
