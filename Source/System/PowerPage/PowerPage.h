@@ -7,7 +7,6 @@
 
 #include "Page_Component.h"
 #include "Widgets_OverlaySpinner.h"
-#include "LoginPage.h"
 #include "Locale_TextUser.h"
 
 /**
@@ -31,11 +30,6 @@ private:
      * The lock screen will be visible when the display turns on again.
      */
     void startSleepMode();
-
-    /**
-     * @brief  If the lock screen is visible, removes it from the screen.
-     */
-    void hideLockscreen();
 
     /**
      * @brief  Shows the power spinner to indicate to the user that the system 
@@ -84,8 +78,6 @@ private:
     Widgets::BoundedLabel versionLabel;
     /* Spinner to indicate that the system is rebooting/shutting down: */
     Widgets::OverlaySpinner overlaySpinner;
-    /* The lock screen to display after entering sleep mode: */
-    LoginPage lockscreen;   
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PowerPage)
 };

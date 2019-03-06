@@ -468,6 +468,10 @@ static const std::map<int, Theme::Colour::UICategory> idCategories =
         UICategory::text
     },
     {
+        layoutContainer::background,
+        UICategory::menuBackground
+    },
+    {
         overlaySpinner::background,
         UICategory::widgetBackground
     },

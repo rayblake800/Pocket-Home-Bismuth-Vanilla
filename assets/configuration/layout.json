@@ -1,7 +1,7 @@
 {  
     "small text"  : 0.075,  
     "medium text" : 0.085,  
-    "large text"  : 0.13,
+    "large text"  : 0.09,
 
     "scrolling app menu": {
         "x": 0,
@@ -88,5 +88,7 @@
         "width": 0.1,
         "height": 0.2    },
     "loading spinner": {
+        "width" : 0.1,
+        "height" : 0.1
     }
 }

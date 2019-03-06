@@ -3,6 +3,7 @@
 #include "Config_MainKeys.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Widgets_Switch.h"
+#include "Widgets_BoundedLabel.h"
 #include "Widgets_DrawableImage.h"
 #include "Widgets_ListEditor.h"
 #include "Widgets_FilePathEditor.h"
@@ -267,6 +268,13 @@ juce::Font Theme::LookAndFeel::getComboBoxFont(juce::ComboBox& comboBox)
  */ 
 juce::Font Theme::LookAndFeel::getLabelFont(juce::Label& label)
 {
+    // Let bounded labels set their own font
+    Widgets::BoundedLabel* testBounded = dynamic_cast<Widgets::BoundedLabel*>
+            (&label);
+    if(testBounded != nullptr)
+    {
+        return label.getFont();
+    }
     Layout::Component::ConfigFile config;
     using TextSize = Layout::Component::TextSize;
     int height = std::min(config.getFontHeight(TextSize::smallText),

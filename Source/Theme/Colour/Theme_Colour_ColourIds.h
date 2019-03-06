@@ -433,6 +433,14 @@ namespace Theme { namespace Colour { namespace ColourIds
         };
     }
 
+    namespace layoutContainer
+    {
+        enum
+        {
+            background = 0x1900499
+        };
+    }
+
     namespace pageComponent
     {
         enum

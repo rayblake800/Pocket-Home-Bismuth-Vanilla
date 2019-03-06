@@ -15,7 +15,7 @@
         "defaultTitle"       : "Select an image file",
         "defaultDescription" : "Please select an image file"
     },
-    "LoginPage": 
+    "Password::LoginScreen": 
     {
         "passwordLabel" : "Password:",
         "logIn"         : "Log In",
@@ -31,6 +31,21 @@
         "mode24Hour"    : "24h mode",
         "mode12Hour"    : "AM/PM mode",
         "hideClock"     : "Don't show clock"
+    },
+    "Page::PasswordEditor":
+    {
+        "changePassword"  : "Change your password",
+        "currentPassword" : "Current password",
+        "newPassword"     : "New password",
+        "retypePassword"  : "Retype password",
+        "update"          : "update"
+    },
+    "Page::PasswordRemover":
+    {
+        "removePassword"     : "Remove your password",
+        "currentPassword"    : "Current password",
+        "apply"              : "Apply",
+        "success"            : "Success"
     },
     "AppMenu::SettingsComponents":
     {
@@ -88,13 +103,8 @@
         "no"           : "No",
         "flashingInfo" : "For instructions, visit https://archive.org/details/C.h.i.p.FlashCollection" 
     },
-    "SetPasswordPage": 
+    "Password::UpdateController": 
     {
-        "changePassword"    : "Change your password",
-        "currentPassword"   : "Current password",
-        "newPassword"       : "New password",
-        "retypePassword"    : "Retype password",
-        "apply"             : "Apply",
         "confirmationFailed": "Password confirmation failed",
         "fieldsDontMatch"   : "The new password fields don't match, try again.",
         "success"           : "Success",
@@ -110,12 +120,8 @@
         "filesMissing"      : "Important application files are missing! Please reinstall pocket-home.",
         "polkitMissing"     : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
-    "RemovePasswordPage":
+    "Password::RemovalController":
     {
-        "currentPassword"    : "Current password",
-        "removePassword"     : "Remove your password",
-        "apply"              : "Apply",
-        "success"            : "Success",
         "passwordRemoved"    : "Your Pocket-Home password has been removed.",
         "cantRemovePassword" : "Removing password failed",
         "wrongPassword"      : "The current Pocket-Home password was incorrect.",
