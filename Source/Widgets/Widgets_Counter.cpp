@@ -151,10 +151,12 @@ void Widgets::Counter::resized()
     plusButton.setBounds(plusBounds);
     textField.setBounds(bounds);
 
+    /*
     // Update text size:
     Layout::Component::ConfigFile layoutConfig;
     const float fontSize 
           = layoutConfig.getFontHeight(bounds, textField.getText());
     juce::Font newFont(fontSize);
     textField.applyFontToAllText(newFont);
+    */
 }

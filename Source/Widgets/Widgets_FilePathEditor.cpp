@@ -188,9 +188,11 @@ void Widgets::FilePathEditor::resized()
 
     filePath.setBounds(textBounds);
     fileSelectButton.setBounds(buttonBounds);
+    /*
     Layout::Component::ConfigFile componentConfig;
     int fontSize = componentConfig.getFontHeight
             (Layout::Component::TextSize::smallText);
     fontSize = std::min(fontSize, textBounds.getHeight());
     filePath.applyFontToAllText(juce::Font(fontSize));
+    */
 }

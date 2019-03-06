@@ -6,6 +6,7 @@
  */
 
 #include "Locale_TextUser.h"
+#include "Widgets_TextEditor.h"
 #include "JuceHeader.h"
 #include <set>
 
@@ -145,7 +146,7 @@ private:
 
     /* The editable text field. This shows the selected path, or whatever other 
        value the user types in. */
-    juce::TextEditor filePath;
+    Widgets::TextEditor filePath;
     
     /* Opens the file selection window. */
     juce::TextButton fileSelectButton;

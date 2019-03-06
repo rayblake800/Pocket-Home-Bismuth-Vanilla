@@ -5,6 +5,7 @@
  * @brief  Provides a counter component used to enter integer values.
  */
 
+#include "Widgets_TextEditor.h"
 #include "JuceHeader.h"
 
 namespace Widgets { class Counter; }
@@ -127,7 +128,7 @@ private:
     juce::TextButton plusButton;
     
     /* Displays and edits the counter value: */
-    juce::TextEditor textField;
+    Widgets::TextEditor textField;
 
     /* Limits the text field to valid integer characters. */
     juce::TextEditor::LengthAndCharacterRestriction permittedCharacters;

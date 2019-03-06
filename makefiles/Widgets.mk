@@ -5,12 +5,14 @@ WIDGET_OBJ   := $(JUCE_OBJDIR)/$(WIDGET_PREFIX)
 
 OBJECTS_WIDGET := \
   $(WIDGET_OBJ)BoundedLabel.o \
+  $(WIDGET_OBJ)TextEditor.o \
   $(WIDGET_OBJ)Clock.o \
   $(WIDGET_OBJ)ColourPicker.o \
   $(WIDGET_OBJ)Counter.o \
   $(WIDGET_OBJ)DrawableImage.o \
   $(WIDGET_OBJ)DrawableImageButton.o \
   $(WIDGET_OBJ)FilePathEditor.o \
+  $(WIDGET_OBJ)LayoutContainer.o \
   $(WIDGET_OBJ)PagedList.o \
   $(WIDGET_OBJ)FocusingPagedList.o \
   $(WIDGET_OBJ)NavButton.o \
@@ -37,6 +39,9 @@ widget : $(OBJECTS_WIDGET)
 $(WIDGET_OBJ)BoundedLabel.o : \
     $(WIDGET_ROOT)/$(WIDGET_PREFIX)BoundedLabel.cpp
 
+$(WIDGET_OBJ)TextEditor.o : \
+    $(WIDGET_ROOT)/$(WIDGET_PREFIX)TextEditor.cpp
+
 $(WIDGET_OBJ)Clock.o : \
     $(WIDGET_ROOT)/$(WIDGET_PREFIX)Clock.cpp
 
@@ -54,6 +59,9 @@ $(WIDGET_OBJ)DrawableImageButton.o : \
 
 $(WIDGET_OBJ)FilePathEditor.o : \
     $(WIDGET_ROOT)/$(WIDGET_PREFIX)FilePathEditor.cpp
+
+$(WIDGET_OBJ)LayoutContainer.o : \
+    $(WIDGET_ROOT)/$(WIDGET_PREFIX)LayoutContainer.cpp
 
 $(WIDGET_OBJ)PagedList.o : \
     $(WIDGET_ROOT)/$(WIDGET_PREFIX)PagedList.cpp
