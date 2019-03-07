@@ -4,7 +4,7 @@
 
 /* Minimum fraction of extra space to leave between edited text and component 
  * bounds: */
-static const constexpr float minPadding = 0.3;
+static const constexpr float minPadding = 0.1;
 
 /*
  * Updates the font height, and immediately applies the change to the edited 
