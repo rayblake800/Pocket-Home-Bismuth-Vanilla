@@ -16,6 +16,9 @@ const juce::Identifier Icon::ThreadResource::resourceKey
 /* Resource thread name: */
 static const juce::String threadName = "Icon_ThreadResource";
 
+/* Home folder application icon directory: */
+static const constexpr char* homeIconDir = ".icons";
+
 /* Legacy application icon directory: */
 static const constexpr char* pixmapIconPath = "/usr/share/pixmaps";
 
@@ -62,6 +65,8 @@ SharedResource::Thread::Resource(resourceKey, ::threadName)
         }
         dir += iconSubDir;
     }
+    const String homePath = getenv("HOME");
+    iconDirectories.add(homePath + "/" + homeIconDir);
     iconDirectories.addArray(dataDirs);
     iconDirectories.add(pixmapIconPath);
     iconDirectories.add(pocketHomeIconPath);
@@ -70,7 +75,7 @@ SharedResource::Thread::Resource(resourceKey, ::threadName)
        priority: */
     StringArray themeNames;
     StringArray themeSettings;
-    String gtkSettingPath(String(getenv("HOME")) + "/" + iconThemeFile);
+    String gtkSettingPath(homePath + "/" + iconThemeFile);
     File(gtkSettingPath).readLines(themeSettings);
     for(const String& line : themeSettings)
     {
