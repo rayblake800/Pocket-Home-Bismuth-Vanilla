@@ -1,8 +1,6 @@
 ## Pocket-Home Bismuth Modules
 
- Pocket-Home Bismuth divides its functionality into modules. Each Module has its own source directory and its own makefile.
-
- Eventually, each module should have its own namespace, and a clearly defined public interface for other modules to use. At the moment, some modules are just collections of similar classes with ill-defined boundaries and little to no cohesion. See [the main task list](TODO.txt) for lists of modules that need refactoring.
+ Pocket-Home Bismuth divides its functionality into modules. Each Module has its own source directory, makefile, and namespace.
 
 #### [AppMenu](./modules/AppMenu.md)
  Manages the application menu UI component. This module handles the menu's appearance, loads menu contents, and allows the user to edit the menu.

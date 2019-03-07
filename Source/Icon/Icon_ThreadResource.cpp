@@ -120,6 +120,18 @@ SharedResource::Thread::Resource(resourceKey, ::threadName)
             }
         }
     } 
+    #ifdef JUCE_DEBUG
+    String dbgThemeNames;
+    for(ThemeIndex* theme : iconThemes)
+    {
+        if(dbgThemeNames.isNotEmpty())
+        {
+            dbgThemeNames += ", ";
+        }
+        dbgThemeNames += theme->getName();
+    }
+    DBG(dbgPrefix << __func__ << ": Loaded icon themes: " << dbgThemeNames);
+    #endif
 }
 
 Icon::ThreadResource::~ThreadResource()
@@ -237,12 +249,17 @@ void Icon::ThreadResource::runLoop(SharedResource::Thread::Lock& lock)
     String iconPath = getIconPath(firstRequest);
     if (iconPath.isNotEmpty())
     {
-        Image iconImg = AssetFiles::loadImageAsset(iconPath);
-        if(iconImg.isNull())
+        // Loading svg files into drawable components requires the message
+        // thread to be locked.
+        Image iconImg;
         {
-            DBG(dbgPrefix << __func__ << ": Unable to load icon "
-                    << icon);
-            return;
+            const juce::MessageManagerLock mmLock;
+            iconImg = AssetFiles::loadImageAsset(iconPath);
+            if(iconImg.isNull())
+            {
+                DBG(dbgPrefix << __func__ << ": Unable to load icon " << icon);
+                return;
+            }
         }
 
         lock.enterWrite();
@@ -294,6 +311,22 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
     using juce::String;
     using juce::File;
 
+    // TODO: remove this temporary hack after fixing svg rendering
+    // Only use SVG files as a last resort
+    String svgBackup;
+    const auto backupSvgFile = [this, &svgBackup](const String& path)->bool
+    {
+        if(path.endsWith("svg"))
+        {
+            if(svgBackup.isEmpty())
+            {
+                svgBackup = path;
+            }
+            return true;
+        }
+        return false;
+    };
+
     /* Don't waste time searching for icons that weren't found before: */
     if(missingIcons.contains(request.icon))
     {
@@ -305,7 +338,7 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
     {
         String iconPath = themeIndex->lookupIcon(request.icon, request.size,
                 request.context, request.scale);
-        if(iconPath.isNotEmpty())
+        if(iconPath.isNotEmpty() && !backupSvgFile(iconPath))
         {
             return iconPath;
         }
@@ -320,7 +353,7 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
         subRequest.icon = subRequest.icon.upToLastOccurrenceOf("-", false,
                 false);
         String iconPath = getIconPath(subRequest);
-        if(iconPath.isNotEmpty())
+        if(iconPath.isNotEmpty() && !backupSvgFile(iconPath))
         {
             return iconPath;
         }
@@ -328,17 +361,23 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
     /* If that didn't find anything, search for matching unthemed icon files: */
     for(const String& iconDir : iconDirectories)
     {
-        //TODO: add support for .xpm files, fix svg rendering problems
-        //static const StringArray iconExtensions = {".png", ".xpm", ".svg"};
-        //for(const String& ext : iconExtensions)
-        //{
-            static const char* ext = ".png";
+        //TODO: fix svg rendering problems
+        //static const juce::StringArray iconExtensions = {".png", ".xpm", ".svg"};
+        static const juce::StringArray iconExtensions = {".png", ".xpm"};
+        for(const String& ext : iconExtensions)
+        {
             String iconPath = iconDir + String("/") + request.icon + ext;
             if(File(iconPath).existsAsFile())
             {
                 return iconPath;
             }
-        //}
+        }
+        //Temporary svg hack again:
+        String backup = iconDir + String("/") + request.icon + ".svg";
+        if(File(backup).existsAsFile())
+        {
+            backupSvgFile(backup);
+        }
     }
-    return String();
+    return svgBackup;
 }

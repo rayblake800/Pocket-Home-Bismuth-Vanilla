@@ -24,8 +24,6 @@ namespace Icon { class ThreadResource; }
  * config file, and the icon themes' index.theme files to determine which
  * directories are prioritized.  GTK's icon-theme.cache files are used to
  * quickly locate image files within icon theme directories.
- * 
- * @see Icon_ThemeIndex.h, Icon_Cache.h
  */
 
 class Icon::ThreadResource : public SharedResource::Thread::Resource
