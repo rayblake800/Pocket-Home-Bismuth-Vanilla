@@ -42,9 +42,13 @@ static const std::map<int, juce::Identifier> colourIdKeys =
     {drawableImageComponent::image3,  "Image3"},
     {drawableImageComponent::image4,  "Image4"},
     {appMenuButton::text,             "AppMenuButton text"},
+    {appMenuButton::selectedText,     "AppMenuButton selected text"},
+    {appMenuButton::textBackground,   "AppMenuButton text background"},
+    {appMenuButton::selectedTextBG,   "AppMenuButton selected text background"},
     {appMenuButton::background,       "AppMenuButton background"},
-    {appMenuButton::selection,        "AppMenuButton selection"},
+    {appMenuButton::selectedBG,       "AppMenuButton selected background"},
     {appMenuButton::border,           "AppMenuButton border"},
+    {appMenuButton::selectedBorder,   "AppMenuButton selected border"},
     {fileSelectTextEditor::fileWindow,"FilePicker window"},
     {fileSelectTextEditor::text,      "FilePicker text"},
     {overlaySpinner::background,      "OverlaySpinner background"},
@@ -107,10 +111,14 @@ static const std::map<juce::Identifier, int> colourIds
     {"Image3",                     drawableImageComponent::image3},
     {"Image4",                     drawableImageComponent::image4},
             
-    {"AppMenuButton text",         appMenuButton::text},
-    {"AppMenuButton background",   appMenuButton::background},
-    {"AppMenuButton selection",    appMenuButton::selection},
-    {"AppMenuButton border",       appMenuButton::border},
+    {"AppMenuButton text",                     appMenuButton::text},
+    {"AppMenuButton selected text",            appMenuButton::selectedText},
+    {"AppMenuButton text background",          appMenuButton::textBackground},
+    {"AppMenuButton selected text background", appMenuButton::selectedTextBG},
+    {"AppMenuButton background",               appMenuButton::background},
+    {"AppMenuButton selected background",      appMenuButton::selectedBG},
+    {"AppMenuButton border",                   appMenuButton::border},
+    {"AppMenuButton selected border",          appMenuButton::selectedBorder},
             
     {"FilePicker window",          fileSelectTextEditor::fileWindow},
     {"FilePicker text",            fileSelectTextEditor::text},
@@ -196,15 +204,31 @@ static const std::map<int, Theme::Colour::UICategory> idCategories =
         UICategory::widgetBackground
     },
     {
+        appMenuButton::selectedBG,
+        UICategory::widgetBackground
+    },
+    {
+        appMenuButton::textBackground,
+        UICategory::widgetBackground
+    },
+    {
+        appMenuButton::selectedTextBG,
+        UICategory::widgetBackground
+    },
+    {
         appMenuButton::border,
         UICategory::outline
     },
     {
-        appMenuButton::selection,
-        UICategory::highlightedTextField
+        appMenuButton::selectedBorder,
+        UICategory::outline
     },
     {
         appMenuButton::text,
+        UICategory::text
+    },
+    {
+        appMenuButton::selectedText,
         UICategory::text
     },
     {

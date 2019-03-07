@@ -3,6 +3,11 @@
 #include "AppMenu_MenuButton.h"
 #include "Layout_Component_ConfigFile.h"
 
+/* Fraction of the component's height to leave as padding around text and icon
+ * bounds: */
+static const constexpr float paddingFraction = 0.05;
+
+
 /*
  * Creates a new MenuButton component for a menu item.
  */
@@ -18,7 +23,11 @@ juce::Rectangle<float> AppMenu::Paged::MenuButton::findTitleBounds() const
     using namespace Layout::Component;
     ConfigFile config;
     const int textHeight = config.getFontHeight(TextSize::smallText); 
-    return getLocalBounds().withTop(getHeight() - textHeight).toFloat();
+    const int paddingSize = paddingFraction * getHeight();
+    const int width = std::min(getWidth() - paddingSize * 2,
+            getTitleWidth());
+    return juce::Rectangle<float>((getWidth() - width) / 2,
+            getHeight() - textHeight - paddingSize, width, textHeight);
 }
 
 /*
@@ -30,8 +39,12 @@ juce::Rectangle<float> AppMenu::Paged::MenuButton::findIconBounds() const
     using namespace Layout::Component;
     ConfigFile config;
     const int textHeight = config.getFontHeight(TextSize::smallText); 
-    const int iconSize = std::min(getHeight() - textHeight, getWidth());
-    return juce::Rectangle<float>((getWidth() - iconSize) / 2, 0,
+    const int paddingSize = paddingFraction * getHeight();
+    const int iconSize = std::min(getHeight() - textHeight, getWidth())
+            - paddingSize * 2;
+
+
+    return juce::Rectangle<float>((getWidth() - iconSize) / 2, paddingSize,
             iconSize, iconSize);
 }
 

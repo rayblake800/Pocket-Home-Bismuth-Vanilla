@@ -34,14 +34,18 @@ public:
      */
     enum ColourIds
     {
-        /* The color used to print the menu item's title */
+        /* Title text colour: */
         textColourId = 0x1900200,
-        /* The color that may be filled in for the menu item's background */
-        backgroundColourId = 0x1900201,
-        /* The color used for the background when the menu item is selected */
-        selectionColourId = 0x1900202,
-        /* The color that may be used to draw the menu item's border */
-        borderColourId = 0x1900203
+        selectedTextColourId = 0x1900201,
+        /* Colour to fill in behind the title: */
+        textBGColourId = 0x1900202,
+        selectedTextBGColourId = 0x1900203,
+        /* Colour to fill the entire component background: */
+        bgColourId = 0x1900204,
+        selectedBGColourId = 0x1900205,
+        /* Colour to draw the component border: */
+        borderColourId = 0x1900206,
+        selectedBorderColourId = 0x1900207
     };
 
     /**

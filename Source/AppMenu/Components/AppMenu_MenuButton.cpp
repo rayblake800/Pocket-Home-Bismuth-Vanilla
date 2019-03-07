@@ -7,6 +7,14 @@
    space relative to the font size. */
 static const constexpr char* titleBuffer = "     ";
 
+/* Fraction of the button's smallest dimension to use as the border outline
+ * width: */
+static const constexpr float borderFraction = 0.03;
+
+/* Fraction of the button's smallest dimension to use as the background corner
+ * size: */
+static const constexpr float cornerFraction = 0.1;
+
 /*
  * Creates a new MenuButton component for a menu item.
  */
@@ -180,18 +188,17 @@ void AppMenu::MenuButton::paintButton
     {
         resized();
     }
-    g.setColour(findColour(isSelected() ?
-            selectionColourId : backgroundColourId));
+    const int smallestSide = std::min(getWidth(), getHeight());
+    const int cornerSize = cornerFraction * smallestSide;
+
+    g.setColour(findColour(isSelected() ?  selectedBGColourId : bgColourId));
     if (shouldFillBackground())
     {
-        g.fillRoundedRectangle(border.toFloat(), border.getHeight() / 6);
+        g.fillRoundedRectangle(border.toFloat(), cornerSize);
     }
-    else
-    {
-        Rectangle<float> textOval = titleBounds.withSizeKeepingCentre
-                (textWidth, titleBounds.getHeight());
-        g.fillRoundedRectangle(textOval, textOval.getHeight() / 6);
-    }
+    g.setColour(findColour(isSelected() 
+                ? selectedTextBGColourId : textBGColourId));
+    g.fillRoundedRectangle(titleBounds, cornerSize);
     // Draw icon:
     g.setOpacity(1);
     RectanglePlacement iconPlacement;
@@ -211,13 +218,15 @@ void AppMenu::MenuButton::paintButton
             iconPlacement,
             false);
     // Draw title:
-    g.setColour(findColour(textColourId));
+    g.setColour(findColour(isSelected() ? selectedTextColourId : textColourId));
     g.setFont(titleFont);
     g.drawText(getMenuItem().getTitle(), titleBounds, 
             getTextJustification(), true);
     if (shouldDrawBorder())
     {
-        g.setColour(findColour(borderColourId));
-        g.drawRoundedRectangle(border.toFloat(), border.getHeight() / 6, 2);
+        g.setColour(findColour(isSelected() 
+                    ? selectedBorderColourId : borderColourId));
+        g.drawRoundedRectangle(border.toFloat(), cornerSize,
+                borderFraction * smallestSide);
     }
 }

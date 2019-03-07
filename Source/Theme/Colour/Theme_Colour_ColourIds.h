@@ -516,10 +516,14 @@ namespace Theme { namespace Colour { namespace ColourIds
     {
         enum
         {
-            text       = 0x1900200,
-            background = 0x1900201,
-            selection  = 0x1900202,
-            border     = 0x1900203
+            text           = 0x1900200,
+            selectedText   = 0x1900201,
+            textBackground = 0x1900202,
+            selectedTextBG = 0x1900203,
+            background     = 0x1900204,
+            selectedBG     = 0x1900205,
+            border         = 0x1900206,
+            selectedBorder = 0x1900207
         };
     }
     

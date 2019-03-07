@@ -20,9 +20,17 @@
     "Image4"                      : "0xff0000ff",
 
     "AppMenuButton text"          : "",
-    "AppMenuButton background"    : "0xaab8b8b8",
-    "AppMenuButton selection"     : "0xfff799aa",
-    "AppMenuButton border"        : "0xffb88e47",
+    "AppMenuButton background"    : "0x00000000",
+    "AppMenuButton text background"
+                                  : "0xa5ffffff",
+    "AppMenuButton border"        : "0x9bb88e47",
+    "AppMenuButton selected text" : "",
+    "AppMenuButton selected background"
+                                  : "0xe6bc3662",
+    "AppMenuButton selected text background"
+                                  : "0xa5ffffff",
+    "AppMenuButton selected border"        
+                                  : "0xffb88e47",
 
     "FilePicker window"           : "",
     "FilePicker text"             : "",

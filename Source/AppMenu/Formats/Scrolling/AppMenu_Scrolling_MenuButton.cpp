@@ -1,6 +1,9 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_Scrolling_MenuButton.h"
 
+/* Padding to leave around the title bounds, as a fraction of button height: */
+static const constexpr float titlePaddingFraction = 0.05;
+
 /*
  * Creates a new MenuButton component for a menu item.
  */
@@ -13,8 +16,11 @@
  */
 juce::Rectangle<float> AppMenu::Scrolling::MenuButton::findTitleBounds() const 
 {
-    return juce::Rectangle<float>(getHeight(), 0,
-            getTitleWidth(), getHeight());
+    const int paddingSize = titlePaddingFraction * getHeight();
+    const int xPos = getHeight() + paddingSize;
+    const int width = getWidth() - xPos - paddingSize;
+    return juce::Rectangle<float>(xPos, paddingSize, width,
+            getHeight() - 2 * paddingSize);
 }
 
 /*
