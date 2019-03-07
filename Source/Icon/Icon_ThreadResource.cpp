@@ -31,6 +31,9 @@ static const constexpr char* iconThemeKey = "gtk-icon-theme-name";
 /* Backup icon theme selection key in the iconThemeFile: */
 static const constexpr char* backupThemeKey = "gtk-fallback-icon-theme";
 
+/* Icon theme file name: */
+static const constexpr char* indexFileName = "index.theme";
+
 /* Default fallback icon theme: */
 static const constexpr char* fallbackTheme = "hicolor";
 
@@ -359,24 +362,107 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
         }
     }
     /* If that didn't find anything, search for matching unthemed icon files: */
-    for(const String& iconDir : iconDirectories)
+    String unindexedPath = getUnindexedIconPath(request);
+    if(unindexedPath.isNotEmpty() && !backupSvgFile(unindexedPath))
     {
-        //TODO: fix svg rendering problems
-        //static const juce::StringArray iconExtensions = {".png", ".xpm", ".svg"};
-        static const juce::StringArray iconExtensions = {".png", ".xpm"};
+        return unindexedPath;
+    }
+    return svgBackup;
+}
+
+
+/**
+ * @brief  Sorts directory lists to prioritize ones with non-numeric names, and
+ *         prioritize numeric directories with values close to a target integer.
+ */
+class DirectoryComparator
+{
+public:
+    DirectoryComparator(const int target) : target(target) { }
+
+    int compareElements(juce::File first, juce::File second)
+    {
+        using juce::String;
+        const String numericChars = "0123456789";
+        juce::String firstNumber = first.getFileName()
+                .initialSectionContainingOnly(numericChars);
+        juce::String secondNumber = first.getFileName()
+                .initialSectionContainingOnly(numericChars);
+        // Prioritize non-numeric
+        if(firstNumber.isEmpty())
+        {
+            return secondNumber.isEmpty() ? 0 : -1;
+        }
+        else if(secondNumber.isEmpty())
+        {
+            return 1;
+        }
+        const int firstDistance = abs(firstNumber.getIntValue() - target);
+        const int secondDistance = abs(secondNumber.getIntValue() - target);
+        return firstDistance - secondDistance;
+    }
+
+private:
+    const int target;
+};
+
+
+/*
+ * Searches icon directories for icon files not indexed by icon themes.
+ */
+juce::String Icon::ThreadResource::getUnindexedIconPath
+(const IconRequest& request)
+{
+    using juce::String;
+    using juce::StringArray;
+    using juce::File;
+    StringArray searchPaths = iconDirectories;
+    DirectoryComparator comp(request.size);
+    for(int i = 0; i < searchPaths.size(); i++)
+    {
+        int insertIndex = i + 1;
+        File iconDir(searchPaths[i]);
+        juce::Array<File> subDirectories 
+                = iconDir.findChildFiles(File::findDirectories, false);
+        subDirectories.sort(comp);
+        for(const File& subDirectory : subDirectories)
+        {
+            File indexFile = subDirectory.getChildFile(indexFileName);
+            if(indexFile.existsAsFile())
+            {
+                continue;
+            }
+            searchPaths.insert(insertIndex, subDirectory.getFullPathName());
+            insertIndex++;
+        }
+    }
+
+    // TODO: remove this temporary hack after fixing svg rendering
+    // Only use SVG files as a last resort
+    String svgBackup;
+    const auto backupSvgFile = [this, &svgBackup](const String& path)->bool
+    {
+        if(path.endsWith("svg"))
+        {
+            if(svgBackup.isEmpty())
+            {
+                svgBackup = path;
+            }
+            return true;
+        }
+        return false;
+    };
+    for(const String& iconDir : searchPaths)
+    {
+        static const juce::StringArray iconExtensions 
+                = {".png", ".xpm", ".svg"};
         for(const String& ext : iconExtensions)
         {
             String iconPath = iconDir + String("/") + request.icon + ext;
-            if(File(iconPath).existsAsFile())
+            if(File(iconPath).existsAsFile() && !backupSvgFile(iconPath))
             {
                 return iconPath;
             }
-        }
-        //Temporary svg hack again:
-        String backup = iconDir + String("/") + request.icon + ".svg";
-        if(File(backup).existsAsFile())
-        {
-            backupSvgFile(backup);
         }
     }
     return svgBackup;

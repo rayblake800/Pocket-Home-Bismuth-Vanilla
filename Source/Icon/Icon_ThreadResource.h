@@ -98,6 +98,17 @@ private:
      */
     juce::String getIconPath(const IconRequest& request);
 
+    /**
+     * @brief  Searches icon directories for icon files not indexed by icon 
+     *         themes.
+     *
+     * @param request  Defines the name and size of the requested icon.
+     * 
+     * @return         The full path of the best matching icon file, or the
+     *                 empty string if no match is found.
+     */
+    juce::String getUnindexedIconPath(const IconRequest& request);
+
     /* All pending icon requests, mapped by ID so they can be cancelled. */
     std::map<RequestID, IconRequest> requestMap;
 
