@@ -24,7 +24,7 @@ private:
             public Theme::Colour::ConfigListener
     {
     public:
-        ColourListModel();
+        ColourListModel(Widgets::ColourPicker& colourPicker);
         virtual ~ColourListModel();
         
         int getNumRows() override;
@@ -63,6 +63,18 @@ private:
         virtual void configValueChanged(const juce::Identifier& key) override;
 
         /**
+         * @brief  When a list item is clicked, copy its colour to the preview
+         *         component if the list item's color is not completely 
+         *         transparent.
+         *
+         * @param row         The clicked row item.
+         *
+         * @param mouseEvent  Additional click event data.
+         */
+        virtual void listBoxItemClicked(int row,
+                const juce::MouseEvent& mouseEvent) override;
+
+        /**
          * @brief Listens for updates to all tracked juce ColorId values.
          *
          * @param colourId   The updated ColorId value.
@@ -82,6 +94,8 @@ private:
         const juce::Array<juce::Identifier>& colourKeys;
         
         juce::Array<juce::Colour> colours;
+
+        Widgets::ColourPicker& colourPicker;
     };
 
     ColourListModel listModel;

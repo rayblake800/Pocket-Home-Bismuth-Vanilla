@@ -7,7 +7,7 @@
 namespace ColourTheme = Theme::Colour;
 
 ColourTheme::ConfigPage::ConfigPage() :
-listModel(),
+listModel(colourPicker),
 colourList("colourList", &listModel)
 {
     using namespace Layout::Group;
@@ -44,8 +44,10 @@ void ColourTheme::ConfigPage::pageResized()
     colourList.repaint();
 }
 
-ColourTheme::ConfigPage::ColourListModel::ColourListModel() : 
-colourKeys(JSONKeys::getColourKeys())
+ColourTheme::ConfigPage::ColourListModel::ColourListModel
+(Widgets::ColourPicker& colourPicker) : 
+colourKeys(JSONKeys::getColourKeys()),
+colourPicker(colourPicker)
 {
     ConfigFile config;
     for(const juce::Identifier& key : colourKeys)
@@ -157,6 +159,21 @@ void ColourTheme::ConfigPage::ColourListModel::configValueChanged
                 << ": Unknown color key " << key);
     }
 
+}
+
+
+/*
+ * When a list item is clicked, copy its colour to the preview component if the 
+ * list item's color is not completely transparent.
+ */
+void ColourTheme::ConfigPage::ColourListModel::listBoxItemClicked
+(int row, const juce::MouseEvent& mouseEvent)
+{
+    juce::Colour rowColour = colours[row];
+    if(rowColour.getAlpha() > 0)
+    {
+        colourPicker.setSelectedColour(rowColour, false);
+    }
 }
 
 /*
