@@ -18,3 +18,5 @@
 
 #### [AssetFiles](../../Source/Util/Files/AssetFiles.h)
 
+#### [XPMLoader](../../Source/Util/Files/XPMLoader.h)
+

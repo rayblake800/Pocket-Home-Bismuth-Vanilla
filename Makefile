@@ -65,7 +65,7 @@ DATA_PATH := /usr/share/$(JUCE_TARGET_APP)
 
 # Pkg-config libraries:
 PKG_CONFIG_LIBS = NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 \
-	              x11 xext xinerama
+	              x11 xext xinerama xpm
   
 # Additional library flags:
 LDFLAGS := -lcrypto -ldl -lpthread -lrt $(LDFLAGS)

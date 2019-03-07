@@ -1,0 +1,26 @@
+#pragma once
+/**
+ * @file  XPMLoader.h
+ *
+ * @brief  Loads juce::Image objects from .xpm files.
+ */
+
+namespace juce
+{
+    class Image;
+    class File;
+}
+
+namespace XPMLoader
+{
+    /**
+     * @brief  Loads a juce Image object from an xpm image file.
+     *
+     * @param xpmFile  An xpm file object.
+     *
+     * @return         An image loaded from the file, or a null image if the 
+     *                 file was not a valid xpm file.
+     */
+    juce::Image loadXPMImage(const juce::File xpmFile);
+
+}

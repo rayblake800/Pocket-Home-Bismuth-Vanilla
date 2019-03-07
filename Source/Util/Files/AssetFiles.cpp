@@ -1,4 +1,5 @@
 #include "AssetFiles.h"
+#include "XPMLoader.h"
 
 #ifdef JUCE_DEBUG
 /* Print namespace before all debug output: */
@@ -72,6 +73,11 @@ juce::Image AssetFiles::loadImageAsset
 
     }
     juce::File imageFile = findAssetFile(assetName, lookOutsideAssets);
+    if(assetName.endsWith(".xpm"))
+    {
+        DBG("Loading xpm " << assetName);
+        return XPMLoader::loadXPMImage(imageFile);
+    }
     return juce::ImageFileFormat::loadFrom(imageFile);
 }
 

@@ -32,6 +32,7 @@
      libxcursor-dev \
      libxft-dev \
      libxinerama-dev \
+     libxpm-dev \
      libnm-glib-dev \
      network-manager-dev \
      libi2c-dev \

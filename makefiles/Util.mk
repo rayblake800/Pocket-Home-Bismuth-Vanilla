@@ -10,6 +10,7 @@ OBJECTS_UTIL := \
   $(UTIL_PREFIX)JSONFile.o \
   $(UTIL_PREFIX)XDGDirectories.o \
   $(UTIL_PREFIX)AssetFiles.o \
+  $(UTIL_PREFIX)XPMLoader.o \
   $(UTIL_PREFIX)WindowFocus.o \
   $(UTIL_PREFIX)WindowFocusedTimer.o 
 
@@ -40,6 +41,8 @@ $(UTIL_PREFIX)XDGDirectories.o : \
     $(UTIL_ROOT)/Files/XDGDirectories.cpp
 $(UTIL_PREFIX)AssetFiles.o : \
     $(UTIL_ROOT)/Files/AssetFiles.cpp
+$(UTIL_PREFIX)XPMLoader.o : \
+    $(UTIL_ROOT)/Files/XPMLoader.cpp
 $(UTIL_PREFIX)WindowFocus.o : \
     $(UTIL_ROOT)/WindowFocus/WindowFocus.cpp
 $(UTIL_PREFIX)WindowFocusedTimer.o : \
