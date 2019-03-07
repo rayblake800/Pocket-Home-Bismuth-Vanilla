@@ -5,6 +5,28 @@
 #include "DelayUtils.h"
 #include "SystemCommands.h"
 #include "JuceHeader.h"
+#include <map>
+
+/* Simple commands to run, paired with expected output: */
+static const std::map<juce::String, juce::String> outputCommands =
+{
+    {"echo (test)", "(test)"},
+    {"expr 1 + 1", "2"},
+};
+
+/* Terminal applications to try running: */
+static const juce::StringArray termApps =
+{
+    "top",
+    "vi"
+};
+
+/* Simple windowed applications to try running: */
+static const juce::StringArray windowedApps = 
+{
+    "xclock",
+    "xeyes"
+};
 
 namespace Process { class LaunchedTest; }
 
@@ -15,49 +37,63 @@ public:
     
     void runTest() override
     {
-        using namespace juce;
+        using juce::String;
         String output;
         SystemCommands commandReader;
 
-        if(Launcher::testCommand("echo"))
+        beginTest("Process output test");
+        for(auto& iter : outputCommands)
         {
-            beginTest("echo test");
-            Launched echo("echo (test)");
-            echo.waitForProcessToFinish(1000);
-            expect(!echo.isRunning(), 
-                "Echo process still running, but should be finished.");
-            String expected("(test)");
-            String output = echo.getProcessOutput().trim();
-            expectEquals(output, expected,
-                    "Echo process output was incorrect.");
-            expect(!echo.kill(),
-                    "Killing finished process didn't fail");
-        }
-        else
-        {
-            logMessage("echo is not a valid command, skipping test");
-        }
-
-        if(Launcher::testCommand("top"))
-        {
-            beginTest("top test");
-            Launched top("top");
-            expect(DelayUtils::idleUntil([&top](){ return top.isRunning(); },
-                    500, 5000), "\"top\" process is not running.");
-            output = top.getProcessOutput();
-            expect(output.isEmpty(), String("Unexpected process output ") 
-                    + output);
-            expect(top.kill(), "Failed to kill process.");
-        }
-        else
-        {
-            logMessage("top is not a valid command, skipping test");
+            String command = iter.first;
+            String expectedResult = iter.second;
+            String commandName = command.initialSectionNotContaining(" ");
+            if(Launcher::testCommand(commandName))
+            {
+                Launched outputProcess(command);
+                outputProcess.waitForProcessToFinish(1000);
+                expect(!outputProcess.isRunning(), String("\"")
+                        + commandName 
+                        + "\" process still running, but should be finished.");
+                String output = outputProcess.getProcessOutput().trim();
+                expectEquals(output, expectedResult, String("\"") + commandName
+                        + "\" process output was incorrect.");
+                expect(!outputProcess.kill(),
+                        "Kill command returned true, invalid if finished");
+            }
+            else
+            {
+                logMessage(String("Command \"") + commandName
+                        + "\" doesn't appear to be valid, skipping test.");
+            }
         }
         
+        beginTest("Terminal application test");
+        for(const String& command : termApps)
+        {
+            if(Launcher::testCommand(command))
+            {
+                Launched termProcess(command);
+                expect(DelayUtils::idleUntil([&termProcess]()
+                { 
+                    return termProcess.isRunning(); 
+                }, 500, 5000), String("\"") + command 
+                        + "\" process is not running.");
+                output = termProcess.getProcessOutput();
+                expect(output.isEmpty(), String("Unexpected process output ") 
+                        + output);
+                expect(termProcess.kill(), "Failed to kill process.");
+            }
+            else
+            {
+                logMessage(String("Command \"") + command
+                        + "\" doesn't appear to be valid, skipping test.");
+            }
+        }
+        
+        beginTest("Invalid command handling test");
         String badCommand("DefinitelyNotAValidLaunchCommand");
         expect(!Launcher::testCommand(badCommand),
                 "DefinitelyNotAValidLaunchCommand should have been invalid.");
-        beginTest("bad command handling");
         Launched bad("DefinitelyNotAValidLaunchCommand");
         expect(!DelayUtils::idleUntil([&bad]() { return bad.isRunning(); },
                 200, 2000), "Process running despite bad launch command.");
@@ -67,26 +103,32 @@ public:
         expectEquals(String(bad.getExitCode()), String("0"),
 			"Bad process error code should have been 0.");
         
-        if(Launcher::testCommand("xclock"))
+        beginTest("Windowed launch and activation test");
+        for(const String& command : windowedApps)
         {
-            beginTest("window activation");
-            Launched winApp("xclock");
-            expect(DelayUtils::idleUntil([&winApp]()
-                    { return winApp.isRunning(); }, 100, 1000), 
-                    "Launched terminal process not running.");
-            winApp.activateWindow();
-            expect(DelayUtils::idleUntil(
-                    []() { return !WindowFocus::isFocused(); }, 500, 8000),
-                    "pocket-home window should not be focused.");
-            winApp.kill();
-            XWindowInterface xwin;
-            xwin.activateWindow(xwin.getPocketHomeWindow());
-            expect(!winApp.isRunning(),
-                "xclock process should be dead.");
-        }
-        else
-        {
-            logMessage("xclock is not a valid command, skipping test");
+            if(Launcher::testCommand(command))
+            {
+                Launched windowedApp(command);
+                expect(DelayUtils::idleUntil([&windowedApp]()
+                { 
+                    return windowedApp.isRunning(); 
+                }, 100, 1000), String("\"") + command
+                        + "\" process not is running.");
+                windowedApp.activateWindow();
+                expect(DelayUtils::idleUntil(
+                        []() { return !WindowFocus::isFocused(); }, 500, 8000),
+                        "pocket-home window should not be focused.");
+                windowedApp.kill();
+                XWindowInterface xwin;
+                xwin.activateWindow(xwin.getPocketHomeWindow());
+                expect(!windowedApp.isRunning(), String("\"") + command
+                        + "\" process should be dead.");
+            }
+            else
+            {
+                logMessage(String("Command \"") + command
+                        + "\" doesn't appear to be valid, skipping test.");
+            }
         }
     }
 };

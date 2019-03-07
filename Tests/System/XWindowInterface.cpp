@@ -1,9 +1,10 @@
 #include "JuceHeader.h"
 #include "WindowFocus.h"
-#include "Process.h"
 #include "Process_Launcher.h"
 #include "XWindowInterface.h"
 #include "DelayUtils.h"
+#include "Process_Data.h"
+#include <unistd.h>
 
 class XWindowInterfaceTest : public juce::UnitTest
 {
@@ -55,14 +56,14 @@ public:
         int windowProcess = -1;
         std::function<bool()> findProcess = [&windowProcess, testApp]()->bool
         {
-            Array<Process::Data> childProcs 
-                    = Process::getChildProcesses
-                    (Process::getProcessId());
-            for(const Process::Data& process : childProcs)
+            using namespace Process;
+            Data runningProcess(getpid());
+            Array<Data> childProcs = runningProcess.getChildProcesses();
+            for(const Data& process : childProcs)
             {
-                if(process.executableName.containsIgnoreCase(testApp))
+                if(process.getExecutableName().containsIgnoreCase(testApp))
                 {
-                    windowProcess = (int) process.processId;
+                    windowProcess = (int) process.getProcessId();
                     return true;
                 }
             }

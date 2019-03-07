@@ -4,7 +4,8 @@ PROCESS_PREFIX := Process_
 PROCESS_OBJ := $(JUCE_OBJDIR)/$(PROCESS_PREFIX)
 
 OBJECTS_PROCESS := \
-  $(PROCESS_OBJ)Process.o \
+  $(PROCESS_OBJ)State.o \
+  $(PROCESS_OBJ)Data.o \
   $(PROCESS_OBJ)Launched.o \
   $(PROCESS_OBJ)Launcher.o  
 
@@ -23,8 +24,10 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_PROCESS)
 process : $(OBJECTS_PROCESS)
 	@echo "Built Process module"
 
-$(PROCESS_OBJ)Process.o : \
-    $(PROCESS_ROOT)/Process.cpp
+$(PROCESS_OBJ)State.o : \
+    $(PROCESS_ROOT)/$(PROCESS_PREFIX)State.cpp
+$(PROCESS_OBJ)Data.o : \
+    $(PROCESS_ROOT)/$(PROCESS_PREFIX)Data.cpp
 $(PROCESS_OBJ)Launched.o : \
     $(PROCESS_ROOT)/$(PROCESS_PREFIX)Launched.cpp
 $(PROCESS_OBJ)Launcher.o : \

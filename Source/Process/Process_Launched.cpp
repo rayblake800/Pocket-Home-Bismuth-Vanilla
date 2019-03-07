@@ -1,7 +1,9 @@
 #include "Process_Launched.h"
-#include "Process.h"
+#include "Process_Data.h"
+#include "Process_State.h"
 #include "JuceHeader.h"
 #include "XWindowInterface.h"
+#include <unistd.h>
 #include <cstdint>
 
 #ifdef JUCE_DEBUG
@@ -24,14 +26,18 @@ launchCommand(launchCommand)
 {
     if(childProcess.start(launchCommand))
     {
-        juce::Array<Data> childProcesses = getChildProcesses(getProcessId());
+        Data currentProcess(getpid());
+        juce::Array<Data> childProcesses = currentProcess.getChildProcesses();
         jassert(!childProcesses.isEmpty());
         for(const Data& process : childProcesses)
         {
-            if(launchCommand.contains(process.executableName))
+            if(process.isValid())
             {
-                processId = process.processId;    
-                break;
+                if(launchCommand.contains(process.getExecutableName()))
+                {
+                    processId = process.getProcessId();
+                    break;
+                }
             }
         }
     }
@@ -58,15 +64,19 @@ bool Process::Launched::isRunning()
     bool processRunning = childProcess.isRunning();
     if(processRunning)
     {
-        Data processData = getProcessData(processId);
+        Data processData(processId);
         DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " is in state " 
-                << stateString(processData.lastState));
-        if(processData.lastState == State::dead 
-                || processData.lastState == State::invalid)
+                << stateString(processData.getLastState()));
+        if(!processData.isValid() || processData.getLastState() == State::dead)
         {
-            bool killed = kill();
-            jassert(killed);
+            DBG(dbgPrefix << __func__ 
+                    << ": Launched process is dead/missing, but JUCE process "
+                    << "object reports that it is still running.");
+            DBG(dbgPrefix << __func__ 
+                    << ": Attempting to kill invalid process:");
+            const bool processKilled = kill();
+            jassert(processKilled);
             processRunning = false;
         }
     }  
@@ -87,21 +97,20 @@ bool Process::Launched::kill()
  */
 void Process::Launched::waitForProcessToFinish(const int timeoutMs)
 {
-    bool indefiniteWait = (timeoutMs == -1);
+    const bool noTimeout = (timeoutMs == -1);
     juce::uint32 endTime = juce::Time::getMillisecondCounter() + timeoutMs;
-    Data process= getProcessData(processId);
+    Data process(processId);
     while(childProcess.isRunning()
-            && process.lastState != State::zombie
-            && process.lastState != State::stopped
-            && process.lastState != State::dead
-            && process.lastState != State::unknown
-            && process.lastState != State::invalid
-            && (indefiniteWait
-                || juce::Time::getMillisecondCounter() < endTime))
+            && process.getLastState() != State::zombie
+            && process.getLastState() != State::stopped
+            && process.getLastState() != State::dead
+            && process.getLastState() != State::unknown
+            && process.getLastState() != State::invalid
+            && (noTimeout || juce::Time::getMillisecondCounter() < endTime))
 
     {
         int waitTime = processCheckInterval;
-        if(!indefiniteWait)
+        if(timeoutMs >= 0)
         {
             juce::uint32 timeLeft = endTime 
                     - juce::Time::getMillisecondCounter();
@@ -111,7 +120,7 @@ void Process::Launched::waitForProcessToFinish(const int timeoutMs)
             }
         }
         childProcess.waitForProcessToFinish(waitTime);
-        process = getProcessData(processId);
+        process = Data(processId);
     }
 #ifdef JUCE_DEBUG
     if(juce::Time::getMillisecondCounter() >= endTime
@@ -119,7 +128,7 @@ void Process::Launched::waitForProcessToFinish(const int timeoutMs)
     {
         DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " did not finish, process state="
-                << stateString(process.lastState));
+                << stateString(process.getLastState()));
     }
 #endif
 }
@@ -139,10 +148,10 @@ juce::String Process::Launched::getProcessOutput()
     }
     else
     {    
-        Data process = getProcessData(processId);
+        Data process(processId);
         DBG(dbgPrefix << __func__ << ": process " << launchCommand
                 << " is still active in state " 
-                << stateString(process.lastState) << ", can't get output");
+                << stateString(process.getLastState()) << ", can't get output");
         return juce::String();
     }
 }
