@@ -36,6 +36,6 @@ $(SETTINGS_OBJ)CursorModePicker.o : \
 $(SETTINGS_OBJ)CalibrationButton.o : \
     $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)CalibrationButton.cpp
 $(SETTINGS_OBJ)ConnectionComponent.o : \
-    $(SETTINGS_ROOT)/QuickSettingsPage/ConnectionSettingsComponent.cpp
+    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)ConnectionComponent.cpp
 $(SETTINGS_OBJ)ListPage.o : \
     $(SETTINGS_ROOT)/SettingsListPage/SettingsListPage.cpp

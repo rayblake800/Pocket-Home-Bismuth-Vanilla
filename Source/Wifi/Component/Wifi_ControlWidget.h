@@ -6,7 +6,7 @@
  *         wifi settings page.
  */
 
-#include "Settings/QuickSettingsPage/ConnectionSettingsComponent.h"
+#include "Settings_ConnectionComponent.h"
 #include "Wifi_Device_Listener.h"
 #include "Wifi_Connection_Record_Listener.h"
 #include "Locale_TextUser.h"
@@ -14,7 +14,7 @@
 namespace Wifi { class ControlWidget; }
 namespace Wifi { class AccessPoint; }
 
-class Wifi::ControlWidget : public ConnectionSettingsComponent,
+class Wifi::ControlWidget : public Settings::ConnectionComponent,
     public Wifi::Device::Listener, public Wifi::Connection::Record::Listener,  
     public Locale::TextUser
 {

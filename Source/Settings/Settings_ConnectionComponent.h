@@ -1,39 +1,43 @@
 #pragma once
+/**
+ * @file  Settings_ConnectionComponent.h
+ * 
+ * @brief  A basis for network information and control components.
+ */
 #include "JuceHeader.h"
 #include "Widgets_Switch.h"
 #include "Widgets_Spinner.h"
 #include "Widgets_DrawableImage.h"
 
-/**
- * @file  ConnectionSettingsComponent.h
- * 
- * @brief  A widget that provides a connection status icon, a toggle switch for 
- *         enabling/disabling the connection, and a button that shows a 
- *         connection status string. The button will also open a connection page
- *         when clicked while the switch is enabled.
- */
+namespace Settings { class ConnectionComponent; }
 
-class ConnectionSettingsComponent : public juce::Component,
+/**
+ * @brief  Provides connection status info and basic connection controls.
+ *
+ *  ConnectionComponent provides a connection status icon, a toggle switch for 
+ * enabling or disabling the connection, and a button that shows a connection 
+ * status string. The button will also open a connection page when clicked while
+ * the switch is enabled.
+ */
+class Settings::ConnectionComponent : public juce::Component,
         private juce::Button::Listener
 {
 public:
     /**
+     * @brief  Sets the connection button's action on construction.
+     *
      * @param openConnectionPage  A callback to run when the button is clicked.
      *                            This should be a function that opens a 
      *                            connection settings page.
-     * 
-     * @param name                The internal component name.
      */
-    ConnectionSettingsComponent(
-            std::function<void()> openConnectionPage,
-            const juce::String& name = juce::String());
+    ConnectionComponent(std::function<void()> openConnectionPage);
 
-    virtual ~ConnectionSettingsComponent() { }
+    virtual ~ConnectionComponent() { }
 
 protected:
     /**
-     * @brief  Updates the icon, switch, and connection button based on current
-     *         connection status.
+     * @brief  Updates the icon, switch, and connection button based on the 
+     *         current connection status.
      */
     void refresh();
 
@@ -41,8 +45,8 @@ private:
     /**
      * @brief  Checks if the connection is enabled.  
      *
-     * This will be used to determine what position the switch should be in when
-     * the component is created or refreshed.
+     *  This will be used to determine what position the switch should be in 
+     * when the component is created or refreshed.
      * 
      * @return  True if connections are enabled, false if disabled.
      */
@@ -59,15 +63,14 @@ private:
     /**
      * @brief  Determines if the connection switch should be enabled.
      * 
-     * @return  True iff the connection state can be changed.
+     * @return  Whether the connection state can be changed.
      */
     virtual bool allowConnectionToggle() = 0;
-
     
     /**
      * @brief  Determines if the connection page should be accessible.
      * 
-     * @return  True iff the connection button should open the connection page.
+     * @return  Whether the connection button should open the connection page.
      */
     virtual bool connectionPageAvailable() = 0;
     
@@ -88,9 +91,8 @@ private:
      */
     virtual void enabledStateChanged(bool enabled) = 0;
 
-
     /**
-     * @brief  Return connection status text for the current connection state.
+     * @brief  Gets connection status text for the current connection state.
      *
      * @return  Text describing the connection state.
      */
@@ -102,7 +104,7 @@ private:
     void resized() override;
 
     /**
-     * @brief  If text color changes, updates the icon color to match.
+     * @brief  Updates the icon color to match when the text colour changes.
      */
     void colourChanged() override;
 
@@ -119,21 +121,18 @@ private:
     void buttonClicked(juce::Button* button) override;
 
     /**
-     * @brief  Run refresh() when the component regains visibility.
+     * @brief  Calls the refresh method when the component regains visibility.
      */
     void visibilityChanged() override;
 
     /**
-     * Connection button displays status text and opens the connection page
-     * when possible.
+     * @brief  Displays status text, and opens the connection page when 
+     *         possible.
      */
     class ConnectionButton : public juce::Button
     {
     public:
-        /**
-         * @param name    The internal component name.
-         */
-        ConnectionButton(const juce::String name = juce::String());
+        ConnectionButton() : juce::Button("ConnectionButton") { }
 
         virtual ~ConnectionButton() { }
 
@@ -185,5 +184,5 @@ private:
     /* Callback function that opens the connection page */
     std::function<void()> openConnectionPage;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionSettingsComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ConnectionComponent)
 };

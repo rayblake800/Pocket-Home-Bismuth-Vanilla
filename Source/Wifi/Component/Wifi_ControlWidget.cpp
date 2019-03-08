@@ -23,7 +23,7 @@ namespace TextKey
 }
     
 Wifi::ControlWidget::ControlWidget(std::function<void() > openWifiPage) :
-ConnectionSettingsComponent(openWifiPage, localeClassKey.toString()),
+Settings::ConnectionComponent(openWifiPage),
 Locale::TextUser(localeClassKey)
 {
     juce::MessageManager::callAsync([this]() { refresh(); });
