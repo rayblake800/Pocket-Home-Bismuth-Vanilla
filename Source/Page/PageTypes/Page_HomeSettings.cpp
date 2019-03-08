@@ -12,7 +12,22 @@ namespace TextKey
 {
     static const juce::Identifier title      = "title";
     static const juce::Identifier background = "background";
+    static const juce::Identifier clockMode  = "clockMode";
 }
+
+/* Page layout constants: */
+static const constexpr int titleRowWeight   = 30;
+static const constexpr int contentRowWeight = 20;
+static const constexpr int rowPaddingWeight = 3;
+
+static const constexpr int labelWeight    = 10;
+static const constexpr int comboBoxWeight = 10;
+
+static const constexpr int counterLabelWeight = 20;
+static const constexpr int counterWeight      = 10;
+
+static const constexpr int xPaddingWeight = 1;
+static const constexpr float yMarginFraction = 0.05;
 
 /*
  * Initializes the page layout.
@@ -20,7 +35,10 @@ namespace TextKey
 Page::HomeSettings::HomeSettings() :
 Locale::TextUser(localeClassKey),
 title("personalizeTitle", localeText(TextKey::title)),
-bgLabel("bgLabel", localeText(TextKey::background))
+bgLabel("bgLabel", localeText(TextKey::background)),
+clockLabel("clockLabel", localeText(TextKey::clockMode)),
+menuController(menuFormatLabel, menuFormatPicker, columnCountLabel,
+        columnCounter, rowCountLabel, rowCounter)
 {
 #if JUCE_DEBUG
     setName("HomeSettingsPage");
@@ -28,39 +46,44 @@ bgLabel("bgLabel", localeText(TextKey::background))
     setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout({
-        Row(30,
+        Row(titleRowWeight,
         { 
             RowItem(&title)
         }),
-        Row(20,
+        Row(contentRowWeight,
         {
-            RowItem(&bgLabel, 10),
-            RowItem(&homeBGPicker, 10)
+            RowItem(&bgLabel, labelWeight),
+            RowItem(&homeBGPicker, comboBoxWeight)
         }),
-        Row(20,
+        Row(contentRowWeight,
         {
-            RowItem(menuComponents.getMenuFormatLabel(), 10),
-            RowItem(menuComponents.getMenuFormatPicker(), 10)
+            RowItem(&clockLabel, labelWeight),
+            RowItem(&clockModePicker, comboBoxWeight)
         }),
-        Row(20,
+        Row(contentRowWeight,
         {
-            RowItem(menuComponents.getRowCountLabel(), 20),
-            RowItem(menuComponents.getRowCounter(), 10)
+            RowItem(&menuFormatLabel, labelWeight),
+            RowItem(&menuFormatPicker, comboBoxWeight)
         }),
-        Row(20,
+        Row(contentRowWeight,
         {
-            RowItem(menuComponents.getColumnCountLabel(), 20),
-            RowItem(menuComponents.getColumnCounter(), 10)
+            RowItem(&rowCountLabel, counterLabelWeight),
+            RowItem(&rowCounter, counterWeight)
+        }),
+        Row(contentRowWeight,
+        {
+            RowItem(&columnCountLabel, counterLabelWeight),
+            RowItem(&columnCounter, counterWeight)
         })
     });
-    layout.setYMarginFraction(0.05);
-    layout.setXPaddingWeight(1);
-    layout.setYPaddingWeight(3);
+    layout.setYMarginFraction(yMarginFraction);
+    layout.setXPaddingWeight(xPaddingWeight);
+    layout.setYPaddingWeight(rowPaddingWeight);
     setLayout(layout);
 
     title.setJustificationType(juce::Justification::centred);
     addAndShowLayoutComponents();
-    menuComponents.updateForCurrentSettings();
+    menuController.updateForCurrentSettings();
 }
 
 /*
@@ -68,5 +91,5 @@ bgLabel("bgLabel", localeText(TextKey::background))
  */
 Page::HomeSettings::~HomeSettings()
 {
-    menuComponents.applySettingsChanges();
+    menuController.applySettingsChanges();
 }

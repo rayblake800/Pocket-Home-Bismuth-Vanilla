@@ -8,11 +8,13 @@
  */
 
 #include "Page_Component.h"
-#include "Widgets_BoundedLabel.h"
-#include "AppMenu_SettingsComponents.h"
-#include "Theme_Image_HomeBackgroundPicker.h"
-#include "Utils.h"
 #include "Locale_TextUser.h"
+#include "Widgets_BoundedLabel.h"
+#include "Theme_Image_HomeBackgroundPicker.h"
+#include "Settings_ClockModePicker.h"
+#include "AppMenu_SettingsController.h"
+#include "Widgets_Counter.h"
+#include "Utils.h"
 
 namespace Page { class HomeSettings; }
 
@@ -41,8 +43,24 @@ private:
     Widgets::BoundedLabel bgLabel;
     Theme::Image::HomeBackgroundPicker homeBGPicker;
 
-    /* Used to select AppMenu format settings: */
-    AppMenu::SettingsComponents menuComponents;
+    /* Used to set the Clock display mode: */
+    Widgets::BoundedLabel clockLabel;
+    Settings::ClockModePicker clockModePicker;
+
+    /* Used to manage AppMenu setting controls: */
+    AppMenu::SettingsController menuController;
+
+    /* Used to select the AppMenu format: */
+    Widgets::BoundedLabel menuFormatLabel;
+    juce::ComboBox menuFormatPicker;
+
+    /* Used to select the maximum column count for AppMenu grids: */
+    Widgets::BoundedLabel columnCountLabel;
+    Widgets::Counter columnCounter;
+
+    /* Used to select the maximum row count for AppMenu grids: */
+    Widgets::BoundedLabel rowCountLabel;
+    Widgets::Counter rowCounter;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomeSettings)
 };

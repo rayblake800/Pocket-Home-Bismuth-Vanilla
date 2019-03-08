@@ -27,11 +27,15 @@
     {
         "title"         : "Homepage Settings",
         "background"    : "Background image:",
-        "clockMode"     : "Select the display mode for the clock:",
-        "mode24Hour"    : "24h mode",
-        "mode12Hour"    : "AM/PM mode",
-        "hideClock"     : "Don't show clock"
+        "clockMode"     : "Clock mode:"
     },
+    "Settings::ClockModePicker":
+    {
+        "hideClock"     : "Hide clock",
+        "mode12Hour"    : "AM/PM mode",
+        "mode24Hour"    : "24 hour mode"
+    },
+
     "Page::PasswordEditor":
     {
         "changePassword"  : "Change your password",
@@ -47,9 +51,9 @@
         "apply"              : "Apply",
         "success"            : "Success"
     },
-    "AppMenu::SettingsComponents":
+    "AppMenu::SettingsController":
     {
-        "menuType"        : "Application menu:",
+        "menuType"        : "Menu format:",
         "scrollingMenu"   : "Scrolling menu",
         "pagedMenu"       : "Paged menu",
         "menuColumns"     : "Menu columns:",
