@@ -29,9 +29,9 @@ void Wifi::Signal::APModule::signalStrengthChanged
     nmThread->lockForAsyncCallback(SharedResource::LockType::write,
             [this, updatedAP, newStrength]()
     {
-        DBG(dbgPrefix << __func__ << ": Signal strength change for " 
-                << updatedAP.getSSIDText() << " to strength " 
-                << (int) newStrength);
+        //DBG(dbgPrefix << __func__ << ": Signal strength change for " 
+        //        << updatedAP.getSSIDText() << " to strength " 
+        //        << (int) newStrength);
         APList::Module* apList = getSiblingModule<APList::Module>();
         AccessPoint updated = apList->getAccessPoint(updatedAP.generateHash());
         apList->updateSignalStrength(updated);
