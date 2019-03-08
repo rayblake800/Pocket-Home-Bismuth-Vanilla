@@ -1,7 +1,6 @@
 ## Known Issues
 
 ### Icon Module
-- .xpm icon files are not supported by the Juce library's Image class.
 - Juce .svg rendering fails to correctly render some .svg files.
 
 ### DesktopEntry Module

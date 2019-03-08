@@ -1,3 +1,7 @@
+#### Mar 7 2019
+   - Added support for .xpm image files.
+   - Improved icon file finding.
+   - Continuing documentation/design overhaul.
 #### Feb 25 2019
    - Redesigned and tested the Wifi module UI.
    - Fixed Page module design issues, and started to remove functionality unrelated to component layout and page transitions from page classes.

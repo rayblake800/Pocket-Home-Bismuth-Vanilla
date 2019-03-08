@@ -9,9 +9,6 @@
     3. Place config files and lock files in directories selected with
        XDGDirectories.
 
-## Icon improvements
-    1. Restore support for .svg icon files, but ensure .png icon files are always prioritized.
-
 ## Configuration Improvements
     1. Add config. option for enabling/disabling that PocketCHIP audio hack. 
     2. Recreate config test class.
@@ -20,9 +17,6 @@
 
 ### Quick Settings Page
     1. Restore the IP address label.
-
-### DateTime Page
-    1. Remove this page until admin/authentication handling is implemented.
 
 ### Home Settings Page
     1. Move the clock settings to this page from the DateTime page.

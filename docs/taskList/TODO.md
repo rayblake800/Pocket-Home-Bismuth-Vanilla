@@ -29,7 +29,6 @@ Ideally, all non-trivial classes should have their own test classes, but most te
 - [Wifi::LibNM::Thread::Module](../../Source/Wifi/LibNM/Thread/Wifi_LibNM_Thread_Module.h)
 
 ## Misc. fixes and improvements
-    - Add more custom colour values to AppMenu button components.
     - Provide a way to override the system locale.
     - Finish implementing Config::AlertWindow to provide useful error messages when configuration errors occur.
     - Restore the IP address label.
