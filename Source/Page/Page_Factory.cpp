@@ -5,11 +5,11 @@
 #include "Page_PasswordEditor.h"
 #include "Page_PasswordRemover.h"
 #include "Page_QuickSettings.h"
+#include "Page_SettingsList.h"
 #include "Page_WifiConnection.h"
 #include "HomePage.h"
 #include "PowerPage.h"
 #include "FelPage.h"
-#include "SettingsListPage.h"
 #include "Theme_Colour_ConfigPage.h"
 
 /*
@@ -43,7 +43,7 @@ Page::Component* Page::Factory::createPage(const Type pageType)
             newPage = new WifiConnection;
             break;
         case Type::settingsList:
-            newPage = new SettingsListPage;
+            newPage = new SettingsList;
             break;
         case Type::inputSettings:
             newPage = new InputSettings;

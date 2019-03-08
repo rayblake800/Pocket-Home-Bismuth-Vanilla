@@ -1,8 +1,60 @@
 {
-    "Process::Launcher": 
+    "AppMenu::ConfigData": 
     {
-        "couldNotOpen"    : "Couldn't open application",
-        "notValidCommand" : " is not a valid command."
+        "removeAPP"        : "Remove \"",
+        "fromMenu"         : "\" from the menu?",
+        "willRemoveApp"    : "This will permanently remove this shortcut from the application menu.",
+        "editApp"          : "Edit Application",
+        "deleteNAME"       : "Delete \"",
+        "folder"           : "\" folder?",
+        "willRemoveFolder" : "This will permanently remove this folder from the menu.",
+        "editFolder"       : "Edit Folder"
+    },
+    "AppMenu::Controller": 
+    {
+        "edit"         : "Edit",
+        "delete"       : "Delete",
+        "pinItem"      : "Pin to main menu",
+        "moveBack"     : "Move back",
+        "moveForward"  : "Move forward",
+        "newShortcut"  : "New shortcut",
+        "newEntry"     : "New desktop menu entry",
+        "newFolder"    : "New folder",
+        "launchingAPP" : "Launching"
+    },
+    "AppMenu::CategoryEditor":
+    {
+        "editCategoryTitle" : "Edit Categories"
+    },
+    "AppMenu::EntryData":    
+    {
+        "removeLinkTo"  : "Remove link to ",
+        "questionMark"  : "?",
+        "willHideEntry" : "This application will be hidden from pocket-home.",
+        "editApp"       : "Edit Menu Item"
+    },
+    "AppMenu::NewConfigItemEditor":
+    {
+        "newAppTitleKey"    : "New application shortcut",
+        "newFolderTitleKey" : "New application folder"
+    },
+    "AppMenu::PopupEditor": 
+    {
+        "name"             : "Name:",
+        "icon"             : "Icon path:",
+        "selectIcon"       : "Select Icon",
+        "editCategory"     : "Edit categories",
+        "command"          : "Command:",
+        "runInTerm"        : "Run in terminal:",
+        "newEntryTitleKey" : "New desktop entry file"
+    },
+    "AppMenu::SettingsController":
+    {
+        "menuType"        : "Menu format:",
+        "scrollingMenu"   : "Scrolling menu",
+        "pagedMenu"       : "Paged menu",
+        "menuColumns"     : "Menu columns:",
+        "menuRows"        : "Menu rows:"
     },
     "ConfigAlertWindows": 
     {
@@ -10,18 +62,30 @@
         "checkPermissions" : "Make sure you have permission to write to this file.",
         "saveError"        : "Error saving configuration:"
     },
-    "Widgets::FilePathEditor": 
+    "FelPage":
     {
-        "defaultTitle"       : "Select an image file",
-        "defaultDescription" : "Please select an image file"
+        "reboot"       : "Reboot into software flashing mode?",
+        "yes"          : "Yes",
+        "no"           : "No",
+        "flashingInfo" : "For instructions, visit https://archive.org/details/C.h.i.p.FlashCollection" 
     },
-    "Password::LoginScreen": 
+    "Locale::Time":
     {
-        "passwordLabel" : "Password:",
-        "logIn"         : "Log In",
-        "wrongPassword" : "Wrong password",
-        "retryPassword" : "Wrong password, try again",
-        "closeButton"   : "Ok"
+	    "never"          : "never",
+        "now"            : "now",
+        "momentsAgo"     : "moments ago",
+        "secondsPrefix"  : "",
+        "minutesPrefix"  : "",
+        "hoursPrefix"    : "",
+        "daysPrefix"     : "",
+        "weeksPrefix"    : "",
+        "yearsPrefix"    : "",
+        "secondsPostfix" : " seconds ago",
+        "minutesPostfix" : " minutes ago",
+        "hoursPostfix"   : " hours ago",
+        "daysPostfix"    : " days ago",
+        "weeksPostfix"   : " weeks ago",
+        "yearsPostfix"   : " years ago"
     },
     "Page::HomeSettings": 
     {
@@ -29,13 +93,11 @@
         "background"    : "Background image:",
         "clockMode"     : "Clock mode:"
     },
-    "Settings::ClockModePicker":
+    "Page::InputSettings": 
     {
-        "hideClock"     : "Hide clock",
-        "mode12Hour"    : "AM/PM mode",
-        "mode24Hour"    : "24 hour mode"
+        "inputSettings" : "Input settings",
+        "showCursor"    : "Mouse cursor mode:"
     },
-
     "Page::PasswordEditor":
     {
         "changePassword"  : "Change your password",
@@ -51,23 +113,87 @@
         "apply"              : "Apply",
         "success"            : "Success"
     },
-    "AppMenu::SettingsController":
-    {
-        "menuType"        : "Menu format:",
-        "scrollingMenu"   : "Scrolling menu",
-        "pagedMenu"       : "Paged menu",
-        "menuColumns"     : "Menu columns:",
-        "menuRows"        : "Menu rows:"
-    },
-    "SettingsListPage": 
+    "Page::SettingsList": 
     {
         "homeSettings"   : "Personalize your homepage",
         "colorSettings"  : "Set colors",
         "setPassword"    : "Set your password",
         "changePassword" : "Change your password",
         "removePassword" : "Remove your password",
-        "dateTime"       : "Date and time",
         "inputSettings"  : "Input settings"
+    },
+    "Password::LoginScreen": 
+    {
+        "passwordLabel" : "Password:",
+        "logIn"         : "Log In",
+        "wrongPassword" : "Wrong password",
+        "retryPassword" : "Wrong password, try again",
+        "closeButton"   : "Ok"
+    },
+    "Password::RemovalController":
+    {
+        "passwordRemoved"    : "Your Pocket-Home password has been removed.",
+        "cantRemovePassword" : "Removing password failed",
+        "wrongPassword"      : "The current Pocket-Home password was incorrect.",
+        "checkAgent"         : "The current password was correct, but the action failed. Most likely, either your root password was incorrect, or no PolicyKit authentication agent is running.",
+        "error"              : "Error",
+        "filesMissing"       : "Important application files are missing! Please reinstall pocket-home.",
+        "polkitMissing"      : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
+    },
+    "Password::UpdateController": 
+    {
+        "confirmationFailed": "Password confirmation failed",
+        "fieldsDontMatch"   : "The new password fields don't match, try again.",
+        "success"           : "Success",
+        "passwordUpdated"   : "The Pocket-Home password has been updated.",
+        "missingPassword"   : "Missing password",
+        "askToEnterNew"     : "Please enter a new password.",
+        "failedSet"         : "Failed to set your password",
+        "failedUpdate"      : "Failed to update your password",
+        "wrongPassword"     : "The existing Pocket-Home password was incorrect.",
+        "checkAgentAndRoot" : "The current password was correct, but the action failed. Most likely, either your root password was incorrect, or no PolicyKit authentication agent is running.",
+        "error"             : "Error",
+        "securingFailed"    : "Failed to lock the password directory!  The pocket-home password has been removed. Make sure you aren't running pocket-home as root.",
+        "filesMissing"      : "Important application files are missing! Please reinstall pocket-home.",
+        "polkitMissing"     : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
+    },
+    "Process::Launcher": 
+    {
+        "couldNotOpen"    : "Couldn't open application",
+        "notValidCommand" : " is not a valid command."
+    },
+    "PowerPage": 
+    {
+        "shutdown"      : "Shutdown",
+        "reboot"        : "Reboot",
+        "sleep"         : "Sleep",
+        "flashSoftware" : "Flash Software",
+        "build"         : "Build: ",
+        "version"       : "Version "
+    },
+    "Settings::CalibrationButton":
+    {
+        "calibrate"     : "Calibrate the screen"
+    },
+    "Settings::ClockModePicker":
+    {
+        "hideClock"     : "Hide clock",
+        "mode12Hour"    : "AM/PM mode",
+        "mode24Hour"    : "24 hour mode"
+    },
+    "Settings::CursorModePicker":
+    {
+        "visible"       : "Visible",
+        "notVisible"    : "Not visible"
+    },
+    "Widgets::ColourPicker" : 
+    {
+	    "setColour" : "Set Color"
+    },
+    "Widgets::FilePathEditor": 
+    {
+        "defaultTitle"       : "Select an image file",
+        "defaultDescription" : "Please select an image file"
     },
     "Wifi::ConnectionList": 
     {
@@ -90,132 +216,5 @@
         "missingPSK"        : "Incorrect Password",
         "connectingUnknown" : "Connecting...",
         "disconnecting"     : "Disconnecting..."   
-    },
-    "PowerPage": 
-    {
-        "shutdown"      : "Shutdown",
-        "reboot"        : "Reboot",
-        "sleep"         : "Sleep",
-        "flashSoftware" : "Flash Software",
-        "build"         : "Build: ",
-        "version"       : "Version "
-    },
-    "FelPage":
-    {
-        "reboot"       : "Reboot into software flashing mode?",
-        "yes"          : "Yes",
-        "no"           : "No",
-        "flashingInfo" : "For instructions, visit https://archive.org/details/C.h.i.p.FlashCollection" 
-    },
-    "Password::UpdateController": 
-    {
-        "confirmationFailed": "Password confirmation failed",
-        "fieldsDontMatch"   : "The new password fields don't match, try again.",
-        "success"           : "Success",
-        "passwordUpdated"   : "The Pocket-Home password has been updated.",
-        "missingPassword"   : "Missing password",
-        "askToEnterNew"     : "Please enter a new password.",
-        "failedSet"         : "Failed to set your password",
-        "failedUpdate"      : "Failed to update your password",
-        "wrongPassword"     : "The existing Pocket-Home password was incorrect.",
-        "checkAgentAndRoot" : "The current password was correct, but the action failed. Most likely, either your root password was incorrect, or no PolicyKit authentication agent is running.",
-        "error"             : "Error",
-        "securingFailed"    : "Failed to lock the password directory!  The pocket-home password has been removed. Make sure you aren't running pocket-home as root.",
-        "filesMissing"      : "Important application files are missing! Please reinstall pocket-home.",
-        "polkitMissing"     : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
-    },
-    "Password::RemovalController":
-    {
-        "passwordRemoved"    : "Your Pocket-Home password has been removed.",
-        "cantRemovePassword" : "Removing password failed",
-        "wrongPassword"      : "The current Pocket-Home password was incorrect.",
-        "checkAgent"         : "The current password was correct, but the action failed. Most likely, either your root password was incorrect, or no PolicyKit authentication agent is running.",
-        "error"              : "Error",
-        "filesMissing"       : "Important application files are missing! Please reinstall pocket-home.",
-        "polkitMissing"      : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
-    },
-    "Page::InputSettings": 
-    {
-        "inputSettings" : "Input settings",
-        "showCursor"    : "Mouse cursor mode:"
-    },
-    "Settings::CalibrationButton":
-    {
-        "calibrate"     : "Calibrate the screen"
-    },
-    "Settings::CursorModePicker":
-    {
-        "visible"       : "Visible",
-        "notVisible"    : "Not visible"
-    },
-    "AppMenu::Controller": 
-    {
-        "edit"         : "Edit",
-        "delete"       : "Delete",
-        "pinItem"      : "Pin to main menu",
-        "moveBack"     : "Move back",
-        "moveForward"  : "Move forward",
-        "newShortcut"  : "New shortcut",
-        "newEntry"     : "New desktop menu entry",
-        "newFolder"    : "New folder",
-        "launchingAPP" : "Launching"
-    },
-    "AppMenu::PopupEditor": 
-    {
-        "name"             : "Name:",
-        "icon"             : "Icon path:",
-        "selectIcon"       : "Select Icon",
-        "editCategory"     : "Edit categories",
-        "command"          : "Command:",
-        "runInTerm"        : "Run in terminal:",
-        "newEntryTitleKey" : "New desktop entry file"
-    },
-    "AppMenu::CategoryEditor":
-    {
-        "editCategoryTitle" : "Edit Categories"
-    },
-    "AppMenu::NewConfigItemEditor":
-    {
-        "newAppTitleKey"    : "New application shortcut",
-        "newFolderTitleKey" : "New application folder"
-    },
-    "AppMenu::EntryData":     {
-        "removeLinkTo"  : "Remove link to ",
-        "questionMark"  : "?",
-        "willHideEntry" : "This application will be hidden from pocket-home.",
-        "editApp"       : "Edit Menu Item"
-    },
-    "AppMenu::ConfigData": 
-    {
-        "removeAPP"        : "Remove \"",
-        "fromMenu"         : "\" from the menu?",
-        "willRemoveApp"    : "This will permanently remove this shortcut from the application menu.",
-        "editApp"          : "Edit Application",
-        "deleteNAME"       : "Delete \"",
-        "folder"           : "\" folder?",
-        "willRemoveFolder" : "This will permanently remove this folder from the menu.",
-        "editFolder"       : "Edit Folder"
-    },
-    "Widgets::ColourPicker" : 
-    {
-	    "setColour" : "Set Color"
-    },
-    "Locale::Time":
-    {
-	    "never"          : "never",
-        "now"            : "now",
-        "momentsAgo"     : "moments ago",
-        "secondsPrefix"  : "",
-        "minutesPrefix"  : "",
-        "hoursPrefix"    : "",
-        "daysPrefix"     : "",
-        "weeksPrefix"    : "",
-        "yearsPrefix"    : "",
-        "secondsPostfix" : " seconds ago",
-        "minutesPostfix" : " minutes ago",
-        "hoursPostfix"   : " hours ago",
-        "daysPostfix"    : " days ago",
-        "weeksPostfix"   : " weeks ago",
-        "yearsPostfix"   : " years ago"
     }
 }

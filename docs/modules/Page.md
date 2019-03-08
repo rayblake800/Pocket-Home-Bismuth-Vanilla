@@ -15,6 +15,12 @@ The Factory object provides an interface that allows page Component objects to c
 #### [Page\::Type](../../Source/Page/Page_Type.h)
 Type enumerates all kinds of Page::Component object the page factory may create.
 
+#### [Page\::QuickSettings](../../Source/Page/PageTypes/Page_QuickSettings.h)
+The QuickSettings page provides Wifi, brightness and volume controls, and opens the settings list page.
+
+#### [Page\::SettingsList](../../Source/Page/PageTypes/Page_SettingsList.h)
+The SettingsList page provides buttons to open all other settings pages.
+
 #### [Page\::HomeSettings](../../Source/Page/PageTypes/Page_HomeSettings.h)
 The HomeSettings page provides controls for updating [AppMenu](./AppMenu.md) and [HomePage](../../Source/HomePage.h) settings.
 
@@ -26,9 +32,6 @@ The PasswordEditor page provides controls for setting or changing the applicatio
 
 #### [Page\::PasswordRemover](../../Source/Page/PageTypes/Page_PasswordEditor.h)
 The PasswordEditor page provides controls for removing the application Password.
-
-#### [Page\::QuickSettings](../../Source/Page/PageTypes/Page_QuickSettings.h)
-The QuickSettings page provides Wifi, brightness and volume controls, and opens the settings list page.
 
 #### [Page\::WifiConnection](../../Source/Page/PageTypes/Page_WifiConnection.h)
 The WifiConnection page holds the [Wifi\::ConnectionList\::ListComponent](../../Source/Wifi/Component/ConnectionList/Wifi_ConnectionList_ListComponent.h) object.

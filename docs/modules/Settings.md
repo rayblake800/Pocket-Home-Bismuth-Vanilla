@@ -18,5 +18,3 @@ CalibrationButton launches a touchscreen calibration application when clicked.
 
 #### [Settings\::ConnectionComponent](../../Source/Settings/Settings_ConnectionComponent.h)
 ConnectionComponent is an abstract basis for connection status and control widgets.
-
-#### [SettingsListPage](../../Source/Settings/SettingsListPage/SettingsListPage.h)

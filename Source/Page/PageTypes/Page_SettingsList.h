@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file SettingsListPage.h
+ * @file  Page_SettingsList.h
  * 
  * @brief  Provides an interface for accessing all other settings pages.
  */
@@ -10,28 +10,31 @@
 #include "Widgets_NavButton.h"
 #include "Widgets_PagedList.h"
 
+namespace Page { class SettingsList; }
+
 /**
  * @brief  A navigation page containing buttons that open other settings pages.
  */
-class SettingsListPage : public Page::Component, public Locale::TextUser
+class Page::SettingsList : public Page::Component, public Locale::TextUser
 {
 public:
-    SettingsListPage();
+    /**
+     * @brief  Sets the page layout on construction.
+     */
+    SettingsList();
 
-    virtual ~SettingsListPage() { }
+    virtual ~SettingsList() { }
 
 private:
     /**
-     * @brief  Gets button titles for all page buttons.
-     *
-     * @return  Titles for all page buttons, in order.
+     * @brief  Updates the list of button titles, refreshing the list if needed.
      */
-    juce::StringArray getButtonTitles();
+    void updateButtonTitles();
 
     /**
-     * @brief  Reloads page layout whenever the page becomes visible.
+     * @brief  Checks if the list should be updated when the page is revealed.
      */
-    void visibilityChanged() override;
+    virtual void pageRevealedOnStack() override;
 
     /**
      * @brief  Handles button clicks within the page.
@@ -44,27 +47,32 @@ private:
          *
          * @param listPage  The SettingsListPage that owns this listener.
          */
-        PageListener(SettingsListPage& listPage) : listPage(listPage) { }
+        PageListener(SettingsList& listPage) : listPage(listPage) { }
 
     private:
         /**
-         * @brief  Handles button clicks to open menu pages.
+         * @brief  Opens new pages when their buttons are clicked.
          */
         void buttonClicked(juce::Button* button) override;
 
-        SettingsListPage& listPage;
+        SettingsList& listPage;
     };
     PageListener pageListener;
     
     /**
      * @brief  The list component providing all settings page buttons. 
      */
-    class SettingsList : public Widgets::PagedList
+    class PageList : public Widgets::PagedList
     {
     public:
-        SettingsList();
+        /**
+         * @brief  Connects the list to the page that contains it.
+         *
+         * @param page  The settings list page that holds this list.
+         */
+        PageList(SettingsList& page);
         
-        virtual ~SettingsList() { }
+        virtual ~PageList() { }
         
         /**
          * @brief Gets the total number of page buttons.
@@ -81,7 +89,7 @@ private:
          * 
          * @param index     The button's index in the list.
          * 
-         * @return  The updated list Component. 
+         * @return          The updated list Component. 
          */
         virtual Component* updateListItem(Component* listItem,
                 const unsigned int index);
@@ -92,8 +100,17 @@ private:
         void refresh();
 
     private:
+        /* The page that holds this list component: */
+        SettingsList& page;
     };
-    SettingsList buttonList;
+    PageList buttonList;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsListPage)
+    /* Holds all page titles that should currently have list buttons: */
+    juce::StringArray pageTitles;
+
+    /* Tracks if the application password was set the last time the list was
+     * updated: */
+    bool passwordSet;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsList)
 };

@@ -10,6 +10,7 @@ OBJECTS_PAGE_TYPES := \
   $(PAGE_OBJ)PasswordEditor.o \
   $(PAGE_OBJ)PasswordRemover.o \
   $(PAGE_OBJ)QuickSettings.o \
+  $(PAGE_OBJ)SettingsList.o \
   $(PAGE_OBJ)WifiConnection.o
 
 PAGE_INTERFACE_ROOT := $(PAGE_ROOT)/Interface
@@ -47,6 +48,8 @@ $(PAGE_OBJ)PasswordRemover.o : \
     $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)PasswordRemover.cpp
 $(PAGE_OBJ)QuickSettings.o : \
     $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)QuickSettings.cpp
+$(PAGE_OBJ)SettingsList.o : \
+    $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)SettingsList.cpp
 $(PAGE_OBJ)WifiConnection.o : \
     $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)WifiConnection.cpp
 
