@@ -11,6 +11,7 @@
 
 #include "Locale_TextUser.h"
 #include "Widgets_FilePathEditor.h"
+#include "Widgets_TextEditor.h"
 #include "Widgets_PopupEditor.h"
 #include "Widgets_Switch.h"
 #include "Icon_RequestID.h"
@@ -166,7 +167,7 @@ private:
     /* Label text: "Name:" */
     Widgets::BoundedLabel nameLabel;     
     /* Edits the application/folder display name. */
-    juce::TextEditor titleEditor;
+    Widgets::TextEditor titleEditor;
 
     /* Label text: "Icon path:" */
     Widgets::BoundedLabel iconLabel; 
@@ -185,7 +186,7 @@ private:
     /* Label text: "Command:" */
     Widgets::BoundedLabel commandLabel;
     /* Edits the application launch command */
-    juce::TextEditor commandEditor;
+    Widgets::TextEditor commandEditor;
 
     /* Label text: "Run in terminal:" */
     Widgets::BoundedLabel terminalCheckboxLabel;

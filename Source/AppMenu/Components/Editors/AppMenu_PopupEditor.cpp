@@ -71,8 +71,8 @@ terminalCheckboxLabel("runInTermLabel", localeText(TextKey::runInTerm))
     if (showCommandField)
     {
         layout.addRow(Row(10,{
-            RowItem(&commandLabel, 10),
-            RowItem(&commandEditor, 20)
+            RowItem(&commandLabel, 20),
+            RowItem(&commandEditor, 41)
         }));
         layout.addRow(Row(10,{
             RowItem(&terminalCheckboxLabel, 60),
