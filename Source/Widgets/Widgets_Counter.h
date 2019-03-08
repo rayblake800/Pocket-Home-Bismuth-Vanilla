@@ -33,7 +33,8 @@ public:
      *                       
      * If the maximum is less than the minimum, their values will be swapped.
      */
-    Counter(const int initialValue, const int minimum, const int maximum);
+    Counter(const int initialValue = 0, const int minimum = 0,
+            const int maximum = 10);
 
     virtual ~Counter() { }
 
