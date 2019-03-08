@@ -17,6 +17,7 @@ OBJECTS_WIDGET := \
   $(WIDGET_OBJ)FocusingPagedList.o \
   $(WIDGET_OBJ)NavButton.o \
   $(WIDGET_OBJ)IconSlider.o \
+  $(WIDGET_OBJ)DelayedIconSlider.o \
   $(WIDGET_OBJ)PopupEditor.o \
   $(WIDGET_OBJ)ListEditor.o \
   $(WIDGET_OBJ)Spinner.o \
@@ -74,6 +75,9 @@ $(WIDGET_OBJ)NavButton.o : \
 
 $(WIDGET_OBJ)IconSlider.o : \
     $(WIDGET_ROOT)/$(WIDGET_PREFIX)IconSlider.cpp
+
+$(WIDGET_OBJ)DelayedIconSlider.o : \
+    $(WIDGET_ROOT)/$(WIDGET_PREFIX)DelayedIconSlider.cpp
 
 $(WIDGET_OBJ)PopupEditor.o : \
     $(WIDGET_ROOT)/$(WIDGET_PREFIX)PopupEditor.cpp

@@ -16,6 +16,9 @@ The Clock class provides a configurable label that prints the current time.
 #### [Widgets\::IconSlider](../../Source/Widgets/Widgets_IconSlider.h)
 The IconSlider class provides a horizontal slider component with icons displayed on both of its sides.
 
+#### [Widgets\::DelayedIconSlider](../../Source/Widgets/Widgets_DelayedIconSlider.h)
+The DelayedIconSlider class is an IconSlider subclass meant for simple, single purpose sliders that run an update callback at a controlled frequency.
+
 #### [Widgets\::Spinner](../../Source/Widgets/Widgets_Spinner.h)
 The Spinner class provides a loading indicator component that shows an animated spinning circle.
 
