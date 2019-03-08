@@ -7,8 +7,8 @@ OBJECTS_SETTINGS := \
   $(SETTINGS_OBJ)ClockModePicker.o \
   $(SETTINGS_OBJ)BrightnessSlider.o \
   $(SETTINGS_OBJ)VolumeSlider.o \
-  $(SETTINGS_OBJ)QuickPage.o \
-  $(SETTINGS_OBJ)InputPage.o \
+  $(SETTINGS_OBJ)CursorModePicker.o \
+  $(SETTINGS_OBJ)CalibrationButton.o \
   $(SETTINGS_OBJ)ConnectionComponent.o \
   $(SETTINGS_OBJ)ListPage.o 
 
@@ -31,10 +31,10 @@ $(SETTINGS_OBJ)BrightnessSlider.o : \
     $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)BrightnessSlider.cpp
 $(SETTINGS_OBJ)VolumeSlider.o : \
     $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)VolumeSlider.cpp
-$(SETTINGS_OBJ)QuickPage.o : \
-    $(SETTINGS_ROOT)/QuickSettingsPage/QuickSettingsPage.cpp
-$(SETTINGS_OBJ)InputPage.o : \
-    $(SETTINGS_ROOT)/InputSettingsPage/InputSettingsPage.cpp
+$(SETTINGS_OBJ)CursorModePicker.o : \
+    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)CursorModePicker.cpp
+$(SETTINGS_OBJ)CalibrationButton.o : \
+    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)CalibrationButton.cpp
 $(SETTINGS_OBJ)ConnectionComponent.o : \
     $(SETTINGS_ROOT)/QuickSettingsPage/ConnectionSettingsComponent.cpp
 $(SETTINGS_OBJ)ListPage.o : \

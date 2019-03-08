@@ -1,15 +1,15 @@
 #include "Page_Factory.h"
 #include "Page_Type.h"
 #include "Page_HomeSettings.h"
+#include "Page_InputSettings.h"
 #include "Page_PasswordEditor.h"
 #include "Page_PasswordRemover.h"
+#include "Page_QuickSettings.h"
 #include "Page_WifiConnection.h"
 #include "HomePage.h"
 #include "PowerPage.h"
 #include "FelPage.h"
-#include "QuickSettingsPage.h"
 #include "SettingsListPage.h"
-#include "InputSettingsPage.h"
 #include "Theme_Colour_ConfigPage.h"
 
 /*
@@ -37,7 +37,7 @@ Page::Component* Page::Factory::createPage(const Type pageType)
             newPage = new FelPage;
             break;
         case Type::quickSettings:
-            newPage = new QuickSettingsPage;
+            newPage = new QuickSettings;
             break;
         case Type::wifiConnection:
             newPage = new WifiConnection;
@@ -46,7 +46,7 @@ Page::Component* Page::Factory::createPage(const Type pageType)
             newPage = new SettingsListPage;
             break;
         case Type::inputSettings:
-            newPage = new InputSettingsPage;
+            newPage = new InputSettings;
             break;
         case Type::setPassword:
             newPage = new PasswordEditor;

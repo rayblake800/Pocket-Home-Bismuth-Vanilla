@@ -1,30 +1,34 @@
 #pragma once
 /**
- * @file  QuickSettingsPage.h
+ * @file  Page_QuickSettings.h
  * 
  * @brief  Provides wireless device controls, brightness and volume sliders, and 
  *         a button to open additional settings pages.
  */
 
-#include "Widgets_Switch.h"
-#include "Layout_Component_Manager.h"
 #include "Page_Component.h"
 #include "Wifi_ControlWidget.h"
-#include "Theme_Image_Component.h"
 #include "Settings_BrightnessSlider.h"
 #include "Settings_VolumeSlider.h"
+#include "Theme_Image_Component.h"
+#include "Layout_Component_Manager.h"
 
+namespace Page { class QuickSettings; }
 
-class QuickSettingsPage : public Page::Component
+/**
+ * @brief  Shows basic system control widgets, and links to additional settings
+ *         pages.
+ */
+class Page::QuickSettings : public Page::Component
 {
 public:
-    QuickSettingsPage();
+    QuickSettings();
 
-    virtual ~QuickSettingsPage() { }
+    virtual ~QuickSettings() { }
 
 private:    
     /**
-     * @brief  Updates the advanced settings button when the page is resized.
+     * @brief  Updates the settings list button when the page is resized.
      */
     void pageResized() override;
 
@@ -35,11 +39,11 @@ private:
     {
     public:
         /**
-         * @brief  Connects this listener to its QuickSettingsPage.
+         * @brief  Connects this listener to its page.
          *
          * @param settingsPage  The page component that owns this Listener.
          */
-        PageListener(QuickSettingsPage& settingsPage) : 
+        PageListener(QuickSettings& settingsPage) : 
             settingsPage(settingsPage) { }
 
     private:
@@ -50,7 +54,7 @@ private:
          */
         void buttonClicked(juce::Button* button) override;
 
-        QuickSettingsPage& settingsPage;
+        QuickSettings& settingsPage;
     };
     PageListener pageListener;
 

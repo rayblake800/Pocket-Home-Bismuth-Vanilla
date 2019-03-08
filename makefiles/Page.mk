@@ -6,8 +6,10 @@ PAGE_OBJ := $(JUCE_OBJDIR)/$(PAGE_PREFIX)
 PAGE_TYPES_ROOT := $(PAGE_ROOT)/PageTypes
 OBJECTS_PAGE_TYPES := \
   $(PAGE_OBJ)HomeSettings.o \
+  $(PAGE_OBJ)InputSettings.o \
   $(PAGE_OBJ)PasswordEditor.o \
   $(PAGE_OBJ)PasswordRemover.o \
+  $(PAGE_OBJ)QuickSettings.o \
   $(PAGE_OBJ)WifiConnection.o
 
 PAGE_INTERFACE_ROOT := $(PAGE_ROOT)/Interface
@@ -37,10 +39,14 @@ page : $(OBJECTS_PAGE)
 
 $(PAGE_OBJ)HomeSettings.o : \
     $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)HomeSettings.cpp
+$(PAGE_OBJ)InputSettings.o : \
+    $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)InputSettings.cpp
 $(PAGE_OBJ)PasswordEditor.o : \
     $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)PasswordEditor.cpp
 $(PAGE_OBJ)PasswordRemover.o : \
     $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)PasswordRemover.cpp
+$(PAGE_OBJ)QuickSettings.o : \
+    $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)QuickSettings.cpp
 $(PAGE_OBJ)WifiConnection.o : \
     $(PAGE_TYPES_ROOT)/$(PAGE_PREFIX)WifiConnection.cpp
 

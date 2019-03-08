@@ -18,11 +18,17 @@ Type enumerates all kinds of Page::Component object the page factory may create.
 #### [Page\::HomeSettings](../../Source/Page/PageTypes/Page_HomeSettings.h)
 The HomeSettings page provides controls for updating [AppMenu](./AppMenu.md) and [HomePage](../../Source/HomePage.h) settings.
 
+#### [Page\::InputSettings](../../Source/Page/PageTypes/Page_InputSettings.h)
+The InputSettings page provides controls for setting mouse cursor visibility and touchscreen calibration.
+
 #### [Page\::PasswordEditor](../../Source/Page/PageTypes/Page_PasswordEditor.h)
 The PasswordEditor page provides controls for setting or changing the application [Password](./Password.md).
 
 #### [Page\::PasswordRemover](../../Source/Page/PageTypes/Page_PasswordEditor.h)
 The PasswordEditor page provides controls for removing the application Password.
+
+#### [Page\::QuickSettings](../../Source/Page/PageTypes/Page_QuickSettings.h)
+The QuickSettings page provides Wifi, brightness and volume controls, and opens the settings list page.
 
 #### [Page\::WifiConnection](../../Source/Page/PageTypes/Page_WifiConnection.h)
 The WifiConnection page holds the [Wifi\::ConnectionList\::ListComponent](../../Source/Wifi/Component/ConnectionList/Wifi_ConnectionList_ListComponent.h) object.

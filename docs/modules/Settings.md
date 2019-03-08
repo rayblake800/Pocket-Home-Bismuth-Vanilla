@@ -10,11 +10,12 @@ BrightnessSlider allows the user to set the display brightness level.
 #### [Settings\::VolumeSlider](../../Source/Settings/Settings_VolumeSlider.h)
 VolumeSlider allows the user to set the system volume level.
 
-#### [QuickSettingsPage](../../Source/Settings/QuickSettingsPage/QuickSettingsPage.h)
+#### [Settings\::CursorModePicker](../../Source/Settings/Settings_CursorModePicker.h)
+CursorModePicker allows the user to show or hide the mouse cursor.
+
+#### [Settings\::CalibrationButton](../../Source/Settings/Settings_CalibrationButton.h)
+CalibrationButton launches a touchscreen calibration application when clicked.
 
 #### [ConnectionSettingsComponent](../../Source/Settings/QuickSettingsPage/ConnectionSettingsComponent.h)
 
 #### [SettingsListPage](../../Source/Settings/SettingsListPage/SettingsListPage.h)
-
-#### [InputSettingsPage](../../Source/Settings/InputSettingsPage/InputSettingsPage.h)
-

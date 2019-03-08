@@ -134,13 +134,19 @@
         "filesMissing"       : "Important application files are missing! Please reinstall pocket-home.",
         "polkitMissing"      : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
-    "InputSettingsPage": 
+    "Page::InputSettings": 
     {
         "inputSettings" : "Input settings",
-        "calibrate"     : "Calibrate the screen",
-        "showCursor"    : "Select the visibility of the cursor:",
-        "notVisible"    : "Not visible",
-        "visible"       : "Visible"
+        "showCursor"    : "Mouse cursor mode:"
+    },
+    "Settings::CalibrationButton":
+    {
+        "calibrate"     : "Calibrate the screen"
+    },
+    "Settings::CursorModePicker":
+    {
+        "visible"       : "Visible",
+        "notVisible"    : "Not visible"
     },
     "AppMenu::Controller": 
     {

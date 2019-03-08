@@ -162,7 +162,7 @@ private:
     /**
      * Updates the cursor visibility when the associated config key is changed. 
      */
-    class MainListener : protected Config::MainListener
+    class MainListener : public Config::MainListener
     {
     public:
         MainListener(LookAndFeel& owner);
