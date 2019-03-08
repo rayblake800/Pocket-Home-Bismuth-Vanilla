@@ -63,6 +63,7 @@ void Page::StackComponent::popPage(const Layout::Transition::Type transition)
         {
             removeChildComponent(page);
             stack.removeObject(page);
+            stack.getLast()->pageRevealedOnStack();
         }, false);
     }
 }
