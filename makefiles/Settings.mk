@@ -5,6 +5,8 @@ SETTINGS_OBJ := $(JUCE_OBJDIR)/$(SETTINGS_PREFIX)
 
 OBJECTS_SETTINGS := \
   $(SETTINGS_OBJ)ClockModePicker.o \
+  $(SETTINGS_OBJ)BrightnessSlider.o \
+  $(SETTINGS_OBJ)VolumeSlider.o \
   $(SETTINGS_OBJ)QuickPage.o \
   $(SETTINGS_OBJ)InputPage.o \
   $(SETTINGS_OBJ)ConnectionComponent.o \
@@ -25,6 +27,10 @@ settings : $(OBJECTS_SETTINGS)
 
 $(SETTINGS_OBJ)ClockModePicker.o : \
     $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)ClockModePicker.cpp
+$(SETTINGS_OBJ)BrightnessSlider.o : \
+    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)BrightnessSlider.cpp
+$(SETTINGS_OBJ)VolumeSlider.o : \
+    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)VolumeSlider.cpp
 $(SETTINGS_OBJ)QuickPage.o : \
     $(SETTINGS_ROOT)/QuickSettingsPage/QuickSettingsPage.cpp
 $(SETTINGS_OBJ)InputPage.o : \

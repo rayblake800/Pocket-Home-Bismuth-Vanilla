@@ -6,16 +6,16 @@
  *         a button to open additional settings pages.
  */
 
-#include "Widgets_IconSlider.h"
 #include "Widgets_Switch.h"
 #include "Layout_Component_Manager.h"
 #include "Page_Component.h"
-#include "WindowFocusedTimer.h"
 #include "Wifi_ControlWidget.h"
 #include "Theme_Image_Component.h"
+#include "Settings_BrightnessSlider.h"
+#include "Settings_VolumeSlider.h"
 
 
-class QuickSettingsPage : public Page::Component, public WindowFocusedTimer
+class QuickSettingsPage : public Page::Component
 {
 public:
     QuickSettingsPage();
@@ -24,25 +24,14 @@ public:
 
 private:    
     /**
-     * @brief  Cancels the slider timer when visibility is lost.
-     */
-    virtual void visibilityChanged() override;
-    
-    /**
-     * @brief  Updates the sliders while they're being dragged.
-     */
-    virtual void timerCallback() override;
-    
-    /**
      * @brief  Updates the advanced settings button when the page is resized.
      */
     void pageResized() override;
 
     /**
-     * @brief  Handles component input events for the QuickSettingsPage.
+     * @brief  Controls how the settings list button acts when clicked.
      */
-    class PageListener : public juce::Button::Listener,
-            public juce::Slider::Listener
+    class PageListener : public juce::Button::Listener
     {
     public:
         /**
@@ -61,49 +50,18 @@ private:
          */
         void buttonClicked(juce::Button* button) override;
 
-        /**
-         * @brief  Slider::Listener requires this method to be implemented, but 
-         *         its not actually used.  
-         *
-         *  Brightness and volume do not need to be updated as frequently as 
-         * this method would be called, so a timer is used instead to update the
-         * sliders while they're being dragged.
-         */
-        virtual void sliderValueChanged(juce::Slider* slider) override { };
-        
-        /**
-         * @brief  Starts a timer to update the slider values as its being 
-         *         dragged.
-         * 
-         * @param slider  The slider being dragged, either the brightness or 
-         *                volume slider.
-         */
-        virtual void sliderDragStarted(juce::Slider* slider) override;
-        
-        /**
-         * @brief  Stops the timer and immediately updates slider values.
-         * 
-         * @param slider  The slider component that was being dragged, either 
-         *                the brightness or volume slider.
-         */
-        virtual void sliderDragEnded(juce::Slider* slider) override;
-
         QuickSettingsPage& settingsPage;
     };
     PageListener pageListener;
-    
-    /* Tracks the slider currently being dragged so the timer callback knows
-       whether it should update brightness or volume. */
-    juce::Slider* changingSlider;
 
     /* Turns wifi on or off, shows connection state, and opens the wifi page. */
     Wifi::ControlWidget wifiComponent;
 
     /* Sets the display brightness */
-    Widgets::IconSlider screenBrightnessSlider;
+    Settings::BrightnessSlider brightnessSlider;
 
     /* Sets system volume levels */
-    Widgets::IconSlider volumeSlider;
+    Settings::VolumeSlider volumeSlider;
 
     /* Opens the settings list page */
     Theme::Image::Component<Widgets::DrawableImageButton> settingsListBtn;
