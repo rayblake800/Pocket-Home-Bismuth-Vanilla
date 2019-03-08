@@ -60,7 +60,7 @@ OBJECTS_APPMENU_PAGED := \
 OBJECTS_APPMENU := \
   $(APPMENU_OBJ)AppMenu.o \
   $(APPMENU_OBJ)ConfigFile.o \
-  $(APPMENU_OBJ)SettingsComponents.o \
+  $(APPMENU_OBJ)SettingsController.o \
   $(OBJECTS_APPMENU_DATA) \
   $(OBJECTS_APPMENU_COMPONENT) \
   $(OBJECTS_APPMENU_CONTROL) \
@@ -160,8 +160,8 @@ $(APPMENU_OBJ)AppMenu.o: \
     $(APPMENU_ROOT)/AppMenu.cpp
 $(APPMENU_OBJ)ConfigFile.o: \
     $(APPMENU_ROOT)/$(APPMENU_PREFIX)ConfigFile.cpp
-$(APPMENU_OBJ)SettingsComponents.o: \
-    $(APPMENU_ROOT)/$(APPMENU_PREFIX)SettingsComponents.cpp
+$(APPMENU_OBJ)SettingsController.o: \
+    $(APPMENU_ROOT)/$(APPMENU_PREFIX)SettingsController.cpp
 
 # Tests:
 $(APPMENU_TEST_OBJ)AppMenu.o: \

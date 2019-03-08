@@ -1,13 +1,13 @@
-#include "AppMenu_SettingsComponents.h"
+#include "AppMenu_SettingsController.h"
 #include "AppMenu_Format.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
-static const constexpr char* dbgPrefix = "AppMenu::SettingsComponents::";
+static const constexpr char* dbgPrefix = "AppMenu::SettingsController::";
 #endif
 
 /* Localized object class key */
-static const juce::Identifier localeClassKey = "AppMenu::SettingsComponents";
+static const juce::Identifier localeClassKey = "AppMenu::SettingsController";
 
 /* Localized text value keys: */
 namespace TextKey
@@ -34,30 +34,46 @@ static const constexpr int pagedMenuID     = 1;
 static const constexpr int scrollingMenuID = 2;
 
 /*
- * Initializes all components to match the current AppMenu settings.
- */
-AppMenu::SettingsComponents::SettingsComponents() : 
+ * Initializes all components to match the current AppMenu settings. */
+AppMenu::SettingsController::SettingsController(
+        Widgets::BoundedLabel& menuFormatLabel, 
+        juce::ComboBox& menuFormatPicker,
+        Widgets::BoundedLabel& columnCountLabel,
+        Widgets::Counter& columnCounter,
+        Widgets::BoundedLabel& rowCountLabel,
+        Widgets::Counter& rowCounter) : 
 Locale::TextUser(localeClassKey),
-menuFormatLabel("menuFormatLabel", localeText(TextKey::menuType)),
-menuFormatPicker("menuFormatPicker"),
-columnCountLabel("columnCountLabel", localeText(TextKey::menuColumns)),
-columnCounter(minColumns, minColumns, maxColumns),
-rowCountLabel("rowCountLabel", localeText(TextKey::menuRows)),
-rowCounter(minRows, minRows, maxRows)
-{
-    menuFormatPicker.addItem(localeText(TextKey::scrollingMenu),
-            scrollingMenuID);
-    menuFormatPicker.addItem(localeText(TextKey::pagedMenu),
-            pagedMenuID);
-    menuFormatPicker.addListener(this);
-    updateForCurrentSettings();
-}
+menuFormatLabel(menuFormatLabel),
+menuFormatPicker(menuFormatPicker),
+columnCountLabel(columnCountLabel),
+columnCounter(columnCounter),
+rowCountLabel(rowCountLabel),
+rowCounter(rowCounter) { }
 
 /*
  * Updates all settings components to match the current AppMenu settings.
  */
-void AppMenu::SettingsComponents::updateForCurrentSettings()
+void AppMenu::SettingsController::updateForCurrentSettings()
 {
+    if(!initialized)
+    {
+        menuFormatLabel.setText(localeText(TextKey::menuType),
+                juce::NotificationType::dontSendNotification);
+        menuFormatPicker.addItem(localeText(TextKey::scrollingMenu),
+                scrollingMenuID);
+        menuFormatPicker.addItem(localeText(TextKey::pagedMenu),
+                pagedMenuID);
+        columnCountLabel.setText(localeText(TextKey::menuColumns),
+                juce::NotificationType::dontSendNotification);
+        columnCounter.setMinimum(minColumns);
+        columnCounter.setMaximum(maxColumns);
+        rowCountLabel.setText(localeText(TextKey::menuRows),
+                juce::NotificationType::dontSendNotification);
+        rowCounter.setMinimum(minRows);
+        rowCounter.setMaximum(maxRows);
+        menuFormatPicker.addListener(this);
+        initialized = true;
+    }
     Format menuFormat = formatConfig.getMenuFormat();
     switch(menuFormat)
     {
@@ -77,10 +93,10 @@ void AppMenu::SettingsComponents::updateForCurrentSettings()
 }
 
 /*
- * Saves the settings selected by the SettingsComponents so they will be
+ * Saves the settings selected by the SettingsController so they will be
  * applied to the AppMenu.
  */
-void AppMenu::SettingsComponents::applySettingsChanges()
+void AppMenu::SettingsController::applySettingsChanges()
 {
     const int selectedId = menuFormatPicker.getSelectedId();
     switch(selectedId)
@@ -102,59 +118,9 @@ void AppMenu::SettingsComponents::applySettingsChanges()
 }
 
 /*
- * Gets the label used to identify the AppMenu format selection component.
- */
-juce::Component* AppMenu::SettingsComponents::getMenuFormatLabel()
-{
-    return &menuFormatLabel;
-}
-
-/*
- * Gets the ComboBox component used to set the AppMenu format.
- */
-juce::Component* AppMenu::SettingsComponents::getMenuFormatPicker()
-{
-    return &menuFormatPicker;
-}
-
-/*
- * Gets the label used to identify the AppMenu column count component.
- */
-juce::Component* AppMenu::SettingsComponents::getColumnCountLabel()
-{
-    return &columnCountLabel;
-}
-
-/*
- * Gets the counter used to set the number of application columns shown by the
- * AppMenu.
- */
-juce::Component* AppMenu::SettingsComponents::getColumnCounter()
-{
-    return &columnCounter;
-}
-
-/*
- * Gets the label used to identify the AppMenu row count component.
- */
-juce::Component* AppMenu::SettingsComponents::getRowCountLabel()
-{
-    return &rowCountLabel;
-}
-
-/*
- * Gets the counter used to set the number of application rows shown by the
- * AppMenu.
- */
-juce::Component* AppMenu::SettingsComponents::getRowCounter()
-{
-    return &rowCounter;
-}
-
-/*
  * Updates counter components when the format selection box changes.
  */
-void AppMenu::SettingsComponents::comboBoxChanged(juce::ComboBox* box)
+void AppMenu::SettingsController::comboBoxChanged(juce::ComboBox* box)
 {
     updateCountersForSelectedFormat();
 }
@@ -163,7 +129,7 @@ void AppMenu::SettingsComponents::comboBoxChanged(juce::ComboBox* box)
  * Updates the column and row counters for the current format shown by the
  * menuFormatPicker.
  */
-void AppMenu::SettingsComponents::updateCountersForSelectedFormat()
+void AppMenu::SettingsController::updateCountersForSelectedFormat()
 {
     const int selectedId = menuFormatPicker.getSelectedId();
     switch(selectedId)
