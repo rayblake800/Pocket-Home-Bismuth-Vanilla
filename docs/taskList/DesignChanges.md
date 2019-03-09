@@ -13,8 +13,8 @@ This document tracks all changes to the way this project is designed and structu
 - Find a more elegant place for TextSize, or at least a more elegant way to integrate it into Layout::Component.
 
 ### Password
-- Move functionality from page classes into component group classes, move pages to Page module.
-- Use the module namespace for all module files.
+- Use XDG Data directories to select where to save the password file.
+- Check both custom and default locations in case someone messes with the XDG_DATA_HOME variable.
 
 ### Process
 - Create a module namespace and use it for all module files.

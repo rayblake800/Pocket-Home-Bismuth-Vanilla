@@ -4,41 +4,38 @@ The Layout module handles the placement of UI elements within the window. UI com
 ## Relative Group Layout
 The Relative Layout submodule defines the positions and sizes of UI components in relation to each other. It can be used to quickly define the placement of many non-overlapping UI components within a rectangular area.
 
-#### [Layout\::Group\::RelativeLayout](../../Source/Layout/Group/Layout_Group_RelativeLayout.h)
-RelativeLayout objects hold layout values for a group of UI components. Each layout contains any number of layout rows, and each row contains any number of UI components. Each row is assigned a weight value used to calculate how much vertical space it is allocated relative to all other rows. Each component in the row also holds a weight value, defining how much horizontal space it is allocated relative to other components in the row.
+#### [Layout\::Group\::RelativeLayout](../../Source/Foundation/Layout/Group/Layout_Group_RelativeLayout.h)
+Layout\::Group\::RelativeLayout objects hold layout values for a group of UI components. Each layout contains any number of layout rows, and each row contains any number of UI components. Each row is assigned a weight value used to calculate how much vertical space it is allocated relative to all other rows. Each component in the row also holds a weight value, defining how much horizontal space it is allocated relative to other components in the row.
 
-#### [Layout\::Group\::Manager](../../Source/Layout/Group/Layout_Group_Manager.h)
-Manager objects apply a RelativeLayout object's layout to the components it contains.
+#### [Layout\::Group\::Manager](../../Source/Foundation/Layout/Group/Layout_Group_Manager.h)
+Layout\::Group\::Manager applies a RelativeLayout object's layout to the components it contains. It uses a stored layout to calculate and set the bounds of each layout component within a rectangular area, optionally adding each layout component to a provided parent component.
 
 ## Configurable Component Layout
-The Configurable Component Layout submodule defines the positions of individual UI components within the application window. Component layout values are relative to the size of the main application window. Width and x-coordinate are expressed as a fraction of the window's width, and height and y-coordinate are expressed as a fraction of the window's height. Component layouts are defined within a JSON configuration file the user may edit. This configuration file also provides the preferred font sizes used within the application.
+The Configurable Component layout submodule defines the positions of individual UI components within the application window. Component layout values may be absolute measurements defined in pixels, or relative measurements defined as fractions of the window width or height. Component layouts are defined within a JSON configuration file the user may edit. This configuration file also provides the preferred font sizes used within the application.
 
-#### [Layout\::Component\::ConfigLayout](../../Source/Layout/Component/Layout_Component_ConfigLayout.h)
-ConfigLayout objects hold the position and size of a single UI component.
+#### [Layout\::Component\::ConfigLayout](../../Source/Foundation/Layout/Component/Layout_Component_ConfigLayout.h)
+ConfigLayout holds the position and size of a single UI component. Positions and sizes are relative to the dimensions of the application window. Width and x-coordinate are stored as fractions of the window's width, and height and y-coordinate are stored as fractions of the window's height.
 
-#### [Layout::Component::Manager](../../Source/Layout/Component/Layout_Component_Manager.h)
-Manager objects load and apply a component layout to a UI component.
+#### [Layout::Component::Manager](../../Source/Foundation/Layout/Component/Layout_Component_Manager.h)
+Manager objects store a juce::Component pointer and a ConfigLayout object loaded from the config file. The Manager will apply the layout to the Component on request, or allow the layout to be viewed directly. 
 
-#### [Layout::Component::TextSize](../../Source/Layout/Component/Layout_Component_TextSize.h)
-TextSize lists all font size options defined in the component configuration file.
+#### [Layout::Component::ConfigFile](../../Source/Foundation/Layout/Component/Layout_Component_ConfigFile.h)
+ConfigFile objects share access to the component layout JSON file resource. They are used to load specific component layout objects, and to calculate ideal font heights using  the configurable font heights saved in the JSON file.
 
-#### [Layout::Component::ConfigFile](../../Source/Layout/Component/Layout_Component_ConfigFile.h)
-ConfigFile objects access the component file resource to load component layouts and calculate appropriate font sizes.
+#### [Layout::Component::TextSize](../../Source/Foundation/Layout/Component/Layout_Component_TextSize.h)
+TextSize lists the configurable text height values defined in the component layout JSON file. These sizes may be floating point values representing a height relative to the window height, or integer values representing fixed pixel heights.
 
-#### [Layout::Component::JSONResource](../../Source/Layout/Component/Layout_Component_JSONResource.h)
-The shared JSONResource object manages the configuration file where component layouts and font sizes are defined.
+#### [Layout::Component::JSONKeys](../../Source/Foundation/Layout/Component/Layout_Component_JSONKeys.h)
+JSONKeys defines the key strings used to store component layouts and text heights in the JSON file.
 
-#### [Layout::Component::JSONKeys](../../Source/Layout/Component/Layout_Component_JSONKeys.h)
-JSONKeys provides the keys used to access font sizes and component layouts within the component file resource.
+#### [Layout::Component::JSONResource](../../Source/Foundation/Layout/Component/Layout_Component_JSONResource.h)
+The JSONResource object loads the component layout JSON file, and shares its data with all ConfigFile objects.
 
 ## Layout Transition Animations
-The Layout module provides methods for animating transitions between layouts, or for animating components when their initial layout is loaded.
 
-#### [Layout::Transition::Animator](../../Source/Layout/Transition/Layout_Transition_Animator.h)
-The Animator namespace provides functions for animating components in new layouts as they are applied, and for animating components in old layouts as they are removed.
+#### [Layout::Transition::Animator](../../Source/Foundation/Layout/Transition/Layout_Transition_Animator.h)
+The Animator namespace provides component animation functions. These functions are primarily intended for animating changes in layout, but may be used for general purpose animation as well. Transition animations may be used to show old components moving out as new components move in, even if components in the old layout are reused in the new layout.
 
-#### [Layout::Transition::Type](../../Source/Layout/Transition/Layout_Transition_Type.h)
-Transition::Type defines all types of animation that may be created using transition animator functions.
-
-
+#### [Layout::Transition::Type](../../Source/Foundation/Layout/Transition/Layout_Transition_Type.h)
+Type defines the animation types that may be applied to component transitions. Components may slide onto or off of the page from any of the four cardinal directions, they may move directly from their current location to their destination, or they may be moved directly to their destination without animating.
 

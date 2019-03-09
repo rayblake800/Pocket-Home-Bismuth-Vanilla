@@ -5,31 +5,31 @@ The DesktopEntry module exists to help the [AppMenu](./AppMenu.md) module create
 
 ## Public Interface
 
-#### [DesktopEntry\::EntryFile](../../Source/DesktopEntry/DesktopEntry_EntryFile.h)
+#### [DesktopEntry\::EntryFile](../../Source/Files/DesktopEntry/DesktopEntry_EntryFile.h)
 EntryFile objects represent a single .desktop application shortcut file.
 
-#### [DesktopEntry\::Loader](../../Source/DesktopEntry/DesktopEntry_Loader.h)
+#### [DesktopEntry\::Loader](../../Source/Files/DesktopEntry/DesktopEntry_Loader.h)
 Loader object provide access to shared desktop entry data.
 
-#### [DesktopEntry\::CallbackID](../../Source/DesktopEntry/Types/DesktopEntry_CallbackID.h)
+#### [DesktopEntry\::CallbackID](../../Source/Files/DesktopEntry/Types/DesktopEntry_CallbackID.h)
 CallbackId is used to identify or cancel pending desktop entry update callbacks scheduled through the DesktopEntry\::Loader.
 
-#### [DesktopEntry\::UpdateListener](../../Source/DesktopEntry/DesktopEntry_UpdateListener.h)
+#### [DesktopEntry\::UpdateListener](../../Source/Files/DesktopEntry/DesktopEntry_UpdateListener.h)
 UpdateListener objects receive notifications when desktop entry data is updated.
 
-#### [DesktopEntry\::FormatError](../../Source/DesktopEntry/Exceptions/DesktopEntry_FormatError.h)
+#### [DesktopEntry\::FormatError](../../Source/Files/DesktopEntry/Exceptions/DesktopEntry_FormatError.h)
 FormatError exceptions signal that an attempt was made to add invalid data to a desktop entry.
 
-#### [DesktopEntry\::FileError](../../Source/DesktopEntry/Exceptions/DesktopEntry_FileError.h)
+#### [DesktopEntry\::FileError](../../Source/Files/DesktopEntry/Exceptions/DesktopEntry_FileError.h)
 FileError exceptions signal that an encountered desktop entry file is invalid.
 
 ## Private Implementation Classes
 
-#### [DesktopEntry\::LoadingThread](../../Source/DesktopEntry/DesktopEntry_LoadingThread.h)
+#### [DesktopEntry\::LoadingThread](../../Source/Files/DesktopEntry/DesktopEntry_LoadingThread.h)
 LoadingThread is the shared thread resource used to load and cache all desktop entry file data.
 
-#### [DesktopEntry\::FileUtils](../../Source/DesktopEntry/DesktopEntry_FileUtils.h)
+#### [DesktopEntry\::FileUtils](../../Source/Files/DesktopEntry/DesktopEntry_FileUtils.h)
 The FileUtils namespace provides convenience functions for processing desktop entry file data.
 
-#### [DesktopEntry\::UpdateInterface](../../Source/DesktopEntry/DesktopEntry_UpdateInterface.h)
+#### [DesktopEntry\::UpdateInterface](../../Source/Files/DesktopEntry/DesktopEntry_UpdateInterface.h)
 UpdateInterface is the interface used by the LoadingThread to send updates to all UpdateListener objects.

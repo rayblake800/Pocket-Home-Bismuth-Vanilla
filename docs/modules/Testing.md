@@ -1,28 +1,12 @@
-# Tests Module Documentation
+# Testing Module Documentation
+The testing module provides tools used for building test classes.
 
-#### [StressTest](../../Tests/StressTest.h)
+#### [Testing::Window](../../Source/Development/Testing/Testing_Window.h)
+Window quickly creates and shows a window containing a single test component.
 
-#### [DelayUtils](../../Tests/DelayUtils.h)
+#### [Testing::StressTest](../../Source/Development/Testing/Testing_StressTest.h)
+StressTest objects test execution of many simultaneous random tests running on different threads.
 
-#### [TestWindow](../../Tests/TestWindow.h)
-
-#### [ScopeTimer](../../Tests/ScopeTimer/ScopeTimer.h)
-
-#### [ScopeTimerRecords](../../Tests/ScopeTimer/ScopeTimerRecords.h)
-
-## GLib Testing
-
-#### [gtest::object](../../Tests/GLib/gtest_object.h)
-
-#### [GLib::Test::OwnedObject](../../Tests/GLib/GLib_Test_OwnedObject.h)
-
-## Wifi Testing
-
-#### [Wifi::TestUtils::ConnectionListener](../../Tests/Wifi/TestUtils/Wifi_TestUtils_ConnectionListener.h)
-
-#### [Wifi::TestUtils::Waiting](../../Tests/Wifi/TestUtils/Wifi_TestUtils_Waiting.h)
-
-## SharedResource Testing
-
-#### [Test::SharedResource::Modular::TestClasses](../../Tests/Util/SharedResource/Test_SharedResource_Modular_TestClasses.h)
+#### [Testing::DelayUtils](../../Source/Development/Testing/Testing_DelayUtils.h)
+DelayUtils provides a method that allows tests to run the JUCE event loop until some condition is met.
 
