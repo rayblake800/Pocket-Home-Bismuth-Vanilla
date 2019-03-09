@@ -4,7 +4,7 @@
 #include "Audio.h"
 #include "XWindowInterface.h"
 #include "TempTimer.h"
-#include "ScopeTimerRecords.h"
+#include "Debug_ScopeTimerRecords.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -147,7 +147,7 @@ void PocketHomeApplication::shutdown()
     homeWindow.reset(nullptr);
     juce::LookAndFeel::setDefaultLookAndFeel(nullptr);
     lookAndFeel.reset(nullptr);
-    ScopeTimerRecords::printRecords();
+    Debug::ScopeTimerRecords::printRecords();
 }
 
 /*

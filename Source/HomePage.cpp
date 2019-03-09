@@ -1,7 +1,7 @@
 #include "HomePage.h"
 #include "Layout_Component_JSONKeys.h"
 #include "Theme_Image_JSONKeys.h"
-#include "AssetFiles.h"
+#include "Assets.h"
 #include "AppMenu.h"
 #include "AppMenu_ConfigFile.h"
 #include "Page_Type.h"
@@ -69,7 +69,7 @@ void HomePage::configValueChanged(const juce::Identifier& key)
     if(key == Theme::Image::JSONKeys::homeBackground)
     {
         String background = imageConfig.getHomeBackgroundPath();
-        setBackgroundImage(AssetFiles::loadImageAsset(background));
+        setBackgroundImage(Assets::loadImageAsset(background));
     }
     else
     {

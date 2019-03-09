@@ -1,5 +1,7 @@
 ############################## Icon Module #####################################
-ICON_ROOT = Source/Icon
+ICON_DIR = Source/Files/Icon
+ICON_TEST_DIR = Tests/Files/Icon
+
 ICON_PREFIX := Icon_
 ICON_OBJ := $(JUCE_OBJDIR)/$(ICON_PREFIX)
 
@@ -9,8 +11,7 @@ OBJECTS_ICON := \
   $(ICON_OBJ)ThemeIndex.o \
   $(ICON_OBJ)ThreadResource.o 
 
-ICON_TEST_ROOT = Tests/Icon
-OBJECTS_ICON_TEST := $(ICON_OBJ)XpmTest.o
+OBJECTS_ICON_TEST :=
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_ICON := $(OBJECTS_ICON) $(OBJECTS_ICON_TEST)
@@ -24,13 +25,10 @@ icon : $(OBJECTS_ICON)
 	@echo "Built Icon module"
 
 $(ICON_OBJ)Cache.o: \
-	$(ICON_ROOT)/$(ICON_PREFIX)Cache.cpp
+	$(ICON_DIR)/$(ICON_PREFIX)Cache.cpp
 $(ICON_OBJ)Loader.o: \
-	$(ICON_ROOT)/$(ICON_PREFIX)Loader.cpp
+	$(ICON_DIR)/$(ICON_PREFIX)Loader.cpp
 $(ICON_OBJ)ThemeIndex.o: \
-	$(ICON_ROOT)/$(ICON_PREFIX)ThemeIndex.cpp
+	$(ICON_DIR)/$(ICON_PREFIX)ThemeIndex.cpp
 $(ICON_OBJ)ThreadResource.o: \
-	$(ICON_ROOT)/$(ICON_PREFIX)ThreadResource.cpp
-
-$(ICON_OBJ)XpmTest.o: \
-	$(ICON_TEST_ROOT)/$(ICON_PREFIX)XpmTest.cpp
+	$(ICON_DIR)/$(ICON_PREFIX)ThreadResource.cpp

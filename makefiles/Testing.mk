@@ -1,13 +1,13 @@
 ############################### Testing Module #################################
-TEST_PREFIX := $(JUCE_OBJDIR)/Test_
-TEST_ROOT = Tests
+TEST_DIR = Source/Development/Testing
+
+TEST_PREFIX := Testing_
+TEST_OBJ := $(JUCE_OBJDIR)/$(TEST_PREFIX)
 
 OBJECTS_TEST := \
-  $(TEST_PREFIX)StressTest.o \
-  $(TEST_PREFIX)TestWindow.o \
-  $(TEST_PREFIX)DelayUtils.o \
-  $(TEST_PREFIX)ScopeTimer.o \
-  $(TEST_PREFIX)ScopeTimerRecords.o
+  $(TEST_OBJ)StressTest.o \
+  $(TEST_OBJ)Window.o \
+  $(TEST_OBJ)DelayUtils.o
 
 
 ifeq ($(BUILD_TESTS), 1)
@@ -18,13 +18,9 @@ endif
 testing : $(OBJECTS_TEST)
 	@echo "Built Testing module"
 
-$(TEST_PREFIX)StressTest.o: \
-	$(TEST_ROOT)/StressTest.cpp
-$(TEST_PREFIX)TestWindow.o: \
-	$(TEST_ROOT)/TestWindow.cpp
-$(TEST_PREFIX)DelayUtils.o: \
-	$(TEST_ROOT)/DelayUtils.cpp
-$(TEST_PREFIX)ScopeTimer.o: \
-	$(TEST_ROOT)/ScopeTimer/ScopeTimer.cpp
-$(TEST_PREFIX)ScopeTimerRecords.o: \
-	$(TEST_ROOT)/ScopeTimer/ScopeTimerRecords.cpp
+$(TEST_OBJ)StressTest.o: \
+	$(TEST_DIR)/$(TEST_PREFIX)StressTest.cpp
+$(TEST_OBJ)Window.o: \
+	$(TEST_DIR)/$(TEST_PREFIX)Window.cpp
+$(TEST_OBJ)DelayUtils.o: \
+	$(TEST_DIR)/$(TEST_PREFIX)DelayUtils.cpp

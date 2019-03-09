@@ -1,9 +1,12 @@
 ########################## Bluetooth Module ####################################
-BLUETOOTH_PREFIX := $(JUCE_OBJDIR)/Bluetooth_
-BLUETOOTH_ROOT = Source/Bluetooth
+BLUETOOTH_DIR = Source/System/Bluetooth
+BLUETOOTH_TEST_DIR = Tests/System/Bluetooth
+
+BLUETOOTH_PREFIX = Bluetooth_
+BLUETOOTH_OBJ := $(JUCE_OBJDIR)/$(BLUETOOTH_PREFIX)
 
 OBJECTS_BLUETOOTH := \
-  $(BLUETOOTH_PREFIX)BluezAdapter.o 
+  $(BLUETOOTH_OBJ)BluezAdapter.o 
 
 OBJECTS_BLUETOOTH_TEST :=
 
@@ -18,5 +21,5 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_BLUETOOTH)
 bluetooth : $(OBJECTS_BLUETOOTH)
 	@echo "Built Bluetooth module"
 
-$(BLUETOOTH_PREFIX)BluezAdapter.o : \
-    $(BLUETOOTH_ROOT)/Bluetooth_BluezAdapter.cpp
+$(BLUETOOTH_OBJ)BluezAdapter.o : \
+    $(BLUETOOTH_DIR)/$(BLUETOOTH_PREFIX)BluezAdapter.cpp

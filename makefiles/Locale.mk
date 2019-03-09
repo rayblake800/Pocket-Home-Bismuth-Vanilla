@@ -1,5 +1,6 @@
 ########################## Locale Module ######################################
-LOCALE_ROOT = Source/Locale
+LOCALE_DIR = Source/Foundation/Locale
+
 LOCALE_PREFIX := Locale_
 LOCALE_OBJ := $(JUCE_OBJDIR)/$(LOCALE_PREFIX)
 
@@ -21,8 +22,8 @@ locale : $(OBJECTS_LOCALE)
 	@echo "Built Locale module"
 
 $(LOCALE_OBJ)Time.o: \
-	$(LOCALE_ROOT)/$(LOCALE_PREFIX)Time.cpp
+	$(LOCALE_DIR)/$(LOCALE_PREFIX)Time.cpp
 $(LOCALE_OBJ)TextUser.o: \
-	$(LOCALE_ROOT)/$(LOCALE_PREFIX)TextUser.cpp
+	$(LOCALE_DIR)/$(LOCALE_PREFIX)TextUser.cpp
 $(LOCALE_OBJ)Locale.o: \
-	$(LOCALE_ROOT)/Locale.cpp
+	$(LOCALE_DIR)/Locale.cpp

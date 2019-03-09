@@ -1,5 +1,6 @@
 ########################## Settings Module #####################################
-SETTINGS_ROOT = Source/Settings
+SETTINGS_DIR = Source/GUI/Settings
+
 SETTINGS_PREFIX = Settings_
 SETTINGS_OBJ := $(JUCE_OBJDIR)/$(SETTINGS_PREFIX)
 
@@ -25,14 +26,14 @@ settings : $(OBJECTS_SETTINGS)
 	@echo "Built Settings module"
 
 $(SETTINGS_OBJ)ClockModePicker.o : \
-    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)ClockModePicker.cpp
+    $(SETTINGS_DIR)/$(SETTINGS_PREFIX)ClockModePicker.cpp
 $(SETTINGS_OBJ)BrightnessSlider.o : \
-    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)BrightnessSlider.cpp
+    $(SETTINGS_DIR)/$(SETTINGS_PREFIX)BrightnessSlider.cpp
 $(SETTINGS_OBJ)VolumeSlider.o : \
-    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)VolumeSlider.cpp
+    $(SETTINGS_DIR)/$(SETTINGS_PREFIX)VolumeSlider.cpp
 $(SETTINGS_OBJ)CursorModePicker.o : \
-    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)CursorModePicker.cpp
+    $(SETTINGS_DIR)/$(SETTINGS_PREFIX)CursorModePicker.cpp
 $(SETTINGS_OBJ)CalibrationButton.o : \
-    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)CalibrationButton.cpp
+    $(SETTINGS_DIR)/$(SETTINGS_PREFIX)CalibrationButton.cpp
 $(SETTINGS_OBJ)ConnectionComponent.o : \
-    $(SETTINGS_ROOT)/$(SETTINGS_PREFIX)ConnectionComponent.cpp
+    $(SETTINGS_DIR)/$(SETTINGS_PREFIX)ConnectionComponent.cpp

@@ -1,9 +1,11 @@
 ############################ Theme Module ######################################
-THEME_ROOT    = Source/Theme
+THEME_DIR    = Source/GUI/Theme
+THEME_COLOUR_DIR   := $(THEME_DIR)/Colour
+THEME_IMAGE_DIR   := $(THEME_DIR)/Image
+
 THEME_PREFIX  = Theme_
 THEME_OBJ    := $(JUCE_OBJDIR)/$(THEME_PREFIX)
 
-THEME_COLOUR_ROOT   := $(THEME_ROOT)/Colour
 THEME_COLOUR_PREFIX := $(THEME_PREFIX)Colour_
 THEME_COLOUR_OBJ    := $(THEME_OBJ)Colour_
 OBJECTS_THEME_COLOUR := \
@@ -13,7 +15,6 @@ OBJECTS_THEME_COLOUR := \
   $(THEME_COLOUR_OBJ)ConfigListener.o \
   $(THEME_COLOUR_OBJ)ConfigPage.o
 
-THEME_IMAGE_ROOT   := $(THEME_ROOT)/Image
 THEME_IMAGE_PREFIX := $(THEME_PREFIX)Image_
 THEME_IMAGE_OBJ    := $(THEME_OBJ)Image_
 OBJECTS_THEME_IMAGE := \
@@ -42,26 +43,26 @@ theme : $(OBJECTS_THEME)
 	@echo "Built Theme module"
 
 $(THEME_COLOUR_OBJ)JSONKeys.o : \
-    $(THEME_COLOUR_ROOT)/$(THEME_COLOUR_PREFIX)JSONKeys.cpp
+    $(THEME_COLOUR_DIR)/$(THEME_COLOUR_PREFIX)JSONKeys.cpp
 $(THEME_COLOUR_OBJ)JSONResource.o : \
-    $(THEME_COLOUR_ROOT)/$(THEME_COLOUR_PREFIX)JSONResource.cpp
+    $(THEME_COLOUR_DIR)/$(THEME_COLOUR_PREFIX)JSONResource.cpp
 $(THEME_COLOUR_OBJ)ConfigFile.o : \
-    $(THEME_COLOUR_ROOT)/$(THEME_COLOUR_PREFIX)ConfigFile.cpp
+    $(THEME_COLOUR_DIR)/$(THEME_COLOUR_PREFIX)ConfigFile.cpp
 $(THEME_COLOUR_OBJ)ConfigListener.o : \
-    $(THEME_COLOUR_ROOT)/$(THEME_COLOUR_PREFIX)ConfigListener.cpp
+    $(THEME_COLOUR_DIR)/$(THEME_COLOUR_PREFIX)ConfigListener.cpp
 $(THEME_COLOUR_OBJ)ConfigPage.o : \
-    $(THEME_COLOUR_ROOT)/$(THEME_COLOUR_PREFIX)ConfigPage.cpp
+    $(THEME_COLOUR_DIR)/$(THEME_COLOUR_PREFIX)ConfigPage.cpp
 
 $(THEME_IMAGE_OBJ)AssetList.o : \
-    $(THEME_IMAGE_ROOT)/$(THEME_IMAGE_PREFIX)AssetList.cpp
+    $(THEME_IMAGE_DIR)/$(THEME_IMAGE_PREFIX)AssetList.cpp
 $(THEME_IMAGE_OBJ)JSONResource.o : \
-    $(THEME_IMAGE_ROOT)/$(THEME_IMAGE_PREFIX)JSONResource.cpp
+    $(THEME_IMAGE_DIR)/$(THEME_IMAGE_PREFIX)JSONResource.cpp
 $(THEME_IMAGE_OBJ)ConfigFile.o : \
-    $(THEME_IMAGE_ROOT)/$(THEME_IMAGE_PREFIX)ConfigFile.cpp
+    $(THEME_IMAGE_DIR)/$(THEME_IMAGE_PREFIX)ConfigFile.cpp
 $(THEME_IMAGE_OBJ)ConfigListener.o : \
-    $(THEME_IMAGE_ROOT)/$(THEME_IMAGE_PREFIX)ConfigListener.cpp
+    $(THEME_IMAGE_DIR)/$(THEME_IMAGE_PREFIX)ConfigListener.cpp
 $(THEME_IMAGE_OBJ)HomeBackgroundPicker.o : \
-    $(THEME_IMAGE_ROOT)/$(THEME_IMAGE_PREFIX)HomeBackgroundPicker.cpp
+    $(THEME_IMAGE_DIR)/$(THEME_IMAGE_PREFIX)HomeBackgroundPicker.cpp
 
 $(THEME_OBJ)LookAndFeel.o : \
-    $(THEME_ROOT)/Theme_LookAndFeel.cpp
+    $(THEME_DIR)/Theme_LookAndFeel.cpp
