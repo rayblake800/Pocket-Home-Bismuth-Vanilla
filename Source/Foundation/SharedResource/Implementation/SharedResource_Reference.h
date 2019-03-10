@@ -16,17 +16,20 @@ namespace SharedResource
     class Instance;
 }
 
+/**
+ * @brief  An object that serves as a reference to a specific resource Instance.
+ */
 class SharedResource::Reference : public ReferenceInterface
 {
 private:
     /**
-     * @brief  Connects this new Reference to its resource Instance, 
-     *         creating the Instance object if necessary.
+     * @brief  Connects this new Reference to its resource Instance, creating 
+     *         the Instance object if necessary.
      *
      * @param resourceKey     The key identifying this object's resource.
      *
-     * @param createResource  A function that can be used to create the 
-     *                        Instance if necessary.
+     * @param createResource  A function that can be used to create the Instance
+     *                        if necessary.
      */
     Reference(const juce::Identifier& resourceKey,
             const std::function<Instance*()> createResource);
@@ -43,8 +46,7 @@ public:
 
 protected:
     /**
-     * @brief  Gets the lock used to control access to the referenced 
-     *         resource.
+     * @brief  Gets the lock used to control access to the referenced resource.
      *
      * @return  The resource's shared lock.
      */

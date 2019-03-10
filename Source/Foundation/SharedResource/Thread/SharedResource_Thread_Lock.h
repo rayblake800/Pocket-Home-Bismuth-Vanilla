@@ -45,7 +45,7 @@ public:
     /**
      * @brief  Blocks the thread until it can be locked for writing.
      *
-     * Once locked for writing, no other thread will be able to access the
+     *  Once locked for writing, no other thread will be able to access the
      * ThreadResource's data members until the write lock has been released.
      */
     void enterWrite() const;

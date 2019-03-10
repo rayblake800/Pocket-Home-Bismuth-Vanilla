@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  SharedResource/Implementation/Instance.h
+ * @file  SharedResource_Instance.h
  *
  * @brief  Manages the lifespan of a resource object by tracking each reference
  *         object tied to the resource.
@@ -11,6 +11,16 @@
 namespace SharedResource { class Instance; }
 namespace SharedResource { class ReferenceInterface; }
 
+/**
+ * @brief  The parent class of all Resource objects, used to manage the
+ *         connection between a resource and all of its associated Handler
+ *         objects.
+ *
+ *  All handler objects implement the SharedResource::Reference class. The
+ * instance class tracks all Reference objects associated with a resource,
+ * destroys the resource when its last Reference is removed, and allows the
+ * resource to act on all of its Reference objects.
+ */
 class SharedResource::Instance
 {
 private:
@@ -51,10 +61,8 @@ public:
 
 private:
     /**
-     * @brief  Runs an arbitrary function on each Reference object 
-     *         connected to the resource.  This locks the resource for
-     *         reading, so the function should not take any actions
-     *         that would lock the resource for writing.
+     * @brief  Runs an arbitrary function on each Reference object connected to 
+     *         the resource.  
      *
      * @param handlerAction  Some action that should run for every reference
      *                       connected to this resource instance, passing in

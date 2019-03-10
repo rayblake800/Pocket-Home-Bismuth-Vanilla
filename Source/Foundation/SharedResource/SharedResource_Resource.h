@@ -12,12 +12,13 @@
 namespace SharedResource { class Resource; }
 
 /**
- * Resource object subclasses define access-controlled, reference counted
- * singletons.  Each Reference subclass is automatically created and destroyed
- * by its corresponding SharedResource::Handler class or classes, and may only
- * be accessed through these Handler classes.
+ * @brief  A basis for access-controlled, reference counted singletons.  
  *
- * Each concrete Resource subclass must declare a unique, constant identifying
+ *  Each Reference subclass is automatically created and destroyed by its 
+ * corresponding SharedResource::Handler class or classes, and may only be 
+ * accessed through those Handler classes.
+ *
+ *  Each concrete Resource subclass must declare a unique, constant identifying
  * key, publicly available as a juce::Identifier named resourceKey. Resource
  * subclasses must also only use the default constructor.
  */
@@ -41,11 +42,11 @@ protected:
      *  If it is valid, the SharedResource instance will be locked and the 
      * action will be executed.
      *
-     * @param lockType     Sets how the resource will be locked while the 
-     *                     action function runs.
+     * @param lockType     Sets how the resource will be locked while the action
+     *                     function runs.
      *
-     * @param action       A function to call if the SharedResource 
-     *                     still exists.
+     * @param action       A function to call if the SharedResource still 
+     *                     exists.
      *
      * @param ifDestroyed  An optional alternate function to call if the
      *                     SharedResource was destroyed.

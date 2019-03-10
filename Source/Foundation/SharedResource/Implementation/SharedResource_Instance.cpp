@@ -3,21 +3,26 @@
 #include "SharedResource_Instance.h"
 #include "SharedResource_ReferenceInterface.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "SharedResource::Instance::";
+#endif
+
 /*
  * Creates the unique resource object instance.
  */
 SharedResource::Instance::Instance
 (const juce::Identifier& resourceKey) : resourceKey(resourceKey)
 {
-    DBG("SharedResource::Instance::" << __func__
-            << ": Creating resource \"" << resourceKey.toString() << "\"");
+    DBG(dbgPrefix << __func__ << ": Creating resource \"" 
+            << resourceKey.toString() << "\"");
 
     /* The reference creating this resource can't add itself to the resource's
      * reference list until all of the resource instance's constructors finish
-     * running.  This means that if one of those constructors creates and
-     * then destroys a Reference, it could inadvertently destroy itself.  To
-     * prevent this, the reference list is created with an initial null 
-     * reference, which the creating Reference will replace.
+     * running. This means that if one of those constructors creates and then 
+     * destroys a Reference, it could inadvertently destroy itself. To prevent 
+     * this, the reference list is created with an initial null reference, which
+     * the creating Reference will replace.
      */
     references.add(nullptr);
     Holder::getHolderInstance()->setResource(resourceKey, this);
@@ -30,16 +35,15 @@ SharedResource::Instance::~Instance()
 {
     if(references.size() > 0)
     {
-        DBG("SharedResource::Instance::" << __func__ << ": Resource "
-                << resourceKey.toString() << " destroyed while " 
-                << references.size() << " references still exist!");
+        DBG(dbgPrefix << __func__ << ": Resource " << resourceKey.toString() 
+                << " destroyed while " << references.size() 
+                << " references still exist!");
         jassertfalse;
     }
     else
     {
-        DBG("SharedResource::Instance::" << __func__ 
-                << ": Destroying resource \"" << resourceKey.toString() 
-                << "\"");
+        DBG(dbgPrefix << __func__ << ": Destroying resource \"" 
+                << resourceKey.toString() << "\"");
     }
 }
 

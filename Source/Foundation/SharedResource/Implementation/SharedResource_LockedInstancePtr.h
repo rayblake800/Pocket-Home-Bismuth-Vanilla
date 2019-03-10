@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  SharedResource/Implementation/LockedInstancePtr.h
+ * @file  SharedResource_LockedInstancePtr.h
  *
  * @brief  Provides access to a resource Instance, keeping the resource locked
  *         for as long as the LockedInstancePtr exists.
@@ -9,21 +9,33 @@
 #include "JuceHeader.h"
 #include "SharedResource_LockType.h"
 
-namespace SharedResource { class LockedInstancePtr; }
-namespace SharedResource { class Instance; }
-namespace SharedResource { 
-        template<class ResourceType> class LockedPtr; }
-namespace SharedResource { namespace Modular { 
-        template<class ResourceType, class ModuleType> class LockedPtr; } }
+namespace SharedResource 
+{ 
+    class LockedInstancePtr; 
+    class Instance;
+    template<class ResourceType> class LockedPtr;
+    namespace Modular 
+    { 
+        template<class ResourceType, class ModuleType> class LockedPtr; 
+    }
+}
 
+/**
+ * @brief  A scoped resource lock that provides access to the locked resource
+ *         Instance.
+ *
+ *  LockedInstancePtr may lock the resource for reading or for writing. Locking
+ * it for writing prevents all other sources from accessing the resource until
+ * the lock is released. Locking it for reading prevents other sources from
+ * locking the resource for writing until all read locks are released.
+ */
 class SharedResource::LockedInstancePtr
 {
 public:
 
     /* LockedInstancePtr may only be created as the parent class of a LockedPtr 
        object. */
-    template<class ResourceType> 
-            friend class LockedPtr;
+    template<class ResourceType> friend class LockedPtr;
     template<class ResourceType, class ModuleType> 
             friend class Modular::LockedPtr;
 

@@ -20,12 +20,14 @@ namespace SharedResource { namespace Thread {
         template <class ResourceType> class Module; } }
 
 /**
- *  Each Thread::Module subclass manages a single child thread using the
- * SharedResource Module control pattern. Module threads may be accessed
- * through any of their Handler objects or any of their sibling modules, and 
- * will only be destroyed when all of their resource's handlers are destroyed. 
+ * @brief  Manages a single child thread using the SharedResource Module control
+ *         pattern. 
  *
- * Thread::Module objects guarantee that they will not be deleted while their
+ *  Module threads may be accessed through any of their Handler objects or any 
+ * of their sibling modules, and will only be destroyed when all of their 
+ * resource's handlers are destroyed. 
+ *
+ *  Thread::Module objects guarantee that they will not be deleted while their
  * thread still runs. While running within their own thread, Module objects are 
  * able to access their own resource locks to prevent handlers from modifying 
  * their data.

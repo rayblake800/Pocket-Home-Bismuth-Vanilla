@@ -14,11 +14,13 @@
 namespace SharedResource { namespace Thread { class Thread; } }
 
 /**
- *  Thread provides an abstract basis for Resource or Module classes that create
- * and manage a thread. It provides a single thread interface shared by
- * Thread::Resource and Thread::Module objects. Thread objects selectively lock 
- * themselves to prevent concurrent data access, and stop themselves when the
- * application starts to shut down.
+ * @brief  Provides an abstract basis for Resource or Module classes that create
+ *         and manage a thread. 
+ *
+ *  It provides a single thread interface shared by Thread::Resource and 
+ * Thread::Module objects. Thread objects selectively lock themselves to prevent
+ * concurrent data access, and stop themselves when the application starts to 
+ * shut down.
  */
 class SharedResource::Thread::Thread : public ShutdownListener, 
         private juce::Thread
@@ -83,7 +85,7 @@ private:
     /**
      * @brief  Runs once each time the thread starts running. 
      *
-     * Override this method to define custom initialization routines for a 
+     *  Override this method to define custom initialization routines for a 
      * Thread subclass.
      *
      * @param lock  The Thread's resource lock object.
@@ -95,8 +97,7 @@ private:
      *         will continually run until something stops the thread.
      *
      * @param lock  Grants access to the thread's SharedResource lock within the
-     *              loop.  This should not be saved or shared outside the
-     *              thread.
+     *              loop. This should not be saved or shared outside the thread.
      */
     virtual void runLoop(Lock& lock) = 0;
 
@@ -111,8 +112,8 @@ private:
 
     /**
      * @brief  Sets if the thread should wait until the next notification to
-     *         resume, running the cleanup function and removing the Lock 
-     *         until the Thread is notified.
+     *         resume, running the cleanup function and removing the Lock until 
+     *         the Thread is notified.
      *
      * @return  Whether the thread should wait for a notification before
      *          resuming.

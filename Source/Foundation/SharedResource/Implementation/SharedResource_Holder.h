@@ -3,9 +3,9 @@
 #endif
 #pragma once
 /**
- * @file  SharedResource/Implementation/Holder.h
+ * @file  SharedResource_Holder.h
  *
- * @brief  Holds each SharedResource resource type's resource Instance and lock.
+ * @brief  Holds all resource Instance objects and resource locks.
  */
 
 #include <map>
@@ -23,8 +23,8 @@ public:
     /**
      * @brief  Clears all resource locks.
      *
-     * This should never run before all resources are cleared. In debug
-     * builds, this will verify that each Instance pointer is null.
+     *  This should never run before all resources are cleared. In debug builds,
+     * this will verify that each Instance pointer is null.
      */
     ~Holder();
 
@@ -37,28 +37,28 @@ public:
 
     /**
      * @brief  Deletes the holder instance if it is holding no valid Instance
-     *         pointers.  This should be called after deleting a resource
+     *         pointers.  This should be called after deleting each resource
      *         Instance.
      */
     static void clearIfEmpty();
 
     /**
-     * @brief  Finds and gets an Instance pointer using its resource 
-     *         key.
+     * @brief  Finds and gets an Instance pointer using its resource key.
      *
      * @param resourceKey  A unique key identifying a Resource subclass.
      *
-     * @return             A pointer to the requested resource's
-     *                     Instance object. This value will be null if 
-     *                     the Resource has not yet been initialized. 
+     * @return             A pointer to the requested resource's Instance 
+     *                     object. This value will be null if the Resource has 
+     *                     not yet been initialized. 
      */
     static Instance* getResource(const juce::Identifier& resourceKey);
 
     /**
-     * @brief  Saves the address of a new resource instance. This should
-     *         only be called when the existing resource instance at the
-     *         given ID is null, or to set the pointer to null while
-     *         destroying the resource.
+     * @brief  Saves the address of a new resource Instance. 
+     *
+     *  This should only be called when the existing resource Instance at the
+     * given ID is null, or to set the pointer to null while destroying the 
+     * resource.
      *
      * @param resourceKey  A unique key identifying a Resource subclass.
      *
@@ -69,7 +69,7 @@ public:
             Instance* resource);
 
     /**
-     * @brief  Gets the lock used to control access to a resource instance.
+     * @brief  Gets the lock used to control access to a resource Instance.
      *
      * @param resourceKey  A unique key identifying a Resource subclass.
      *
@@ -81,13 +81,15 @@ public:
 private:
     /**
      * @brief  Gets the index where a resource and its lock are stored in
-     *         the resourceList and resourceLocks.  If necessary, this will
-     *         initialize the resource container, creating a new lock and
-     *         assigning an index.
+     *         the resourceList and resourceLocks arrays.  
+     *
+     *  If necessary, this will initialize the resource container, creating a 
+     * new lock and assigning an index.
      *
      * @param resourceKey  A unique key identifying a Resource subclass.
      *
-     * @return  The index needed to find the resource index and its lock.
+     * @return             The index needed to find the resource index and its 
+     *                     lock.
      */
     static int getResourceIndex(const juce::Identifier& resourceKey);
 

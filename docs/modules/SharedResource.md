@@ -64,7 +64,7 @@ Instance is the basis shared by all Resource classes. The instance class tracks 
 Reference is the basis shared by all Handler classes. Each Reference connects to a specific Instance type, creating that Instance on construction if it doesn't already exist. Reference objects add themselves to their Instance's internal Reference list on construction, and remove themselves from the same list on destruction. Each Reference may freely access its associated Instance object, along with the juce\::ReadWriteLock used to protect that Instance.
 
 #### [SharedResource::ReferenceInterface](../../Source/Foundation/SharedResource/Implementation/SharedResource_ReferenceInterface.h)
-ReferenceInterface is the interface that Instance objects use to store and interact with their Reference objects. ReferenceInterface allows Instance objects to access their lock.
+ReferenceInterface is the interface that Instance objects use to store and interact with their Reference objects.
 
 #### [SharedResource::Holder](../../Source/Foundation/SharedResource/Implementation/SharedResource_Holder.h)
 The Holder class stores all Instance objects, creating and sharing one juce\::ReadWriteLock per Instance. Reference objects use the Holder object to access their Instance and its lock. The Holder object prevents problems from occurring when Reference objects are created while their Instance is being created or destroyed.

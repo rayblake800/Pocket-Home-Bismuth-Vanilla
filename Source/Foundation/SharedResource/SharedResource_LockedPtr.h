@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  SharedResource/LockedPtr.h
+ * @file  SharedResource_LockedPtr.h
  *
  * @brief  Provides access to a specific SharedResource::Resource, keeping it
  *         locked for as long as the LockedPtr exists.
@@ -12,6 +12,9 @@
 namespace SharedResource { template<class ResourceType> class LockedPtr; }
 
 /**
+ * @brief  A scoped lock object that can be used to access the resource object
+ *         it locks.
+ *
  * @tparam ResourceType  The SharedResource::Resource subclass this LockedPtr
  *                       accesses.
  */

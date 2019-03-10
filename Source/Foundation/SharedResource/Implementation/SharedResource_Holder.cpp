@@ -1,6 +1,11 @@
 #define SHARED_RESOURCE_IMPLEMENTATION
 #include "SharedResource_Holder.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "SharedResource::Holder::";
+#endif
+
 /* Holds the unique SharedResource::Holder instance */
 static std::unique_ptr<SharedResource::Holder> holderInstance;
 
@@ -9,8 +14,7 @@ juce::CriticalSection SharedResource::Holder::holderLock;
 
 SharedResource::Holder::Holder()
 {
-    DBG("SharedResource::Holder::" << __func__ 
-            << ": Creating SharedResource instance Holder ");
+    DBG(dbgPrefix << __func__ << ": Creating SharedResource instance Holder ");
 }
 
 /*
@@ -19,10 +23,9 @@ SharedResource::Holder::Holder()
 SharedResource::Holder::~Holder()
 {
     const juce::ScopedLock cleanupLock(holderLock);
-    DBG("SharedResource::Holder::" << __func__ 
-            << ": Destroying SharedResource instance Holder ");
+    DBG(dbgPrefix << __func__ << ": Destroying resource Instance Holder ");
 #ifdef JUCE_DEBUG
-    // Test that all resources were properly destroyed.  Claim all resource
+    // Test that all resources were properly destroyed. Claim all resource
     // locks for writing in case a resource is still being deleted.
     for(int i = 0; i < resourceList.size(); i++)
     {
@@ -38,8 +41,8 @@ SharedResource::Holder::~Holder()
                     break;
                 }
             }
-            DBG("SharedResource::Holder::" << __func__ << ": Resource "
-                    << resourceName << " was not destroyed!");
+            DBG(dbgPrefix << __func__ << ": Resource " << resourceName 
+                    << " was not destroyed!");
             jassertfalse;
         }
     }
@@ -65,56 +68,7 @@ SharedResource::Holder* SharedResource::Holder::getHolderInstance()
 }
 
 /*
- * Finds and gets an Instance pointer using its resource key.
- */
-SharedResource::Instance* SharedResource::Holder::getResource
-(const juce::Identifier& resourceKey)
-{
-    const juce::ScopedLock resourceLock(holderLock);
-    const int resourceIndex = getResourceIndex(resourceKey);
-    return holderInstance->resourceList.getUnchecked(resourceIndex);
-}
-
-/*
- * Saves the address of a new resource instance. This should only be called when
- * the existing resource instance at the given ID is null, or to set the pointer
- * to null while destroying the resource.
- */
-void SharedResource::Holder::setResource(const juce::Identifier& resourceKey,
-        Instance* resource)
-{
-    const juce::ScopedLock resourceLock(holderLock);
-    const int resourceIndex = getResourceIndex(resourceKey);
-    Holder* const holder = getHolderInstance();
-
-    // Make sure either a null resource is becoming non-null, or a
-    // non-null resource is becoming null.
-#ifdef JUCE_DEBUG
-    if(resource == nullptr 
-            && holder->resourceList.getUnchecked(resourceIndex) == nullptr)
-    {
-        DBG("SharedResource::Holder::" << __func__
-                << ": Error, setting resource " << resourceKey.toString()
-                << " to null when it is already null!");
-        jassertfalse;
-    }
-    else if(resource != nullptr
-            && holder->resourceList.getUnchecked(resourceIndex) != nullptr)
-    {
-        DBG("SharedResource::Holder::" << __func__
-                << ": Error, setting new resource " << resourceKey.toString()
-                << " when it already exists!");
-        jassertfalse;
-    }
-#endif
-
-    holder->resourceList.set(resourceIndex, resource);
-
-}
-
-/*
  * Deletes the holder instance if it is holding no valid Instance pointers.  
- * This should be called after deleting a resource Instance.
  */
 void SharedResource::Holder::clearIfEmpty()
 {
@@ -132,6 +86,49 @@ void SharedResource::Holder::clearIfEmpty()
 }
 
 /*
+ * Finds and gets an Instance pointer using its resource key.
+ */
+SharedResource::Instance* SharedResource::Holder::getResource
+(const juce::Identifier& resourceKey)
+{
+    const juce::ScopedLock resourceLock(holderLock);
+    const int resourceIndex = getResourceIndex(resourceKey);
+    return holderInstance->resourceList.getUnchecked(resourceIndex);
+}
+
+/*
+ * Saves the address of a new resource instance.
+ */
+void SharedResource::Holder::setResource(const juce::Identifier& resourceKey,
+        Instance* resource)
+{
+    const juce::ScopedLock resourceLock(holderLock);
+    const int resourceIndex = getResourceIndex(resourceKey);
+    Holder* const holder = getHolderInstance();
+
+#ifdef JUCE_DEBUG
+    // Make sure either a null resource is becoming non-null, or a
+    // non-null resource is becoming null.
+    if(resource == nullptr 
+            && holder->resourceList.getUnchecked(resourceIndex) == nullptr)
+    {
+        DBG(dbgPrefix << __func__ << ": Error, setting resource " 
+                << resourceKey.toString()
+                << " to null when it is already null!");
+        jassertfalse;
+    }
+    else if(resource != nullptr
+            && holder->resourceList.getUnchecked(resourceIndex) != nullptr)
+    {
+        DBG(dbgPrefix << __func__ << ": Error, setting new resource " 
+                << resourceKey.toString() << " when it already exists!");
+        jassertfalse;
+    }
+#endif
+    holder->resourceList.set(resourceIndex, resource);
+}
+
+/*
  * Gets the lock used to control access to a resource instance.
  */
 const juce::ReadWriteLock& 
@@ -144,8 +141,7 @@ SharedResource::Holder::getResourceLock(const juce::Identifier& resourceKey)
 
 /*
  * Gets the index where a resource and its lock are stored in the resourceList 
- * and resourceLocks. If necessary, this will initialize the resource container,
- * creating a new lock and assigning an index.
+ * and resourceLocks arrays.
  */
 int SharedResource::Holder::getResourceIndex
 (const juce::Identifier& resourceKey)
@@ -169,4 +165,3 @@ void SharedResource::Holder::initResource(const juce::Identifier& resourceKey)
     holder->resourceList.add(nullptr);
     holder->resourceLocks.add(new juce::ReadWriteLock());
 }
-

@@ -8,9 +8,19 @@
 
 #include "JuceHeader.h"
 
-namespace SharedResource { namespace Thread { class ScopedReadLock; } }
-namespace SharedResource { namespace Thread { class Lock; } }
+namespace SharedResource 
+{ 
+    namespace Thread 
+    { 
+        class ScopedReadLock; 
+        class Lock;
+    } 
+}
 
+/**
+ * @brief  A juce::ScopedReadLock created from a Thread::Lock instead of a
+ *         juce::ReadWriteLock.
+ */
 class SharedResource::Thread::ScopedReadLock
 {
 public:
@@ -25,5 +35,6 @@ public:
     virtual ~ScopedReadLock() { }
 
 private:
+    /* Private lock object that provides all lock functionality: */
     juce::ScopedReadLock juceLock;
 };

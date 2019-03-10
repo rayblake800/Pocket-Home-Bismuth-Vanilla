@@ -14,9 +14,10 @@ namespace SharedResource { namespace Modular {
         template<class ResourceType> class Module; } }
 
 /**
- *  Modular::Resource is a basis for shared resource classes that divide their
- * responsibilities between several Modular::Module classes. Each
- * Modular::Resource holds a single object instance of each Module class
+ * @brief  A basis for shared resource classes that divide their 
+ *         responsibilities between several Modular::Module classes. 
+ *
+ *  Each Modular::Resource holds a single object instance of each Module class
  * associated with it. These modules are accessed as if they each were separate 
  * Resource types, but all of them are initialized and destroyed together, and
  * all of them share a single lock. This approach allows Resources that perform
@@ -45,7 +46,7 @@ public:
     /**
      * @brief  Gets a pointer to one of this Resource object's modules.
      *
-     * Resource class implementations must provide a specialization of this
+     *  Resource class implementations must provide a specialization of this
      * function for each module type that they contain.
      *
      * @tparam ModuleType  The class of the requested module instance. 
