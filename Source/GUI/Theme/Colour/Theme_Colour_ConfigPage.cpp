@@ -2,7 +2,6 @@
 #include "Theme_Colour_ConfigFile.h"
 #include "Theme_Colour_JSONKeys.h"
 #include "Layout_Component_ConfigFile.h"
-#include "TempTimer.h"
 
 namespace ColourTheme = Theme::Colour;
 

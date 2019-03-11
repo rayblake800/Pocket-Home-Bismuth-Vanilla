@@ -2,7 +2,6 @@
 #include "DesktopEntry_Loader.h"
 #include "DesktopEntry_LoadingThread.h"
 #include "Assets_XDGDirectories.h"
-#include "Utils.h"
 #include <stdlib.h>
 #include <dirent.h>
 #include <stdlib.h>

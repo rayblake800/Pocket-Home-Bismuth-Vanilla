@@ -14,7 +14,6 @@
 #include "Settings_ClockModePicker.h"
 #include "AppMenu_SettingsController.h"
 #include "Widgets_Counter.h"
-#include "Utils.h"
 
 namespace Page { class HomeSettings; }
 

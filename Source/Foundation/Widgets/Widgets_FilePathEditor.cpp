@@ -1,6 +1,6 @@
-#include "Utils.h"
-#include "Layout_Component_ConfigFile.h"
 #include "Widgets_FilePathEditor.h"
+#include "Layout_Component_ConfigFile.h"
+#include "Window_Info.h"
 
 /* Default file filter, allowing image types: */
 const juce::WildcardFileFilter Widgets::FilePathEditor::imageFilter
@@ -159,7 +159,7 @@ void Widgets::FilePathEditor::buttonClicked(juce::Button* button)
             juce::Colours::red);
     jassert(dialogBox.isColourSpecified
             (FileChooserDialogBox::titleTextColourId));
-    juce::Rectangle<int> size = getWindowBounds();
+    juce::Rectangle<int> size = Window::Info::getBounds();
     if (dialogBox.show(size.getWidth(), size.getHeight()))
     {
         juce::File selectedFile = browser.getSelectedFile(0);

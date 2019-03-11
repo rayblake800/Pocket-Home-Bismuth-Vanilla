@@ -5,6 +5,8 @@ WINDOW_TEST_DIR = Tests/System/Window
 WINDOW_PREFIX = Window_
 WINDOW_OBJ := $(JUCE_OBJDIR)/$(WINDOW_PREFIX)
 OBJECTS_WINDOW := \
+  $(WINDOW_OBJ)Info.o \
+  $(WINDOW_OBJ)Alert.o \
   $(WINDOW_OBJ)XWindowInterface.o \
   $(WINDOW_OBJ)WindowFocus.o \
   $(WINDOW_OBJ)WindowFocusedTimer.o 
@@ -25,6 +27,10 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_WINDOW)
 window : $(OBJECTS_WINDOW)
 	@echo "Built Window module"
 
+$(WINDOW_OBJ)Info.o : \
+    $(WINDOW_DIR)/$(WINDOW_PREFIX)Info.cpp
+$(WINDOW_OBJ)Alert.o : \
+    $(WINDOW_DIR)/$(WINDOW_PREFIX)Alert.cpp
 $(WINDOW_OBJ)XWindowInterface.o : \
     $(WINDOW_DIR)/XWindowInterface.cpp
 $(WINDOW_OBJ)WindowFocus.o : \

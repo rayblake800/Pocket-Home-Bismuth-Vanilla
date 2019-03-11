@@ -1,6 +1,5 @@
 #include "Process_Launcher.h"
-#include "Utils.h"
-#include "SystemCommands.h"
+#include "Util_Commands.h"
 #include "XWindowInterface.h"
 
 #ifdef JUCE_DEBUG
@@ -97,9 +96,9 @@ void Process::Launcher::startOrFocusApp(const juce::String& command)
  */
 bool Process::Launcher::testCommand(const juce::String& command)
 {
-    SystemCommands systemCommands;
-    return systemCommands.runIntCommand
-        (SystemCommands::IntCommand::commandCheck, command) == 0;
+    Util::Commands systemCommands;
+    return systemCommands.runIntCommand(Util::CommandTypes::Int::commandCheck,
+            command) == 0;
 }
 
 

@@ -3,7 +3,6 @@
 #include "DesktopEntry_Loader.h"
 #include "DesktopEntry_FormatError.h"
 #include "DesktopEntry_FileError.h"
-#include "Utils.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */

@@ -4,8 +4,8 @@
 #include "AppMenu_ConfigKeys.h"
 #include "Layout_Component_JSONKeys.h"
 #include "Layout_Transition_Animator.h"
-#include "TempTimer.h"
-#include "Utils.h"
+#include "Util_Math.h"
+#include "Util_TempTimer.h"
 
 /* Animation duration in milliseconds: */
 static const constexpr int animationMS = 300;
@@ -19,7 +19,7 @@ boundsManager(this, Layout::Component::JSONKeys::scrollingAppMenu)
 { 
     ConfigFile formatConfig;
     maxRows = formatConfig.getScrollingMenuRows();
-    addTrackedKey(ConfigKeys::scrollingMenuRowsKey);
+    addTrackedKey(ConfigKeys::scrollingMenuRows);
 }
 
 /*
@@ -92,11 +92,11 @@ juce::Rectangle<int> AppMenu::Scrolling::MenuComponent::getFolderBounds
         folderX -= folderWidths[i];
     }
     FolderComponent* folder = static_cast<FolderComponent*>
-        (getOpenFolder(folderIndex));
+            (getOpenFolder(folderIndex));
     const int width = (folderIndex == lastIndex && closingFolder) ?
-        0 : folder->getMinimumWidth();
+            0 : folder->getMinimumWidth();
     const int height = folder->getFolderSize() * buttonHeight;
-    const int folderY = median<int>(
+    const int folderY = Util::Math::median<int>(
             buttonHeight,
             centerY - folder->getSelectedItemYOffset(),
             getHeight() - buttonHeight - height);
@@ -137,7 +137,7 @@ void AppMenu::Scrolling::MenuComponent::parentResized
 void AppMenu::Scrolling::MenuComponent::configValueChanged
 (const juce::Identifier& propertyKey)
 {
-    jassert(propertyKey == ConfigKeys::scrollingMenuRowsKey);
+    jassert(propertyKey == ConfigKeys::scrollingMenuRows);
     ConfigFile formatConfig;
     maxRows = formatConfig.getScrollingMenuRows();
     updateMenuLayout(false);

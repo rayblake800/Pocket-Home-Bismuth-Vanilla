@@ -2,7 +2,6 @@
 #include "AppMenu_ConfigFile.h"
 #include "AppMenu_ConfigJSON.h"
 #include "AppMenu_ConfigKeys.h"
-#include "Utils.h"
 
 AppMenu::ConfigFile::ConfigFile() { }
 
@@ -13,8 +12,7 @@ AppMenu::ConfigFile::Listener::Listener() { }
  */
 AppMenu::Format AppMenu::ConfigFile::getMenuFormat()
 {
-    return stringToFormat(getConfigValue<juce::String>
-            (ConfigKeys::menuFormatKey));
+    return stringToFormat(getConfigValue<juce::String>(ConfigKeys::menuFormat));
 }
 
 /*
@@ -24,7 +22,7 @@ void AppMenu::ConfigFile::setMenuFormat(const AppMenu::Format newFormat)
 {
     if(newFormat != Format::Invalid)
     {
-        setConfigValue<juce::String>(ConfigKeys::menuFormatKey, 
+        setConfigValue<juce::String>(ConfigKeys::menuFormat, 
                 formatToString(newFormat));
     }
 }
@@ -60,8 +58,7 @@ AppMenu::Format AppMenu::ConfigFile::stringToFormat
  */
 int AppMenu::ConfigFile::getPagedMenuColumns()
 {
-    return std::max(1,
-            getConfigValue<int>(ConfigKeys::pagedMenuColumnsKey));
+    return std::max(1, getConfigValue<int>(ConfigKeys::pagedMenuColumns));
 }
 
 /*
@@ -69,7 +66,7 @@ int AppMenu::ConfigFile::getPagedMenuColumns()
  */
 void AppMenu::ConfigFile::setPagedMenuColumns(const int numColumns)
 {
-    setConfigValue<int>(ConfigKeys::pagedMenuColumnsKey, numColumns);
+    setConfigValue<int>(ConfigKeys::pagedMenuColumns, numColumns);
 }
 
 /*
@@ -78,8 +75,7 @@ void AppMenu::ConfigFile::setPagedMenuColumns(const int numColumns)
  */
 int AppMenu::ConfigFile::getPagedMenuRows()
 {
-    return std::max(1,
-            getConfigValue<int>(ConfigKeys::pagedMenuRowsKey));
+    return std::max(1, getConfigValue<int>(ConfigKeys::pagedMenuRows));
 }
 
 /*
@@ -87,7 +83,7 @@ int AppMenu::ConfigFile::getPagedMenuRows()
  */
 void AppMenu::ConfigFile::setPagedMenuRows(const int numRows)
 {
-    setConfigValue<int>(ConfigKeys::pagedMenuRowsKey, numRows);
+    setConfigValue<int>(ConfigKeys::pagedMenuRows, numRows);
 }
 
 /*
@@ -96,8 +92,7 @@ void AppMenu::ConfigFile::setPagedMenuRows(const int numRows)
  */
 int AppMenu::ConfigFile::getScrollingMenuRows()
 {
-    return std::max(1,
-            getConfigValue<int>(ConfigKeys::scrollingMenuRowsKey));
+    return std::max(1, getConfigValue<int>(ConfigKeys::scrollingMenuRows));
 }
 
 /*
@@ -105,5 +100,5 @@ int AppMenu::ConfigFile::getScrollingMenuRows()
  */
 void AppMenu::ConfigFile::setScrollingMenuRows(const int numRows)
 {
-    setConfigValue<int>(ConfigKeys::scrollingMenuRowsKey, numRows);
+    setConfigValue<int>(ConfigKeys::scrollingMenuRows, numRows);
 }

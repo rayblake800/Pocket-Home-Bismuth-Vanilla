@@ -1,11 +1,9 @@
 #include "Page_Power.h"
 #include "Page_Type.h"
 #include "Layout_Transition_Animator.h"
-#include "SystemCommands.h"
+#include "Util_Commands.h"
 #include "PocketHomeWindow.h"
-#include "Utils.h"
 #include <map>
-
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "Page::Power";
@@ -21,6 +19,13 @@ namespace TextKey
     static const juce::Identifier flashSoftware = "flashSoftware";
 }
 
+/* Page layout constants: */
+static const constexpr int labelRowWeight   = 6;
+static const constexpr int buttonRowWeight  = 10;
+static const constexpr int rowPaddingWeight = 4;
+
+static const constexpr float yMarginFraction = 0.1;
+
 Page::Power::Power() : Locale::TextUser(localeClassKey),
 pageListener(*this),
 powerOffButton(localeText(TextKey::shutdown)),
@@ -35,21 +40,39 @@ versionLabel(localeText(TextKey::version)
 #endif
     using namespace Layout::Group;
     RelativeLayout layout({
-        Row(6, { RowItem(&versionLabel) }),
-        Row(10, { RowItem(&powerOffButton) }),
-        Row(10, { RowItem(&sleepButton) }),
-        Row(10, { RowItem(&rebootButton) }),
-        Row(10, { RowItem(&felButton) }),
-        Row(6, { RowItem(&buildLabel) })
+        Row(labelRowWeight, 
+        { 
+            RowItem(&versionLabel) 
+        }),
+        Row(buttonRowWeight,
+        { 
+            RowItem(&powerOffButton) 
+        }),
+        Row(buttonRowWeight, 
+        { 
+            RowItem(&sleepButton) 
+        }),
+        Row(buttonRowWeight,
+        { 
+            RowItem(&rebootButton) 
+        }),
+        Row(buttonRowWeight,
+        {
+            RowItem(&felButton) 
+        }),
+        Row(labelRowWeight,
+        { 
+            RowItem(&buildLabel) 
+        })
     });
-    layout.setYMarginFraction(0.1);
-    layout.setYPaddingWeight(4);
+    layout.setYMarginFraction(yMarginFraction);
+    layout.setYPaddingWeight(rowPaddingWeight);
     setBackButton(BackButtonType::right);
     setLayout(layout);
  
     versionLabel.setJustificationType(juce::Justification::centred);
     versionLabel.setText(localeText(TextKey::version) 
-        + juce::JUCEApplication::getInstance()->getApplicationVersion(),
+            + juce::JUCEApplication::getInstance()->getApplicationVersion(),
             juce::NotificationType::dontSendNotification);
     
     // Determine release label contents
@@ -73,18 +96,17 @@ versionLabel(localeText(TextKey::version)
  */
 void Page::Power::startSleepMode()
 {
-    SystemCommands systemCommands;
-    if(systemCommands.runIntCommand(SystemCommands::IntCommand::sleepCheck)
-            == 0)
+    Util::Commands systemCommands;
+    if(systemCommands.runIntCommand(Util::CommandTypes::Int::sleepCheck) == 0)
     {
-        systemCommands.runActionCommand(SystemCommands::ActionCommand::wake);
+        systemCommands.runActionCommand(Util::CommandTypes::Action::wake);
     }
     else
     {
         PocketHomeWindow* window = PocketHomeWindow::getOpenWindow();
         jassert(window != nullptr);
         window->showLoginScreen();
-        systemCommands.runActionCommand(SystemCommands::ActionCommand::sleep);
+        systemCommands.runActionCommand(Util::CommandTypes::Action::sleep);
     }
 }
 
@@ -125,18 +147,15 @@ void Page::Power::PageListener::buttonClicked(juce::Button *button)
         powerPage.startSleepMode();
         return;
     }
-
-    SystemCommands systemCommands;
+    Util::Commands systemCommands;
     if (button == &powerPage.powerOffButton)
     {
         powerPage.showPowerSpinner();
-        systemCommands.runActionCommand
-            (SystemCommands::ActionCommand::shutdown);
+        systemCommands.runActionCommand(Util::CommandTypes::Action::shutdown);
     }
     else if (button == &powerPage.rebootButton)
     {
         powerPage.showPowerSpinner();
-        systemCommands.runActionCommand
-            (SystemCommands::ActionCommand::restart);
+        systemCommands.runActionCommand(Util::CommandTypes::Action::restart);
     }
 }

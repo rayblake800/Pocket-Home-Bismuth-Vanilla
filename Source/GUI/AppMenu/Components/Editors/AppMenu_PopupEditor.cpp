@@ -5,7 +5,6 @@
 #include "Layout_Component_JSONKeys.h"
 #include "Layout_Component_TextSize.h"
 #include "Icon_Loader.h"
-#include "Utils.h"
 
 /* Localized object class key: */
 static const juce::Identifier localeClassKey = "AppMenu::PopupEditor";

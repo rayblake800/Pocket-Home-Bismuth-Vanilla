@@ -1,11 +1,13 @@
 #include "Layout_Transition_Animator.h"
 #include "Layout_Transition_Type.h"
-#include "TempTimer.h"
-#include "Utils.h"
+#include "Window_Info.h"
+#include "Util_TempTimer.h"
 
 /**
- * Duplicates the appearance of other Component objects for transition
- * animations.  These proxy components will be deleted after animation.
+ * @brief  Duplicates the appearance of other Component objects for transition
+ *         animations.  
+ *
+ * These proxy components will be deleted after animation.
  * 
  * This class is almost an exact copy of the private 
  * ComponentAnimator::AnimationTask::ProxyComponent class. It is duplicated here
@@ -173,7 +175,7 @@ void Layout::Transition::Animator::transitionOut(
     {
         return;
     }
-    Rectangle<int> windowBounds = getWindowBounds();
+    Rectangle<int> windowBounds = Window::Info::getBounds();
     Rectangle<int> destination = component->getBounds();
     if (component->getScreenBounds().intersects(windowBounds))
     {
@@ -232,7 +234,7 @@ void Layout::Transition::Animator::transitionIn(
         transformBounds(component, destination, animationMilliseconds);
         return;
     }
-    Rectangle<int> windowBounds = getWindowBounds().withZeroOrigin();
+    Rectangle<int> windowBounds = Window::Info::getBounds().withZeroOrigin();
     Rectangle<int> startBounds = destination;
     if(destination.intersects(windowBounds))
     {
@@ -294,7 +296,7 @@ void Layout::Transition::Animator::transformBounds(
     }
     if(onFinish)
     {
-        TempTimer::initTimer(animationMilliseconds, 
+        Util::TempTimer::initTimer(animationMilliseconds, 
                 [onFinish]() { onFinish(); });
     }
 }

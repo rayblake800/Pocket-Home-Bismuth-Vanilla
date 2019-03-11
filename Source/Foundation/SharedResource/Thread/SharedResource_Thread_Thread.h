@@ -7,7 +7,7 @@
  */
 
 #include "SharedResource_Thread_Lock.h"
-#include "ShutdownListener.h"
+#include "Util_ShutdownListener.h"
 #include <condition_variable>
 #include <mutex>
 
@@ -22,7 +22,7 @@ namespace SharedResource { namespace Thread { class Thread; } }
  * concurrent data access, and stop themselves when the application starts to 
  * shut down.
  */
-class SharedResource::Thread::Thread : public ShutdownListener, 
+class SharedResource::Thread::Thread : public Util::ShutdownListener, 
         private juce::Thread
 {
 public:

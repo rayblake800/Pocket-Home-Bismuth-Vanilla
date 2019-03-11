@@ -1,7 +1,6 @@
 #include "Page_StackComponent.h"
 #include "Layout_Transition_Animator.h"
-#include "TempTimer.h"
-#include "Utils.h"
+#include "Util_TempTimer.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -111,7 +110,7 @@ void Page::StackComponent::transitionPage(Interface::Component* page,
         Layout::Transition::Animator::transitionOut(page, transition, duration,
                 true);
     }
-    TempTimer::initTimer(duration * 1.2, [this, postAnimation, page]()
+    Util::TempTimer::initTimer(duration * 1.2, [this, postAnimation, page]()
     {
         page->setEnabled(true);
         postAnimation(page);

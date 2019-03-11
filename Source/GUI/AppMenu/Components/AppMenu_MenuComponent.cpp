@@ -1,7 +1,6 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_MenuComponent.h"
 #include "Layout_Transition_Animator.h"
-#include "Utils.h"
 
 /*
  * Gets the MenuItem for the current active folder component.
@@ -22,7 +21,6 @@ void AppMenu::MenuComponent::openFolder(MenuItem folderItem)
     openFolders.add(newFolder);
     addAndMakeVisible(newFolder);
     newFolder->setBounds(initialFolderBounds(openFolders.size() - 1));
-    //newFolder->updateButtonLayout();
     updateMenuLayout();
 }
 

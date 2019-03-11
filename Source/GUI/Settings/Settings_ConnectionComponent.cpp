@@ -1,7 +1,5 @@
 #include "Settings_ConnectionComponent.h"
 #include "Layout_Component_ConfigFile.h"
-#include "Utils.h"
-
 
 /* Component layout constants: */
 

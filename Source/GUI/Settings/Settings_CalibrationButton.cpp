@@ -1,5 +1,5 @@
 #include "Settings_CalibrationButton.h"
-#include "SystemCommands.h"
+#include "Util_Commands.h"
 
 /* Localized text class key: */
 static const juce::Identifier localeClassKey = "Settings::CalibrationButton";
@@ -24,6 +24,6 @@ Locale::TextUser(localeClassKey)
 void Settings::CalibrationButton::buttonClicked(juce::Button* button)
 {
     jassert(button == this);
-    SystemCommands systemCommands;
-    systemCommands.runActionCommand(SystemCommands::ActionCommand::calibrate);
+    Util::Commands systemCommands;
+    systemCommands.runActionCommand(Util::CommandTypes::Action::calibrate);
 }

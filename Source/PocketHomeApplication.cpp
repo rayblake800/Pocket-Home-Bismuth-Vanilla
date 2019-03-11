@@ -1,9 +1,9 @@
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
-#include "ShutdownListener.h"
 #include "Audio.h"
 #include "XWindowInterface.h"
-#include "TempTimer.h"
+#include "Util_ShutdownListener.h"
+#include "Util_TempTimer.h"
 #include "Debug_ScopeTimerRecords.h"
 
 #ifdef JUCE_DEBUG
@@ -73,7 +73,7 @@ static void focusAppWindow()
     }
     else if(!WindowFocus::isFocused())
     {
-        TempTimer::initTimer(focusWaitMs, focusAppWindow);
+        Util::TempTimer::initTimer(focusWaitMs, focusAppWindow);
     }
 }
 
@@ -143,7 +143,7 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
 void PocketHomeApplication::shutdown()
 {
     DBG(dbgPrefix << __func__ << ": Closing application resources.");
-    ShutdownBroadcaster::broadcastShutdown();
+    Util::ShutdownBroadcaster::broadcastShutdown();
     homeWindow.reset(nullptr);
     juce::LookAndFeel::setDefaultLookAndFeel(nullptr);
     lookAndFeel.reset(nullptr);

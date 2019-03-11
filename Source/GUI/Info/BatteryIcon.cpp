@@ -1,7 +1,6 @@
 #include "BatteryIcon.h"
 #include "Layout_Component_JSONKeys.h"
 #include "Theme_Image_JSONKeys.h"
-#include "Utils.h"
 
 /* Battery update frequency in milliseconds. */
 static const constexpr int timerFrequency = 2000;
@@ -15,9 +14,9 @@ batteryImageLayout(&batteryImage, Layout::Component::JSONKeys::batteryIcon),
 batteryPercentLayout(&batteryPercent, 
         Layout::Component::JSONKeys::batteryPercent)
 {
-#    if JUCE_DEBUG
+#if JUCE_DEBUG
     setName("BatteryIcon");
-#    endif
+#endif
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
     batteryPercent.setJustificationType(juce::Justification::centredLeft);

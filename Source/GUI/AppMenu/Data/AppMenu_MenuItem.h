@@ -9,13 +9,14 @@
  */
 
 #include "AppMenu_ItemData.h"
-#include "Nullable.h"
+#include "Util_Nullable.h"
 
 namespace AppMenu { class MenuItem; }
 
 /**
- *  MenuItem is a nullable interface for AppMenu::ItemData objects of any type.  
- * MenuItems mirror the ItemData interface, allowing them to be used 
+ *  @brief  A nullable interface for AppMenu::ItemData objects of any type.
+ *
+ *  MenuItems mirror the ItemData interface, allowing them to be used 
  * interchangeably no matter what type of ItemData they contain.
  *
  *  MenuItem also takes care of memory management issues with ItemData objects.
@@ -29,7 +30,7 @@ namespace AppMenu { class MenuItem; }
  * no controls used to prevent concurrent access errors.  All AppMenu classes
  * are not threadsafe, and should only be used within the Juce message thread.
  */
-class AppMenu::MenuItem : public Nullable<AppMenu::ItemData::Ptr>
+class AppMenu::MenuItem : public Util::Nullable<AppMenu::ItemData::Ptr>
 {
 public:
     /**
@@ -136,7 +137,7 @@ public:
      * @brief  Gets the number of folder items held by this menu item that can
      *         be reordered.
      *
-     * Movable child folder items always come before un-movable ones, so any
+     *  Movable child folder items always come before unmovable ones, so any
      * child folder items with an index less than the movable child count can
      * have their positions swapped.
      *
@@ -252,8 +253,7 @@ public:
     /**
      * @brief   Sets the menu item's application launch command.
      *
-     * This will do nothing if the menu item's command field is not
-     * editable.
+     * This will do nothing if the menu item's command field is not editable.
      *
      * @param command   The new command string to run when this menu item is
      *                  activated.
@@ -268,8 +268,8 @@ public:
      * editable.
      *
      * @param launchInTerm   True to run any launch command assigned to this
-     *                       menu item within a new terminal window, false
-     *                       to run menu commands normally.
+     *                       menu item within a new terminal window, false to 
+     *                       run menu commands normally.
      */
     void setLaunchedInTerm(const bool launchInTerm);
 
@@ -287,7 +287,7 @@ public:
      * @brief  Attempts to insert a menu item into this menu item,
      *         saving the change to the folder menu item's data source.
      *
-     * This will fail if folderItem is not a folder, the index is outside of
+     *  This will fail if folderItem is not a folder, the index is outside of
      * the bounds of the folder item's movable child items, or if the child
      * MenuItem parameter is null.
      *
@@ -323,10 +323,10 @@ public:
      * @param childIdx2   The index within the folder item of the second 
      *                    child item to move.
      *
-     * @return            True if the child menu items were swapped, false 
-     *                    if the indices did not specify two valid menu 
-     *                    items within the folder's child menu items, or if the 
-     *                    folder item was null.
+     * @return            True if the child menu items were swapped, false if 
+     *                    the indices did not specify two valid menu items 
+     *                    within the folder's child menu items, or if the folder
+     *                    item was null.
      */
     bool swapChildren(const int childIdx1, const int childIdx2);
 

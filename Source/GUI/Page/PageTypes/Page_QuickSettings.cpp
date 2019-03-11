@@ -2,7 +2,6 @@
 #include "Theme_Image_JSONKeys.h"
 #include "Layout_Component_JSONKeys.h"
 #include "Page_Type.h"
-#include "Utils.h"
 
 /* Page layout constants: */
 static const constexpr int wifiRowWeight = 10;

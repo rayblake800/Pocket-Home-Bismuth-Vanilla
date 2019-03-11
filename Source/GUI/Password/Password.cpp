@@ -1,8 +1,8 @@
 #include "Password.h"
+#include "Util_Commands.h"
+#include "Assets.h"
 #include <openssl/sha.h>
 #include <unistd.h>
-#include "Assets.h"
-#include "SystemCommands.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full namespace name before all debug output: */
@@ -66,9 +66,10 @@ static bool passwordFileProtected()
  */
 static bool pkexecInstalled()
 {
-    juce::ChildProcess checkCmd;
-    checkCmd.start("command -v pkexec");
-    return checkCmd.readAllProcessOutput().containsNonWhitespaceChars();
+    static const constexpr char* testCommand = "pkexec";
+    Util::Commands systemCommands;
+    return systemCommands.runIntCommand(Util::CommandTypes::Int::commandCheck,
+            testCommand) == 0;
 }
 
 /*
@@ -105,14 +106,14 @@ static Password::ChangeResult runPasswordScript
     {
         return wrongPasswordError;
     }
-    SystemCommands sysCommands;
     juce::String args(getlogin());
     if(newPass.isNotEmpty())
     {
         args += juce::String(" \"" + hashString(newPass) + "\"");
     }
-    int result = sysCommands.runIntCommand(
-            SystemCommands::IntCommand::setPassword, args);
+    Util::Commands sysCommands;
+    int result = sysCommands.runIntCommand(Util::CommandTypes::Int::setPassword,
+            args);
     if (result == -1)
     {
         DBG(dbgPrefix << __func__ << ": password update command is missing!");

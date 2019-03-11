@@ -5,23 +5,24 @@
  * @brief  Holds GObject* data shared by GLib::Borrowed::Object instances.
  */
 
-#include "Nullable.h"
+#include "Util_Nullable.h"
 #include "JuceHeader.h"
 #include <glib-object.h>
 
 namespace GLib { namespace Borrowed { class SharedContainer; } }
 
 /**
- *  For each borrowed GObject* value, exactly one SharedContainer will exist
- * to provide that value to every Borrowed::Object that requires that data.
- * This lets the ObjectLender remove a GObject* value from every single Object
+ * @brief  A GObject* container used to share a single GObject value with every
+ *         single GLib Object wrapper that holds that value.
+ *
+ *  This lets the ObjectLender remove a GObject* value from every single Object
  * that holds it by calling clearData() on a single SharedContainer.
  *
  *  SharedContainer holds a single GObject* provided to it on construction.
  * That value may be replaced with nullptr using the clearData() method, but
  * it may not be changed in any other way.
  */
-class GLib::Borrowed::SharedContainer : public Nullable<GObject*>,
+class GLib::Borrowed::SharedContainer : public Util::Nullable<GObject*>,
     public juce::ReferenceCountedObject
 {
 public:

@@ -1,5 +1,5 @@
 #include "Page_Fel.h"
-#include "SystemCommands.h"
+#include "Util_Commands.h"
 #include "I2CBus.h"
 
 #ifdef JUCE_DEBUG
@@ -76,9 +76,9 @@ void Page::Fel::PageListener::buttonClicked(juce::Button* button)
         {
             I2CBus i2c;
             i2c.enableFelMode();
-            SystemCommands systemCommands;
-            systemCommands.runActionCommand
-                    (SystemCommands::ActionCommand::restart);
+            Util::Commands systemCommands;
+            systemCommands.runActionCommand(
+                    Util::CommandTypes::Action::restart);
         }
         catch (I2CBus::I2CException e)
         {

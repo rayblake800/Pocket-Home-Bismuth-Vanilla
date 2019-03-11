@@ -17,7 +17,7 @@
 #include "Layout_Component_Manager.h"
 #include "Wifi_ConnectionIcon.h"
 #include "BatteryIcon.h"
-#include "SystemCommands.h"
+#include "Util_Commands.h"
 #include "AppMenu.h"
 
 /**
@@ -83,7 +83,7 @@ private:
 
     /* Loads system commands.  This resource should exist as long as the home
        page exists. */
-    SystemCommands systemCommands;
+    Util::Commands systemCommands;
 
     /* Loads desktop entry file data.  This resource should exist as long as
        the home page exists. */

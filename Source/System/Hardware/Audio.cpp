@@ -1,11 +1,40 @@
-#include <alsa/asoundlib.h>
-#include "JuceHeader.h"
-#include "SystemCommands.h"
 #include "Audio.h"
+#include "Util_Commands.h"
+#include "JuceHeader.h"
+#include <alsa/asoundlib.h>
+
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Audio::";
+#endif
 
 /* ALSA buffer size in samples: */
-static const constexpr int defaultBufferSize = 4096;
-snd_pcm_t *g_alsa_playback_handle = 0;
+static const constexpr int alsaBufferSize = 4096;
+/* ALSA channel count: */
+static const constexpr int alsaChannels = 2;
+/* Audio device to use: */
+static const constexpr char* deviceName = "default";
+
+// Preprocessor macros are ugly, but it's better than dozens of lines of 
+// near-identical error checks.
+
+/**
+ * @brief  Runs an ALSA audio function, printing an error and returning false if
+ *         the function fails.
+ *
+ * @param alsaFunction  An ALSA audio function that returns an error code.
+ *
+ * @param errorMessage  An error message to print before the result code 
+ *                      description if the result code is an error code.
+ */
+#define ALSA_FN(alsaFunction, errorMessage)                                \
+resultCode = alsaFunction;                                                 \
+if(resultCode < 0)                                                         \
+{                                                                          \
+    DBG(dbgPrefix << __func__ << ": ALSA ERROR: " << errorMessage << ": "  \
+                << snd_strerror(resultCode));                              \
+    return false;                                                          \
+}                                                                          \
 
 /*
  * Opens a connection to Alsa audio. This is used as a quick fix to a PocketCHIP
@@ -14,105 +43,48 @@ snd_pcm_t *g_alsa_playback_handle = 0;
  */
 bool Audio::chipAudioInit()
 {
-    int err;
-    int freq = 44100, channels = 2;
-    snd_pcm_hw_params_t *hw_params;
-    snd_pcm_sw_params_t *sw_params;
+    snd_pcm_hw_params_t* hardwareParams;
+    snd_pcm_sw_params_t* softwareParams;
 
-    snd_pcm_hw_params_malloc(&hw_params);
-    snd_pcm_sw_params_malloc(&sw_params);
-    err = snd_pcm_open(&g_alsa_playback_handle, "default",
-            SND_PCM_STREAM_PLAYBACK, 0);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__
-                << ": ALSA ERROR: Can't open audio device: "
-                << snd_strerror(err));
-        return false;
-    }
-    DBG("Audio::" << __func__ << ": Opened Audio Device");
-    err = snd_pcm_hw_params_any(g_alsa_playback_handle, hw_params);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__ << ": ALSA ERROR: "
-                << "Can't initialize hardware parameter structure: "
-                << snd_strerror(err));
-        return false;
-    }
-    err = snd_pcm_hw_params_set_access(g_alsa_playback_handle, hw_params,
-            SND_PCM_ACCESS_RW_INTERLEAVED);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__
-                << ": ALSA ERROR: Can't set access type: "
-                << snd_strerror(err));
-        return false;
-    }
-    err = snd_pcm_hw_params_set_format(g_alsa_playback_handle, hw_params,
-            SND_PCM_FORMAT_S16_LE);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__
-                << ": ALSA ERROR: Can't set sample format :"
-                << snd_strerror(err));
-        return false;
-    }
-    err = snd_pcm_hw_params_set_rate_near(g_alsa_playback_handle, hw_params,
-            (unsigned int*) &freq, 0);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__
-                << ": ALSA ERROR: Can't set sample rate: "
-                << snd_strerror(err));
-        return false;
-    }
-    DBG("Audio::" << __func__ << ": ALSA Sample rate: "
-            << freq);
-    err = snd_pcm_hw_params_set_channels(g_alsa_playback_handle, hw_params,
-            channels);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__
-                << ": ALSA ERROR: Can't set channel count: "
-                << snd_strerror(err));
-        return false;
-    }
-    snd_pcm_uframes_t frames;
-    frames = defaultBufferSize;
-    err = snd_pcm_hw_params_set_buffer_size_near(g_alsa_playback_handle,
-            hw_params, &frames);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__
-                << ": ALSA ERROR: Can't set buffer size: "
-                << snd_strerror(err));
-        return false;
-    }
-    snd_pcm_hw_params_get_buffer_size(hw_params, &frames);
-    DBG("Audio::" << __func__
-            << ": ALSA Buffer size: 4096 samples");
-    err = snd_pcm_hw_params(g_alsa_playback_handle, hw_params);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__
-                << ": ALSA ERROR: Can't set parameters: " << snd_strerror(err));
-        return false;
-    }
-    snd_pcm_hw_params_free(hw_params);
-    snd_pcm_sw_params_free(sw_params);
+    snd_pcm_hw_params_malloc(&hardwareParams);
+    snd_pcm_sw_params_malloc(&softwareParams);
 
-    err = snd_pcm_prepare(g_alsa_playback_handle);
-    if (err < 0)
-    {
-        DBG("Audio::" << __func__
-                << ": ALSA ERROR: Can't prepare audio interface for use: "
-                << snd_strerror(err));
-        return false;
-    }
-
+    int resultCode;
+    snd_pcm_t* pcmHandle;
+    ALSA_FN(snd_pcm_open(&pcmHandle, deviceName, SND_PCM_STREAM_PLAYBACK, 0),
+            "Can't open audio device");
+    ALSA_FN(snd_pcm_hw_params_any(pcmHandle, hardwareParams),
+            "Can't initialize hardware parameter structure");
+    ALSA_FN(snd_pcm_hw_params_set_access(pcmHandle, hardwareParams, 
+            SND_PCM_ACCESS_RW_INTERLEAVED),
+            "Can't set access type");
+    ALSA_FN(snd_pcm_hw_params_set_format(pcmHandle, hardwareParams,
+            SND_PCM_FORMAT_S16_LE),
+            "Can't set sample format");
+    int alsaFrequency = 44100;
+    ALSA_FN(snd_pcm_hw_params_set_rate_near(pcmHandle,
+            hardwareParams, (unsigned int*)& alsaFrequency, 0),
+            "Can't set sample rate");
+    ALSA_FN(snd_pcm_hw_params_set_channels(pcmHandle, hardwareParams,
+            alsaChannels),
+            "Can't set channel count");
+    snd_pcm_uframes_t frames = alsaBufferSize;
+    ALSA_FN(snd_pcm_hw_params_set_buffer_size_near(pcmHandle, hardwareParams,
+            &frames),
+            "Can't set buffer size");
+    snd_pcm_hw_params_get_buffer_size(hardwareParams, &frames);
+    DBG(dbgPrefix << __func__ << ": ALSA Buffer size: 4096 samples");
+    ALSA_FN(snd_pcm_hw_params(pcmHandle, hardwareParams),
+            "Can't set parameters");
+    snd_pcm_hw_params_free(hardwareParams);
+    snd_pcm_sw_params_free(softwareParams);
+    ALSA_FN(snd_pcm_prepare(pcmHandle),
+            "Can't prepare audio interface for use");
     /* Stop PCM device and drop pending frames */
-    snd_pcm_drain(g_alsa_playback_handle);
+    snd_pcm_drain(pcmHandle);
     return true;
+    // Someone needs to donate some more vowels to whoever wrote the ALSA sound
+    // library...
 }
 
 /*
@@ -120,11 +92,10 @@ bool Audio::chipAudioInit()
  */
 int Audio::getVolumePercent()
 {
-    using namespace juce;
-    SystemCommands systemCommands;
-    String volume = systemCommands.runTextCommand
-        (SystemCommands::TextCommand::getVolume);
-    DBG("Audio::" << __func__ << ": System volume=" << volume);
+    Util::Commands systemCommands;
+    juce::String volume = systemCommands.runTextCommand(
+            Util::CommandTypes::Text::getVolume);
+    DBG(dbgPrefix << __func__ << ": System volume=" << volume);
     return volume.getIntValue();
 }
 
@@ -133,10 +104,9 @@ int Audio::getVolumePercent()
  */
 void Audio::setVolume(int volumePercent)
 {
-    using namespace juce;
-    String volumeArg(volumePercent);
+    juce::String volumeArg(volumePercent);
     volumeArg += "%";
-    SystemCommands systemCommands;
-    systemCommands.runActionCommand
-        (SystemCommands::ActionCommand::setVolume, volumeArg);
+    Util::Commands systemCommands;
+    systemCommands.runActionCommand(Util::CommandTypes::Action::setVolume,
+            volumeArg);
 }

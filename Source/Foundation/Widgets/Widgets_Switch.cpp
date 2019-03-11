@@ -1,6 +1,4 @@
 #include "Widgets_Switch.h"
-#include "TempTimer.h"
-#include "Utils.h"
 
 /*  Switch layout constants: */
 

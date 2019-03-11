@@ -17,8 +17,8 @@ AppMenu::Paged::MenuComponent::MenuComponent() :
     rightButton(Widgets::NavButton::WindowEdge::right)
 { 
     ConfigFile formatConfig;
-    addTrackedKey(ConfigKeys::pagedMenuColumnsKey);
-    addTrackedKey(ConfigKeys::pagedMenuRowsKey);
+    addTrackedKey(ConfigKeys::pagedMenuColumns);
+    addTrackedKey(ConfigKeys::pagedMenuRows);
     addChildComponent(upButton);
     upButton.setAlwaysOnTop(true);
     addChildComponent(leftButton);

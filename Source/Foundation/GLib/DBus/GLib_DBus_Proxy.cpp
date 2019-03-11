@@ -3,7 +3,6 @@
 #include "GLib_VariantPtr.h"
 #include "GLib_ErrorPtr.h"
 #include "GLib_ObjectPtr.h"
-#include "Utils.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug statements: */

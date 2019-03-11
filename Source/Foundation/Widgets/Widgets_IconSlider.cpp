@@ -1,5 +1,4 @@
 #include "Widgets_IconSlider.h"
-#include "Utils.h"
 
 /*
  * Creates a slider with a default range of 0-100.

@@ -1,6 +1,6 @@
 #include "PocketHomeWindow.h"
 #include "Password.h"
-#include "Utils.h"
+#include "Display.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -18,7 +18,7 @@ WindowFocus::BroadcastWindow(windowName, juce::Colours::darkgrey,
         juce::DocumentWindow::allButtons),
 loginScreen([this](){ setContentNonOwned(&pageStack, true); })
 {
-    juce::Rectangle<int> screenSize = getDisplaySize();
+    juce::Rectangle<int> screenSize = Display::getSize();
 #if JUCE_DEBUG
     setBounds(screenSize.getWidth() / 2 - dbgWidth / 2,
             screenSize.getHeight() / 2 - dbgHeight / 2,

@@ -1,5 +1,4 @@
 #include "Widgets_OverlaySpinner.h"
-#include "Utils.h"
 
 /* The internal spinner height and overlay text component height, as a fraction 
  * of the total component height: */

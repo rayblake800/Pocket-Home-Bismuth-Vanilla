@@ -15,7 +15,7 @@
   #undef WIFI_TEMP
 #endif
 
-#include "Util/Nullable.h"
+#include "Util_Nullable.h"
 #include "JuceHeader.h"
 
 namespace Wifi 
@@ -85,7 +85,7 @@ protected:
  * connection state, and last connection time may be updated.
  */
 class Wifi::AccessPoint : 
-    public Nullable<juce::ReferenceCountedObjectPtr<AP::Data>>,
+    public Util::Nullable<juce::ReferenceCountedObjectPtr<AP::Data>>,
     public APInterface::SignalStrength, public APInterface::SavedConnection
 {
 public:

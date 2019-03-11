@@ -1,7 +1,7 @@
 #include "Widgets_Counter.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Layout_Component_TextSize.h"
-#include "Utils.h"
+#include "Util_Math.h"
 
 /* The minimum width:height ratio of all Counter objects. */
 static const constexpr int widthToHeightRatio = 3;
@@ -42,7 +42,7 @@ int Widgets::Counter::getCount() const
  */
 void Widgets::Counter::setCount(const int newValue)
 {
-    count = median<int>(minimum, newValue, maximum);
+    count = Util::Math::median<int>(minimum, newValue, maximum);
     setTextFieldFromCounter();
 }
 
@@ -150,13 +150,4 @@ void Widgets::Counter::resized()
     minusButton.setBounds(minusBounds);
     plusButton.setBounds(plusBounds);
     textField.setBounds(bounds);
-
-    /*
-    // Update text size:
-    Layout::Component::ConfigFile layoutConfig;
-    const float fontSize 
-          = layoutConfig.getFontHeight(bounds, textField.getText());
-    juce::Font newFont(fontSize);
-    textField.applyFontToAllText(newFont);
-    */
 }

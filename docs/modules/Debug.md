@@ -10,4 +10,7 @@ ScopeTimerRecords stores the records saved by all ScopeTimer objects, and prints
 #### [Debug\::Component](../../Source/Development/Debug/Debug_Component.h)
 The Component namespace provides functions for inspecting and debugging juce::Component objects. Currently, it includes a single function to print the tree of all visible components.
 
+#### [Debug\::AddressLog](../../Source/Development/Debug/Debug_AddressLog.h)
+The AddressLog keeps and prints logs of events associated with particular memory addresses.
+
 

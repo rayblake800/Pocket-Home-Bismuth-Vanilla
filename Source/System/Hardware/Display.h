@@ -9,20 +9,40 @@
 
 namespace Display
 {
-
     /**
-     * Gets the current display brightness level.
+     * @brief  Gets the current display brightness level.
      * 
-     * @return display brightness, as an integer between 1 and 10.
+     * @return  Display brightness, as an integer between 1 and 10.
      */
     int getBrightness();
 
     /**
-     * Sets the display brightness level.
+     * @brief  Sets the display brightness level.
      * 
      * @param brightness   This should be an integer between 1 and 10. Values 
-     *                      outside of this range will be rounded to the closest
-     *                      valid integer.
+     *                     outside of this range will be rounded to the closest
+     *                     valid integer.
      */
     void setBrightness(const int& brightness);
+
+    /**
+     * @brief  Gets the size of the main display.
+     *
+     * @return  The display's width and height in pixels.
+     */
+    juce::Rectangle<int> getSize();
+
+    /**
+     * @brief  Gets the width of the main display.
+     *
+     * @return  The display's width in pixels.
+     */
+    int getWidth();
+
+    /**
+     * @brief  Gets the height of the main display.
+     *
+     * @return  The display's height in pixels.
+     */
+    int getHeight();
 }

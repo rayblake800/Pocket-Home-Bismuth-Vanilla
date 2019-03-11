@@ -4,6 +4,11 @@
 #include "AppMenu_Paged_Initializer.h"
 #include "AppMenu_Scrolling_Initializer.h"
     
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "AppMenu::MainComponent::";
+#endif
+
 /*
  * Creates and initializes the application menu.
  */
@@ -31,7 +36,7 @@ void AppMenu::MainComponent::loadMenuFormat(const Initializer* initializer)
     if(initializer->getMenuFormat() == currentMenuFormat
             || initializer->getMenuFormat() == Format::Invalid)
     {
-        DBG("AppMenu::MainComponent::" << __func__ << 
+        DBG(dbgPrefix << __func__ << 
                 ": Skipping menu init, new format is invalid or matches old "
                 << "format.");
         return;
@@ -86,7 +91,7 @@ void AppMenu::MainComponent::resized()
 AppMenu::MainComponent::FormatUpdater::FormatUpdater
 (MainComponent* mainComponent) : mainComponent(mainComponent)
 {
-    addTrackedKey(ConfigKeys::menuFormatKey);
+    addTrackedKey(ConfigKeys::menuFormat);
 }
 
 /*
@@ -109,8 +114,7 @@ void AppMenu::MainComponent::FormatUpdater::applySelectedFormat()
             initializer.reset(nullptr);
     }
 
-    DBG("AppMenu::MainComponent::" << __func__
-            << ": Switching to Format::" 
+    DBG(dbgPrefix << __func__ << ": Switching to Format::" 
             << formatConfig.formatToString(newFormat));
     mainComponent->loadMenuFormat(initializer.get());
 }
@@ -122,6 +126,6 @@ void AppMenu::MainComponent::FormatUpdater::applySelectedFormat()
 void AppMenu::MainComponent::FormatUpdater::configValueChanged
 (const juce::Identifier& propertyKey)
 {
-    jassert(propertyKey == ConfigKeys::menuFormatKey);
+    jassert(propertyKey == ConfigKeys::menuFormat);
     applySelectedFormat();
 }

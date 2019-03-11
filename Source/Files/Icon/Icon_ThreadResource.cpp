@@ -2,7 +2,6 @@
 #include "Theme_Image_ConfigFile.h"
 #include "Assets_XDGDirectories.h"
 #include "Assets.h"
-#include "Utils.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */

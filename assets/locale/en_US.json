@@ -62,13 +62,6 @@
         "checkPermissions" : "Make sure you have permission to write to this file.",
         "saveError"        : "Error saving configuration:"
     },
-    "FelPage":
-    {
-        "reboot"       : "Reboot into software flashing mode?",
-        "yes"          : "Yes",
-        "no"           : "No",
-        "flashingInfo" : "For instructions, visit https://archive.org/details/C.h.i.p.FlashCollection" 
-    },
     "Locale::Time":
     {
 	    "never"          : "never",
@@ -86,6 +79,13 @@
         "daysPostfix"    : " days ago",
         "weeksPostfix"   : " weeks ago",
         "yearsPostfix"   : " years ago"
+    },
+    "Page::Fel":
+    {
+        "reboot"       : "Reboot into software flashing mode?",
+        "yes"          : "Yes",
+        "no"           : "No",
+        "flashingInfo" : "For instructions, visit https://archive.org/details/C.h.i.p.FlashCollection" 
     },
     "Page::HomeSettings": 
     {
@@ -112,6 +112,15 @@
         "currentPassword"    : "Current password",
         "apply"              : "Apply",
         "success"            : "Success"
+    },
+    "Page::Power": 
+    {
+        "shutdown"      : "Shutdown",
+        "reboot"        : "Reboot",
+        "sleep"         : "Sleep",
+        "flashSoftware" : "Flash Software",
+        "build"         : "Build: ",
+        "version"       : "Version "
     },
     "Page::SettingsList": 
     {
@@ -161,15 +170,6 @@
     {
         "couldNotOpen"    : "Couldn't open application",
         "notValidCommand" : " is not a valid command."
-    },
-    "PowerPage": 
-    {
-        "shutdown"      : "Shutdown",
-        "reboot"        : "Reboot",
-        "sleep"         : "Sleep",
-        "flashSoftware" : "Flash Software",
-        "build"         : "Build: ",
-        "version"       : "Version "
     },
     "Settings::CalibrationButton":
     {

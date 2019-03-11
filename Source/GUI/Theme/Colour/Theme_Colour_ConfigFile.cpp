@@ -2,7 +2,6 @@
 #include "Theme_Colour_JSONResource.h"
 #include "Theme_Colour_ColourIds.h"
 #include "Theme_Colour_JSONKeys.h"
-#include "Utils.h"
 
 namespace ColourTheme = Theme::Colour;
 

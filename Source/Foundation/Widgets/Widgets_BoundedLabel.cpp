@@ -1,6 +1,5 @@
 #include "Widgets_BoundedLabel.h"
 #include "Layout_Component_ConfigFile.h"
-#include "Utils.h"
 
 Widgets::BoundedLabel::BoundedLabel(const juce::String componentName,
         const juce::String labelText, const int fontPadding) : 

@@ -3,7 +3,7 @@
 #include "AppMenu_Scrolling_MenuButton.h"
 #include "AppMenu_ConfigKeys.h"
 #include "AppMenu_ConfigFile.h"
-#include "Utils.h"
+#include "Window_Info.h"
 
 /*
  * Creates a new scrolling folder component.
@@ -37,7 +37,7 @@ void AppMenu::Scrolling::FolderComponent::updateButtonLayout()
 {
     const juce::Rectangle<int> folderBounds = getLocalBounds(); 
     const int buttonHeight = folderBounds.getHeight() 
-        / std::max(getFolderSize(), 1);
+            / std::max(getFolderSize(), 1);
     const int buttonWidth = getMinimumWidth();
     int yPos = 0;
     for(int i = 0; i < getFolderSize(); i++)
@@ -66,8 +66,8 @@ int AppMenu::Scrolling::FolderComponent::getSelectedItemYOffset() const
 int AppMenu::Scrolling::FolderComponent::getMinimumWidth() const
 {
     ConfigFile appConfig;
-    const int iconWidth = getWindowBounds().getHeight() /
-        appConfig.getScrollingMenuRows();
+    const int iconWidth = Window::Info::getHeight() /
+            appConfig.getScrollingMenuRows();
     int maxTextWidth = 0;
     for(int i = 0; i < getFolderSize(); i++)
     {
