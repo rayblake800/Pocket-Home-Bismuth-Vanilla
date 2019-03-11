@@ -6,7 +6,7 @@
 #include "Wifi_Connection_Saved_Deleter.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Locale_Time.h"
-#include "Utils.h"
+#include "Window_Alert.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -15,7 +15,7 @@ static const constexpr char* dbgPrefix
 #endif
 
 /* Localized object class key: */
-static const juce::Identifier localeClassKey = "Wifi_ConnectionList";
+static const juce::Identifier localeClassKey = "Wifi::ConnectionList";
 
 /* Localized text value keys: */
 namespace TextKey
@@ -321,7 +321,8 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
     {
         DBG(dbgPrefix << __func__ 
                 << ": Getting confirmation before deleting saved connection:");
-        confirmAction(controlComponent.localeText(TextKey::deleteSaved),
+        Window::Alert::confirmAction(
+                controlComponent.localeText(TextKey::deleteSaved),
                 controlComponent.localeText(TextKey::confirmDelete),
                 [this, selectedAP]()
         {
