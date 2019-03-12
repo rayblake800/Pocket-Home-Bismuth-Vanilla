@@ -14,9 +14,9 @@
 #include "Theme_Image_ConfigListener.h"
 #include "Widgets_DrawableImageButton.h"
 #include "Info_Clock.h"
+#include "Info_BatteryIcon.h"
 #include "Layout_Component_Manager.h"
 #include "Wifi_ConnectionIcon.h"
-#include "BatteryIcon.h"
 #include "Util_Commands.h"
 #include "AppMenu.h"
 
@@ -101,7 +101,7 @@ private:
     std::unique_ptr<juce::Component> appMenu;
     
     /* Displays the current battery status: */
-    BatteryIcon batteryIcon;
+    Info::BatteryIcon batteryIcon;
     
     /* Displays the current wifi status: */
     Wifi::ConnectionIcon wifiIcon;
