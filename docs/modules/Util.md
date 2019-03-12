@@ -1,22 +1,20 @@
 # Util Module Documentation
+The Util module provides miscellaneous support classes and functions used to build the application.
 
-#### [Nullable](../../Source/Util/Nullable.h)
+#### [Util\::Commands](../../Source/Util/Util_Commands.h)
+The Commands class loads and runs system commands. System commands are defined in a read-only JSON file, so they can be updated if necessary without recompiling. Due to the limitations of the juce::ChildProcess class, commands are divided into commands returning text output, commands that return an integer exit code, and commands that act without returning any value.
 
-#### [TempTimer](../../Source/Util/TempTimer.h)
+#### [Util\::CommandTypes](../../Source/Util/Util_CommandTypes.h)
+CommandTypes defines all system command types that Commands objects can execute.
 
-#### [ShutdownListener](../../Source/Util/ShutdownListener.h)
+#### [Util\::Nullable](../../Source/Util/Util_Nullable.h)
+Nullable is an abstract container class, defining objects that hold a single value that may equal null.
 
-#### [Utils](../../Source/Util/Utils.h)
+#### [Util\::Math](../../Source/Util/Util_Math.h)
+The Util::Math namespace is meant to provide miscellaneous mathematical functions. This currently only contains a template function for finding the median of three values.
 
-#### [WindowFocus](../../Source/Util/WindowFocus/WindowFocus.h)
+#### [Util::TempTimer](../../Source/Util/Util_TempTimer.h)
+TempTimer creates single-use timer objects that execute a function after a specific number of milliseconds.
 
-#### [WindowFocusedTimer](../../Source/Util/WindowFocus/WindowFocusedTimer.h)
-
-#### [JSONFile](../../Source/Util/Files/JSONFile.h)
-
-#### [XDGDirectories](../../Source/Util/Files/XDGDirectories.h)
-
-#### [AssetFiles](../../Source/Util/Files/AssetFiles.h)
-
-#### [XPMLoader](../../Source/Util/Files/XPMLoader.h)
-
+#### [Util::ShutdownListener](../../Source/Util/Util_ShutdownListener.h)
+ShutdownListener is an abstract basis for classes that need to perform an action before the application shuts down.
