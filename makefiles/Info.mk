@@ -7,6 +7,7 @@ INFO_OBJ := $(JUCE_OBJDIR)/$(INFO_PREFIX)
 
 OBJECTS_INFO := \
   $(INFO_OBJ)BatteryIcon.o \
+  $(INFO_OBJ)Clock.o \
 
 INFO_TEST_PREFIX := $(INFO_PREFIX)Test_
 INFO_TEST_OBJ := $(INFO_OBJ)Test_
@@ -25,3 +26,6 @@ info : $(OBJECTS_INFO)
 
 $(INFO_OBJ)BatteryIcon.o : \
     $(INFO_DIR)/BatteryIcon.cpp
+
+$(INFO_OBJ)Clock.o : \
+    $(INFO_DIR)/$(INFO_PREFIX)Clock.cpp

@@ -10,9 +10,6 @@ TextEditor is a subclass of juce\::TextEditor that updates its font height to ma
 #### [Widgets\::Switch](../../Source/Widgets/Widgets_Switch.h)
 The Switch class provides an animated binary switch component.
 
-#### [Widgets\::Clock](../../Source/Widgets/Widgets_Clock.h)
-The Clock class provides a configurable label that prints the current time.
-
 #### [Widgets\::IconSlider](../../Source/Widgets/Widgets_IconSlider.h)
 The IconSlider class provides a horizontal slider component with icons displayed on both of its sides.
 
