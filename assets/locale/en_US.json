@@ -104,7 +104,7 @@
         "currentPassword" : "Current password",
         "newPassword"     : "New password",
         "retypePassword"  : "Retype password",
-        "update"          : "update"
+        "update"          : "Update"
     },
     "Page::PasswordRemover":
     {
