@@ -25,7 +25,7 @@ info : $(OBJECTS_INFO)
 	@echo "Built Info module"
 
 $(INFO_OBJ)BatteryIcon.o : \
-    $(INFO_DIR)/BatteryIcon.cpp
+    $(INFO_DIR)/$(INFO_PREFIX)BatteryIcon.cpp
 
 $(INFO_OBJ)Clock.o : \
     $(INFO_DIR)/$(INFO_PREFIX)Clock.cpp

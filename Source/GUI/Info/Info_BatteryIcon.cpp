@@ -1,4 +1,4 @@
-#include "BatteryIcon.h"
+#include "Info_BatteryIcon.h"
 #include "Layout_Component_JSONKeys.h"
 #include "Theme_Image_JSONKeys.h"
 
@@ -8,14 +8,14 @@ static const constexpr int timerFrequency = 2000;
 /* Number of battery percentages to average to get the reported percent. */
 static const constexpr int percentageCount = 10;
 
-BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
+Info::BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
 batteryImage(Theme::Image::JSONKeys::batteryIcon),
 batteryImageLayout(&batteryImage, Layout::Component::JSONKeys::batteryIcon),
 batteryPercentLayout(&batteryPercent, 
         Layout::Component::JSONKeys::batteryPercent)
 {
 #if JUCE_DEBUG
-    setName("BatteryIcon");
+    setName("Info::BatteryIcon");
 #endif
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
@@ -31,12 +31,11 @@ batteryPercentLayout(&batteryPercent,
  * Runs applyConfigBounds on all child components, and updates bounds to fit the
  * battery text and icon.
  */
-void BatteryIcon::applyConfigBounds()
+void Info::BatteryIcon::applyConfigBounds()
 {
-    using namespace juce;
     batteryImageLayout.applyConfigBounds();
     batteryPercentLayout.applyConfigBounds();
-    Rectangle<int> childBounds = batteryImage.getBounds()
+    juce::Rectangle<int> childBounds = batteryImage.getBounds()
             .getUnion(batteryPercent.getBounds());
     childBounds.setLeft(0);
     childBounds.setTop(0);
@@ -49,19 +48,19 @@ void BatteryIcon::applyConfigBounds()
 /*
  * Set the icon's new display status.
  */
-void BatteryIcon::setStatus
+void Info::BatteryIcon::setStatus
 (BatteryIconImage imageSelection, juce::String percent)
 {
-    using namespace juce;
     batteryImage.setImageAssetIndex((int) imageSelection);
-    batteryPercent.setText(percent, dontSendNotification);
+    batteryPercent.setText(percent, 
+            juce::NotificationType::dontSendNotification);
 }
 
 /*
  * Enables battery updates when this component becomes visible, and disables 
  * them when it's hidden.
  */
-void BatteryIcon::visibilityChanged()
+void Info::BatteryIcon::visibilityChanged()
 {
     if (isVisible())
     {
@@ -76,11 +75,11 @@ void BatteryIcon::visibilityChanged()
     }
 }
 
-/**
- * Clears cached battery percentages when the timer is disabled, so that
- * the values will catch up more quickly on resume.
+/*
+ * Clears cached battery percentages when the timer is disabled, so that the 
+ * values will catch up more quickly on resume.
  */
-void BatteryIcon::onSuspend()
+void Info::BatteryIcon::onSuspend()
 {
     batteryPercents.clear();
 }
@@ -88,10 +87,10 @@ void BatteryIcon::onSuspend()
 /*
  * Updates the battery percentage.
  */
-void BatteryIcon::timerCallback()
+void Info::BatteryIcon::timerCallback()
 {
-    BatteryMonitor::BatteryStatus batteryStatus =
-            batteryMonitor.getBatteryStatus();
+    BatteryMonitor::BatteryStatus batteryStatus 
+            = batteryMonitor.getBatteryStatus();
     int batteryPercent = batteryStatus.percent;
     if (batteryPercent < 0)
     {

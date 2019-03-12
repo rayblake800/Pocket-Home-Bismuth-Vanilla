@@ -1,6 +1,6 @@
 #pragma once
 /** 
- * @file   BatteryIcon.h
+ * @file  Info_BatteryIcon.h
  * 
  * @brief  Displays the current charge level and charging state of the battery
  *         as an icon, and writes the battery percentage as text.
@@ -12,13 +12,17 @@
 #include "WindowFocusedTimer.h"
 #include "BatteryMonitor.h"
 
+namespace Info { class BatteryIcon; }
+
 /** 
+ * @brief  An icon component and label displaying the current battery level.
+ *
  *  While this icon is visible, it will periodically check battery state and 
  * update itself accordingly. To reduce inaccuracies, a rolling average of the
  * last several detected battery percentages is used to create the reported
  * battery percentage.
  */
-class BatteryIcon : public juce::Component, private WindowFocusedTimer
+class Info::BatteryIcon : public juce::Component, private WindowFocusedTimer
 {
 public:
     BatteryIcon();
