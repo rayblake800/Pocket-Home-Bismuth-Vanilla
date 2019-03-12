@@ -23,6 +23,7 @@ ACTION_SUCCEEDED=0
 
 targetUser=$1
 newValue=$2
+saltValue=$3
 allUsers=$(users)
 nameLength=${#targetUser}
 
@@ -37,18 +38,24 @@ if ! [[ ${targetUser} =~ [a-z_][a-z0-9_-]*$ ]] \
     exit $INVALID_USER
 fi
 
-# The user must have a directory in /home that contains a
-# .pocket-home directory.
-
-homedir="/home/$targetUser/.pocket-home"
-if [ ! -d "$homedir" ]; then 
-    echo "missing pocket home directory $passdir"
+# Ensure the pocket-home data directory exists:
+dataDir="/home/$targetUser/.local/share"
+if [ ! -d "$dataDir" ]; then 
+    echo "missing pocket home directory $dataDir"
+    exit $MISSING_APP_DIR
+fi
+appDir="$dataDir/pocket-home"
+if [ ! -d "$appDir" ]; then 
+    mkdir $appDir
+fi
+if [ ! -d "$appDir" ]; then 
+    echo "couldn't create pocket home directory $appDir"
     exit $MISSING_APP_DIR
 fi
 
 # This must be running as root to properly set the password directory.
 if [ "$USER" = "root" ]; then
-    passdir="$homedir/.passwd"
+    passdir="$appDir/.passwd"
     if [ ! -d "$passdir" ]; then
         mkdir "$passdir"
         echo "created password directory $passdir"
@@ -65,13 +72,14 @@ if [ "$USER" = "root" ]; then
             exit $ACTION_SUCCEEDED
         fi
     else
-        echo "$newValue" >| "$passfile"
+        fileText=$(printf "%s\n%s" "$newValue" "$saltValue")
+        printf "$fileText" >| "$passfile"
         writtenFile=$(cat "$passfile") 
         if [ ! -f "$passfile" ]; then
             echo "Couldn't create password file!"
             exit $FAILED_TO_SET_PASSWORD
         fi
-        if [ "$newValue" != "$writtenFile" ]; then
+        if [ "$fileText" != "$writtenFile" ]; then
             echo "Couldn't change password!"            
             exit $FAILED_TO_SET_PASSWORD
         fi
