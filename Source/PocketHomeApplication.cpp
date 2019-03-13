@@ -1,6 +1,6 @@
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
-#include "Audio.h"
+#include "Hardware_Audio.h"
 #include "XWindowInterface.h"
 #include "Util_ShutdownListener.h"
 #include "Util_TempTimer.h"
@@ -98,7 +98,7 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         return;
     }
 
-    if (!Audio::chipAudioInit())
+    if (!Hardware::Audio::chipAudioInit())
     {
         DBG("PocketHomeApplication::" << __func__
                 << ": PocketC.H.I.P audio setup failed");

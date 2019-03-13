@@ -1,6 +1,6 @@
 #include "Settings_BrightnessSlider.h"
 #include "Theme_Image_JSONKeys.h"
-#include "Display.h"
+#include "Hardware_Display.h"
 
 /* Frequency in milliseconds to run brightness updates while the slider is
  * dragged: */
@@ -17,7 +17,7 @@ Settings::BrightnessSlider::BrightnessSlider() :
 Widgets::DelayedIconSlider(Theme::Image::JSONKeys::brightnessSlider, updateFreq)
 {
     setRange(minValue, maxValue, 1);
-    setValue(Display::getBrightness());
+    setValue(Hardware::Display::getBrightness());
 }
 
 /*
@@ -25,5 +25,5 @@ Widgets::DelayedIconSlider(Theme::Image::JSONKeys::brightnessSlider, updateFreq)
  */
 void Settings::BrightnessSlider::valueChanged(const double newValue)
 {
-    Display::setBrightness(newValue);
+    Hardware::Display::setBrightness(newValue);
 }

@@ -1,6 +1,6 @@
 #include "Page_Fel.h"
 #include "Util_Commands.h"
-#include "I2CBus.h"
+#include "Hardware_I2CBus.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -74,13 +74,13 @@ void Page::Fel::PageListener::buttonClicked(juce::Button* button)
         felPage.debounce = true;
         try
         {
-            I2CBus i2c;
+            Hardware::I2CBus i2c;
             i2c.enableFelMode();
             Util::Commands systemCommands;
             systemCommands.runActionCommand(
                     Util::CommandTypes::Action::restart);
         }
-        catch (I2CBus::I2CException e)
+        catch (Hardware::I2CBus::I2CException e)
         {
             DBG(dbgPrefix << __func__ << e.getErrorMessage());
         }

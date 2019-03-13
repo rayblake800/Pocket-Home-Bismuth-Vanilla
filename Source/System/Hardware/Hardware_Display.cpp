@@ -1,12 +1,12 @@
+#include "Hardware_Display.h"
 #include "JuceHeader.h"
-#include "Display.h"
 #include "Util_Commands.h"
 #include "Util_Math.h"
 
 /*
  * Gets the current display brightness level.
  */
-int Display::getBrightness()
+int Hardware::Display::getBrightness()
 {
     Util::Commands systemCommands;
     juce::String brightness = systemCommands.runTextCommand(
@@ -21,7 +21,7 @@ int Display::getBrightness()
 /*
  * Sets the display brightness level.
  */
-void Display::setBrightness(const int& brightness)
+void Hardware::Display::setBrightness(const int brightness)
 {
     juce::String newBrightness(Util::Math::median<int>(1, brightness, 10));
     Util::Commands systemCommands;
@@ -32,7 +32,7 @@ void Display::setBrightness(const int& brightness)
 /*
  * Gets the size of the main display.
  */
-juce::Rectangle<int> Display::getSize()
+juce::Rectangle<int> Hardware::Display::getSize()
 {
     return juce::Desktop::getInstance().getDisplays().getMainDisplay().userArea;
 }
@@ -40,7 +40,7 @@ juce::Rectangle<int> Display::getSize()
 /*
  * Gets the width of the main display.
  */
-int Display::getWidth()
+int Hardware::Display::getWidth()
 {
     return getSize().getWidth();
 }
@@ -48,7 +48,7 @@ int Display::getWidth()
 /*
  * Gets the height of the main display.
  */
-int Display::getHeight()
+int Hardware::Display::getHeight()
 {
     return getSize().getHeight();
 }

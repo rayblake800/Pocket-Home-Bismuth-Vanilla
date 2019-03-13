@@ -9,8 +9,8 @@
 #include "Theme_Image_Component.h"
 #include "Widgets_DrawableImage.h"
 #include "Layout_Component_Manager.h"
+#include "Hardware_Battery.h"
 #include "WindowFocusedTimer.h"
-#include "BatteryMonitor.h"
 
 namespace Info { class BatteryIcon; }
 
@@ -96,7 +96,7 @@ private:
     Layout::Component::Manager batteryPercentLayout;
     
     /* Gets battery info */
-    BatteryMonitor batteryMonitor;
+    Hardware::Battery batteryMonitor;
 
     /* Holds the last several recorded battery percentages */
     juce::Array<int> batteryPercents;

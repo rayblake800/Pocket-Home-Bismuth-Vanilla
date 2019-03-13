@@ -2,11 +2,14 @@
 #include "Layout_Component_JSONKeys.h"
 #include "Theme_Image_JSONKeys.h"
 
-/* Battery update frequency in milliseconds. */
+/* Battery update frequency in milliseconds: */
 static const constexpr int timerFrequency = 2000;
 
-/* Number of battery percentages to average to get the reported percent. */
+/* Number of battery percentages to average to get the reported percent: */
 static const constexpr int percentageCount = 10;
+
+/* Number of available images representing battery percentages: */
+static const constexpr int percentageLevels = 4;
 
 Info::BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
 batteryImage(Theme::Image::JSONKeys::batteryIcon),
@@ -89,8 +92,7 @@ void Info::BatteryIcon::onSuspend()
  */
 void Info::BatteryIcon::timerCallback()
 {
-    BatteryMonitor::BatteryStatus batteryStatus 
-            = batteryMonitor.getBatteryStatus();
+    Hardware::Battery::Status batteryStatus = batteryMonitor.getBatteryStatus();
     int batteryPercent = batteryStatus.percent;
     if (batteryPercent < 0)
     {
@@ -110,8 +112,9 @@ void Info::BatteryIcon::timerCallback()
         {
             batteryPercents.remove(0);
         }
-        int status = round(((float) batteryPercent) / 100.0f * 3.0f);
-        jassert(status >= 0 && status < 4);
+        int status = round(((float) batteryPercent) / 100.0f * 
+                (percentageLevels - 1));
+        jassert(status >= 0 && status < percentageLevels);
         if (batteryStatus.isCharging)
         {
             status += (int) charging0;

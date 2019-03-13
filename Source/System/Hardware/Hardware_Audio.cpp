@@ -1,11 +1,11 @@
-#include "Audio.h"
+#include "Hardware_Audio.h"
 #include "Util_Commands.h"
 #include "JuceHeader.h"
 #include <alsa/asoundlib.h>
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
-static const constexpr char* dbgPrefix = "Audio::";
+static const constexpr char* dbgPrefix = "Hardware::Audio::";
 #endif
 
 /* ALSA buffer size in samples: */
@@ -41,7 +41,7 @@ if(resultCode < 0)                                                         \
  * bug where touch screen presses cause buzzing when no application has opened 
  * Alsa.
  */
-bool Audio::chipAudioInit()
+bool Hardware::Audio::chipAudioInit()
 {
     snd_pcm_hw_params_t* hardwareParams;
     snd_pcm_sw_params_t* softwareParams;
@@ -90,7 +90,7 @@ bool Audio::chipAudioInit()
 /*
  * Gets the system's volume level.
  */
-int Audio::getVolumePercent()
+int Hardware::Audio::getVolumePercent()
 {
     Util::Commands systemCommands;
     juce::String volume = systemCommands.runTextCommand(
@@ -102,7 +102,7 @@ int Audio::getVolumePercent()
 /*
  * Changes the system audio volume level.
  */
-void Audio::setVolume(int volumePercent)
+void Hardware::Audio::setVolume(int volumePercent)
 {
     juce::String volumeArg(volumePercent);
     volumeArg += "%";

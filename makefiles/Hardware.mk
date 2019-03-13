@@ -7,7 +7,7 @@ HARDWARE_OBJ := $(JUCE_OBJDIR)/$(HARDWARE_PREFIX)
 
 OBJECTS_HARDWARE := \
   $(HARDWARE_OBJ)Audio.o \
-  $(HARDWARE_OBJ)BatteryMonitor.o \
+  $(HARDWARE_OBJ)Battery.o \
   $(HARDWARE_OBJ)Display.o \
   $(HARDWARE_OBJ)I2CBus.o
 
@@ -27,10 +27,10 @@ hardware : $(OBJECTS_HARDWARE)
 	@echo "Built Hardware module"
 
 $(HARDWARE_OBJ)Audio.o : \
-    $(HARDWARE_DIR)/Audio.cpp
-$(HARDWARE_OBJ)BatteryMonitor.o : \
-    $(HARDWARE_DIR)/BatteryMonitor.cpp
+    $(HARDWARE_DIR)/$(HARDWARE_PREFIX)Audio.cpp
+$(HARDWARE_OBJ)Battery.o : \
+    $(HARDWARE_DIR)/$(HARDWARE_PREFIX)Battery.cpp
 $(HARDWARE_OBJ)Display.o : \
-    $(HARDWARE_DIR)/Display.cpp
+    $(HARDWARE_DIR)/$(HARDWARE_PREFIX)Display.cpp
 $(HARDWARE_OBJ)I2CBus.o : \
-    $(HARDWARE_DIR)/I2CBus.cpp
+    $(HARDWARE_DIR)/$(HARDWARE_PREFIX)I2CBus.cpp
