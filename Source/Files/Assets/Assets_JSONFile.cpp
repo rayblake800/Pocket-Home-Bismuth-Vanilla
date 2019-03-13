@@ -79,44 +79,48 @@ void Assets::JSONFile::writeChanges()
     }
 }
  
-/*
- * Removes and returns a value of type T from a var container. 
- */
-template<> juce::String Assets::JSONFile::extractProperty<juce::String>
-(juce::var& container) const { return container; }
-
-template<> int Assets::JSONFile::extractProperty<int>
-(juce::var& container) const { return container; }
-
-template<> bool Assets::JSONFile::extractProperty<bool>
-(juce::var& container) const { return container; }
-
-template<> double Assets::JSONFile::extractProperty<double>
-(juce::var& container) const { return container; }
-
-template<> juce::var Assets::JSONFile::extractProperty<juce::var>
-(juce::var& container) const { return container; }
-
-template<> juce::Array<juce::var> Assets::JSONFile::extractProperty 
-<juce::Array<juce::var>>
-(juce::var& container) const
+// Specializations need to be in the same namespace as the original:
+namespace Assets 
 {
-    using juce::Array;
-    using juce::var;
-    Array<var>* arrayProperty = container.getArray();
-    if(arrayProperty != nullptr)
+    /*
+     * Removes and returns a value of type T from a var container. 
+     */
+    template<> juce::String JSONFile::extractProperty<juce::String>
+    (juce::var& container) const { return container; }
+
+    template<> int JSONFile::extractProperty<int>
+    (juce::var& container) const { return container; }
+
+    template<> bool JSONFile::extractProperty<bool>
+    (juce::var& container) const { return container; }
+
+    template<> double JSONFile::extractProperty<double>
+    (juce::var& container) const { return container; }
+
+    template<> juce::var JSONFile::extractProperty<juce::var>
+    (juce::var& container) const { return container; }
+
+    template<> juce::Array<juce::var> JSONFile::extractProperty 
+    <juce::Array<juce::var>>
+    (juce::var& container) const
     {
-        return Array<var>(*container.getArray());
-    } 
-        DBG(dbgPrefix << __func__ << ": Array is null!");
-    return Array<var>();
-}
+        using juce::Array;
+        using juce::var;
+        Array<var>* arrayProperty = container.getArray();
+        if(arrayProperty != nullptr)
+        {
+            return Array<var>(*container.getArray());
+        } 
+            DBG(dbgPrefix << __func__ << ": Array is null!");
+        return Array<var>();
+    }
 
-template<> juce::DynamicObject* Assets::JSONFile::extractProperty
-<juce::DynamicObject*>
-(juce::var& container) const
-{
-    return container.getDynamicObject();
+    template<> juce::DynamicObject* JSONFile::extractProperty
+    <juce::DynamicObject*>
+    (juce::var& container) const
+    {
+        return container.getDynamicObject();
+    }
 }
 
 /*
@@ -171,42 +175,46 @@ juce::String Assets::JSONFile::getTypeName(const juce::var& property) const
     return "var";
 }
 
-/*
- * Gets the name of a data type that may be contained in a JSON var object.
- */
-template<>juce::String Assets::JSONFile::getTypeName<int>() const
+// Specializations need to be in the same namespace as the original:
+namespace Assets 
 {
-    return "int";
-}
+    /*
+     * Gets the name of a data type that may be contained in a JSON var object.
+     */
+    template<>juce::String JSONFile::getTypeName<int>() const
+    {
+        return "int";
+    }
 
-template<>juce::String Assets::JSONFile::getTypeName<bool>() const
-{
-    return "bool";
-}
+    template<>juce::String JSONFile::getTypeName<bool>() const
+    {
+        return "bool";
+    }
 
-template<>juce::String Assets::JSONFile::getTypeName<double>() const
-{
-    return "double";
-}
+    template<>juce::String JSONFile::getTypeName<double>() const
+    {
+        return "double";
+    }
 
-template<>juce::String Assets::JSONFile::getTypeName<juce::String>() const
-{
-    return "String";
-}
+    template<>juce::String JSONFile::getTypeName<juce::String>() const
+    {
+        return "String";
+    }
 
-template<>juce::String Assets::JSONFile::getTypeName<juce::DynamicObject*>() 
-        const
-{
-    return "DynamicObject*";
-}
+    template<>juce::String JSONFile::getTypeName<juce::DynamicObject*>() 
+            const
+    {
+        return "DynamicObject*";
+    }
 
-template<>juce::String Assets::JSONFile::getTypeName<juce::Array<juce::var>>() 
-        const
-{
-    return "Array<var>";
-}
+    template<>juce::String JSONFile::getTypeName<juce::Array<juce::var>>() 
+            const
+    {
+        return "Array<var>";
+    }
 
-template<>juce::String Assets::JSONFile::getTypeName<juce::var>() const
-{
-    return "var";
+    template<>juce::String JSONFile::getTypeName<juce::var>() const
+    {
+        return "var";
+    }
 }
