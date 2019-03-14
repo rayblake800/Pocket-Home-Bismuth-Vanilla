@@ -300,8 +300,10 @@ void Wifi::APList::Module::updateAllAccessPoints()
             addAccessPoint(nmAccessPoint);
         }
     });
-    DBG(dbgPrefix << __func__ << ": List contains " << wifiAccessPoints.size()
-            << " AP objects representing " << nmAccessPoints.size()
+    DBG(dbgPrefix << __func__ << ": List contains " 
+            << (int) wifiAccessPoints.size()
+            << " AP objects representing " 
+            << (int) nmAccessPoints.size()
             << " LibNM AP objects");
 }
 
