@@ -1,50 +1,68 @@
-##################### Pocket-Home Bismuth Makefile: ############################ 
-################################################################################
-## Main build targets:	                                                      ##
-##	                                                                          ##
-##   build:	            Compile default build type.                           ##
-##   devinstall:	    Install default build binaries.                       ##
-##   debug:	            Compile debug build, install, and open in gdb.        ##
-##   release:	        Compile release build and install binaries.           ##
-##   check-pkg-config:	Verifies all pkg-config libraries.                    ##
-##   clean:	            Removes all build files.                              ##
-##   strip:	            Removes symbols from build files.                     ##
-##   uninstall:	        Removes installed binaries and data files.            ##
-##	                                                                          ##
-################################################################################
-## Main build options:	                                                      ##
-##	                                                                          ##
-## CONFIG=Debug	         Build debug binaries skipping optimizations,         ##
-##	                     including all test code, and enabling gdb            ##
-##	                     debugging symbols.                                   ##
-##	                                                                          ##
-## CONFIG=Release	     Build release binaries using full optimization,      ##
-##	                     removing all test code, and omitting gdb flags.      ##
-##	                                                                          ##
-## V=1	                 Enable verbose build output.                         ##
-##	                                                                          ##
-## OPTIMIZE=1            Set to 1 to enable full optimization, or 0 to        ##
-##	                     disable all optimization, overriding the behavior    ##
-##	                     selected by the CONFIG option.                       ##
-##	                                                                          ##
-## GDB_SUPPORT=1         Set to 1 to compile with gdb debugging symbols, or 0 ##
-##	                     to disable debugging symbols. This will also         ##
-##	                     override the behavior selected by the CONFIG option. ##
-##	                                                                          ##
-################################################################################
-######### Build values: #########
+define HELPTEXT
+## Pocket-Home Bismuth Makefile ##
+# Usage: make [target] [options]
+# Typical installation process:
+    make
+    make install
+
+## Main build targets:
+   build:             Compile all project code.
+   install:           Install compiled binaries and program asset files.
+   debug:             Compile debug build, install, and open in gdb.
+   release:           Compile and install release build.
+   check-pkg-config:  Verify all pkg-config libraries.
+   clean:             Remove all compiled binaries.
+   strip:             Remove symbols from compiled binaries.
+   uninstall:	      Uninstall the application.
+   help:              Print this help information
+
+# Main build Options:
+# Format:
+# OPTION_NAME=(all, permitted, values)
+#   Description of what the option controls.
+
+CONFIG=(Debug, Release)
+  Selects between debug and release builds. By default, gdb flags, console 
+  logging, assertions, and tests are enabled only in debug builds, while 
+  optimization is enabled only in release builds.                     
+
+V=(1)
+  Enable verbose build output.                
+
+CHECK_DEPS=(1)
+  Find and remove build files that have missing or renamed dependencies before
+  compiling.
+
+OPTIMIZE=(0, 1)
+  Disable or enable optimization when compiling and linking.
+
+GDB_SUPPORT=(0, 1)
+  Disable or enable compiling with gdb debugging flags.
+  
+BUILD_TESTS=(0, 1)
+  Disable or enable compilation of test classes.
+  
+  or renamed files
+endef
+export HELPTEXT
+
+# TODO: Add additional options:
+#       -Enable/disable PocketCHIP-specific features
+#       -Enable/disable Wifi support
+
+######### Initialize build variables: #########
 
 # Default Options:
 # Build type: either Debug or Release
-CONFIG ?= Debug
+CONFIG ?= Release
 # Command used to strip unneeded symbols from object files:
 STRIP ?= strip
 # Use the build system's architecture by default.
 TARGET_ARCH ?= -march=native
 # Enable or disable verbose output
 V ?= 0
-# Whether test classes will be built
-BUILD_TESTS ?= 1
+# Skip extra dependency checks by default.
+CHECK_DEPS ?= 0
 
 # Executable name:
 JUCE_TARGET_APP = pocket-home
@@ -121,17 +139,21 @@ JUCE_OBJDIR := $(JUCE_OBJDIR)/$(CONFIG)
 JUCE_OUTDIR := $(JUCE_OUTDIR)/$(CONFIG)
 
 ifeq ($(CONFIG),Debug)
-    # Disable optimization and enable gdb flags unless otherwise specified:
+    # Disable optimization and enable gdb flags and tests unless otherwise 
+    # specified:
     OPTIMIZATION ?= 0
     GDB_SUPPORT ?= 1
+    BUILD_TESTS ?= 1
 	# Debug-specific preprocessor definitions:
 	JUCE_CONFIG_FLAGS = -DDEBUG=1 -D_DEBUG=1
 endif
 
 ifeq ($(CONFIG),Release)
-    # Enable optimization and disable gdb flags unless otherwise specified:
+    # Enable optimization and disable gdb flags and tests unless otherwise 
+    # specified:
     OPTIMIZATION ?= 1
     GDB_SUPPORT ?= 0
+    BUILD_TESTS ?= 0
 	# Release-specific preprocessor definitions:
 	JUCE_CONFIG_FLAGS = -DNDEBUG=1
 endif
@@ -176,7 +198,7 @@ JUCE_LDFLAGS  += $(TARGET_ARCH) \
 CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 
 
-.PHONY: build devInstall debug release clean strip uninstall
+.PHONY: build install debug release clean strip uninstall help
 build : $(JUCE_OUTDIR)/$(JUCE_TARGET_APP)
 
 # Include makefiles defining each module:
@@ -211,11 +233,11 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(MODULES) $(RESOURCES)
 
 $(OBJECTS_APP) :
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "   Compiling: $(<F) -> $(@F)"
+	@echo "   Compiling: $(<F)"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 		-o "$@" -c "$<"
 
-devinstall:
+install:
 	killall $(JUCE_TARGET_APP);\
 	sudo cp build/$(CONFIG)/$(JUCE_TARGET_APP) /usr/bin/$(JUCE_TARGET_APP) && \
 	if [ ! -d $(DATA_PATH) ]; then \
@@ -237,7 +259,13 @@ release:
 check-pkg-config:
 	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 \
 		"pkg-config not installed. Please, install it."; exit 1; }
-	@pkg-config --print-errors $(PKG_CONFIG_LIBS)
+	@pkg-config --print-errors $(PKG_CONFIG_LIBS); \
+    if [ $(CHECK_DEPS) == 1 ]; then \
+ 		echo "Checking for outdated dependencies:"; \
+        ./project-scripts/DepClean.sh $(JUCE_OBJDIR); \
+	fi
+
+#   if [ $(CHECK_DEPS) ]; then \
 
 clean:
 	@echo Cleaning $(JUCE_TARGET_APP)
@@ -252,6 +280,9 @@ uninstall:
 	killall $(JUCE_TARGET_APP);\
 	sudo rm /usr/bin/$(JUCE_TARGET_APP) && \
 	sudo rm -r  $(DATA_PATH) ; \
+
+help:
+	@echo "$$HELPTEXT"
 
 -include $(OBJECTS_APP:%.o=%.d)
 

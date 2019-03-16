@@ -48,7 +48,7 @@ The Bluetooth module is currently unimplemented. It will provide controls allowi
 The process module creates and manages new child processes.
 
 #### [Hardware](./modules/Hardware.md)
-The hardware module provides tools for viewing and controlling device hardware.
+The hardware module provides tools for monitoring and controlling device hardware.
 
 #### [Wifi](./modules/Wifi.md)
 The Wifi module controls and tracks the system Wifi device and active Wifi connection.
