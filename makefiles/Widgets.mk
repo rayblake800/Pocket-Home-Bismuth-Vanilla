@@ -1,5 +1,5 @@
 ############################## Widget Module ###################################
-WIDGET_ROOT   = Source/Foundation/Widgets
+WIDGET_ROOT   = Source/Framework/Widgets
 WIDGET_PREFIX = Widgets_
 WIDGET_OBJ   := $(JUCE_OBJDIR)/$(WIDGET_PREFIX)
 

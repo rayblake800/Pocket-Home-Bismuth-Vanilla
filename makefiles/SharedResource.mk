@@ -1,8 +1,8 @@
 ###################### SharedResource Module ################################### 
-SHARED_DIR = Source/Foundation/SharedResource
+SHARED_DIR = Source/Framework/SharedResource
 SHARED_THREAD_DIR = $(SHARED_DIR)/Thread
 SHARED_IMPL_DIR = $(SHARED_DIR)/Implementation
-SHARED_TEST_DIR = Tests/Foundation/SharedResource
+SHARED_TEST_DIR = Tests/Framework/SharedResource
 
 SHARED_PREFIX = SharedResource_
 SHARED_OBJ := $(JUCE_OBJDIR)/$(SHARED_PREFIX)

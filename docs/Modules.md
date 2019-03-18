@@ -56,8 +56,8 @@ The Wifi module controls and tracks the system Wifi device and active Wifi conne
 #### [Window](./modules/Window.md)
 The Window module finds, tracks, and controls open windows.
 
-### Foundation
-Foundation modules provide tools used to design and build other modules.
+### Framework
+Framework modules provide tools used to design and build other modules.
 
 #### [GLib](./modules/GLib.md)
 The GLib module provides tools for managing the GLib library's C-based custom object system, simplifying interaction with libraries build using GLib.

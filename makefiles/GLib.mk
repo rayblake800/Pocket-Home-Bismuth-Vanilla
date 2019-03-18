@@ -1,12 +1,12 @@
 ############################# GLib Module ######################################
-GLIB_DIR = Source/Foundation/GLib
+GLIB_DIR = Source/Framework/GLib
 GLIB_PTR_DIR := $(GLIB_DIR)/SmartPointers
 GLIB_OWNED_DIR := $(GLIB_DIR)/Owned
 GLIB_BORROWED_DIR := $(GLIB_DIR)/Borrowed
 GLIB_THREAD_DIR := $(GLIB_DIR)/Thread
 GLIB_DBUS_DIR := $(GLIB_DIR)/DBus
 GLIB_VAR_DIR := $(GLIB_DBUS_DIR)/Variant
-GLIB_TEST_DIR = Tests/Foundation/GLib
+GLIB_TEST_DIR = Tests/Framework/GLib
 
 GLIB_PREFIX = GLib_
 GLIB_OBJ := $(JUCE_OBJDIR)/$(GLIB_PREFIX)

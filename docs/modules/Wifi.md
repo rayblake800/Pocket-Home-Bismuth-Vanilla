@@ -2,7 +2,7 @@
 The Wifi module allows the application to provide Wifi controls and information. It provides a modular [SharedResource](./SharedResource.md) that monitors and controls the system Wifi device and any active Wifi connection. This is used to implement the Wifi controls provided by [Page\::WifiConnection](../../Source/GUI/Page/PageTypes/Page_WifiConnection.h).
 
 #### [Wifi\::Resource](../../Source/System/Wifi/Wifi_Resource.h)
-Resource defines the SharedResource object instance that controls access to the Wifi device and cached Wifi data. The Resource object initializes, manages, and destroys the [SharedResource\::Modular\::Module](../../Source/Foundation/SharedResource/Modular/SharedResource_Modular_Module.h) subclasses that handle the Wifi module's responsibilities.
+Resource defines the SharedResource object instance that controls access to the Wifi device and cached Wifi data. The Resource object initializes, manages, and destroys the [SharedResource\::Modular\::Module](../../Source/Framework/SharedResource/Modular/SharedResource_Modular_Module.h) subclasses that handle the Wifi module's responsibilities.
 
 #### [Wifi\::Module](../../Source/System/Wifi/Wifi_Module.h)
 Module is the shared basis for all resource modules managed by the Wifi\::Resource. It provides additional functions allowing its subclasses to safely run asynchronous actions and asynchronously interact with connected Module Handler objects.

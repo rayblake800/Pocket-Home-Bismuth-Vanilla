@@ -1,5 +1,5 @@
 ########################### Layout Module ######################################
-LAYOUT_DIR = Source/Foundation/Layout
+LAYOUT_DIR = Source/Framework/Layout
 LAYOUT_COMPONENT_DIR := $(LAYOUT_DIR)/Component
 LAYOUT_GROUP_DIR := $(LAYOUT_DIR)/Group
 LAYOUT_TRANSITION_DIR := $(LAYOUT_DIR)/Transition

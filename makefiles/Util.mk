@@ -1,6 +1,6 @@
 ########################## Utility Module ######################################
-UTIL_DIR = Source/Foundation/Util
-UTIL_TEST_DIR = Tests/Foundation/Util
+UTIL_DIR = Source/Framework/Util
+UTIL_TEST_DIR = Tests/Framework/Util
 
 UTIL_PREFIX = Util_
 UTIL_OBJ := $(JUCE_OBJDIR)/$(UTIL_PREFIX)

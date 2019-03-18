@@ -1,5 +1,5 @@
 ########################## Locale Module ######################################
-LOCALE_DIR = Source/Foundation/Locale
+LOCALE_DIR = Source/Framework/Locale
 
 LOCALE_PREFIX := Locale_
 LOCALE_OBJ := $(JUCE_OBJDIR)/$(LOCALE_PREFIX)
