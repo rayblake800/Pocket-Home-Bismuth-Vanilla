@@ -33,14 +33,16 @@ public:
      *
      * @param errorMessage  An optional brief description of the error.
      */
-    ALSAException(const int errorCode, const juce::String errorMessage = "") :
-    error(dbgPrefix)
+    ALSAException(const int errorCode, const juce::String errorMessage = "")
     {
+#ifdef JUCE_DEBUG
+        error = dbgPrefix;
         error += __func__;
         error += ": ALSA ERROR: ";
         error += errorMessage;
         error += " Error code " + juce::String(errorCode) + ": ";
         error += snd_strerror(errorCode);
+#endif
     }
 
     /**
