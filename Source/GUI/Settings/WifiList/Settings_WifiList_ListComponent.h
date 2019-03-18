@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file Wifi_ConnectionList_ListComponent.h
+ * @file Settings_WifiList_ListComponent.h
  * 
  * @brief Shows information on all visible Wifi access points, and provides 
  *        controls for connecting to or disconnecting from those access points.
@@ -10,11 +10,11 @@
 #include "Wifi_AP_StrengthListener.h"
 #include "Wifi_APList_Listener.h"
 #include "Wifi_Connection_Record_Listener.h"
-#include "Wifi_ConnectionList_ControlComponent.h"
+#include "Settings_WifiList_ControlComponent.h"
 
-namespace Wifi { namespace ConnectionList { class ListComponent; } }
+namespace Settings { namespace WifiList { class ListComponent; } }
 
-class Wifi::ConnectionList::ListComponent : public Widgets::FocusingPagedList,
+class Settings::WifiList::ListComponent : public Widgets::FocusingPagedList,
         public Wifi::APList::Listener,
         public Wifi::AP::StrengthListener,
         public Wifi::Connection::Record::Listener
@@ -32,7 +32,7 @@ private:
      * @brief  Sets the number of items in the list to match the number of 
      *         visible Wifi access points.
      * 
-     * @return  The number of WifiAccessPoint objects available. 
+     * @return  The number of visible Wifi::AccessPoint objects. 
      */
     virtual unsigned int getListSize() const final override;
 
@@ -40,8 +40,8 @@ private:
      * @brief  Creates or updates an unselected list item.
      * 
      * @param listItem  A list item Button to update. This parameter may be 
-     *                  null, in which case a new ConnectionList::ListButton
-     *                  should be created.
+     *                  null, in which case a new WifiList::ListButton should be
+     *                  created.
      * 
      * @param index     The index where the list item will be used. This index
      *                  is also the index of the AccessPoint object the list
@@ -57,7 +57,7 @@ private:
      *         list item.
      * 
      * @param listItem  A list item Button to update. This parameter may be 
-     *                  null, in which case a new ConnectionList::ListButton
+     *                  null, in which case a new WifiList::ListButton
      *                  should be created.
      * 
      * @return          The updated selected list Component. 
@@ -67,7 +67,7 @@ private:
 
 private:
     /**
-     * @brief  Reloads the list of wifi access points within range of the wifi 
+     * @brief  Reloads the list of Wifi access points within range of the Wifi 
      *         device, and updates the access point list.
      */
     void loadAccessPoints();
@@ -104,7 +104,7 @@ private:
      *
      * @param updatedAP  The AccessPoint with a new signal strength value.
      */
-    virtual void signalStrengthUpdate(const AccessPoint updatedAP) 
+    virtual void signalStrengthUpdate(const Wifi::AccessPoint updatedAP) 
         final override;
 
     /**
@@ -113,7 +113,7 @@ private:
      *
      * @param newAP  The new Wifi::AccessPoint object.
      */
-    virtual void accessPointAdded(const AccessPoint newAP) override;
+    virtual void accessPointAdded(const Wifi::AccessPoint newAP) override;
 
     /**
      * @brief  Replaces the removed access point with a null access point and 
@@ -121,7 +121,7 @@ private:
      *
      * @param removedAP  The access point that is no longer visible.
      */
-    virtual void accessPointRemoved(const AccessPoint removedAP) override;
+    virtual void accessPointRemoved(const Wifi::AccessPoint removedAP) override;
 
     /**
      * @brief  Updates access point connection controls when a connection starts
@@ -130,7 +130,8 @@ private:
      * @param connectingAP  The Wifi access point the system is trying to 
      *                      connect to.
      */
-    virtual void startedConnecting(const AccessPoint connectingAP) override;
+    virtual void startedConnecting(const Wifi::AccessPoint connectingAP) 
+        override;
 
     /**
      * @brief  Updates access point connection controls when connection 
@@ -138,14 +139,15 @@ private:
      *
      * @param connectingAP  The Wifi access point that failed to connect.
      */
-    virtual void connectionAuthFailed(const AccessPoint connectingAP) override;
+    virtual void connectionAuthFailed(const Wifi::AccessPoint connectingAP) 
+        override;
 
     /**
      * @brief  Schedules a list update whenever an access point connects.
      *
      * @param connectedAP  The access point used to open the connection.
      */
-    virtual void connected(const AccessPoint connectedAP) override; 
+    virtual void connected(const Wifi::AccessPoint connectedAP) override; 
 
     /**
      * @brief  Schedules a list update whenever an access point disconnects.
@@ -153,10 +155,10 @@ private:
      * @param disconnectedAP  The access point that was being used by the closed
      *                        connection.
      */
-    virtual void disconnected(const AccessPoint disconnectedAP) override; 
+    virtual void disconnected(const Wifi::AccessPoint disconnectedAP) override; 
     
     /* All visible access points. */
-    juce::Array<AccessPoint> visibleAPs;
+    juce::Array<Wifi::AccessPoint> visibleAPs;
 
     /* Tracks whether the access point list needs to be sorted: */
     bool fullUpdateNeeded = false;

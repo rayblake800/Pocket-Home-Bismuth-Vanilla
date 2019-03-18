@@ -1,8 +1,8 @@
 #pragma once
 /**
- * @file  Wifi_ConnectionList_ListButton.h
+ * @file  Settings_WifiList_ListButton.h
  *
- * @brief  Represents a single list item in the Wifi::ConnectionList.
+ * @brief  Represents a single list item in the WifiList.
  */
 
 #include "JuceHeader.h"
@@ -12,21 +12,21 @@
 #include "Wifi_AccessPoint.h"
 #include "Layout_Group_Manager.h"
 
-namespace Wifi 
+namespace Settings
 {
-    class AccessPoint;
-    namespace ConnectionList 
+    namespace WifiList 
     { 
         class ListButton; 
         class ControlComponent;
     } 
 }
+namespace Wifi { class AccessPoint; }
 
 /**
  * @brief  A button representing a Wifi access point in the access point
  *         connection list.
  */
-class Wifi::ConnectionList::ListButton final : public juce::Button
+class Settings::WifiList::ListButton final : public juce::Button
 {
 public:
     /**
@@ -42,7 +42,7 @@ public:
      * @param accessPoint  The Wifi access point object this component will
      *                     represent in the connection list.
      */
-    void updateForAccessPoint(const AccessPoint accessPoint);
+    void updateForAccessPoint(const Wifi::AccessPoint accessPoint);
 
     /**
      * @brief  Adds a connection control component to the bottom of the 

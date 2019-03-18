@@ -1,5 +1,5 @@
-#include "Wifi_ConnectionList_ListButton.h"
-#include "Wifi_ConnectionList_ControlComponent.h"
+#include "Settings_WifiList_ListButton.h"
+#include "Settings_WifiList_ControlComponent.h"
 #include "Theme_Image_JSONKeys.h"
 
 /* List item border width in pixels: */
@@ -22,8 +22,8 @@ static const constexpr float selectedYMarginFraction = 0.03;
 /*
  * Sets up the initial button layout.
  */
-Wifi::ConnectionList::ListButton::ListButton() : 
-        juce::Button("Wifi::ConnectionList::ListButton"),
+Settings::WifiList::ListButton::ListButton() : 
+        juce::Button("Settings::WifiList::ListButton"),
         lockIcon(Theme::Image::JSONKeys::lockIcon)
 {
     using namespace Layout::Group;
@@ -51,13 +51,13 @@ Wifi::ConnectionList::ListButton::ListButton() :
 /*
  * Updates this list button to represent a specific access point.
  */
-void Wifi::ConnectionList::ListButton::updateForAccessPoint
-(const AccessPoint accessPoint)
+void Settings::WifiList::ListButton::updateForAccessPoint
+(const Wifi::AccessPoint accessPoint)
 {
     apNameLabel.setText(accessPoint.getSSID().toString(),
             juce::NotificationType::dontSendNotification);
     lockIcon.setVisible(accessPoint.getSecurityType()
-            != LibNM::SecurityType::unsecured);
+            != Wifi::LibNM::SecurityType::unsecured);
     signalIcon.setSignalStrengthImage(accessPoint.getSignalStrength());
 }
 
@@ -65,7 +65,7 @@ void Wifi::ConnectionList::ListButton::updateForAccessPoint
 /*
  * Adds a connection control component to the bottom of the ListButton.
  */
-void Wifi::ConnectionList::ListButton::addControlComponent
+void Settings::WifiList::ListButton::addControlComponent
 (ControlComponent& controlComponent)
 {
     using namespace Layout::Group;
@@ -92,7 +92,7 @@ void Wifi::ConnectionList::ListButton::addControlComponent
 /*
  * Removes the control component from the ListButton if it is present.
  */
-void Wifi::ConnectionList::ListButton::removeControlComponent()
+void Settings::WifiList::ListButton::removeControlComponent()
 {
     using namespace Layout::Group;
     RelativeLayout layout = layoutManager.getLayout();
@@ -108,7 +108,7 @@ void Wifi::ConnectionList::ListButton::removeControlComponent()
 /*
  * Updates child components to fit the updated button bounds.
  */
-void Wifi::ConnectionList::ListButton::resized()
+void Settings::WifiList::ListButton::resized()
 {
     layoutManager.layoutComponents(getLocalBounds()); 
 }
@@ -116,7 +116,7 @@ void Wifi::ConnectionList::ListButton::resized()
 /*
  * Draws an outline around the ListButton.
  */
-void Wifi::ConnectionList::ListButton::paintButton
+void Settings::WifiList::ListButton::paintButton
 (juce::Graphics& graphics, bool isMouseOverButton, bool isButtonDown)
 {
     /* TODO: define custom ColourIDs rather than using label text color. */

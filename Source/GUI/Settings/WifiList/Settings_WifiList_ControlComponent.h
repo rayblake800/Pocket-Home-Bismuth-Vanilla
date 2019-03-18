@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Wifi_ConnectionList_ControlComponent.h
+ * @file  Settings_WifiList_ControlComponent.h
  *
  * @brief  Provides reusable control and information components for a single
  *         access point.
@@ -14,13 +14,13 @@
 #include "Wifi_Connection_Control_Handler.h"
 #include "JuceHeader.h"
 
-namespace Wifi { namespace ConnectionList { class ControlComponent; } }
+namespace Settings { namespace WifiList { class ControlComponent; } }
 
 /**
  * @brief  A collection of components that provide detailed information and
  *         controls for a single Wifi access point.
  */
-class Wifi::ConnectionList::ControlComponent : public juce::Component,
+class Settings::WifiList::ControlComponent : public juce::Component,
     public Locale::TextUser
 {
 public:
@@ -36,7 +36,7 @@ public:
      *
      * @param newAP  The access point the ControlComponent should represent.
      */
-    void updateComponentsForAP(AccessPoint newAP);
+    void updateComponentsForAP(Wifi::AccessPoint newAP);
 
 private:
     /**
@@ -131,7 +131,7 @@ private:
     Layout::Group::Manager layoutControl;
 
     /* The access point object represented and controlled by this component: */
-    AccessPoint selectedAP;
+    Wifi::AccessPoint selectedAP;
 
     /* Displays an access point's last connection time if applicable. */
     Widgets::BoundedLabel lastConnectionLabel;

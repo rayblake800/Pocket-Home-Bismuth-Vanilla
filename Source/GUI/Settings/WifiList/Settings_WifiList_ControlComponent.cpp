@@ -1,5 +1,5 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi_ConnectionList_ControlComponent.h"
+#include "Settings_WifiList_ControlComponent.h"
 #include "Wifi_Connection_Record_Reader.h"
 #include "Wifi_Connection_Event.h"
 #include "Wifi_Connection_Control_Handler.h"
@@ -11,11 +11,11 @@
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
 static const constexpr char* dbgPrefix 
-        = "Wifi::ConnectionList::ControlComponent::";
+        = "Settings::WifiList::ControlComponent::";
 #endif
 
 /* Localized object class key: */
-static const juce::Identifier localeClassKey = "Wifi::ConnectionList";
+static const juce::Identifier localeClassKey = "Settings::WifiList";
 
 /* Localized text value keys: */
 namespace TextKey
@@ -45,7 +45,7 @@ static const constexpr float yPaddingFraction = 0.02;
 /*
  * Initializes all child components.
  */
-Wifi::ConnectionList::ControlComponent::ControlComponent() :
+Settings::WifiList::ControlComponent::ControlComponent() :
     Locale::TextUser(localeClassKey),
     controlListener(*this)
 { 
@@ -95,18 +95,18 @@ Wifi::ConnectionList::ControlComponent::ControlComponent() :
 /*
  * Updates all components to represent a specific Wifi access point.
  */
-void Wifi::ConnectionList::ControlComponent::updateComponentsForAP
-(AccessPoint newAP)
+void Settings::WifiList::ControlComponent::updateComponentsForAP
+(Wifi::AccessPoint newAP)
 {
 
     using juce::String;
-    using Connection::EventType;
+    using Wifi::Connection::EventType;
 
-    const Connection::Record::Reader connectionRecord;
+    const Wifi::Connection::Record::Reader connectionRecord;
     DBG(dbgPrefix << __func__ << ": Updating connection controls for AP " 
             << newAP.getSSID().toString());
     const bool requiresAuth = newAP.getSecurityType() 
-            != LibNM::SecurityType::unsecured;
+            != Wifi::LibNM::SecurityType::unsecured;
     const bool hasSavedConnection = newAP.hasSavedConnection();
     const bool isActiveAP = connectionRecord.getActiveAP() == newAP;
     const bool isConnected = isActiveAP && connectionRecord.isConnected();
@@ -140,11 +140,10 @@ void Wifi::ConnectionList::ControlComponent::updateComponentsForAP
             && hasSavedConnection;
     savedConnectionDeleteButton.setVisible(showDeleteButton);
     savedConnectionDeleteButton.setEnabled(showDeleteButton);
-    
 
     // Update password label and entry field:
     const bool showPasswordEntry = !isConnected && !isConnecting && requiresAuth
-        && (!hasSavedConnection || lastEventType 
+            && (!hasSavedConnection || lastEventType 
                 == EventType::connectionAuthFailed);
     passwordLabel.setVisible(showPasswordEntry);
     passwordEditor.setVisible(showPasswordEntry);
@@ -162,11 +161,12 @@ void Wifi::ConnectionList::ControlComponent::updateComponentsForAP
     }
     if(!isConnected && !isConnecting)
     {
-        if(lastEventType == Connection::EventType::connectionFailed)
+        if(lastEventType == Wifi::Connection::EventType::connectionFailed)
         {
             errorText = localeText(TextKey::connectionFailed);
         }
-        else if(lastEventType == Connection::EventType::connectionAuthFailed)
+        else if(lastEventType 
+                == Wifi::Connection::EventType::connectionAuthFailed)
         {
             errorText = localeText(TextKey::wrongPassword);
         }
@@ -193,7 +193,7 @@ void Wifi::ConnectionList::ControlComponent::updateComponentsForAP
  * Updates the layout of all child components when the main component is 
  * resized.
  */
-void Wifi::ConnectionList::ControlComponent::resized()
+void Settings::WifiList::ControlComponent::resized()
 {
     layoutControl.layoutComponents(getLocalBounds());
 }
@@ -201,7 +201,7 @@ void Wifi::ConnectionList::ControlComponent::resized()
 /*
  * Attempts to open a connection using the selected access point.
  */
-void Wifi::ConnectionList::ControlComponent::connect()
+void Settings::WifiList::ControlComponent::connect()
 {
     using juce::String;
     if (selectedAP.isNull())
@@ -218,7 +218,7 @@ void Wifi::ConnectionList::ControlComponent::connect()
         return;
     }
 
-    if (selectedAP.getSecurityType() != LibNM::SecurityType::unsecured)
+    if (selectedAP.getSecurityType() != Wifi::LibNM::SecurityType::unsecured)
     {
         DBG(dbgPrefix << __func__ << ": connecting to "
                 << selectedAP.getSSID().toString() << " with psk of length "
@@ -237,7 +237,7 @@ void Wifi::ConnectionList::ControlComponent::connect()
             juce::NotificationType::dontSendNotification);
 }
 
-using Control = Wifi::ConnectionList::ControlComponent;
+using Control = Settings::WifiList::ControlComponent;
 
 Control::ConnectionButton::ConnectionButton() 
 { 
@@ -286,7 +286,7 @@ Control::ControlListener::ControlListener
  */
 void Control::ControlListener::buttonClicked(juce::Button* button)
 {
-    AccessPoint selectedAP = controlComponent.selectedAP;
+    Wifi::AccessPoint selectedAP = controlComponent.selectedAP;
     if(selectedAP.isNull())
     {
         DBG(dbgPrefix << __func__ << ": ap is null!");
@@ -294,7 +294,7 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
     }
     if(button == &controlComponent.connectionButton)
     {
-        const Connection::Record::Reader connectionRecords;
+        const Wifi::Connection::Record::Reader connectionRecords;
         if(connectionRecords.getActiveAP() == selectedAP)
         {
             if(connectionRecords.isConnecting())
@@ -326,7 +326,7 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
                 controlComponent.localeText(TextKey::confirmDelete),
                 [this, selectedAP]()
         {
-            Connection::Saved::Deleter connectionDeleter;
+            Wifi::Connection::Saved::Deleter connectionDeleter;
             connectionDeleter.removeSavedConnection(selectedAP);
             controlComponent.updateComponentsForAP(selectedAP);
         });

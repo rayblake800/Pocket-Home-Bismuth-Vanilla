@@ -1,6 +1,6 @@
 #define WIFI_IMPLEMENTATION
-#include "Wifi_ConnectionList_ListComponent.h"
-#include "Wifi_ConnectionList_ListButton.h"
+#include "Settings_WifiList_ListComponent.h"
+#include "Settings_WifiList_ListButton.h"
 #include "Wifi_Connection_Record_Reader.h"
 #include "Wifi_Connection_Saved_Reader.h"
 #include "Wifi_Connection_Event.h"
@@ -12,7 +12,7 @@
 #ifdef JUCE_DEBUG
 /* Print the full class name before debug output: */
 static const constexpr char* dbgPrefix 
-        = "Wifi::ConnectionList::ListComponent::";
+        = "Settings::WifiList::ListComponent::";
 #endif
 
 /* Animation duration in milliseconds: */
@@ -23,7 +23,7 @@ static class
 {
 public:
     /**
-     * @brief  Compares wifi access points in order to sort the access point 
+     * @brief  Compares Wifi access points in order to sort the access point 
      *         list.
      *
      *  The connected access point will always come before all others, and
@@ -70,11 +70,11 @@ public:
     }
 } apComparator;
 
-Wifi::ConnectionList::ListComponent::ListComponent()
+Settings::WifiList::ListComponent::ListComponent()
 {
-#    if JUCE_DEBUG
-    setName("Wifi::ConnectionList::ListComponent");
-#    endif
+#if JUCE_DEBUG
+    setName("Settings::WifiList::ListComponent");
+#endif
     loadAccessPoints();
 }
 
@@ -82,7 +82,7 @@ Wifi::ConnectionList::ListComponent::ListComponent()
  * Sets the number of items in the list to match the number of visible
  * Wifi access points. 
  */
-unsigned int Wifi::ConnectionList::ListComponent::getListSize() const
+unsigned int Settings::WifiList::ListComponent::getListSize() const
 {
     return visibleAPs.size();
 }
@@ -95,10 +95,10 @@ unsigned int Wifi::ConnectionList::ListComponent::getListSize() const
  *
  * @return        A valid, non-null ListButton pointer.
  */
-static Wifi::ConnectionList::ListButton* getOrCreateListButton
+static Settings::WifiList::ListButton* getOrCreateListButton
 (juce::Button* button)
 {
-    using namespace Wifi::ConnectionList;
+    using namespace Settings::WifiList;
     if(button == nullptr)
     {
         return new ListButton;
@@ -112,7 +112,7 @@ static Wifi::ConnectionList::ListButton* getOrCreateListButton
 /*
  * Creates or updates an unselected list item.
  */
-juce::Button* Wifi::ConnectionList::ListComponent::updateUnselectedListItem
+juce::Button* Settings::WifiList::ListComponent::updateUnselectedListItem
 (juce::Button* listItem, const unsigned int index)
 {
     ListButton* listButton = getOrCreateListButton(listItem);
@@ -124,11 +124,11 @@ juce::Button* Wifi::ConnectionList::ListComponent::updateUnselectedListItem
 /*
  * Creates or updates a component so it can be used as the selected list item.
  */
-juce::Button* Wifi::ConnectionList::ListComponent::updateSelectedListItem
+juce::Button* Settings::WifiList::ListComponent::updateSelectedListItem
 (juce::Button* listItem) 
 {
     ListButton* listButton = getOrCreateListButton(listItem);
-    AccessPoint selectedAP = visibleAPs[getSelectedIndex()];
+    Wifi::AccessPoint selectedAP = visibleAPs[getSelectedIndex()];
     listButton->updateForAccessPoint(selectedAP);
     listButton->addControlComponent(controlComponent);
     controlComponent.updateComponentsForAP(selectedAP);
@@ -139,10 +139,10 @@ juce::Button* Wifi::ConnectionList::ListComponent::updateSelectedListItem
  * Reloads the list of wifi access points within range of the wifi device,
  * and updates the access point list.
  */
-void Wifi::ConnectionList::ListComponent::loadAccessPoints()
+void Settings::WifiList::ListComponent::loadAccessPoints()
 {
     visibleAPs.clearQuick();
-    const APList::Reader apListReader;
+    const Wifi::APList::Reader apListReader;
     visibleAPs = apListReader.getAccessPoints();
     DBG(dbgPrefix << __func__ << ": Found " << visibleAPs.size()
             << " access points.");
@@ -154,7 +154,7 @@ void Wifi::ConnectionList::ListComponent::loadAccessPoints()
 /*
  * Refreshes all visible list items without changing their order in the list.
  */
-void Wifi::ConnectionList::ListComponent::updateListItems(const bool animate)
+void Settings::WifiList::ListComponent::updateListItems(const bool animate)
 {
     //DBG(dbgPrefix << __func__ << ": Refreshing list items.");
     if(animate)
@@ -171,10 +171,13 @@ void Wifi::ConnectionList::ListComponent::updateListItems(const bool animate)
 /*
  * Removes any lost access points and sorts the access point list.
  */
-void Wifi::ConnectionList::ListComponent::updateList()
+void Settings::WifiList::ListComponent::updateList()
 {
     DBG(dbgPrefix << __func__ << ": Sorting and pruning AP list.");
-    visibleAPs.removeIf([](AccessPoint listAP) { return listAP.isNull(); });
+    visibleAPs.removeIf([](Wifi::AccessPoint listAP) 
+    { 
+        return listAP.isNull(); 
+    });
     visibleAPs.sort(apComparator, false);
 }
 
@@ -183,7 +186,7 @@ void Wifi::ConnectionList::ListComponent::updateList()
  * selected, it will instead update list components, and wait to update list 
  * order and remove missing items until the full list is shown again.
  */
-void Wifi::ConnectionList::ListComponent::scheduleListUpdate()
+void Settings::WifiList::ListComponent::scheduleListUpdate()
 {
     if(getSelectedIndex() == -1)
     {
@@ -201,7 +204,7 @@ void Wifi::ConnectionList::ListComponent::scheduleListUpdate()
  * If necessary, updates the list order and removes lost access points when the 
  * selection is removed to reveal the full list.
  */
-void Wifi::ConnectionList::ListComponent::selectionChanged()
+void Settings::WifiList::ListComponent::selectionChanged()
 {
     if(getSelectedIndex() == -1 && fullUpdateNeeded)
     {
@@ -213,8 +216,8 @@ void Wifi::ConnectionList::ListComponent::selectionChanged()
 /*
  * Schedules a list update when access point strength changes.
  */
-void Wifi::ConnectionList::ListComponent::signalStrengthUpdate
-(const AccessPoint updatedAP) 
+void Settings::WifiList::ListComponent::signalStrengthUpdate
+(const Wifi::AccessPoint updatedAP) 
 {
     scheduleListUpdate();
 }
@@ -223,8 +226,8 @@ void Wifi::ConnectionList::ListComponent::signalStrengthUpdate
  * Adds a newly discovered access point to the list, and schedules a list 
  * update.
  */
-void Wifi::ConnectionList::ListComponent::accessPointAdded
-(const AccessPoint addedAP)
+void Settings::WifiList::ListComponent::accessPointAdded
+(const Wifi::AccessPoint addedAP)
 {
     visibleAPs.addIfNotAlreadyThere(addedAP);
     scheduleListUpdate();
@@ -234,8 +237,8 @@ void Wifi::ConnectionList::ListComponent::accessPointAdded
  * Replaces the removed access point with a null access point and schedules a 
  * list update whenever an access point is lost.
  */
-void Wifi::ConnectionList::ListComponent::accessPointRemoved
-(const AccessPoint removedAP)
+void Settings::WifiList::ListComponent::accessPointRemoved
+(const Wifi::AccessPoint removedAP)
 {
     int removedIndex = visibleAPs.indexOf(removedAP);
     if(removedIndex >= 0)
@@ -247,7 +250,7 @@ void Wifi::ConnectionList::ListComponent::accessPointRemoved
         }
         else
         {
-            visibleAPs.set(removedIndex, AccessPoint());
+            visibleAPs.set(removedIndex, Wifi::AccessPoint());
             scheduleListUpdate();
         }
     }
@@ -257,8 +260,8 @@ void Wifi::ConnectionList::ListComponent::accessPointRemoved
  * Updates access point connection controls when a connection starts to 
  * activate.
  */
-void Wifi::ConnectionList::ListComponent::startedConnecting
-(const AccessPoint connectingAP)
+void Settings::WifiList::ListComponent::startedConnecting
+(const Wifi::AccessPoint connectingAP)
 {
     const int selectedIndex = getSelectedIndex();
     if(selectedIndex >= 0 && connectingAP == visibleAPs[selectedIndex])
@@ -276,8 +279,8 @@ void Wifi::ConnectionList::ListComponent::startedConnecting
  * Updates access point connection controls when connection authentication 
  * fails.
  */
-void Wifi::ConnectionList::ListComponent::connectionAuthFailed
-(const AccessPoint connectingAP)
+void Settings::WifiList::ListComponent::connectionAuthFailed
+(const Wifi::AccessPoint connectingAP)
 {
     startedConnecting(connectingAP);
 }
@@ -285,8 +288,8 @@ void Wifi::ConnectionList::ListComponent::connectionAuthFailed
 /*
  * Schedules a list update whenever an access point connects.
  */
-void Wifi::ConnectionList::ListComponent::connected
-(const AccessPoint connectedAP)
+void Settings::WifiList::ListComponent::connected
+(const Wifi::AccessPoint connectedAP)
 {
     startedConnecting(connectedAP);
 }
@@ -294,8 +297,8 @@ void Wifi::ConnectionList::ListComponent::connected
 /*
  * Schedules a list update whenever an access point disconnects.
  */
-void Wifi::ConnectionList::ListComponent::disconnected
-(const AccessPoint disconnectedAP)
+void Settings::WifiList::ListComponent::disconnected
+(const Wifi::AccessPoint disconnectedAP)
 {
     scheduleListUpdate();
 }

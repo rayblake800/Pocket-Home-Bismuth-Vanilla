@@ -196,16 +196,7 @@
         "connectingUnknown" : "Connecting...",
         "disconnecting"     : "Disconnecting..."   
     },
-    "Widgets::ColourPicker" : 
-    {
-	    "setColour" : "Set Color"
-    },
-    "Widgets::FilePathEditor": 
-    {
-        "defaultTitle"       : "Select an image file",
-        "defaultDescription" : "Please select an image file"
-    },
-    "Wifi::ConnectionList": 
+    "Settings::WifiList": 
     {
         "password"         : "Password:",
         "connect"          : "Connect",
@@ -216,5 +207,14 @@
         "lostAP"           : "Access point lost.",
         "lastConnected"    : "Last connected: ",
         "deleteSaved"      : "Delete saved connection"
+    },
+    "Widgets::ColourPicker" : 
+    {
+	    "setColour" : "Set Color"
+    },
+    "Widgets::FilePathEditor": 
+    {
+        "defaultTitle"       : "Select an image file",
+        "defaultDescription" : "Please select an image file"
     }
 }

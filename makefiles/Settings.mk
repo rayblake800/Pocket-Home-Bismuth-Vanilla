@@ -1,8 +1,16 @@
 ########################## Settings Module #####################################
 SETTINGS_DIR = Source/GUI/Settings
+SETTINGS_WIFI_LIST_DIR := $(SETTINGS_DIR)/WifiList
 
 SETTINGS_PREFIX = Settings_
 SETTINGS_OBJ := $(JUCE_OBJDIR)/$(SETTINGS_PREFIX)
+
+SETTINGS_WIFI_LIST_PREFIX := $(SETTINGS_PREFIX)WifiList_
+SETTINGS_WIFI_LIST_OBJ := $(SETTINGS_OBJ)WifiList_
+OBJECTS_WIFI_LIST_SETTINGS := \
+  $(SETTINGS_WIFI_LIST_OBJ)ListButton.o \
+  $(SETTINGS_WIFI_LIST_OBJ)ControlComponent.o \
+  $(SETTINGS_WIFI_LIST_OBJ)ListComponent.o
 
 OBJECTS_SETTINGS := \
   $(SETTINGS_OBJ)ClockModePicker.o \
@@ -12,7 +20,8 @@ OBJECTS_SETTINGS := \
   $(SETTINGS_OBJ)HomeBackgroundPicker.o \
   $(SETTINGS_OBJ)CalibrationButton.o \
   $(SETTINGS_OBJ)ConnectionComponent.o \
-  $(SETTINGS_OBJ)WifiControl.o
+  $(SETTINGS_OBJ)WifiControl.o \
+  $(OBJECTS_WIFI_LIST_SETTINGS)
 
 OBJECTS_SETTINGS_TEST :=
 
@@ -43,3 +52,10 @@ $(SETTINGS_OBJ)ConnectionComponent.o : \
     $(SETTINGS_DIR)/$(SETTINGS_PREFIX)ConnectionComponent.cpp
 $(SETTINGS_OBJ)WifiControl.o : \
     $(SETTINGS_DIR)/$(SETTINGS_PREFIX)WifiControl.cpp
+
+$(SETTINGS_WIFI_LIST_OBJ)ListButton.o : \
+    $(SETTINGS_WIFI_LIST_DIR)/$(SETTINGS_WIFI_LIST_PREFIX)ListButton.cpp
+$(SETTINGS_WIFI_LIST_OBJ)ControlComponent.o : \
+    $(SETTINGS_WIFI_LIST_DIR)/$(SETTINGS_WIFI_LIST_PREFIX)ControlComponent.cpp
+$(SETTINGS_WIFI_LIST_OBJ)ListComponent.o : \
+    $(SETTINGS_WIFI_LIST_DIR)/$(SETTINGS_WIFI_LIST_PREFIX)ListComponent.cpp

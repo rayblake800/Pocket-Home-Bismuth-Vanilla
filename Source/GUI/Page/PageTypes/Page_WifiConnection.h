@@ -6,7 +6,7 @@
  */
 
 #include "Page_Component.h"
-#include "Wifi_ConnectionList_ListComponent.h"
+#include "Settings_WifiList_ListComponent.h"
 
 namespace Page { class WifiConnection; }
 
@@ -35,5 +35,5 @@ private:
     virtual bool overrideBackButton() override;
 
     /* The list component used to view and control possible connections: */
-    Wifi::ConnectionList::ListComponent connectionList;
+    Settings::WifiList::ListComponent connectionList;
 };

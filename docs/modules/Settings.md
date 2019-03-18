@@ -25,3 +25,15 @@ ConnectionComponent is an abstract basis for connection status and control widge
 #### [Settings\::WifiControl](../../Source/GUI/Settings/Settings_WifiControl.h)
 WifiControl is a ConnectionComponent used to enable or disable Wifi, view the active Wifi connection, and open the Wifi settings page.
 
+## WifiList Connection Settings
+The WifiList submodule creates a Wifi connection list component that allows the user to set or change the active Wifi connection.
+
+#### [Settings\::WifiList\::ListComponent](../../Source/GUI/Settings/WifiList/Settings_WifiList_ListComponent.h)
+ListComponent gets the list of all visible Wifi access points, and displays them within a [Widgets\::FocusingPageList](../../Source/Foundation/Widgets/Widgets_FocusingPagedList.h) UI component, where selecting a Wifi access point brings up connection controls and information for that access point.
+
+#### [Settings\::WifiList\::ListButton](../../Source/GUI/Settings/WifiList/Settings_WifiList_ListButton.h)
+ListButton UI components represents an unselected list item in the Wifi connection list. It displays the name of its Wifi access point, the signal strength of the access point, and whether the access point is connected or secured.
+
+#### [Settings\::WifiList\::ControlComponent](../../Source/GUI/Settings/WifiList/Settings_WifiList_ControlComponent.h)
+The ControlComponent shows connection controls and information for the selected list item. It shows last connection time, and provides controls to create a connection, destroy a connection, or delete a saved connection for the selected access point.
+
