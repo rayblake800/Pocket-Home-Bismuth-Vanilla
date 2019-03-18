@@ -41,8 +41,6 @@ GDB_SUPPORT=(0, 1)
   
 BUILD_TESTS=(0, 1)
   Disable or enable compilation of test classes.
-  
-  or renamed files
 endef
 export HELPTEXT
 
@@ -248,13 +246,13 @@ install:
 debug:
 	$(MAKE) CONFIG=Debug
 	reset
-	$(MAKE) devinstall CONFIG=Debug
+	$(MAKE) install CONFIG=Debug
 	gdb $(JUCE_TARGET_APP)
 
 release:
 	$(MAKE) CONFIG=Release
 	reset
-	$(MAKE) devinstall CONFIG=Release
+	$(MAKE) install CONFIG=Release
 
 check-pkg-config:
 	@command -v pkg-config >/dev/null 2>&1 || { echo >&2 \
@@ -264,9 +262,6 @@ check-pkg-config:
  		echo "Checking for outdated dependencies:"; \
         ./project-scripts/DepClean.sh $(JUCE_OBJDIR); \
 	fi
-
-#   if [ $(CHECK_DEPS) ]; then \
-
 clean:
 	@echo Cleaning $(JUCE_TARGET_APP)
 	$(V_AT)$(CLEANCMD)
