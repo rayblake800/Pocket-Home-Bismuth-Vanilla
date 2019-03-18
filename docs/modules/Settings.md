@@ -21,3 +21,7 @@ CalibrationButton launches a touchscreen calibration application when clicked.
 
 #### [Settings\::ConnectionComponent](../../Source/GUI/Settings/Settings_ConnectionComponent.h)
 ConnectionComponent is an abstract basis for connection status and control widgets.
+
+#### [Settings\::WifiControl](../../Source/GUI/Settings/Settings_WifiControl.h)
+WifiControl is a ConnectionComponent used to enable or disable Wifi, view the active Wifi connection, and open the Wifi settings page.
+

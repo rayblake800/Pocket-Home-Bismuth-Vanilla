@@ -11,7 +11,8 @@ OBJECTS_SETTINGS := \
   $(SETTINGS_OBJ)CursorModePicker.o \
   $(SETTINGS_OBJ)HomeBackgroundPicker.o \
   $(SETTINGS_OBJ)CalibrationButton.o \
-  $(SETTINGS_OBJ)ConnectionComponent.o
+  $(SETTINGS_OBJ)ConnectionComponent.o \
+  $(SETTINGS_OBJ)WifiControl.o
 
 OBJECTS_SETTINGS_TEST :=
 
@@ -40,3 +41,5 @@ $(SETTINGS_OBJ)CalibrationButton.o : \
     $(SETTINGS_DIR)/$(SETTINGS_PREFIX)CalibrationButton.cpp
 $(SETTINGS_OBJ)ConnectionComponent.o : \
     $(SETTINGS_DIR)/$(SETTINGS_PREFIX)ConnectionComponent.cpp
+$(SETTINGS_OBJ)WifiControl.o : \
+    $(SETTINGS_DIR)/$(SETTINGS_PREFIX)WifiControl.cpp

@@ -186,6 +186,16 @@
         "visible"       : "Visible",
         "notVisible"    : "Not visible"
     },
+    "Settings::WifiControl":
+    {
+        "wifiNotFound"      : "WiFi Not Found",
+        "wifiDisabled"      : "WiFi Disabled",
+        "notConnected"      : "Not Connected",
+        "connectingAP"      : "Connecting to ",
+        "missingPSK"        : "Incorrect Password",
+        "connectingUnknown" : "Connecting...",
+        "disconnecting"     : "Disconnecting..."   
+    },
     "Widgets::ColourPicker" : 
     {
 	    "setColour" : "Set Color"
@@ -206,15 +216,5 @@
         "lostAP"           : "Access point lost.",
         "lastConnected"    : "Last connected: ",
         "deleteSaved"      : "Delete saved connection"
-    },
-    "Wifi::ControlWidget":
-    {
-        "wifiNotFound"      : "WiFi Not Found",
-        "wifiDisabled"      : "WiFi Disabled",
-        "notConnected"      : "Not Connected",
-        "connectingAP"      : "Connecting to ",
-        "missingPSK"        : "Incorrect Password",
-        "connectingUnknown" : "Connecting...",
-        "disconnecting"     : "Disconnecting..."   
     }
 }

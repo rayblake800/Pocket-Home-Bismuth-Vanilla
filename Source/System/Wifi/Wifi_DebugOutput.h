@@ -5,7 +5,6 @@
  * @brief Converts assorted Wifi-related enums to text for debug output.
  */
 
-#ifdef JUCE_DEBUG
 #include <nm-device-wifi.h>
 
 /**
@@ -54,4 +53,3 @@ const char* deviceStateReasonString(NMDeviceStateReason stateReason);
  * @return       A text representation of the state value.
  */
 const char* activeConnectionStateString(NMActiveConnectionState state);
-#endif

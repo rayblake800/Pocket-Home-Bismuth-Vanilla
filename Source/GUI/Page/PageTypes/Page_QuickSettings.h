@@ -7,7 +7,7 @@
  */
 
 #include "Page_Component.h"
-#include "Wifi_ControlWidget.h"
+#include "Settings_WifiControl.h"
 #include "Settings_BrightnessSlider.h"
 #include "Settings_VolumeSlider.h"
 #include "Theme_Image_Component.h"
@@ -59,7 +59,7 @@ private:
     PageListener pageListener;
 
     /* Turns wifi on or off, shows connection state, and opens the wifi page. */
-    Wifi::ControlWidget wifiComponent;
+    Settings::WifiControl wifiComponent;
 
     /* Sets the display brightness */
     Settings::BrightnessSlider brightnessSlider;

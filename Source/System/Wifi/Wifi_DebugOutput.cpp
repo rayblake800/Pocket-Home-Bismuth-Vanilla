@@ -1,5 +1,4 @@
 #include "Wifi_DebugOutput.h"
-#ifdef JUCE_DEBUG
 /*
  * Gets text describing a NMState enum value.
  */
@@ -246,4 +245,3 @@ const char* activeConnectionStateString(NMActiveConnectionState state)
     }
     return "[Unknown NMActiveConnectionState!]";
 }
-#endif
