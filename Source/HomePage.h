@@ -16,7 +16,7 @@
 #include "Info_Clock.h"
 #include "Info_BatteryIcon.h"
 #include "Layout_Component_Manager.h"
-#include "Wifi_ConnectionIcon.h"
+#include "Info_ConnectionIcon.h"
 #include "Util_Commands.h"
 #include "AppMenu.h"
 
@@ -104,7 +104,7 @@ private:
     Info::BatteryIcon batteryIcon;
     
     /* Displays the current wifi status: */
-    Wifi::ConnectionIcon wifiIcon;
+    Info::ConnectionIcon wifiIcon;
 
     /* Loads the background image and ensures the image asset JSON resource
      * remains available: */

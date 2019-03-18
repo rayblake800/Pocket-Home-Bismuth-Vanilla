@@ -158,8 +158,6 @@ OBJECTS_WIFI_CONNECTION_LIST := \
 
 OBJECTS_WIFI_COMPONENT := \
   $(WIFI_OBJ)ControlWidget.o \
-  $(WIFI_OBJ)SignalIcon.o \
-  $(WIFI_OBJ)ConnectionIcon.o \
   $(OBJECTS_WIFI_CONNECTION_LIST)
 
 ################ Main Wifi Module  ################
@@ -313,10 +311,6 @@ $(WIFI_CONNECTION_LIST_OBJ)ListComponent.o : \
 
 $(WIFI_OBJ)ControlWidget.o : \
     $(WIFI_COMPONENT_DIR)/$(WIFI_PREFIX)ControlWidget.cpp
-$(WIFI_OBJ)SignalIcon.o : \
-    $(WIFI_COMPONENT_DIR)/$(WIFI_PREFIX)SignalIcon.cpp
-$(WIFI_OBJ)ConnectionIcon.o : \
-    $(WIFI_COMPONENT_DIR)/$(WIFI_PREFIX)ConnectionIcon.cpp
 
 $(WIFI_TESTUTILS_OBJ)ConnectionListener.o : \
     $(WIFI_TESTUTILS_DIR)/$(WIFI_TESTUTILS_PREFIX)ConnectionListener.cpp

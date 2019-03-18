@@ -1,21 +1,35 @@
-#include "Wifi_SignalIcon.h"
+#include "Info_SignalIcon.h"
 #include "Theme_Image_JSONKeys.h"
 
 /*
  * Initializes the icon with the image assets defined in the image
  * configuration file.
  */
-Wifi::SignalIcon::SignalIcon() : 
+Info::SignalIcon::SignalIcon() : 
     Theme::Image::Component<>(Theme::Image::JSONKeys::wifiIcon) { }
+
+/**
+ * @brief  All signal state icon images.  
+ *
+ * Each should correspond to an image asset file defined in components.json.
+ */
+enum class ImageAsset
+{
+    off,
+    strength0,
+    strength1,
+    strength2,
+    strength3
+};
 
 /*
  * Updates the Wifi signal icon to represent a new signal strength.
  */
-void Wifi::SignalIcon::setSignalStrengthImage
+void Info::SignalIcon::setSignalStrengthImage
 (const unsigned int signalStrength)
 {
-    const int minStrengthIdx = (int) APIcon::wifiStrength0;
-    const int maxStrengthIdx = (int) APIcon::wifiStrength3;
+    const int minStrengthIdx = (int) ImageAsset::strength0;
+    const int maxStrengthIdx = (int) ImageAsset::strength3;
     const int numStrengthImages = 1 + maxStrengthIdx - minStrengthIdx;
     const int strengthIndex = std::min<int>(maxStrengthIdx,
             minStrengthIdx + signalStrength / (100 / numStrengthImages));
@@ -25,7 +39,7 @@ void Wifi::SignalIcon::setSignalStrengthImage
 /*
  * Updates the Wifi signal icon to show that Wifi is disabled.
  */
-void Wifi::SignalIcon::setWifiDisabledImage()
+void Info::SignalIcon::setDisabledImage()
 {
-    setImageAssetIndex((int) APIcon::wifiOff);
+    setImageAssetIndex((int) ImageAsset::off);
 }

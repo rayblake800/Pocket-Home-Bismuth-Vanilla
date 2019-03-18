@@ -25,11 +25,6 @@ StrengthListener objects receive updates when the signal strength of Wifi access
 UpdateInterface is the interface inherited by StrengthListener and used by the Wifi\::Signal\::APModule to send updates to StrengthListener objects.
 
 ## Wifi UI Components
-
-#### [Wifi\::ConnectionIcon](../../Source/System/Wifi/Component/Wifi_ConnectionIcon.h)
-
-#### [Wifi\::SignalIcon](../../Source/System/Wifi/Component/Wifi_SignalIcon.h)
-
 #### [Wifi\::ControlWidget](../../Source/System/Wifi/Component/Wifi_ControlWidget.h)
 
 #### [Wifi\::ConnectionList\::ListComponent](../../Source/System/Wifi/Component/ConnectionList/Wifi_ConnectionList_ListComponent.h)

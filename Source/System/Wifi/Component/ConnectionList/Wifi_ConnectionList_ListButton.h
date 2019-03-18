@@ -7,7 +7,7 @@
 
 #include "JuceHeader.h"
 #include "Widgets_BoundedLabel.h"
-#include "Wifi_SignalIcon.h"
+#include "Info_SignalIcon.h"
 #include "Theme_Image_Component.h"
 #include "Wifi_AccessPoint.h"
 #include "Layout_Group_Manager.h"
@@ -85,7 +85,7 @@ private:
     Widgets::BoundedLabel apNameLabel;
 
     /* Shows an image representing signal strength: */
-    Wifi::SignalIcon signalIcon;
+    Info::SignalIcon signalIcon;
 
     /* Shows a lock icon if the access point is secured: */
     Theme::Image::Component<> lockIcon;
