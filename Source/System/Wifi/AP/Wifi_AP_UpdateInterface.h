@@ -5,7 +5,7 @@
 /**
  * @file  Wifi_AP_UpdateInterface.h
  *
- * @brief  The interface used by the Wifi::APList::ListModule to send updates 
+ * @brief  The interface used by the Wifi::Signal::APModule to send updates 
  *         to all Wifi::AP::StrengthListener objects.
  */
 

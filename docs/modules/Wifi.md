@@ -1,20 +1,28 @@
 # Wifi Module Documentation
+The Wifi module allows the application to provide Wifi controls and information. It provides a modular [SharedResource](./SharedResource.md) that monitors and controls the system Wifi device and any active Wifi connection. This is used to implement the Wifi controls provided by [Page\::WifiConnection](../../Source/GUI/Page/PageTypes/Page_WifiConnection.h).
 
 #### [Wifi\::Resource](../../Source/System/Wifi/Wifi_Resource.h)
+Resource defines the SharedResource object instance that controls access to the Wifi device and cached Wifi data. The Resource object initializes, manages, and destroys the [SharedResource\::Modular\::Module](../../Source/Foundation/SharedResource/Modular/SharedResource_Modular_Module.h) subclasses that handle the Wifi module's responsibilities.
 
 #### [Wifi\::Module](../../Source/System/Wifi/Wifi_Module.h)
+Module is the shared basis for all resource modules managed by the Wifi\::Resource. It provides additional functions allowing its subclasses to safely run asynchronous actions and asynchronously interact with connected Module Handler objects.
 
 #### [Wifi\::DebugOutput](../../Source/System/Wifi/Wifi_DebugOutput.h)
+DebugOutput converts Wifi enum types to text in order to construct debug output. DebugOutput functions are not included in release builds of the application.
 
 ## Wifi Access Points
 
 #### [Wifi\::AccessPoint](../../Source/System/Wifi/Wifi_AccessPoint.h)
-
-#### [Wifi\::AP\::StrengthListener](../../Source/System/Wifi/AP/Wifi_AP_StrengthListener.h)
+AccessPoint represents a Wifi access point visible to the system Wifi device. An AccessPoint may also represent multiple identical access points that connect to the same network. Each AccessPoint is automatically updated whenever its signal strength should change, when a compatible saved connection is added or removed, or when its last connection time changes.
 
 #### [Wifi\::AP\::Data](../../Source/System/Wifi/AP/Wifi_AP_Data.h)
+Data objects hold internal Wifi access point data, shared by AccessPoint objects to ensure access point state updates are applied to every AccessPoint.
+
+#### [Wifi\::AP\::StrengthListener](../../Source/System/Wifi/AP/Wifi_AP_StrengthListener.h)
+StrengthListener objects receive updates when the signal strength of Wifi access points changes. StrengthListener objects may choose to ignore all updates, get updates from a single access point, or get updates from all visible access points.
 
 #### [Wifi\::AP\::UpdateInterface](../../Source/System/Wifi/AP/Wifi_AP_UpdateInterface.h)
+UpdateInterface is the interface inherited by StrengthListener and used by the Wifi\::Signal\::APModule to send updates to StrengthListener objects.
 
 ## Wifi UI Components
 

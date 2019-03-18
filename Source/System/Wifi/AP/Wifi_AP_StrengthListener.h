@@ -21,6 +21,8 @@ namespace Wifi { namespace AP { class StrengthListener; } }
 namespace Wifi { class Resource; }
 
 /**
+ * @brief  Tracks the signal strength of Wifi access points.
+ *
  *  StrengthListener may choose to receive updates from all AccessPoint objects,
  * receive updates from a specific AccessPoint, or ignore all signal strength 
  * updates. This choice may be changed at any time.

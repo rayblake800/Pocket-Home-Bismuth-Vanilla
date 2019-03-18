@@ -1,5 +1,8 @@
 #include "Wifi_DebugOutput.h"
-
+#ifdef JUCE_DEBUG
+/*
+ * Gets text describing a NMState enum value.
+ */
 const char* nmStateString(NMState state)
 {
     switch (state)
@@ -24,7 +27,10 @@ const char* nmStateString(NMState state)
     return "[Unknown NMState!]";
 }
 
-const char * nmConnectivityStateString(NMConnectivityState state)
+/*
+ * Gets text describing a NMConnectivityState enum value.
+ */
+const char* nmConnectivityStateString(NMConnectivityState state)
 {
     switch (state)
     {
@@ -42,7 +48,10 @@ const char * nmConnectivityStateString(NMConnectivityState state)
     return "[Unknown NMConnectivityState!]";
 }
 
-const char * deviceStateString(NMDeviceState state)
+/*
+ * Gets text describing a NMDeviceState enum value.
+ */
+const char* deviceStateString(NMDeviceState state)
 {
     switch (state)
     {
@@ -76,7 +85,10 @@ const char * deviceStateString(NMDeviceState state)
     return "[Unknown NMDeviceState!]";
 }
 
-const char * deviceStateReasonString(NMDeviceStateReason stateReason)
+/*
+ * Gets text describing a NMDeviceStateReason enum value.
+ */
+const char* deviceStateReasonString(NMDeviceStateReason stateReason)
 {
     switch (stateReason)
     {
@@ -214,7 +226,10 @@ const char * deviceStateReasonString(NMDeviceStateReason stateReason)
     return "[Unknown NMDeviceStateReason!]";
 }
    
-const char * activeConnectionStateString(NMActiveConnectionState state)
+/*
+ * Gets text describing a NMActiveConnectionState enum value.
+ */
+const char* activeConnectionStateString(NMActiveConnectionState state)
 {
     switch(state)
     {
@@ -231,3 +246,4 @@ const char * activeConnectionStateString(NMActiveConnectionState state)
     }
     return "[Unknown NMActiveConnectionState!]";
 }
+#endif
