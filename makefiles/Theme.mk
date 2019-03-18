@@ -21,8 +21,7 @@ OBJECTS_THEME_IMAGE := \
   $(THEME_IMAGE_OBJ)AssetList.o \
   $(THEME_IMAGE_OBJ)JSONResource.o \
   $(THEME_IMAGE_OBJ)ConfigFile.o \
-  $(THEME_IMAGE_OBJ)ConfigListener.o \
-  $(THEME_IMAGE_OBJ)HomeBackgroundPicker.o \
+  $(THEME_IMAGE_OBJ)ConfigListener.o
 
 OBJECTS_THEME := \
   $(OBJECTS_THEME_COLOUR) \
@@ -61,8 +60,6 @@ $(THEME_IMAGE_OBJ)ConfigFile.o : \
     $(THEME_IMAGE_DIR)/$(THEME_IMAGE_PREFIX)ConfigFile.cpp
 $(THEME_IMAGE_OBJ)ConfigListener.o : \
     $(THEME_IMAGE_DIR)/$(THEME_IMAGE_PREFIX)ConfigListener.cpp
-$(THEME_IMAGE_OBJ)HomeBackgroundPicker.o : \
-    $(THEME_IMAGE_DIR)/$(THEME_IMAGE_PREFIX)HomeBackgroundPicker.cpp
 
 $(THEME_OBJ)LookAndFeel.o : \
     $(THEME_DIR)/Theme_LookAndFeel.cpp

@@ -26,7 +26,7 @@ public:
 private:
     /**
      * @brief   Gets the set of all basic (non-array, non-object) properties 
-     *          tracked by this ConfigJSON.
+     *          tracked by this JSON resource.
      * 
      * @return  The keys to all variables tracked in this config file.
      */
@@ -38,8 +38,7 @@ private:
      *         of a single key value, and if so, notifies it that the tracked
      *         value has updated.
      *
-     * @param listener          A Listener object attached to the ConfigJSON
-     *                          object.
+     * @param listener          A Listener object attached to the JSON resource.
      *
      * @param key               The key to an updated configuration value.
      */

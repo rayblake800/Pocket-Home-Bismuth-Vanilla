@@ -2,11 +2,14 @@
 #include "Theme_Colour_JSONKeys.h"
 #include "Config_Listener.h"
 
-namespace ColourTheme = Theme::Colour;
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Theme::Colour::JSONResource::";
+#endif
 
 /* SharedResource object key */
-const juce::Identifier ColourTheme::JSONResource::resourceKey 
-        = "Theme_Colour_JSONResource";
+const juce::Identifier Theme::Colour::JSONResource::resourceKey 
+        = "Theme::Colour::JSONResource";
 
 /* Filename of the JSON configuration file */
 static const constexpr char * configFilename = "colours.json";
@@ -18,10 +21,29 @@ Config::FileResource(resourceKey, configFilename)
 }
 
 /*
+ * Gets the set of all basic (non-array, non-object) properties tracked by this 
+ * JSON resource.
+ */
+const std::vector<Config::DataKey>& 
+Theme::Colour::JSONResource::getConfigKeys() const
+{
+    using juce::Identifier;
+    static std::vector<Config::DataKey> keys;
+    if(keys.empty())
+    {
+        for(const Identifier& key : JSONKeys::getColourKeys())
+        {
+            keys.push_back(Config::DataKey(key, Config::DataKey::stringType));
+        }
+    }
+    return keys;
+}
+
+/*
  * Checks if a single handler object is a Listener tracking updates of a single 
  * key value, and if so, notifies it that the tracked value has updated.
  */
-void ColourTheme::JSONResource::notifyListener(ListenerInterface* listener,
+void Theme::Colour::JSONResource::notifyListener(ListenerInterface* listener,
         const juce::Identifier& key)
 {
     using namespace Theme::Colour::JSONKeys;
@@ -39,7 +61,7 @@ void ColourTheme::JSONResource::notifyListener(ListenerInterface* listener,
             if(colourId == -1)
             {
                 //Category color removed, this shouldn't happen.
-                DBG("ColourJSON::" << __func__ << ": Color category "
+                DBG(dbgPrefix << __func__ << ": Color category "
                         << key << " value was removed!");
                 jassertfalse;
             }
@@ -76,19 +98,4 @@ void ColourTheme::JSONResource::notifyListener(ListenerInterface* listener,
             }
         }
     }
-}
-
-const std::vector<Config::DataKey>& 
-ColourTheme::JSONResource::getConfigKeys() const
-{
-    using juce::Identifier;
-    static std::vector<Config::DataKey> keys;
-    if(keys.empty())
-    {
-        for(const Identifier& key : JSONKeys::getColourKeys())
-        {
-            keys.push_back(Config::DataKey(key, Config::DataKey::stringType));
-        }
-    }
-    return keys;
 }

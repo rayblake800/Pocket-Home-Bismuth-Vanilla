@@ -9,6 +9,7 @@ OBJECTS_SETTINGS := \
   $(SETTINGS_OBJ)BrightnessSlider.o \
   $(SETTINGS_OBJ)VolumeSlider.o \
   $(SETTINGS_OBJ)CursorModePicker.o \
+  $(SETTINGS_OBJ)HomeBackgroundPicker.o \
   $(SETTINGS_OBJ)CalibrationButton.o \
   $(SETTINGS_OBJ)ConnectionComponent.o
 
@@ -33,6 +34,8 @@ $(SETTINGS_OBJ)VolumeSlider.o : \
     $(SETTINGS_DIR)/$(SETTINGS_PREFIX)VolumeSlider.cpp
 $(SETTINGS_OBJ)CursorModePicker.o : \
     $(SETTINGS_DIR)/$(SETTINGS_PREFIX)CursorModePicker.cpp
+$(SETTINGS_OBJ)HomeBackgroundPicker.o : \
+    $(SETTINGS_DIR)/$(SETTINGS_PREFIX)HomeBackgroundPicker.cpp
 $(SETTINGS_OBJ)CalibrationButton.o : \
     $(SETTINGS_DIR)/$(SETTINGS_PREFIX)CalibrationButton.cpp
 $(SETTINGS_OBJ)ConnectionComponent.o : \

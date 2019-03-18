@@ -1,8 +1,4 @@
 #pragma once
-
-#include "Config_FileHandler.h"
-#include "Theme_Colour_JSONKeys.h"
-
 /**
  * @file  Theme_Colour_ConfigFile.h
  * 
@@ -10,8 +6,18 @@
  *         ~/.pocket-home/colours.json.
  */
 
-namespace Theme { namespace Colour { class ConfigFile; } }
-namespace Theme { namespace Colour { class JSONResource; } }
+#include "Config_FileHandler.h"
+#include "Theme_Colour_JSONKeys.h"
+
+
+namespace Theme 
+{ 
+    namespace Colour 
+    { 
+        class ConfigFile;
+        class JSONResource;
+    } 
+}
 
 class Theme::Colour::ConfigFile : public Config::FileHandler<JSONResource>
 {
@@ -23,7 +29,7 @@ public:
     /**
      * @brief  Looks up the Colour value saved for a specific Juce ColourId.
      *  
-     * @param colourId  The id value representing the colour of a specific UI
+     * @param colourId  The ID value representing the colour of a specific UI
      *                  element.
      * 
      * @return          The Colour value saved to the colours.json file for the 
@@ -87,7 +93,7 @@ public:
 
 private:
     /**
-     * Gets a Colour string saved to the colour config file.
+     * @brief  Gets a Colour string saved to the colour config file.
      * 
      * @param colourKey  The key to a colour value saved in the colours.json
      *                   file.

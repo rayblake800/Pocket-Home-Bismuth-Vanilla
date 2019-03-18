@@ -2,13 +2,18 @@
 #include "Theme_Colour_ColourIds.h"
 #include <map>
 
+#ifdef JUCE_DEBUG
+/* Print the full namespace name before all debug output: */
+static const constexpr char* dbgPrefix = "Theme::Colour::JSONKeys::";
+#endif
+
 namespace ColourKeys = Theme::Colour::JSONKeys;
 
 //=============================== Colour Keys: =================================
 /**
  * @brief  Keys for colour values assigned to UI element colour categories.  
  *
- * All Juce ColourId values are grouped under one of these categories. When
+ *  All Juce ColourId values are grouped under one of these categories. When
  * looking up colour values, if no value is explicitly assigned to a given 
  * ColourId, the value assigned to the associated UICategory will be used.
  */
@@ -30,8 +35,8 @@ static const juce::Array<juce::Identifier> uiCategoryKeys=
 namespace Theme { namespace Colour { namespace ColourIds {
 
 /**
- * For each Juce ColourId value tracked in colours.json, colourIdKeys maps that
- * colour to its string key.
+ * @brief  For each Juce ColourId value tracked in colours.json, colourIdKeys 
+ *         maps that colour to its JSON key.
  */
 static const std::map<int, juce::Identifier> colourIdKeys = 
 {
@@ -97,9 +102,9 @@ static const std::map<int, juce::Identifier> colourIdKeys =
     {batteryIcon::text,               "BatteryIcon text"}
 };
 
-/*
- * For each colour key string tracked in colours.json, colourIds maps that
- * key to its Juce ColourId value.
+/**
+ * @brief  For each JSON colour key tracked in colours.json, colourIds maps that
+ *         key to its Juce ColourId value.
  */
 static const std::map<juce::Identifier, int> colourIds
 {
@@ -178,7 +183,6 @@ static const std::map<juce::Identifier, int> colourIds
 
 
 //======================= ColourId->UICategory Map =============================
-
 // Auto-generated using ColourIdSort.pl.
 
 /**
@@ -845,9 +849,6 @@ Theme::Colour::UICategory ColourKeys::getUICategory
     auto searchIter = ColourIds::idCategories.find(colourId);
     if (searchIter == ColourIds::idCategories.end())
     {
-        //DBG("Theme::Colour::JSONKeys::" << __func__ 
-        //        << ": No category found for colorId "
-        //        << juce::String::toHexString(colourId));
         return UICategory::none;
     }
     return searchIter->second;
@@ -862,7 +863,7 @@ int ColourKeys::getColourId(const juce::Identifier& colourKey)
     auto searchIter = ColourIds::colourIds.find(colourKey);
     if (searchIter == ColourIds::colourIds.end())
     {
-        DBG("Theme::Colour::JSONKeys::" << __func__ << ": No Id found for key "
+        DBG(dbgPrefix << __func__ << ": No ID found for key "
                 << colourKey.toString());
         return -1;
     }
@@ -878,8 +879,8 @@ Theme::Colour::UICategory ColourKeys::getCategoryType
     int enumVal = uiCategoryKeys.indexOf(categoryKey);
     if(enumVal < 0)
     {
-        DBG("Theme::Colour::JSONKeys::" << __func__ 
-                << ": No category matches key " << categoryKey.toString());
+        DBG(dbgPrefix << __func__ << ": No category matches key " 
+                << categoryKey.toString());
 
         return UICategory::none;
     }
@@ -910,8 +911,7 @@ const juce::Identifier& ColourKeys::getCategoryKey
 {
     if(category == UICategory::none)
     {
-        DBG("Theme::Colour::JSONKeys::" << __func__ 
-                << ": No key, category == none");
+        DBG(dbgPrefix << __func__ << ": No key, category == none");
         return invalidKey;
     }
     return uiCategoryKeys.getReference((int) category);

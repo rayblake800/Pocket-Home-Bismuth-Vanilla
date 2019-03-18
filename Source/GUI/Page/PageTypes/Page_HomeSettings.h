@@ -10,7 +10,7 @@
 #include "Page_Component.h"
 #include "Locale_TextUser.h"
 #include "Widgets_BoundedLabel.h"
-#include "Theme_Image_HomeBackgroundPicker.h"
+#include "Settings_HomeBackgroundPicker.h"
 #include "Settings_ClockModePicker.h"
 #include "AppMenu_SettingsController.h"
 #include "Widgets_Counter.h"
@@ -40,7 +40,7 @@ private:
     
     /* Used to set the HomePage's background image: */
     Widgets::BoundedLabel bgLabel;
-    Theme::Image::HomeBackgroundPicker homeBGPicker;
+    Settings::HomeBackgroundPicker homeBGPicker;
 
     /* Used to set the Clock display mode: */
     Widgets::BoundedLabel clockLabel;

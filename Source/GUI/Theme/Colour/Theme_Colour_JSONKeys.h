@@ -16,7 +16,7 @@ namespace Theme { namespace Colour { namespace JSONKeys
     static const juce::Identifier invalidKey("invalid!");
 
     /**
-     * @brief   Gets all Juce ColourId values defined by the colour config file.
+     * @brief  Gets all Juce ColourId values defined by the colour config file.
      * 
      * @return  All ColourIds defined in colours.json, either directly or
      *          through a UICategory. 
@@ -31,7 +31,7 @@ namespace Theme { namespace Colour { namespace JSONKeys
      const juce::Array<juce::Identifier>& getCategoryKeys();
 
     /**
-     * @brief   Gets all keys used by the ColourConfigFile.
+     * @brief  Gets all keys used by the ColourConfigFile.
      * 
      * @return  All UICategory keys and ColourID keys. 
      */
@@ -82,7 +82,7 @@ namespace Theme { namespace Colour { namespace JSONKeys
     const juce::Identifier& getColourKey(const int colourId);
        
     /**
-     * Finds the key string representing a UICategory value.
+     * @brief  Finds the key string representing a UICategory value.
      * 
      * @param category  One of the default UI element types.
      * 

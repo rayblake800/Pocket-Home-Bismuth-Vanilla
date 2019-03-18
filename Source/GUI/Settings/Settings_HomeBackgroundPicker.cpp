@@ -1,9 +1,9 @@
-#include "Theme_Image_HomeBackgroundPicker.h"
+#include "Settings_HomeBackgroundPicker.h"
 
 /*
  * Loads the saved background image as the editor's initial value.
  */
-Theme::Image::HomeBackgroundPicker::HomeBackgroundPicker()
+Settings::HomeBackgroundPicker::HomeBackgroundPicker()
 {
     setText(imageConfig.getHomeBackgroundPath(), false);
     addFileSelectListener(this);
@@ -12,8 +12,8 @@ Theme::Image::HomeBackgroundPicker::HomeBackgroundPicker()
 /*
  * Updates the selected image when a new file is selected.
  */
-void Theme::Image::HomeBackgroundPicker::fileSelected
-(FilePathEditor* thisEditor)
+void Settings::HomeBackgroundPicker::fileSelected
+(Widgets::FilePathEditor* thisEditor)
 {
     jassert(thisEditor == this);
     imageConfig.setHomeBackgroundPath(getText());

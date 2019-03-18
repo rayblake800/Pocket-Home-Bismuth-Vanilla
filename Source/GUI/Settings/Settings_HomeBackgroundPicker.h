@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Theme_Image_HomeBackgroundPicker.h
+ * @file  Settings_HomeBackgroundPicker.h
  *
  * @brief  Provides UI controls for selecting the HomePage background image.
  */
@@ -8,9 +8,9 @@
 #include "Widgets_FilePathEditor.h"
 #include "Theme_Image_ConfigFile.h"
 
-namespace Theme { namespace Image { class HomeBackgroundPicker; } }
+namespace Settings { class HomeBackgroundPicker; }
 
-class Theme::Image::HomeBackgroundPicker : public Widgets::FilePathEditor,
+class Settings::HomeBackgroundPicker : public Widgets::FilePathEditor,
         public Widgets::FilePathEditor::Listener
 {
 public:
@@ -32,5 +32,5 @@ private:
 
     /* Reads and writes the background image, and ensures the image JSON file
      * resource remains available. */
-    ConfigFile imageConfig;
+    Theme::Image::ConfigFile imageConfig;
 };

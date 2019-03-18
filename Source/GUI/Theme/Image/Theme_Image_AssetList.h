@@ -46,7 +46,7 @@ public:
     const juce::Array<juce::Colour>& getImageColours() const;
 
     /**
-     * @brief  Compares this object with another assetList object.
+     * @brief  Compares this object with another AssetList object.
      *
      * @param rhs  Another image asset object to compare with this one.
      *
