@@ -32,7 +32,7 @@
             "component assets/BatteryIcon/noBattery.svg"
         ]
     },
-    "wifi": {
+    "signal strength": {
         "colours": [
             "0xffeb008b"
         ],

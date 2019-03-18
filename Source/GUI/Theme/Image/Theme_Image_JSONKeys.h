@@ -45,8 +45,8 @@ static const juce::Identifier menuFrame
         ("menu frame");
 static const juce::Identifier batteryIcon
         ("battery");
-static const juce::Identifier wifiIcon
-        ("wifi");
+static const juce::Identifier signalIcon
+        ("signal strength");
 static const juce::Identifier powerButton
         ("power button");
 static const juce::Identifier settingsButton
@@ -70,7 +70,7 @@ static const juce::Array<juce::Identifier> components =
 {
     menuFrame,
     batteryIcon,
-    wifiIcon,
+    signalIcon,
     powerButton,
     settingsButton,
     popupMenu,

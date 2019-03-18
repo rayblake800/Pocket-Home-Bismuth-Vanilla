@@ -6,7 +6,7 @@
  * configuration file.
  */
 Info::SignalIcon::SignalIcon() : 
-    Theme::Image::Component<>(Theme::Image::JSONKeys::wifiIcon) { }
+    Theme::Image::Component<>(Theme::Image::JSONKeys::signalIcon) { }
 
 /**
  * @brief  All signal state icon images.  
