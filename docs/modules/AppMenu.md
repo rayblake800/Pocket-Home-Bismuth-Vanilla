@@ -4,7 +4,7 @@ The AppMenu module displays an application launching menu. This menu displays ap
 ## Public Interface
 
 #### [AppMenu](../../Source/GUI/AppMenu/AppMenu.h)
-AppMenu creates the main menu component, returning it as a generic juce::Component pointer.
+AppMenu creates the main menu component, returning it as a generic juce\::Component pointer.
 
 #### [AppMenu\::ConfigFile](../../Source/GUI/AppMenu/AppMenu_ConfigFile.h)
 ConfigFile objects get and set menu format and menu display properties.
@@ -80,7 +80,7 @@ MenuFile objects safely share access to the single MenuJSON object.
 MenuKeys defines the JSON keys used within the menu JSON file.
 
 #### [AppMenu\::ConfigData](../../Source/GUI/AppMenu/Data/JSON/AppMenu_ConfigData.h)
-ConfigData is an AppMenu::ItemData subclass that gets its data from the MenuJSON object's configuration file.
+ConfigData is an AppMenu\::ItemData subclass that gets its data from the MenuJSON object's configuration file.
 
 #### [AppMenu\::EntryLoader](../../Source/GUI/AppMenu/Data/DesktopEntry/AppMenu_EntryLoader.h)
 The EntryLoader object connects with the DesktopEntry module to load DesktopEntry objects for .desktop application shortcut files.
@@ -89,7 +89,7 @@ The EntryLoader object connects with the DesktopEntry module to load DesktopEntr
 EntryActions provides convenience functions for working with groups of DesktopEntry objects when constructing the menu.
 
 #### [AppMenu\::EntryData](../../Source/GUI/AppMenu/Data/DesktopEntry/AppMenu_EntryData.h)
-EntryData is an AppMenu::ItemData subclass that gets its data from a .desktop application shortcut file, accessed through a DesktopEntry object.
+EntryData is an AppMenu\::ItemData subclass that gets its data from a .desktop application shortcut file, accessed through a DesktopEntry object.
 
 #### [AppMenu\::EntryUpdater](../../Source/GUI/AppMenu/Data/DesktopEntry/AppMenu_EntryUpdater.h)
 EntryUpdater objects listen for updates to loaded .desktop files and apply them to the application menu.

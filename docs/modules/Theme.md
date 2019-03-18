@@ -1,39 +1,53 @@
 # Theme Module Documentation
+The Theme module handles tasks related to the general appearance of the application. Its primary responsibility is loading UI images and colors from JSON configuration files.
 
-#### [Theme::LookAndFeel](../../Source/Theme/Theme_LookAndFeel.h)
+#### [Theme\::LookAndFeel](../../Source/GUI/Theme/Theme_LookAndFeel.h)
+LookAndFeel controls how the JUCE library draws UI components. This sets the application font and mouse cursor, and defines custom drawing routines for several UI components. LookAndFeel also loads and applies configurable UI color values.
 
 ## Theme Colors
+The Colour submodule loads and sets UI component color values from the colours.json configuration file.
 
-#### [Theme::Colour::ConfigPage](../../Source/Theme/Colour/Theme_Colour_ConfigPage.h)
+#### [Theme\::Colour\::JSONResource](../../Source/GUI/Theme/Colour/Theme_Colour_JSONResource.h)
+JSONResource defines the [SharedResource](./SharedResource.md) class instance used to manage the colours.json file.
 
-#### [Theme::Colour::ColourIds](../../Source/Theme/Colour/Theme_Colour_ColourIds.h)
+#### [Theme\::Colour\::ColourIds](../../Source/GUI/Theme/Colour/Theme_Colour_ColourIds.h)
+The JUCE library assigns a unique ID to each UI component color value. The ColourIds namespace provides all of these IDs in a single file.
 
-#### [Theme::Colour::ConfigListener](../../Source/Theme/Colour/Theme_Colour_ConfigListener.h)
+#### [Theme\::Colour\::UICategory](../../Source/GUI/Theme/Colour/Theme_Colour_UICategory.h)
+UICategory defines a set of broad UI component color categories. Each JUCE ColourId value is assigned to one of these categories, and the JSONResource stores color values for each category. If no specific color is provided by the JSONResource for a given ColourId, it uses the color provided by its UICategory.
 
-#### [Theme::Colour::ListenerInterface](../../Source/Theme/Colour/Theme_Colour_ListenerInterface.h)
+#### [Theme\::Colour\::JSONKeys](../../Source/GUI/Theme/Colour/Theme_Colour_JSONKeys.h)
+JSONKeys provides the list of all color keys that should be present in the colours.json configuration file. It also converts between ColourId and JSON key values, and looks up the generic color category assigned to any ColourId or JSON key.
 
-#### [Theme::Colour::ConfigFile](../../Source/Theme/Colour/Theme_Colour_ConfigFile.h)
+#### [Theme\::Colour\::ConfigFile](../../Source/GUI/Theme/Colour/Theme_Colour_ConfigFile.h)
+ConfigFile objects connect to the JSONResource to lookup or change color values by ColourId value or JSON key.
 
-#### [Theme::Colour::JSONResource](../../Source/Theme/Colour/Theme_Colour_JSONResource.h)
+#### [Theme\::Colour\::ConfigListener](../../Source/GUI/Theme/Colour/Theme_Colour_ConfigListener.h)
+ConfigListener objects may track any number of ColourId values. Whenever a value a ConfigListener tracks is updated by the JSONResource, the listener will be notified via the ConfigListener\::colourChanged method.
 
-#### [Theme::Colour::UICategory](../../Source/Theme/Colour/Theme_Colour_UICategory.h)
+#### [Theme\::Colour\::ListenerInterface](../../Source/GUI/Theme/Colour/Theme_Colour_ListenerInterface.h)
+ListenerInterface is an abstract interface inherited by ConfigListener, used by the JSONResource to send updates to relevant listener objects when the color values it stores are updated.
 
-#### [Theme::Colour::JSONKeys](../../Source/Theme/Colour/Theme_Colour_JSONKeys.h)
+#### [Theme\::Colour\::ConfigPage](../../Source/GUI/Theme/Colour/Theme_Colour_ConfigPage.h)
+ConfigPage provides UI controls for updating application color values within a page component.
 
 ## Theme Images
+The Image submodule loads image assets with optional customized colors from the imageAssets.json configuration file.
 
-#### [Theme::Image::ConfigFile](../../Source/Theme/Image/Theme_Image_ConfigFile.h)
+#### [Theme\::Image\::JSONResource](../../Source/GUI/Theme/Image/Theme_Image_JSONResource.h)
+JSONResource defines the [SharedResource](./SharedResource.md) class instance used to manage the imageAssets.json file.
 
-#### [Theme::Image::ConfigListener](../../Source/Theme/Image/Theme_Image_ConfigListener.h)
+#### [Theme\::Image\::AssetList](../../Source/GUI/Theme/Image/Theme_Image_AssetList.h)
+AssetList objects store a set of image paths and custom image colors loaded from the JSON configuration file. Each AssetList object stores image paths and colors for a single UI component.
 
-#### [Theme::Image::Component](../../Source/Theme/Image/Theme_Image_Component.h)
+#### [Theme\::Image\::JSONKeys](../../Source/GUI/Theme/Image/Theme_Image_JSONKeys.h)
+JSONKeys provides all JSON key values used to load individual image files and component image asset lists from the imageAssets.json file.
 
-#### [Theme::Image::AssetList](../../Source/Theme/Image/Theme_Image_AssetList.h)
+#### [Theme\::Image\::ConfigFile](../../Source/GUI/Theme/Image/Theme_Image_ConfigFile.h)
+ConfigFile objects connect to the JSONResource to load AssetList objects for specific components, get individual image paths defined in the imageAssets file, or to change the image path values saved for specific images.
 
-#### [Theme::Image::JSONKeys](../../Source/Theme/Image/Theme_Image_JSONKeys.h)
+#### [Theme\::Image\::ConfigListener](../../Source/GUI/Theme/Image/Theme_Image_ConfigListener.h)
+ConfigListener objects track any number of individual image keys defined in JSONKeys. These objects are notified by the JSONResource whenever an image path they track is updated.
 
-#### [Theme::Image::JSONResource](../../Source/Theme/Image/Theme_Image_JSONResource.h)
-
-#### [Theme::Image::HomeBackgroundPicker](../../Source/Theme/Image/Theme_Image_HomeBackgroundPicker.h)
-
-
+#### [Theme\::Image\::Component](../../Source/GUI/Theme/Image/Theme_Image_Component.h)
+Component is a template class used to create subclasses of [Widgets\::DrawableImage](../../Source/Foundation/Widgets/Widgets_DrawableImage.h) that use image assets and colors provided by an Image\::AssetList.

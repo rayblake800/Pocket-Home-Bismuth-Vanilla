@@ -9,13 +9,13 @@ FileHandlers also define their own listener classes, which receive notifications
 ## Public Interface
 
 #### [Config\::FileResource](../../Source/Files/Config/Config_FileResource.h)
-FileResource is an abstract basis for JSON file resource classes. A new Config::FileResource subclass should be implemented for each JSON configuration file.
+FileResource is an abstract basis for JSON file resource classes. A new Config\::FileResource subclass should be implemented for each JSON configuration file.
 
 #### [Config\::FileHandler](../../Source/Files/Config/Config_FileHandler.h)
-FileHandler is an abstract basis for classes that access JSON file resources. Each Config::FileResource subclass should have at least one Config::FileHandler subclass defined to provide controlled access to the file resource.
+FileHandler is an abstract basis for classes that access JSON file resources. Each Config\::FileResource subclass should have at least one Config\::FileHandler subclass defined to provide controlled access to the file resource.
 
 #### [Config\::DataKey](../../Source/Files/Config/Config_DataKey.h)
-DataKey objects store the key and type of a basic data value stored in a FileResource. These should be used to declare all string, integer, double, and boolean values provided by a Config::FileResource subclass.
+DataKey objects store the key and type of a basic data value stored in a FileResource. These should be used to declare all string, integer, double, and boolean values provided by a Config\::FileResource subclass.
 
 #### [Config\::Listener](../../Source/Files/Config/Config_Listener.h)
 Listener is an abstract basis for classes that listen for changes to JSON file resources. Listeners may track any number of value keys, and will receive notifications only when their tracked key values change in the JSON resource.

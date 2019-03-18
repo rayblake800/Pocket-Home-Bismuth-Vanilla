@@ -1,20 +1,20 @@
 # Util Module Documentation
 The Util module provides miscellaneous support classes and functions used to build the application.
 
-#### [Util\::Commands](../../Source/Util/Util_Commands.h)
-The Commands class loads and runs system commands. System commands are defined in a read-only JSON file, so they can be updated if necessary without recompiling. Due to the limitations of the juce::ChildProcess class, commands are divided into commands returning text output, commands that return an integer exit code, and commands that act without returning any value.
+#### [Util\::Commands](../../Source/Foundation/Util/Util_Commands.h)
+The Commands class loads and runs system commands. System commands are defined in a read-only JSON file, so they can be updated if necessary without recompiling. Due to the limitations of the juce\::ChildProcess class, commands are divided into commands returning text output, commands that return an integer exit code, and commands that act without returning any value.
 
-#### [Util\::CommandTypes](../../Source/Util/Util_CommandTypes.h)
+#### [Util\::CommandTypes](../../Source/Foundation/Util/Util_CommandTypes.h)
 CommandTypes defines all system command types that Commands objects can execute.
 
-#### [Util\::Nullable](../../Source/Util/Util_Nullable.h)
+#### [Util\::Nullable](../../Source/Foundation/Util/Util_Nullable.h)
 Nullable is an abstract container class, defining objects that hold a single value that may equal null.
 
-#### [Util\::Math](../../Source/Util/Util_Math.h)
-The Util::Math namespace is meant to provide miscellaneous mathematical functions. This currently only contains a template function for finding the median of three values.
+#### [Util\::Math](../../Source/Foundation/Util/Util_Math.h)
+The Util\::Math namespace is meant to provide miscellaneous mathematical functions. This currently only contains a template function for finding the median of three values.
 
-#### [Util::TempTimer](../../Source/Util/Util_TempTimer.h)
+#### [Util\::TempTimer](../../Source/Foundation/Util/Util_TempTimer.h)
 TempTimer creates single-use timer objects that execute a function after a specific number of milliseconds.
 
-#### [Util::ShutdownListener](../../Source/Util/Util_ShutdownListener.h)
+#### [Util\::ShutdownListener](../../Source/Foundation/Util/Util_ShutdownListener.h)
 ShutdownListener is an abstract basis for classes that need to perform an action before the application shuts down.
