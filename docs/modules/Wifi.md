@@ -10,6 +10,19 @@ Module is the shared basis for all resource modules managed by the Wifi\::Resour
 #### [Wifi\::DebugOutput](../../Source/System/Wifi/Wifi_DebugOutput.h)
 DebugOutput converts Wifi enum types to text in order to construct debug output. DebugOutput functions are not included in release builds of the application.
 
+## Wifi Device Submodule
+The Device submodule controls basic access to the system's Wifi device.
+
+#### [Wifi\::Device\::Controller](../../Source/System/Wifi/Device/Wifi_Device_Controller.h)
+
+#### [Wifi\::Device\::UpdateInterface](../../Source/System/Wifi/Device/Wifi_Device_UpdateInterface.h)
+
+#### [Wifi\::Device\::Reader](../../Source/System/Wifi/Device/Wifi_Device_Reader.h)
+
+#### [Wifi\::Device\::Module](../../Source/System/Wifi/Device/Wifi_Device_Module.h)
+
+#### [Wifi\::Device\::Listener](../../Source/System/Wifi/Device/Wifi_Device_Listener.h)
+
 ## Wifi Access Points
 
 #### [Wifi\::AccessPoint](../../Source/System/Wifi/Wifi_AccessPoint.h)
@@ -25,20 +38,22 @@ StrengthListener objects receive updates when the signal strength of Wifi access
 UpdateInterface is the interface inherited by StrengthListener and used by the Wifi\::Signal\::APModule to send updates to StrengthListener objects.
 
 ## Access Point List Submodule
+The APList submodule monitors updates to the list of visible Wifi access points, caching and sharing visible access point data.
+
+#### [Wifi\::APList\::Module](../../Source/System/Wifi/APList/Wifi_APList_Module.h)
 
 #### [Wifi\::APList\::Reader](../../Source/System/Wifi/APList/Wifi_APList_Reader.h)
+
+#### [Wifi\::APList\::NMReader](../../Source/System/Wifi/APList/Wifi_APList_NMReader.h)
 
 #### [Wifi\::APList\::Writer](../../Source/System/Wifi/APList/Wifi_APList_Writer.h)
 
 #### [Wifi\::APList\::UpdateInterface](../../Source/System/Wifi/APList/Wifi_APList_UpdateInterface.h)
 
-#### [Wifi\::APList\::Module](../../Source/System/Wifi/APList/Wifi_APList_Module.h)
-
 #### [Wifi\::APList\::Listener](../../Source/System/Wifi/APList/Wifi_APList_Listener.h)
 
-#### [Wifi\::APList\::NMReader](../../Source/System/Wifi/APList/Wifi_APList_NMReader.h)
-
 ## Wifi Signal Handler Submodules
+The signal handler submodules receive and handle update signals from the wifi device, network client, and individual access points.
 
 #### [Wifi\::Signal\::DeviceModule](../../Source/System/Wifi/Signal/Wifi_Signal_DeviceModule.h)
 
@@ -46,7 +61,42 @@ UpdateInterface is the interface inherited by StrengthListener and used by the W
 
 #### [Wifi\::Signal\::APModule](../../Source/System/Wifi/Signal/Wifi_Signal_APModule.h)
 
+## Wifi Connection Management
+The Wifi module is responsible for managing Wifi network connections. It monitors the current connection state, creates new connections, closes existing connections, and manages saved connections.
+
+#### [Wifi\::Connection\::Event](../../Source/System/Wifi/Connection/Wifi_Connection_Event.h)
+
+### Connection Control Submodule
+Connection\::Control is responsible for creating new Wifi connections, and closing existing Wifi connections.
+
+#### [Wifi\::Connection\::Control\::Module](../../Source/System/Wifi/Connection/Control/Wifi_Connection_Control_Module.h)
+
+#### [Wifi\::Connection\::Control\::Handler](../../Source/System/Wifi/Connection/Control/Wifi_Connection_Control_Handler.h)
+
+### Saved Connection Submodule
+Connection\::Saved is responsible for loading saved connection information and deleting saved connections.
+
+#### [Wifi\::Connection\::Saved\::Module](../../Source/System/Wifi/Connection/Saved/Wifi_Connection_Saved_Module.h)
+
+#### [Wifi\::Connection\::Saved\::Reader](../../Source/System/Wifi/Connection/Saved/Wifi_Connection_Saved_Reader.h)
+
+#### [Wifi\::Connection\::Saved\::Deleter](../../Source/System/Wifi/Connection/Saved/Wifi_Connection_Saved_Deleter.h)
+
+### Connection Record Submodule
+Connection\::Record monitors the current connection state and records all Wifi connection events.
+
+#### [Wifi\::Connection\::Record\::Reader](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Reader.h)
+
+#### [Wifi\::Connection\::Record\::Listener](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Listener.h)
+
+#### [Wifi\::Connection\::Record\::Module](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Module.h)
+
+#### [Wifi\::Connection\::Record\::UpdateInterface](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_UpdateInterface.h)
+
+#### [Wifi\::Connection\::Record\::Writer](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Writer.h)
+
 ## LibNM Interface
+The Wifi module accesses the Wifi device and network connections through NetworkManager, using libnm-glib. Wifi\::LibNM manages LibNM data resources and provides a more convenient interface for using LibNM functions.
 
 #### [Wifi\::LibNM\::APHash](../../Source/System/Wifi/LibNM/Wifi_LibNM_APHash.h)
 
@@ -99,46 +149,4 @@ UpdateInterface is the interface inherited by StrengthListener and used by the W
 #### [Wifi\::LibNM\::DBus\::SavedConnectionLoader](../../Source/System/Wifi/LibNM/DBus/Wifi_LibNM_DBus_SavedConnectionLoader.h)
 
 #### [Wifi\::LibNM\::DBus\::SavedConnection](../../Source/System/Wifi/LibNM/DBus/Wifi_LibNM_DBus_SavedConnection.h)
-
-## Wifi Connection Management
-
-#### [Wifi\::Connection\::Event](../../Source/System/Wifi/Connection/Wifi_Connection_Event.h)
-
-### Connection Control Submodule
-
-#### [Wifi\::Connection\::Control\::Module](../../Source/System/Wifi/Connection/Control/Wifi_Connection_Control_Module.h)
-
-#### [Wifi\::Connection\::Control\::Handler](../../Source/System/Wifi/Connection/Control/Wifi_Connection_Control_Handler.h)
-
-### Saved Connection Submodule
-
-#### [Wifi\::Connection\::Saved\::Module](../../Source/System/Wifi/Connection/Saved/Wifi_Connection_Saved_Module.h)
-
-#### [Wifi\::Connection\::Saved\::Reader](../../Source/System/Wifi/Connection/Saved/Wifi_Connection_Saved_Reader.h)
-
-#### [Wifi\::Connection\::Saved\::Deleter](../../Source/System/Wifi/Connection/Saved/Wifi_Connection_Saved_Deleter.h)
-
-### Connection Record Submodule
-
-#### [Wifi\::Connection\::Record\::Reader](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Reader.h)
-
-#### [Wifi\::Connection\::Record\::Listener](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Listener.h)
-
-#### [Wifi\::Connection\::Record\::Module](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Module.h)
-
-#### [Wifi\::Connection\::Record\::UpdateInterface](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_UpdateInterface.h)
-
-#### [Wifi\::Connection\::Record\::Writer](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Writer.h)
-
-## Wifi Device Submodule
-
-#### [Wifi\::Device\::Controller](../../Source/System/Wifi/Device/Wifi_Device_Controller.h)
-
-#### [Wifi\::Device\::UpdateInterface](../../Source/System/Wifi/Device/Wifi_Device_UpdateInterface.h)
-
-#### [Wifi\::Device\::Reader](../../Source/System/Wifi/Device/Wifi_Device_Reader.h)
-
-#### [Wifi\::Device\::Module](../../Source/System/Wifi/Device/Wifi_Device_Module.h)
-
-#### [Wifi\::Device\::Listener](../../Source/System/Wifi/Device/Wifi_Device_Listener.h)
 
