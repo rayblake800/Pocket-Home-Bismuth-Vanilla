@@ -11,12 +11,12 @@ OBJECTS_TEST := \
 
 
 ifeq ($(BUILD_TESTS), 1)
-    MODULES := $(MODULES) testing
+    DEVELOPMENT_MODULES := $(DEVELOPMENT_MODULES) testing
     OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_TEST)
 endif
 
 testing : $(OBJECTS_TEST)
-	@echo "Built Testing module"
+	@echo "    Built Testing module"
 
 $(TEST_OBJ)StressTest.o: \
 	$(TEST_DIR)/$(TEST_PREFIX)StressTest.cpp

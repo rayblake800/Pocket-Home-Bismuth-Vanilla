@@ -15,11 +15,11 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_LOCALE := $(OBJECTS_LOCALE) $(OBJECTS_LOCALE_TEST)
 endif
 
-MODULES := $(MODULES) locale
+FRAMEWORK_MODULES := $(FRAMEWORK_MODULES) locale
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_LOCALE)
 
 locale : $(OBJECTS_LOCALE)
-	@echo "Built Locale module"
+	@echo "    Built Locale module"
 
 $(LOCALE_OBJ)Time.o: \
 	$(LOCALE_DIR)/$(LOCALE_PREFIX)Time.cpp

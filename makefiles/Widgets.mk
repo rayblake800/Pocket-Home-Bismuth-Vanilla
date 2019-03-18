@@ -29,12 +29,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_WIDGET := $(OBJECTS_WIDGET) $(OBJECTS_WIDGET_TEST)
 endif
 
-MODULES := $(MODULES) widget
+FRAMEWORK_MODULES := $(FRAMEWORK_MODULES) widget
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_WIDGET)
 
 widget : $(OBJECTS_WIDGET)
-	@echo "Built Widget module"
+	@echo "    Built Widget module"
 
 $(WIDGET_OBJ)BoundedLabel.o : \
     $(WIDGET_ROOT)/$(WIDGET_PREFIX)BoundedLabel.cpp

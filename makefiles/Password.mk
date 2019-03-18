@@ -16,12 +16,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_PASSWORD := $(OBJECTS_PASSWORD) $(OBJECTS_PASSWORD_TEST)
 endif
 
-MODULES := $(MODULES) password
+GUI_MODULES := $(GUI_MODULES) password
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_PASSWORD)
 
 password : $(OBJECTS_PASSWORD)
-	@echo "Built Password module"
+	@echo "    Built Password module"
 
 $(PASSWORD_OBJ)Password.o : \
     $(PASSWORD_DIR)/Password.cpp

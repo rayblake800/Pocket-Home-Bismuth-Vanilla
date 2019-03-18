@@ -39,12 +39,12 @@ ifeq ($(BUILD_TESTS), 1)
                                $(OBJECTS_SHARED_TEST)
 endif
 
-MODULES := $(MODULES) sharedResource
+FRAMEWORK_MODULES := $(FRAMEWORK_MODULES) sharedResource
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_SHARED_RESOURCE)
 
 sharedResource : $(OBJECTS_SHARED_RESOURCE)
-	@echo "Built SharedResource module"
+	@echo "    Built SharedResource module"
 
 $(SHARED_OBJ)Holder.o : \
     $(SHARED_IMPL_DIR)/$(SHARED_PREFIX)Holder.cpp

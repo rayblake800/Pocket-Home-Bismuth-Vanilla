@@ -20,12 +20,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_WINDOW := $(OBJECTS_WINDOW) $(OBJECTS_WINDOW_TEST)
 endif
 
-MODULES := $(MODULES) window
+SYSTEM_MODULES := $(SYSTEM_MODULES) window
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_WINDOW)
 
 window : $(OBJECTS_WINDOW)
-	@echo "Built Window module"
+	@echo "    Built Window module"
 
 $(WINDOW_OBJ)Info.o : \
     $(WINDOW_DIR)/$(WINDOW_PREFIX)Info.cpp

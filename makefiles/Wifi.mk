@@ -177,12 +177,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_WIFI := $(OBJECTS_WIFI) $(OBJECTS_WIFI_TEST)
 endif
 
-MODULES := $(MODULES) wifi
+SYSTEM_MODULES := $(SYSTEM_MODULES) wifi
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_WIFI)
 
 wifi : $(OBJECTS_WIFI)
-	@echo "Built Wifi module"
+	@echo "    Built Wifi module"
 
 $(NM_BORROWED_OBJ)AccessPoint.o: \
     $(NM_BORROWED_DIR)/$(NM_PREFIX)AccessPoint.cpp

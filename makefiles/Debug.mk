@@ -18,12 +18,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_DEBUG := $(OBJECTS_DEBUG) $(OBJECTS_DEBUG_TEST)
 endif
 
-MODULES := $(MODULES) debugging
+DEVELOPMENT_MODULES := $(DEVELOPMENT_MODULES) debugging
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_DEBUG)
 
 debugging : $(OBJECTS_DEBUG)
-	@echo "Built Debug module"
+	@echo "    Built Debug module"
 
 $(DEBUG_OBJ)AddressLog.o: \
 	$(DEBUG_DIR)/$(DEBUG_PREFIX)AddressLog.cpp

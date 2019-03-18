@@ -79,12 +79,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_APPMENU := $(OBJECTS_APPMENU) $(OBJECTS_APPMENU_TEST)
 endif
 
-MODULES := $(MODULES) appMenu
+GUI_MODULES := $(GUI_MODULES) appMenu
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_APPMENU)
 
 appMenu : $(OBJECTS_APPMENU)
-	@echo "Built AppMenu module"
+	@echo "    Built AppMenu module"
 
 $(APPMENU_SCROLLING_OBJ)MenuButton.o: \
 	$(APPMENU_SCROLLING_DIR)/$(APPMENU_SCROLLING_PREFIX)MenuButton.cpp

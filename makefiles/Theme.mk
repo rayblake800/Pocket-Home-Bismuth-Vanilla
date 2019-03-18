@@ -34,12 +34,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_THEME := $(OBJECTS_THEME) $(OBJECTS_THEME_TEST)
 endif
 
-MODULES := $(MODULES) theme
+GUI_MODULES := $(GUI_MODULES) theme
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_THEME)
 
 theme : $(OBJECTS_THEME)
-	@echo "Built Theme module"
+	@echo "    Built Theme module"
 
 $(THEME_COLOUR_OBJ)JSONKeys.o : \
     $(THEME_COLOUR_DIR)/$(THEME_COLOUR_PREFIX)JSONKeys.cpp

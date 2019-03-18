@@ -19,12 +19,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_ASSETS := $(OBJECTS_ASSETS) $(OBJECTS_ASSETS_TEST)
 endif
 
-MODULES := $(MODULES) assets
+FILE_MODULES := $(FILE_MODULES) assets
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_ASSETS)
 
 assets : $(OBJECTS_ASSETS)
-	@echo "Built Assets module"
+	@echo "    Built Assets module"
 
 $(ASSETS_OBJ)Assets.o : \
     $(ASSETS_DIR)/Assets.cpp

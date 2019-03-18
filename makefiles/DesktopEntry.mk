@@ -19,12 +19,12 @@ ifeq ($(BUILD_TESTS), 1)
                              $(OBJECTS_DESKTOP_ENTRY_TEST)
 endif
 
-MODULES := $(MODULES) desktopEntry
+FILE_MODULES := $(FILE_MODULES) desktopEntry
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_DESKTOP_ENTRY)
 
 desktopEntry : $(OBJECTS_DESKTOP_ENTRY)
-	@echo "Built DesktopEntry module"
+	@echo "    Built DesktopEntry module"
 
 $(DESKTOP_ENTRY_OBJ)FileUtils.o: \
     $(DESKTOP_ENTRY_DIR)/$(DESKTOP_ENTRY_PREFIX)FileUtils.cpp

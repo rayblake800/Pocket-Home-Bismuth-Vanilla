@@ -199,9 +199,13 @@ CLEANCMD = rm -rf $(JUCE_OUTDIR)/$(TARGET) $(JUCE_OBJDIR)
 .PHONY: build install debug release clean strip uninstall help
 build : $(JUCE_OUTDIR)/$(JUCE_TARGET_APP)
 
+# Split modules up by module groups:
+MODULES = framework development system file gui main
+
 # Include makefiles defining each module:
 include $(shell pwd)/JuceLibraryCode/Makefile
 include $(shell pwd)/makefiles/*.mk
+
 
 OBJECTS_MAIN := \
   $(JUCE_OBJDIR)/Main.o \
@@ -215,8 +219,24 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_MAIN := $(OBJECTS_MAIN) $(OBJECTS_MAIN_TEST)
 endif
 
-MODULES := $(MODULES) main
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_MAIN)
+
+# Module group build targets:
+framework : $(FRAMEWORK_MODULES)
+	@echo "Built Framework modules" 
+
+development : $(DEVELOPMENT_MODULES)
+	@echo "Built Development modules" 
+
+system : $(SYSTEM_MODULES)
+	@echo "Built System modules" 
+
+file : $(FILE_MODULES)
+	@echo "Built File modules" 
+
+gui : $(GUI_MODULES)
+	@echo "Built GUI modules" 
+
 main : $(OBJECTS_MAIN)
 	@echo "Built pocket-home"
 
@@ -231,7 +251,7 @@ $(JUCE_OUTDIR)/$(JUCE_TARGET_APP) : check-pkg-config $(MODULES) $(RESOURCES)
 
 $(OBJECTS_APP) :
 	-$(V_AT)mkdir -p $(JUCE_OBJDIR)
-	@echo "   Compiling: $(<F)"
+	@echo "      Compiling: $(<F)"
 	$(V_AT)$(CXX) $(JUCE_CXXFLAGS) $(JUCE_CPPFLAGS_APP) $(JUCE_CFLAGS_APP) \
 		-o "$@" -c "$<"
 

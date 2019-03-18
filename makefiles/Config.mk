@@ -25,12 +25,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_CONFIG := $(OBJECTS_CONFIG) $(OBJECTS_CONFIG_TEST)
 endif
 
-MODULES := $(MODULES) config
+FILE_MODULES := $(FILE_MODULES) config
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_CONFIG)
 
 config : $(OBJECTS_CONFIG)
-	@echo "Built Config module"
+	@echo "    Built Config module"
 
 $(CONFIG_OBJ)AlertWindow.o: \
     $(CONFIG_IMPL_DIR)/$(CONFIG_PREFIX)AlertWindow.cpp

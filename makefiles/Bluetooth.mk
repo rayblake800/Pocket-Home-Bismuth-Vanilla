@@ -14,12 +14,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_BLUETOOTH := $(OBJECTS_BLUETOOTH) $(OBJECTS_BLUETOOTH_TEST)
 endif
 
-MODULES := $(MODULES) bluetooth
+SYSTEM_MODULES := $(SYSTEM_MODULES) bluetooth
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_BLUETOOTH)
 
 bluetooth : $(OBJECTS_BLUETOOTH)
-	@echo "Built Bluetooth module"
+	@echo "    Built Bluetooth module"
 
 $(BLUETOOTH_OBJ)BluezAdapter.o : \
     $(BLUETOOTH_DIR)/$(BLUETOOTH_PREFIX)BluezAdapter.cpp

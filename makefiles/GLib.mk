@@ -64,12 +64,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_GLIB := $(OBJECTS_GLIB) $(OBJECTS_GLIB_TEST)
 endif
 
-MODULES := $(MODULES) glib
+FRAMEWORK_MODULES := $(FRAMEWORK_MODULES) glib
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_GLIB)
 
 glib : $(OBJECTS_GLIB)
-	@echo "Built GLib module"
+	@echo "    Built GLib module"
 
 $(GLIB_OBJ)Object.o : \
     $(GLIB_DIR)/$(GLIB_PREFIX)Object.cpp

@@ -10,12 +10,12 @@ OBJECTS_JUCE := \
   $(JUCE_PREFIX)gui_basics.o \
   $(JUCE_PREFIX)BinaryData.o 
 
-MODULES := $(MODULES) juce
+MODULES := juce $(MODULES)
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_JUCE)
 
 juce : $(OBJECTS_JUCE)
-	@echo "Built Juce library modules"
+	@echo "Built JUCE library modules"
     
 $(JUCE_PREFIX)BinaryData.o: \
 	$(JUCE_ROOT)/BinaryData.cpp

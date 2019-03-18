@@ -18,12 +18,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_PROCESS := $(OBJECTS_PROCESS) $(OBJECTS_PROCESS_TEST)
 endif
 
-MODULES := $(MODULES) process
+SYSTEM_MODULES := $(SYSTEM_MODULES) process
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_PROCESS)
 
 process : $(OBJECTS_PROCESS)
-	@echo "Built Process module"
+	@echo "    Built Process module"
 
 $(PROCESS_OBJ)State.o : \
     $(PROCESS_DIR)/$(PROCESS_PREFIX)State.cpp

@@ -19,12 +19,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_UTIL := $(OBJECTS_UTIL) $(OBJECTS_UTIL_TEST)
 endif
 
-MODULES := $(MODULES) util
+FRAMEWORK_MODULES := $(FRAMEWORK_MODULES) util
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_UTIL)
 
 util : $(OBJECTS_UTIL)
-	@echo "Built Utility module"
+	@echo "    Built Utility module"
 
 $(UTIL_OBJ)Commands.o : \
     $(UTIL_DIR)/$(UTIL_PREFIX)Commands.cpp

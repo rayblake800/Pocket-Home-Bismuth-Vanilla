@@ -37,12 +37,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_LAYOUT := $(OBJECTS_LAYOUT) $(OBJECTS_LAYOUT_TEST)
 endif
 
-MODULES := $(MODULES) layout
+FRAMEWORK_MODULES := $(FRAMEWORK_MODULES) layout
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_LAYOUT)
 
 layout : $(OBJECTS_LAYOUT)
-	@echo "Built Layout module"
+	@echo "    Built Layout module"
 
 $(LAYOUT_COMPONENT_OBJ)ConfigLayout.o : \
     $(LAYOUT_COMPONENT_DIR)/$(LAYOUT_COMPONENT_PREFIX)ConfigLayout.cpp

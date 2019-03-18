@@ -34,12 +34,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_PAGE := $(OBJECTS_PAGE) $(OBJECTS_PAGE_TEST)
 endif
 
-MODULES := $(MODULES) page
+GUI_MODULES := $(GUI_MODULES) page
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_PAGE)
 
 page : $(OBJECTS_PAGE)
-	@echo "Built Page module"
+	@echo "    Built Page module"
 
 $(PAGE_OBJ)Fel.o : \
     $(PAGE_TYPES_DIR)/$(PAGE_PREFIX)Fel.cpp

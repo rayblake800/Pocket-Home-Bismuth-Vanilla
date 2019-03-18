@@ -29,12 +29,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_SETTINGS := $(OBJECTS_SETTINGS) $(OBJECTS_SETTINGS_TEST)
 endif
 
-MODULES := $(MODULES) settings
+GUI_MODULES := $(GUI_MODULES) settings
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_SETTINGS)
 
 settings : $(OBJECTS_SETTINGS)
-	@echo "Built Settings module"
+	@echo "    Built Settings module"
 
 $(SETTINGS_OBJ)ClockModePicker.o : \
     $(SETTINGS_DIR)/$(SETTINGS_PREFIX)ClockModePicker.cpp

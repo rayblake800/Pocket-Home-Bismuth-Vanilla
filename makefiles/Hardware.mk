@@ -19,12 +19,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_HARDWARE := $(OBJECTS_HARDWARE) $(OBJECTS_HARDWARE_TEST)
 endif
 
-MODULES := $(MODULES) hardware
+SYSTEM_MODULES := $(SYSTEM_MODULES) hardware
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_HARDWARE)
 
 hardware : $(OBJECTS_HARDWARE)
-	@echo "Built Hardware module"
+	@echo "    Built Hardware module"
 
 $(HARDWARE_OBJ)Audio.o : \
     $(HARDWARE_DIR)/$(HARDWARE_PREFIX)Audio.cpp

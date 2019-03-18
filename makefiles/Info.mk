@@ -19,12 +19,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_INFO := $(OBJECTS_INFO) $(OBJECTS_INFO_TEST)
 endif
 
-MODULES := $(MODULES) info
+GUI_MODULES := $(GUI_MODULES) info
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_INFO)
 
 info : $(OBJECTS_INFO)
-	@echo "Built Info module"
+	@echo "    Built Info module"
 
 $(INFO_OBJ)BatteryIcon.o : \
     $(INFO_DIR)/$(INFO_PREFIX)BatteryIcon.cpp

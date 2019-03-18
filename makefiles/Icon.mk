@@ -17,12 +17,12 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_ICON := $(OBJECTS_ICON) $(OBJECTS_ICON_TEST)
 endif
 
-MODULES := $(MODULES) icon
+GUI_MODULES := $(GUI_MODULES) icon
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_ICON)
 
 icon : $(OBJECTS_ICON)
-	@echo "Built Icon module"
+	@echo "    Built Icon module"
 
 $(ICON_OBJ)Cache.o: \
 	$(ICON_DIR)/$(ICON_PREFIX)Cache.cpp
