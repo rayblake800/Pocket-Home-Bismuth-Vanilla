@@ -12,14 +12,18 @@
 #include "Wifi_Module.h"
 
 
-namespace Wifi { namespace Device { class Module; } }
-namespace Wifi { class Resource; }
+namespace Wifi 
+{ 
+    namespace Device { class Module; } 
+    class Resource;
+}
 
 /**
- *   Wifi::Device::Module tracks whether a Wifi device managed by 
- * NetworkManager is known to exist, and whether it is currently enabled. 
- * Whenever this status changes, the TrackingModule notifies all 
- * Wifi::Device::Listener objects of the change. 
+ * @brief  Tracks whether a Wifi device managed by NetworkManager is known to 
+ *         exist, and whether it is currently enabled.
+ *
+ *  Whenever this status changes, the Module notifies all Device::Listener 
+ * objects of the change. 
  */
 class Wifi::Device::Module : public Wifi::Module
 {
@@ -56,16 +60,16 @@ public:
 
     /**
      * @brief  Connects to NetworkManager to update the Wifi device state,
-     *         optionally notifying all DeviceListeners if the state changes.
+     *         optionally notifying all Listener objects if the state changes.
      *
-     * @param notifyListeners  Whether the module should notify DeviceListeners
+     * @param notifyListeners  Whether the module should notify Listener objects
      *                         if the state changes.
      */
     void updateDeviceState(const bool notifyListeners = true);
 
     /**
-     * @brief  Updates the TrackingModule's saved wifi device state, optionally
-     *         notifying all DeviceListeners if the state changes.
+     * @brief  Updates the Module's saved wifi device state, optionally
+     *         notifying all Listener objects if the state changes.
      *
      * @param exists   Indicates if a managed Wifi device is present.
      *
@@ -78,7 +82,7 @@ public:
             const bool notifyListeners = true);
 
     /**
-     * @brief  Notifies the device tracker that Wifi is about to be enabled or
+     * @brief  Notifies the device module that Wifi is about to be enabled or
      *         disabled.
      */
     void signalDeviceStateChanging();

@@ -82,9 +82,7 @@ WIFI_AP_LIST_OBJ := $(WIFI_OBJ)APList_
 OBJECTS_WIFI_ACCESS_POINT_LIST := \
   $(WIFI_AP_LIST_OBJ)Module.o \
   $(WIFI_AP_LIST_OBJ)Listener.o \
-  $(WIFI_AP_LIST_OBJ)Reader.o \
-  $(WIFI_AP_LIST_OBJ)NMReader.o \
-  $(WIFI_AP_LIST_OBJ)Writer.o
+  $(WIFI_AP_LIST_OBJ)Reader.o
 
 ################ Connection Submodules ################
 

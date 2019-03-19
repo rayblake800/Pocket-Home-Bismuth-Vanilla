@@ -7,9 +7,15 @@
 
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace Device { class Controller; } }
-namespace Wifi { namespace Device { class Module; } }
-namespace Wifi { class Resource; }
+namespace Wifi 
+{ 
+    namespace Device 
+    { 
+        class Controller; 
+        class Module;
+    } 
+    class Resource;
+}
 
 /**
  * @brief  Accesses the wifi device module to turn Wifi on and off, and to make 

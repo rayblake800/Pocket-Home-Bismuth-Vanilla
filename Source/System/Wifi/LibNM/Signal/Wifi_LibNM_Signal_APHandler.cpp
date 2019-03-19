@@ -1,6 +1,5 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_LibNM_Signal_APHandler.h"
-#include "Wifi_APList_Writer.h"
 #include "Wifi_AccessPoint.h"
 #include "Wifi_LibNM_AccessPoint.h"
 #include "Wifi_LibNM_ContextTest.h"
