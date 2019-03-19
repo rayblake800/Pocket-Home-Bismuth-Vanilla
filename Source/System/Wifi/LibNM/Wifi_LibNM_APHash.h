@@ -17,7 +17,9 @@ namespace Wifi { namespace LibNM
     enum class SecurityType;
 } }
 
-/** 
+/**
+ * @brief  A unique identifier for a possible Wifi connection.
+ *
  *  Access points will share an APHash if and only if both have the same SSID,
  * access point mode, and security settings. APHash values are immutable, and
  * should be used to compare and sort access point objects.
@@ -46,13 +48,6 @@ public:
     APHash(const GByteArray* ssid,
         APMode mode,
         SecurityType securityType);
-
-    /**
-     * @brief  Creates an APHash as a copy of another hash value.
-     *
-     * @param toCopy  Another access point hash to copy.
-     */
-    APHash(const APHash& toCopy);
 
     /**
      * @brief  Creates an APHash from a saved hash value string.

@@ -37,12 +37,6 @@ Wifi::LibNM::APHash::APHash(const GByteArray* ssid,
 }
 
 /*
- * Creates an APHash as a copy of another hash value.
- */
-Wifi::LibNM::APHash::APHash(const APHash& toCopy) : 
-        hashValue(toCopy.hashValue) { }
-
-/*
  * Creates an APHash from a saved hash value string.
  */
 Wifi::LibNM::APHash::APHash(const juce::String hashString) : 
