@@ -10,6 +10,15 @@ Wifi::LibNM::SSID::SSID(const SSID& toCopy)
 }
 
 /*
+ * Creates this SSID from a temporary SSID object.
+ */
+Wifi::LibNM::SSID::SSID(SSID&& toCopy)
+{
+    ssidBytes = toCopy.ssidBytes;
+    toCopy.ssidBytes = nullptr;
+}
+
+/*
  * Creates this SSID from a SSID byte string.
  */
 Wifi::LibNM::SSID::SSID(const GByteArray* toCopy)

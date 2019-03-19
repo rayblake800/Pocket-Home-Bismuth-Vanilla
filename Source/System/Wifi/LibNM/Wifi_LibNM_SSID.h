@@ -21,6 +21,13 @@ public:
     SSID(const SSID& toCopy);
 
     /**
+     * @brief  Creates this SSID from a temporary SSID object.
+     *
+     * @param toCopy  The temporary SSID to copy.
+     */
+    SSID(SSID&& toCopy);
+
+    /**
      * @brief  Creates this SSID from a SSID byte string.
      *
      * @param toCopy  The SSID byte string this object will copy.
