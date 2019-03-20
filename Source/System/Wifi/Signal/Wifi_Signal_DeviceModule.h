@@ -24,6 +24,10 @@ namespace Wifi
     } 
 }
 
+/**
+ * @brief  Receives and handles all LibNM::DeviceWifi signals for the Wifi 
+ *         module.
+ */
 class Wifi::Signal::DeviceModule : public LibNM::Signal::DeviceHandler,
     public Wifi::Module
 {

@@ -1,8 +1,9 @@
 #pragma once
 /**
- * @file Wifi_LibNM_DeviceWifi.h
+ * @file  Wifi_LibNM_DeviceWifi.h
  *
- * @brief A C++ interface for LibNM NMDeviceWifi objects.
+ * @brief  Provides information about and basic controls for a system Wifi 
+ *         device.
  */
 
 #include "GLib_Borrowed_Object.h"
@@ -25,8 +26,8 @@ namespace Wifi
     } 
 }
 
-namespace GLib { namespace Signal { 
-    template <class SourceType> class CallbackData; } }
+namespace GLib { namespace Signal { template <class SourceType> 
+        class CallbackData; } }
 
 /**
  * @brief  Inheriting this interface ensures that only the LibNM::Thread::Module
@@ -78,7 +79,8 @@ private:
 };
 
 /**
- *  @brief  Represents a system Wifi device recognized by NetworkManager. 
+ *  @brief  Manages a NMDeviceWifi* value, representing a system Wifi device 
+ *          recognized by NetworkManager. 
  *
  *  DeviceWifi provides information about the Wifi device's state, loads 
  * AccessPoint objects representing access points visible to the device, and 
@@ -88,10 +90,6 @@ private:
  * and to make the device re-scan visible access points. Enabling or disabling
  * the device, and creating new connections using the device is handled by the
  * LibNM::Client class instead.
- *
- *  DeviceWifi also provides a Listener object interface that may be used to
- * track NMDeviceWifi signals. Listeners are notified when the active connection
- * changes, access points are discovered or lost, or the device's state changes. 
  */
 class Wifi::LibNM::DeviceWifi : public GLib::Borrowed::Object,
         public ObjectLenderInterface

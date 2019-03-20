@@ -15,10 +15,17 @@
 #include "Wifi_LibNM_ActiveConnection.h"
 #include "GLib_Borrowed_ObjectLender.h"
 
-namespace Wifi { namespace LibNM { namespace Thread { class Module; } } }
-namespace Wifi { class Resource; }
+namespace Wifi 
+{ 
+    namespace LibNM { namespace Thread { class Module; } } 
+    class Resource;
+}
 
 /**
+ * @brief  The Wifi::Module responsible for creating and managing the LibNM 
+ *         event loop thread, and for initializing the LibNM client and wifi
+ *         device objects.
+ *
  *  All interaction with LibNM::Object subclasses should occur within the
  * LibNM::ThreadResource thread, using its call and callAsync methods. The 
  * Client and DeviceWifi objects provided by the thread should be requested as 

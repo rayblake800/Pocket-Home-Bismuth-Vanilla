@@ -5,7 +5,8 @@
 /**
  * @file  Wifi_AP_Data.h
  *
- * @brief  Holds shared, reference counted data describing a Wifi access point.
+ * @brief  Defines the access point data class used by equivalent AccessPoint 
+ *         objects to share data.
  */
 
 #include "Wifi_LibNM_APHash.h"
@@ -16,6 +17,13 @@
 namespace Wifi { namespace AP { class Data; } }
 namespace LibNM { class AccessPoint; }
 
+/**
+ * @brief  Holds shared, reference counted data describing a Wifi access point.
+ *
+ *  Each Data object is dynamically allocated and shared between all equivalent
+ * AccessPoint objects. This structure ensures that all access point objects
+ * receive signal strength and saved connection status updates.
+ */
 class Wifi::AP::Data : public juce::ReferenceCountedObject
 {
 public:

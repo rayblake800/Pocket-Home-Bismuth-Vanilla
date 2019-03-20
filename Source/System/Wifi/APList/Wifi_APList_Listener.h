@@ -2,8 +2,8 @@
 /**
  * @file  Wifi_APList_Listener.h
  *
- * @brief  Receives notifications whenever the list of visible Wifi access
- *         points changes.
+ * @brief  Provides a basis for classes that should receive updates whenever the
+ *         list of visible Wifi access points changes.
  */
 
 #ifndef WIFI_IMPLEMENTATION
@@ -21,6 +21,13 @@ namespace Wifi { namespace APList { class Listener; } }
 namespace Wifi { namespace APList { class Module; } }
 namespace Wifi { class Resource; }
 
+/**
+ * @brief  Tracks the list of visible Wifi access points.
+ *
+ *  Listener objects are automatically connected to the APList::Module object
+ * on construction. Listener subclasses should override Listener's abstract
+ * signal methods to handle APList change updates.
+ */
 class Wifi::APList::Listener : public UpdateInterface,
     public SharedResource::Modular::Handler<Resource, Module>
 {

@@ -2,7 +2,8 @@
 /**
  * @file  Wifi_AccessPoint.h
  *
- * @brief  Holds shared data describing a wifi access point.
+ * @brief  Holds data representing a wireless network visible through one or
+ *         more nearby Wifi access points.
  */
 
 #ifndef WIFI_IMPLEMENTATION
@@ -73,7 +74,8 @@ protected:
 };
 
 /**
- * @brief  Holds shared data describing a wifi access point.
+ * @brief  Holds shared data describing a Wifi network and all visible access 
+ *         points that share that network.
  *
  *  Wifi::AccessPoint represents one or more LibNM::AccessPoints, which in 
  * turn represent a Wifi access point found by NetworkManager through the 

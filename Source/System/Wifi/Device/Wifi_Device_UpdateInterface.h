@@ -1,3 +1,6 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included directly outside of Wifi module implementation.
+#endif
 #pragma once
 /**
  * @file  Wifi_Device_UpdateInterface.h
@@ -7,9 +10,19 @@
  *         disabled.
  */
 
-namespace Wifi { namespace Device { class UpdateInterface; } }
-namespace Wifi { namespace Device { class Module; } }
+namespace Wifi 
+{ 
+    namespace Device 
+    { 
+        class UpdateInterface; 
+        class Module;
+    } 
+}
 
+/**
+ * @brief  An interface used to send updates when wireless networking is enabled
+ *         or disabled.
+ */
 class Wifi::Device::UpdateInterface
 {
 public:

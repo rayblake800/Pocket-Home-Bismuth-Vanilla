@@ -12,6 +12,9 @@
 namespace Wifi { namespace AP { class UpdateInterface; } }
 namespace Wifi { class AccessPoint; }
 
+/**
+ * @brief  An abstract interface used for sending signal strength updates.
+ */
 class Wifi::AP::UpdateInterface
 {
 public:

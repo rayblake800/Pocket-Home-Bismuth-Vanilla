@@ -18,6 +18,14 @@ namespace Wifi
     namespace Signal { class APModule; }
 }
 
+/**
+ * @brief  Receives and handles all LibNM::AccessPoint signal strength updates.
+ *
+ *  The Signal::APModule subscribes to signals from all LibNM::AccessPoint 
+ * objects. When it receives signal strength change signals, it passes the
+ * update to the APList::Module so it can update AccessPoint object data and 
+ * notify AP::Listener objects.
+ */
 class Wifi::Signal::APModule : public LibNM::Signal::APHandler,
     public Wifi::Module
 {

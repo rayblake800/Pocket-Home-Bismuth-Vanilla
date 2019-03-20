@@ -18,16 +18,16 @@ namespace Wifi { namespace LibNM {
 } }
 
 /**
- *  AccessPoint holds a LibNM object representing a wifi access point.  It
- * provides access to relevant access point data, and checks Connection 
- * objects for compatibility with this access point.
- * 
- *  AccessPoint also provides the AccessPoint::Listener class as an interface 
- * for receiving access point signals. After they have been added, listeners 
- * will receive updates if signal strength changes or the access point is 
- * removed. 
+ * @brief  Holds a LibNM NMAccessPoint* value representing a Wifi access point.  
+ *
+ *  AccessPoint provides access to relevant access point data, and checks 
+ * Connection objects for compatibility with this access point.
+ *
+ *  Each LibNM::AccessPoint represents a signal broadcasted by a single device.
+ * Unlike Wifi::AccessPoint, new LibNM::AccessPoint objects will be created for 
+ * each visible Wifi router, even if multiple routers are detected that connect 
+ * to the same network.
  */
-
 class Wifi::LibNM::AccessPoint : public GLib::Borrowed::Object
 {
 public:
@@ -57,7 +57,7 @@ public:
     /**
      * @brief  Gets the access point SSID as a byte array from the access point.  
      *
-     * This may contain unprintable characters, and might not be 
+     *  This may contain unprintable characters, and might not be 
      * null-terminated.
      * 
      * @return  The exact SSID value, packaged in a byte array. 
@@ -140,7 +140,7 @@ private:
     /**
      * @brief  Creates a AccessPoint to contain a NMAccessPoint object.
      * 
-     * @toAssign  A NMAccessPoint* for this AccessPoint to hold.
+     * @param toAssign  A NMAccessPoint* for this AccessPoint to hold.
      */
     AccessPoint(NMAccessPoint* toAssign);
 

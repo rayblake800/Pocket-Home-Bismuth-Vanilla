@@ -2,7 +2,8 @@
 /**
  * @file  Wifi_LibNM_DBus_SavedConnection.h
  * 
- * @brief  Controls a NetworkManager saved connection object over DBus.
+ * @brief  Controls a saved network connection stored remotely by 
+ *         NetworkManager.
  */
 
 #include "GLib_DBus_Proxy.h"
@@ -12,19 +13,21 @@
 namespace Wifi { namespace LibNM { namespace DBus { class SavedConnection; } } }
 
 /**
- *  SavedConnection can read or delete a DBus connection object held by the
- * NetworkManager. All saved network connections visible to NetworkManager on 
- * the system running this application may be loaded as SavedConnection objects.
+ * @brief  A D-Bus proxy wrapper used to access a single saved connection held
+ *         by NetworkManager.
+ *
+ *  All saved network connections visible to NetworkManager on the system 
+ * running this application may be loaded as SavedConnection objects.
  * SavedConnection objects are primarily meant to handle Wifi connections, and
  * support for other connection types is incomplete.
  *
- *  As a GLib::DBusProxy, the SavedConnection primarily acts within the shared
- * DBus thread resource, but it may be accessed safely within other threads.
- * 
- *  If the saved connection is a valid wifi connection, SavedConnection can
+ *  If the saved connection is a valid Wifi connection, SavedConnection can
  * create a Connection object that may be used with the LibNM::Client to
- * re-open the connection. As a LibNM::Object subclass, that Connection should
- * not be used outside of the NMThread.
+ * activate the connection if a compatible access point is visible.
+ *
+ *  SavedConnection may be used to delete its connection from NetworkManager.
+ * This will affect other connection applications using NetworkManager, and it
+ * cannot be undone.
  */
 class Wifi::LibNM::DBus::SavedConnection : public GLib::DBus::Proxy
 {

@@ -19,6 +19,9 @@ namespace Wifi
     namespace LibNM { class APHash; }
 }
 
+/**
+ * @brief  Connects to the APList::Module to read access point list data.
+ */
 class Wifi::APList::Reader : 
     public SharedResource::Modular::Handler<Resource, Module>
 {

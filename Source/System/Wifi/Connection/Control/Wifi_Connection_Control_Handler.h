@@ -1,4 +1,11 @@
 #pragma once
+/**
+ * @file  Wifi_Connection_Control_Handler.h
+ *
+ * @brief  Provides methods for starting new Wifi connections or closing the
+ *         existing Wifi connection.
+ */
+
 #include "SharedResource_Modular_Handler.h"
 
 namespace Wifi 
@@ -13,6 +20,10 @@ namespace Wifi
     namespace LibNM { class ActiveConnection; }
 }
 
+/**
+ * @brief  Connects to the Connection::Control::Module to open or close Wifi
+ *         connections.
+ */
 class Wifi::Connection::Control::Handler : 
         public SharedResource::Modular::Handler<Resource, Module>
 {

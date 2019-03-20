@@ -17,6 +17,10 @@ namespace Wifi
     class Module;
 }
 
+/**
+ * @brief  A basis for module objects that handle part of the responsibilities 
+ *         of the Wifi::Resource object.
+ */
 class Wifi::Module : public SharedResource::Modular::Module<Resource>
 {
 public:

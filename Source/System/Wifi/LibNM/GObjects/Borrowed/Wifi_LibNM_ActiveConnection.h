@@ -16,10 +16,11 @@ namespace Wifi { namespace LibNM
 } }
 
 /**
- *  ActiveConnection manages a NMActiveConnection object, used to represent an
- * active network connection. ActiveConnection provides information about the
- * connection's status, its properties, and the access point used to activate
- * the connection.
+ * @brief  Manages a NMActiveConnection* value, used to represent an active 
+ *         network connection. 
+ *
+ *  ActiveConnection provides information about the connection's status, its 
+ * properties, and the access point used to activate the connection.
  */
 class Wifi::LibNM::ActiveConnection : public GLib::Borrowed::Object
 {

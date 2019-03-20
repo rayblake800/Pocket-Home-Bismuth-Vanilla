@@ -1,9 +1,9 @@
 #pragma once
 /**
- * @file Wifi_Device_Listener.h
+ * @file  Wifi_Device_Listener.h
  *
- * @brief  Checks if a Wifi device is present and enabled, and receives signals
- *         whenever Wifi is enabled or disabled.
+ * @brief  Provides a basis for classes that should receive updates when 
+ *         wireless networking is enabled or disabled.
  */
 
 #ifndef WIFI_IMPLEMENTATION
@@ -17,10 +17,20 @@
 #endif
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace Device { class Listener; } }
-namespace Wifi { namespace Device { class Module; } }
-namespace Wifi { class Resource; }
+namespace Wifi 
+{ 
+    class Resource;
+    namespace Device 
+    { 
+        class Listener;
+        class Module;
+    } 
+}
 
+/**
+ * @brief  Checks if a Wifi device is present and enabled, and receives signals
+ *         whenever Wifi is enabled or disabled.
+ */
 class Wifi::Device::Listener : 
     public SharedResource::Modular::Handler<Resource, Module>,
     public UpdateInterface

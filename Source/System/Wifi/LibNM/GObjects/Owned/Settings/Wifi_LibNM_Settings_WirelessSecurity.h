@@ -2,17 +2,26 @@
 /**
  * @file  Wifi_LibNM_Settings_WirelessSecurity.h
  *
- * @brief  Holds wireless network connection security settings.
+ * @brief  Stores the security information needed to open a wireless network
+ *         connection.
  */
 
 #include "Wifi_LibNM_Settings_Object.h"
 #include <nm-setting-wireless-security.h>
 
-namespace Wifi { namespace LibNM { 
-    namespace Settings { class WirelessSecurity; }
-    enum class SecurityType;
-} }
+namespace Wifi 
+{ 
+    namespace LibNM 
+    { 
+        namespace Settings { class WirelessSecurity; }
+        enum class SecurityType;
+    } 
+}
 
+/**
+ * @brief  Holds NMSettingWirelessSecurity* data, used to store wireless network
+ *         connection security settings.
+ */
 class Wifi::LibNM::Settings::WirelessSecurity : public Object
 {
 public:

@@ -2,8 +2,8 @@
 /**
  * @file  Wifi_Connection_Event.h
  *
- * @brief  Stores the wifi access point, time, and type of a Wifi connection
- *         event.
+ * @brief  Provides the EventType enum and Event class used to store Wifi
+ *         connection event records.
  */
 #include "Wifi_AccessPoint.h"
 
@@ -47,7 +47,10 @@ enum class Wifi::Connection::EventType
     invalid
 };
 
-
+/**
+ * @brief  Stores the wifi access point, time, and type of a Wifi connection
+ *         event.
+ */
 class Wifi::Connection::Event
 {
 public:

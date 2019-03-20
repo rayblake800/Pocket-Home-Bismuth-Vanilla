@@ -10,6 +10,15 @@
 
 namespace Wifi { namespace LibNM { class SSID; } }
 
+/**
+ * @brief  Represents the ID name of a Wifi network broadcast by a Wifi access
+ *         point.
+ *
+ *  SSID values are stored as byte arrays. SSID values are usually descriptive
+ * string values, but they may contain unprintable characters or lack a null
+ * terminator. SSID object store one of these values, allowing it to be accessed
+ * as a raw byte array or a sanitized String object.
+ */
 class Wifi::LibNM::SSID
 {
 public:

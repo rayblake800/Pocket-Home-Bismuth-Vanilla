@@ -9,13 +9,20 @@
 #include <nm-setting-wireless.h>
 #include <nm-access-point.h>
 
-namespace Wifi { namespace LibNM 
+namespace Wifi 
 { 
-    namespace Settings { class Wireless; }
-    class SSID;
-    enum class APMode;
-} }
+    namespace LibNM 
+    { 
+        namespace Settings { class Wireless; }
+        class SSID;
+        enum class APMode;
+    } 
+}
 
+/**
+ * @brief  Manages a NMSettingsWireless* value, used to store wireless 
+ *         connection settings.
+ */
 class Wifi::LibNM::Settings::Wireless : public Object
 {
 public:

@@ -1,20 +1,28 @@
-#ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
-#endif
-#pragma once
 /**
  * @file  Wifi_Connection_Saved_Deleter.h
  *
  * @brief  Deletes saved network connections from the system.
  */
-#include "SharedResource_Modular_Handler.h"
+#include "Wifi_Module.h"
 
-namespace Wifi { namespace Connection {  namespace Saved { class Deleter; } } }
-namespace Wifi { namespace Connection {  namespace Saved { class Module; } } }
-namespace Wifi { class Resource; }
-namespace Wifi { class AccessPoint; }
+namespace Wifi 
+{ 
+    class Resource;
+    class AccessPoint;
+    namespace Connection 
+    {  
+        namespace Saved 
+        { 
+            class Deleter; 
+            class Module;
+        } 
+    }
+}
 
-
+/**
+ * @brief  Connects to the Connection::Saved::Module to delete saved 
+ *         connections.
+ */
 class Wifi::Connection::Saved::Deleter : 
         public SharedResource::Modular::Handler<Resource, Module>
 {

@@ -26,8 +26,7 @@ namespace Wifi
 }
 
 /**
- * @brief  The interface used to control access to the Client's 
- *         ObjectLenders.
+ * @brief  The interface used to control access to the Client's ObjectLenders.
  */
 class Wifi::LibNM::LenderInterface
 {
@@ -58,12 +57,11 @@ private:
 };
 
 /**
- *  The LibNM Client provides the main interface used to access and control
- * the NetworkManager. It is responsible for creating network device objects,
- * opening new connections, and enabling or disabling wireless networks. 
+ *  @brief  Provides the main interface used to access and control 
+ *          NetworkManager. 
  *
- *  Client provides a Listener interface, which may be used to receive
- * notifications when wireless networking is enabled or disabled.
+ *  LibNM::Client is responsible for creating network device objects, opening 
+ * new connections, and enabling or disabling wireless networking. 
  */
 class Wifi::LibNM::Client : public GLib::Owned::Object, public LenderInterface
 {

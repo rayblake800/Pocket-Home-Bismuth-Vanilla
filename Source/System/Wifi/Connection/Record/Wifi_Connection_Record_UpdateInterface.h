@@ -5,16 +5,27 @@
 /**
  * @file  Wifi_Connection_UpdateInterface.h
  *
- * @brief  The interface used by the Wifi::Connection::RecordModule instance
- *         to notify all Wifi::Connection::Listener objects of new Wifi network 
- *         connection events.
+ * @brief  The interface used by the Wifi::Connection::Record::Module instance
+ *         to notify all Wifi::Connection::Record::Listener objects of new Wifi 
+ *         network connection events.
  */
 
-namespace Wifi { namespace Connection { namespace Record { 
-        class UpdateInterface; } } }
-namespace Wifi { namespace Connection { namespace Record { class Module; } } }
-namespace Wifi { class AccessPoint; }
+namespace Wifi 
+{ 
+    class AccessPoint;
+    namespace Connection 
+    { 
+        namespace Record 
+        { 
+            class UpdateInterface; 
+            class Module;
+        } 
+    } 
+}
 
+/**
+ * @brief  An interface used to send Wifi connection event updates.
+ */
 class Wifi::Connection::Record::UpdateInterface
 {
 public:

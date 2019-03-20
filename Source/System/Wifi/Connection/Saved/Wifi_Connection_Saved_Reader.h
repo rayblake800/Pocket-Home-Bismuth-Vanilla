@@ -5,27 +5,32 @@
 /**
  * @file Wifi_Connection_Saved_Reader.h
  *
- * @brief  Reads saved Wifi connections from the Connection::Saved::Module.
+ * @brief  Looks up saved Wifi connection data, and searches for saved 
+ *         connections matching specific access points.
  */
 
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { 
-    namespace Connection { namespace Saved 
-    { 
-        class Reader; 
-        class Module;
-    } } 
+namespace Wifi 
+{ 
     class Resource;
     class AccessPoint;
     namespace LibNM { class Connection; }
+    namespace Connection 
+    { 
+        namespace Saved 
+        { 
+            class Reader; 
+            class Module;
+        }   
+    } 
 }
-namespace Wifi { namespace Connection { namespace Saved { class Module; } } }
-namespace Wifi { class Resource; }
-namespace Wifi { class AccessPoint; }
-namespace LibNM { class Connection; }
 
 
+/**
+ * @brief  Connects to the Connection::Saved::Module to read saved Wifi
+ *         connection data.
+ */
 class Wifi::Connection::Saved::Reader : 
     public SharedResource::Modular::Handler<Resource, Module>
 {
@@ -44,7 +49,8 @@ public:
      * @param toCheck  The access point to check against the list of saved
      *                 connections.
      *
-     * @return  Whether a saved connection exists that uses that access point. 
+     * @return         Whether a saved connection exists that uses that access 
+     *                 point. 
      */
     bool hasSavedConnection(const AccessPoint toCheck);
 

@@ -2,8 +2,8 @@
 /**
  * @file  Wifi_Connection_Record_Listener.h
  *
- * @brief  Receives notifications whenever the Wifi network connection's state
- *         changes.
+ * @brief  A basis for classes that should receive updates whenever the Wifi 
+ *         network connection state changes.
  */
 
 #ifndef WIFI_IMPLEMENTATION
@@ -17,11 +17,22 @@
 #endif
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace Connection { namespace Record { class Listener; } } }
-namespace Wifi { namespace Connection { namespace Record { class Module; } } }
-namespace Wifi { class Resource; }
+namespace Wifi 
+{ 
+    class Resource;
+    namespace Connection 
+    { 
+        namespace Record 
+        { 
+            class Listener; 
+            class Module;
+        } 
+    } 
+}
 
 /**
+ * @brief  Receives updates whenever new Wifi connection events are recorded.
+ *
  *  Listener object methods will be called by the Connection::Record::Module to 
  * notify the Listener of new connection events.  All of its notification 
  * methods do nothing by default. Listener subclasses should override these 

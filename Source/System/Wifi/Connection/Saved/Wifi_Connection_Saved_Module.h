@@ -23,9 +23,12 @@ namespace Wifi
 }
 
 /**
- *  The Saved::Module accesses saved Wifi network connections. It loads LibNM 
- * connection objects, reads the last time that they were active, and allows
- * them to be deleted.
+ * @brief  Handles saved Wifi connection data loaded from NetworkManager.
+ *
+ *  Saved::Module loads LibNM::DBus saved connection objects, reads the last 
+ * time that they were active, and allows them to be deleted. The Saved::Module
+ * is responsible for setting and updating the saved connection status stored
+ * by AccessPoint objects.
  */
 class Wifi::Connection::Saved::Module : public Wifi::Module
 {

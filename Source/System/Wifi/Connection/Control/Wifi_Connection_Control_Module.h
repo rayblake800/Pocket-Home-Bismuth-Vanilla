@@ -1,3 +1,6 @@
+#ifndef WIFI_IMPLEMENTATION
+  #error File included directly outside of Wifi module implementation.
+#endif
 #pragma once
 /**
  * @file  Wifi_Connection_Control_Module.h
@@ -22,6 +25,16 @@ namespace Wifi
     }
 }
 
+/**
+ * @brief  Handles the process of creating, opening, and closing Wifi network
+ *         connections.
+ *
+ *  The Control::Module object handles the process of creating a new network
+ * connection, or closing an existing one. It determines whether saved
+ * connections can be reused, which access point device should be used to open
+ * the connection, and what kind of security settings to create in order to
+ * activate a new connection.
+ */
 class Wifi::Connection::Control::Module : public Wifi::Module,
         public LibNM::ConnectionHandler, protected juce::Timer
 {
@@ -61,13 +74,6 @@ public:
      * thread.
      */
     void continueConnectionAttempt();
-
-    /**
-     * @brief 
-     *
-     * @return 
-     */
-    bool isConnecting() const;
 
     /**
      * @brief  Disconnects the active Wifi connection. If there is no active

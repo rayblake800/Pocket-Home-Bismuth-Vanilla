@@ -28,10 +28,12 @@ namespace Wifi
 }
 
 /**
- *  Connection objects represent a potential network connection tracked by the
- * NetworkManager. Connection objects hold all settings used by NetworkManager
- * when attempting to add an active connection. Connections are not guaranteed
- * to be complete or valid.
+ *  @brief  Represents a potential network connection tracked by the 
+ *          NetworkManager. 
+ *
+ *  Connection objects hold all settings used by NetworkManager when attempting 
+ * to add an active connection. Connections are not guaranteed to be complete or
+ * valid.
  *
  *  Connection objects are never created from objects borrowed from
  * NetworkManager. If a Connection object is transferred to NetworkManager, it

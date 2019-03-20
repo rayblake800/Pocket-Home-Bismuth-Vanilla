@@ -18,6 +18,14 @@ namespace Wifi
     namespace Signal { class ClientModule; }
 }
 
+/**
+ * @brief  Receives and handles all LibNM::Client signals for the Wifi module.
+ *
+ *  The Signal::ClientModule handles signals sent by the Wifi module's shared
+ * LibNM::Client object. Whenever wireless networking is enabled or disabled,
+ * the ClientModule receives a signal and passes the information on to the
+ * Device::Module object.
+ */
 class Wifi::Signal::ClientModule: public Wifi::LibNM::Signal::ClientHandler,
     public Wifi::Module
 {

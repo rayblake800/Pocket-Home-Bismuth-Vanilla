@@ -5,8 +5,8 @@
 /**
  * @file  Wifi_LibNM_Signal_DeviceHandler.h
  *
- * @brief  Handles signals from the Wifi device object, updating Wifi connection
- *         state and visible access points. 
+ * @brief  A basis for classes that should be updated when the list of visible
+ *         Wifi access points or the state of the active Wifi Device change.
  */
 
 #include "GLib_Signal_Handler.h"
@@ -23,6 +23,11 @@ namespace Wifi
     } 
 }
 
+/**
+ * @brief  Handles signals from the active LibNM::DeviceWifi object, receiving 
+ *         updates when Wifi connection state or the list of visible access 
+ *         points change. 
+ */
 class Wifi::LibNM::Signal::DeviceHandler : 
         public GLib::Signal::Handler<DeviceWifi>
 {
@@ -36,8 +41,7 @@ protected:
      * @brief  Subscribes to all relevant signals from a single GObject 
      *         signal source.
      * 
-     * @param source  A NMDeviceWifi GObject this signal handler should 
-     *                track.
+     * @param source  A DeviceWifi object this signal handler should track.
      */
     virtual void connectAllSignals(const DeviceWifi source) override;
 

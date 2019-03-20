@@ -2,14 +2,17 @@
 /**
  * @file  Wifi_LibNM_SecurityType.h
  *
+ * @brief  Defines the basic categories of Wifi security handled by LibNM.
+ */
+
+namespace Wifi { namespace LibNM { enum class SecurityType; } }
+
+/**
  * @brief  Enumerates all basic Wifi security types.
  *
  *  Any combination of APMode and SecurityType values may be used as bitflags in
  * a single byte.
  */
-
-namespace Wifi { namespace LibNM { enum class SecurityType; } }
-
 enum class Wifi::LibNM::SecurityType
 {
     unsecured      = 0b0001000,

@@ -2,7 +2,7 @@
 /**
  * @file  Wifi_LibNM_Thread_Handler.h
  *
- * @brief  Provides access to the LibNM thread module.
+ * @brief  Schedules actions and accesses data on the LibNM thread's event loop.
  */
 
 #include "Wifi_LibNM_Client.h"
@@ -22,6 +22,10 @@ namespace Wifi
     } } 
 }
 
+/**
+ * @brief  Connects to the Thread::Module to schedule actions within the LibNM
+ *         thread's event loop, or to access the Client or DeviceWifi objects.
+ */
 class Wifi::LibNM::Thread::Handler : public GLib::ThreadHandler
         <SharedResource::Modular::Handler<Resource, Module>>
 {
@@ -33,7 +37,7 @@ public:
 
     virtual ~Handler() { }
 
-    /*
+    /**
      * @brief  Gets the shared NetworkManager client object.
      *
      * @return  The Client object, or a null Client if called outside the event

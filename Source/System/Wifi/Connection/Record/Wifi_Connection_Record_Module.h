@@ -16,10 +16,11 @@ namespace Wifi { class Resource; }
 namespace Wifi { class AccessPoint; }
 
 /**
- *  Record::Module records all Wifi connection events relevant to this 
- * application that occur after the program is launched. RecordModule finds and 
- * shares the most recent connection events, optionally filtering by access 
- * point or event type.
+ * @brief  Records all Wifi connection events relevant to this application that 
+ *         occur after the program is launched. 
+ *
+ *  RecordModule finds and shares the most recent connection events, optionally 
+ * filtering by access point or event type.
  */
 class Wifi::Connection::Record::Module final : public Wifi::Module
 {

@@ -6,10 +6,20 @@
 
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace Device { class Reader; } }
-namespace Wifi { namespace Device { class Module; } }
-namespace Wifi { class Resource; }
+namespace Wifi 
+{ 
+    class Resource;
+    namespace Device 
+    { 
+        class Reader;
+        class Module;
+    }
+}
 
+/**
+ * @brief  Connects to the Device::Module object to check the state of the
+ *         primary Wifi device.
+ */
 class Wifi::Device::Reader : 
     public SharedResource::Modular::Handler<Resource, Module>
 {

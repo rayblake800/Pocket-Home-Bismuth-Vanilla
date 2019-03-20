@@ -5,8 +5,8 @@
 /**
  * @file  Wifi_LibNM_Signal_ClientHandler.h
  *
- * @brief  Receives a signal whenever wireless networking is enabled or 
- *         disabled.
+ * @brief  Provides a basis for classes that should be updated when wireless
+ *         networking is enabled or disabled.
  */
 
 #include "GLib_Signal_Handler.h"
@@ -20,6 +20,10 @@ namespace Wifi
     } 
 }
 
+/**
+ * @brief  Receives a signal from the LibNM::Client object whenever wireless 
+ *         networking is enabled or disabled.
+ */
 class Wifi::LibNM::Signal::ClientHandler: public GLib::Signal::Handler<Client>
 {
 public:

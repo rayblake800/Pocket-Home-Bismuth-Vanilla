@@ -9,9 +9,16 @@
 #include "GLib_Owned_Object.h"
 #include <nm-connection.h>
 
-namespace Wifi { namespace LibNM { namespace Settings {
-        class Object; } } }
+namespace Wifi { namespace LibNM { namespace Settings { class Object; } } }
 
+/**
+ * @brief  Manages a NMSetting* value, used to store network connection 
+ *         settings.
+ *
+ *  NMSetting is an abstract type inherited by many specialized connection 
+ * setting types. Wifi::LibNM classes that manage any type of NMSetting value
+ * should inherit Settings::Object.
+ */
 class Wifi::LibNM::Settings::Object : public GLib::Owned::Object
 {
 public:

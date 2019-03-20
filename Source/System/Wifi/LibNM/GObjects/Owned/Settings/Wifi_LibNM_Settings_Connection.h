@@ -10,6 +10,10 @@
 
 namespace Wifi { namespace LibNM { namespace Settings { class Connection; } } }
 
+/**
+ * @brief  Manages a NMSettingsConnection* value, used to store basic network
+ *         connection settings.
+ */
 class Wifi::LibNM::Settings::Connection : public Object
 {
 public:

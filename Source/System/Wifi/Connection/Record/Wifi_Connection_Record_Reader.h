@@ -2,19 +2,31 @@
 /**
  * @file Wifi_Connection_Record_Reader.h
  *
- * @brief  Reads Wifi connection events saved in the Connection::Record::Module.
+ * @brief  Reads saved Wifi connection event records.
  */
 
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi { namespace Connection { namespace Record { class Reader; } } }
-namespace Wifi { namespace Connection { namespace Record { class Module; } } }
-namespace Wifi { namespace Connection { class Event; } }
-namespace Wifi { namespace Connection { enum class EventType; } }
-namespace Wifi { class Resource; }
-namespace Wifi { class AccessPoint; }
+namespace Wifi 
+{ 
+    class Resource;
+    class AccessPoint;
+    namespace Connection 
+    { 
+        class Event;
+        enum class EventType;
+        namespace Record 
+        { 
+            class Reader; 
+            class Module;
+        } 
+    } 
+}
 
-
+/**
+ * @brief  Connects to the Connection::Record::Module to access the list of 
+ *         saved Wifi connection events.
+ */
 class Wifi::Connection::Record::Reader : 
     public SharedResource::Modular::Handler<Resource, Module>
 {

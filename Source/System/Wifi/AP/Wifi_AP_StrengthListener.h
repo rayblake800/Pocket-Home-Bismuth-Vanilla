@@ -2,7 +2,8 @@
 /**
  * @file  Wifi_AP_StrengthListener.h
  *
- * @brief  Receives updates whenever Wifi access point signal strength changes.
+ * @brief  Provides a basis for classes that should receive updates whenever 
+ *         Wifi access point signal strength changes.
  */
 
 #ifndef WIFI_IMPLEMENTATION

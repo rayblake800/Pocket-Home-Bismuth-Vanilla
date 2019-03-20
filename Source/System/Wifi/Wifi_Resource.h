@@ -3,7 +3,7 @@
 #endif
 #pragma once
 /**
- * @file Wifi_Resource.h
+ * @file  Wifi_Resource.h
  *
  * @brief  Manages shared Wifi data and controls.
  */
@@ -16,6 +16,10 @@ namespace Wifi
     class Module;
 }
 
+/**
+ * @brief  A SharedResource::Modular::Resource used to access the application's
+ *         Wifi data caches and connection controls.
+ */
 class Wifi::Resource : public SharedResource::Modular::Resource<>
 {
 public:

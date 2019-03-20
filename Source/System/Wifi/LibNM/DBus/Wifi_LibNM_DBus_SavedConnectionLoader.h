@@ -2,7 +2,7 @@
 /**
  * @file Wifi_LibNM_DBus_SavedConnectionLoader.h
  * 
- * @brief Connects to NetworkManager to read saved network connections.
+ * @brief  Connects to NetworkManager to read saved network connections.
  */
 
 #include "GLib_DBus_Proxy.h"
@@ -16,6 +16,9 @@ namespace Wifi { namespace LibNM
 } }
 
 /**
+ * @brief  A D-Bus proxy object that loads NetworkManager's saved connection
+ *         data.
+ *
  *  SavedConnectionLoader reads all saved network connections from
  * NetworkManager over DBus, creating SavedConnection objects for each Wifi
  * connection it finds. It then caches the SavedConnections, updating and
@@ -60,7 +63,7 @@ public:
     /**
      * @brief  Finds a saved connection from its DBus path.  
      *  
-     * If no matching connection is already loaded, the saved connection list 
+     *  If no matching connection is already loaded, the saved connection list 
      * will be updated in case the requested connection was recently added.
      * 
      * @param connectionPath  The DBus path of a saved network connection.
@@ -71,7 +74,7 @@ public:
     SavedConnection getConnection(const juce::String& connectionPath);
     
     /**
-     * @brief  Finds all saved connections that are compatible with a given wifi
+     * @brief  Finds all saved connections that are compatible with a given Wifi
      *         access point.
      * 
      * @param accessPoint  A wifi access point to check against the list of

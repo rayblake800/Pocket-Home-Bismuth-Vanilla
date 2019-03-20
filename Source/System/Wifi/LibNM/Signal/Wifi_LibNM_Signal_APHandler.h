@@ -5,8 +5,8 @@
 /**
  * @file  Wifi_LibNM_Signal_APHandler.h
  *
- * @brief  Receives signal strength update notifications from connected 
- *         LibNM::AccessPoint objects.
+ * @brief  Provides a basis for classes that should receive updates when access 
+ *         point signal strengths change.
  */
 
 #include "SharedResource_Handler.h"
@@ -21,6 +21,11 @@ namespace Wifi
     } 
 }
 
+
+/**
+ * @brief  Receives signal strength update notifications from connected 
+ *         LibNM::AccessPoint objects.
+ */
 class Wifi::LibNM::Signal::APHandler : 
         public GLib::Signal::Handler<AccessPoint> 
 {

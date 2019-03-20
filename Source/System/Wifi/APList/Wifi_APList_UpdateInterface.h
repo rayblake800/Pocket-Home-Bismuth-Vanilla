@@ -10,9 +10,15 @@
  *         removed.
  */
 
-namespace Wifi { namespace APList { class UpdateInterface; } }
-namespace Wifi { class AccessPoint; }
+namespace Wifi 
+{ 
+    namespace APList { class UpdateInterface; } 
+    class AccessPoint;
+}
 
+/**
+ * @brief  An abstract interface used for sending access point list updates.
+ */
 class Wifi::APList::UpdateInterface
 {
 public:
