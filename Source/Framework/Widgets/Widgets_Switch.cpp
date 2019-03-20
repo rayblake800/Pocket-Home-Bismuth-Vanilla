@@ -9,14 +9,14 @@ static const constexpr int minHeight = 4;
 /* Width : height ratio of all switch components: */
 static const constexpr double widthToHeightRatio = 1.5;
 /* Switch handle margin size, as a fraction of the switch height: */
-static const constexpr double handleMarginFraction = 0.04;
+static const constexpr double handleMarginFraction = 0.06;
 
 /* Switch handle layout constants: */
 
 /* Minimum switch handle margin size in pixels: */
 static const constexpr int minimumHandleMargin = 2;
 /* Minimum switch handle size in pixels: */
-static const constexpr int minimumHandleSize =2;
+static const constexpr int minimumHandleSize = 2;
 
 /* Switch animation duration in milliseconds: */
 static const constexpr int animationDuration = 150;
@@ -68,8 +68,8 @@ void Widgets::Switch::paintButton
 void Widgets::Switch::resized()
 {
     backgroundShape = getLocalBounds();
-    float width = std::max(getWidth(), minWidth);
-    float height = std::max(getHeight(), minHeight);
+    int width = std::max(getWidth(), minWidth);
+    int height = std::max(getHeight(), minHeight);
 
     // Ensure minimum bounds are met:
     if(width != getWidth() || height != getHeight())
@@ -90,7 +90,7 @@ void Widgets::Switch::resized()
         height = width / widthToHeightRatio;
         backgroundShape.reduce(0, (backgroundShape.getHeight() - height) / 2);
     }
-    const int handleMargin = std::max(int(height * handleMarginFraction), 
+    int handleMargin = std::max(int(height * handleMarginFraction), 
             minimumHandleMargin);
     const int handleSize = std::max(int(height - handleMargin * 2), 
             minimumHandleSize);
