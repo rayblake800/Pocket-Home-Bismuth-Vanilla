@@ -2,7 +2,7 @@
 /*
  * Gets text describing a NMState enum value.
  */
-const char* nmStateString(NMState state)
+const char* Wifi::nmStateString(NMState state)
 {
     switch (state)
     {
@@ -29,7 +29,7 @@ const char* nmStateString(NMState state)
 /*
  * Gets text describing a NMConnectivityState enum value.
  */
-const char* nmConnectivityStateString(NMConnectivityState state)
+const char* Wifi::nmConnectivityStateString(NMConnectivityState state)
 {
     switch (state)
     {
@@ -50,7 +50,7 @@ const char* nmConnectivityStateString(NMConnectivityState state)
 /*
  * Gets text describing a NMDeviceState enum value.
  */
-const char* deviceStateString(NMDeviceState state)
+const char* Wifi::deviceStateString(NMDeviceState state)
 {
     switch (state)
     {
@@ -87,7 +87,7 @@ const char* deviceStateString(NMDeviceState state)
 /*
  * Gets text describing a NMDeviceStateReason enum value.
  */
-const char* deviceStateReasonString(NMDeviceStateReason stateReason)
+const char* Wifi::deviceStateReasonString(NMDeviceStateReason stateReason)
 {
     switch (stateReason)
     {
@@ -228,7 +228,7 @@ const char* deviceStateReasonString(NMDeviceStateReason stateReason)
 /*
  * Gets text describing a NMActiveConnectionState enum value.
  */
-const char* activeConnectionStateString(NMActiveConnectionState state)
+const char* Wifi::activeConnectionStateString(NMActiveConnectionState state)
 {
     switch(state)
     {
