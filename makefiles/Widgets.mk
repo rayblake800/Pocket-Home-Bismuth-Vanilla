@@ -1,5 +1,5 @@
 ############################## Widget Module ###################################
-WIDGET_ROOT   = Source/Framework/Widgets
+WIDGET_ROOT   = Source/GUI/Widgets
 WIDGET_PREFIX = Widgets_
 WIDGET_OBJ   := $(JUCE_OBJDIR)/$(WIDGET_PREFIX)
 
@@ -29,7 +29,7 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_WIDGET := $(OBJECTS_WIDGET) $(OBJECTS_WIDGET_TEST)
 endif
 
-FRAMEWORK_MODULES := $(FRAMEWORK_MODULES) widget
+GUI_MODULES := $(GUI_MODULES) widget
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_WIDGET)
 

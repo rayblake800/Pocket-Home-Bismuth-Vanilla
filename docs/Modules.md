@@ -5,6 +5,9 @@
 ### GUI
 GUI modules create the application's user interface.
 
+#### [Widgets](./modules/Widgets.md)
+The Widgets module provides UI components that may be reused throughout the application.
+
 #### [AppMenu](./modules/AppMenu.md)
 The AppMenu module creates and manages the application menu UI component.
 
@@ -70,9 +73,6 @@ The Locale module provides localized display text throughout the application.
 
 #### [SharedResource](./modules/SharedResource.md)
  Provides a system for safely creating, accessing, and destroying shared application resources.
-
-#### [Widgets](./modules/Widgets.md)
-The Widgets module provides UI components that may be reused throughout the application.
 
 #### [Util](./modules/Util.md)
 The Util module provides miscellaneous support classes and functions used to build the application.
