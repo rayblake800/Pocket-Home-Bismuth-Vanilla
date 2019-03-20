@@ -68,23 +68,6 @@
         {
             "name": "Games",
             "icon": "applications-games",
-            "folder items":
-            [
-                {
-                    "name": "PICO-8",
-                    "icon": "pico8",
-                    "command": "pico8",
-                    "launch in terminal": false
-                },
-                {
-                    "name": "Recursive games",
-                    "icon": "doom",
-                    "categories":
-                    [
-                        "Game"
-                    ]
-                }
-            ],
             "categories": 
             [
                 "Game"
