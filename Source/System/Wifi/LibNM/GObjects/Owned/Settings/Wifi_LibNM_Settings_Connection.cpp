@@ -4,13 +4,6 @@
 namespace WifiNMSettings = Wifi::LibNM::Settings;
 
 /*
- * Creates a Connection object that shares data with another
- * Connection object.
- */
-WifiNMSettings::Connection::Connection
-(const Connection& toCopy) : Object(toCopy) { }
-
-/*
  * Creates a Connection object to hold existing LibNM connection
  * settings.
  */

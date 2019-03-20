@@ -16,14 +16,6 @@ class Wifi::LibNM::Settings::Object : public GLib::Owned::Object
 {
 public:
     /**
-     * @brief  Creates a Settings::Object sharing data with another Settings
-     *         object.
-     *
-     * @param toCopy       Another Settings::Object to copy.
-     */
-    Object(const Object& toCopy);
-
-    /**
      * @brief  Creates a Settings::Object to contain NMSetting data.
      *
      * @param toAssign     A valid NMSetting pointer for this Settings::Object 

@@ -14,15 +14,6 @@ class Wifi::LibNM::Settings::Connection : public Object
 {
 public:
     /**
-     * @brief  Creates a Settings::Connection object that shares data with 
-     *         another Connection object.
-     *
-     * @param toCopy  The Connection settings object that will share its LibNM
-     *                data with the new object.
-     */
-    Connection(const Connection& toCopy);
-
-    /**
      * @brief  Creates a Settings::Connection object to hold existing LibNM
      *         connection settings.
      *

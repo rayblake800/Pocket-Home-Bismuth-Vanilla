@@ -11,12 +11,6 @@
 #include "GLib_ObjectPtr.h"
 
 /*
- * Creates a Connection sharing a GObject with an existing Connection.
- */
-Wifi::LibNM::Connection::Connection(const Connection& toCopy) :
-GLib::Owned::Object(toCopy, NM_TYPE_CONNECTION) { }
-
-/*
  * Creates a Connection to contain a NMConnection object.
  */
 Wifi::LibNM::Connection::Connection(NMConnection* toAssign) :

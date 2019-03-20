@@ -35,13 +35,6 @@ public:
     SavedConnection();
     
     /**
-     * @brief  Creates an object from an existing DBus Connection proxy.
-     * 
-     * @param toCopy  The existing connection object to copy.
-     */
-    SavedConnection(const SavedConnection& toCopy);
-    
-    /**
      * @brief  Initializes a SavedConnection from a DBus connection path.
      * 
      * @param path  A valid DBus path to a NetworkManager saved connection.

@@ -20,15 +20,6 @@ class Wifi::LibNM::Settings::Wireless : public Object
 {
 public:
     /**
-     * @brief  Creates a wireless settings object that shares data with another
-     *         settings object.
-     *
-     * @param toCopy  The Wireless object that will share its LibNM data
-     *                with the new object.
-     */
-    Wireless(const Wireless& toCopy);
-
-    /**
      * @brief  Creates a Wireless object to hold existing wireless settings
      *         data.
      *

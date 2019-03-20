@@ -5,12 +5,6 @@
 namespace WifiNMSettings = Wifi::LibNM::Settings;
 
 /*
- * Creates a Settings object sharing data with another Settings object.
- */
-WifiNMSettings::Object::Object(const Object& toCopy) :
-GLib::Owned::Object(toCopy, toCopy.getType()) { }
-
-/*
  * Creates a Settings object to contain NMSetting data.
  */
 WifiNMSettings::Object::Object

@@ -22,17 +22,6 @@
  */
 Wifi::LibNM::Client::Client() : 
 GLib::Owned::Object(NM_TYPE_CLIENT) { }
-
-/*
- * Creates a Client that shares a NMClient with another Client.
- */
-Wifi::LibNM::Client::Client(const Client& toCopy) : 
-GLib::Owned::Object(toCopy, NM_TYPE_CLIENT),
-deviceLender(toCopy.deviceLender),
-connectionLender(toCopy.connectionLender)
-{
-    ASSERT_NM_CONTEXT;
-}
  
 /*
  * Creates a Client holding an existing NMClient object.

@@ -17,15 +17,6 @@ class Wifi::LibNM::Settings::WirelessSecurity : public Object
 {
 public:
     /**
-     * @brief  Creates a WirelessSecurity object sharing data with another
-     *         WirelessSecurity object.
-     *
-     * @param toCopy  The object that will share its LibNM data with the new
-     *                object.
-     */
-    WirelessSecurity(const WirelessSecurity& toCopy);
-
-    /**
      * @brief  Creates a WirelessSecurity object to hold existing LibNM
      *         settings data.
      *

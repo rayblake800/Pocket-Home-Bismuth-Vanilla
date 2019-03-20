@@ -12,13 +12,6 @@ static const constexpr char* wpaEnterpriseTypeKey = "wpa-eap";
 namespace WifiNMSettings = Wifi::LibNM::Settings;
 
 /*
- * Creates a WirelessSecurity object sharing data with another
- * WirelessSecurity object.
- */
-WifiNMSettings::WirelessSecurity::WirelessSecurity
-(const WirelessSecurity& toCopy) : Object(toCopy) { }
-
-/*
  * Creates a WirelessSecurity object to hold existing LibNM settings data.
  */
 WifiNMSettings::WirelessSecurity::WirelessSecurity

@@ -37,15 +37,6 @@ NMDBus::SavedConnection::SavedConnection() :
 GLib::DBus::Proxy(nullptr, nullptr, nullptr) { } 
 
 /*
- * Creates an object from an existing DBus Connection proxy.
- */
-NMDBus::SavedConnection::SavedConnection(const SavedConnection& toCopy) :
-GLib::DBus::Proxy(toCopy), path(toCopy.path)
-{
-    setGObject(toCopy);
-}
-
-/*
  * Initializes a SavedConnection from a DBus connection path.
  */ 
 NMDBus::SavedConnection::SavedConnection(const char * path) :

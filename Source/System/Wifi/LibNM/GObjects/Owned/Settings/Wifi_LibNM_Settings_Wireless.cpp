@@ -4,11 +4,6 @@
 #include "GLib_ObjectPtr.h"
 
 namespace WifiNMSettings = Wifi::LibNM::Settings;
-/*
- * Creates a Wireless object that shares data with another Wireless
- * object.
- */
-WifiNMSettings::Wireless::Wireless(const Wireless& toCopy) : Object(toCopy) { }
 
 /*
  * Creates a Wireless object to hold existing wireless settings data.

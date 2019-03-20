@@ -72,14 +72,6 @@ public:
      * @brief  Creates a null Client object.
      */
     Client();
-    
-    /**
-     * @brief  Creates a Client that shares a NMClient with another Client.
-     * 
-     * @param toCopy  Holds the NMClient object that will be shared with the
-     *                new Client.
-     */
-    Client(const Client& toCopy);
    
     /**
      * @brief  Creates a Client holding an existing NMClient object.

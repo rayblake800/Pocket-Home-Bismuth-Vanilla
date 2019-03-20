@@ -46,14 +46,6 @@ class Wifi::LibNM::Connection : public GLib::Owned::Object
 {
 public:
     /**
-     * @brief  Creates a Connection sharing a GObject with an existing 
-     *         Connection.
-     * 
-     * @toCopy  Another Connection object to copy.
-     */
-    Connection(const Connection& toCopy);
-    
-    /**
      * @brief  Creates a Connection to contain NMConnection data.
      * 
      * @toAssign  A valid NMConnection pointer for this Connection to hold, or
