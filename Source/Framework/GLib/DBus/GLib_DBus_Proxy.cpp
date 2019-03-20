@@ -50,12 +50,6 @@ GLib::Owned::Object(G_TYPE_DBUS_PROXY)
  */
 GLib::DBus::Proxy::Proxy(GDBusProxy * proxy) :
 GLib::Owned::Object(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
-        
-/*
- * Creates the Proxy as a copy of another DBus Proxy
- */
-GLib::DBus::Proxy::Proxy(const Proxy& proxy) : 
-GLib::Owned::Object(proxy, G_TYPE_DBUS_PROXY) { }
 
 /*
  * Calls one of the methods provided by this DBus interface.

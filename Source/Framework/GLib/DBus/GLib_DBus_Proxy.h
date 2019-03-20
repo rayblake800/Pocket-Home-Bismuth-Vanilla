@@ -57,15 +57,7 @@ protected:
      * 
      * @param proxy  An initialized GIO proxy object.  
      */
-    Proxy(GDBusProxy * proxy);
-    
-    /**
-     * @brief  Creates the Proxy as a copy of another Proxy. Both proxies will
-     *         hold the same connection to the remote DBus object.
-     * 
-     * @param proxy  The Proxy object to copy.
-     */
-    Proxy(const Proxy& proxy);
+    Proxy(GDBusProxy* proxy);
     
 public:
     virtual ~Proxy() { }

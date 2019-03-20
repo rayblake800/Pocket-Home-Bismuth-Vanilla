@@ -24,6 +24,16 @@ GLib::WeakRef::WeakRef(const WeakRef& toAssign)
 }
 
 /*
+ * Initializes the weak reference from a temporary WeakRef.
+ */
+GLib::WeakRef::WeakRef(WeakRef&& toMove)
+{
+    weakRef = toMove.weakRef;
+    refInitialized = toMove.refInitialized;
+    toMove.refCleared = refInitialized;
+}
+
+/*
  * Initializes the weak reference with a GObject value. 
  */ 
 GLib::WeakRef::WeakRef(GObject* value)

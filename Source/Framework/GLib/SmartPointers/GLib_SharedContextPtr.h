@@ -39,6 +39,15 @@ public:
     SharedContextPtr(const SharedContextPtr& contextPtr);
 
     /**
+     * @brief  Creates a context pointer using data taken from a temporary
+     *         context pointer.
+     *
+     * @param contextPtr  A temporary context pointer the new context pointer
+     *                    will take data from.
+     */
+    SharedContextPtr(SharedContextPtr&& contextPtr);
+
+    /**
      * @brief  Unreferences the internal GMainContext* on destruction if it
      *         holds a non-null value.
      */

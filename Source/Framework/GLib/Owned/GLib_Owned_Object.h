@@ -27,7 +27,23 @@ protected:
      * @param objectType   Sets the type of GObject this Object may hold.
      */
     Object(const GType objectType);
+
+    /**
+     * @brief  Creates a new Object as a reference to existing object data,
+     *         using the same GType.
+     * 
+     * @param toCopy  This object's GObject* will be shared, and the GObject's 
+     *                reference count will be increased.
+     */
+    Object(const Object& toCopy);
     
+    /**
+     * @brief  Creates a new Object using data moved from a temporary Object.
+     * 
+     * @param toMove  This object's GObject* will be moved to the new Object.
+     */
+    Object(Object&& toMove);
+
     /**
      * @brief  Creates a new Object as a reference to existing object data.
      * 

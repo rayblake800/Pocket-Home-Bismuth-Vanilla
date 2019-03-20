@@ -48,6 +48,14 @@ public:
     WeakRef(const WeakRef& toAssign);
 
     /**
+     * @brief  Initializes the weak reference from a temporary WeakRef.
+     *
+     * @param toMove  A temporary WeakRef that will have its data moved to the
+     *                new WeakRef.
+     */
+    WeakRef(WeakRef&& toMove);
+
+    /**
      * @brief  Clears the reference on destruction.
      */
     ~WeakRef();

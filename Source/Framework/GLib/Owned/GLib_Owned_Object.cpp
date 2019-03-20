@@ -8,6 +8,25 @@ using OwnedObject = GLib::Owned::Object;
 OwnedObject::Object(const GType objectType) : GLib::Object(objectType) { }
 
 /*
+ * Creates a new Object as a reference to existing object data, using the same
+ * GType.
+ */
+OwnedObject::Object(const Object& toCopy) 
+: GLib::Object(toCopy.getType()) 
+{
+    setGObject(toCopy);
+}
+    
+/*
+ * Creates a new Object using data moved from a temporary Object.
+ */
+OwnedObject::Object(Object&& toMove) :
+GLib::Object(toMove.getType())
+{
+    objectRef = std::move(toMove.objectRef);
+}
+
+/*
  * Creates a new Object as a reference to existing object data.
  */
 OwnedObject::Object(const Object& toCopy, const GType objectType) 

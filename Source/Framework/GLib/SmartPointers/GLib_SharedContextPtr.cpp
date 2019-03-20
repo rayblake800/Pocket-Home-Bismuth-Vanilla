@@ -20,6 +20,15 @@ GLib::SharedContextPtr::SharedContextPtr(const SharedContextPtr& contextPtr)
 }
 
 /*
+ * Creates a context pointer using data taken from a temporary context pointer.
+ */
+GLib::SharedContextPtr::SharedContextPtr(SharedContextPtr&& contextPtr)
+{
+    context = contextPtr.context;
+    contextPtr.context = nullptr;
+}
+
+/*
  * Unreferences the internal GMainContext* on destruction if it holds a non-null
  * value.
  */ 
