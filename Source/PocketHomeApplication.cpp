@@ -1,7 +1,7 @@
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
 #include "Hardware_Audio.h"
-#include "XWindowInterface.h"
+#include "Windows_XInterface.h"
 #include "Util_ShutdownListener.h"
 #include "Util_TempTimer.h"
 #include "Debug_ScopeTimerRecords.h"
@@ -59,19 +59,27 @@ static void runApplicationTests()
  */
 static void focusAppWindow()
 {
-    XWindowInterface xWindows;
-    Window appWindow = xWindows.getPocketHomeWindow();
-    xWindows.activateWindow(appWindow);
-    juce::Component * rootComponent 
-            = juce::Desktop::getInstance().getComponent(0);
-    rootComponent->grabKeyboardFocus();
-    if(runTests && xWindows.isActiveWindow(appWindow))
+    bool isFocused = false;
+    Windows::XInterface xWindows;
+    Window appWindow = xWindows.getMainAppWindow();
+    if(appWindow != BadWindow)
     {
-        DBG(dbgPrefix << __func__ 
-                << ": Window focused, running pocket-home tests:");
-        runApplicationTests();
+        xWindows.activateWindow(appWindow);
+        juce::Component* rootComponent 
+                = juce::Desktop::getInstance().getComponent(0);
+        if(rootComponent != nullptr)
+        {
+            isFocused = xWindows.isActiveWindow(appWindow);
+            rootComponent->grabKeyboardFocus();
+            if(runTests && isFocused)
+            {
+                DBG(dbgPrefix << __func__ 
+                        << ": Window focused, running pocket-home tests:");
+                runApplicationTests();
+            }
+        }
     }
-    else if(!WindowFocus::isFocused())
+    if(!isFocused)
     {
         Util::TempTimer::initTimer(focusWaitMs, focusAppWindow);
     }

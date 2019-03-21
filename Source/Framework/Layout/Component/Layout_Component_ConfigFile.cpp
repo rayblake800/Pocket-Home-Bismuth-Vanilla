@@ -2,7 +2,7 @@
 #include "Layout_Component_JSONKeys.h"
 #include "Layout_Component_JSONResource.h"
 #include "Layout_Component_ConfigLayout.h"
-#include "Window_Info.h"
+#include "Windows_Info.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -82,7 +82,7 @@ int ComponentLayout::ConfigFile::getFontHeight(TextSize sizeType)
     var size = getReadLockedResource()->getConfigValue<var>(key);
     if(size.isDouble())
     {
-        return (int) ((double) size * Window::Info::getHeight());
+        return (int) ((double) size * Windows::Info::getHeight());
     }
     else if(size.isInt())
     {

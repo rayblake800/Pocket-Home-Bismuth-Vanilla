@@ -1,6 +1,5 @@
 #include "Process_Launcher.h"
 #include "Util_Commands.h"
-#include "XWindowInterface.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -23,9 +22,7 @@ static const juce::Identifier localeClassKey = "Process::Launcher";
 static const juce::Identifier couldNotOpenTextKey    = "couldNotOpen";
 static const juce::Identifier notValidCommandTextKey = "notValidCommand";
 
-Process::Launcher::Launcher() : 
-WindowFocusedTimer(localeClassKey.toString()), 
-Locale::TextUser(localeClassKey),
+Process::Launcher::Launcher() : Locale::TextUser(localeClassKey),
 launchFailureCallback([](){}) { }
 
 void Process::Launcher::setLaunchFailureCallback

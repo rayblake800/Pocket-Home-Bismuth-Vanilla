@@ -6,7 +6,7 @@
  */
 
 #include "Theme_Image_Component.h"
-#include "WindowFocusedTimer.h"
+#include "Windows_FocusedTimer.h"
 #include "JuceHeader.h"
 
 namespace Widgets { class Spinner; }
@@ -18,7 +18,7 @@ namespace Widgets { class Spinner; }
  * a set amount of time.
  */
 class Widgets::Spinner : public Theme::Image::Component<>,
-        private WindowFocusedTimer 
+        public Windows::FocusedTimer 
 {
 public:
     /**

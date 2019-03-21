@@ -7,7 +7,6 @@
 static const constexpr int timerInterval = 500;
 
 Widgets::Spinner::Spinner(const int secondsToTimeout) :
-WindowFocusedTimer("Widgets::Spinner"),
 Theme::Image::Component<>(Theme::Image::JSONKeys::spinner, 0,
         juce::RectanglePlacement::fillDestination),
 timeout(secondsToTimeout)

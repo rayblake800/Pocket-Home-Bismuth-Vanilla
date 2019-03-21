@@ -3,7 +3,7 @@
 #include "AppMenu_Scrolling_MenuButton.h"
 #include "AppMenu_ConfigKeys.h"
 #include "AppMenu_ConfigFile.h"
-#include "Window_Info.h"
+#include "Windows_Info.h"
 
 /*
  * Creates a new scrolling folder component.
@@ -66,7 +66,7 @@ int AppMenu::Scrolling::FolderComponent::getSelectedItemYOffset() const
 int AppMenu::Scrolling::FolderComponent::getMinimumWidth() const
 {
     ConfigFile appConfig;
-    const int iconWidth = Window::Info::getHeight() /
+    const int iconWidth = Windows::Info::getHeight() /
             appConfig.getScrollingMenuRows();
     int maxTextWidth = 0;
     for(int i = 0; i < getFolderSize(); i++)

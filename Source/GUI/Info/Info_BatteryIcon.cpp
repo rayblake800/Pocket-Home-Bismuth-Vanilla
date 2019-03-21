@@ -11,7 +11,7 @@ static const constexpr int percentageCount = 10;
 /* Number of available images representing battery percentages: */
 static const constexpr int percentageLevels = 4;
 
-Info::BatteryIcon::BatteryIcon() : WindowFocusedTimer("BatteryIcon"),
+Info::BatteryIcon::BatteryIcon() :
 batteryImage(Theme::Image::JSONKeys::batteryIcon),
 batteryImageLayout(&batteryImage, Layout::Component::JSONKeys::batteryIcon),
 batteryPercentLayout(&batteryPercent, 

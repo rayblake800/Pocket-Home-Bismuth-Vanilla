@@ -14,7 +14,7 @@ static const constexpr int dbgHeight = 272;
  * Creates and shows the main application window.
  */
 PocketHomeWindow::PocketHomeWindow(juce::String windowName) :
-WindowFocus::BroadcastWindow(windowName, juce::Colours::darkgrey,
+Windows::MainWindow(windowName, juce::Colours::darkgrey,
         juce::DocumentWindow::allButtons),
 loginScreen([this](){ setContentNonOwned(&pageStack, true); })
 {

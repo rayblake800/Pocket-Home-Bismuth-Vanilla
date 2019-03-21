@@ -6,7 +6,7 @@
  */
 
 #include "JuceHeader.h"
-#include "WindowFocusedTimer.h"
+#include "Windows_FocusedTimer.h"
 #include "Config_MainListener.h"
 
 namespace Info { class Clock; }
@@ -15,7 +15,7 @@ namespace Info { class Clock; }
  * @brief  A configurable label component that displays the current time.
  */
 class Info::Clock : public juce::Label, public Config::MainListener,
-        private WindowFocusedTimer
+        public Windows::FocusedTimer
 {
 public:
     /**

@@ -1,4 +1,5 @@
 #include "Testing_Window.h"
+#include "JuceHeader.h"
 
 /*
  * Creates and shows a window holding a test component.
@@ -9,7 +10,7 @@ Testing::Window::Window(const juce::String testName,
         const int yPos,
         const int width,
         const int height) :
-WindowFocus::BroadcastWindow(testName, juce::Colours::white,
+Windows::MainWindow(testName, juce::Colours::white, 
         juce::DocumentWindow::allButtons)
 {
     setBounds(xPos, yPos, width, height);

@@ -10,7 +10,7 @@
 #include "Widgets_DrawableImage.h"
 #include "Layout_Component_Manager.h"
 #include "Hardware_Battery.h"
-#include "WindowFocusedTimer.h"
+#include "Windows_FocusedTimer.h"
 
 namespace Info { class BatteryIcon; }
 
@@ -22,7 +22,7 @@ namespace Info { class BatteryIcon; }
  * last several detected battery percentages is used to create the reported
  * battery percentage.
  */
-class Info::BatteryIcon : public juce::Component, private WindowFocusedTimer
+class Info::BatteryIcon : public juce::Component, public Windows::FocusedTimer
 {
 public:
     BatteryIcon();

@@ -6,7 +6,6 @@
 Widgets::DelayedIconSlider::DelayedIconSlider
 (const juce::Identifier& imageKey, const int updateFrequency) :
 IconSlider(imageKey),
-WindowFocusedTimer("DelayedIconSlider"),
 updateFrequency(updateFrequency)
 {
     addListener(this);

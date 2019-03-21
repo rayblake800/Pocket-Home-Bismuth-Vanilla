@@ -7,12 +7,10 @@
 /*
  * Loads clock settings from Config::MainFile.
  */
-Info::Clock::Clock() :
-juce::Label("Info::Clock", ""),
-WindowFocusedTimer("Info::Clock")
+Info::Clock::Clock() : juce::Label("Info::Clock", "")
 {
 #if JUCE_DEBUG
-    setName("ClockLabel");
+    setName("Info::Clock");
 #endif
     addTrackedKey(Config::MainKeys::use24HrModeKey);
     addTrackedKey(Config::MainKeys::showClockKey);

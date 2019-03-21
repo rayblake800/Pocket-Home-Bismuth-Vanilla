@@ -5,7 +5,7 @@
 #include "AppMenu_NewDesktopAppEditor.h"
 #include "AppMenu_MenuFile.h"
 #include "Config_MainFile.h"
-#include "Window_Alert.h"
+#include "Windows_Alert.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -186,7 +186,7 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             break;
         case OptionCode::Delete:
             jassert(!editedItem.isNull());
-            Window::Alert::confirmAction(editedItem.getConfirmDeleteTitle(),
+            Windows::Alert::confirmAction(editedItem.getConfirmDeleteTitle(),
                     editedItem.getConfirmDeleteMessage(),
                     [editedItem]() 
                     { 

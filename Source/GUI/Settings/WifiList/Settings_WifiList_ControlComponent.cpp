@@ -6,7 +6,7 @@
 #include "Wifi_Connection_Saved_Deleter.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Locale_Time.h"
-#include "Window_Alert.h"
+#include "Windows_Alert.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -321,7 +321,7 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
     {
         DBG(dbgPrefix << __func__ 
                 << ": Getting confirmation before deleting saved connection:");
-        Window::Alert::confirmAction(
+        Windows::Alert::confirmAction(
                 controlComponent.localeText(TextKey::deleteSaved),
                 controlComponent.localeText(TextKey::confirmDelete),
                 [this, selectedAP]()

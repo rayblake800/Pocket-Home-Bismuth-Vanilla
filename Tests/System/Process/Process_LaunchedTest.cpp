@@ -1,7 +1,7 @@
 #include "Process_Launched.h"
 #include "Process_Launcher.h"
-#include "WindowFocus.h"
-#include "XWindowInterface.h"
+#include "Windows_FocusListener.h"
+#include "Windows_XInterface.h"
 #include "Testing_DelayUtils.h"
 #include "Util_Commands.h"
 #include "JuceHeader.h"
@@ -26,6 +26,16 @@ static const juce::StringArray windowedApps =
 {
     "xclock",
     "xeyes"
+};
+
+/**
+ * @brief  A minimal FocusListener class used to check if the window is focused.
+ */
+class FocusChecker : public Windows::FocusListener
+{
+public:
+    FocusChecker() { }
+    virtual ~FocusChecker() { }
 };
 
 namespace Process { class LaunchedTest; }
@@ -105,6 +115,7 @@ public:
         expectEquals(String(bad.getExitCode()), String("0"),
 			"Bad process error code should have been 0.");
         
+        FocusChecker focusChecker;
         beginTest("Windowed launch and activation test");
         for(const String& command : windowedApps)
         {
@@ -117,12 +128,14 @@ public:
                 }, 100, 1000), String("\"") + command
                         + "\" process not is running.");
                 windowedApp.activateWindow();
-                expect(Testing::DelayUtils::idleUntil(
-                        []() { return !WindowFocus::isFocused(); }, 500, 8000),
+                expect(Testing::DelayUtils::idleUntil([&focusChecker]()
+                { 
+                    return !focusChecker.getFocusState(); 
+                }, 500, 8000),
                         "pocket-home window should not be focused.");
                 windowedApp.kill();
-                XWindowInterface xwin;
-                xwin.activateWindow(xwin.getPocketHomeWindow());
+                Windows::XInterface xwin;
+                xwin.activateWindow(xwin.getMainAppWindow());
                 expect(!windowedApp.isRunning(), String("\"") + command
                         + "\" process should be dead.");
             }

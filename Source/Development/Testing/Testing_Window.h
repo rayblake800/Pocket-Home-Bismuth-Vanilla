@@ -5,7 +5,7 @@
  * @brief  Creates a basic window for testing a single component.
  */
 
-#include "WindowFocus.h"
+#include "Windows_MainWindow.h"
 
 namespace Testing { class Window; }
 
@@ -14,7 +14,7 @@ namespace Testing { class Window; }
  *
  * @brief  A simple window object that owns a single component.
  */
-class Testing::Window : public WindowFocus::BroadcastWindow
+class Testing::Window : public Windows::MainWindow
 {
 public:
     /**

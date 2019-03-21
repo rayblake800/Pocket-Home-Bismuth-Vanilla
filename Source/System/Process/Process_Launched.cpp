@@ -2,7 +2,7 @@
 #include "Process_Data.h"
 #include "Process_State.h"
 #include "JuceHeader.h"
-#include "XWindowInterface.h"
+#include "Windows_XInterface.h"
 #include <unistd.h>
 #include <cstdint>
 
@@ -185,7 +185,7 @@ void Process::Launched::activateWindow()
         return;
     }
         
-    XWindowInterface xWindows;
+    Windows::XInterface xWindows;
     juce::Array<Window> appWindows = xWindows.getMatchingWindows(
             [this, &xWindows] (Window window)
     {

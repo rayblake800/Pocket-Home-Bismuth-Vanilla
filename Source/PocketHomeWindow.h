@@ -5,7 +5,7 @@
  * @brief  Creates the main application window.
  */
 
-#include "WindowFocus.h"
+#include "Windows_MainWindow.h"
 #include "Page_Factory.h"
 #include "Page_StackComponent.h"
 #include "Password_LoginScreen.h"
@@ -14,7 +14,7 @@
  * @brief The sole application window object and the root component in the 
  *        component display tree. 
  */
-class PocketHomeWindow : public WindowFocus::BroadcastWindow
+class PocketHomeWindow : public Windows::MainWindow
 {
 public:
     /**

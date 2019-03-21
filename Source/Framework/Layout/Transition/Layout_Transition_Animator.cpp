@@ -1,6 +1,6 @@
 #include "Layout_Transition_Animator.h"
 #include "Layout_Transition_Type.h"
-#include "Window_Info.h"
+#include "Windows_Info.h"
 #include "Util_TempTimer.h"
 
 /**
@@ -175,7 +175,7 @@ void Layout::Transition::Animator::transitionOut(
     {
         return;
     }
-    Rectangle<int> windowBounds = Window::Info::getBounds();
+    Rectangle<int> windowBounds = Windows::Info::getBounds();
     Rectangle<int> destination = component->getBounds();
     if (component->getScreenBounds().intersects(windowBounds))
     {
@@ -234,7 +234,7 @@ void Layout::Transition::Animator::transitionIn(
         transformBounds(component, destination, animationMilliseconds);
         return;
     }
-    Rectangle<int> windowBounds = Window::Info::getBounds().withZeroOrigin();
+    Rectangle<int> windowBounds = Windows::Info::getBounds().withZeroOrigin();
     Rectangle<int> startBounds = destination;
     if(destination.intersects(windowBounds))
     {

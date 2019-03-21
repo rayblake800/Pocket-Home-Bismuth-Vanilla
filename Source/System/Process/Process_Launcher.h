@@ -11,20 +11,21 @@
 #include "Process_Launched.h"
 #include "Locale_TextUser.h"
 #include "JuceHeader.h"
-#include "WindowFocusedTimer.h"
+#include "Windows_FocusedTimer.h"
 
 namespace Process { class Launcher; }
 
 /**
- *  Launcher is responsible for launching and managing independant windowed 
- * applications. It runs application launch commands in new child processes,
+ * @brief  Launches and manages independant windowed applications. 
+ *
+ *  Process::Launcher runs application launch commands in new child processes,
  * monitoring them so that any errors can be handled appropriately.  
  *
- * Launcher attempts to avoid creating multiple processes simultaneously running
- * the same command. When given a launch command, if Launcher already created a 
- * process with that command, and that process is still running, Launcher will 
- * attempt to find and focus an application window belonging to that process, 
- * rather than creating a new process.
+ *  Launcher attempts to avoid creating multiple processes simultaneously 
+ * running the same command. When given a launch command, if Launcher already 
+ * created a process with that command, and that process is still running, 
+ * Launcher will attempt to find and focus an application window belonging to 
+ * that process, rather than creating a new process.
  *
  *  If Launcher is given an invalid launch command, or the launched process
  * dies before it gains window focus while still within a launch timeout period,
@@ -36,7 +37,7 @@ namespace Process { class Launcher; }
  *
  * TODO: Read timeout periods from a ConfigFile.
  */
-class Process::Launcher : public WindowFocusedTimer, private Locale::TextUser
+class Process::Launcher : public Windows::FocusedTimer, private Locale::TextUser
 {
 public:
     Launcher();

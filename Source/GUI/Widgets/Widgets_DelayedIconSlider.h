@@ -7,7 +7,7 @@
  */
 
 #include "Widgets_IconSlider.h"
-#include "WindowFocusedTimer.h"
+#include "Windows_FocusedTimer.h"
 
 namespace Widgets { class DelayedIconSlider; }
 
@@ -25,8 +25,8 @@ namespace Widgets { class DelayedIconSlider; }
  * valueChanged method will be called regularly. The frequency that the update
  * method is called is set on construction.
  */
-class Widgets::DelayedIconSlider : public IconSlider, public WindowFocusedTimer,
-        private juce::Slider::Listener
+class Widgets::DelayedIconSlider : public IconSlider,
+        public Windows::FocusedTimer, private juce::Slider::Listener
 {
 public:
     /**

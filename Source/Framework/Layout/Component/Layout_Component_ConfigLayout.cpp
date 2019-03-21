@@ -1,5 +1,5 @@
 #include "Layout_Component_ConfigLayout.h"
-#include "Window_Info.h"
+#include "Windows_Info.h"
 
 namespace ComponentLayout = Layout::Component;
 
@@ -164,7 +164,7 @@ int ComponentLayout::ConfigLayout::getAbsoluteValue
 int ComponentLayout::ConfigLayout::getWindowDimension
 (const ValueType layoutValueType)
 {
-   const juce::Rectangle<int> windowBounds = Window::Info::getBounds();
+   const juce::Rectangle<int> windowBounds = Windows::Info::getBounds();
    if(layoutValueType == ValueType::xPos || layoutValueType == ValueType::width)
    {
        return windowBounds.getWidth();

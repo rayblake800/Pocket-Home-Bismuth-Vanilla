@@ -11,11 +11,14 @@
 
 #include "AppMenu_Controller.h"
 #include "AppMenu_MenuComponent.h"
-#include "WindowFocus.h"
+#include "Windows_FocusListener.h"
 #include "JuceHeader.h"
 
-namespace AppMenu { class InputHandler; }
-namespace AppMenu { class FolderComponent; }
+namespace AppMenu 
+{ 
+    class InputHandler; 
+    class FolderComponent;
+}
 
 /**
  *  @brief  Captures key and mouse events for the MenuComponent and its 
@@ -43,7 +46,7 @@ namespace AppMenu { class FolderComponent; }
  * action that caused the window to lose focus.
  */
 class AppMenu::InputHandler : public juce::MouseListener,
-    public juce::KeyListener, private WindowFocus::Listener
+    public juce::KeyListener, public Windows::FocusListener
 {
 public:
     /**
