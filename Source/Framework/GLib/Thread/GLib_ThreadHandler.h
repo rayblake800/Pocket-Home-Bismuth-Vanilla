@@ -55,7 +55,7 @@ public:
         auto glibThread = HandlerType::getWriteLockedResource();
         glibThread->call(toCall, onFailure, [&glibThread]()
         {
-            glibThread->notifyThread();
+            glibThread->notify();
             glibThread.unlock();
         });
     }
@@ -64,7 +64,8 @@ public:
     /**
      * @brief  Asynchronously calls a function once on this GLib event loop.
      * 
-     * @param toCall   A function that needs to be called on the GLib event loop.
+     * @param toCall     A function that needs to be called on the GLib event 
+     *                   loop.
      *
      * @param onFailure  An optional function to call if accessing the event
      *                   loop failed.
