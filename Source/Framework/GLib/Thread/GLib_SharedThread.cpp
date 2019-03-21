@@ -1,5 +1,10 @@
 #include "GLib_SharedThread.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "GLib::SharedThread::";
+#endif
+
 /*
  * Creates the thread with an initial GMainContext.
  */
@@ -42,6 +47,10 @@ void GLib::SharedThread::call(
             }
         }
         contextCaller.call(toCall, onFailure, afterAdding);
+        if(!getFocusState())
+        {
+            eventLoop.stopLoop();
+        }
     }
 }
 
@@ -117,16 +126,6 @@ void GLib::SharedThread::stopResourceThread()
         Thread::stopResourceThread();
     }
 }
-    
-/*
- * Wakes the thread if it is currently waiting, and prevents it from waiting 
- * again until after the thread loop restarts.
- */
-void GLib::SharedThread::notifyThread()
-{
-    waitingAllowed = false;
-    notify();
-}
 
 /*
  * Grants the SharedThread access to its ThreadLock within the GLib event loop.
@@ -148,30 +147,29 @@ void GLib::SharedThread::runLoop(SharedResource::Thread::Lock& lock)
     threadLock = &lock;
     eventLoop.runLoop();
     threadLock = nullptr;
-    waitingAllowed = !threadShouldExit();
 }
 
 /*
- * Pauses the event loop whenever window focus is lost.
+ * Stops the thread whenever window focus is lost.
  */
 void GLib::SharedThread::windowFocusLost()
 {
-    eventLoop.stopLoop();
+    stopResourceThread();
 }
 
 /*
- * Resumes the event loop whenever window focus is regained.
+ * Restarts the thread whenever window focus is regained.
  */
 void GLib::SharedThread::windowFocusGained()
 {
-    notify();
+    startResourceThread();
 }
 
 /*
- * Lets the thread wait while the EventLoop isn't running, rather than stopping 
- * it completely.
+ * Prevents the thread from waiting to prevent potential deadlocks when the 
+ * ContextCaller needs to wait for the thread.
  */
 bool GLib::SharedThread::threadShouldWait()
 {
-    return waitingAllowed;
+    return false;
 }

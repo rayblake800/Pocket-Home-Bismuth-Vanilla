@@ -5,7 +5,7 @@
  * @brief  Runs a GLib event loop on a shared thread resource. 
  */
 
-#include "WindowFocus.h"
+#include "Windows_FocusListener.h"
 #include "GLib_EventLoop.h"
 #include "GLib_ContextCaller.h"
 #include "GLib_SharedContextPtr.h"
@@ -33,7 +33,7 @@ namespace GLib { class SharedThread; }
  * SharedResource Resource or Module.
  */
 class GLib::SharedThread : public SharedResource::Thread::Thread,
-    private WindowFocus::Listener
+    public Windows::FocusListener
 {
 public:
     /**
@@ -130,12 +130,6 @@ public:
     virtual void stopResourceThread() override;
 
     /**
-     * @brief  Wakes the thread if it is currently waiting, and prevents it from
-     *         waiting again until after the thread loop restarts.
-     */
-    void notifyThread();
-
-    /**
      * @brief  Grants the SharedThread access to its ThreadLock within the
      *         GLib event loop.
      *
@@ -151,26 +145,22 @@ private:
     virtual void runLoop(SharedResource::Thread::Lock& lock) override;
 
     /**
-     * @brief  Pauses the event loop whenever window focus is lost.
+     * @brief  Stops the thread whenever window focus is lost.
      */
     virtual void windowFocusLost() override;
     
     /**
-     * @brief  Resumes the event loop whenever window focus is regained.
+     * @brief  Restarts the thread whenever window focus is regained.
      */
     virtual void windowFocusGained() override;
     
     /**
-     * @brief  Lets the thread wait while the EventLoop isn't running, rather
-     *         than stopping it completely.
+     * @brief  Prevents the thread from waiting to prevent potential deadlocks
+     *         when the ContextCaller needs to wait for the thread.
      *
-     * @return  True if the thread hasn't waited already since the EventLoop
-     *          stopped running.
+     * @return  False.
      */
     virtual bool threadShouldWait() override;
-
-    /* Tracks if the thread is allowed to wait. */
-    bool waitingAllowed = true;
 
     /* Used to allow any function running on the thread's EventLoop to access
        its threadLock. */
