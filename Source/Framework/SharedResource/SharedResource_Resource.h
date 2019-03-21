@@ -7,6 +7,7 @@
 
 #include "JuceHeader.h"
 #include "SharedResource_Instance.h"
+#include "SharedResource_ReferenceInterface.h"
 #include "SharedResource_LockType.h"
 
 namespace SharedResource { class Resource; }
