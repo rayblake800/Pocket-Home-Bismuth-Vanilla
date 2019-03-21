@@ -1,10 +1,10 @@
-#include "Window_Alert.h"
+#include "Windows_Alert.h"
 #include "JuceHeader.h"
 
 /*
  * Requests user confirmation before performing some action.
  */
-void Window::Alert::confirmAction(
+void Windows::Alert::confirmAction(
         const juce::String title,
         const juce::String message,
         const std::function<void()> onConfirm)

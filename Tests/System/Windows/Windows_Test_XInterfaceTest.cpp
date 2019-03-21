@@ -1,24 +1,26 @@
-#include "JuceHeader.h"
-#include "WindowFocus.h"
+#include "Windows_XInterface.h"
+#include "Windows_FocusListener.h"
 #include "Process_Launcher.h"
-#include "XWindowInterface.h"
 #include "Testing_DelayUtils.h"
 #include "Process_Data.h"
+#include "JuceHeader.h"
 #include <unistd.h>
 
-class XWindowInterfaceTest : public juce::UnitTest
+namespace Windows { namespace Test { class XInterfaceTest; } }
+
+class Windows::Test::XInterfaceTest : public juce::UnitTest
 {
 public:
-    XWindowInterfaceTest() : juce::UnitTest("XWindowInterface testing",
-            "System") {}
+    XInterfaceTest() : juce::UnitTest("Windows::XInterface testing",
+            "Windows") {}
     
     void runTest() override
     {
         using namespace Process;
         using namespace juce;
         beginTest("Home Window Tests");
-        XWindowInterface xwin;
-        Window homeWin = xwin.getPocketHomeWindow();
+        XInterface xwin;
+        Window homeWin = xwin.getMainAppWindow();
         expect(homeWin != 0, "pocket-home window couldn't be found."); 
         xwin.activateWindow(homeWin);
 
@@ -122,4 +124,4 @@ public:
      }
 };
 
-static XWindowInterfaceTest test;
+static Windows::Test::XInterfaceTest test;

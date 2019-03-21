@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Window_Info.h
+ * @file  Windows_Info.h
  *
  * @brief  Provides functions for getting information about the main application
  *         window.
@@ -8,7 +8,7 @@
 
 namespace juce { template <typename T> class Rectangle; }
 
-namespace Window
+namespace Windows
 {
     namespace Info
     {

@@ -1,10 +1,10 @@
-#include "Window_Info.h"
+#include "Windows_Info.h"
 #include "JuceHeader.h"
 
 /*
  * Gets the size of the main application window.
  */
-juce::Rectangle<int> Window::Info::getBounds()
+juce::Rectangle<int> Windows::Info::getBounds()
 {
     juce::Component * windowComp = juce::Desktop::getInstance().getComponent(0);
     if (windowComp == nullptr)
@@ -17,7 +17,7 @@ juce::Rectangle<int> Window::Info::getBounds()
 /*
  * Gets the width of the main application window.
  */
-int Window::Info::getWidth()
+int Windows::Info::getWidth()
 {
     return getBounds().getWidth();
 }
@@ -25,7 +25,7 @@ int Window::Info::getWidth()
 /*
  * Gets the height of the main application window.
  */
-int Window::Info::getHeight()
+int Windows::Info::getHeight()
 {
     return getBounds().getHeight();
 }

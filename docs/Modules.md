@@ -56,8 +56,8 @@ The hardware module provides tools for monitoring and controlling device hardwar
 #### [Wifi](./modules/Wifi.md)
 The Wifi module controls and tracks the system Wifi device and active Wifi connection.
 
-#### [Window](./modules/Window.md)
-The Window module finds, tracks, and controls open windows.
+#### [Windows](./modules/Windows.md)
+The Windows module finds, tracks, and controls open windows.
 
 ### Framework
 Framework modules provide tools used to design and build other modules.

@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Window_Alert.h
+ * @file  Windows_Alert.h
  *
  * @brief  Provides convenience functions for creating simple popup alert
  *         windows.
@@ -9,7 +9,7 @@
 namespace juce { class String; }
 namespace std { template<typename T> class function; }
 
-namespace Window
+namespace Windows
 {
     namespace Alert
     {
