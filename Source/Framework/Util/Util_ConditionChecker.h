@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file  Util_ConditionCheck.h
+ * @file  Util_ConditionChecker.h
  *
  * @brief  Handles tasks that require waiting for an event that will occur after
  *         an indeterminate delay or not at all.
@@ -8,19 +8,19 @@
 
 #include "JuceHeader.h"
 
-namespace Util { class ConditionCheck; }
+namespace Util { class ConditionChecker; }
 
 /**
  * @brief  Waits for a condition to be met before running a scheduled action.
  */
-class Util::ConditionCheck
+class Util::ConditionChecker
 {
 public:
     /**
      * @brief  Initializes the internal timer and loads the default interval
      *         value on construction.
      */
-    ConditionCheck();
+    ConditionChecker();
 
     /**
      * @brief  Starts checking for a condition, unless already checking for
@@ -129,18 +129,18 @@ private:
     {
     public:
         /**
-         * @brief  Connects the timer to the ConditionCheck object that owns it.
+         * @brief  Connects the timer to the ConditionChecker object that owns it.
          *
          * @param owner  The object that holds this timer.
          */
-        CheckTimer(ConditionCheck& owner);
+        CheckTimer(ConditionChecker& owner);
 
         virtual ~CheckTimer() { }
 
         /**
-         * @brief  Stops the timer and resets the timer's interval.
+         * @brief  Starts periodically checking the test condition.
          */
-        void stopChecking();
+        void startChecking();
 
     private:
         /**
@@ -149,7 +149,13 @@ private:
          */
         virtual void timerCallback() override;
 
-        ConditionCheck& owner;
+        /**
+         * @brief  Sets the timer for the next condition check, ensuring that
+         *         the timer stops at the timeout period if necessary.
+         */
+        void setCheckTimer();
+
+        ConditionChecker& owner;
         /* Holds the owner's interval value, multiplied by the owner's 
          * intervalMultiplier once for each previous failed condition. */
         int nextInterval;

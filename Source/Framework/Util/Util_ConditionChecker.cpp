@@ -1,21 +1,24 @@
-#include "Util_ConditionCheck.h"
+#include "Util_ConditionChecker.h"
 #include "Util_Math.h"
 
 /* Default condition checking interval in milliseconds: */
 static const constexpr int defaultInterval = 300;
 
+/* Minimum interval between tests: */
+static const constexpr int minInterval = 10;
+
 /*
  * Initializes the internal timer and loads the default interval value on
  * construction.
  */
-Util::ConditionCheck::ConditionCheck() : timer(*this),
+Util::ConditionChecker::ConditionChecker() : timer(*this),
     checkInterval(defaultInterval) { }
 
 /*
  * Starts checking for a condition, unless already checking for another
  * condition.
  */
-bool Util::ConditionCheck::startCheck(
+bool Util::ConditionChecker::startCheck(
         const std::function<bool()> check,
         const std::function<void()> callback,
         const int timeoutPeriod,
@@ -29,6 +32,7 @@ bool Util::ConditionCheck::startCheck(
     {
         conditionCheck = check;
         conditionCallback = callback;
+        failureCallback = onFailure;
         if(timeoutPeriod < 0)
         {
             timeout = -1;
@@ -39,7 +43,7 @@ bool Util::ConditionCheck::startCheck(
         }
         if(!checkCondition())
         {
-            timer.startTimer(checkInterval);
+            timer.startChecking();
         }
         return true;
     }
@@ -49,7 +53,7 @@ bool Util::ConditionCheck::startCheck(
 /*
  * Checks if the object is currently waiting for a condition to occur.
  */
-bool Util::ConditionCheck::isChecking() const
+bool Util::ConditionChecker::isChecking() const
 {
     const juce::ScopedLock updateLock(conditionLock);
     // The connection checking function will be valid if and only if the
@@ -60,19 +64,19 @@ bool Util::ConditionCheck::isChecking() const
 /*
  * Sets how frequently the object should check for its condition to be met.
  */
-void Util::ConditionCheck::setCheckInterval
+void Util::ConditionChecker::setCheckInterval
 (const int interval, const float multiplier)
 {
     const juce::ScopedLock updateLock(conditionLock);
-    checkInterval = interval;
-    intervalMultiplier = multiplier;
+    checkInterval = std::max(interval, minInterval);
+    intervalMultiplier = (multiplier > 0) ? multiplier : 1;
 }
 
 /*
  * Cancels any ongoing condition checking. This takes no action if no condition
  * is being checked.
  */
-void Util::ConditionCheck::cancelCheck
+void Util::ConditionChecker::cancelCheck
 (const bool runFailureCallback, const bool runFinalTest)
 {
     const juce::ScopedLock updateLock(conditionLock);
@@ -93,7 +97,7 @@ void Util::ConditionCheck::cancelCheck
 /*
  * Checks the condition, running the condition callback if the condition is met.
  */
-bool Util::ConditionCheck::checkCondition()
+bool Util::ConditionChecker::checkCondition()
 {
     if(conditionCheck())
     {
@@ -108,36 +112,37 @@ bool Util::ConditionCheck::checkCondition()
  * Removes the conditionCheck test and all callback functions and stops and 
  * resets the timer.
  */
-void Util::ConditionCheck::clearCheckValues()
+void Util::ConditionChecker::clearCheckValues()
 {
     conditionCheck = std::function<bool()>();
     conditionCallback = std::function<void()>();
     failureCallback = std::function<void()>();
-    timeout= 0;
-    timer.stopChecking();
+    timeout = 0;
+    timer.stopTimer();
 }
 
 /*
- * Connects the timer to the ConditionCheck object that owns it.
+ * Connects the timer to the ConditionChecker object that owns it.
  */
-Util::ConditionCheck::CheckTimer::CheckTimer(ConditionCheck& owner) : 
+Util::ConditionChecker::CheckTimer::CheckTimer(ConditionChecker& owner) : 
     owner(owner) { }
 
-
 /*
- * Stops the timer and resets the timer's interval.
+ * Starts periodically checking the test condition.
  */
-void Util::ConditionCheck::CheckTimer::stopChecking()
+void Util::ConditionChecker::CheckTimer::startChecking()
 {
-    stopTimer();
+    // This should never be called while the timer is already running
+    jassert(!isTimerRunning());
     nextInterval = owner.checkInterval;
+    setCheckTimer();
 }
 
 /*
  * Checks the condition, running callbacks or scheduling future checks as
  * necessary.
  */
-void Util::ConditionCheck::CheckTimer::timerCallback()
+void Util::ConditionChecker::CheckTimer::timerCallback()
 {
     const juce::ScopedLock timerLock(owner.conditionLock);
     jassert(owner.conditionCheck);
@@ -155,12 +160,22 @@ void Util::ConditionCheck::CheckTimer::timerCallback()
         else
         {
             nextInterval *= owner.intervalMultiplier;
-            if(owner.timeout >= 0)
-            {
-                nextInterval = Util::Math::median<int>(nextInterval,
-                        owner.timeout - juce::Time::currentTimeMillis(), 1);
-            }
-            startTimer(nextInterval);
+            setCheckTimer();
         }
     }
+}
+
+/*
+ * Sets the timer for the next condition check, ensuring that the timer stops at
+ * the timeout period if necessary.
+ */
+void Util::ConditionChecker::CheckTimer::setCheckTimer()
+{
+    juce::int64 interval = std::max(nextInterval, minInterval);
+    if(owner.timeout >= 0)
+    {
+        interval = std::min(interval,
+                owner.timeout - juce::Time::currentTimeMillis());
+    }
+    startTimer(interval);
 }
