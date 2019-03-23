@@ -9,11 +9,17 @@
  */
 #include "Wifi_Module.h"
 
-namespace Wifi { namespace Connection { namespace Record { class Module; } } }
-namespace Wifi { namespace Connection { class Event; }  }
-namespace Wifi { namespace Connection { enum class EventType; }  }
-namespace Wifi { class Resource; }
-namespace Wifi { class AccessPoint; }
+namespace Wifi 
+{ 
+    class Resource;
+    class AccessPoint;
+    namespace Connection 
+    { 
+        class Event;
+        enum class EventType;
+        namespace Record { class Module; } 
+    } 
+}
 
 /**
  * @brief  Records all Wifi connection events relevant to this application that 
@@ -77,8 +83,8 @@ public:
     void addEventIfNotDuplicate(const Event newEvent);
 
     /**
-     * @brief  Connects with NetworkManager to build the initial set of
-     *         connection records.
+     * @brief  Connects with NetworkManager to initialize or update the most
+     *         recent connection record.
      */
     void updateRecords();
 

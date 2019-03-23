@@ -132,9 +132,9 @@ void WifiRecord::Module::addEventIfNotDuplicate(const Event newEvent)
     }
 }
 
-
 /*
- * Connects with NetworkManager to build the initial set of connection records.
+ * Connects with NetworkManager to initialize or update the most recent 
+ * connection record.
  */
 void WifiRecord::Module::updateRecords()
 {

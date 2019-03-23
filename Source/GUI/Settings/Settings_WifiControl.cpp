@@ -2,7 +2,7 @@
 #include "Wifi_AccessPoint.h"
 #include "Wifi_Device_Reader.h"
 #include "Wifi_Device_Controller.h"
-#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Record_Handler.h"
 #include "Wifi_Connection_Event.h"
 #include "Theme_Image_ConfigFile.h"
 #include "Theme_Image_AssetList.h"
@@ -42,9 +42,9 @@ bool Settings::WifiControl::connectionEnabled()
  */
 bool Settings::WifiControl::shouldShowSpinner() 
 {
-    const Wifi::Connection::Record::Reader recordReader;
+    const Wifi::Connection::Record::Handler recordHandler;
     const Wifi::Device::Reader deviceReader; 
-    return recordReader.isConnecting()
+    return recordHandler.isConnecting()
             && !deviceReader.isDeviceStateChanging();
 }
 
@@ -64,10 +64,10 @@ bool Settings::WifiControl::allowConnectionToggle()
 bool Settings::WifiControl::connectionPageAvailable() 
 {
     const Wifi::Device::Reader deviceReader;
-    const Wifi::Connection::Record::Reader recordReader;
+    const Wifi::Connection::Record::Handler recordHandler;
     return deviceReader.wifiDeviceEnabled()
             && !deviceReader.isDeviceStateChanging()
-            && !recordReader.isConnecting();
+            && !recordHandler.isConnecting();
 }
 
 /*
@@ -103,20 +103,20 @@ juce::String Settings::WifiControl::updateButtonText()
         return localeText(TextKey::wifiDisabled);
     }
 
-    const Wifi::Connection::Record::Reader recordReader;
-    if(recordReader.getLatestEvent().getEventType()
+    const Wifi::Connection::Record::Handler recordHandler;
+    if(recordHandler.getLatestEvent().getEventType()
             == Wifi::Connection::EventType::connectionAuthFailed)
     {
         return localeText(TextKey::missingPSK);
     }
 
-    const bool isConnected = recordReader.isConnected();
+    const bool isConnected = recordHandler.isConnected();
     const bool isConnecting = isConnected ? 
-            false : recordReader.isConnecting();
+            false : recordHandler.isConnecting();
     if(isConnected || isConnecting)
     {
         juce::String apName 
-                = recordReader.getActiveAP().getSSID().toString();
+                = recordHandler.getActiveAP().getSSID().toString();
         jassert(apName.isNotEmpty());
         return isConnected ? apName :
                 (localeText(TextKey::connectingAP) + apName);

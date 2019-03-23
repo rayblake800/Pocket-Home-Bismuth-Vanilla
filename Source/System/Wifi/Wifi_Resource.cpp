@@ -10,10 +10,15 @@
 #include "Wifi_Signal_APModule.h"
 #include "Wifi_Signal_ClientModule.h"
 #include "Wifi_Device_Listener.h"
+#include "Wifi_FocusUpdater.h"
+
+/* The SharedResource::Resource object instance key: */
+const juce::Identifier Wifi::Resource::resourceKey = "Wifi::Resource";
+
+/* Updates connection records when window focus is regained: */
+static std::unique_ptr<Wifi::FocusUpdater> focusUpdater;
 
 /*##################### Shared resource modules: #############################*/
-/* The SharedResource::Resource object instance key: */
-const juce::Identifier Wifi::Resource::resourceKey = "Wifi_Resource";
 
 /* Runs the LibNM Wifi thread: */
 static std::unique_ptr<Wifi::LibNM::Thread::Module> nmThread;
@@ -69,6 +74,7 @@ Wifi::Resource::Resource() : SharedResource::Modular::Resource<>(resourceKey)
         clientSignalHandler->connect();
         deviceSignalHandler->connect();
         nmThread->getWifiDevice().requestScan();
+        focusUpdater.reset(new FocusUpdater);
         DBG("Wifi::Resource::Resource: Finished initializing Wifi resources.");
     });
 }
@@ -87,6 +93,7 @@ Wifi::Resource::~Resource()
     savedConnections.reset(nullptr);
     deviceTracker.reset(nullptr);
     nmThread.reset(nullptr);
+    focusUpdater.reset(nullptr);
 }
 
 /*

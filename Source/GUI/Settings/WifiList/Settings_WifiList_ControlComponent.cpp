@@ -1,6 +1,6 @@
 #define WIFI_IMPLEMENTATION
 #include "Settings_WifiList_ControlComponent.h"
-#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Record_Handler.h"
 #include "Wifi_Connection_Event.h"
 #include "Wifi_Connection_Control_Handler.h"
 #include "Wifi_Connection_Saved_Deleter.h"
@@ -102,7 +102,7 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
     using juce::String;
     using Wifi::Connection::EventType;
 
-    const Wifi::Connection::Record::Reader connectionRecord;
+    const Wifi::Connection::Record::Handler connectionRecord;
     DBG(dbgPrefix << __func__ << ": Updating connection controls for AP " 
             << newAP.getSSID().toString());
     const bool requiresAuth = newAP.getSecurityType() 
@@ -294,7 +294,7 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
     }
     if(button == &controlComponent.connectionButton)
     {
-        const Wifi::Connection::Record::Reader connectionRecords;
+        const Wifi::Connection::Record::Handler connectionRecords;
         if(connectionRecords.getActiveAP() == selectedAP)
         {
             if(connectionRecords.isConnecting())

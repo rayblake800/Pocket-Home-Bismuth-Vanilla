@@ -1,7 +1,7 @@
 #define WIFI_IMPLEMENTATION
 #include "Settings_WifiList_ListComponent.h"
 #include "Settings_WifiList_ListButton.h"
-#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Record_Handler.h"
 #include "Wifi_Connection_Saved_Reader.h"
 #include "Wifi_Connection_Event.h"
 #include "Wifi_APList_Reader.h"
@@ -43,8 +43,8 @@ public:
     {
         using namespace Wifi;
         jassert(!first.isNull() && !second.isNull());
-        const Connection::Record::Reader recordReader;
-        AccessPoint activeAP = recordReader.getActiveAP();
+        const Connection::Record::Handler recordHandler;
+        AccessPoint activeAP = recordHandler.getActiveAP();
         if (!activeAP.isNull())
         {
             if (first == activeAP)

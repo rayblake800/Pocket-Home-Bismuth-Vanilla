@@ -7,6 +7,9 @@ Resource defines the SharedResource object instance that controls access to the 
 #### [Wifi\::Module](../../Source/System/Wifi/Wifi_Module.h)
 Module is the shared basis for all resource modules managed by the Wifi\::Resource. It provides additional functions allowing its subclasses to safely run asynchronous actions and asynchronously interact with connected Module Handler objects.
 
+#### [Wifi\::FocusUpdater](../../Source/System/Wifi/Wifi_FocusUpdater.h)
+FocusUpdater ensures that Wifi connection status is up to date when the main application window gains focus and the Wifi thread restarts.
+
 #### [Wifi\::DebugOutput](../../Source/System/Wifi/Wifi_DebugOutput.h)
 DebugOutput converts Wifi enum types to text in order to construct debug output. DebugOutput functions are not included in release builds of the application.
 
@@ -81,8 +84,8 @@ Connection\::Record monitors the current connection state and records all Wifi c
 #### [Wifi\::Connection\::Record\::Module](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Module.h)
 The Record\::Module object stores Connection\::Event objects representing all Wifi connection events that have occurred since the application started. It uses these records to get information about the current Wifi connection state, or to find the most recent records of an AccessPoint or event type.
 
-#### [Wifi\::Connection\::Record\::Reader](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Reader.h)
-Record\::Reader objects connect to the Record\::Module to read the current connection status, get the active AccessPoint object, and check recorded events.
+#### [Wifi\::Connection\::Record\::Handler](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Handler.h)
+Record\::Handler objects connect to the Record\::Module to read the current connection status, get the active AccessPoint object, check recorded events, and check for unrecorded updates to save.
 
 #### [Wifi\::Connection\::Record\::Listener](../../Source/System/Wifi/Connection/Record/Wifi_Connection_Record_Listener.h)
 Record\::Listener objects receive notification from the Record\::Module whenever a Wifi connection starts connecting, connects successfully, fails to authenticate, or disconnects.

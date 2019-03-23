@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file Wifi_Connection_Record_Reader.h
+ * @file Wifi_Connection_Record_Handler.h
  *
  * @brief  Reads saved Wifi connection event records.
  */
@@ -17,7 +17,7 @@ namespace Wifi
         enum class EventType;
         namespace Record 
         { 
-            class Reader; 
+            class Handler; 
             class Module;
         } 
     } 
@@ -27,16 +27,16 @@ namespace Wifi
  * @brief  Connects to the Connection::Record::Module to access the list of 
  *         saved Wifi connection events.
  */
-class Wifi::Connection::Record::Reader : 
+class Wifi::Connection::Record::Handler : 
     public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     /**
      * @brief  Initializes the Wifi::Resource object if necessary.
      */
-    Reader();
+    Handler();
 
-    virtual ~Reader() { }
+    virtual ~Handler() { }
     
     /**
      * @brief  Checks if the system has an active, established Wifi network
@@ -107,4 +107,10 @@ public:
      */
     Event getLatestEvent(const AccessPoint eventAP,
             const EventType eventType) const;
+
+    /**
+     * @brief  Connects with NetworkManager to initialize or update the most
+     *         recent connection record.
+     */
+    void updateRecords();
 };

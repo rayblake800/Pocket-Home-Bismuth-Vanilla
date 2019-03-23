@@ -5,7 +5,7 @@
  */
 #define WIFI_IMPLEMENTATION
 #include "Wifi_Connection_Control_Handler.h"
-#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Record_Handler.h"
 #include "Wifi_Connection_Saved_Deleter.h"
 #include "Wifi_TestUtils_Waiting.h"
 #include "Wifi_TestUtils_ConnectionListener.h"
@@ -154,15 +154,15 @@ public:
 
         Device::Controller deviceController;
         Control::Handler connectionController;
-        Record::Reader recordReader;
+        Record::Handler recordHandler;
         EventWatcher connectionEventWatcher(*this);
 
         // If Wifi is connected, save the current connected AP to restore after
         // tests:
         LibNM::APHash initialAPHash;
-        if(recordReader.isConnected())
+        if(recordHandler.isConnected())
         {
-            AccessPoint initialAP = recordReader.getActiveAP();
+            AccessPoint initialAP = recordHandler.getActiveAP();
             initialAPHash = initialAP.getHashValue();
             beginTest(String("Saving and disconnecting existing connection ")
                     + initialAP.toString());
@@ -234,7 +234,7 @@ public:
 
         /* First main connection test: */
         beginTest("Valid saved connection test");
-        expect(!recordReader.isConnected(), 
+        expect(!recordHandler.isConnected(), 
                 "Failed to disconnect from Wifi connection before tests");
 
         LibNM::APHash savedAPHash(firstAP.hashString);

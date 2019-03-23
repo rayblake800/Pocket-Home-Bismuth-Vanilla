@@ -5,7 +5,7 @@
  */
 #define WIFI_IMPLEMENTATION
 #include "Wifi_Connection_Control_Handler.h"
-#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Record_Handler.h"
 #include "Wifi_Connection_Record_Writer.h"
 #include "Wifi_Connection_Record_Listener.h"
 #include "Wifi_Connection_Event.h"
@@ -177,7 +177,7 @@ public:
     {
         using namespace Wifi::Connection;
         using juce::String;
-        Record::Reader recordReader;
+        Record::Handler recordHandler;
         Event lastEvent = updateListener.getLatestEvent();
         if(lastEvent.getEventType() == expectedEventType
                 && lastEvent.getEventAP() == expectedEventAP)
@@ -216,12 +216,12 @@ public:
         // Make sure Wifi is enabled and disconnected:
         Device::Controller deviceController;
         Control::Handler connectionController;
-        Record::Reader recordReader;
+        Record::Handler recordHandler;
         deviceController.setEnabled(true);
         connectionController.disconnect();
-        DelayUtils::idleUntil([&recordReader]()
+        DelayUtils::idleUntil([&recordHandler]()
         {
-            return !recordReader.isConnected();
+            return !recordHandler.isConnected();
         }, 200, 1000);
         
         /* Read in test data from the test JSON file: */
@@ -285,11 +285,11 @@ public:
 
         Wifi::APList::Reader apListReader;
         Listener updateListener;
-        expect(!recordReader.isConnected(), 
+        expect(!recordHandler.isConnected(), 
                 "Failed to disconnect from Wifi connection before tests");
 
         Wifi::AccessPoint savedAP; 
-        expect(DelayUtils::idleUntil(
+        expect(Testing::DelayUtils::idleUntil(
                 [this, &savedAP, &savedHash, &apListReader]()
         {
             logMessage("Scanning for matching access point...");

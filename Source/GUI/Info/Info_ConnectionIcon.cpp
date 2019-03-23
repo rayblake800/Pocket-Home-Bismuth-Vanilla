@@ -1,7 +1,7 @@
 #include "Info_ConnectionIcon.h"
 #include "Wifi_AccessPoint.h"
 #include "Wifi_Device_Reader.h"
-#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Record_Handler.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -13,7 +13,7 @@ Info::ConnectionIcon::ConnectionIcon()
 #if JUCE_DEBUG
     setName("Info::ConnectionIcon");
 #endif
-    const Wifi::Connection::Record::Reader connectionRecords;
+    const Wifi::Connection::Record::Handler connectionRecords;
     if(connectionRecords.isConnected())
     {
         Wifi::AccessPoint connectedAP = connectionRecords.getActiveAP();
@@ -75,7 +75,7 @@ void Info::ConnectionIcon::disconnected(const Wifi::AccessPoint disconnectedAP)
  */
 void Info::ConnectionIcon::wirelessEnabled()
 {
-    Wifi::Connection::Record::Reader connectionRecord;
+    Wifi::Connection::Record::Handler connectionRecord;
     if(connectionRecord.isConnected())
     {
         connected(connectionRecord.getActiveAP());

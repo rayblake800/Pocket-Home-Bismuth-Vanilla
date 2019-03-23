@@ -1,6 +1,6 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_TestUtils_ConnectionListener.h"
-#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Record_Handler.h"
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
@@ -14,8 +14,8 @@ static const constexpr char* dbgPrefix
 void Wifi::TestUtils::ConnectionListener::updateLastRecordedEvent()
 {
     const juce::ScopedLock eventLock(eventControl);
-    Connection::Record::Reader recordReader;
-    lastEvent = recordReader.getLatestEvent();
+    Connection::Record::Handler recordHandler;
+    lastEvent = recordHandler.getLatestEvent();
     DBG(dbgPrefix << __func__ << ": New Event:" << lastEvent.toString());
     eventAdded(lastEvent);
 }

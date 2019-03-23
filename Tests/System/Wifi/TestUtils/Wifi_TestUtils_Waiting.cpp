@@ -4,7 +4,7 @@
 #include "Wifi_LibNM_APHash.h"
 #include "Wifi_Connection_Event.h"
 #include "Wifi_APList_Reader.h"
-#include "Wifi_Connection_Record_Reader.h"
+#include "Wifi_Connection_Record_Handler.h"
 #include "Testing_DelayUtils.h"
 
 /* Number of milliseconds to wait for access points to load: */
@@ -90,11 +90,11 @@ Wifi::Connection::Event Wifi::TestUtils::Waiting::waitForNextConnectionEvent
 {
     using namespace Wifi::Connection;
     const juce::int64 startTimeMS = startTime.toMilliseconds();
-    Record::Reader recordReader;
+    Record::Handler recordHandler;
     Event lastEvent;
-    if(Testing::DelayUtils::idleUntil([&lastEvent, &recordReader, startTimeMS]()
+    if(Testing::DelayUtils::idleUntil([&lastEvent, &recordHandler, startTimeMS]()
     {
-        lastEvent = recordReader.getLatestEvent();
+        lastEvent = recordHandler.getLatestEvent();
         return lastEvent.getEventTime().toMilliseconds() > startTimeMS;
     }, connectionCheckFrequency, connectionWaitPeriod))
     {
