@@ -44,5 +44,5 @@ public:
 
 private:
     /* Saves the last value sent by setFocusState: */
-    bool isFocused = false;
+    bool isFocused = true;
 };

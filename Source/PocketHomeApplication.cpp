@@ -12,7 +12,12 @@ static const constexpr char* dbgPrefix = "PocketHomeApplication::";
 #endif
 
 /* Milliseconds to wait between window focus attempts: */
-static const constexpr int focusWaitMs = 200;
+static const constexpr int focusWaitMs = 100;
+/* Each attempt to set and check window focus status should wait a little longer
+ * before the next test. Wait time multiplier: */
+static const constexpr float focusWaitMultiplier = 1.3;
+/* Milliseconds to wait before abandoning window focus attempts: */
+static const constexpr int focusTimeout = 20000;
 
 /* Sets if tests should run after the window is created and focused. */
 static bool runTests = false;
@@ -23,67 +28,6 @@ static bool verboseTesting = false;
 /* Specific test categories to run: */
 static juce::StringArray testCategories;
 
-/**
- * @brief  Runs application tests and shuts down the application.
- *
- *  The application window should be created and focused before this function is
- * called.
- */
-static void runApplicationTests()
-{
-    juce::UnitTestRunner tester;
-    tester.setPassesAreLogged(verboseTesting);
-    if(testCategories.isEmpty())
-    {
-        DBG(dbgPrefix << __func__ << ": Running all pocket-home tests.");
-        tester.runAllTests();
-    }
-    else
-    {
-        for(const juce::String& category : testCategories)
-        {
-            DBG(dbgPrefix << __func__ << ": Running test category: " 
-                    << category);
-            tester.runTestsInCategory(category);
-        }
-    }
-    DBG(dbgPrefix << __func__ << ": Finished running application tests.");
-    juce::JUCEApplication::getInstance()->systemRequestedQuit();
-}
-
-/**
- * @brief  Attempts to activate the application window and grab keyboard focus.  
- *
- *  This may fail if the window isn't fully initialized, so it will repeatedly 
- * call itself on a timer until the action succeeds.
- */
-static void focusAppWindow()
-{
-    bool isFocused = false;
-    Windows::XInterface xWindows;
-    Window appWindow = xWindows.getMainAppWindow();
-    if(appWindow != BadWindow)
-    {
-        xWindows.activateWindow(appWindow);
-        juce::Component* rootComponent 
-                = juce::Desktop::getInstance().getComponent(0);
-        if(rootComponent != nullptr)
-        {
-            isFocused = xWindows.isActiveWindow(appWindow);
-            rootComponent->grabKeyboardFocus();
-            if(runTests && isFocused)
-            {
-                DBG(dbgPrefix << __func__ 
-                        << ": Window focused, running pocket-home tests:");
-                runApplicationTests();
-            }
-        }
-    }
-    if(!isFocused)
-    {
-        Util::TempTimer::initTimer(focusWaitMs, focusAppWindow);
-    }
-}
 
 /*
  * Performs all required initialization when the application is first launched.
@@ -141,7 +85,31 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     {
         homeWindow.reset(new PocketHomeWindow(getApplicationName()));
     }           
-    focusAppWindow();
+
+    focusChecker.setCheckInterval(focusWaitMs, focusWaitMultiplier);
+    const auto onFocus = [this]()
+    {
+        DBG(dbgPrefix << __func__ 
+                << ": Main window focused, enabling focus tracking:");
+        static_cast<Windows::MainWindow*>(homeWindow.get())
+                ->startFocusTracking();
+        if(runTests)
+        {
+            runApplicationTests();
+        }
+    };
+#ifdef JUCE_DEBUG
+    focusChecker.startCheck([this]() { return focusAppWindow(); },
+            onFocus, focusTimeout, 
+            []()
+            {
+                DBG(dbgPrefix << __func__ 
+                        << ": Window focus attempts timed out!");
+            });
+#else
+    focusChecker.startCheck([this]() { return focusAppWindow(); },
+            onFocus, focusTimeout);
+#endif
 }
 
 /*
@@ -180,4 +148,50 @@ const juce::String PocketHomeApplication::getApplicationVersion()
 bool PocketHomeApplication::moreThanOneInstanceAllowed()
 {
     return false;
+}
+
+/*
+ * Runs application tests and shuts down the application.
+ */
+void PocketHomeApplication::runApplicationTests()
+{
+    juce::UnitTestRunner tester;
+    tester.setPassesAreLogged(verboseTesting);
+    if(testCategories.isEmpty())
+    {
+        DBG(dbgPrefix << __func__ << ": Running all pocket-home tests.");
+        tester.runAllTests();
+    }
+    else
+    {
+        for(const juce::String& category : testCategories)
+        {
+            DBG(dbgPrefix << __func__ << ": Running test category: " 
+                    << category);
+            tester.runTestsInCategory(category);
+        }
+    }
+    DBG(dbgPrefix << __func__ << ": Finished running application tests.");
+    juce::JUCEApplication::getInstance()->systemRequestedQuit();
+}
+
+/*
+ * Attempts to activate the application window and grab keyboard focus.  
+ */
+bool PocketHomeApplication::focusAppWindow()
+{
+    if(homeWindow == nullptr)
+    {
+        return false;
+    }
+    Windows::XInterface xWindows;
+    Window appWindow = xWindows.getMainAppWindow();
+    if(appWindow == BadWindow)
+    {
+        return false;
+    }
+    xWindows.activateWindow(appWindow);
+    homeWindow->grabKeyboardFocus();
+    return xWindows.isActiveWindow(appWindow) 
+            && homeWindow->hasKeyboardFocus(true);
 }

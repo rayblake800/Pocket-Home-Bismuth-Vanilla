@@ -62,7 +62,6 @@ juce::DocumentWindow(title, backgroundColour, requiredButtons)
     {
         focusUpdater.reset(new FocusUpdater);
     }
-    focusUpdater->setFocusState(isActiveWindow());
 }
 
 /*
@@ -82,18 +81,28 @@ Windows::MainWindow::~MainWindow()
 }
 
 /*
+ * Ensures all future window focus changes will be sent to the FocusTracker 
+ * resource.
+ */
+void Windows::MainWindow::startFocusTracking()
+{
+    trackingEnabled = true;
+    activeWindowStatusChanged();
+    
+}
+
+/*
  * Ensures all listeners are notified when the window focus state changes.
  */
 void Windows::MainWindow::activeWindowStatusChanged()
 {
-    const bool isFocused = isActiveWindow();
-    if(isFocused == focusUpdater->getFocusState()) 
+    juce::DocumentWindow::activeWindowStatusChanged();
+    if(!trackingEnabled)
     {
-        // Don't take any extra actions if this method is called but the focus
-        // state somehow hasn't changed.
-        //return;
+        return;
     }
-    
+    const bool isFocused = isActiveWindow();
+    DBG((isFocused ? "Focused" : "Unfocused"));
     if(isFocused)
     {
 	    // Window focus regained, close modal components so AlertWindows don't 

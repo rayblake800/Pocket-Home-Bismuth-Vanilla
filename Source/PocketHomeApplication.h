@@ -11,6 +11,7 @@
 #include "Layout_Component_ConfigFile.h"
 #include "Theme_Colour_ConfigFile.h"
 #include "Theme_Image_ConfigFile.h"
+#include "Util_ConditionChecker.h"
 
 
 /**
@@ -68,6 +69,26 @@ private:
      *          accidental.
      */
     bool moreThanOneInstanceAllowed() override;
+
+    /**
+     * @brief  Attempts to activate the application window and grab keyboard 
+     *         focus.  
+     *
+     * @return  Whether the main application window exists and is focused.
+     */
+    bool focusAppWindow();
+
+    /**
+     * @brief  Runs application tests and shuts down the application.
+     *
+     *  The application window should be created and focused before this 
+     * function is called.
+     */
+    void runApplicationTests();
+
+    /* Waits for the main window to be focused before starting focus updates and
+     * running tests(if applicable): */
+    Util::ConditionChecker focusChecker;
     
     /* Application resource objects: 
      *
