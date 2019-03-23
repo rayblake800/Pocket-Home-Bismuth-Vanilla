@@ -73,6 +73,6 @@
 
 [Project Task List](./docs/taskList/TODO.md)
 
-[Design Overview](./docs/taskList/Modules.md)
+[Design Overview](./docs/Modules.md)
 
 [Library References](./docs/Libraries.md)
