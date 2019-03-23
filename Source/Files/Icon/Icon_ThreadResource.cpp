@@ -10,7 +10,7 @@ static const constexpr char* dbgPrefix = "Icon::ThreadResource::";
 
 /* SharedResource object instance key: */
 const juce::Identifier Icon::ThreadResource::resourceKey 
-        = "Icon_ThreadResource";
+        = "Icon::ThreadResource";
 
 /* Resource thread name: */
 static const juce::String threadName = "Icon_ThreadResource";

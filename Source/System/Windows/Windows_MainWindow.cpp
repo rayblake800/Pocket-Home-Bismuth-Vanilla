@@ -40,7 +40,7 @@ public:
 };
 
 /*
- * The focusUpdater used by the sole MainWindow instance. The MainWindow will
+ * The FocusUpdater used by the sole MainWindow instance. The MainWindow will
  * check if this value is non-null to make sure another MainWindow doesn't
  * already exist.
  */
@@ -102,7 +102,6 @@ void Windows::MainWindow::activeWindowStatusChanged()
         return;
     }
     const bool isFocused = isActiveWindow();
-    DBG((isFocused ? "Focused" : "Unfocused"));
     if(isFocused)
     {
 	    // Window focus regained, close modal components so AlertWindows don't 

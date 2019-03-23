@@ -6,7 +6,7 @@ static const constexpr char * configFilename = "config.json";
 
 /* SharedResource object key */
 const juce::Identifier Config::MainResource::resourceKey 
-    = "Config_MainResource";
+    = "Config::MainResource";
 
 Config::MainResource::MainResource() : FileResource(resourceKey, configFilename)
 {

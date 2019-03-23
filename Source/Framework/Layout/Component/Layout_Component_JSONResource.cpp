@@ -6,7 +6,7 @@ namespace ComponentKeys = Layout::Component::JSONKeys;
 
 /* SharedResource object key */
 const juce::Identifier ComponentLayout::JSONResource::resourceKey
-        = "Layout_Component_JSONResource";
+        = "Layout::Component::JSONResource";
 
 /* Filename of the JSON configuration file */
 static const constexpr char * configFilename = "layout.json";

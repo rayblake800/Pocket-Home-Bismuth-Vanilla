@@ -8,7 +8,7 @@
 
 /* SharedResource object class key: */ 
 const juce::Identifier DesktopEntry::LoadingThread::resourceKey
-    = "DesktopEntry_LoadingThread";
+    = "DesktopEntry::LoadingThread";
 
 /* Resource thread name: */
 static const juce::String threadName = "DesktopEntry_LoadingThread";

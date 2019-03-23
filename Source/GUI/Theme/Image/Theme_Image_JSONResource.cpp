@@ -5,7 +5,7 @@ namespace ThemeImages = Theme::Image;
 
 /* SharedResource object key */
 const juce::Identifier ThemeImages::JSONResource::resourceKey
-        = "Theme_Image_JSONResource";
+        = "Theme::Image::JSONResource";
 
 /* Filename of the JSON configuration file */
 static const constexpr char * configFilename = "imageAssets.json";
