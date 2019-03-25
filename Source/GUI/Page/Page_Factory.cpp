@@ -56,6 +56,7 @@ Page::Component* Page::Factory::createPage(const Type pageType)
             break;
         case Type::homeSettings:
             newPage = new HomeSettings;
+            break;
 #ifdef CHIP_FEATURES
         case Type::fel:
             newPage = new Fel;
