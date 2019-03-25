@@ -6,18 +6,20 @@ PAGE_OBJ := $(JUCE_OBJDIR)/$(PAGE_PREFIX)
 
 PAGE_TYPES_DIR := $(PAGE_DIR)/PageTypes
 OBJECTS_PAGE_TYPES := \
-  $(PAGE_OBJ)Fel.o \
   $(PAGE_OBJ)HomeSettings.o \
   $(PAGE_OBJ)InputSettings.o \
   $(PAGE_OBJ)PasswordEditor.o \
   $(PAGE_OBJ)PasswordRemover.o \
   $(PAGE_OBJ)Power.o \
   $(PAGE_OBJ)QuickSettings.o \
-  $(PAGE_OBJ)SettingsList.o \
-  
+  $(PAGE_OBJ)SettingsList.o 
+ifeq ($(CHIP_FEATURES), 1)
+    OBJECTS_PAGE_TYPES := $(OBJECTS_PAGE_TYPES) $(PAGE_OBJ)Fel.o
+endif
 ifeq ($(WIFI_SUPPORT), 1)
     OBJECTS_PAGE_TYPES := $(OBJECTS_PAGE_TYPES) $(PAGE_OBJ)WifiConnection.o
 endif
+
 PAGE_INTERFACE_DIR := $(PAGE_DIR)/Interface
 PAGE_INTERFACE_PREFIX := $(PAGE_PREFIX)Interface_
 PAGE_INTERFACE_OBJ := $(PAGE_OBJ)Interface_

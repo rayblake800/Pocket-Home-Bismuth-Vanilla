@@ -10,6 +10,7 @@ namespace Hardware
 {
     namespace Audio
     {
+#ifdef CHIP_FEATURES
         /**
          * @brief  Opens a connection to Alsa audio.
          *
@@ -19,6 +20,7 @@ namespace Hardware
          * @return  Whether the Alsa connection was successfully initialized.
          */
         bool chipAudioInit();
+#endif
         
         /**
          * @brief  Gets the system's volume level.

@@ -16,7 +16,9 @@ namespace TextKey
     static const juce::Identifier sleep         = "sleep";
     static const juce::Identifier build         = "build";
     static const juce::Identifier version       = "version";
+#ifdef CHIP_FEATURES
     static const juce::Identifier flashSoftware = "flashSoftware";
+#endif
 }
 
 /* Page layout constants: */
@@ -31,7 +33,9 @@ pageListener(*this),
 powerOffButton(localeText(TextKey::shutdown)),
 rebootButton(localeText(TextKey::reboot)),
 sleepButton(localeText(TextKey::sleep)),
+#ifdef CHIP_FEATURES
 felButton(localeText(TextKey::flashSoftware)),
+#endif
 versionLabel(localeText(TextKey::version) 
         + juce::JUCEApplication::getInstance()->getApplicationVersion())
 {
@@ -56,10 +60,12 @@ versionLabel(localeText(TextKey::version)
         { 
             RowItem(&rebootButton) 
         }),
+#ifdef CHIP_FEATURES
         Row(buttonRowWeight,
         {
             RowItem(&felButton) 
         }),
+#endif
         Row(labelRowWeight,
         { 
             RowItem(&buildLabel) 
@@ -86,7 +92,9 @@ versionLabel(localeText(TextKey::version)
     powerOffButton.addListener(&pageListener);
     sleepButton.addListener(&pageListener);
     rebootButton.addListener(&pageListener);
+#ifdef CHIP_FEATURES
     felButton.addListener(&pageListener);
+#endif
     addChildComponent(overlaySpinner);
     addAndShowLayoutComponents();
 }
@@ -119,7 +127,9 @@ void Page::Power::showPowerSpinner()
     powerOffButton.setVisible(false);
     sleepButton.setVisible(false);
     rebootButton.setVisible(false);
+#ifdef CHIP_FEATURES
     felButton.setVisible(false);
+#endif
     overlaySpinner.setVisible(true);
 }
 
@@ -136,12 +146,14 @@ void Page::Power::pageResized()
  */
 void Page::Power::PageListener::buttonClicked(juce::Button *button)
 {
+#ifdef CHIP_FEATURES
     if (button == &powerPage.felButton)
     {
         powerPage.pushPageToStack(Page::Type::fel,
                 Layout::Transition::Type::moveRight);
         return;
     }
+#endif
     if (button == &powerPage.sleepButton)
     {
         powerPage.startSleepMode();

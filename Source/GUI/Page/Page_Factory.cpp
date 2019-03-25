@@ -36,9 +36,6 @@ Page::Component* Page::Factory::createPage(const Type pageType)
         case Type::power:
             newPage = new Power;
             break;
-        case Type::fel:
-            newPage = new Fel;
-            break;
         case Type::quickSettings:
             newPage = new QuickSettings;
             break;
@@ -59,6 +56,11 @@ Page::Component* Page::Factory::createPage(const Type pageType)
             break;
         case Type::homeSettings:
             newPage = new HomeSettings;
+#ifdef CHIP_FEATURES
+        case Type::fel:
+            newPage = new Fel;
+            break;
+#endif
 #ifdef WIFI_SUPPORTED
         case Type::wifiConnection:
             newPage = new WifiConnection;

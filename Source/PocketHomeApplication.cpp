@@ -1,9 +1,12 @@
 #include "PocketHomeApplication.h"
 #include "PocketHomeWindow.h"
-#include "Hardware_Audio.h"
 #include "Windows_XInterface.h"
 #include "Util_ShutdownListener.h"
 #include "Util_TempTimer.h"
+
+#ifdef CHIP_FEATURES
+#include "Hardware_Audio.h"
+#endif
 
 #ifdef INCLUDE_TESTING
 #include "Debug_ScopeTimerRecords.h"
@@ -56,11 +59,14 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         return;
     }
 
+#ifdef CHIP_FEATURES
     if(!Hardware::Audio::chipAudioInit())
     {
         DBG("PocketHomeApplication::" << __func__
                 << ": PocketC.H.I.P audio setup failed");
     }
+#endif
+
     lookAndFeel.reset(new Theme::LookAndFeel);
     juce::LookAndFeel::setDefaultLookAndFeel(lookAndFeel.get());
 

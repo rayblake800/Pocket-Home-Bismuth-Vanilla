@@ -1,12 +1,15 @@
 #include "Hardware_Battery.h"
-#include "Hardware_I2CBus.h"
 #include "Util_Math.h"
+#ifdef CHIP_FEATURES
+#include "Hardware_I2CBus.h"
+#endif
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
 static const constexpr char* dbgPrefix = "Hardware::Battery::";
 #endif
 
+#ifdef CHIP_FEATURES
 /* Battery status files:
  *  These files are created and actively updated by the pocketCHIP's battery 
  * monitor program, pocketchipp-batt. If these files exist and are being 
@@ -30,13 +33,13 @@ static constexpr const char* chargingPath = "/usr/lib/pocketchip-batt/charging";
  * battery gauge or voltage file is judged an invalid data source: */
 static const constexpr int validFilePeriod = 600;
 
-
 /*
  * If the voltage file is being used for battery percentage, these values 
  * will be needed to calculate the battery percentage from the voltage data.
  */
 static constexpr const int maxVoltage = 4250;
 static constexpr const int minVoltage = 3275;
+#endif
 
 /*
  * Determines the most appropriate way to monitor battery state on construction.
@@ -45,7 +48,7 @@ Hardware::Battery::Battery()
 {
     // TODO: Provide battery checking command accessed through Util::Commands,
     //       and a way of determining whether that command should be used.
-
+#ifdef CHIP_FEATURES
     /* Checks if a battery file was modified recently enough for it to qualify
      * as a valid data source. */
     const std::function<bool(const char*)> validFile = [](const char* filename)
@@ -73,6 +76,7 @@ Hardware::Battery::Battery()
     }
     DBG(dbgPrefix << __func__ << ": data source set to i2c bus.");
     dataSource = i2cBus;
+#endif
 }
 
 
@@ -87,6 +91,7 @@ Hardware::Battery::Status Hardware::Battery::getBatteryStatus()
     {
         return currentStatus;
     }
+#ifdef CHIP_FEATURES
     if (dataSource == i2cBus)
     {
         try
@@ -130,6 +135,7 @@ Hardware::Battery::Status Hardware::Battery::getBatteryStatus()
                     = juce::File(gaugePath).loadFileAsString().getIntValue();
         }
     }
+#endif
     currentStatus.percent = Util::Math::median<int>(0, currentStatus.percent,
             100);
     return currentStatus;

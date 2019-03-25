@@ -75,8 +75,10 @@ private:
     juce::TextButton sleepButton;
     /* Restarts the system: */
     juce::TextButton rebootButton;
+#ifdef CHIP_FEATURES
     /* Shows a page that gives the user the option to enter flashing mode: */
     juce::TextButton felButton;
+#endif
     /* Identifies the pocket-home version:*/
     Widgets::BoundedLabel versionLabel;
     /* Spinner to indicate that the system is rebooting/shutting down: */

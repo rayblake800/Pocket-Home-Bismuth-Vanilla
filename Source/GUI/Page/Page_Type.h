@@ -14,7 +14,6 @@ namespace Page { enum class Type; }
 enum class Page::Type
 {
     power,
-    fel,
     quickSettings,
     settingsList,
     inputSettings,
@@ -22,6 +21,9 @@ enum class Page::Type
     removePassword,
     colourSettings,
     homeSettings,
+#ifdef CHIP_FEATURES
+    fel,
+#endif
 #ifdef WIFI_SUPPORTED
     wifiConnection
 #endif

@@ -1,23 +1,23 @@
 #include "Hardware_Audio.h"
 #include "Util_Commands.h"
 #include "JuceHeader.h"
+#ifdef CHIP_FEATURES
 #include <exception>
 #include <alsa/asoundlib.h>
+#endif
 
 #ifdef JUCE_DEBUG
 /* Print the full class name before all debug output: */
 static const constexpr char* dbgPrefix = "Hardware::Audio::";
 #endif
 
+#ifdef CHIP_FEATURES
 /* ALSA buffer size in samples: */
 static const constexpr int alsaBufferSize = 4096;
 /* ALSA channel count: */
 static const constexpr int alsaChannels = 2;
 /* Audio device to use: */
 static const constexpr char* deviceName = "default";
-
-// Preprocessor macros are ugly, but it's better than dozens of lines of 
-// near-identical error checks.
 
 /**
  * @brief  Interrupts ALSA initialization when an ALSA library function returns
@@ -143,6 +143,7 @@ bool Hardware::Audio::chipAudioInit()
     // Someone needs to donate some more vowels to whoever wrote the ALSA sound
     // library...
 }
+#endif
 
 /*
  * Gets the system's volume level.
