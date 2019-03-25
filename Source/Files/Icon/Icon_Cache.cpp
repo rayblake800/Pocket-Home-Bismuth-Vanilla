@@ -170,24 +170,14 @@ std::map<juce::String,juce::String> Icon::Cache::lookupIcon
                 {
                     extension = ".png";
                 }
-                
-                // .xpm and .svg icons should eventually be supported:
-                /*
-                //TODO: add support for the xpm file format
                 else if((iconFlags & xpmExtensionFlag) == xpmExtensionFlag)
                 {
                     extension = ".xpm";
                 }
-                
-                // svg image loading fails with some svg files, so don't select
-                // svg icons automatically.
-                //TODO: fix svg rendering issues
                 else if((iconFlags & svgExtensionFlag) == svgExtensionFlag)
                 {
                     extension = ".svg";
                 }
-                */
-
                 if(extension.isNotEmpty())
                 {
                    matches[directories[read16(img)]] = extension;

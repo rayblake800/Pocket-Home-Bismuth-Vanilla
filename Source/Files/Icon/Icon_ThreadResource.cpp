@@ -66,6 +66,7 @@ SharedResource::Thread::Resource(resourceKey, ::threadName)
     }
     const String homePath = getenv("HOME");
     iconDirectories.add(homePath + "/" + homeIconDir);
+
     iconDirectories.addArray(dataDirs);
     iconDirectories.add(pixmapIconPath);
     iconDirectories.add(pocketHomeIconPath);
@@ -167,7 +168,7 @@ Icon::RequestID Icon::ThreadResource::addRequest(IconRequest request)
     {
         return 0;
     }
-    /* First, attempt to load the icon from  the loaded image cache or assets. */
+    /* First, attempt to load the icon from the loaded image cache or assets. */
     Image preLoadedIcon;
     if(request.icon[0] == '/')
     {

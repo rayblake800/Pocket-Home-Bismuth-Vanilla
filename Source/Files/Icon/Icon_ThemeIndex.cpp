@@ -236,7 +236,8 @@ juce::String Icon::ThemeIndex::lookupIcon
                  * defined in the theme's index file, add it as an undefined
                  * IconDirectory. */
                 DBG(dbgPrefix << __func__ << ": Cached directory \""
-                        << it->first << "\" is not present in the index file, "
+                        << it->first << "\" is not present in the \""
+                        << getName() << "\" theme index file, "
                         << "adding it as an undefined IconDirectory.");
                 IconDirectory undefinedDir;
                 undefinedDir.path = it->first;
@@ -269,9 +270,9 @@ juce::String Icon::ThemeIndex::lookupIcon
 
     /* TODO: remove this temporary hack after fixing svg rendering.
      * Svg files have occasional rendering problems, but they work more often
-     * than not. Instead of searching normally, for now png files will always
-     * be prioritized, and svg files will only be used if no valid png file
-     * exists. */
+     * than not. Instead of searching normally, for now png and xpm files will 
+     * always be prioritized, and svg files will only be used if no valid 
+     * alternate file exists. */
     String backupSvgPath;
 
     for (const IconDirectory& dir : searchDirs)
@@ -286,7 +287,7 @@ juce::String Icon::ThemeIndex::lookupIcon
             }
             else
             {
-                DBG(dbgPrefix << __func__ << ": Cached file is missing:" 
+                DBG(dbgPrefix << __func__ << ": Cached file is missing: " 
                         << filePath << extension);
             }
         }
@@ -360,8 +361,8 @@ juce::String Icon::ThemeIndex::getExampleIcon() const
 }
 
 /*
- * Compares two icon directories by their distance from the target size 
- * and scale.
+ * Compares two icon directories by their distance from the target size and 
+ * scale.
  */
 int Icon::ThemeIndex::DirectoryComparator::compareElements
 (IconDirectory first, IconDirectory second)
