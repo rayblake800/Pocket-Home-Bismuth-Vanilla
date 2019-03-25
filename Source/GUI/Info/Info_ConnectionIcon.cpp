@@ -65,9 +65,14 @@ void Info::ConnectionIcon::connected(const Wifi::AccessPoint connectedAP)
  */
 void Info::ConnectionIcon::disconnected(const Wifi::AccessPoint disconnectedAP)
 {
-    ignoreAllUpdates();
-    setSignalStrengthImage(0);
-    DBG(dbgPrefix << __func__ << ": Removing old tracked AP");
+    const Wifi::Device::Reader deviceReader;
+    if(deviceReader.wifiDeviceEnabled())
+    {
+        DBG(dbgPrefix << __func__ 
+                << ": Wifi disconnected, setting image to signal strength 0");
+        ignoreAllUpdates();
+        setSignalStrengthImage(0);
+    }
 }
 
 /*
@@ -75,6 +80,7 @@ void Info::ConnectionIcon::disconnected(const Wifi::AccessPoint disconnectedAP)
  */
 void Info::ConnectionIcon::wirelessEnabled()
 {
+    DBG(dbgPrefix << __func__ << ": Wifi connected, updating signal image");
     Wifi::Connection::Record::Handler connectionRecord;
     if(connectionRecord.isConnected())
     {
@@ -92,6 +98,7 @@ void Info::ConnectionIcon::wirelessEnabled()
  */
 void Info::ConnectionIcon::wirelessDisabled()
 {
+    DBG(dbgPrefix << __func__ << ": Wifi disabled, setting disabled image");
     ignoreAllUpdates();
     setDisabledImage();
 }
