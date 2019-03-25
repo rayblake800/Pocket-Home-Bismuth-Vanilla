@@ -167,15 +167,21 @@ private:
      * @brief  Runs a delayed condition test that will succeed after a specific 
      *         duration.
      *
-     * @param toTest   The checker to use to run the test.
+     * @param toTest     The checker to use to run the test.
      *
-     * @param delayMS  Milliseconds to wait before the condition is met.
+     * @param delayMS    Milliseconds to wait before the condition is met.
      *
-     * @param timeout  Milliseconds to wait before timeout, or -1 to disable
-     *                 the timeout period.
+     * @param timeout    Milliseconds to wait before timeout, or -1 to disable
+     *                   the timeout period.
+     *
+     * @param onSuccess  Callback function to run if the test passes before
+     *                   timeout.
+     *
+     * @param onTimeout  Callback function to run if the test times out before
+     *                   passing.
      */
     void delayTest(ConditionChecker& toTest, const int delayMS,
-            const int timeout);
+            const int timeout, VoidFunction onSuccess, VoidFunction onTimeout);
 
     /**
      * @brief  Tests that a Condition checker correctly runs a check that should
@@ -244,8 +250,35 @@ public:
         resetConditionChecker(checker);
         logMessage("Testing overly high multiplier:");
         resetConditionChecker(checker, defaultInterval, tooHighMult);
-        delayTest(checker, defaultDelay, defaultDelay - bufferPeriod);
+        delayTest(checker, defaultDelay, defaultDelay - bufferPeriod,
+                markAsPassed, markAsFailed);
         testResult(Result::fail);
+
+        beginTest("Single callback test");
+        int passCounter = 0;
+        int failCounter = 0;
+        VoidFunction addPass = [&passCounter]()
+        {
+            passCounter++;
+        };
+        VoidFunction addFail = [&failCounter]()
+        {
+            failCounter++;
+        };
+        resetConditionChecker(checker);
+        delayTest(checker, defaultDelay, -1, addPass, addFail);
+        expectEquals(passCounter, 1,
+                "Test should have incremented the pass counter exactly once.");
+        expectEquals(failCounter, 0,
+                "Test should not have changed the fail counter.");
+        resetConditionChecker(checker);
+        passCounter = 0;
+        failCounter = 0;
+        delayTest(checker, defaultDelay, defaultDelay / 2, addPass, addFail);
+        expectEquals(passCounter, 0,
+                "Test should not have changed the pass counter.");
+        expectEquals(failCounter, 1,
+                "Test should have incremented the fail counter exactly once.");
     }
 };
 
@@ -404,7 +437,10 @@ void Util::Test::ConditionTest::immediateSuccessTest(ConditionChecker& toTest)
  * Runs a delayed condition test that will succeed after a specific duration.
  */
 void Util::Test::ConditionTest::delayTest(ConditionChecker& toTest,
-        const int delayMS, const int timeout)
+        const int delayMS,
+        const int timeout,
+        VoidFunction onSuccess,
+        VoidFunction onTimeout)
 {
     using juce::int64;
     int64 passTime = juce::Time::currentTimeMillis() + delayMS;
@@ -414,8 +450,8 @@ void Util::Test::ConditionTest::delayTest(ConditionChecker& toTest,
     };
     delayedPass = trackedTest(delayedPass);
     lastResult = Result::none;
-    startTestedCheck(toTest, delayedPass, markAsPassed, timeout,
-            markAsFailed);
+    startTestedCheck(toTest, delayedPass, onSuccess, timeout,
+            onTimeout);
     juce::MessageManager::getInstance()->runDispatchLoopUntil(
             delayMS + bufferPeriod);
     expect(!toTest.isChecking(), "Condition check failed to finish");
@@ -428,6 +464,6 @@ void Util::Test::ConditionTest::delayTest(ConditionChecker& toTest,
 void Util::Test::ConditionTest::delayedSuccessTest
 (ConditionChecker& toTest, const int delayMS)
 {
-    delayTest(toTest, delayMS, -1);
+    delayTest(toTest, delayMS, -1, markAsPassed, markAsFailed);
     testResult(Result::pass);
 }

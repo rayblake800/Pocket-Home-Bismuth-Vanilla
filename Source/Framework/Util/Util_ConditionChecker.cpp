@@ -145,6 +145,7 @@ void Util::ConditionChecker::CheckTimer::startChecking()
 void Util::ConditionChecker::CheckTimer::timerCallback()
 {
     const juce::ScopedLock timerLock(owner.conditionLock);
+    stopTimer();
     jassert(owner.conditionCheck);
     if(!owner.checkCondition())
     {
