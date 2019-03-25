@@ -55,10 +55,10 @@ OBJECTS_GLIB := \
 GLIB_TEST_PREFIX := $(GLIB_PREFIX)Test_
 GLIB_TEST_OBJ := $(GLIB_OBJ)Test_
 OBJECTS_GLIB_TEST := \
+  $(GLIB_TEST_OBJ)TypeTest.o \
   $(GLIB_TEST_OBJ)OwnedObjectTest.o \
   $(GLIB_TEST_OBJ)OwnedObject.o \
-  $(GLIB_TEST_OBJ)gtest_object.o \
-  $(GLIB_TEST_OBJ)TypeHelper.o
+  $(GLIB_TEST_OBJ)gtest_object.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_GLIB := $(OBJECTS_GLIB) $(OBJECTS_GLIB_TEST)
@@ -107,11 +107,11 @@ $(GLIB_OBJ)TypeHelper.o : \
     $(GLIB_VAR_DIR)/$(GLIB_PREFIX)TypeHelper.cpp
 
 # Tests
+$(GLIB_TEST_OBJ)TypeTest.o : \
+    $(GLIB_TEST_DIR)/$(GLIB_TEST_PREFIX)TypeTest.cpp
 $(GLIB_TEST_OBJ)OwnedObject.o : \
     $(GLIB_TEST_DIR)/$(GLIB_TEST_PREFIX)OwnedObject.cpp
 $(GLIB_TEST_OBJ)OwnedObjectTest.o : \
     $(GLIB_TEST_DIR)/$(GLIB_TEST_PREFIX)OwnedObjectTest.cpp
 $(GLIB_TEST_OBJ)gtest_object.o : \
     $(GLIB_TEST_DIR)/gtest_object.cpp
-$(GLIB_TEST_OBJ)TypeHelper.o : \
-    $(GLIB_TEST_DIR)/TypeHelper.cpp

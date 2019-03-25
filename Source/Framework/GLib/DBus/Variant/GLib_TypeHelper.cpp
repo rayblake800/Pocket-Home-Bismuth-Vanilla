@@ -1,6 +1,6 @@
 #include "GLib_TypeHelper.h"
 
-/* Use templates to define simple TypeHelper specialization methods and avoid
+/* Use macros to define simple TypeHelper specialization methods and avoid
  * excess repetition: */
 
 #define TYPE_DEFINITION(VarType, GVarType)                 \

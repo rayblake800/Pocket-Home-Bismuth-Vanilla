@@ -92,4 +92,32 @@ namespace GLib
     // Array types:
 #include "GLib_TypeHelper_Array.inc"
 
+    /**
+     * @brief  Declares all TypeHelper template specializations for a supported
+     *         GVariant value type.
+     *
+     * @param VarType  A supported GVariant data type.
+     */
+    #define TYPE_DECLARATION(VarType) \
+    template<> juce::String TypeHelper<VarType>::getTypeName();            \
+    template<> juce::String TypeHelper<VarType>::getFormatString();        \
+    template<> bool TypeHelper<VarType>::isType(GVariant* variant);        \
+    template<> const GVariantType* TypeHelper<VarType>::getGVariantType(); \
+    template<> VarType TypeHelper<VarType>::getValue(GVariant*, VarType);  \
+    template<> GVariant* TypeHelper<VarType>::getVariant(VarType);
+
+    TYPE_DECLARATION(bool);
+    TYPE_DECLARATION(VariantTypes::byte);
+    TYPE_DECLARATION(VariantTypes::int16);
+    TYPE_DECLARATION(VariantTypes::uint16);
+    TYPE_DECLARATION(VariantTypes::int32);
+    TYPE_DECLARATION(VariantTypes::uint32);
+    TYPE_DECLARATION(VariantTypes::int64);
+    TYPE_DECLARATION(VariantTypes::uint64);
+    TYPE_DECLARATION(VariantTypes::Handle);
+    TYPE_DECLARATION(double);
+    TYPE_DECLARATION(VariantTypes::String);
+    TYPE_DECLARATION(VariantTypes::Path);
+    TYPE_DECLARATION(VariantTypes::Signature);
+    TYPE_DECLARATION(VariantTypes::GVariantType);
 }
