@@ -20,20 +20,23 @@ settingsButton(Theme::Image::JSONKeys::settingsButton)
     setName("HomePage");
 #endif
     addTrackedKey(Theme::Image::JSONKeys::homeBackground);
-
+    setWantsKeyboardFocus(false);
     using namespace Layout::Component;
-    layoutManagers.add(Manager(&wifiIcon, JSONKeys::wifiIcon));
     layoutManagers.add(Manager(&clock, JSONKeys::clockLabel));
     layoutManagers.add(Manager(&powerButton, JSONKeys::powerButton));
     layoutManagers.add(Manager(&settingsButton, JSONKeys::settingsButton));
     layoutManagers.add(Manager(&frame, JSONKeys::menuFrame));
 
-    setWantsKeyboardFocus(false);
+#ifdef WIFI_SUPPORTED
+    layoutManagers.add(Manager(&wifiIcon, JSONKeys::wifiIcon));
+    addAndMakeVisible(wifiIcon);
+#endif
+
     addAndMakeVisible(frame);
     addAndMakeVisible(clock);
 
     addAndMakeVisible(batteryIcon);
-    addAndMakeVisible(wifiIcon);
+
 
     powerButton.addListener(&pageListener);
     powerButton.setWantsKeyboardFocus(false);

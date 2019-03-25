@@ -7,9 +7,15 @@ INFO_OBJ := $(JUCE_OBJDIR)/$(INFO_PREFIX)
 
 OBJECTS_INFO := \
   $(INFO_OBJ)BatteryIcon.o \
-  $(INFO_OBJ)Clock.o \
-  $(INFO_OBJ)SignalIcon.o \
-  $(INFO_OBJ)ConnectionIcon.o
+  $(INFO_OBJ)Clock.o 
+
+ifeq ($(WIFI_SUPPORT), 1)
+    OBJECTS_INFO := \
+      $(OBJECTS_INFO) \
+      $(INFO_OBJ)SignalIcon.o \
+      $(INFO_OBJ)ConnectionIcon.o
+endif
+
 
 INFO_TEST_PREFIX := $(INFO_PREFIX)Test_
 INFO_TEST_OBJ := $(INFO_OBJ)Test_

@@ -20,8 +20,12 @@ OBJECTS_SETTINGS := \
   $(SETTINGS_OBJ)HomeBackgroundPicker.o \
   $(SETTINGS_OBJ)CalibrationButton.o \
   $(SETTINGS_OBJ)ConnectionComponent.o \
-  $(SETTINGS_OBJ)WifiControl.o \
-  $(OBJECTS_WIFI_LIST_SETTINGS)
+
+ifeq ($(WIFI_SUPPORT), 1)
+    OBJECTS_SETTINGS := \
+      $(OBJECTS_SETTINGS) $(SETTINGS_OBJ)WifiControl.o \
+      $(OBJECTS_WIFI_LIST_SETTINGS)
+endif
 
 OBJECTS_SETTINGS_TEST :=
 

@@ -11,10 +11,12 @@ static const constexpr float yMarginFraction = 0.1;
 
 Page::QuickSettings::QuickSettings() :
 pageListener(*this),
+#ifdef WIFI_SUPPORTED
 wifiComponent([this]()
 {
     pushPageToStack(Page::Type::wifiConnection);
 }),
+#endif
 settingsListBtn(Theme::Image::JSONKeys::settingsListBtn),
 listButtonManager(&settingsListBtn, 
         Layout::Component::JSONKeys::settingsListBtn)
@@ -26,10 +28,12 @@ listButtonManager(&settingsListBtn,
     using namespace Layout::Group;
     RelativeLayout layout(
     {
+#ifdef WIFI_SUPPORTED
         Row(wifiRowWeight, 
         { 
             RowItem(&wifiComponent) 
         }),
+#endif
         Row(sliderRowWeight, 
         { 
             RowItem(&brightnessSlider) 

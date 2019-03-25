@@ -16,9 +16,11 @@
 #include "Info_Clock.h"
 #include "Info_BatteryIcon.h"
 #include "Layout_Component_Manager.h"
-#include "Info_ConnectionIcon.h"
 #include "Util_Commands.h"
 #include "AppMenu.h"
+#ifdef WIFI_SUPPORTED
+#include "Info_ConnectionIcon.h"
+#endif
 
 /**
  * @brief  The root Page::Component within the application.
@@ -103,8 +105,10 @@ private:
     /* Displays the current battery status: */
     Info::BatteryIcon batteryIcon;
     
+#ifdef WIFI_SUPPORTED
     /* Displays the current wifi status: */
     Info::ConnectionIcon wifiIcon;
+#endif
 
     /* Loads the background image and ensures the image asset JSON resource
      * remains available: */

@@ -116,7 +116,8 @@ void ThreadResource::Thread::run()
         if(threadShouldWait() && !threadShouldExit())
         {
             DBG(dbgPrefix << __func__ << ": Thread \"" << getThreadName() 
-                    << "\" is waiting.");
+                    << "\" running cleanup before waiting.");
+            cleanup(*threadLock);
             // If the thread was notified while it was not waiting, calling
             // wait will immediately return and clear the saved notification.
             // There's no way to tell if the thread is in this state, so notify
@@ -125,11 +126,10 @@ void ThreadResource::Thread::run()
             notify();
             bool resetThread = wait(-1);
             jassert(resetThread);
-
-            bool result = wait(-1);
+            wait(-1);
             DBG(dbgPrefix << __func__ << ": Thread \"" << getThreadName() 
-                    << "\" is resuming after "
-                    << (result ? "notify" : "timeout"));
+                    << "\" waking and re-initializing.");
+            init(*threadLock);
         }
     }
         

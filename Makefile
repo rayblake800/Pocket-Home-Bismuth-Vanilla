@@ -45,12 +45,12 @@ BUILD_TESTS=(0, 1)
 WIFI_SUPPORT=(0, 1)
   Disable or enable Wifi connection status and controls. Wifi is enabled by 
   default.
+
+CHIP_FEATURES=(0, 1)
+  Disable or enable features specific to the PocketCHIP. These features are
+  enabled by default.
 endef
 export HELPTEXT
-
-# TODO: Add additional options:
-#       -Enable/disable PocketCHIP-specific features
-#       -Enable/disable Wifi support
 
 ######### Initialize build variables: #########
 
@@ -119,6 +119,9 @@ RECURSIVE_INCLUDE_DIRS := Source Tests
 # Whether Wifi controls will be built and used:
 WIFI_SUPPORT ?= 1
 
+# Whether PocketCHIP-specific features should be included:
+CHIP_FEATURES ?= 1
+
 #### Setup: #### 
 
 # build with "V=1" for verbose builds
@@ -181,6 +184,12 @@ endif
 # Add preprocessor flags enabling optional features:
 ifeq ($(BUILD_TESTS), 1)
     FEATURE_DEFS := $(FEATURE_DEFS) -DINCLUDE_TESTING
+endif
+ifeq ($(WIFI_SUPPORT), 1)
+    FEATURE_DEFS := $(FEATURE_DEFS) -DWIFI_SUPPORTED
+endif
+ifeq ($(CHIP_FEATURES), 1)
+    FEATURE_DEFS := $(FEATURE_DEFS) -DCHIP_FEATURES
 endif
   
 JUCE_CPPFLAGS := $(DEPFLAGS) \

@@ -6,6 +6,11 @@
 #include "SharedResource_Thread_ScopedWriteLock.h"
 #include "Assets_XDGDirectories.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "DesktopEntry::LoadingThread::";
+#endif
+
 /* SharedResource object class key: */ 
 const juce::Identifier DesktopEntry::LoadingThread::resourceKey
     = "DesktopEntry::LoadingThread";
@@ -83,8 +88,8 @@ DesktopEntry::LoadingThread::getCategoryEntries
             }
             catch(std::out_of_range e)
             {
-                DBG("DesktopEntry::LoadingThread::" << __func__ 
-                        << ": Failed to find entry with ID " << entryID);
+                DBG(dbgPrefix << __func__ << ": Failed to find entry with ID " 
+                        << entryID);
             }
         }
         return entryList;
@@ -120,8 +125,8 @@ DesktopEntry::LoadingThread::getCategoryEntries
         }
         catch(std::out_of_range e)
         {
-            DBG("DesktopEntry::LoadingThread::" << __func__ 
-                    << ": Failed to find entry with ID " << entryID);
+            DBG(dbgPrefix << __func__ << ": Failed to find entry with ID " 
+                    << entryID);
         }
     }
     return entryList;
@@ -139,6 +144,11 @@ DesktopEntry::CallbackID DesktopEntry::LoadingThread::addLoadingCallback
         const CallbackID callbackID = generateCallbackID();
         onFinish[callbackID] = loadingCallback;
         return callbackID;
+    }
+    else
+    {
+        DBG(dbgPrefix << __func__ 
+                << ": Attempted to add invalid loading callback");
     }
     return 0;
 }
@@ -208,11 +218,11 @@ void DesktopEntry::LoadingThread::findUpdatedFiles()
         }
     }
     lastScanTime = juce::Time::getCurrentTime();
-    DBG("DesktopEntry::LoadingThread::" << __func__ << ": Found " 
+    DBG(dbgPrefix << __func__ << ": Found " 
             << String(entryFiles.size()) 
             << " unique desktop entry files in "
             << dirs.size() << " data directories.");
-    DBG("DesktopEntry::LoadingThread::" << __func__ << ": Reloading "
+    DBG(dbgPrefix << __func__ << ": Reloading "
             << ((int) pendingFiles.size()) << " entry files.");
 }
 
@@ -232,7 +242,6 @@ bool DesktopEntry::LoadingThread::isFinishedLoading()
  */
 void DesktopEntry::LoadingThread::init(SharedResource::Thread::Lock& threadLock) 
 {
-    const SharedResource::Thread::ScopedWriteLock writeLock(threadLock);
     finishedLoading = false;
     lastAddedIDs.clear();
     lastChangedIDs.clear();
@@ -247,63 +256,57 @@ void DesktopEntry::LoadingThread::runLoop
 (SharedResource::Thread::Lock& threadLock) 
 {
     using juce::String;
-    threadLock.enterWrite();
-    if(pendingFiles.empty())
+    const SharedResource::Thread::ScopedWriteLock writeLock(threadLock);
+    if(!pendingFiles.empty())
     {
-        signalThreadShouldExit();
-        threadLock.exitWrite();
-        return;
-    }
-    String entryID = pendingFiles.begin()->first;
-    juce::File entryFile = pendingFiles.begin()->second;
-    pendingFiles.erase(pendingFiles.begin());
-    try
-    {
-        EntryFile entry(entryFile, entryID);
-        if (entry.shouldBeDisplayed())
+        String entryID = pendingFiles.begin()->first;
+        juce::File entryFile = pendingFiles.begin()->second;
+        pendingFiles.erase(pendingFiles.begin());
+        try
         {
-            juce::StringArray entryCategories = entry.getCategories();
-            if (entryCategories.isEmpty())
+            EntryFile entry(entryFile, entryID);
+            if (entry.shouldBeDisplayed())
             {
-                // Categorize as "Other"
-                entryCategories.add(miscEntryCategory);
+                juce::StringArray entryCategories = entry.getCategories();
+                if (entryCategories.isEmpty())
+                {
+                    // Categorize as "Other"
+                    entryCategories.add(miscEntryCategory);
+                }
+                // Add to list of all entries
+                entryCategories.add(everyEntryCategory);
+                for(const String& category : entryCategories)
+                {
+                    categories[category].add(entryID);
+                }
+                entries[entryID] = entry;
             }
-            // Add to list of all entries
-            entryCategories.add(everyEntryCategory);
-            for(const String& category : entryCategories)
-            {
-                categories[category].add(entryID);
-            }
-            entries[entryID] = entry;
-        }
-        /* If an updated entry is hidden, mark it as removed in the change 
-           list.  If a new entry was hidden, don't mention in in the change
-           list at all. */
-        else
-        {
-            if(entries.count(entryID) > 0)
-            {
-                lastChangedIDs.removeString(entryID);
-                lastRemovedIDs.add(entryID);
-                entries.erase(entryID);
-            }
+            /* If an updated entry is hidden, mark it as removed in the change 
+               list.  If a new entry was hidden, don't mention in in the change
+               list at all. */
             else
             {
-                lastAddedIDs.removeString(entryID);
+                if(entries.count(entryID) > 0)
+                {
+                    lastChangedIDs.removeString(entryID);
+                    lastRemovedIDs.add(entryID);
+                    entries.erase(entryID);
+                }
+                else
+                {
+                    lastAddedIDs.removeString(entryID);
+                }
             }
         }
+        catch(FileError e)
+        {
+            DBG(dbgPrefix << __func__ << ": File error: " << e.what());
+        }
+        catch(FormatError e)
+        {
+            DBG(dbgPrefix << __func__ << ": Format error: " << e.what());
+        }
     }
-    catch(FileError e)
-    {
-        DBG("DesktopEntry::LoadingThread::" << __func__ << ": File error: "
-                << e.what());
-    }
-    catch(FormatError e)
-    {
-        DBG("DesktopEntry::LoadingThread::" << __func__ << ": Format error: "
-                << e.what());
-    }
-    threadLock.exitWrite();
 }
 
 /*
@@ -315,7 +318,7 @@ void DesktopEntry::LoadingThread::cleanup
 {
     const SharedResource::Thread::ScopedWriteLock writeLock(threadLock);
     finishedLoading = true;
-    DBG("DesktopEntry::LoadingThread::" << __func__ << ": "
+    DBG(dbgPrefix << __func__ << ": "
             << lastAddedIDs.size() << " added, "
             << lastChangedIDs.size() << " updated, "
             << lastRemovedIDs.size() << " removed.");
@@ -330,8 +333,8 @@ void DesktopEntry::LoadingThread::cleanup
 
         foreachHandler<UpdateInterface>([this](UpdateInterface* updateListener)
         {
-        if(!lastAddedIDs.isEmpty())
-        {
+            if(!lastAddedIDs.isEmpty())
+            {
                 updateListener->entriesAdded(lastAddedIDs);
             }
             if(!lastChangedIDs.isEmpty())

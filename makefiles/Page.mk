@@ -14,8 +14,10 @@ OBJECTS_PAGE_TYPES := \
   $(PAGE_OBJ)Power.o \
   $(PAGE_OBJ)QuickSettings.o \
   $(PAGE_OBJ)SettingsList.o \
-  $(PAGE_OBJ)WifiConnection.o
-
+  
+ifeq ($(WIFI_SUPPORT), 1)
+    OBJECTS_PAGE_TYPES := $(OBJECTS_PAGE_TYPES) $(PAGE_OBJ)WifiConnection.o
+endif
 PAGE_INTERFACE_DIR := $(PAGE_DIR)/Interface
 PAGE_INTERFACE_PREFIX := $(PAGE_PREFIX)Interface_
 PAGE_INTERFACE_OBJ := $(PAGE_OBJ)Interface_

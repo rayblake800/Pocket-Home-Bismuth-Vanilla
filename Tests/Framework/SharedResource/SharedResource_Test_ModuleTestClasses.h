@@ -193,3 +193,26 @@ public:
 
     int actOnAllHandlers();
 };
+
+/* getModule template specialization declarations: */
+namespace SharedResource { namespace Modular {
+
+template<> template<> TestModuleA* 
+SharedResource::Modular::Resource<>::getModule<TestModuleA>();
+
+template<> template<> TestModuleB* 
+SharedResource::Modular::Resource<>::getModule<TestModuleB>();
+
+template<> template<> TestModuleC* 
+SharedResource::Modular::Resource<>::getModule<TestModuleC>();
+
+template<> template<> const TestModuleA* 
+SharedResource::Modular::Resource<>::getModule<const TestModuleA>();
+
+template<> template<> const TestModuleB* 
+SharedResource::Modular::Resource<>::getModule<const TestModuleB>();
+
+template<> template<> const TestModuleC* 
+SharedResource::Modular::Resource<>::getModule<const TestModuleC>();
+
+} }

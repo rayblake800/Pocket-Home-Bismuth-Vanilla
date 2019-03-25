@@ -65,7 +65,7 @@ void DesktopEntry::Loader::scanForChanges()
    {
        loadingThread->startResourceThread();
    }
-   else if(loadingThread->isFinishedLoading())
+   else //if(loadingThread->isFinishedLoading())
    {
        loadingThread->notify();
    }

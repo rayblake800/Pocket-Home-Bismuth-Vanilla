@@ -7,11 +7,13 @@
  */
 
 #include "Page_Component.h"
-#include "Settings_WifiControl.h"
 #include "Settings_BrightnessSlider.h"
 #include "Settings_VolumeSlider.h"
 #include "Theme_Image_Component.h"
 #include "Layout_Component_Manager.h"
+#ifdef WIFI_SUPPORTED
+#include "Settings_WifiControl.h"
+#endif
 
 namespace Page { class QuickSettings; }
 
@@ -58,8 +60,10 @@ private:
     };
     PageListener pageListener;
 
+#ifdef WIFI_SUPPORTED
     /* Turns wifi on or off, shows connection state, and opens the wifi page. */
     Settings::WifiControl wifiComponent;
+#endif
 
     /* Sets the display brightness */
     Settings::BrightnessSlider brightnessSlider;

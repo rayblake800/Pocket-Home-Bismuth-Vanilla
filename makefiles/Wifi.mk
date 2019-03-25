@@ -1,4 +1,7 @@
 ########################### Wifi Module ########################################
+# Add this module only if Wifi support is enabled: 
+ifeq ($(WIFI_SUPPORT), 1)
+
 WIFI_DIR = Source/System/Wifi
 WIFI_PREFIX := Wifi_
 WIFI_OBJ := $(JUCE_OBJDIR)/$(WIFI_PREFIX)
@@ -303,3 +306,5 @@ $(WIFI_OBJ)FocusUpdater.o : \
     $(WIFI_DIR)/$(WIFI_PREFIX)FocusUpdater.cpp
 $(WIFI_OBJ)DebugOutput.o : \
     $(WIFI_DIR)/$(WIFI_PREFIX)DebugOutput.cpp
+
+endif

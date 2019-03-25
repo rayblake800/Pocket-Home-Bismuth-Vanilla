@@ -8,9 +8,12 @@
 #include "Page_Power.h"
 #include "Page_QuickSettings.h"
 #include "Page_SettingsList.h"
-#include "Page_WifiConnection.h"
-#include "HomePage.h"
 #include "Theme_Colour_ConfigPage.h"
+#include "HomePage.h"
+
+#ifdef WIFI_SUPPORTED
+#include "Page_WifiConnection.h"
+#endif
 
 /*
  * Creates an instance of the application's home page.
@@ -39,9 +42,6 @@ Page::Component* Page::Factory::createPage(const Type pageType)
         case Type::quickSettings:
             newPage = new QuickSettings;
             break;
-        case Type::wifiConnection:
-            newPage = new WifiConnection;
-            break;
         case Type::settingsList:
             newPage = new SettingsList;
             break;
@@ -59,6 +59,11 @@ Page::Component* Page::Factory::createPage(const Type pageType)
             break;
         case Type::homeSettings:
             newPage = new HomeSettings;
+#ifdef WIFI_SUPPORTED
+        case Type::wifiConnection:
+            newPage = new WifiConnection;
+            break;
+#endif
     }
     if(newPage != nullptr)
     {

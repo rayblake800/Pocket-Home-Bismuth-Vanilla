@@ -16,11 +16,13 @@ enum class Page::Type
     power,
     fel,
     quickSettings,
-    wifiConnection,
     settingsList,
     inputSettings,
     setPassword,
     removePassword,
     colourSettings,
-    homeSettings
+    homeSettings,
+#ifdef WIFI_SUPPORTED
+    wifiConnection
+#endif
 };
