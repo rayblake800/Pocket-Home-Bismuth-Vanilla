@@ -40,6 +40,14 @@ public:
     };
 
     /**
+     * @brief  Checks if the Battery object is able to detect and read battery
+     *         information.
+     *
+     * @return  Whether the system battery status is available.
+     */
+    bool isBatteryAvailable() const;
+
+    /**
      * @brief  Finds the current battery charge percentage and charging state.
      * 
      * @return  An integer between 0 and 100 representing battery charge state,

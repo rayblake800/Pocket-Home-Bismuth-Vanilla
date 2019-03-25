@@ -27,15 +27,16 @@ settingsButton(Theme::Image::JSONKeys::settingsButton)
     layoutManagers.add(Manager(&settingsButton, JSONKeys::settingsButton));
     layoutManagers.add(Manager(&frame, JSONKeys::menuFrame));
 
-#ifdef WIFI_SUPPORTED
-    layoutManagers.add(Manager(&wifiIcon, JSONKeys::wifiIcon));
-    addAndMakeVisible(wifiIcon);
-#endif
 
     addAndMakeVisible(frame);
     addAndMakeVisible(clock);
 
     addAndMakeVisible(batteryIcon);
+
+#ifdef WIFI_SUPPORTED
+    layoutManagers.add(Manager(&wifiIcon, JSONKeys::wifiIcon));
+    addAndMakeVisible(wifiIcon);
+#endif
 
 
     powerButton.addListener(&pageListener);

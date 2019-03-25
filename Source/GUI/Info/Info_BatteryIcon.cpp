@@ -25,9 +25,12 @@ batteryPercentLayout(&batteryPercent,
     batteryPercent.setJustificationType(juce::Justification::centredLeft);
     batteryPercent.setColour(juce::Label::textColourId,
             findColour(textColourId));
-    addAndMakeVisible(batteryPercent);
-    addAndMakeVisible(batteryImage);
-    startTimer(1);
+    if(batteryMonitor.isBatteryAvailable())
+    {
+        addAndMakeVisible(batteryPercent);
+        addAndMakeVisible(batteryImage);
+        startTimer(1);
+    }
 }
 
 /*
@@ -36,15 +39,18 @@ batteryPercentLayout(&batteryPercent,
  */
 void Info::BatteryIcon::applyConfigBounds()
 {
-    batteryImageLayout.applyConfigBounds();
-    batteryPercentLayout.applyConfigBounds();
-    juce::Rectangle<int> childBounds = batteryImage.getBounds()
-            .getUnion(batteryPercent.getBounds());
-    childBounds.setLeft(0);
-    childBounds.setTop(0);
-    if (childBounds != getBounds())
+    if(batteryMonitor.isBatteryAvailable())
     {
-        setBounds(childBounds);
+        batteryImageLayout.applyConfigBounds();
+        batteryPercentLayout.applyConfigBounds();
+        juce::Rectangle<int> childBounds = batteryImage.getBounds()
+                .getUnion(batteryPercent.getBounds());
+        childBounds.setLeft(0);
+        childBounds.setTop(0);
+        if (childBounds != getBounds())
+        {
+            setBounds(childBounds);
+        }
     }
 }
 
@@ -54,9 +60,12 @@ void Info::BatteryIcon::applyConfigBounds()
 void Info::BatteryIcon::setStatus
 (BatteryIconImage imageSelection, juce::String percent)
 {
-    batteryImage.setImageAssetIndex((int) imageSelection);
-    batteryPercent.setText(percent, 
-            juce::NotificationType::dontSendNotification);
+    if(batteryMonitor.isBatteryAvailable())
+    {
+        batteryImage.setImageAssetIndex((int) imageSelection);
+        batteryPercent.setText(percent, 
+                juce::NotificationType::dontSendNotification);
+    }
 }
 
 /*
@@ -65,16 +74,19 @@ void Info::BatteryIcon::setStatus
  */
 void Info::BatteryIcon::visibilityChanged()
 {
-    if (isVisible())
+    if(batteryMonitor.isBatteryAvailable())
     {
-        if (!isTimerRunning())
+        if (isVisible())
         {
-            startTimer(1);
+            if (!isTimerRunning())
+            {
+                startTimer(1);
+            }
         }
-    }
-    else
-    {
-        stopTimer();
+        else
+        {
+            stopTimer();
+        }
     }
 }
 

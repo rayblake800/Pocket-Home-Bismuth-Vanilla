@@ -74,11 +74,33 @@ Hardware::Battery::Battery()
             return;
         }
     }
-    DBG(dbgPrefix << __func__ << ": data source set to i2c bus.");
-    dataSource = i2cBus;
+    else //Check if valid i2cBus data is available:
+    {
+        try
+        {
+            I2CBus i2c;
+            i2c.batteryGaugePercent();
+            DBG(dbgPrefix << __func__ << ": data source set to i2c bus.");
+            dataSource = i2cBus;
+        }
+        catch (I2CBus::I2CException e)
+        {
+            DBG(dbgPrefix << __func__ << ": no available battery source.");
+            dataSource = noBattery;
+        }
+    }
+#else
+    dataSource = noBattery;
 #endif
 }
 
+/*
+ * Checks if the Battery object is able to detect and read battery information.
+ */
+bool Hardware::Battery::isBatteryAvailable() const
+{
+    return dataSource != noBattery;
+}
 
 /*
  * Find the current battery charge percentage and charging state
