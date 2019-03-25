@@ -41,6 +41,10 @@ GDB_SUPPORT=(0, 1)
   
 BUILD_TESTS=(0, 1)
   Disable or enable compilation of test classes.
+
+WIFI_SUPPORT=(0, 1)
+  Disable or enable Wifi connection status and controls. Wifi is enabled by 
+  default.
 endef
 export HELPTEXT
 
@@ -86,11 +90,11 @@ PKG_CONFIG_LIBS = NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 \
 # Additional library flags:
 LDFLAGS := -lcrypto -ldl -lpthread -lrt $(LDFLAGS)
 
-# Preprocessor values used by JUCE library code:
-JUCE_DEFS	     := -DDONT_SET_USING_JUCE_NAMESPACE=1 \
-	                 -DJUCER_LINUX_MAKE_6D53C8B4=1 \
-	                 -DJUCE_APP_VERSION=$(APP_VERSION) \
-	                 -DJUCE_APP_VERSION_HEX=$(APP_VERSION_HEX) \
+# Preprocessor values used by the JUCE library:
+JUCE_DEFS := -DDONT_SET_USING_JUCE_NAMESPACE=1 \
+	         -DJUCER_LINUX_MAKE_6D53C8B4=1 \
+	         -DJUCE_APP_VERSION=$(APP_VERSION) \
+	         -DJUCE_APP_VERSION_HEX=$(APP_VERSION_HEX) \
 
 JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 \
 	                 -DJucePlugin_Build_VST3=0 \
@@ -111,6 +115,9 @@ INCLUDE_DIRS := JuceLibraryCode deps/JUCE/modules
 
 # Directories to recursively search for header files:
 RECURSIVE_INCLUDE_DIRS := Source Tests
+
+# Whether Wifi controls will be built and used:
+WIFI_SUPPORT ?= 1
 
 #### Setup: #### 
 
@@ -170,10 +177,16 @@ ifeq ($(GDB_SUPPORT), 1)
 else
     CONFIG_LDFLAGS := $(CONFIG_LDFLAGS) -fvisibility=hidden
 endif
+
+# Add preprocessor flags enabling optional features:
+ifeq ($(BUILD_TESTS), 1)
+    FEATURE_DEFS := $(FEATURE_DEFS) -DINCLUDE_TESTING
+endif
   
 JUCE_CPPFLAGS := $(DEPFLAGS) \
 	             $(JUCE_CONFIG_FLAGS) \
 	             $(JUCE_DEFS)\
+	             $(FEATURE_DEFS)\
                  -DBUILD_NAME="\"$(shell ./project-scripts/BuildLabel.sh)\"" \
 	             $(shell pkg-config --cflags $(PKG_CONFIG_LIBS)) \
 	             $(DIR_FLAGS)

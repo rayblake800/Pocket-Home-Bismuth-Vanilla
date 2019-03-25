@@ -78,6 +78,7 @@ private:
      */
     bool focusAppWindow();
 
+#ifdef INCLUDE_TESTING
     /**
      * @brief  Runs application tests and shuts down the application.
      *
@@ -85,6 +86,7 @@ private:
      * function is called.
      */
     void runApplicationTests();
+#endif
 
     /* Waits for the main window to be focused before starting focus updates and
      * running tests(if applicable): */
