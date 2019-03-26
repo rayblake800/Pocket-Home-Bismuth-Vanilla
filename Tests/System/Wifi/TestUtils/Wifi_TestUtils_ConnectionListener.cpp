@@ -35,6 +35,7 @@ void Wifi::TestUtils::ConnectionListener::startedConnecting
 void Wifi::TestUtils::ConnectionListener::connectionAuthFailed
 (const Wifi::AccessPoint failedAP)
 {
+    const juce::ScopedLock eventLock(eventControl);
     updateLastRecordedEvent();
 }
 

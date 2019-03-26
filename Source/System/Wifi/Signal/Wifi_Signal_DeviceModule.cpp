@@ -69,6 +69,8 @@ void Wifi::Signal::DeviceModule::stateChanged
         DBG(dbgPrefix << "stateChanged" << ":  changed to " 
                 << deviceStateString(newState) 
                 << ", reason=" << deviceStateReasonString(reason));
+        DBG(dbgPrefix << "stateChanged" << ":  old state = " 
+                << deviceStateString(oldState));
 
         // Find any access point associated with the state change:
         LibNM::Thread::Module* nmThread 
@@ -105,17 +107,28 @@ void Wifi::Signal::DeviceModule::stateChanged
                 eventType = EventType::startedConnecting;
                 break;
             case NM_DEVICE_STATE_DISCONNECTED:
-                eventType = (oldState == NM_DEVICE_STATE_DEACTIVATING) ?
-                        EventType::disconnected : EventType::connectionFailed;
+            case NM_DEVICE_STATE_UNMANAGED:
+            case NM_DEVICE_STATE_UNAVAILABLE:
+                if(oldState == NM_DEVICE_STATE_NEED_AUTH)
+                {
+                    eventType = EventType::connectionAuthFailed;
+                }
+                else if(oldState == NM_DEVICE_STATE_DEACTIVATING) 
+                {
+                    eventType = EventType::disconnected;
+                }
+                else
+                {
+                    eventType = EventType::connectionFailed;
+                }
                 break;
             case NM_DEVICE_STATE_DEACTIVATING:
             case NM_DEVICE_STATE_FAILED:
                 eventType = (reason == NM_DEVICE_STATE_REASON_NO_SECRETS) ?
                         EventType::connectionAuthFailed 
                         : EventType::disconnected;
+                break;
             case NM_DEVICE_STATE_UNKNOWN:
-            case NM_DEVICE_STATE_UNMANAGED:
-            case NM_DEVICE_STATE_UNAVAILABLE:
             default:
                 eventType = EventType::invalid;
         }
@@ -127,14 +140,26 @@ void Wifi::Signal::DeviceModule::stateChanged
         if(eventType != EventType::invalid)
         {
             Event newEvent(lastActiveAP, eventType);
+            Connection::Control::Module* connectionControl
+                    = getSiblingModule<Connection::Control::Module>();
+            if(connectionControl->tryingToConnect())
+            {
+                // Notify the Connection::Control::Module if it is opening a
+                // connection and needs to know about new connection events.
+                connectionControl->wifiEventRecorded(newEvent);
+
+                // If the event is a connection failure attempt, don't pass it
+                // to the Record::Module yet. The Control::Module gets the final
+                // say on when its connection attempts have actually failed.
+                if(eventType == EventType::connectionFailed 
+                        || eventType == EventType::connectionAuthFailed
+                        || eventType == EventType::disconnected)
+                {
+                    return;
+                }
+            }
             connectionRecord->addEventIfNotDuplicate(newEvent);
         }
-
-        // Send the update to the connection control module in case it needs it 
-        // to complete a connection attempt:
-        Connection::Control::Module* connectionController
-                = getSiblingModule<Connection::Control::Module>();
-        connectionController->signalWifiStateChange(newState, oldState, reason);
     });
 }
 
@@ -253,15 +278,6 @@ void Wifi::Signal::DeviceModule::activeConnectionChanged
                         (juce::Time::getCurrentTime().toMilliseconds());
                 apUpdateInterface->setHasSavedConnection(true);
             }
-        }
-
-        // Only add a new event if the event type and access point are valid.
-        // Do not add an event if its type and access point are identical to the
-        // last recorded event.
-        if(updateType != EventType::invalid && !connectionAP.isNull())
-        {
-            connectionRecord->addEventIfNotDuplicate(Event(connectionAP,
-                        updateType));
         }
     });
 }

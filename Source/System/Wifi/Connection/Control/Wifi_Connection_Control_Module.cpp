@@ -40,6 +40,9 @@ static const constexpr int connectionTimeout = 300000;
 /* The access point used to establish the connection: */
 static Wifi::AccessPoint connectingAP;
 
+/* The last recorded connection event: */
+static Wifi::Connection::Event lastEvent;
+
 /* Saved connection objects to try and use to connect: */
 static juce::Array<Wifi::LibNM::DBus::SavedConnection> 
         potentialSavedConnections;
@@ -118,6 +121,15 @@ WifiConnect::Control::Module::~Module()
 }
 
 /*
+ * Checks if the Control::Module is currently attempting to open a Wifi 
+ * connection.
+ */
+bool WifiConnect::Control::Module::tryingToConnect() const
+{
+    return connectionStarted;
+}
+
+/*
  * Attempts to open a Wifi network connection using a nearby access point.
  */
 void WifiConnect::Control::Module::connectToAccessPoint
@@ -174,8 +186,8 @@ void WifiConnect::Control::Module::connectToAccessPoint
     potentialNMAPs.clear();
     savedConnectionIdx = -1;
     nmAPIdx = -1;
-    connectionRecord->addConnectionEvent(Event(connectingAP,
-                EventType::connectionRequested));
+    lastEvent = Event(connectingAP, EventType::connectionRequested);
+    connectionRecord->addEventIfNotDuplicate(lastEvent);
     startTimer(connectionTimeout);
 
     nmThread->call([this, nmThread]()
@@ -224,8 +236,7 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
 
     // Make sure a clear error is visible if this method somehow gets called in
     // the wrong circumstances:
-    const Record::Module* connectionRecord 
-            = getConstSiblingModule<Record::Module>();
+    Record::Module* connectionRecord = getSiblingModule<Record::Module>();
     jassert(connectionStarted);
     jassert(!connectionActivating);
     jassert(connectionRecord->isConnecting());
@@ -237,7 +248,7 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
     // If the current LibNM AccessPoint is null or it has failed to connect with
     // either a saved connection or a new connection, advance to the next access
     // point.
-    if(potentialNMAPs[nmAPIdx].isNull() 
+    while(potentialNMAPs[nmAPIdx].isNull() 
             || savedConnectionIdx > potentialSavedConnections.size())
     {
         nmAPIdx++;
@@ -247,7 +258,34 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
             DBG(dbgPrefix << __func__ << ": all " << potentialNMAPs.size()
                     << " potential LibNM access point(s) failed, "
                     << "cancelling connection attempt.");
+            EventType lastEventType = lastEvent.getEventType();
+            if(lastEventType != EventType::connectionFailed
+                    && lastEventType != EventType::connectionAuthFailed)
+            {
+                // Treat the event as an authentication failure if the access
+                // point is secured and at least one of its NMAccessPoints is
+                // still valid.
+                lastEventType = EventType::connectionAuthFailed;
+                if(connectingAP.getSecurityType() 
+                        == LibNM::SecurityType::unsecured)
+                {
+                    lastEventType = EventType::connectionFailed;
+                }
+                else
+                {
+                    for(LibNM::AccessPoint& nmAP : potentialNMAPs)
+                    {
+                        if(!nmAP.isNull())
+                        {
+                            lastEventType = EventType::connectionFailed;
+                            break;
+                        }
+                    }
+                }
+                lastEvent = Event(connectingAP, lastEventType);
+            }
             cancelPendingConnection();
+            connectionRecord->addEventIfNotDuplicate(lastEvent);
             return;
         }
     }
@@ -380,53 +418,44 @@ void WifiConnect::Control::Module::signalWifiDisabled()
 }
 
 /*
- * Notifies the Control::Module that the Wifi device state has changed.
+ * Notifies the Control::Module when a new connection event is recorded.
  */
-void WifiConnect::Control::Module::signalWifiStateChange(
-        NMDeviceState newState,
-        NMDeviceState oldState,
-        NMDeviceStateReason reason)
+void WifiConnect::Control::Module::wifiEventRecorded(const Event newEvent)
 {
     ASSERT_NM_CONTEXT;
-    switch (newState)
+    if(newEvent == lastEvent)
     {
-        case NM_DEVICE_STATE_ACTIVATED:
-            if(connectionStarted)
-            {
-                DBG(dbgPrefix << __func__ 
-                        << ": Connection activated, clearing connection data.");
-                clearPendingConnectionData();
-            }
+        return;
+    }
+    DBG(dbgPrefix << __func__ << ": Received new event " 
+            << newEvent.toString());
+    lastEvent = newEvent;
+    if(!connectionStarted)
+    {
+        return;
+    }
+    switch(lastEvent.getEventType())
+    {
+        case EventType::connected:
+            DBG(dbgPrefix << __func__ 
+                    << ": Connection activated, clearing connection data.");
+            clearPendingConnectionData();
             return;
-        case NM_DEVICE_STATE_FAILED:
-            if(connectionStarted)
-            {
-                DBG(dbgPrefix << __func__ << ": Failed to open connection,"
-                        << " continuing connection attempt.");
-                connectionActivating = false;
-                continueConnectionAttempt();
-            }
+        case EventType::connectionAuthFailed:
+        case EventType::connectionFailed:
+            DBG(dbgPrefix << __func__ << ": Failed to open connection,"
+                    << " continuing connection attempt.");
+            connectionActivating = false;
+            continueConnectionAttempt();
             return;
-        case NM_DEVICE_STATE_UNKNOWN:
-        case NM_DEVICE_STATE_UNMANAGED:
-        case NM_DEVICE_STATE_UNAVAILABLE:
-            if(connectionStarted)
-            {
-                DBG(dbgPrefix << __func__ << ": No longer able to connect: "
-                        << deviceStateString(newState));
-                cancelPendingConnection();
-                return;
-            }
-        case NM_DEVICE_STATE_DISCONNECTED:
-        case NM_DEVICE_STATE_DEACTIVATING:
-        case NM_DEVICE_STATE_PREPARE:
-        case NM_DEVICE_STATE_CONFIG:
-        case NM_DEVICE_STATE_IP_CONFIG:
-        case NM_DEVICE_STATE_IP_CHECK:
-        case NM_DEVICE_STATE_SECONDARIES:
-        case NM_DEVICE_STATE_NEED_AUTH:
+        case EventType::connectionRequested:
+        case EventType::startedConnecting:
+        case EventType::disconnected:
             // No action needed even if a connection is in progress.
             return;
+        case EventType::invalid:
+            DBG(dbgPrefix << __func__ 
+                    << ": Received invalid connection event!");
     }
 }
 
@@ -454,7 +483,7 @@ void WifiConnect::Control::Module::openingConnection
         {
             DBG(dbgPrefix << "openingConnection"
                     << ": Recording new connection attempt.");
-            record->addConnectionEvent(Event(connectingAP, 
+            record->addEventIfNotDuplicate(Event(connectingAP, 
                         EventType::startedConnecting));
         }
     });
@@ -484,10 +513,6 @@ void WifiConnect::Control::Module::openingConnectionFailed
             juce::Array<LibNM::DBus::SavedConnection> newSavedConnections
                     = savedConnectionLoader->getMatchingConnections(
                             connectingNMAP);
-            // Check if the failed connection actually needs to be deleted here
-            jassert(newSavedConnections.size() 
-                    == potentialSavedConnections.size() + 1);
-            
             for(LibNM::DBus::SavedConnection& savedConnection 
                     : newSavedConnections)
             {
@@ -534,8 +559,8 @@ void WifiConnect::Control::Module::cancelPendingConnection()
 {
     ASSERT_NM_CONTEXT;
     DBG(dbgPrefix << __func__ << ": cancelling connection.");
-    clearPendingConnectionData();
     stopTimer();
+    clearPendingConnectionData();
 
     Record::Module* record = getSiblingModule<Record::Module>();
     if(record->isConnected())
@@ -543,9 +568,9 @@ void WifiConnect::Control::Module::cancelPendingConnection()
         DBG(dbgPrefix << "cancelPendingConnection: connection completed, "
                 << "no need to cancel.");
     }
-    else
+    else if(record->isConnecting())
     {
-        record->addConnectionEvent(Event(connectingAP,
+        record->addEventIfNotDuplicate(Event(connectingAP,
                     EventType::connectionFailed));
     }
     connectingAP = Wifi::AccessPoint();

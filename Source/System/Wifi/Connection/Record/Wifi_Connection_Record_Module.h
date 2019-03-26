@@ -77,6 +77,9 @@ public:
      * @brief  Adds a new event to the list of saved events if the most recent 
      *         saved event doesn't have the same access point and event type.
      *
+     *  For the purposes of this function, disconnect, connection failure, and
+     * authentication failure are treated as equivalent types.
+     *
      * @param newEvent  A valid connection event to add to the list. If this
      *                  parameter is null, no action will be taken.
      */

@@ -1,6 +1,7 @@
 #define WIFI_IMPLEMENTATION
 #include "Wifi_Connection_Record_Module.h"
 #include "Wifi_Connection_Record_UpdateInterface.h"
+#include "Wifi_Connection_Control_Module.h"
 #include "Wifi_Resource.h"
 #include "Wifi_APList_Module.h"
 #include "Wifi_Connection_Event.h"
@@ -124,12 +125,29 @@ void WifiRecord::Module::addEventIfNotDuplicate(const Event newEvent)
     {
         return;
     }
-    Event latestEvent = getLatestEvent();
-    if(latestEvent.getEventAP() != newEvent.getEventAP()
-            || latestEvent.getEventType() != newEvent.getEventType())
+
+    Event lastEvent = getLatestEvent();
+    if(lastEvent.getEventAP() == newEvent.getEventAP())
     {
-        addConnectionEvent(newEvent);
+        // Get an event's type, treating EventType::connectionFailed and
+        // EventType::connectionAuthFailed as equivalent to 
+        // EventType::disconnected.
+        const auto getCompEventType = [](const Event& event)
+        {
+            EventType type = event.getEventType();
+            if(type == EventType::connectionFailed
+                    || type == EventType::connectionAuthFailed)
+            {
+                return EventType::disconnected;
+            }
+            return type;
+        };
+        if(getCompEventType(newEvent) == getCompEventType(lastEvent))
+        {
+            return;
+        }
     }
+    addConnectionEvent(newEvent);
 }
 
 /*
@@ -181,7 +199,7 @@ void WifiRecord::Module::updateRecords()
                 EventType::startedConnecting : EventType::connected);
         DBG(dbgPrefix << __func__ << ": Initial event:"
                 << initialEvent.toString());
-        addConnectionEvent(initialEvent);
+        addEventIfNotDuplicate(initialEvent);
     });
 }
 

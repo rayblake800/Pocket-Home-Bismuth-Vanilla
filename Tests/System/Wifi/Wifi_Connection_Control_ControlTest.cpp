@@ -155,7 +155,6 @@ public:
         Device::Controller deviceController;
         Control::Handler connectionController;
         Record::Handler recordHandler;
-        EventWatcher connectionEventWatcher(*this);
 
         // If Wifi is connected, save the current connected AP to restore after
         // tests:
@@ -166,15 +165,21 @@ public:
             initialAPHash = initialAP.getHashValue();
             beginTest(String("Saving and disconnecting existing connection ")
                     + initialAP.toString());
-            expectEvent(EventType::disconnected, initialAP);
             connectionController.disconnect();
-            waitForAllExpected(1000);
+            /* The initial AP connection event may or may not make it through
+             * before the disconnect event, so an EventWatcher and 
+             * waitForAllExpected() aren't usable here. */
+            juce::MessageManager::getInstance()->runDispatchLoopUntil(1000);
         }
         else
         {
             // Make sure Wifi is enabled:
             deviceController.setEnabled(true);
         }
+        expect(!recordHandler.isConnected(),
+                "Failed to close existing connection.");
+        EventWatcher connectionEventWatcher(*this);
+        
         
         /* Read in test data from the test JSON file: */
         APTestData firstAP;
@@ -312,9 +317,9 @@ public:
             beginTest("Restoring original Wifi connection");
             Wifi::AccessPoint initialAP 
                     = TestUtils::Waiting::waitForAccessPoint(initialAPHash); 
-            expectEvent(EventType::connectionRequested, unsavedAP);
-            expectEvent(EventType::startedConnecting, unsavedAP);
-            expectEvent(EventType::connected, unsavedAP);
+            expectEvent(EventType::connectionRequested, initialAP);
+            expectEvent(EventType::startedConnecting, initialAP);
+            expectEvent(EventType::connected, initialAP);
             connectionController.connectToAccessPoint(initialAP);
             waitForAllExpected(15000);
         }

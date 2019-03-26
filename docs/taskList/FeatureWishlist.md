@@ -63,7 +63,7 @@
     - Saving calibration data. 
     - Changing the date and time.
 - Create custom PolKit policies for interacting with the setuid program.
-- Implement a PolKit authentication agent within the application to eliminate the dependancy on the GNOME authenticatio agent.
+- Implement a PolKit authentication agent within the application to eliminate the dependancy on the GNOME authentication agent.
 
 ### Date/Time control page:
 - Re-implement with built in controls for system time and date.

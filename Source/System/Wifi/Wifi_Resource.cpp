@@ -58,8 +58,8 @@ Wifi::Resource::Resource() : SharedResource::Modular::Resource<>(resourceKey)
     deviceTracker.reset(new Device::Module(*this));
     savedConnections.reset(new Connection::Saved::Module(*this));
     apList.reset(new APList::Module(*this));
-    connectionRecord.reset(new Connection::Record::Module(*this));
     connectionControl.reset(new Connection::Control::Module(*this));
+    connectionRecord.reset(new Connection::Record::Module(*this));
     apSignalHandler.reset(new Signal::APModule(*this));
     deviceSignalHandler.reset(new Signal::DeviceModule(*this));
     clientSignalHandler.reset(new Signal::ClientModule(*this));
@@ -73,7 +73,6 @@ Wifi::Resource::Resource() : SharedResource::Modular::Resource<>(resourceKey)
         connectionRecord->updateRecords();
         clientSignalHandler->connect();
         deviceSignalHandler->connect();
-        nmThread->getWifiDevice().requestScan();
         focusUpdater.reset(new FocusUpdater);
         DBG("Wifi::Resource::Resource: Finished initializing Wifi resources.");
     });
@@ -87,8 +86,8 @@ Wifi::Resource::~Resource()
     clientSignalHandler.reset(nullptr);
     deviceSignalHandler.reset(nullptr);
     apSignalHandler.reset(nullptr);
-    connectionControl.reset(nullptr);
     connectionRecord.reset(nullptr);
+    connectionControl.reset(nullptr);
     apList.reset(nullptr);
     savedConnections.reset(nullptr);
     deviceTracker.reset(nullptr);

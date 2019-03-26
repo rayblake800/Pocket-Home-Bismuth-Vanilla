@@ -14,7 +14,11 @@
 
 namespace Wifi 
 { 
-    namespace Connection { namespace Control { class Module; } } 
+    namespace Connection 
+    { 
+        class Event;
+        namespace Control { class Module; } 
+    } 
     class Resource;
     class AccessPoint;
     namespace LibNM
@@ -50,6 +54,14 @@ public:
      * @brief  Ensures all pending connection data is removed.
      */
     virtual ~Module();
+
+    /**
+     * @brief  Checks if the Control::Module is currently attempting to open a
+     *         Wifi connection.
+     *
+     * @return  Whether a connection attempt is in progress.
+     */
+    bool tryingToConnect() const;
 
     /**
      * @brief  Attempts to open a Wifi network connection using a nearby access
@@ -96,19 +108,18 @@ public:
     void signalWifiDisabled();
 
     /**
-     * @brief  Notifies the Control::Module that the Wifi device state has
-     *         changed.
+     * @brief  Notifies the Control::Module when a new connection event is
+     *         added.
      *
-     * @param newState  The new Wifi device state.
+     *  If this is a connection failure attempt and the Module is attempting to
+     * connect, this event will not have been sent to the Record::Module. The
+     * Control::Module is responsible for deciding when a Wifi connection 
+     * attempt has failed, passing the failure event to the Record::Module at
+     * that point.
      *
-     * @param oldState  The last state of the Wifi device before the change.
-     *
-     * @param reason    The reason for the change in state.
+     * @param newEvent  The new Wifi connection event to report.
      */
-    void signalWifiStateChange(
-            NMDeviceState newState,
-            NMDeviceState oldState,
-            NMDeviceStateReason reason);
+    void wifiEventRecorded(const Event newEvent);
 
 private:
     /**
