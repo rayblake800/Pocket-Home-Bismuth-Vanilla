@@ -64,6 +64,10 @@ struct APTestData
 
 /**
  * @brief  Tests the Wifi::Connection::Control module.
+ *
+ *   This test is far from complete, lots of unexpected results from 
+ * NetworkManager keep turning up, and differences in NetworkManager behavior
+ * between different versions are not handled appropriately.
  */
 class Wifi::Connection::Control::ControlTest : public juce::UnitTest
 {

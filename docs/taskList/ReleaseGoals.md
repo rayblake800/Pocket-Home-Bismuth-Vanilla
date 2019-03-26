@@ -1,5 +1,9 @@
 # Task list for release 0.10
 
+## Documentation
+    1. Provide basic application use instructions, including controls.
+    2. Document configuration files.
+
 ## FreeDesktop Standards/ DesktopEntry Improvements
     1. Fix problems with recreating hidden entries.
 

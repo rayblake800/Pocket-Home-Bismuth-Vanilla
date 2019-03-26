@@ -12,3 +12,7 @@
 - Changes to color values are usually not applied to components until they're reconstructed.
 - Popup windows do a poor job of formatting text to fit.
 - The file label gets cut off in file selection windows.
+
+### Wifi Module
+- Detecting when connections fail because of an invalid key/passphrase fails on desktop tests with modern versions of NetworkManager.
+- Invalid new saved connections aren't being properly deleted.
