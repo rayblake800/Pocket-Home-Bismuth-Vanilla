@@ -17,11 +17,11 @@ Assets::JSONFile::JSONFile(const juce::String filePath) : filePath(filePath)
 { 
     using juce::var;
     jsonData = Assets::loadJSONAsset(filePath);
-    if (!jsonData.isObject())
+    if(!jsonData.isObject())
     {
         jsonData = var(); 
         juce::File sourceFile = Assets::findAssetFile(filePath);
-        if (sourceFile.existsAsFile())
+        if(sourceFile.existsAsFile())
         {
             if (sourceFile.getSize() > 0)
             {
@@ -31,13 +31,27 @@ Assets::JSONFile::JSONFile(const juce::String filePath) : filePath(filePath)
         else
         {
             juce::Result createFile = sourceFile.create();
-            if (!createFile)
+            if(!createFile)
             {
                 throw FileException(filePath, createFile.getErrorMessage());
             }
         }
         jsonData = var(new juce::DynamicObject());
     }
+}
+
+/*
+ * Constructs the JSONFile object with no actual file.
+ */
+Assets::JSONFile::JSONFile() { }
+
+/*
+ * Checks if this object has a valid JSON file it controls.
+ */
+bool Assets::JSONFile::isValidFile() const
+{
+    juce::File sourceFile = Assets::findAssetFile(filePath);
+    return sourceFile.existsAsFile() && sourceFile.getSize() > 0;
 }
 
 /*

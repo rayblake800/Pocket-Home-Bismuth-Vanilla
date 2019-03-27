@@ -50,6 +50,18 @@ public:
      *                        created.
      */
     JSONFile(const juce::String filePath);
+
+    /**
+     * @brief  Constructs the JSONFile object with no actual file.
+     */
+    JSONFile();
+
+    /**
+     * @brief  Checks if this object has a valid JSON file it controls.
+     *
+     * @return  Whether the object is managing a valid file.
+     */
+    bool isValidFile() const;
     
     /**
      * @brief  Saves all changes back to the source file if applicable.
@@ -125,7 +137,7 @@ public:
      * 
      * @return     Whether a value of type T exists at the given key.
      */
-    template<typename T> bool propertyExists(const juce::Identifier& key)
+    template<typename T> bool propertyExists(const juce::Identifier& key) const
     {
         using juce::var;
         if(jsonData.isVoid())

@@ -14,8 +14,11 @@ static const juce::Identifier scriptDirKey("POCKET_HOME_SCRIPTS");
 /* SharedResource object key */
 static const juce::Identifier jsonResourceKey("Util::CommandJSON");
 
-/* JSON resource file name */
-static const juce::String filename("commands.json");
+/* Default JSON command file name */
+static const juce::String defaultFilename("commands.json");
+
+/* Replacement JSON command file name */
+static const juce::String overrideFilename("overrideCommands.json");
 
 /**
  * @brief Gets the Identifier key used to store an action command.
@@ -110,7 +113,7 @@ static const juce::Identifier& intCommandKey
             return setPasswordKey;
         }
     }
-    DBG(dbgPrefix << __func__ << ":Error, unhandled command type!");
+    DBG(dbgPrefix << __func__ << ": Error, unhandled command type!");
     jassertfalse;
     return juce::Identifier::null;
 }
@@ -147,36 +150,75 @@ static const juce::Identifier& textCommandKey
             return getBrightnessKey;
         }
     }
-    DBG(dbgPrefix << __func__ << ":Error, unhandled command type!");
+    DBG(dbgPrefix << __func__ << ": Error, unhandled command type!");
     jassertfalse;
     return juce::Identifier::null;
 }
 
 
 /* Private SharedResource class: */
-class Util::CommandJSON : public SharedResource::Resource, 
-        public Assets::JSONFile
+class Util::CommandJSON : public SharedResource::Resource
 {
 private:
     /* Pocket-Home script directory path: */
     juce::String scriptDir;
 
+    /* JSON file storing default command definitions: */
+    Assets::JSONFile defaultCommands;
+
+    /* Alternate JSON file storing replacement command definitions: */
+    Assets::JSONFile overrideCommands;
+
 public:
     friend class Commands;
 
     CommandJSON() : SharedResource::Resource(jsonResourceKey), 
-    Assets::JSONFile(filename),
-    scriptDir(getProperty<juce::String>(scriptDirKey))
+    overrideCommands(overrideFilename),
+    defaultCommands(defaultFilename)
     {
-        if(!juce::File(scriptDir).exists())
+        scriptDir = getCommandString(scriptDirKey);
+        if(scriptDir.isEmpty())
         {
-            DBG("Util::CommandJSON::" << __func__ << ": " << scriptDir <<
+            DBG(dbgPrefix << __func__ << ": " << scriptDir <<
                     " is not a valid script directory.");
-            scriptDir = juce::String();
         }
     }
 
     virtual ~CommandJSON() { }
+
+    /**
+     * @brief  Gets a command from a command file, using override commands
+     *         before default commands if possible.
+     *
+     * @param key  The key to a system command.
+     *
+     * @return     The corresponding command string, or the empty string if the
+     *             command isn't found.
+     */
+    juce::String getCommandString(const juce::Identifier& key)const
+    {
+        using juce::String;
+        String command;
+        if(overrideCommands.isValidFile())
+        {
+            command = overrideCommands.getProperty<String>(key);
+        }
+        if(command.isEmpty())
+        {
+            command = defaultCommands.getProperty<String>(key);
+        }
+        if(command.isNotEmpty())
+        {
+            String dirKeyString = scriptDirKey.toString();
+            int index = command.indexOf(dirKeyString);
+            if(index != -1)
+            {
+                command = command.substring(0, index) + scriptDir
+                    + command.substring(index + dirKeyString.length());
+            }
+        }
+        return command;
+    }
 };
 
 Util::Commands::Commands() :
@@ -236,7 +278,7 @@ juce::String Util::Commands::getCommandString
 {   
     using juce::String;
     SharedResource::LockedPtr<const CommandJSON> json = getReadLockedResource();
-    juce::String command = json->getProperty<String>(commandKey); 
+    juce::String command = json->getCommandString(commandKey);
     if(command.isEmpty())
     {
         DBG(dbgPrefix << __func__ << ": No command defined for key "

@@ -25,7 +25,17 @@ namespace Util
  *  All system commands are defined in the commands.json file in the pocket-home
  * data directory. This file is stored as read-only rather than as a ConfigFile
  * because these commands should be kept secure and do not need to be changed
- * during execution.
+ * during execution. 
+ *
+ *  All system commands are sorted into three categories. ActionCommands execute 
+ * asynchronously, and return no data. IntCommands return the command process 
+ * exit code. TextCommands return all text output by the command process.  
+ * TextCommands must always exit returning 0, or their text output will be 
+ * lost. The distinction between TextCommands and IntCommands only exists
+ * because JUCE ChildProcess objects cannot return their text output if they
+ * finish with a nonzero exit code. These types should be merged into a single
+ * type after adding a way to get text output from processes that exit 
+ * irregularly.
  *
  *  Command definitions should include a single executable name plus an optional
  * object list. If more complex shell commands are needed, they should be 
@@ -35,11 +45,13 @@ namespace Util
  * that contains the literal string POCKET_HOME_SCRIPTS will have that string
  * replaced with the correct script directory path.
  *
- *  All system commands are sorted into three categories. ActionCommands execute 
- * asynchronously, and return no data. IntCommands return the command process 
- * exit code. TextCommands return all text output by the command process.  
- * TextCommands must always exit returning 0, or their text output will be 
- * lost.
+ *  To override the default commands, create a file called overrideCommands.json
+ * and define any replacement commands there using the same keys as 
+ * commands.json. This file should be placed in the pocket-home data directory. 
+ * Commands defined in this file will take precedence over ones in the default
+ * commands.json file. The overrideCommands.json file will not be altered or
+ * removed when this application updates, even if the default command file is
+ * updated.
  */
 class Util::Commands : public SharedResource::Handler<CommandJSON>
 {
