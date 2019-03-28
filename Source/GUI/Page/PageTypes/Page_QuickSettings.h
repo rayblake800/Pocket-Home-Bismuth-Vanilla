@@ -7,6 +7,7 @@
  */
 
 #include "Page_Component.h"
+#include "Info_IPLabel.h"
 #include "Settings_BrightnessSlider.h"
 #include "Settings_VolumeSlider.h"
 #include "Theme_Image_Component.h"
@@ -59,6 +60,9 @@ private:
         QuickSettings& settingsPage;
     };
     PageListener pageListener;
+
+    /* Optional IP address label component: */
+    std::unique_ptr<Info::IPLabel> ipLabel;
 
 #ifdef WIFI_SUPPORTED
     /* Turns wifi on or off, shows connection state, and opens the wifi page. */
