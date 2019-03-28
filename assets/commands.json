@@ -15,5 +15,8 @@
     
     "get volume"          : "POCKET_HOME_SCRIPTS/printVolume.sh",
     "get battery percent" : "",
-    "get brightness"      : "cat /sys/class/backlight/backlight/brightness"
+    "get brightness"      : "cat /sys/class/backlight/backlight/brightness",
+
+    "get local IP"        : "POCKET_HOME_SCRIPTS/printLocalIP.sh",
+    "get public IP"       : "POCKET_HOME_SCRIPTS/printPublicIP.sh"
 }

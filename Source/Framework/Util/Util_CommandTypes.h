@@ -57,7 +57,11 @@ namespace Util
             /* Gets the battery percentage */
             getBatteryPercent,
             /* Gets the display brightness percentage */
-            getBrightness
+            getBrightness,
+            /* Prints the system's local IP address */
+            getLocalIP,
+            /* Prints the system's public IP address */
+            getPublicIP
         };
     }
 }

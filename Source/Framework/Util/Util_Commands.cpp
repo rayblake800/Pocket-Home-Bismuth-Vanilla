@@ -149,6 +149,16 @@ static const juce::Identifier& textCommandKey
             static const juce::Identifier getBrightnessKey("get brightness");
             return getBrightnessKey;
         }
+        case TextCommand::getLocalIP:
+        {
+            static const juce::Identifier localIPKey("get local IP");
+            return localIPKey;
+        }
+        case TextCommand::getPublicIP:
+        {
+            static const juce::Identifier publicIPKey("get public IP");
+            return publicIPKey;
+        }
     }
     DBG(dbgPrefix << __func__ << ": Error, unhandled command type!");
     jassertfalse;
