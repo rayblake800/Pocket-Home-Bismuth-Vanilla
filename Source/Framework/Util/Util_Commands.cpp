@@ -205,15 +205,17 @@ public:
      * @return     The corresponding command string, or the empty string if the
      *             command isn't found.
      */
-    juce::String getCommandString(const juce::Identifier& key)const
+    juce::String getCommandString(const juce::Identifier& key) const
     {
         using juce::String;
         String command;
-        if(overrideCommands.isValidFile())
+        if(overrideCommands.isValidFile()
+                && overrideCommands.propertyExists<String>(key))
         {
             command = overrideCommands.getProperty<String>(key);
         }
-        if(command.isEmpty())
+        if(command.isEmpty() && defaultCommands.isValidFile()
+                && defaultCommands.propertyExists<String>(key))
         {
             command = defaultCommands.getProperty<String>(key);
         }
@@ -277,7 +279,7 @@ juce::String Util::Commands::runTextCommand
     }
     Process::Launched commandProcess(command);
     commandProcess.waitForProcessToFinish();
-    return commandProcess.getProcessOutput();
+    return commandProcess.getProcessOutput().trim();
 }
 
 /*
