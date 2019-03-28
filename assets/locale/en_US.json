@@ -62,6 +62,11 @@
         "checkPermissions" : "Make sure you have permission to write to this file.",
         "saveError"        : "Error saving configuration:"
     },
+    "Info::IPLabel":
+    {
+        "localIP"  : "Local IP: ",
+        "publicIP" : "Public IP: "
+    },
     "Locale::Time":
     {
 	    "never"          : "never",
