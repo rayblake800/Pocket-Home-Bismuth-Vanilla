@@ -8,7 +8,7 @@
 #include "Widgets_BoundedLabel.h"
 #include "Locale_TextUser.h"
 #include "Util_Commands.h"
-#ifdef WIFI_SUPPORT
+#ifdef WIFI_SUPPORTED
 #include "Wifi_Connection_Record_Listener.h"
 #endif
 
@@ -26,7 +26,7 @@ namespace Info { class IPLabel; }
  * set in the config.json file, accessed through Config::MainFile.
  */
 class Info::IPLabel : public Locale::TextUser,
-#ifdef WIFI_SUPPORT
+#ifdef WIFI_SUPPORTED
     public Wifi::Connection::Record::Listener,
 #endif
     public Widgets::BoundedLabel
@@ -51,14 +51,14 @@ private:
      */
     virtual void visibilityChanged() override;
 
-#ifdef WIFI_SUPPORT
+#ifdef WIFI_SUPPORTED
     /**
      * @brief  Updates the label text whenever a new network connection becomes
      *         active.
      *
      * @param connectedAP  The access point used to create the new connection.
      */
-    virtual void connected(const AccessPoint connectedAP) override;
+    virtual void connected(const Wifi::AccessPoint connectedAP) override;
 
     /**
      * @brief  Updates the label text whenever the active network connection is
@@ -67,7 +67,7 @@ private:
      * @param connectedAP  The access point used by the former active 
      *                     connection.
      */
-    virtual void disconnected(const AccessPoint connectedAP) override;
+    virtual void disconnected(const Wifi::AccessPoint connectedAP) override;
 #endif
 
     /* Runs system commands and ensures the system command resource remains

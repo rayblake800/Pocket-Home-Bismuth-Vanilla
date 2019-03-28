@@ -3,6 +3,11 @@
 #include "Wifi_AccessPoint.h"
 #include "Util_Commands.h"
 
+#ifdef JUCE_DEBUG
+/* Print the full class name before all debug output: */
+static const constexpr char* dbgPrefix = "Info::IPLabel::";
+#endif
+
 /* Localized text class key: */
 static const juce::Identifier localeClassKey = "Info::IPLabel";
 
@@ -65,12 +70,13 @@ void Info::IPLabel::visibilityChanged()
     }
 }
 
-#ifdef WIFI_SUPPORT
+#ifdef WIFI_SUPPORTED
 /*
  * Updates the label text whenever a new network connection becomes active.
  */
 void Info::IPLabel::connected(const Wifi::AccessPoint connectedAP)
 {
+    DBG(dbgPrefix << __func__ << ": Connection opened, updating label text.");
     updateLabelText();
 }
 
@@ -79,6 +85,7 @@ void Info::IPLabel::connected(const Wifi::AccessPoint connectedAP)
  */
 void Info::IPLabel::disconnected(const Wifi::AccessPoint connectedAP)
 {
+    DBG(dbgPrefix << __func__ << ": Connection closed, updating label text.");
     updateLabelText();
 }
 #endif
