@@ -75,6 +75,37 @@ public:
     bool get24HourEnabled() const;
 
     /**
+     * @brief  Checks if an IPLabel should be shown on the HomePage.
+     *
+     * @return   Whether the HomePage will include an Info::IPLabel component.
+     */
+    bool getIPLabelOnHomePage() const;
+
+    /**
+     * @brief  Checks if an IPLabel should be shown on the quick settings page.
+     *
+     * @return   Whether Page::QuickSettings will include an Info::IPLabel 
+     *           component.
+     */
+    bool getIPLabelOnSettingsPage() const;
+
+    /**
+     * @brief  Checks if the IPLabel should print the local IP address.
+     *
+     * @return  Whether the IPLabel prints the system's address on the local
+     *          network.
+     */
+    bool getIPLabelPrintsLocal() const;
+
+    /**
+     * @brief  Checks if the IPLabel should print the public IP address.
+     *
+     * @return  Whether the IPLabel prints the system's public IP address used
+     *          outside the local network.
+     */
+    bool getIPLabelPrintsPublic() const;
+
+    /**
      * @brief  Sets if the mouse cursor is shown or hidden.
      *
      * @param showCursor  Whether the mouse cursor will be shown.

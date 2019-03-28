@@ -10,7 +10,7 @@ Config::MainFile::MainFile() { }
  */
 int Config::MainFile::getWifiScanFrequency() const
 {
-    return getConfigValue<int>(MainKeys::wifiScanFreqKey);
+    return getConfigValue<int>(MainKeys::wifiScanFreq);
 }
 
 /*
@@ -19,7 +19,7 @@ int Config::MainFile::getWifiScanFrequency() const
  */
 juce::String Config::MainFile::getTermLaunchPrefix() const
 {
-    return getConfigValue<juce::String>(MainKeys::termLaunchCommandKey);
+    return getConfigValue<juce::String>(MainKeys::termLaunchCommand);
 }
 
 /*
@@ -27,7 +27,7 @@ juce::String Config::MainFile::getTermLaunchPrefix() const
  */
 juce::String Config::MainFile::getWifiInterface() const
 {
-    return getConfigValue<juce::String>(MainKeys::wifiInterfaceKey);
+    return getConfigValue<juce::String>(MainKeys::wifiInterface);
 }
 
 /*
@@ -35,7 +35,7 @@ juce::String Config::MainFile::getWifiInterface() const
  */
 bool Config::MainFile::getShowCursor() const
 {
-    return getConfigValue<bool>(MainKeys::showCursorKey);
+    return getConfigValue<bool>(MainKeys::showCursor);
 }
 
 /*
@@ -43,7 +43,7 @@ bool Config::MainFile::getShowCursor() const
  */
 bool Config::MainFile::getShowClock() const
 {
-    return getConfigValue<bool>(MainKeys::showClockKey);
+    return getConfigValue<bool>(MainKeys::showClock);
 }
 
 /*
@@ -52,7 +52,39 @@ bool Config::MainFile::getShowClock() const
  */
 bool Config::MainFile::get24HourEnabled() const
 {
-    return getConfigValue<bool>(MainKeys::use24HrModeKey);
+    return getConfigValue<bool>(MainKeys::use24HrMode);
+}
+
+/*
+ * Checks if an IPLabel should be shown on the HomePage.
+ */
+bool Config::MainFile::getIPLabelOnHomePage() const
+{
+    return getConfigValue<bool>(MainKeys::showIPOnHome);
+}
+
+/*
+ * Checks if an IPLabel should be shown on the quick settings page.
+ */
+bool Config::MainFile::getIPLabelOnSettingsPage() const
+{
+    return getConfigValue<bool>(MainKeys::showIPOnSettings);
+}
+
+/*
+ * Checks if the IPLabel should print the local IP address.
+ */
+bool Config::MainFile::getIPLabelPrintsLocal() const
+{
+    return getConfigValue<bool>(MainKeys::printLocalIP);
+}
+
+/*
+ * Checks if the IPLabel should print the public IP address.
+ */
+bool Config::MainFile::getIPLabelPrintsPublic() const
+{
+    return getConfigValue<bool>(MainKeys::printPublicIP);
 }
 
 /*
@@ -60,7 +92,7 @@ bool Config::MainFile::get24HourEnabled() const
  */
 void Config::MainFile::setShowCursor(const bool showCursor)
 {
-    setConfigValue<bool>(MainKeys::showCursorKey, showCursor);
+    setConfigValue<bool>(MainKeys::showCursor, showCursor);
 }
 
 /*
@@ -68,7 +100,7 @@ void Config::MainFile::setShowCursor(const bool showCursor)
  */
 void Config::MainFile::setShowClock(const bool showClock)
 {
-    setConfigValue<bool>(MainKeys::showClockKey, showClock);
+    setConfigValue<bool>(MainKeys::showClock, showClock);
 }
 
 /*
@@ -76,5 +108,5 @@ void Config::MainFile::setShowClock(const bool showClock)
  */
 void Config::MainFile::set24HourEnabled(const bool use24HourMode)
 {
-    setConfigValue<bool>(MainKeys::use24HrModeKey, use24HourMode);
+    setConfigValue<bool>(MainKeys::use24HrMode, use24HourMode);
 }

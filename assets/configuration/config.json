@@ -4,5 +4,9 @@
     "Wifi interface" : "",
     "cursor": true,
     "use 24h mode": true,
-    "show clock": true
+    "show clock": true,
+    "use IP label on home page": false,
+    "use IP label on settings page": true,
+    "IPLabel prints local IP": true,
+    "IPLabel prints public IP": false
 }

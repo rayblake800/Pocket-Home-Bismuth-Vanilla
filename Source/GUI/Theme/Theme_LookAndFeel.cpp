@@ -305,7 +305,7 @@ juce::Font Theme::LookAndFeel::getAlertWindowMessageFont()
 Theme::LookAndFeel::MainListener::MainListener(Theme::LookAndFeel& owner) :
 owner(owner)
 {
-    addTrackedKey(Config::MainKeys::showCursorKey);
+    addTrackedKey(Config::MainKeys::showCursor);
 }
 
 /*
@@ -315,7 +315,7 @@ void Theme::LookAndFeel::MainListener::configValueChanged
 (const juce::Identifier& key)
 {
     using juce::MouseCursor;
-    if (key == Config::MainKeys::showCursorKey)
+    if (key == Config::MainKeys::showCursor)
     {
         Config::MainFile config;
         owner.cursor = (config.getShowCursor() ?

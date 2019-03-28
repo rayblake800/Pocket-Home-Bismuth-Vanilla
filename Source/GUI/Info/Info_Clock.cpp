@@ -12,8 +12,8 @@ Info::Clock::Clock() : juce::Label("Info::Clock", "")
 #if JUCE_DEBUG
     setName("Info::Clock");
 #endif
-    addTrackedKey(Config::MainKeys::use24HrModeKey);
-    addTrackedKey(Config::MainKeys::showClockKey);
+    addTrackedKey(Config::MainKeys::use24HrMode);
+    addTrackedKey(Config::MainKeys::showClock);
     setJustificationType(juce::Justification::centredRight);
     setColour(juce::Label::textColourId, findColour(textColourId));
     loadAllConfigProperties();
@@ -91,7 +91,7 @@ void Info::Clock::visibilityChanged()
 void Info::Clock::configValueChanged(const juce::Identifier& key)
 {
     Config::MainFile config;
-    if (key == Config::MainKeys::showClockKey)
+    if (key == Config::MainKeys::showClock)
     {
         showClock = config.getShowClock();
         juce::MessageManager::callAsync([this]
@@ -107,7 +107,7 @@ void Info::Clock::configValueChanged(const juce::Identifier& key)
             }
         });
     }
-    else if (key == Config::MainKeys::use24HrModeKey)
+    else if (key == Config::MainKeys::use24HrMode)
     {
         use24HrMode = config.get24HourEnabled();
         updateTime();
