@@ -110,3 +110,19 @@ void Config::MainFile::set24HourEnabled(const bool use24HourMode)
 {
     setConfigValue<bool>(MainKeys::use24HrMode, use24HourMode);
 }
+
+/*
+ * Sets if the IPLabel should print the local IP address.
+ */
+void Config::MainFile::setIPLabelPrintsLocal(const bool printLocal)
+{
+    setConfigValue<bool>(MainKeys::printLocalIP, printLocal);
+}
+
+/*
+ * Sets if the IPLabel should print the public IP address.
+ */
+void Config::MainFile::setIPLabelPrintsPublic(const bool printPublic)
+{
+    setConfigValue<bool>(MainKeys::printPublicIP, printPublic);
+}

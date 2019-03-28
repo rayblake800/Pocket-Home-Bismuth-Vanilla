@@ -128,10 +128,18 @@ public:
     void set24HourEnabled(const bool use24HourMode);
 
     /**
-     * @brief  Sets the background used by the HomePage component.
+     * @brief  Sets if the IPLabel should print the local IP address.
      *
-     * @param background  The image asset name or hex color value to use as the
-     *                    HomePage background.
+     * @param printLocal  Whether the IPLabel should print the system's local
+     *                    network address 
      */
-    void setHomeBackground(const juce::String background);
+    void setIPLabelPrintsLocal(const bool printLocal);
+
+    /**
+     * @brief  Sets if the IPLabel should print the public IP address.
+     *
+     * @param printPublic  Whether the IPLabel should print the system's public 
+     *                     IP address used outside the local network.
+     */
+    void setIPLabelPrintsPublic(const bool printPublic);
 };
