@@ -5,6 +5,7 @@
 #include "AppMenu.h"
 #include "AppMenu_ConfigFile.h"
 #include "Page_Type.h"
+#include "Config_MainFile.h"
 
 /*
  * Initializes all page components and creates the AppMenu.
@@ -37,6 +38,15 @@ settingsButton(Theme::Image::JSONKeys::settingsButton)
     layoutManagers.add(Manager(&wifiIcon, JSONKeys::wifiIcon));
     addAndMakeVisible(wifiIcon);
 #endif
+
+    Config::MainFile mainConfig;
+    if(mainConfig.getIPLabelOnHomePage())
+    {
+        ipLabel.reset(new Info::IPLabel);
+        layoutManagers.add(Manager(ipLabel.get(), JSONKeys::homeIPLabel));
+        addAndMakeVisible(ipLabel.get());
+        ipLabel->setJustificationType(juce::Justification::centred);
+    }
 
 
     powerButton.addListener(&pageListener);

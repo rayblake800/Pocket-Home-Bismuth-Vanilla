@@ -32,6 +32,8 @@ static const juce::Identifier batteryPercent
         ("battery percent text");
 static const juce::Identifier clockLabel
         ("time");
+static const juce::Identifier homeIPLabel
+        ("HomePage IPLabel");
 static const juce::Identifier wifiIcon
         ("wifi");
 static const juce::Identifier powerButton
@@ -68,6 +70,7 @@ static const juce::Array<juce::Identifier> components =
     batteryIcon,
     batteryPercent,
     clockLabel,
+    homeIPLabel,
     wifiIcon,
     powerButton,
     settingsButton,

@@ -15,6 +15,7 @@
 #include "Widgets_DrawableImageButton.h"
 #include "Info_Clock.h"
 #include "Info_BatteryIcon.h"
+#include "Info_IPLabel.h"
 #include "Layout_Component_Manager.h"
 #include "Util_Commands.h"
 #include "AppMenu.h"
@@ -97,6 +98,9 @@ private:
     
     /* Displays the time: */
     Info::Clock clock;
+
+    /* Optional system IP address label: */
+    std::unique_ptr<Info::IPLabel> ipLabel;
    
     /* The application menu. This is automatically updated whenever the menu 
        type preference changes in MainConfigFile. */

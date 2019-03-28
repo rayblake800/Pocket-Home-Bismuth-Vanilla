@@ -49,6 +49,12 @@
         "width": 0.15,
         "height": 0.075
     },
+    "HomePage IPLabel": {
+        "x": 0.74,
+        "y": 0.018,
+        "width": 1.0,
+        "height": 0.075
+    },
     "wifi": {
         "x": 0.91,
         "y": 0.01,
