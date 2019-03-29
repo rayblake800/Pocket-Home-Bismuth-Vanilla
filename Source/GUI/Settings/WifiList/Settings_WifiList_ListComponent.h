@@ -11,6 +11,7 @@
 #include "Wifi_APList_Listener.h"
 #include "Wifi_Connection_Record_Listener.h"
 #include "Settings_WifiList_ControlComponent.h"
+#include "Util_ConditionChecker.h"
 #include "Windows_FocusedTimer.h"
 
 namespace Settings { namespace WifiList { class ListComponent; } }
@@ -170,6 +171,9 @@ private:
 
     /* Selected connection control component to reuse: */
     ControlComponent controlComponent;
+
+    /* Postpones list updates when list items are animating. */
+    Util::ConditionChecker animationCheck;
 
     /**
      * @brief  Runs periodic Wifi access point scans for as long as the list

@@ -8,6 +8,7 @@
 #include "Wifi_APList_Reader.h"
 #include "Config_MainFile.h"
 #include "Layout_Component_ConfigFile.h"
+#include "Layout_Transition_Animator.h"
 #include "Wifi_LibNM_SecurityType.h"
 #include "Locale_Time.h"
 
@@ -19,6 +20,9 @@ static const constexpr char* dbgPrefix
 
 /* Animation duration in milliseconds: */
 static const constexpr int animationDuration = 300;
+
+/* Maximum time to wait for list items to finish animating: */
+static const constexpr int animationTimeout = animationDuration * 5;
 
 /* Anonymous comparator class object for Wifi access point array sorting. */
 static class
@@ -77,6 +81,7 @@ Settings::WifiList::ListComponent::ListComponent()
 #if JUCE_DEBUG
     setName("Settings::WifiList::ListComponent");
 #endif
+    animationCheck.setCheckInterval(animationDuration);
     loadAccessPoints();
 }
 
@@ -158,16 +163,34 @@ void Settings::WifiList::ListComponent::loadAccessPoints()
  */
 void Settings::WifiList::ListComponent::updateListItems(const bool animate)
 {
-    //DBG(dbgPrefix << __func__ << ": Refreshing list items.");
-    if(animate)
+    // Ensure list items are finished animating before updating the list:
+    animationCheck.startCheck([this]()
     {
-        refreshListContent(Layout::Transition::Type::toDestination,
-                animationDuration);
-    }
-    else
+        for(juce::Component* child : getChildren())
+        {
+            if(Layout::Transition::Animator::isAnimating(child))
+            {
+                return false;
+            }
+        }
+        return true;
+    },
+    [this, animate]()
     {
-        refreshListContent();
-    }
+        if(animate)
+        {
+            refreshListContent(Layout::Transition::Type::moveLeft,
+                    animationDuration, false);
+        }
+        else
+        {
+            refreshListContent();
+        }
+    }, animationTimeout,
+    []()
+    {
+        DBG(dbgPrefix << "updateListItems: timed out while waiting to update!");
+    });
 }
 
 /*
