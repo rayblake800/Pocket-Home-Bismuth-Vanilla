@@ -39,7 +39,7 @@ bool isAnimating(juce::Component* possiblyAnimating);
  * @brief  Moves one set of components off-window, while moving another set of 
  *         components on-window, animating the transition.  
  *
- * Any component that is in both sets will appear to move off-window while a
+ *  Any component that is in both sets will appear to move off-window while a
  * duplicate component moves on-window simultaneously.
  * 
  * @param movingOut              An array of all components that will move off 
@@ -93,7 +93,7 @@ void transitionOut(
     const bool useProxy = false);
 
 /**
- * Moves a component into the window bounds, animating the transition.
+ * @brief  Moves a component into the window bounds, animating the transition.
  * 
  * @param component              A component to move onto the window. Before
  *                               animating, it will be re-positioned outside the
@@ -118,7 +118,7 @@ void transitionIn(juce::Component* component,
     const unsigned int animationMilliseconds);
 
 /**
- * Updates a component's bounds, animating the transformation.
+ * @brief  Updates a component's bounds, animating the transformation.
  * 
  * @param component              The component being transformed.
  * 

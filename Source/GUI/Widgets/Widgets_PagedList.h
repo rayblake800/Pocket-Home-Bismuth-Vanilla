@@ -127,15 +127,22 @@ protected:
      * @brief  Reloads list content, running updateListItem for each visible
      *         list item.
      * 
-     * @param transition  Optional transition animation to apply when updating
-     *                    list content.
+     * @param transition      Optional transition animation to apply when 
+     *                        updating list content.
      * 
-     * @param duration    Duration in milliseconds to run transition animations.
+     * @param duration        Duration in milliseconds to run transition 
+     *                        animations.
+     *
+     * @param animateUnmoved  Whether transition animations should be applied to
+     *                        list items when their bounds are not updated. By 
+     *                        default, transition animations are applied to all 
+     *                        list items.
      */
     void refreshListContent(
             const Layout::Transition::Type transition
                     = Layout::Transition::Type::none, 
-            const unsigned int duration = 0);
+            const unsigned int duration = 0,
+            const bool animateUnmoved = true);
         
     /**
      * @brief  Updates the list page navigation button visibility.

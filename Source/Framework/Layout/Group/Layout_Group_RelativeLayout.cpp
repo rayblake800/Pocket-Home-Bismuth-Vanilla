@@ -2,120 +2,7 @@
 
 namespace GroupLayout = Layout::Group;
 
-//####################### GroupLayout::RowItem ###############################   
-/*
- * Gets the component assigned to this RowItem. 
- */
-juce::Component* GroupLayout::RowItem::getComponent() const
-{
-    return component;
-}
-
-/*
- * Gets the horizontal weight value assigned to this RowItem.
- */
-unsigned int GroupLayout::RowItem::getWeight()const
-{
-    return weight;
-}
-
-/*
- * Checks if this row item represents an empty space.
- */
-bool GroupLayout::RowItem::isEmpty() const
-{
-    return component == nullptr;
-}
- 
-/*
- * Checks if this RowItem and another are equivalent. RowItems are 
- * equivalent if they have the same weight and Component.
- */
-bool GroupLayout::RowItem::operator==(const GroupLayout::RowItem& rhs) const
-{
-    return component == rhs.component && weight == rhs.weight;
-}
-
-/*
- * Checks if this RowItem and another are not equivalent.
- */
-bool GroupLayout::RowItem::operator!=(const GroupLayout::RowItem& rhs) const
-{
-    return !(*this == rhs);
-}
-
-//######################### GroupLayout::Row #################################
-
-/*
- * Adds a new RowItem to the end of this row.
- */
-void GroupLayout::Row::addRowItem(const GroupLayout::RowItem rowItem)
-{
-    rowItems.push_back(rowItem);
-}
-
-/*
- * Gets the number of rowItems in the row.
- */
-unsigned int GroupLayout::Row::itemCount() const
-{
-    return rowItems.size();
-}
-
-/*
- * Checks if this row is empty.
- */
-bool GroupLayout::Row::isEmpty() const
-{
-    return rowItems.empty();
-}
-
-/*
- * Gets a RowItem from the row.
- */
-const GroupLayout::RowItem& GroupLayout::Row::getRowItem
-(const unsigned int index) const
-{
-    return rowItems.at(index);
-}
-
-/*
- * Gets the weight assigned to this row.
- */
-unsigned int GroupLayout::Row::getWeight() const
-{
-    return weight;
-}
-
-/*
- * Checks if this Row and another Row are equivalent.
- */
-bool GroupLayout::Row::operator==(const GroupLayout::Row& rhs) const
-{
-    if(weight != rhs.weight 
-            || rowItems.size() != rhs.rowItems.size())
-    {
-        return false;
-    }
-    for(int i = 0; i < rowItems.size(); i++)
-    {
-        if(rowItems[i] != rhs.rowItems[i])
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-/*
- * Checks if this Row and another Row are not equivalent.
- */
-bool GroupLayout::Row::operator !=(const GroupLayout::Row& rhs) const
-{
-    return !(*this == rhs);
-}
-
-//#################### GroupLayout::GroupLayout #############################
+//#################### GroupLayout::RelativeLayout #############################
 
 /*
  * Sets the size of the top and bottom margins of the layout using a weight 
@@ -362,6 +249,186 @@ bool GroupLayout::RelativeLayout::operator==(const RelativeLayout& rhs) const
  * Checks if this layout and another are not equivalent.
  */
 bool GroupLayout::RelativeLayout::operator!=(const RelativeLayout& rhs) const
+{
+    return !(*this == rhs);
+}
+
+/*
+ * Gets an iterator pointing to the first row in the layout.
+ */
+GroupLayout::RelativeLayout::iterator 
+GroupLayout::RelativeLayout::begin()
+{
+    return rows.begin();
+}
+
+/*
+ * Gets an iterator pointing just after the last row in the layout.
+ */
+GroupLayout::RelativeLayout::iterator GroupLayout::RelativeLayout::end()
+{
+    return rows.end();
+}
+
+/*
+ * Gets a const iterator pointing to the first row in the layout.
+ */
+GroupLayout::RelativeLayout::const_iterator 
+GroupLayout::RelativeLayout::begin() const
+{
+    return rows.begin();
+}
+
+/*
+ * Gets a const iterator pointing just after the last row in the layout.
+ */
+GroupLayout::RelativeLayout::const_iterator 
+GroupLayout::RelativeLayout::end() const
+{
+    return rows.end();
+}
+
+//######################### GroupLayout::Row #################################
+
+/*
+ * Adds a new RowItem to the end of this row.
+ */
+void GroupLayout::Row::addRowItem(const GroupLayout::RowItem rowItem)
+{
+    rowItems.push_back(rowItem);
+}
+
+/*
+ * Gets the number of rowItems in the row.
+ */
+unsigned int GroupLayout::Row::itemCount() const
+{
+    return rowItems.size();
+}
+
+/*
+ * Checks if this row is empty.
+ */
+bool GroupLayout::Row::isEmpty() const
+{
+    return rowItems.empty();
+}
+
+/*
+ * Gets a RowItem from the row.
+ */
+const GroupLayout::RowItem& GroupLayout::Row::getRowItem
+(const unsigned int index) const
+{
+    return rowItems.at(index);
+}
+
+/*
+ * Gets the weight assigned to this row.
+ */
+unsigned int GroupLayout::Row::getWeight() const
+{
+    return weight;
+}
+
+/*
+ * Checks if this Row and another Row are equivalent.
+ */
+bool GroupLayout::Row::operator==(const GroupLayout::Row& rhs) const
+{
+    if(weight != rhs.weight 
+            || rowItems.size() != rhs.rowItems.size())
+    {
+        return false;
+    }
+    for(int i = 0; i < rowItems.size(); i++)
+    {
+        if(rowItems[i] != rhs.rowItems[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+/*
+ * Checks if this Row and another Row are not equivalent.
+ */
+bool GroupLayout::Row::operator !=(const GroupLayout::Row& rhs) const
+{
+    return !(*this == rhs);
+}
+
+/*
+ * Gets an iterator pointing to the first item in the row.
+ */
+GroupLayout::Row::iterator GroupLayout::Row::begin()
+{
+    return rowItems.begin();
+}
+
+/*
+ * Gets an iterator pointing just after the last item in the row.
+ */
+GroupLayout::Row::iterator GroupLayout::Row::end()
+{
+    return rowItems.end();
+}
+
+/*
+ * Gets a const iterator pointing to the first item in the row.
+ */
+GroupLayout::Row::const_iterator GroupLayout::Row::begin() const
+{
+    return rowItems.begin();
+}
+
+/*
+ * Gets a const iterator pointing just after the last item in the row.
+ */
+GroupLayout::Row::const_iterator GroupLayout::Row::end() const
+{
+    return rowItems.end();
+}
+
+//####################### GroupLayout::RowItem ###############################   
+/*
+ * Gets the component assigned to this RowItem. 
+ */
+juce::Component* GroupLayout::RowItem::getComponent() const
+{
+    return component;
+}
+
+/*
+ * Gets the horizontal weight value assigned to this RowItem.
+ */
+unsigned int GroupLayout::RowItem::getWeight()const
+{
+    return weight;
+}
+
+/*
+ * Checks if this row item represents an empty space.
+ */
+bool GroupLayout::RowItem::isEmpty() const
+{
+    return component == nullptr;
+}
+ 
+/*
+ * Checks if this RowItem and another are equivalent. RowItems are 
+ * equivalent if they have the same weight and Component.
+ */
+bool GroupLayout::RowItem::operator==(const GroupLayout::RowItem& rhs) const
+{
+    return component == rhs.component && weight == rhs.weight;
+}
+
+/*
+ * Checks if this RowItem and another are not equivalent.
+ */
+bool GroupLayout::RowItem::operator!=(const GroupLayout::RowItem& rhs) const
 {
     return !(*this == rhs);
 }

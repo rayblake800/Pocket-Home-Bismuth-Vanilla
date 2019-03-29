@@ -9,7 +9,7 @@
  *
  * These proxy components will be deleted after animation.
  * 
- * This class is almost an exact copy of the private 
+ *  This class is almost an exact copy of the private 
  * ComponentAnimator::AnimationTask::ProxyComponent class. It is duplicated here
  * in order to allow simultaneous animation of component proxies and their 
  * source components. 

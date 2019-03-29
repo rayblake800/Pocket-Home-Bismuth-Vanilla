@@ -45,53 +45,67 @@ public:
      *          layout to all components in the layout, and optionally animates
      *          the transition.
      *
-     * @param newLayout    The new layout to apply.
+     * @param newLayout       The new layout to apply.
      * 
-     * @param parent       The parent component of all layout components.
-     *                     All components in the old layout will be removed from
-     *                     this component's children. All components in the new 
-     *                     layout will be added to this component as children.  
-     *                     Layout components will be placed within this 
-     *                     component's bounds.
+     * @param parent          The parent component of all layout components.
+     *                        All components in the old layout will be removed 
+     *                        from this component's children. All components in 
+     *                        the new layout will be added to this component as 
+     *                        children. Layout components will be placed within 
+     *                        this component's bounds.
      * 
-     * @param transition   Optional transition animation to apply when updating
-     *                     the layout.
+     * @param transition      Optional transition animation to apply when 
+     *                        updating the layout.
      * 
-     * @param duration     If animating the transition, this defines the
-     *                     animation duration in milliseconds.
+     * @param duration        If animating the transition, this defines the
+     *                        animation duration in milliseconds. Animation
+     *                        duration is set to zero by default.
+     *
+     * @param animateUnmoved  Sets whether transitioned items will be animated
+     *                        if their bounds do not change in the transition.
+     *                        By default, animations will apply to all layout
+     *                        components.
      */
     void transitionLayout(
             const RelativeLayout& newLayout,
             juce::Component* parent,
-            const Transition::Type transition
-                = Transition::Type::none,
-            const unsigned int duration = 0);
+            const Transition::Type transition = Transition::Type::none,
+            const unsigned int duration = 0,
+            const bool animateUnmoved = true);
 
     /**
-     * Adds all components in the layout to a parent component, and makes them
-     * all visible.
+     * @brief  Adds all components in the layout to a parent component and makes
+     *         them all visible.
+     *
+     * @param parent  The parent component that will hold all layout components.
      */
     void addComponentsToParent(juce::Component* parent);
 
     /**
-     * Arranges the components within a bounding rectangle, optionally applying
-     * a transition animation to all components in the layout.
+     * @brief  Arranges the components within a bounding rectangle, optionally 
+     *         applying a transition animation to all components in the layout.
      * 
-     * @param bounds      The rectangle components will be positioned within.
+     * @param bounds          The rectangle where all layout components will be
+     *                        arranged.
      * 
-     * @param transition  The optional transition animation to apply.
+     * @param transition      An optional transition animation to apply.
      * 
-     * @param duration    The duration of any transition animation, in
-     *                    milliseconds.
+     * @param duration        The duration of any transition animation in
+     *                        milliseconds.
+     *
+     * @param animateUnmoved  Sets whether transitioned items will be animated
+     *                        if their bounds do not change in the transition.
+     *                        By default, animations will apply to all layout
+     *                        components.
      */
     void layoutComponents(
             const juce::Rectangle<int>& bounds,
-            const Transition::Type transition
-                = Transition::Type::none,
-            const unsigned int duration = 0);
+            const Transition::Type transition = Transition::Type::none,
+            const unsigned int duration = 0,
+            const bool animateUnmoved = true);
 
     /**
-     * Remove all saved component layout parameters.
+     * @brief  Remove all saved component layout parameters.
      * 
      * @param removeComponentsFromParent   If true, all components will also
      *                                     be removed from their parent 
@@ -101,12 +115,55 @@ public:
 
 #if JUCE_DEBUG
     /**
-     * Print out the layout to the console for debugging
+     * @brief  Print out the layout to the console for debugging.
      */
     void printLayout();
 #endif
 
 private:
+    /* Stores the bounds of all components in a layout row, indexed by column
+     * position. */
+    typedef juce::Array<juce::Rectangle<int>> BoundsList;
+
+    /* Stores the bounds of all components in a layout, indexed by row and
+     * column position.  */
+    typedef juce::Array<BoundsList> BoundsGrid;
+
+    /**
+     * @brief  Finds where the layout manager would place each layout item 
+     *         within a given bounding box.
+     *
+     * @param layoutBounds  The rectangle where all layout items would be
+     *                      arranged.
+     *
+     * @return              The BoundsGrid storing the individual bounding boxes
+     *                      that would be applied to each layout item.
+     */
+    BoundsGrid getBoundsGrid(const juce::Rectangle<int>& layoutBounds) const;
+
+    /**
+     * @brief  Updates the positions and sizes of all layout Components using
+     *         an existing set of layout item bounding rectangles.
+     *
+     * @param boundsGrid      A grid containing bounding boxes for each item in
+     *                        the manage layout.
+     * 
+     * @param transition      An optional transition animation to apply.
+     * 
+     * @param duration        The duration of any transition animation in
+     *                        milliseconds.
+     *
+     * @param animateUnmoved  Sets whether transitioned items will be animated
+     *                        if their bounds do not change in the transition.
+     *                        By default, animations will apply to all layout
+     *                        components.
+     */
+    void layoutComponents(
+            const BoundsGrid& boundsGrid,
+            const Transition::Type transition = Transition::Type::none,
+            const unsigned int duration = 0,
+            const bool animateUnmoved = true);
+
     /* Current managed layout: */
     RelativeLayout layout;
 

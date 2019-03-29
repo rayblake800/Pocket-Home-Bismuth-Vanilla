@@ -134,7 +134,8 @@ void Widgets::PagedList::setYPaddingFraction(const float paddingFraction)
  * list item.
  */
 void Widgets::PagedList::refreshListContent
-(const Layout::Transition::Type transition, const unsigned int duration)
+(const Layout::Transition::Type transition, const unsigned int duration,
+        const bool animateUnmoved)
 {
     Layout::Group::RelativeLayout layout;
     unsigned int listSize = getListSize();
@@ -159,7 +160,8 @@ void Widgets::PagedList::refreshListContent
     layout.setYMarginFraction(std::max(
             NavButton::yMarginFractionNeeded(NavButton::WindowEdge::up),
             NavButton::yMarginFractionNeeded(NavButton::WindowEdge::down)));
-    layoutManager.transitionLayout(layout, this, transition, duration);
+    layoutManager.transitionLayout(layout, this, transition, duration,
+            animateUnmoved);
     // Update individual list components:
     for(int i = 0; i < itemsPerPage; i++)
     {

@@ -1,5 +1,6 @@
 #include "Layout_Group_Manager.h"
 #include "Layout_Transition_Animator.h"
+#include <map>
 
 namespace GroupLayout = Layout::Group;
 
@@ -19,29 +20,35 @@ void GroupLayout::Manager::setLayout
 {
     clearLayout();
     this->layout = layout;
-    yWeightSum = layout.getYMarginWeight() * 2;
-    for (int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
+    int yMarginWeights = layout.getYMarginWeight() * 2;
+    yWeightSum = yMarginWeights;
+
+    int rowNum = 0;
+    for(int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
     {
         const Row& rowLayout = layout.getRow(rowNum);
-        yWeightSum += rowLayout.getWeight();
-
-        //add padding weights between rows with non-zero weight
-        if (rowNum > 0 && yWeightSum > 0 &&  rowLayout.getWeight() > 0)
-        {
-            yWeightSum += layout.getYPaddingWeight();
-        }
 
         xWeightSums.set(rowNum, 0);
-        for (int cNum = 0; cNum < rowLayout.itemCount(); cNum++)
+        if(rowLayout.getWeight() > 0)
         {
-            const RowItem& rowItem = rowLayout.getRowItem(cNum);
-            xWeightSums.getReference(rowNum) += rowItem.getWeight();
-
-            //add padding weights between row items with non-zero weight
-            if (cNum > 0 && rowItem.getWeight() != 0
-                && xWeightSums[rowNum] > 0)
+            // Add padding weights between rows with non-zero weight
+            if(yWeightSum > yMarginWeights)
             {
-                xWeightSums.getReference(rowNum) += layout.getXPaddingWeight();
+                yWeightSum += layout.getYPaddingWeight();
+            }
+            yWeightSum += rowLayout.getWeight();
+        }
+        unsigned int& rowWeightSum = xWeightSums.getReference(rowNum);
+        for(const RowItem& rowItem : rowLayout)
+        {
+            if(rowItem.getWeight() > 0)
+            {
+                // Add padding weights between row items with non-zero weight
+                if(rowWeightSum > 0)
+                {
+                    rowWeightSum += layout.getXPaddingWeight();
+                }
+                rowWeightSum += rowItem.getWeight();
             }
             if (parentToInit != nullptr)
             {
@@ -53,15 +60,19 @@ void GroupLayout::Manager::setLayout
 
 
 /*
- * Changes the current layout, and immediately applies the updated layout
- * to all components in the layout, optionally animating the transition.
+ * Changes the current layout and immediately applies the updated layout to all 
+ * components in the layout, optionally animating the transition.
  */
 void GroupLayout::Manager::transitionLayout(
         const RelativeLayout& newLayout,
         juce::Component* parent,
         const Transition::Type transition,
-        const unsigned int duration)
+        const unsigned int duration,
+        const bool animateUnmoved)
 {
+    jassert(parent != nullptr); // Parent must be non-null!
+
+    // Immediately swap layouts if no transition animation is needed:
     if(transition == Transition::Type::none || duration == 0)
     {
         clearLayout(true);
@@ -69,24 +80,73 @@ void GroupLayout::Manager::transitionLayout(
         layoutComponents(parent->getLocalBounds());
         return;
     }
-    //Transition out old layout items
-    for (int rNum = 0; rNum < layout.rowCount(); rNum++)
+
+    // When animating, map all layout items, tracking which ones are in each 
+    // layout.
+    struct ComponentInfo
     {
-        const Row& row = layout.getRow(rNum);
-        for (int i = 0; i < row.itemCount(); i++)
+        bool inOldLayout = false;
+        bool inNewLayout = false;
+    };
+    std::map<juce::Component*, ComponentInfo> layoutItems;
+    for(const Row& layoutRow : newLayout)
+    {
+        for(const RowItem& layoutItem : layoutRow)
         {
-            const RowItem& rowItem = row.getRowItem(i);
-            if (!rowItem.isEmpty())
+            if(!layoutItem.isEmpty())
             {
-                Transition::Animator::transitionOut(rowItem.getComponent(),
-                        transition, duration, true);
+                layoutItems[layoutItem.getComponent()].inNewLayout = true;
             }
         }
     }
-    clearLayout(true);
-    // Transition in new layout items:
+    for(const Row& layoutRow : layout)
+    {
+        for(const RowItem& layoutItem : layoutRow)
+        {
+            if(!layoutItem.isEmpty())
+            {
+                juce::Component* component = layoutItem.getComponent();
+                ComponentInfo& itemInfo = layoutItems[component];
+                itemInfo.inOldLayout = true;
+                // Transition out and remove items that aren't in the new list. 
+                if(!itemInfo.inNewLayout)
+                {
+                    Transition::Animator::transitionOut(component, transition, 
+                            duration, true);
+                    parent->removeChildComponent(component);
+                }
+            }
+        }
+    }
     setLayout(newLayout, parent);
-    layoutComponents(parent->getLocalBounds(), transition, duration);
+    BoundsGrid newBoundsGrid = getBoundsGrid(parent->getLocalBounds());
+    for(int rowIndex = 0; rowIndex < layout.rowCount(); rowIndex++)
+    {
+        const Row& row = layout.getRow(rowIndex);
+        for(int itemIndex = 0; itemIndex < row.itemCount(); itemIndex++)
+        {
+            const RowItem& rowItem = row.getRowItem(itemIndex);
+            if(!rowItem.isEmpty())
+            {
+                juce::Component* component = rowItem.getComponent();
+                const ComponentInfo& itemInfo = layoutItems[component];
+                const juce::Rectangle<int>& newBounds 
+                        = newBoundsGrid.getReference(rowIndex)
+                        .getReference(itemIndex);
+                if(animateUnmoved || !itemInfo.inOldLayout
+                        || (newBounds != component->getBounds()))
+                {
+                    if(itemInfo.inOldLayout)
+                    {
+                        Transition::Animator::transitionOut(component,
+                                transition, duration, true);
+                    }
+                    Transition::Animator::transitionIn(component, transition,
+                            newBounds, duration);
+                }
+            }
+        }
+    }
 }
 
 /*
@@ -112,111 +172,14 @@ void GroupLayout::Manager::addComponentsToParent(juce::Component* parent)
 /*
  * Arranges the components within a bounding rectangle.
  */
-void GroupLayout::Manager::layoutComponents(const juce::Rectangle<int>& bounds,
-            const Transition::Type transition,
-            const unsigned int duration)
+void GroupLayout::Manager::layoutComponents(
+        const juce::Rectangle<int>& bounds,
+        const Transition::Type transition,
+        const unsigned int duration,
+        const bool animateUnmoved)
 {
-    int xMarginSize = layout.getXMarginFraction() * bounds.getWidth();
-    int yMarginSize = layout.getYMarginFraction() * bounds.getHeight();
-    int yPaddingSize = layout.getYPaddingFraction() * bounds.getHeight();
-    int yPaddingCount = 0;
-    bool nonzeroRowFound = false;
-    for (int i = 0; i < layout.rowCount(); i++)
-    {
-        if(layout.getRow(i).getWeight() > 0)
-        {
-            if(nonzeroRowFound)
-            {
-                yPaddingCount++;
-            }
-            else
-            {
-                nonzeroRowFound = true;
-            }
-        }
-    }
-
-    int weightedHeight = 0;
-    if (yWeightSum > 0)
-    {
-        weightedHeight = bounds.getHeight() - yMarginSize * 2
-                         - yPaddingSize * yPaddingCount;
-    }
-    int yStart = bounds.getY() + yMarginSize;
-    if(yWeightSum > 0)
-    {
-        yStart += layout.getYMarginWeight() * weightedHeight / yWeightSum;
-    }
-    if (yPaddingSize == 0 && yWeightSum > 0)
-    {
-        yPaddingSize = layout.getYPaddingWeight() * weightedHeight / yWeightSum;
-    }
-    int yPos = yStart;
-    for (int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
-    {
-        const Row& row = layout.getRow(rowNum);
-        if (row.getWeight() > 0 && yPos != yStart)
-        {
-            yPos += yPaddingSize;
-        }
-
-        int height = 0;
-        if(yWeightSum > 0)
-        {
-            height = std::max<int>(0,
-                    row.getWeight() * weightedHeight / yWeightSum);
-        }
-        const int& xWeightSum = xWeightSums[rowNum];
-        int xPaddingCount = 0;
-        bool nonzeroItmFound = false;
-        for (int i = 0; i < row.itemCount(); i++)
-        {
-            if (row.getRowItem(i).getWeight() > 0)
-            {
-                if(nonzeroItmFound)
-                {
-                    xPaddingCount++;
-                }
-                else
-                {
-                    nonzeroItmFound = true;
-                }
-            }
-        }
-        int xPaddingSize = layout.getXPaddingFraction() * bounds.getWidth();
-        int weightedWidth = bounds.getWidth() - xMarginSize * 2
-                             - xPaddingSize * xPaddingCount;
-        if (xPaddingSize == 0 && xWeightSum > 0)
-        {
-            xPaddingSize = layout.getXPaddingWeight() * weightedWidth 
-                    / xWeightSum;
-        }
-        int xStart = bounds.getX() + xMarginSize;
-        int xPos = xStart;
-        for (int cNum = 0; cNum < row.itemCount(); cNum++)
-        {
-            const RowItem& rowItem = row.getRowItem(cNum);
-            if (rowItem.getWeight() > 0 && xPos != xStart)
-            {
-                xPos += xPaddingSize;
-            }
-            int width = 0;
-            if(xWeightSum > 0)
-            {
-                width = std::max<int>(0,
-                        rowItem.getWeight() * weightedWidth / xWeightSum);
-            }
-            if (!rowItem.isEmpty())
-            {
-                Transition::Animator::transitionIn(rowItem.getComponent(),
-                        transition,
-                        juce::Rectangle<int>(xPos, yPos, width, height),
-                        duration);
-            }
-            xPos += width;
-        }
-        yPos += height;
-    }
+    const BoundsGrid boundsGrid = getBoundsGrid(bounds);
+    layoutComponents(boundsGrid, transition, duration, animateUnmoved);
 }
 
 /*
@@ -224,22 +187,19 @@ void GroupLayout::Manager::layoutComponents(const juce::Rectangle<int>& bounds,
  */
 void GroupLayout::Manager::clearLayout(bool removeComponentsFromParent)
 {
-    if (removeComponentsFromParent)
+    if(removeComponentsFromParent)
     {
-        for (int rNum = 0; rNum < layout.rowCount(); rNum++)
+        for(const Row& row : layout)
         {
-            const Row& row = layout.getRow(rNum);
-            for (int i = 0; i < row.itemCount(); i++)
+            for(const RowItem& rowItem : row)
             {
-                const RowItem& rowItem = row.getRowItem(i);
                 if (!rowItem.isEmpty())
                 {
                     juce::Component * parent = rowItem.getComponent()
                             ->getParentComponent();
                     if (parent != nullptr)
                     {
-                        parent->removeChildComponent
-                                (rowItem.getComponent());
+                        parent->removeChildComponent(rowItem.getComponent());
                     }
                 }
             }
@@ -251,8 +211,7 @@ void GroupLayout::Manager::clearLayout(bool removeComponentsFromParent)
 }
 
 #if JUCE_DEBUG
-
-/**
+/*
  * Print out the layout to the console for debugging
  */
 void GroupLayout::Manager::printLayout()
@@ -285,5 +244,147 @@ void GroupLayout::Manager::printLayout()
     }
     DBG("");
 }
-
 #endif
+
+/*
+ * Finds where the layout manager would place each layout item within a given 
+ * bounding box.
+ */
+Layout::Group::Manager::BoundsGrid Layout::Group::Manager::getBoundsGrid
+(const juce::Rectangle<int>& layoutBounds) const
+{
+    int xMarginSize = layout.getXMarginFraction() * layoutBounds.getWidth();
+    int yMarginSize = layout.getYMarginFraction() * layoutBounds.getHeight();
+    int yPaddingSize = layout.getYPaddingFraction() * layoutBounds.getHeight();
+    int yPaddingCount = 0;
+    bool nonzeroRowFound = false;
+    for(const Row& row : layout)
+    {
+        if(row.getWeight() > 0)
+        {
+            if(nonzeroRowFound)
+            {
+                yPaddingCount++;
+            }
+            else
+            {
+                nonzeroRowFound = true;
+            }
+        }
+    }
+
+    int weightedHeight = 0;
+    if (yWeightSum > 0)
+    {
+        weightedHeight = layoutBounds.getHeight() - yMarginSize * 2
+                         - yPaddingSize * yPaddingCount;
+    }
+    int yStart = layoutBounds.getY() + yMarginSize;
+    if(yWeightSum > 0)
+    {
+        yStart += layout.getYMarginWeight() * weightedHeight / yWeightSum;
+    }
+    if (yPaddingSize == 0 && yWeightSum > 0)
+    {
+        yPaddingSize = layout.getYPaddingWeight() * weightedHeight / yWeightSum;
+    }
+    int yPos = yStart;
+    BoundsGrid boundsGrid;
+    for (int rowNum = 0; rowNum < layout.rowCount(); rowNum++)
+    {
+        const Row& row = layout.getRow(rowNum);
+        if (row.getWeight() > 0 && yPos != yStart)
+        {
+            yPos += yPaddingSize;
+        }
+
+        int height = 0;
+        if(yWeightSum > 0)
+        {
+            height = std::max<int>(0,
+                    row.getWeight() * weightedHeight / yWeightSum);
+        }
+        const int& xWeightSum = xWeightSums[rowNum];
+        int xPaddingCount = 0;
+        bool nonzeroItemFound = false;
+        BoundsList boundsList;
+        for(const RowItem& rowItem : row)
+        {
+            if (rowItem.getWeight() > 0)
+            {
+                if(nonzeroItemFound)
+                {
+                    xPaddingCount++;
+                }
+                else
+                {
+                    nonzeroItemFound = true;
+                }
+            }
+        }
+        int xPaddingSize = layout.getXPaddingFraction() 
+                * layoutBounds.getWidth();
+        int weightedWidth = layoutBounds.getWidth() - xMarginSize * 2
+                             - xPaddingSize * xPaddingCount;
+        if (xPaddingSize == 0 && xWeightSum > 0)
+        {
+            xPaddingSize = layout.getXPaddingWeight() * weightedWidth 
+                    / xWeightSum;
+        }
+        int xStart = layoutBounds.getX() + xMarginSize;
+        int xPos = xStart;
+        for(const RowItem& rowItem : row)
+        {
+            if (rowItem.getWeight() > 0 && xPos != xStart)
+            {
+                xPos += xPaddingSize;
+            }
+            int width = 0;
+            if(xWeightSum > 0)
+            {
+                width = std::max<int>(0,
+                        rowItem.getWeight() * weightedWidth / xWeightSum);
+            }
+            boundsList.add(juce::Rectangle<int>(xPos, yPos, width, height));
+            xPos += width;
+        }
+        boundsGrid.add(boundsList);
+        yPos += height;
+    }
+    return boundsGrid;
+}
+
+/*
+ * Updates the positions and sizes of all layout Components using an existing 
+ * set of layout item bounding rectangles.
+ */
+void Layout::Group::Manager::layoutComponents(
+        const BoundsGrid& boundsGrid,
+        const Transition::Type transition,
+        const unsigned int duration,
+        const bool animateUnmoved)
+{
+    for(int rowIndex = 0; rowIndex < layout.rowCount(); rowIndex++)
+    {
+        const Row& layoutRow = layout.getRow(rowIndex);
+        const BoundsList& rowBounds = boundsGrid.getReference(rowIndex);
+        for(int itemIndex = 0; itemIndex < layoutRow.itemCount(); itemIndex++)
+        {
+            const RowItem& rowItem = layoutRow.getRowItem(itemIndex);
+            if(!rowItem.isEmpty())
+            {
+                const juce::Rectangle<int>& newBounds 
+                        = rowBounds.getReference(itemIndex);
+                const bool boundsChanged 
+                        = (rowItem.getComponent()->getBounds() != newBounds);
+                if(animateUnmoved || boundsChanged)
+                {
+                    Transition::Animator::transitionIn(rowItem.getComponent(),
+                            transition,
+                            newBounds,
+                            duration);
+                }
+            }
+        }
+    }
+}
