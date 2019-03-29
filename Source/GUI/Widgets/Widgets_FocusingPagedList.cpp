@@ -47,7 +47,7 @@ void Widgets::FocusingPagedList::setSelectedIndex(const int index)
         selectionChanged();
         refreshListContent(Layout::Transition::Type::toDestination,
                 focusDuration);
-        updateNavButtonVisibility(false);
+        updateNavButtonVisibility(index < 0);
     }
 }
 
