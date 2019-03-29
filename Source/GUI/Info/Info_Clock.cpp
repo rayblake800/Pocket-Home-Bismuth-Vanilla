@@ -15,7 +15,6 @@ Info::Clock::Clock() : juce::Label("Info::Clock", "")
     addTrackedKey(Config::MainKeys::use24HrMode);
     addTrackedKey(Config::MainKeys::showClock);
     setJustificationType(juce::Justification::centredRight);
-    setColour(juce::Label::textColourId, findColour(textColourId));
     loadAllConfigProperties();
     if(showClock)
     {

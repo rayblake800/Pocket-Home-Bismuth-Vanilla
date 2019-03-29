@@ -82,6 +82,5 @@
     "Color picker color outline"         : "",
     "Color picker focused color outline" : "",
 
-    "ClockLabel text"                    : "0xffffffff",
-    "BatteryIcon text"                   : "0xffffffff"
+    "HomePage widget text" : "0xffffffff"
 }

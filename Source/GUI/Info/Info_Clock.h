@@ -25,12 +25,6 @@ public:
     
     virtual ~Clock() { }
 
-    /* Juce ColourId values: */
-    enum ColourIds
-    {
-        textColourId = 0x1900700
-    };
-
 private:
     /**
      * @brief  Sets the label text to the current time.

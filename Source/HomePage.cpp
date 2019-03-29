@@ -71,6 +71,7 @@ settingsButton(Theme::Image::JSONKeys::settingsButton)
     }
 
     loadAllConfigProperties();
+    colourChanged();
 }
 
 /*
@@ -89,6 +90,20 @@ void HomePage::configValueChanged(const juce::Identifier& key)
     {
         //invalid key!
         jassertfalse;
+    }
+}
+
+/*
+ * Updates child components when HomePage colour values change.
+ */
+void HomePage::colourChanged()
+{
+    const juce::Colour textColour = findColour(textColourId);
+    clock.setColour(juce::Label::textColourId, textColour);
+    batteryIcon.setTextColour(textColour);
+    if(ipLabel != nullptr)
+    {
+        ipLabel->setColour(juce::Label::textColourId, textColour);
     }
 }
 

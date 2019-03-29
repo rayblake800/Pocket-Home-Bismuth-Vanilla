@@ -29,17 +29,19 @@ public:
 
     virtual ~BatteryIcon() { }
 
-    /* Juce ColourId values: */
-    enum ColourIds
-    {
-        textColourId = 0x1900800
-    };
-
     /**
      * @brief  Runs applyConfigBounds on all child components, and updates
      *         bounds to fit the battery text and icon.
      */
     void applyConfigBounds();
+
+    /**
+     * @brief  Updates the color of the BatteryIcon's text.
+     *
+     * @param newColour  The new color to use when drawing BatteryIcon battery
+     *                   percentage text.
+     */
+    void setTextColour(const juce::Colour newColour);
 
 private:
     /**

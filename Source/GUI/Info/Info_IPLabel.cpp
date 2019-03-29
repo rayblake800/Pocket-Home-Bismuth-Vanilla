@@ -30,33 +30,44 @@ Locale::TextUser(localeClassKey)
  */
 void Info::IPLabel::updateLabelText() noexcept
 {
-    using juce::String;
-    Config::MainFile mainConfig;
-    String newText;
-    if(mainConfig.getIPLabelPrintsLocal())
+    // Load in another thread to reduce lag when waiting for network data.
+    juce::Component::SafePointer<IPLabel> thisLabel(this);
+    juce::MessageManager::callAsync([thisLabel]()
     {
-        String localIP = commandLoader.runTextCommand(
-                Util::CommandTypes::Text::getLocalIP);
-        if(localIP.isNotEmpty())
+        if(thisLabel == nullptr)
         {
-            newText = localeText(localIPKey) + localIP;
-            
+            return;
         }
-    }
-    if(mainConfig.getIPLabelPrintsPublic())
-    {
-        String publicIP = commandLoader.runTextCommand(
-                Util::CommandTypes::Text::getPublicIP);
-        if(publicIP.isNotEmpty())
+        IPLabel& ipLabel = *thisLabel;
+        Config::MainFile mainConfig;
+        using juce::String;
+        String newText;
+        if(mainConfig.getIPLabelPrintsLocal())
         {
-            if(newText.isNotEmpty())
+            String localIP = ipLabel.commandLoader.runTextCommand(
+                    Util::CommandTypes::Text::getLocalIP);
+            if(localIP.isNotEmpty())
             {
-                newText += "\t";
+                newText = ipLabel.localeText(localIPKey) + localIP;
+                
             }
-            newText += localeText(publicIPKey) + publicIP;
         }
-    }
-    setText(newText, juce::NotificationType::sendNotification);
+        if(mainConfig.getIPLabelPrintsPublic())
+        {
+            String publicIP = ipLabel.commandLoader.runTextCommand(
+                    Util::CommandTypes::Text::getPublicIP);
+            if(publicIP.isNotEmpty())
+            {
+                if(newText.isNotEmpty())
+                {
+                    newText += "\t";
+                }
+                newText += ipLabel.localeText(publicIPKey) + publicIP;
+            }
+        }
+        const juce::MessageManagerLock mmLock;
+        ipLabel.setText(newText, juce::NotificationType::sendNotification);
+    });
 }
 
 /*

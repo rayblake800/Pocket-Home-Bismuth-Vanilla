@@ -23,14 +23,21 @@ batteryPercentLayout(&batteryPercent,
     setInterceptsMouseClicks(false, false);
     setWantsKeyboardFocus(false);
     batteryPercent.setJustificationType(juce::Justification::centredLeft);
-    batteryPercent.setColour(juce::Label::textColourId,
-            findColour(textColourId));
     if(batteryMonitor.isBatteryAvailable())
     {
         addAndMakeVisible(batteryPercent);
         addAndMakeVisible(batteryImage);
         startTimer(1);
     }
+}
+
+/*
+ * Updates the color of the BatteryIcon's text.
+ */
+void Info::BatteryIcon::setTextColour(const juce::Colour newColour)
+{
+    batteryPercent.setColour(juce::Label::textColourId, newColour);
+    batteryPercent.repaint();
 }
 
 /*
@@ -46,8 +53,7 @@ void Info::BatteryIcon::applyConfigBounds()
         juce::Rectangle<int> childBounds = batteryImage.getBounds()
                 .getUnion(batteryPercent.getBounds());
         childBounds.setLeft(0);
-        childBounds.setTop(0);
-        if (childBounds != getBounds())
+        childBounds.setTop(0); if (childBounds != getBounds())
         {
             setBounds(childBounds);
         }

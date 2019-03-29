@@ -90,6 +90,7 @@ static const std::map<int, juce::Identifier> colourIdKeys =
     {label::backgroundWhenEditing,    "Label background(editing)"},
     {label::textWhenEditing,          "Label text(editing)"},
     {label::outlineWhenEditing,       "Label outline(editing)"},
+    {homePage::text,                  "HomePage widget text"},
     {colourPicker::checkerboardLight,
             "Color picker checkerboard(light)"},
     {colourPicker::checkerboardDark,
@@ -97,9 +98,7 @@ static const std::map<int, juce::Identifier> colourIdKeys =
     {colourPicker::outline,           
             "Color picker color outline"},
     {colourPicker::focusedOutline, 
-            "Color picker focused color outline"},
-    {clockLabel::text,                "ClockLabel text"},
-    {batteryIcon::text,               "BatteryIcon text"}
+            "Color picker focused color outline"}
 };
 
 /**
@@ -170,15 +169,15 @@ static const std::map<juce::Identifier, int> colourIds
     {"Label text(editing)",         label::textWhenEditing},
     {"Label outline(editing)",      label::outlineWhenEditing},   
     
+    {"HomePage widget text",        homePage::text},
+
     {"Color picker checkerboard(light)",
             colourPicker::checkerboardLight},
     { "Color picker checkerboard(dark)",
             colourPicker::checkerboardDark},
     {"Color picker color outline", colourPicker::outline},
     {"Color picker focused color outline",
-            colourPicker::focusedOutline},
-    {"ClockLabel text",             clockLabel::text},
-    {"BatteryIcon text",            batteryIcon::text}
+            colourPicker::focusedOutline}
 };
 
 
@@ -784,11 +783,7 @@ static const std::map<int, Theme::Colour::UICategory> idCategories =
         UICategory::focusedOutline        
     },
     {
-        clockLabel::text,
-        UICategory::text
-    },
-    {
-        batteryIcon::text,
+        homePage::text,
         UICategory::text
     }
 };

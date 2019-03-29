@@ -44,6 +44,12 @@ public:
     
     virtual ~HomePage() { }
 
+    /* Juce ColourId values: */
+    enum ColourIds
+    {
+        textColourId = 0x1900800
+    };
+
 protected:
     /**
      * @brief  Tracks page background changes. 
@@ -56,6 +62,11 @@ protected:
     virtual void configValueChanged(const juce::Identifier& key) override;
 
 private:
+    /**
+     * @brief  Updates child components when HomePage colour values change.
+     */
+    virtual void colourChanged() override;
+
     /**
      * @brief  Grabs keyboard focus when the page becomes visible.
      */
