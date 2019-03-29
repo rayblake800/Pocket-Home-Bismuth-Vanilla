@@ -31,5 +31,4 @@ Ideally, all non-trivial classes should have their own test classes, but most te
 ## Misc. fixes and improvements
     - Provide a way to override the system locale.
     - Finish implementing Config::AlertWindow to provide useful error messages when configuration errors occur.
-    - Restore the IP address label.
     - Remove unnecessary use of component names.

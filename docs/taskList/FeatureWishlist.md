@@ -84,6 +84,6 @@
 - Load and apply saved themes without restarting.
 
 ### Component editing:
-- Set component layout within a UI settings page.
+- Set component layouts within a UI settings page.
 - Provide controls for setting font sizes within the application.
 - Provide controls for selecting image resources within the application. 

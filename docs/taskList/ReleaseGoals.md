@@ -13,9 +13,6 @@
 
 ## Settings Page Improvements
 
-### Quick Settings Page
-    1. Restore the IP address label.
-
 ### Home Settings Page
     1. Add options to show/hide the battery icon and wifi icon.
 
