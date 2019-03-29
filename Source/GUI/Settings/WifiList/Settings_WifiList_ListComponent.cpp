@@ -4,7 +4,9 @@
 #include "Wifi_Connection_Record_Handler.h"
 #include "Wifi_Connection_Saved_Reader.h"
 #include "Wifi_Connection_Event.h"
+#include "Wifi_Device_Controller.h"
 #include "Wifi_APList_Reader.h"
+#include "Config_MainFile.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Wifi_LibNM_SecurityType.h"
 #include "Locale_Time.h"
@@ -301,4 +303,37 @@ void Settings::WifiList::ListComponent::disconnected
 (const Wifi::AccessPoint disconnectedAP)
 {
     scheduleListUpdate();
+}
+
+/*
+ * Starts the first access point scan, and begins running additional scans at an
+ * interval defined in the main configuration file.
+ */
+Settings::WifiList::ListComponent::ScanTimer::ScanTimer()
+{
+    timerCallback();
+}
+
+/*
+ * Commands the Wifi module to start a new scan for visible access points.
+ */
+void Settings::WifiList::ListComponent::ScanTimer::startScan()
+{
+    Wifi::Device::Controller wifiController;
+    wifiController.scanAccessPoints();
+}
+
+/*
+ * Starts a new scan, and schedules the next scan.
+ */
+void Settings::WifiList::ListComponent::ScanTimer::timerCallback() 
+{
+    stopTimer();
+    startScan();
+    Config::MainFile mainConfig;
+    int scanFrequency = mainConfig.getWifiScanFrequency();
+    if(scanFrequency > 0)
+    {
+        startTimer(scanFrequency);
+    }
 }

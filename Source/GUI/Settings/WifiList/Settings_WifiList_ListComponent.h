@@ -11,9 +11,14 @@
 #include "Wifi_APList_Listener.h"
 #include "Wifi_Connection_Record_Listener.h"
 #include "Settings_WifiList_ControlComponent.h"
+#include "Windows_FocusedTimer.h"
 
 namespace Settings { namespace WifiList { class ListComponent; } }
 
+/**
+ * @brief  A Widgets::FocusingPagedList component that displays all visible 
+ *         Wifi access points.
+ */
 class Settings::WifiList::ListComponent : public Widgets::FocusingPagedList,
         public Wifi::APList::Listener,
         public Wifi::AP::StrengthListener,
@@ -165,6 +170,34 @@ private:
 
     /* Selected connection control component to reuse: */
     ControlComponent controlComponent;
+
+    /**
+     * @brief  Runs periodic Wifi access point scans for as long as the list
+     *         exists.
+     */
+    class ScanTimer : public Windows::FocusedTimer
+    {
+    public:
+        /**
+         * @brief  Starts the first access point scan, and begins running
+         *         additional scans at an interval defined in the main 
+         *         configuration file.
+         */
+        ScanTimer();
+
+    private:
+        /**
+         * @brief  Commands the Wifi module to start a new scan for visible
+         *         access points.
+         */
+        void startScan();
+
+        /**
+         * @brief  Starts a new scan, and schedules the next scan.
+         */
+        virtual void timerCallback() override;
+    };
+    ScanTimer apScanTimer;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ListComponent)
 };
