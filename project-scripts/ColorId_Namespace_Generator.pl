@@ -22,7 +22,12 @@ if(!defined($ARGV[0]) || !defined($ARGV[1]))
     die "usage: ./ColorIDs_Namespace_Generator.pl [project directory] [output file]\n";
 }
 
-my $colourIds = "namespace ColourIds\n{\n";
+my $colourIds = "#pragma once\n\n#include \"Theme_Colour_Element.h\"\n"
+        ."namespace Theme { namespace Colour { namespace ColourIds\n{\n";
+
+my @allElements;
+
+my $indent = "    ";
 
 sub headers
 {
@@ -33,67 +38,54 @@ sub headers
 		my $class = $_;
 		$class =~ s/juce_//;
 		$class =~ s/\.h//;
-		$class = lc(substr($class,0,1)).substr($class,1);
 		if($text =~ /enum\s+ColourIds\s*\{(.*?)\}/gs)
 		{
 			$colourIds=$colourIds."    namespace $class\n    {\n";
-		        $colourIds=$colourIds."        enum\n        {\n";
 			my @names;
 			my @ids;
-			my @comments;
-			my $longest = 0;
-			while($text =~ /^(.*?\s* (\w+)          \s*=\s*
-				            (0x[\da-f]{7})  \s*
-				            (\/\*[^\/]*\/)?  )/sx)
+			while($text =~ /
+                    ^(.*?\s* (\w+)          
+                    \s*=\s*
+				    (0x[\da-f]{7})  
+                    \s*)/sx)
 			{ 
 				my $blockLen = length($1);
 				my $name = $2;
 				my $id = $3;
-				my $comment = $4;
 				if(!defined($id))
 				{
 					die "Missing id!\n";
 				}
 				$name =~ s/Colour//;
 				$name =~ s/Id//;
-				if(length($name) > $longest)
-				{
-					$longest = length($name);
-				}
 				push(@names,$name);
 				push(@ids,$id);
-				if(defined($comment))
-				{
-					push(@comments,"            $comment\n");
-				}
-				else
-				{
-					push(@comments,"");
-				}
 				$text = substr($text,$blockLen);
 			}
 			my $nColors = @names;
 			for(my $i = 0; $i < $nColors; $i++)
 			{
-				my $line = $comments[$i]."            ";
-				while(length($names[$i]) < $longest)
-				{
-					$names[$i]=$names[$i]." ";
-				}
-				$line=$line.$names[$i]." = ".$ids[$i];
-				if($i < (scalar @names - 1))
-				{
-					$line=$line.",";
-				}
-				$colourIds=$colourIds. "$line\n";
+                push(@allElements, $class."::".$names[$i]);
+				my $line = ($indent x 2)."static const Element "
+                        .$names[$i]."(\n"
+                        .($indent x 4).$ids[$i]
+                        .", UICategory::none);";
+				$colourIds=$colourIds."$line\n";
 			}
-			$colourIds=$colourIds."        };\n    };\n\n";
+			$colourIds=$colourIds.$indent."}\n";
 		}
 	}
 }
 
 find(\&headers,$ARGV[0]);
-$colourIds=$colourIds."};";
+$colourIds = $colourIds.$indent
+        ."static const std::vector<Element> allElements = \n".$indent."{\n";
+foreach my $element(@allElements)
+{
+    $colourIds = $colourIds.($indent x 2).$element.",\n"
+}
+$colourIds = substr($colourIds, 0, -2)."\n".$indent."};\n";
+$colourIds = $colourIds."} } }";
 
 open(IDLIST,">",$ARGV[1]) or die "Couldn't open output file!\n";
 print(IDLIST $colourIds);

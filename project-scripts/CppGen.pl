@@ -1,13 +1,18 @@
 #!/usr/bin/perl
 
-################################################################################
-#  CppGen.pl                                                                   # 
-# ---------------------------------------------------------------------------- #
-#  Given a header file, CppGen creates a .cpp file defining the values         #
+## CppGen.pl ###################################################################
+#  Generates formatted .cpp source files from header files.                    #
+#                                                                              #
+#-- Description: --------------------------------------------------------------#
+#  Given a header file path, CppGen creates a .cpp file defining the values    #
 # declared in that header. The new .cpp file is then formatted according to my #
 # personal preferences.                                                        #
-#------------------------------------------------------------------------------#
-#  usage: ./CppGen.pl [path to input header file] [path to output .cpp file]   #
+#                                                                              #
+#-- Usage: --------------------------------------------------------------------#
+#  ./CppGen.pl [path to input header file] [path to output .cpp file]          #
+#                                                                              #
+#  If no output path is given, the input path with the extension changed from  #
+# .h to .cpp will be used.                                                     #
 ################################################################################
 
 use strict;
@@ -36,9 +41,17 @@ my $fullIDMatch = qr/(?:$idMatch\:\:)*$idMatch/;
 # Matches the name of any type of code block that has its own namespace.
 my $namedBlockTypeMatch = qr/class|namespace|struct/;
 
-if(!defined($ARGV[0]) || !defined($ARGV[1]))
+my $inFileName  = $ARGV[0];
+my $outFileName = $ARGV[1];
+if(!defined($inFileName))
 {
     die "usage: perl cpp_from_h.pl  [input file] [output file]\n";
+}
+if(!defined($outFileName))
+{
+    $outFileName = $inFileName;
+    $outFileName =~ s/\..+$//;
+    $outFileName = "$outFileName.cpp";
 }
 
 # Comments are only copied if they directly precede a function. Store formatted
@@ -431,8 +444,6 @@ sub formatFunction
     return $formattedFunction;
 }
 
-my $inFileName  = $ARGV[0];
-my $outFileName = $ARGV[1];
 
 if(-e $outFileName)
 {
