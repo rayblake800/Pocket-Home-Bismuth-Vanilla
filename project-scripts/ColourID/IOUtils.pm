@@ -1,14 +1,24 @@
 # IOUtils.pm
 # Reads and prints ColourId data
+##### ColourEnum.pm ############################################################
+# Stores data parsed from a juce::ColourId enum definition.                    #
+##### Functions: ############################################################### 
+#                                                                              #
+# new: Creates a new ColourEnum object.                                        #
+#- Parameters: ----------------------------------------------------------------#
+#- Returns: -------------------------------------------------------------------#
+#==============================================================================#
+################################################################################
 use strict;
 use warnings;
 
 package IOUtils;
 use lib './project-scripts/ColourID';
+use lib './project-scripts/ColourID/DataObjects';
+use CacheBuilder;
 use Element;
 use Category;
 use IDCache;
-use CacheBuilder;
 use File::Slurp;
 use Scalar::Util qw(blessed);
 
@@ -100,5 +110,22 @@ sub printNamespaceElements
         printElement($element);
         $count++;
     }
+}
+
+# Reads user input until the user confirms or rejects an option by entering 'y'
+# or 'n'
+sub confirm
+{
+    print("(y/n):");
+    my $input = "";
+    while(! ($input =~ /n/i))
+    {
+        $input = <STDIN>;
+        if($input =~ /y/i)
+        {
+            return 1;
+        }
+    }
+    return 0;
 }
 1;

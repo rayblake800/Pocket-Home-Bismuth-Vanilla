@@ -1,5 +1,19 @@
-# CacheBuilder.pm
-# Caches ColourID elements loaded from C++ definitions in a file.
+##### CacheBuilder.pm ##########################################################
+# Caches ColourID elements loaded from C++ definitions in a file.              #
+################################################################################ 
+
+##### Functions: #####
+
+#==============================================================================#
+#--- processFile: ---
+# Parses Element declarations, definitions, or keys from a file and adds them 
+# to an IDCache object.
+#--- Parameters: ---
+# $cache:  The cache object where parsed elements will be added.
+#
+# $path:   The path of the file to parse.
+#==============================================================================#
+
 use strict;
 use warnings;
 
@@ -25,10 +39,10 @@ sub processFile
     my @innerNamespaces = ($file =~ /namespace \w+\s+{[^{]*?}/gs);
     foreach my $namespace(@innerNamespaces)
     {
-        my $name;
+        my $namespaceName;
         if($namespace =~ /namespace (\w+)/)
         {
-            $name = $1;
+            $namespaceName = $1;
         }
         else
         {
@@ -41,7 +55,7 @@ sub processFile
                 \s*\(.*?\)\s*;/gsx);
         foreach my $definition(@elementDefs)
         {
-            my $element = Element::parseElement($definition, $name);
+            my $element = new Element($namespaceName, $definition);
             if(defined($element))
             {
                 push(@elements, $element);
@@ -57,7 +71,7 @@ sub processFile
         {
             my $namespace = $1;
             my $def = $2;
-            my $element = Element::parseElement($def, $namespace);
+            my $element = new Element($namespace, $def);
             if(defined($element))
             {
                 push(@elements, $element);

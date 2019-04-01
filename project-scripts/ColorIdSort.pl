@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-
 ##### ColourIdSort.pl ##########################################################
 # Sorts JUCE ColourId values into general categories.                          #
 #                                                                              #

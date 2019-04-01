@@ -1,5 +1,41 @@
-# Category.pm
-# Represents a Theme::Colour::UICategory value
+##### Category.pm: #############################################################
+# Represents a Theme::Colour::UICategory value.
+################################################################################ 
+
+##### Functions: #####
+
+#==============================================================================#
+#--- new: ---
+# Creates a new Category object.
+#--- Parameters: ---
+# $value: The category type the object should represent. This may be given as
+#         one of the category type constants defined below, as a valid
+#         category name, or as a valid category JSON key string.
+#- Returns: ---
+# The new Category object, or undef if no valid category value was given.
+#==============================================================================#
+
+#==============================================================================#
+#--- getValue: ---
+# Gets a category's numeric value.
+#--- Returns: ---
+# The category value as one of the category constants defined below. This will
+# match the integer value of the UICategory enum value the object represents.
+#==============================================================================#
+
+#==============================================================================#
+#--- getTypeName: ---
+# Gets the category's enum value name.
+#--- Returns: ---
+# The name of the category's UICategory enum value.
+#==============================================================================#
+
+#==============================================================================#
+#--- getKey: ---
+# Gets the category's colour configuration key value.
+#--- Returns: ---
+# The key used to store the category's colour in the colours.json file.
+#==============================================================================#
 
 use strict;
 use warnings;
@@ -125,5 +161,4 @@ sub getKey
     my $self = shift;
     return $categoryKeys[$self->{_value}];
 }
-
 1;
