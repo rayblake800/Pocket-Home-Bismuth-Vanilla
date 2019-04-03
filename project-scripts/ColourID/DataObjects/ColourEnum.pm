@@ -43,6 +43,15 @@
 # All colour integer IDs, sorted numerically.
 #==============================================================================#
 
+#==============================================================================#
+#--- contains: ---
+# Checks if the object contains a specific name or key.
+#--- Parameters: --- 
+# $searchValue: The name or ID to search for in the ColourEnum.
+#--- Returns: ---
+# Whether the ColourEnum holds the requested color value.
+#==============================================================================#
+
 use strict;
 use warnings;
 
@@ -103,5 +112,22 @@ sub getIDs
 {
     my $self = shift;
     return @{$self->{_ids}};
+}
+
+# Checks if the object contains a specific name or key.
+sub contains
+{
+    my $self = shift;
+    my $searchValue = shift;
+    my $numItems = @{$self->{_ids}};
+    for(my $i = 0; $i < $numItems; $i++)
+    {
+        if(($self->{_names}->[$i] eq $searchValue)
+                || $self->{_ids}->[$i] eq $searchValue)
+        {
+            return 1;
+        }
+    }
+    return 0;
 }
 1;

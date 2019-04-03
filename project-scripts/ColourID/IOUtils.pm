@@ -1,14 +1,44 @@
-# IOUtils.pm
-# Reads and prints ColourId data
-##### ColourEnum.pm ############################################################
-# Stores data parsed from a juce::ColourId enum definition.                    #
-##### Functions: ############################################################### 
-#                                                                              #
-# new: Creates a new ColourEnum object.                                        #
-#- Parameters: ----------------------------------------------------------------#
-#- Returns: -------------------------------------------------------------------#
+##### IOUtils.pm ###############################################################
+# Reads, prints, and writes ColourId data.
+################################################################################ 
+
+##### Functions: #####
+
 #==============================================================================#
-################################################################################
+#--- cacheCodeFiles: ---
+# Populates an IDCache with data from project code files.
+#--- Parameters: ---
+# $cache: The IDCache object to update.
+#==============================================================================#
+
+#==============================================================================#
+#--- getDeclarationText: ---
+# Gets all cached Element C++ declarations as a single string.
+#--- Parameters: ---
+# $cache: The IDCache object to read.
+#--- Returns: ---
+# C++ declaration text for all cached Element objects.
+#==============================================================================#
+
+#==============================================================================#
+#--- getDefinitionText: ---
+# Gets all cached Element C++ definitions as a single string.
+#--- Parameters: ---
+# $cache: The IDCache object to read.
+#--- Returns: ---
+# C++ definition text for all cached Element objects.
+#==============================================================================#
+
+#==============================================================================#
+#--- getKeyMapDeclaration: ---
+# Gets a C++ map declaration and definition mapping all Element JSON key values
+# to their element names.
+#--- Parameters: ---
+# $cache: The IDCache object to read.
+#--- Returns: ---
+# C++ text declarint the full static const colourIds map.
+#==============================================================================#
+
 use strict;
 use warnings;
 
@@ -73,59 +103,26 @@ sub getDefinitionText
     return $definitions;
 }
 
-# Prints the list of cached namespaces
-sub printNamespaces
+# Gets a C++ map declaration and definition mapping all Element JSON key values
+# to their element names.
+sub getKeyMapDeclaration
 {
     my $cache = shift;
-    my @namespaces = $cache->getNamespaceNames();
-    my $count = 1;
-    foreach my $namespace(@namespaces)
+    my $indent = " " x 4;
+    my $mapText = "static const std::map<juce::Identifier, Element> colourIds"
+            ."\n{\n";
+    my @keys = $cache->getElementKeys();
+    foreach my $key(@keys)
     {
-        print("$count. $namespace\n");
-        $count++;
-    }
-}
-
-#prints a single element
-sub printElement
-{
-    my $element = shift;
-    if(defined($element))
-    {
-        print($element->getNameKey().": ID:".$element->getID().", category "
-                .$element->getCategory()->getTypeName()."\n");
-    }
-}
-
-#prints all elements in a namespace
-sub printNamespaceElements
-{
-    my $cache = shift;
-    my $namespace = shift;
-    my @elements = $namespace->getElements();
-    my $count = 1;
-    foreach my $element(@elements)
-    {
-        print("$count. ");
-        printElement($element);
-        $count++;
-    }
-}
-
-# Reads user input until the user confirms or rejects an option by entering 'y'
-# or 'n'
-sub confirm
-{
-    print("(y/n):");
-    my $input = "";
-    while(! ($input =~ /n/i))
-    {
-        $input = <STDIN>;
-        if($input =~ /y/i)
+        my $element = $cache->findElement($key);
+        my $fullName = $element->getFullName();
+        if($key ne $keys[0])
         {
-            return 1;
+            $mapText = $mapText.",\n";
         }
+        $mapText = $mapText."$indent\{\"$key\",\n"
+            .($indent x 2)."$fullName}";
     }
-    return 0;
+    return $mapText."\n};";
 }
 1;

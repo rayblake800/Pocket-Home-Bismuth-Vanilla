@@ -1,5 +1,3 @@
-# IDCache.pm
-# Stores a set of cached ColourId Element Namespace objects
 ##### IDCache.pm ###############################################################
 # Stores a set of cached ColourId Element Namespace objects.                   #
 ################################################################################ 
@@ -23,6 +21,14 @@
 #==============================================================================#
 
 #==============================================================================#
+#--- removeElement: ---
+# Removes an element from the cache.
+#--- Parameters: ---
+# $element: The Element to remove, or a search value the findElement method can
+#           use to locate the cached Element.
+#==============================================================================#
+
+#==============================================================================#
 #--- assignKey: ---
 # Assigns a JSON colour value key string to an Element.
 #--- Parameters: ---
@@ -34,7 +40,7 @@
 
 #==============================================================================#
 #--- findElement: ---
-# Finds a  cached Element objects.
+# Finds a cached Element objects.
 #--- Parameters: ---
 # @searchValues: The full name, current key, or hex ColourId value of the 
 #                Element that should be found.
@@ -110,7 +116,7 @@ sub new
         _namespaces => {}, # Store namespace objects by name
         _elements   => {}, # Store element objects by name
         _keys       => {}, # Store element objects by key
-        _ids        => {} # Store element objects by ID
+        _ids        => {}  # Store element objects by ID
     };
     bless($self, $class);
     return $self;
@@ -127,14 +133,12 @@ sub addElement
     }
     $self->{_elements}->{$element->getFullName()} = $element;
     # If an existing element is being replaced, make sure to remove it from
-    # its Namespace object too.
+    # everywhere in the cache.
     my $id = $element->getID();
     my $replacedElement = $self->{_ids}->{$id};
     if(defined($replacedElement))
     {
-        my $oldNamespace = $self->{_namespaces}
-                ->{$replacedElement->getNamespace()};
-        $oldNamespace->removeElement($id);
+        $self->removeElement($replacedElement);
     }
     $self->{_ids}->{$id} = $element;
 
@@ -153,6 +157,34 @@ sub addElement
     }
 }
 
+# Removes an element from the cache.
+sub removeElement
+{
+    my $self = shift;
+    my $element = shift;
+    if(defined($element) && !blessed($element))
+    {
+        $element = $self->findElement($element);
+    }
+    if(blessed($element) && (blessed($element) eq 'Element'))
+    {
+        my $namespaceName = $element->getNamespace();
+        my $namespace = $self->findNamespace($namespaceName);
+        $namespace->removeElement($element->getID());
+        if((scalar $namespace->getElements()) == 0)
+        {
+            delete($self->{_namespaces}->{$namespaceName});
+        }
+        delete($self->{_elements}->{$element->getFullName()});
+        my $key = $element->getKey();
+        if(length($key) > 0)
+        {
+            delete($self->{_keys}->{$key});
+        }
+        delete($self->{_ids}->{$element->getID()});
+    }
+}
+
 # Assigns a JSON colour value key string to an Element.
 sub assignKey
 {
@@ -162,7 +194,7 @@ sub assignKey
 
     if(exists($self->{_keys}->{$key}))
     {
-        print("IDCache::assignKey: key $key is already in use!\n");
+        print("IDCache::assignKey: key \"$key\" is already in use!\n");
         return;
     }
     my $element = $self->findElement($searchVal);

@@ -17,6 +17,7 @@ package MainMenu;
 use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 use EnumMenu;
+use NamespaceListMenu;
 
 # Displays the main menu, repeatedly accepting input and running the menu action
 # with the selected option parameter until the user enters 'q'.
@@ -57,8 +58,7 @@ sub enumScan
 sub namespaceMenu
 {
     my $cache = shift;
-    #IOUtils::printNamespaces($cache);
-    todo("Implement namespace menu\n");
+    NamespaceListMenu::openMenu($cache);
 }
 
 sub keyMenu

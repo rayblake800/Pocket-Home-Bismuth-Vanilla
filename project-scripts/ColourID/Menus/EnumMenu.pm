@@ -17,7 +17,7 @@ use warnings;
 package EnumMenu;
 use lib './project-scripts/ColourID';
 use EnumSearch;
-use IOUtils;
+use UserInput;
 use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 
@@ -50,47 +50,122 @@ sub loadEnums
         my $enumName = $enum->getNamespaceName();
         my @colourNames = $enum->getNames();
         my @colourIds = $enum->getIDs();
-        
-        # Search for missing namespaces:
-        my $namespace = $cache->findNamespace($enumName);
-        if(!defined($namespace))
+
+        my %matchNames;
+        # Check if namespace already exists:
+        if(defined($cache->getNamespace($enumName)))
         {
-            print("Add uncached namespace $enumName?");
-            if(!IOUtils::confirm())
+            $matchNames{$enumName} = 1;
+        }
+        
+        # Check if enum IDs exists under any other namespaces:
+        foreach my $id(@colourIds)
+        {
+            my $element = $cache->findElement($id);
+            if(defined($element))
             {
-                next;
+                my $namespaceName = $element->getNamespace();
+                if($namespaceName)
+                {
+                    $matchNames{$namespaceName} = 1;
+                }
             }
         }
-        # Check the cache for name/ID conflicts:
-        for(my $i = 0; $i < (scalar @colourIds); $i++)
+        my @matches = keys(%matchNames);
+        foreach my $match(@matches)
         {
-            my $name = $colourNames[$i];
-            my $id = $colourIds[$i];
-            my $newValText = "$enumName\::$name = $id";
-            my $elementMatch = $cache->findElement($id);
-            if($elementMatch) 
+            my $namespace = $cache->getNamespace($match);
+            # If names differ, use enum namespace name, or cached namespace 
+            # name?
+            my $overrideName = undef;
+            my $conflictMoveOnly = undef;
+            if($match ne $enumName)
             {
-                if(($elementMatch->getNamespace() ne $enumName)
-                     || ($elementMatch->getName() ne $name))
+                print("Namespace $match conflicts with enum $enumName.\n");
+                print("Choose an option:\n");
+                print("1. Move all Elements into $match Namespace\n.");
+                print("2. Move all Elements into $enumName Namespace\n.");
+                print("3. Keep conflicting Elements in $match Namespace.\n");
+                print("4. Move conflicting Elements into $enumName Namespace.\n");
+                my $selection = UserInput::checkInput('1', '2', '3', '4');
+                if(($selection % 2) == 0)
                 {
-                    print("Possible conflict detected:\n"
-                            ."Element: ".$elementMatch->getFullName()
-                            ." = ".$elementMatch->getID()."\n"
-                            ."Enum value: $newValText\n"
-                            ."Replace cached Element?");
-                    if(IOUtils::confirm())
+                    $overrideName = $enumName;
+                }
+                else
+                {
+                    $overrideName = $match;
+                }
+                $conflictMoveOnly = ($selection > 2);
+            }
+            # For each individual ID in the enum:
+            for(my $i = 0; $i < (scalar @colourIds); $i++)
+            {
+                my $id = $colourIds[$i];
+                my $name = $colourNames[$i];
+                my $cachedElement = $cache->findElement($id);
+                my $updatedName = $name;
+                # If ID is not cached, ask if it should be added:
+                if(!defined($cachedElement))
+                {
+                    print("Add non-cached enum element $name?");
+                    if(UserInput::confirm())
                     {
-                        my $replacement = new Element($enumName, $name, $id,
-                                $elementMatch->getCategory());
-                        $cache->addElement($replacement);
+                        my $namespace = $enumName;
+                        if(!$conflictMoveOnly && $overrideName)
+                        {
+                            $namespace = $overrideName;
+                        }
+                        my $addedElement = new Element($namespace, $name, $id);
+                    }
+                }
+                elsif($cachedElement->getName() ne $name)
+                {
+                    print("Element $name is cached as "
+                            .$cachedElement->getName()
+                            .", replace cached name?");
+                    if(!UserInput::confirm())
+                    {
+                        $updatedName = $cachedElement->getName();
+                    }
+                }
+                my $updatedElement = new Element(
+                        $overrideName || $cachedElement->getNamespace(),
+                        $updatedName,
+                        $id,
+                        $cachedElement->getCategory());
+                $cache->addElement($updatedElement);
+            }
+
+            # For each individual ID in the namespace:  
+            # If ID is not in the enum, ask if it should be removed.
+            my @nsElements = $namespace->getElements();
+            foreach my $nsElement(@nsElements)
+            {
+                if(! $enum->contains($nsElement->getID()))
+                {
+                    print("Remove cached element ".$nsElement->getName() 
+                            ." that's missing from enum?");
+                    if(UserInput::confirm())
+                    {
+                       $cache->deleteElement($nsElement); 
                     }
                 }
             }
-            else
+        }
+        # If no matches exist, ask to add as a new namespace:
+        if((scalar @matches) == 0)
+        {
+            print("Add uncached namespace $enumName?");
+            if(UserInput::confirm())
             {
-                print("Adding new Element $newValText.\n");
-                my $newVal = new Element($enumName, $name, $id);
-                $cache->addElement($newVal);
+                # Create and add elements for each enum value.
+                for(my $i = 0; $i < (scalar @colourIds); $i++)
+                {
+                    my $id = $colourIds[$i];
+                    my $name = $colourNames[$i];
+                    $cache->addElement(new Element($enumName, $name, $id));
+                }
             }
         }
     }

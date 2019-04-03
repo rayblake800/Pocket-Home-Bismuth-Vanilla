@@ -31,9 +31,30 @@
 #==============================================================================#
 
 #==============================================================================#
+#--- clearOptions: ---
+# Removes all options from the menu.
+#==============================================================================#
+
+#==============================================================================#
+#--- setRefreshAction: ---
+# Saves a function that the menu should perform to update itself before each
+# time it prints out the available menu options.
+#-- Parameters: --
+# $refreshAction: A function reference that will run each time the menu is
+#                 reprinted. The menu object will be passed to this function as
+#                 its only parameter.
+#==============================================================================#
+
+#==============================================================================#
 #--- openMenu: ---
 # Displays the menu, repeatedly accepting input and running the menu action
 # with the selected option parameter until the user enters 'q'.
+#==============================================================================#
+
+#==============================================================================#
+#--- closeMenu: ---
+# If the menu is currently open, ensures that the menu will close before
+# taking any further actions.
 #==============================================================================#
 
 use strict;
@@ -73,7 +94,8 @@ sub new
         _exitText => $exitText,
         _action   => $action,
         _args     => \@args,
-        _options  => []
+        _options  => [],
+        _refresh  => sub { }
     };
     bless($self, $class);
     return $self;
@@ -86,16 +108,42 @@ sub addOption
     my $description = shift;
     my $optionData = shift;
     push(@{$self->{_options}}, [$description, $optionData]);
-};
+}
+
+# Removes all options from the menu.
+sub clearOptions
+{
+    my $self = shift;
+    $self->{_options} = [];
+}
+
+# Saves a function that the menu should perform to update itself before each
+# time it prints out the available menu options.
+sub setRefreshAction
+{
+    my $self = shift;
+    my $refreshAction = shift;
+    $self->{_refresh} = $refreshAction;
+}
 
 # Displays the menu, accepting input until the user enters 'q'
 sub openMenu
 {
     my $self = shift;
+    delete($self->{_shouldClose});
     my $input = "";
     while(!($input =~ /q/))
     {
-        my $infoText = $self->{_title}."\n";
+        if(exists($self->{_shouldClose}))
+        {
+            return;
+        }
+        $self->{_refresh}->($self);
+        if(exists($self->{_shouldClose}))
+        {
+            return;
+        }
+        my $infoText = "\n".$self->{_title}."\n";
         my $index = 1;
         my $numOptions = @{$self->{_options}};
         foreach my $option(@{$self->{_options}})
@@ -106,7 +154,7 @@ sub openMenu
         $infoText = $infoText."q: ".$self->{_exitText}."\n";
         print($infoText);
         $input = <STDIN>;
-        if($input =~ /(\d)/)
+        if($input =~ /(\d+)/)
         {
             my $index = $1 - 1;
             if(($index >= 0) && ($index < $numOptions))
@@ -118,6 +166,13 @@ sub openMenu
             }
         }
     }
+}
 
+# If the menu is currently open, ensures that the menu will close before
+# taking any further actions.
+sub closeMenu
+{
+    my $self = shift;
+    $self->{_shouldClose} = 1;
 }
 1;
