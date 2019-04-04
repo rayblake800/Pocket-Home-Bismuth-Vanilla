@@ -84,6 +84,13 @@
 #==============================================================================#
 
 #==============================================================================#
+#--- getElements: ---
+# Gets all cached Element objects, sorted by Element ID value.
+#--- Returns: ---
+# The full list of all cached Element objects.
+#==============================================================================#
+
+#==============================================================================#
 #--- getElementNames: ---
 # Gets the list of all Element full names, sorted by Element ID value.
 #--- Returns: ---
@@ -296,6 +303,19 @@ sub getNamespace
     return undef;
 }
 
+# Gets all cached Element objects, sorted by Element ID value.
+sub getElements
+{
+    my $self = shift;
+    my @names = $self->getElementNames();
+    my @elements;
+    foreach my $name(@names)
+    {
+        push(@elements, $self->findElement($name));
+    }
+    return @elements;
+}
+
 # Gets the list of all Element full names, sorted by Element ID value.
 sub getElementNames
 {
@@ -309,7 +329,7 @@ sub getElementNames
 sub getElementKeys
 {
     my $self = shift;
-    my @names = keys(@{$self->{_keys}});
-    return sort {$a->sortValue() <=> $b->sortValue()} @names;
+    my @names = keys(%{$self->{_keys}});
+    return sort {$self->sortValue($a) <=> $self->sortValue($b)} @names;
 }
 1;

@@ -18,6 +18,10 @@ use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 use EnumMenu;
 use NamespaceListMenu;
+use KeyMenu;
+use CategoryMenu;
+use ExportMenu;
+use UpdateMenu;
 
 # Displays the main menu, repeatedly accepting input and running the menu action
 # with the selected option parameter until the user enters 'q'.
@@ -26,53 +30,19 @@ sub openMenu
     my $cache = shift;
     my $menu = new InputMenu(
             "ColourId management tool options:",
-            "Exit program:",
-            undef,
-            $cache);
+            "Exit program:");
     $menu->addOption("Scan project for new ColourId enums",
-            \&enumScan);
+            sub { EnumMenu::openMenu($cache); });
     $menu->addOption("Edit Element namespaces",
-            \&namespaceMenu);
-    $menu->addOption("Edit configuration keys",
-            \&keyMenu);
+            sub { NamespaceListMenu::openMenu($cache); });
+    $menu->addOption("Edit custom colour JSON keys",
+            sub { KeyMenu::openMenu($cache); });
     $menu->addOption("Assign UI categories",
-            \&categoryMenu);
-    $menu->addOption("Update Colour files",
-            \&updateFiles);
+            sub { CategoryMenu::openMenu($cache); });
+    $menu->addOption("Export cached data",
+            sub { ExportMenu::openMenu($cache); });
+    $menu->addOption("Update project files",
+            sub { UpdateMenu::openMenu($cache); });
     $menu->openMenu();
-}
-
-sub todo
-{
-    print("TODO: ".shift."\n");
-    print("press enter to continue:");
-    <STDIN>
-}
-
-sub enumScan
-{
-    my $cache = shift;
-    EnumMenu::openMenu($cache);
-}
-
-sub namespaceMenu
-{
-    my $cache = shift;
-    NamespaceListMenu::openMenu($cache);
-}
-
-sub keyMenu
-{
-    todo("Implement key menu\n");
-}
-
-sub categoryMenu
-{
-    todo("Implement key menu\n");
-}
-
-sub updateFiles
-{
-    todo("Implement file update\n");
 }
 1;
