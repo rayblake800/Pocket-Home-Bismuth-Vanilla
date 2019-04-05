@@ -88,7 +88,7 @@ sub renameNamespace
     my $menu = shift;
     my $cache = shift;
     my $namespaceName = shift;
-    my $newName = UserInput::inputName(
+    my $newName = UserInput::inputText(
             '[a-zA-Z_][a-zA-Z_0-9]*',
             "Enter the new name for Namespace $namespaceName:",
             undef,
@@ -104,8 +104,9 @@ sub renameNamespace
         my $replacement = new Element($newName,
                 $element->getName(),
                 $element->getID(),
-                $element->getCategory());
-        $replacement->setKey($element->getKey());
+                $element->getCategory(),
+                $element->getKey(),
+                $element->getDefaultColour());
         $cache->removeElement($element);
         $cache->addElement($replacement);
     }

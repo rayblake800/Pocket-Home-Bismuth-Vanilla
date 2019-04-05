@@ -83,8 +83,8 @@ sub loadEnums
             {
                 print("Namespace $match conflicts with enum $enumName.\n");
                 print("Choose an option:\n");
-                print("1. Move all Elements into $match Namespace\n.");
-                print("2. Move all Elements into $enumName Namespace\n.");
+                print("1. Move all Elements into $match Namespace.\n");
+                print("2. Move all Elements into $enumName Namespace.\n");
                 print("3. Keep conflicting Elements in $match Namespace.\n");
                 print("4. Move conflicting Elements into $enumName Namespace.\n");
                 my $selection = UserInput::checkInput('1', '2', '3', '4');
@@ -119,22 +119,27 @@ sub loadEnums
                         my $addedElement = new Element($namespace, $name, $id);
                     }
                 }
-                elsif($cachedElement->getName() ne $name)
+                else
                 {
-                    print("Element $name is cached as "
-                            .$cachedElement->getName()
-                            .", replace cached name?");
-                    if(!UserInput::confirm())
+                    if($cachedElement->getName() ne $name)
                     {
-                        $updatedName = $cachedElement->getName();
+                        print("Element $name is cached as "
+                                .$cachedElement->getName()
+                                .", replace cached name?");
+                        if(!UserInput::confirm())
+                        {
+                            $updatedName = $cachedElement->getName();
+                        }
                     }
+                    my $updatedElement = new Element(
+                            $overrideName || $cachedElement->getNamespace(),
+                            $updatedName,
+                            $id,
+                            $cachedElement->getCategory(),
+                            $cachedElement->getKey(),
+                            $cachedElement->getDefaultColour());
+                    $cache->addElement($updatedElement);
                 }
-                my $updatedElement = new Element(
-                        $overrideName || $cachedElement->getNamespace(),
-                        $updatedName,
-                        $id,
-                        $cachedElement->getCategory());
-                $cache->addElement($updatedElement);
             }
 
             # For each individual ID in the namespace:  
@@ -148,7 +153,7 @@ sub loadEnums
                             ." that's missing from enum?");
                     if(UserInput::confirm())
                     {
-                       $cache->deleteElement($nsElement); 
+                       $cache->removeElement($nsElement); 
                     }
                 }
             }

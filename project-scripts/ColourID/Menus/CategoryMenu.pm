@@ -56,7 +56,33 @@ sub assignCategory
     my $cache = shift;
     my $element = shift;
     my $defaultOption = shift;
-    print("TODO: Finish assignment function.\n");
+    my @validOptions = ("\n", "q");
+    print("\n".$element->getFullName.":\n select a category.\n");
+    for(my $i = 0; $i < Category::NUM_TYPES; $i++)
+    {
+        my $category = new Category($i);
+        print($i.". ".$category->getTypeName().".\n");
+        push(@validOptions, $i);
+    }
+    print("[enter]: Repeat option $defaultOption.\n");
+    print("q: Cancel assignment:");
+    my $selection = UserInput::checkInput(@validOptions);
+    if($selection ne 'q')
+    {
+        if($selection eq "\n")
+        {
+            $selection = $defaultOption;
+        }
+        my $assignedElement = new Element($element->getNamespace(),
+            $element->getName(),
+            $element->getID(),
+            new Category($selection),
+            $element->getKey(),
+            $element->getDefaultColour());
+        $cache->removeElement($element);
+        $cache->addElement($assignedElement);
+    }
+    return $selection;
 }
 
 # Assigns categories to a list of cached Element objects.
@@ -64,6 +90,24 @@ sub assignCategories
 {
     my $cache = shift;
     my @elements = @_;
-    print("TODO: Finish assignment function.\n");
+    print("Sort by 1:ID, 2:full name, or 3:element name?:");
+    my $sortOrder = UserInput::checkInput('1', '2', '3');
+    if($sortOrder == 2)
+    {
+        @elements = sort {$a->getFullName() cmp $b->getFullName()}  @elements;
+    }
+    elsif($sortOrder == 3)
+    {
+        @elements = sort {$a->getName() cmp $b->getName()}  @elements;
+    }
+    my $lastSelection = 0;
+    foreach my $element(@elements)
+    {
+        $lastSelection = assignCategory($cache, $element, $lastSelection);
+        if($lastSelection eq 'q')
+        {
+            return;
+        }
+    }
 }
 1;

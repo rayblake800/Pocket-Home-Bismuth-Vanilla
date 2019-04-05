@@ -30,13 +30,19 @@ sub openMenu
 {
     my $element = shift;
     my $cache = shift;
-    my $menu = new InputMenu(
-            "Element ".$element->getFullName()
+    my $title = "Element ".$element->getFullName()
             ."\nID: ".$element->getID()
-            ."\nCategory: ".$element->getCategory()->getTypeName()
-            ."\nKey: ".$element->getKey()
-            ."\nEdit Element:",
-            "Return to main menu:");
+            ."\nCategory: ".$element->getCategory()->getTypeName();
+    if($element->getKey())
+    {
+        $title = $title."\nKey: ".$element->getKey();
+    }
+    if($element->getDefaultColour())
+    {
+        $title = $title."\nDefault colour: ".$element->getDefaultColour();
+    }
+    my $menu = new InputMenu($title."\nEdit Element:",
+            "Return to namespace menu:");
     $menu->addOption("Rename Element", sub
             { renameElement($menu, $element, $cache); });
     $menu->addOption("Set category", sub
@@ -51,14 +57,15 @@ sub renameElement
     my $menu = shift;
     my $element = shift;
     my $cache = shift;
-    my $newName = UserInput::inputName();
+    my $newName = UserInput::inputText();
     if($newName)
     {
         my $replacement = new Element($newName,
                 $element->getName(),
                 $element->getID(),
-                $element->getCategory());
-        $replacement->setKey($element->getKey());
+                $element->getCategory(),
+                $element->getKey(),
+                $element->getDefaultColour());
         $cache->removeElement($element);
         $cache->addElement($replacement);
         $menu->closeMenu();
@@ -86,8 +93,9 @@ sub setCategory
         my $replacement = new Element($element->getNamespace(),
                 $element->getName(),
                 $element->getID(),
-                $selectedCategory);
-        $replacement->setKey($element->getKey());
+                $selectedCategory,
+                $element->getKey(),
+                $element->getDefaultColour());
         $cache->removeElement($element);
         $cache->addElement($replacement);
         $menu->closeMenu();
@@ -106,5 +114,4 @@ sub setKey
         $menu->closeMenu();
     }
 }
-
 1;

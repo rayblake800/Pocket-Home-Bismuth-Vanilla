@@ -59,7 +59,7 @@ sub checkInput
         $input = <STDIN>;
         foreach my $option(@options)
         {
-            if($input =~ /^$option\n/i)
+            if($input =~ /^$option\n?$/i)
             {
                 return $option;
             }
@@ -82,9 +82,9 @@ sub inputText
     my $renameMessage = (shift || "Please enter the new value:");
     my $errorMessage = (shift ||  "Invalid input, try again:");
     my $confirmMessage = shift;
-    my $newText = "";
+    my $newText;
     print($renameMessage);
-    while($newText eq "")
+    while(!defined($newText))
     {
         $newText = <STDIN>;
         #strip trailing newline
@@ -103,7 +103,7 @@ sub inputText
         else
         {
             print("$errorMessage");
-            $newText = "";
+            $newText = undef;
         }
     }
     return $newText;

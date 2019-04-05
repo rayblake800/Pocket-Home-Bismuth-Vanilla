@@ -33,6 +33,14 @@ sub openMenu
             "Exit program:");
     $menu->addOption("Scan project for new ColourId enums",
             sub { EnumMenu::openMenu($cache); });
+    $menu->addOption("Find next open ID value",
+            sub 
+            { 
+                my @elements = $cache->getElements();
+                my $lastID = hex($elements[-1]->getID()) + 0x100;
+                $lastID = sprintf("0x%x", $lastID);
+                print("Start the next new ColourId enum at $lastID\n");
+            });
     $menu->addOption("Edit Element namespaces",
             sub { NamespaceListMenu::openMenu($cache); });
     $menu->addOption("Edit custom colour JSON keys",
@@ -43,6 +51,7 @@ sub openMenu
             sub { ExportMenu::openMenu($cache); });
     $menu->addOption("Update project files",
             sub { UpdateMenu::openMenu($cache); });
+
     $menu->openMenu();
 }
 1;

@@ -184,7 +184,7 @@ sub removeElement
         }
         delete($self->{_elements}->{$element->getFullName()});
         my $key = $element->getKey();
-        if(length($key) > 0)
+        if($key)
         {
             delete($self->{_keys}->{$key});
         }
@@ -207,13 +207,15 @@ sub assignKey
     my $element = $self->findElement($searchVal);
     if(defined($element))
     {
-        my $currentKey = $element->getKey();
-        if($currentKey)
-        {
-            delete($self->{_keys}->{$currentKey});
-        }
-        $element->setKey($key);
-        $self->{_keys}->{$key} = $element;
+        my $replacement = new Element(
+                $element->getNamespace(),
+                $element->getName(),
+                $element->getID(),
+                $element->getCategory(),
+                $key,
+                $element->getDefaultColour());
+        $self->removeElement($element);
+        $self->addElement($replacement);
     }
     else
     {

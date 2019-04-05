@@ -17,6 +17,10 @@
 # [$category]:  The element's UICategory object, a value that can be used to
 #               construct a valid Category object, or no value to default to
 #               Category::NONE.
+#
+# [$key]:       The element's optional JSON colour key.
+#
+# [$colour]:    The element's optional default JSON colour value.
 #--- Returns ---
 # The new element object, or undef if invalid parameters were given.
 #==============================================================================#
@@ -62,13 +66,6 @@
 #==============================================================================#
 
 #==============================================================================#
-#--- setCategory: ---
-# Sets the element's Category enum object
-#--- Parameters: --- 
-# $newCategory: A value that can be used to construct a valid Category object.
-#==============================================================================#
-
-#==============================================================================#
 #--- getKey: ---
 # Gets the element's optional JSON colour key.
 #--- Returns: ---
@@ -77,10 +74,12 @@
 #==============================================================================#
 
 #==============================================================================#
-#--- setKey: ---
-# Sets the element's optional JSON colour key.
-#--- Parameters: --- 
-# $key:  The new JSON key string the element should hold.
+#--- getDefaultColour: ---
+# Gets the colour value assigned to the element in the default colours.json 
+# file.
+#--- Returns: ---
+# The default colour assigned to this element in the configuration file, or the
+# empty string if no key is set.
 #==============================================================================#
 
 #==============================================================================#
@@ -99,17 +98,6 @@
 #            each line in the returned declaration.
 #--- Returns: ---
 # An Element declaration that may be used in a C++ header file.
-#==============================================================================#
-
-#==============================================================================#
-#--- getDefinition: ---
-# Gets a C++ Theme::Colour::Element constant definition using this object's 
-# values.
-#--- Parameters: --- 
-# [$indent]: Optional number of indentations to include at the beginning of
-#            each line in the returned definition.
-#--- Returns: ---
-# An Element definition that may be used in a C++ source file.
 #==============================================================================#
 
 #==============================================================================#
@@ -137,7 +125,7 @@ sub new
 {
     my $class = shift;
     my $namespace = shift;
-    my $name, my $id, my $category;
+    my $name, my $id, my $category, my $key, my $colour;
     my $numParams = @_;
     if($numParams == 1)
     {
@@ -159,12 +147,38 @@ sub new
         $name = shift;
         $id = shift;
         $category = shift;
+        $key = shift;
+        $colour = shift;
+        if($colour)
+        {
+            if(!($colour =~ /^0x/i))
+            {
+                $colour = "0x$colour";
+            }
+            if($colour =~ /^0x[0-9a-f]{8}$/i)
+            {
+                $colour = lc($colour);
+            }
+            else
+            {
+                print("Element::setDefaultColour: Default colour must be an"
+                        ." eight digit hexadecimal number.\n");
+                $colour = "";
+            }
+        }
     }
     if(!defined($category))
     {
         $category = Category::NONE;
     }
     $category = new Category($category);
+    foreach my $optionalParam(\$colour, \$key)
+    {
+        if(!defined($$optionalParam))
+        {
+            $$optionalParam = "";
+        }
+    }
     if(defined($namespace) && defined($name) && defined($id) 
             && defined($category))
     {
@@ -174,7 +188,8 @@ sub new
             _name      => $name,
             _id        => $id,
             _category  => $category,
-            _key       => ""
+            _key       => $key,
+            _colour    => $colour
         };
         bless($self, $class);
         return $self;
@@ -210,14 +225,6 @@ sub getCategory
     return $self->{_category};
 }
 
-# Sets the element's Category enum object
-sub setCategory
-{
-    my $self = shift;
-    my $newCategory = new Category(shift);
-    $self->{_category} = $newCategory;
-}
-
 # Gets the element's optional JSON colour key.
 sub getKey
 {
@@ -225,11 +232,33 @@ sub getKey
     return $self->{_key};
 }
 
-# Sets the element's optional JSON colour key.
-sub setKey
+# Gets the colour value assigned to the element in the default colours.json 
+# file.
+sub getDefaultColour
 {
     my $self = shift;
-    $self->{_key} = shift;
+    return $self->{_colour};
+}
+
+# Sets the colour value assigned to the element in the default colours.json 
+# file.
+sub setDefaultColour
+{
+    my $self = shift;
+    my $colour = shift;
+    if(!($colour =~ /^0x/i))
+    {
+        $colour = "0x$colour";
+    }
+    if($colour =~ /^0x[0-9a-f]{8}$/i)
+    {
+        $self->{_colour} = lc($colour);
+    }
+    else
+    {
+        print("Element::setDefaultColour: Default colour must be an eight "
+                ."digit hexadecimal number.\n");
+    }
 }
 
 # Gets the full name used to identify the Element in C++.
@@ -252,23 +281,7 @@ sub getDeclaration
     {
         $indent = "";
     }
-    return $indent."static const Element ".$self->getName().";";
-}
-
-# Gets a C++ definition for the Element as a Theme::Colour::Element constant.
-sub getDefinition
-{
-    my $self = shift;
-    my $indent = shift;
-    if(defined($indent))
-    {
-        $indent = " " x ($indent*4);
-    }
-    else
-    {
-        $indent = "";
-    }
-    return $indent."const Element ".$self->getNameKey()."(\n"
+    return $indent."static const Element ".$self->getName()."(\n"
             .$indent.(" " x 8).$self->getID()
             .", UICategory::".$self->getCategory()->getTypeName().");";
 }

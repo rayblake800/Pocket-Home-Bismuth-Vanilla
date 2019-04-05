@@ -14,6 +14,8 @@ use strict;
 use warnings;
 
 package KeyMenu;
+use lib './project-scripts/ColourID';
+use UserInput;
 use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 
@@ -46,5 +48,25 @@ sub editKey
 {
     my $element = shift;
     my $cache = shift;
+    print("1. Edit key\n2. Delete key\nq. Return to key menu:");
+    my $selection = UserInput::checkInput('1', '2', 'q');
+    if($selection == 1)
+    {
+        print("Enter new key value:");
+        my $newKey = UserInput::inputText('.+');
+        $cache->assignKey($element->getFullName(), $newKey);
+    }
+    elsif($selection == 2)
+    {
+        my $replacement = new Element(
+                $element->getNamespace(),
+                $element->getName(),
+                $element->getID(),
+                $element->getCategory(),
+                "",
+                $element->getDefaultColour());
+        $cache->removeElement($element);
+        $cache->addElement($replacement);
+    }
 }
 1;

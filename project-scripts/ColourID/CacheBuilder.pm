@@ -6,8 +6,8 @@
 
 #==============================================================================#
 #--- processFile: ---
-# Parses Element declarations, definitions, or keys from a file and adds them 
-# to an IDCache object.
+# Parses Element declarations, definitions, keys, or default colours from a file
+# and adds them to an IDCache object.
 #--- Parameters: ---
 # $cache:  The cache object where parsed elements will be added.
 #
@@ -18,7 +18,7 @@ use strict;
 use warnings;
 
 package CacheBuilder;
-use lib './project-scripts/ColourID';
+use lib './project-scripts/ColourID/DataObjects';
 use Element;
 use Category;
 use IDCache;
@@ -32,11 +32,18 @@ sub processFile
 {
     my $cache = shift;
     my $path = shift;
-    my $file = read_file($path);
+    if($path =~ /json$/i)
+    { 
+        parseJSON($cache, $path);
+        return;
+    }
+    my $file = read_file($path) or die("Failed to read $path\n");
 
     my @elements;
     # Parse definitions that are also declarations:
-    my @innerNamespaces = ($file =~ /namespace \w+\s+{[^{]*?}/gs);
+    my @innerNamespaces = ($file =~ /
+            namespace\ \w+\s+{ # match any namespace
+            [^{]*?}            # that contains no inner scopes /xgs);
     foreach my $namespace(@innerNamespaces)
     {
         my $namespaceName;
@@ -51,8 +58,10 @@ sub processFile
             next;
         }
         my @elementDefs = ($namespace =~ /
-                static\ const\ Element\ [a-zA-Z_][a-zA-Z0-9_]*
-                \s*\(.*?\)\s*;/gsx);
+                static\ const\ Element\  # Match Element declaration type
+                [a-zA-Z_][a-zA-Z0-9_]*   # Match valid Element name
+                \s*\(.*?\)\s*;           # Match parameters
+                /gsx); 
         foreach my $definition(@elementDefs)
         {
             my $element = new Element($namespaceName, $definition);
@@ -63,39 +72,29 @@ sub processFile
         }
     }
 
-    # Parse definitions for Elements declared elsewhere:
-    my @definitions = ($file =~ /Element (\w+::)+\w+\s*\(.*?\)/gs);
-    foreach my $definition(@definitions)
-    {
-        if($definition =~ /Element (?:\w+::)*(\w+)::(.*)/gs)
-        {
-            my $namespace = $1;
-            my $def = $2;
-            my $element = new Element($namespace, $def);
-            if(defined($element))
-            {
-                push(@elements, $element);
-            }
-        }
-        else
-        {
-            print("CacheBuilder::ProcessFile: Invalid definition found.\n");
-            print("definition=$definition\n");
-            next;
-        }
-    }
-
     # parse config key definitions:
-    if($file =~ /map\s*<\s*juce::Identifier\s*,\s*Element\s*>[^{]+
-            {([^;]+)};/sx)
+    if($file =~ /
+            map\s*<\s*juce::Identifier\s*,\s*Element\s*> # Match key map type
+            [^{]+                                        # Match map name
+            {([^;]+)};                                   # Match map contents
+            /sx)                               
     {
         my $keyMap = $1;
         my @keyList = ($keyMap =~ /{[^}]+}/gs);
-        print("Found probable key map with ".(scalar @keyList)
-                ." key(s) defined\n");
+        my $numKeys = @keyList;
+        if($numKeys > 0)
+        {
+            print("Found key map with $numKeys key(s) defined in $path\n");
+        }
         foreach my $keyPair(@keyList)
         {
-            if($keyPair =~ /{\s*"(.*?)"\s*,\s*(.*?)\s*}/s)
+            if($keyPair =~ /
+                    {\s*
+                    "(.*?)"  # Capture key string
+                    \s*,\s*
+                    (.*?)    # Capture associated Element
+                    \s*}
+                    /sx)
             {
                 my $key = $1;
                 my $elementName = $2;
@@ -108,13 +107,64 @@ sub processFile
         }
     } 
 
-    print("Found ".(scalar @elements)." elements to cache in $path.\n");
+    my $numElements = @elements;
+    if($numElements > 0)
+    {
+        print("Found $numElements elements to cache in $path.\n");
+    }
     foreach my $element(@elements)
     {
         if(defined($element) && blessed($element)
                 && blessed($element) eq 'Element')
         {
             $cache->addElement($element);
+        }
+    }
+}
+
+# Parse default colour values from a JSON file.
+sub parseJSON
+{
+    my $cache = shift;
+    my $path = shift;
+    my $file = read_file($path);
+    my @configValues = ($file =~ /
+            "[^"]+" # match quoted key
+            \s*:\s*
+            "[^"]+" # match quoted value
+            /xgsi);
+    my $numValues = @configValues;
+    if($numValues > 0)
+    {
+        print("Found $numValues default colour values in $path.\n");
+    }
+    foreach my $value(@configValues)
+    {
+        if($value =~ /
+                "(.+?)"           # capture quoted key
+                \s*:\s*
+                "(0x[0-9a-f]{8})" # capture quoted hex value
+                /xsi)
+        {
+            my $key = $1;
+            my $colour = $2;
+            my $element = $cache->findElement($key);
+            if(defined($element))
+            {
+                my $updated = new Element(
+                        $element->getNamespace(),
+                        $element->getName(),
+                        $element->getID(),
+                        $element->getCategory(),
+                        $key,
+                        $colour);
+                $cache->removeElement($element);
+                $cache->addElement($updated);
+            }
+        }
+        else
+        {
+            print("No match: $value\n");
         }
     }
 }

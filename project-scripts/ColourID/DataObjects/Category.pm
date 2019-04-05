@@ -79,7 +79,7 @@ my @categoryKeys = (
         'Window background',
         'Widget background',
         'Widget',
-        'Widget(Off)',
+        'Widget(off)',
         'Menu background',
         'Outline',
         'Focused outline',

@@ -14,6 +14,9 @@ use strict;
 use warnings;
 
 package ExportMenu;
+use File::Slurp;
+use lib './project-scripts/ColourID';
+use IOUtils;
 use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 
@@ -25,16 +28,29 @@ sub openMenu
     my $menu = new InputMenu(
             "Colour data export options:",
             "Return to main menu:",
-            undef,
-            $cache);
+            \&export);
     $menu->addOption("Export Element object declarations.",
-            sub { });
-    $menu->addOption("Export Element object definitions.",
-            sub { });
+            sub { return IOUtils::getDeclarationText($cache); });
     $menu->addOption("Export <JSONKey, Element> map definition.",
-            sub { });
+            sub { return IOUtils::getKeyMapDeclaration($cache); });
     $menu->addOption("Export default colours.json file.",
-            sub { });
+            sub { return IOUtils::getDefaultColourConfig($cache); });
     $menu->openMenu();
+}
+
+sub export
+{
+    my $dataFunction = shift;
+    my $outPath = UserInput::inputText(undef,
+            "Enter an export path, or press enter to export to stdout:");
+    my $exportData = $dataFunction->();
+    if($outPath && write_file($outPath, $exportData))
+    {
+        print("Exported to $outPath.\n");
+    }
+    else
+    {
+        print("Exporting to stdout:\n$exportData\n");
+    }
 }
 1;

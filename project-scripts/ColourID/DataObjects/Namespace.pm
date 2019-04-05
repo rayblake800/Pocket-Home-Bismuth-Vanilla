@@ -60,13 +60,6 @@
 # The full C++ declaration text. 
 #==============================================================================#
 
-#==============================================================================#
-#--- getDefinitionText: ---
-# Creates C++ definitions of all Elements in this Namespace.
-#--- Returns: ---
-# A string containing all C++ Element definitions.
-#==============================================================================#
-
 use strict;
 use warnings;
 
@@ -112,7 +105,7 @@ sub addElement
         && ($element->getNamespace() eq $self->getName()))
     {
         push(@{$self->{_elements}}, $element);
-        sortElements();
+        $self->sortElements();
     }
     else
     {
@@ -137,11 +130,7 @@ sub removeElement
         if($element && ($element->getID() eq $id))
         {
             splice(@{$self->{_elements}}, $i, 1);
-            my $newNum = @{$self->{_elements}};
-            if($newNum >= $numElements)
-            {
-                die "that doesn't work.\n";
-            }
+            $self->sortElements();
             return;
         }
     }
@@ -171,25 +160,12 @@ sub getFirstID
 sub getDeclarationText
 {
     my $self = shift;
-    my $decl = "namespace ".$self->getTitle()."\n{\n";
+    my $decl = "namespace ".$self->getName()."\n{\n";
     my @elements = $self->getElements();
     foreach my $element(@elements)
     {
        $decl = $decl.$element->getDeclaration(1)."\n"; 
     }
     return $decl."}\n";
-}
-
-# Creates C++ definitions of all Elements in this Namespace.
-sub getDefinitionText()
-{
-    my $self = shift;
-    my $def = "";
-    my @elements = $self->getElements();
-    foreach my $element(@elements)
-    {
-       $def = $def.$element->getDefinition()."\n"; 
-    }
-    return $def."\n";
 }
 1;
