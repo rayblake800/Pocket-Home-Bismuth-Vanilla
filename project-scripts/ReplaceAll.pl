@@ -43,8 +43,37 @@ sub rewindLines
 
 chdir($FindBin::Bin);
 my $projectDir = "../";
-my $toFind = $ARGV[0];
-my $replace = $ARGV[1];
+
+my $toFind, my $replace, my $fileApprove;
+foreach my $arg(@ARGV)
+{
+    if($arg =~ /^-*h(elp)?$/i)
+    {
+        print("Usage:\n");
+        print("./project_scripts/ReplaceAll.pl [flags] \"pattern\" "
+                ."\"replacement\"\n");
+        print("\t-h/-H/--help/etc: Print this help text and exit.\n");
+        print("\t-a: Approve replacements by file instead of line.\n");
+        exit(0);
+    }
+    if($arg eq "-a")
+    {
+        $fileApprove = 1;
+    }
+    elsif(!defined($toFind))
+    {
+        $toFind = $arg;
+    }
+    elsif(!defined($replace))
+    {
+        $replace = $arg;
+    }
+    else
+    {
+        die "Unexpected argument $arg\n";
+    }
+}
+
 
 #Subdirectories to exclude:
 my @excluded = (
@@ -88,32 +117,67 @@ sub readFiles
         my $text= read_file($file);
         my @matches = ($text =~ /$toFind/g);
         my $matchCount = @matches;
+        my $approveAll = 0;
         if($matchCount > 0)
         {
             print("Found $matchCount ".($matchCount > 1 ? "matches" : "match")
                     ." in ");
             printGreen($File::Find::name);
+            if($fileApprove)
+            {
+                print(". Update file?:(");
+                printGreen('y');
+                print("/");
+                printRed('n');
+                print("):");
+                my $input = "";
+                while(($input ne 'y') && ($input ne 'n'))
+                {
+                    chomp($input = <STDIN>);
+                }
+                if($input eq 'y')
+                {
+                    $approveAll = 1;
+                }
+                else
+                {
+                    next;
+                }
+            }
             print(":\n");
             my $changesMade = 0;
             my $outText = "";
             my $input = "";
             while($text =~ /(.*?)(^.*?)($toFind)(.*?$)(.*)/ms)
             {
-                print("Found line:\n");
-                print($2);
-                printRed($3);
-                print("$4\n");
+                if(!$approveAll)
+                {
+                    print("Found line:\n");
+                    print($2);
+                    printRed($3);
+                    print("$4\n");
 
-                print($2);
-                printGreen($replace);
-                print("$4\n");
-                
-                print("Change line? (");
-                printGreen("y"); print("es/");
-                printRed("n");   print("o/");
-                printWhite("s"); print("kip file/");
-                printRed("q");   print("uit):");
-                chomp($input = <STDIN>);
+                    print($2);
+                    printGreen($replace);
+                    print("$4\n");
+                    
+                    print("Change line? (");
+                    printGreen("y"); print("es/");
+                    printRed("n");   print("o/");
+                    printWhite("s"); print("kip file/");
+                    printGreen("c"); print("hange all in file/");
+                    printRed("q");   print("uit):");
+                    chomp($input = <STDIN>);
+                }
+                else
+                {
+                    $input = 'y';
+                }
+                if($input eq "c")
+                {
+                    $approveAll = 1;
+                    $input = 'y';
+                }
                 if($input eq "y")
                 {
                     $changesMade++;
