@@ -21,7 +21,6 @@ public:
     JSONResource();
 
     virtual ~JSONResource() { }
-    
      
 private:
     /**

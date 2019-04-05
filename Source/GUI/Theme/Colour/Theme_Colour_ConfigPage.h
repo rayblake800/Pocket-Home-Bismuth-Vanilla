@@ -91,7 +91,7 @@ private:
         
         int textHeight;
         
-        const juce::Array<juce::Identifier>& colourKeys;
+        const juce::Array<const juce::Identifier*> colourKeys;
         
         juce::Array<juce::Colour> colours;
 

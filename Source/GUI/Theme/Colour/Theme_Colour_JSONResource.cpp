@@ -31,9 +31,9 @@ Theme::Colour::JSONResource::getConfigKeys() const
     static std::vector<Config::DataKey> keys;
     if(keys.empty())
     {
-        for(const Identifier& key : JSONKeys::getColourKeys())
+        for(const Identifier* key : JSONKeys::getColourKeys())
         {
-            keys.push_back(Config::DataKey(key, Config::DataKey::stringType));
+            keys.push_back(Config::DataKey(*key, Config::DataKey::stringType));
         }
     }
     return keys;

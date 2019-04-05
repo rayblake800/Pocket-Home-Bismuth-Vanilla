@@ -16,14 +16,14 @@ enum class Theme::Colour::UICategory
 {
     windowBackground = 0,
     widgetBackground,
-    widgetOff,
     widgetOn,
+    widgetOff,
     menuBackground,
     outline,
     focusedOutline,
-    textField,
     text,
-    highlightedTextField,
     highlightedText,
+    textField,
+    highlightedTextField,
     none
 };

@@ -49,15 +49,15 @@ colourKeys(JSONKeys::getColourKeys()),
 colourPicker(colourPicker)
 {
     ConfigFile config;
-    for(const juce::Identifier& key : colourKeys)
+    for(const juce::Identifier* key : colourKeys)
     {
-        addTrackedKey(key);
+        addTrackedKey(*key);
     }
     DBG("ColourTheme::ConfigPage::ColourListModel::" << __func__ 
             << ": adding " << colourKeys.size() << " colors");
-    for (const juce::Identifier& key : colourKeys)
+    for (const juce::Identifier* key : colourKeys)
     {
-        colours.add(config.getColour(key));
+        colours.add(config.getColour(*key));
     }
     DBG("ColourTheme::ConfigPage::ColourListModel::" << __func__ 
             << ": found " << colours.size() << " colors");
@@ -76,7 +76,7 @@ int ColourTheme::ConfigPage::ColourListModel::getNumRows()
 juce::String ColourTheme::ConfigPage::ColourListModel::getRowText
 (int index) const
 {
-    return colourKeys[index].toString();
+    return colourKeys[index]->toString();
 }
 
 void ColourTheme::ConfigPage::ColourListModel::listResized(juce::ListBox& list)
@@ -118,7 +118,7 @@ void ColourTheme::ConfigPage::ColourListModel::paintListBoxItem(
     }
     graphics.setOpacity(1);
     graphics.setFont(juce::Font(textHeight));
-    graphics.drawText(colourKeys[rowNumber].toString(), fillArea, 
+    graphics.drawText(colourKeys[rowNumber]->toString(), fillArea, 
             juce::Justification::centred);
 }
 
@@ -143,7 +143,7 @@ void ColourTheme::ConfigPage::ColourListModel::configValueChanged
 (const juce::Identifier& key) 
 {
     ConfigFile config;
-    int colourIndex = colourKeys.indexOf(key);
+    int colourIndex = colourKeys.indexOf(&key);
     juce::Colour newColour = config.getColour(key);
     if (colourIndex >= 0)
     {
@@ -184,7 +184,7 @@ void ColourTheme::ConfigPage::ColourListModel::colourChanged(const int colourId,
     using namespace JSONKeys;
     ConfigFile config;
     const juce::Identifier& idKey = getColourKey(colourId); 
-    int colourIndex = colourKeys.indexOf(idKey);
+    int colourIndex = colourKeys.indexOf(&idKey);
     if (colourIndex >= 0)
     {
         colours.set(colourIndex, newColour);

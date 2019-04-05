@@ -1,4 +1,6 @@
 #pragma once
+#include "Theme_Colour_Element.h"
+
 /**
  * @file Theme_Colour_ColourIds.h
  * 
@@ -16,534 +18,400 @@
  * of ColourIds.
  */
 
-namespace Theme { namespace Colour { namespace ColourIds
+namespace Theme { namespace Colour { namespace ColourIds {
+
+
+namespace TextButton
 {
-    namespace midiKeyboardComponent
-    {
-        enum
-        {
-            whiteNote              = 0x1005000,
-            blackNote              = 0x1005001,
-            keySeparatorLine       = 0x1005002,
-            mouseOverKeyOverlay    = 0x1005003,
-            keyDownOverlay         = 0x1005004,
-            textLabel              = 0x1005005,
-            upDownButtonBackground = 0x1005006,
-            upDownButtonArrow      = 0x1005007,
-            shadow                 = 0x1005008
-        };
-    }
+    static const Element buttonOff(
+            0x1000100, UICategory::widgetBackground);
+    static const Element button(
+            0x1000101, UICategory::widgetOn);
+    static const Element textOff(
+            0x1000102, UICategory::text);
+    static const Element text(
+            0x1000103, UICategory::text);
+}
+namespace TextEditor
+{
+    static const Element background(
+            0x1000200, UICategory::textField);
+    static const Element text(
+            0x1000201, UICategory::text);
+    static const Element highlight(
+            0x1000202, UICategory::highlightedTextField);
+    static const Element highlightedText(
+            0x1000203, UICategory::highlightedText);
+    static const Element outline(
+            0x1000205, UICategory::outline);
+    static const Element focusedOutline(
+            0x1000206, UICategory::focusedOutline);
+    static const Element shadow(
+            0x1000207, UICategory::widgetOff);
+}
+namespace Caret
+{
+    static const Element caret(
+            0x1000204, UICategory::text);
+}
+namespace Label
+{
+    static const Element background(
+            0x1000280, UICategory::windowBackground);
+    static const Element text(
+            0x1000281, UICategory::text);
+    static const Element outline(
+            0x1000282, UICategory::outline);
+    static const Element backgroundWhenEditing(
+            0x1000283, UICategory::textField);
+    static const Element textWhenEditing(
+            0x1000284, UICategory::text);
+    static const Element outlineWhenEditing(
+            0x1000285, UICategory::focusedOutline);
+}
+namespace ScrollBar
+{
+    static const Element background(
+            0x1000300, UICategory::widgetBackground);
+    static const Element thumb(
+            0x1000400, UICategory::widgetOn);
+    static const Element track(
+            0x1000401, UICategory::widgetOff);
+}
+namespace DirectoryContentsDisplay
+{
+    static const Element highlight(
+            0x1000540, UICategory::highlightedTextField);
+    static const Element text(
+            0x1000541, UICategory::text);
+    static const Element highlightedText(
+            0x1000542, UICategory::highlightedText);
+}
+namespace PopupMenu
+{
+    static const Element text(
+            0x1000600, UICategory::text);
+    static const Element headerText(
+            0x1000601, UICategory::text);
+    static const Element background(
+            0x1000700, UICategory::menuBackground);
+    static const Element highlightedText(
+            0x1000800, UICategory::highlightedText);
+    static const Element highlightedBackground(
+            0x1000900, UICategory::highlightedTextField);
+}
+namespace FileBrowser
+{
+    static const Element currentPathBoxBackground(
+            0x1000640, UICategory::widgetBackground);
+    static const Element currentPathBoxText(
+            0x1000641, UICategory::text);
+    static const Element currentPathBoxArrow(
+            0x1000642, UICategory::text);
+    static const Element filenameBoxBackground(
+            0x1000643, UICategory::textField);
+    static const Element filenameBoxText(
+            0x1000644, UICategory::text);
+}
+namespace FileChooserDialogBox
+{
+    static const Element titleText(
+            0x1000850, UICategory::text);
+}
+namespace ComboBox
+{
+    static const Element text(
+            0x1000a00, UICategory::text);
+    static const Element background(
+            0x1000b00, UICategory::menuBackground);
+    static const Element outline(
+            0x1000c00, UICategory::outline);
+    static const Element button(
+            0x1000d00, UICategory::widgetOff);
+    static const Element arrow(
+            0x1000e00, UICategory::text);
+    static const Element focusedOutline(
+            0x1000f00, UICategory::focusedOutline);
+}
+namespace Slider
+{
+    static const Element background(
+            0x1001200, UICategory::widgetBackground);
+    static const Element thumb(
+            0x1001300, UICategory::widgetOn);
+    static const Element track(
+            0x1001310, UICategory::widgetOff);
+    static const Element textBoxText(
+            0x1001400, UICategory::text);
+    static const Element textBoxBackground(
+            0x1001500, UICategory::windowBackground);
+    static const Element textBoxHighlight(
+            0x1001600, UICategory::highlightedText);
+    static const Element textBoxOutline(
+            0x1001700, UICategory::outline);
+}
+namespace AlertWindow
+{
+    static const Element background(
+            0x1001800, UICategory::windowBackground);
+    static const Element text(
+            0x1001810, UICategory::text);
+    static const Element outline(
+            0x1001820, UICategory::focusedOutline);
+}
+namespace ProgressBar
+{
+    static const Element background(
+            0x1001900, UICategory::widgetBackground);
+    static const Element foreground(
+            0x1001a00, UICategory::widgetOn);
+}
+namespace ListBox
+{
+    static const Element background(
+            0x1002800, UICategory::menuBackground);
+    static const Element outline(
+            0x1002810, UICategory::outline);
+    static const Element text(
+            0x1002820, UICategory::text);
+}
+namespace DrawableButton
+{
+    static const Element text(
+            0x1004010, UICategory::text);
+    static const Element background(
+            0x1004011, UICategory::widgetBackground);
+    static const Element backgroundOn(
+            0x1004012, UICategory::widgetBackground);
+    static const Element textOn(
+            0x1004013, UICategory::text);
+}
+namespace FileSearchPathList
+{
+    static const Element background(
+            0x1004100, UICategory::menuBackground);
+}
+namespace ResizableWindow
+{
+    static const Element background(
+            0x1005700, UICategory::windowBackground);
+}
+namespace DocumentWindow
+{
+    static const Element text(
+            0x1005701, UICategory::text);
+}
+namespace ToggleButton
+{
+    static const Element text(
+            0x1006501, UICategory::text);
+    static const Element tick(
+            0x1006502, UICategory::text);
+    static const Element tickDisabled(
+            0x1006503, UICategory::widgetOff);
+}
+namespace KeyMappingEditor
+{
+    static const Element background(
+            0x100ad00, UICategory::windowBackground);
+    static const Element text(
+            0x100ad01, UICategory::text);
+}
+namespace Image
+{
+    static const Element image0(
+            0x1900000, UICategory::none);
+    static const Element image1(
+            0x1900001, UICategory::none);
+    static const Element image2(
+            0x1900002, UICategory::none);
+    static const Element image3(
+            0x1900003, UICategory::none);
+    static const Element image4(
+            0x1900004, UICategory::none);
+}
+namespace ListEditor
+{
+    static const Element background(
+            0x1900100, UICategory::menuBackground);
+    static const Element listItem(
+            0x1900101, UICategory::textField);
+    static const Element selectedListItem(
+            0x1900102, UICategory::highlightedTextField);
+    static const Element text(
+            0x1900103, UICategory::text);
+}
+namespace AppMenuButton
+{
+    static const Element text(
+            0x1900200, UICategory::text);
+    static const Element selectedText(
+            0x1900201, UICategory::text);
+    static const Element textBackground(
+            0x1900202, UICategory::widgetBackground);
+    static const Element selectedTextBG(
+            0x1900203, UICategory::widgetBackground);
+    static const Element background(
+            0x1900204, UICategory::widgetBackground);
+    static const Element selectedBG(
+            0x1900205, UICategory::widgetBackground);
+    static const Element border(
+            0x1900206, UICategory::outline);
+    static const Element selectedBorder(
+            0x1900207, UICategory::focusedOutline);
+}
+namespace FilePathEditor
+{
+    static const Element fileWindow(
+            0x1900300, UICategory::windowBackground);
+    static const Element text(
+            0x1900301, UICategory::text);
+}
+namespace OverlaySpinner
+{
+    static const Element background(
+            0x1900400, UICategory::widgetBackground);
+    static const Element text(
+            0x1900401, UICategory::text);
+}
+namespace LayoutContainer
+{
+    static const Element background(
+            0x1900499, UICategory::windowBackground);
+}
+namespace Page
+{
+    static const Element background(
+            0x1900500, UICategory::windowBackground);
+}
+namespace ColourPicker
+{
+    static const Element checkerboardLight(
+            0x1900600, UICategory::widgetOn);
+    static const Element checkerboardDark(
+            0x1900601, UICategory::widgetOff);
+    static const Element outline(
+            0x1900602, UICategory::outline);
+    static const Element focusedOutline(
+            0x1900603, UICategory::focusedOutline);
+}
+namespace Switch
+{
+    static const Element background(
+            0x1900700, UICategory::widgetBackground);
+    static const Element handle(
+            0x1900701, UICategory::widgetOn);
+    static const Element handleOff(
+            0x1900702, UICategory::widgetOff);
+}
+namespace HomePage
+{
+    static const Element text(
+            0x1900800, UICategory::text);
+}
 
-    namespace bubbleComponent
-    {
-        enum
-        {
-            background = 0x1000af0,
-            outline    = 0x1000af1
-        };
-    }
-
-    namespace fileChooserDialogBox
-    {
-        enum
-        {
-            titleText = 0x1000850
-        };
-    }
-
-    namespace directoryContentsDisplayComponent
-    {
-        enum
-        {
-            highlight       = 0x1000540,
-            text            = 0x1000541,
-            highlightedText = 0x1000542
-        };
-    }
-
-    namespace fileBrowserComponent
-    {
-        enum
-        {
-            currentPathBoxBackground = 0x1000640,
-            currentPathBoxText       = 0x1000641,
-            currentPathBoxArrow      = 0x1000642,
-            filenameBoxBackground    = 0x1000643,
-            filenameBoxText          = 0x1000644
-        };
-    }
-
-    namespace fileSearchPathListComponent
-    {
-        enum
-        {
-            background = 0x1004100
-        };
-    }
-
-    namespace propertyComponent
-    {
-        enum
-        {
-            background = 0x1008300,
-            labelText  = 0x1008301
-        };
-    }
-
-    namespace textPropertyComponent
-    {
-        enum
-        {
-            background = 0x100e401,
-            text       = 0x100e402,
-            outline    = 0x100e403
-        };
-    }
-
-    namespace booleanPropertyComponent
-    {
-        enum
-        {
-            background = 0x100e801,
-            outline    = 0x100e803
-        };
-    }
-
-    namespace groupComponent
-    {
-        enum
-        {
-            outline = 0x1005400,
-            text    = 0x1005410
-        };
-    }
-
-    namespace tabbedComponent
-    {
-        enum
-        {
-            background = 0x1005800,
-            outline    = 0x1005801
-        };
-    }
-
-    namespace tabbedButtonBar
-    {
-        enum
-        {
-            tabOutline   = 0x1005812,
-            tabText      = 0x1005813,
-            frontOutline = 0x1005814,
-            frontText    = 0x1005815
-        };
-    }
-
-    namespace scrollBar
-    {
-        enum
-        {
-            background = 0x1000300,
-            thumb      = 0x1000400,
-            track      = 0x1000401
-        };
-    }
-
-    namespace sidePanel
-    {
-        enum
-        {
-            background          = 0x100f001,
-            titleText           = 0x100f002,
-            shadowBase          = 0x100f003,
-            dismissButtonNormal = 0x100f004,
-            dismissButtonOver   = 0x100f004,
-            dismissButtonDown   = 0x100f005
-        };
-    }
-
-    namespace progressBar
-    {
-        enum
-        {
-            background = 0x1001900,
-            foreground = 0x1001a00
-        };
-    }
-
-    namespace treeView
-    {
-        enum
-        {
-            background             = 0x1000500,
-            lines                  = 0x1000501,
-            dragAndDropIndicator   = 0x1000502,
-            selectedItemBackground = 0x1000503,
-            oddItems               = 0x1000504,
-            evenItems              = 0x1000505
-        };
-    }
-
-    namespace comboBox
-    {
-        enum
-        {
-            background     = 0x1000b00,
-            text           = 0x1000a00,
-            outline        = 0x1000c00,
-            button         = 0x1000d00,
-            arrow          = 0x1000e00,
-            focusedOutline = 0x1000f00
-        };
-    }
-
-    namespace textEditor
-    {
-        enum
-        {
-            background      = 0x1000200,
-            text            = 0x1000201,
-            highlight       = 0x1000202,
-            highlightedText = 0x1000203,
-            outline         = 0x1000205,
-            focusedOutline  = 0x1000206,
-            shadow          = 0x1000207
-        };
-    }
-
-    namespace label
-    {
-        enum
-        {
-            background            = 0x1000280,
-            text                  = 0x1000281,
-            outline               = 0x1000282,
-            backgroundWhenEditing = 0x1000283,
-            textWhenEditing       = 0x1000284,
-            outlineWhenEditing    = 0x1000285
-        };
-    }
-
-    namespace tableHeaderComponent
-    {
-        enum
-        {
-            text       = 0x1003800,
-            background = 0x1003810,
-            outline    = 0x1003820,
-            highlight  = 0x1003830
-        };
-    }
-
-    namespace listBox
-    {
-        enum
-        {
-            background = 0x1002800,
-            outline    = 0x1002810,
-            text       = 0x1002820
-        };
-    }
-
-    namespace toolbar
-    {
-        enum
-        {
-            background                = 0x1003200,
-            separator                 = 0x1003210,
-            buttonMouseOverBackground = 0x1003220,
-            buttonMouseDownBackground = 0x1003230,
-            labelText                 = 0x1003240,
-            editingModeOutline        = 0x1003250
-        };
-    }
-
-    namespace slider
-    {
-        enum
-        {
-            background          = 0x1001200,
-            thumb               = 0x1001300,
-            track               = 0x1001310,
-            rotarySliderFill    = 0x1001311,
-            rotarySliderOutline = 0x1001312,
-            textBoxText         = 0x1001400,
-            textBoxBackground   = 0x1001500,
-            textBoxHighlight    = 0x1001600,
-            textBoxOutline      = 0x1001700
-        };
-    }
-
-    namespace tooltipWindow
-    {
-        enum
-        {
-            background = 0x1001b00,
-            text       = 0x1001c00,
-            outline    = 0x1001c10
-        };
-    }
-
-    namespace alertWindow
-    {
-        enum
-        {
-            background = 0x1001800,
-            text       = 0x1001810,
-            outline    = 0x1001820
-        };
-    }
-
-    namespace documentWindow
-    {
-        enum
-        {
-            text = 0x1005701
-        };
-    }
-
-    namespace resizeableWindow
-    {
-        enum
-        {
-            background = 0x1005700
-        };
-    }
-
-    namespace popupMenu
-    {
-        enum
-        {
-            background            = 0x1000700,
-            text                  = 0x1000600,
-            headerText            = 0x1000601,
-            highlightedBackground = 0x1000900,
-            highlightedText       = 0x1000800
-        };
-    }
-
-    namespace lassoComponent
-    {
-        enum
-        {
-            lassoFill    = 0x1000440,
-            lassoOutline = 0x1000441
-        };
-    }
-
-    namespace caretComponent
-    {
-        enum
-        {
-            caret = 0x1000204
-        };
-    }
-
-    namespace toggleButton
-    {
-        enum
-        {
-            text         = 0x1006501,
-            tick         = 0x1006502,
-            tickDisabled = 0x1006503
-        };
-    }
-
-    namespace textButton
-    {
-        enum
-        {
-            button   = 0x1000100,
-            buttonOn = 0x1000101,
-            textOff  = 0x1000102,
-            textOn   = 0x1000103
-        };
-    }
-
-    namespace hyperlinkButton
-    {
-        enum
-        {
-            text = 0x1001f00
-        };
-    }
-
-    namespace drawableButton
-    {
-        enum
-        {
-            text         = 0x1004010,
-            textOn       = 0x1004013,
-            background   = 0x1004011,
-            backgroundOn = 0x1004012
-        };
-    }
-
-    namespace colourSelector
-    {
-        enum
-        {
-            background = 0x1007000,
-            labelText  = 0x1007001
-        };
-    }
-
-    namespace keyMappingEditorComponent
-    {
-        enum
-        {
-            background = 0x100ad00,
-            text       = 0x100ad01
-        };
-    }
-
-    namespace codeEditorComponent
-    {
-        enum
-        {
-            background           = 0x1004500,
-            highlight            = 0x1004502,
-            defaultText          = 0x1004503,
-            lineNumberBackground = 0x1004504,
-            lineNumberText       = 0x1004505
-        };
-    }
-
-    namespace jucer_CommonHeaders
-    {
-        enum
-        {
-            background                = 0x2340000,
-            secondaryBackground       = 0x2340001,
-            defaultText               = 0x2340002,
-            widgetText                = 0x2340003,
-            defaultButtonBackground   = 0x2340004,
-            secondaryButtonBackground = 0x2340005,
-            userButtonBackground      = 0x2340006,
-            defaultIcon               = 0x2340007,
-            treeIcon                  = 0x2340008,
-            defaultHighlight          = 0x2340009,
-            defaultHighlightedText    = 0x234000a,
-            codeEditorLineNumber      = 0x234000b,
-            activeTabIcon             = 0x234000c,
-            inactiveTabBackground     = 0x234000d,
-            inactiveTabIcon           = 0x234000e,
-            contentHeaderBackground   = 0x234000f,
-            widgetBackground          = 0x2340010,
-            secondaryWidgetBackground = 0x2340011
-        };
-    }
-
-    namespace layoutContainer
-    {
-        enum
-        {
-            background = 0x1900499
-        };
-    }
-
-    namespace pageComponent
-    {
-        enum
-        {
-            background = 0x1900500
-        };
-    }
-
-    namespace overlaySpinner
-    {
-        enum
-        {
-            background = 0x1900400,
-            text       = 0x1900401
-        };
-    }
-
-    namespace drawableImageButton
-    {
-        enum
-        {
-            image0 = 0x1900000,
-            image1 = 0x1900001,
-            image2 = 0x1900002,
-            image3 = 0x1900003,
-            image4 = 0x1900004
-        };
-    }
-
-    namespace drawableImageComponent
-    {
-        enum
-        {
-            image0 = 0x1900000,
-            image1 = 0x1900001,
-            image2 = 0x1900002,
-            image3 = 0x1900003,
-            image4 = 0x1900004
-        };
-    }
-
-    namespace switchComponent
-    {
-        enum
-        {
-            background = 0x100f000,
-            handle     = 0x100f001,
-            handleOff  = 0x100f002
-        };
-    }
-
-    namespace fileSelectTextEditor
-    {
-        enum
-        {
-            fileWindow = 0x1900300,
-            text       = 0x1900301
-        };
-    }
-
-    namespace listEditor
-    {
-        enum
-        {
-            background       = 0x1900100,
-            listItem         = 0x1900101,
-            selectedListItem = 0x1900102,
-            text             = 0x1900103
-        };
-    }
-
-    namespace appMenuButton
-    {
-        enum
-        {
-            text           = 0x1900200,
-            selectedText   = 0x1900201,
-            textBackground = 0x1900202,
-            selectedTextBG = 0x1900203,
-            background     = 0x1900204,
-            selectedBG     = 0x1900205,
-            border         = 0x1900206,
-            selectedBorder = 0x1900207
-        };
-    }
-    
-    namespace colourPicker
-    {
-      enum
-      {
-          checkerboardLight = 0x1900600,
-          checkerboardDark  = 0x1900601,
-          outline           = 0x1900602,
-          focusedOutline    = 0x1900603
-      };
-    }
-
-    namespace homePage
-    {
-        enum
-        {
-            text = 0x1900800
-        };
-    }
+/* The list of all Colour Element objects, sorted by ID: */
+const juce::Array<const Element*> allElements =
+{
+    &TextButton::buttonOff,
+    &TextButton::button,
+    &TextButton::textOff,
+    &TextButton::text,
+    &TextEditor::background,
+    &TextEditor::text,
+    &TextEditor::highlight,
+    &TextEditor::highlightedText,
+    &Caret::caret,
+    &TextEditor::outline,
+    &TextEditor::focusedOutline,
+    &TextEditor::shadow,
+    &Label::background,
+    &Label::text,
+    &Label::outline,
+    &Label::backgroundWhenEditing,
+    &Label::textWhenEditing,
+    &Label::outlineWhenEditing,
+    &ScrollBar::background,
+    &ScrollBar::thumb,
+    &ScrollBar::track,
+    &DirectoryContentsDisplay::highlight,
+    &DirectoryContentsDisplay::text,
+    &DirectoryContentsDisplay::highlightedText,
+    &PopupMenu::text,
+    &PopupMenu::headerText,
+    &FileBrowser::currentPathBoxBackground,
+    &FileBrowser::currentPathBoxText,
+    &FileBrowser::currentPathBoxArrow,
+    &FileBrowser::filenameBoxBackground,
+    &FileBrowser::filenameBoxText,
+    &PopupMenu::background,
+    &PopupMenu::highlightedText,
+    &FileChooserDialogBox::titleText,
+    &PopupMenu::highlightedBackground,
+    &ComboBox::text,
+    &ComboBox::background,
+    &ComboBox::outline,
+    &ComboBox::button,
+    &ComboBox::arrow,
+    &ComboBox::focusedOutline,
+    &Slider::background,
+    &Slider::thumb,
+    &Slider::track,
+    &Slider::textBoxText,
+    &Slider::textBoxBackground,
+    &Slider::textBoxHighlight,
+    &Slider::textBoxOutline,
+    &AlertWindow::background,
+    &AlertWindow::text,
+    &AlertWindow::outline,
+    &ProgressBar::background,
+    &ProgressBar::foreground,
+    &ListBox::background,
+    &ListBox::outline,
+    &ListBox::text,
+    &DrawableButton::text,
+    &DrawableButton::background,
+    &DrawableButton::backgroundOn,
+    &DrawableButton::textOn,
+    &FileSearchPathList::background,
+    &ResizableWindow::background,
+    &DocumentWindow::text,
+    &ToggleButton::text,
+    &ToggleButton::tick,
+    &ToggleButton::tickDisabled,
+    &KeyMappingEditor::background,
+    &KeyMappingEditor::text,
+    &Image::image0,
+    &Image::image1,
+    &Image::image2,
+    &Image::image3,
+    &Image::image4,
+    &ListEditor::background,
+    &ListEditor::listItem,
+    &ListEditor::selectedListItem,
+    &ListEditor::text,
+    &AppMenuButton::text,
+    &AppMenuButton::selectedText,
+    &AppMenuButton::textBackground,
+    &AppMenuButton::selectedTextBG,
+    &AppMenuButton::background,
+    &AppMenuButton::selectedBG,
+    &AppMenuButton::border,
+    &AppMenuButton::selectedBorder,
+    &FilePathEditor::fileWindow,
+    &FilePathEditor::text,
+    &OverlaySpinner::background,
+    &OverlaySpinner::text,
+    &LayoutContainer::background,
+    &Page::background,
+    &ColourPicker::checkerboardLight,
+    &ColourPicker::checkerboardDark,
+    &ColourPicker::outline,
+    &ColourPicker::focusedOutline,
+    &Switch::background,
+    &Switch::handle,
+    &Switch::handleOff,
+    &HomePage::text
+};
 
 } } }

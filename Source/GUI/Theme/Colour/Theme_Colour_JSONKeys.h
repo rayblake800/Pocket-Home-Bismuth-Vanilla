@@ -21,7 +21,7 @@ namespace Theme { namespace Colour { namespace JSONKeys
      * @return  All ColourIds defined in colours.json, either directly or
      *          through a UICategory. 
      */
-     const juce::Array<int>& getColourIds();
+     juce::Array<int> getColourIds();
     
      /**
       * @brief  Gets all UI category color keys.
@@ -35,7 +35,7 @@ namespace Theme { namespace Colour { namespace JSONKeys
      * 
      * @return  All UICategory keys and ColourID keys. 
      */
-     const juce::Array<juce::Identifier>& getColourKeys();
+     juce::Array<const juce::Identifier*> getColourKeys();
     
     /**
      * @brief  Gets the UICategory assigned to a Juce ColourId value.
