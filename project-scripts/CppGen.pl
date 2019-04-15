@@ -43,11 +43,11 @@ my $namedBlockTypeMatch = qr/class|namespace|struct/;
 
 my $inFileName  = $ARGV[0];
 my $outFileName = $ARGV[1];
-if(!defined($inFileName))
+if (!defined($inFileName))
 {
     die "usage: perl cpp_from_h.pl  [input file] [output file]\n";
 }
-if(!defined($outFileName))
+if (!defined($outFileName))
 {
     $outFileName = $inFileName;
     $outFileName =~ s/\..+$//;
@@ -63,7 +63,7 @@ my $pendingCommentBlock = "";
 my %typeNamespaces;
 
 ################################################################################
-# sub trim($string)                                                            #
+# sub trim ($string)                                                           #
 #------------------------------------------------------------------------------#
 # Trims leading and trailing whitespace from a string.                         #
 #------------------------------------------------------------------------------#
@@ -81,7 +81,7 @@ sub trim
 }
 
 ################################################################################
-# sub formatComments($commentBlock)                                            #
+# sub formatComments ($commentBlock)                                           #
 #------------------------------------------------------------------------------#
 #  Formats a comment block string.                                             #
 #------------------------------------------------------------------------------#
@@ -95,7 +95,7 @@ sub trim
 sub formatComments
 {
     my $commentBlock = shift;
-    if(!defined($commentBlock))
+    if (!defined($commentBlock))
     {
         return "";
     }
@@ -104,7 +104,7 @@ sub formatComments
     $commentBlock =~ s/\s*\@brief\s*/ /g;
 
     # Remove all other javadoc fields
-    $commentBlock =~ s/\n\s*\*\s*@.*?\*\/\n*/\n *\//gs;  
+    $commentBlock =~ s/\n\s*\*\s*@.*?\*\/\n*/\n *\//gs;
 
     # Remove comment block characters, newlines, and excess whitespace.
     $commentBlock =~ s/^\s*\/\*+//g;   # Trim comment block start
@@ -115,33 +115,33 @@ sub formatComments
     $commentBlock = trim($commentBlock);
 
     # If no content remains, return the empty string.
-    if($commentBlock =~ /^\s*$/)
+    if ($commentBlock =~ /^\s*$/)
     {
         return "";
     }
 
     # Re-wrap the comment text in a comment block, adding new line breaks to
     # use the whole page width.
-    my $formattedComment = "\n/*"; # Keep one empty line above the block
+    my $formattedComment = "\n"; # Keep one empty line above the block
     my $lineStart = 0;
     my $spaceIdx = 0;
-    for(my $i = 0; $i < length($commentBlock); $i++)
+    for (my $i = 0; $i < length($commentBlock); $i++)
     {
         my $blockChar = substr($commentBlock, $i, 1);
         my $lineLength = $i - $lineStart + 3;
-        if($lineLength < MAX_LINE_LENGTH && $blockChar =~ /\s/)
+        if ($lineLength < MAX_LINE_LENGTH && $blockChar =~ /\s/)
         {
             $spaceIdx = $i;
         }
-        if($lineLength > MAX_LINE_LENGTH || $blockChar =~ /\n/)
+        if ($lineLength > MAX_LINE_LENGTH || $blockChar =~ /\n/)
         {
-            $formattedComment = $formattedComment."\n * "
+            $formattedComment = $formattedComment."\n// "
                 .substr($commentBlock, $lineStart, $spaceIdx - $lineStart);
             $spaceIdx++;
             $lineStart = $spaceIdx;
         }
     }
-    if($lineStart < length($commentBlock))
+    if ($lineStart < length($commentBlock))
     {
         $formattedComment = $formattedComment
             ."\n * ".substr($commentBlock, $lineStart);
@@ -151,7 +151,7 @@ sub formatComments
 }
 
 ################################################################################
-# sub splitParams($paramStr)                                                   #
+# sub splitParams ($paramStr)                                                  #
 #------------------------------------------------------------------------------#
 #  Splits a parameter list string on all comma characters that aren't within   #
 # sub-blocks.                                                                  #
@@ -166,7 +166,7 @@ sub splitParams
 {
     my $paramListStr = shift;
     my @params;
-    if(!defined($paramListStr))
+    if (!defined($paramListStr))
     {
         return @params;
     }
@@ -174,17 +174,17 @@ sub splitParams
     # Find all inner blocks within the list:
     my @innerBlockRanges;
     my $blockSearchIdx = 1;
-    while($blockSearchIdx < length($paramListStr))
+    while ($blockSearchIdx < length($paramListStr))
     {
-        my($nestedType, $nestedStart, $nestedLen) = BlockSearch::findBlock
+        my ($nestedType, $nestedStart, $nestedLen) = BlockSearch::findBlock
             ($paramListStr, $blockSearchIdx, BlockSearch::ALL_BLOCK_TYPES);
-        if(!defined($nestedStart) || !defined($nestedLen))
+        if (!defined($nestedStart) || !defined($nestedLen))
         {
             last;
         }
-        my $blockRange = 
-        { 
-            'start' => $nestedStart, 
+        my $blockRange =
+        {
+            'start' => $nestedStart,
             'end' => $nestedStart + $nestedLen
         };
         push(@innerBlockRanges, $blockRange);
@@ -196,17 +196,17 @@ sub splitParams
     {
         my ($searchChar, $startIndex) = @_;
         my $matchIndex = index($paramListStr, $searchChar, $startIndex);
-        foreach my $blockRange(@innerBlockRanges)
+        foreach my $blockRange (@innerBlockRanges)
         {
-            if($matchIndex == -1)
+            if ($matchIndex == -1)
             {
                 return -1;
             }
-            elsif($matchIndex < $blockRange->{'start'})
+            elsif ($matchIndex < $blockRange->{'start'})
             {
                 return $matchIndex;
             }
-            elsif($matchIndex <= $blockRange->{'end'})
+            elsif ($matchIndex <= $blockRange->{'end'})
             {
                 $matchIndex = index($paramListStr, $searchChar,
                         $blockRange->{'end'})
@@ -216,10 +216,10 @@ sub splitParams
     };
 
     my $paramStart = 1;
-    while($paramStart < length($paramListStr) - 1)
+    while ($paramStart < length($paramListStr) - 1)
     {
         my $paramEnd = $indexOutsideBlocks->(',', $paramStart);
-        if($paramEnd == -1) # No remaining commas, this is the last parameter.
+        if ($paramEnd == -1) # No remaining commas, this is the last parameter.
         {
             $paramEnd = length($paramListStr) - 1;
         }
@@ -228,7 +228,7 @@ sub splitParams
         my $equalsIdx = $indexOutsideBlocks->('=', $paramStart);
 
         my $paramLength;
-        if($equalsIdx >= 0 && $equalsIdx < $paramEnd)
+        if ($equalsIdx >= 0 && $equalsIdx < $paramEnd)
         {
             $paramLength = $equalsIdx - $paramStart
         }
@@ -240,7 +240,7 @@ sub splitParams
         my $paramStr = substr($paramListStr, $paramStart, $paramLength);
         $paramStr = trim($paramStr);
         $paramStart = $paramEnd + 1;
-        if(length($paramStr) > 0)
+        if (length($paramStr) > 0)
         {
             push(@params, $paramStr);
         }
@@ -264,7 +264,7 @@ sub splitParams
 ################################################################################
 sub formatFunction
 {
-    my($functionStart, $paramStr, $postParamTxt, $namespace) = @_;
+    my ($functionStart, $paramStr, $postParamTxt, $namespace) = @_;
     my $functionType;
     my $functionName;
 
@@ -274,16 +274,16 @@ sub formatFunction
     $functionStart =~ trim($functionStart);
 
     # If this is a valid function, $functionStart should contain type and name.
-    if($functionStart =~ /(^.+)\h+($fullIDMatch)\h*$/s)
+    if ($functionStart =~ /(^.+)\h+($fullIDMatch)\h*$/s)
     {
         $functionType = trim($1);
         $functionName = trim($2);
 
         # Check if the type belongs in a namespace:
         my @typeWords = split(/\s+/, $functionType);
-        foreach my $typeWord(@typeWords)
+        foreach my $typeWord (@typeWords)
         {
-            if(exists $typeNamespaces{$typeWord})
+            if (exists $typeNamespaces{$typeWord})
             {
                 $typeWord = $typeNamespaces{$typeWord}.'::'.$typeWord;
                 $functionType = join(' ', @typeWords);
@@ -291,25 +291,25 @@ sub formatFunction
             }
         }
     }
-    else 
+    else
     {
         # Check if this is a constructor or destructor:
         ($functionName) = ($functionStart =~ /(~?$fullIDMatch)\h*$/);
         my ($localNamespace) = ($namespace =~ /($idMatch)$/);
-        if(defined($functionName) && defined($localNamespace)
+        if (defined($functionName) && defined($localNamespace)
                 && $functionName =~ /$localNamespace$/)
         {
             $functionType = "";
         }
     }
-    if(!defined($functionType) || !defined($functionName))
+    if (!defined($functionType) || !defined($functionName))
     {
         # Missing type or title, this isn't actually a function declaration.
         return "";
     }
 
     # Prepend the namespace onto the title if it isn't empty.
-    if(length($namespace) > 0)
+    if (length($namespace) > 0)
     {
         $functionName = $namespace.'::'.$functionName;
     }
@@ -320,11 +320,12 @@ sub formatFunction
 
     # Put function back together, adding newlines and indentation where needed.
     my $formattedFunction;
-    if(length($functionType) == 0)
+    if (length($functionType) == 0)
     {
         $formattedFunction = "\n$functionName";
     }
-    elsif((length($functionType) + length($functionName) + 1) > MAX_LINE_LENGTH)
+    elsif ( (length($functionType) + length($functionName) + 1)
+            > MAX_LINE_LENGTH)
     {
         $formattedFunction = "\n$functionType\n$functionName";
     }
@@ -333,7 +334,7 @@ sub formatFunction
         $formattedFunction = "\n$functionType $functionName";
     }
     my $paramLength = 0;
-    foreach my $param(@params)
+    foreach my $param (@params)
     {
         $paramLength += length($param) + 2;
     }
@@ -343,7 +344,7 @@ sub formatFunction
     # Gets the length of the last line of the formatted function string:
     my $lastLineLength = sub
     {
-        if($formattedFunction =~ /\n([^\n]*)/s)
+        if ($formattedFunction =~ /\n ([^\n]*)/s)
         {
             return length($1);
         }
@@ -351,23 +352,23 @@ sub formatFunction
     };
 
     # Try putting the entire parameter list on one line:
-    if($paramLength < MAX_LINE_LENGTH)
+    if ($paramLength < MAX_LINE_LENGTH)
     {
         # Put param list on a new line if needed, or if it would allow params
         # and post-parameter text to fit on one line:
         my $lineLength = $paramLength + $lastLineLength->();
-        if(length($postParamTxt) > 0)
+        if (length($postParamTxt) > 0)
         {
             $lineLength += length($postParamTxt) + 1;
         }
-        if($lineLength >= MAX_LINE_LENGTH)
+        if ($lineLength >= MAX_LINE_LENGTH)
         {
             $formattedFunction = $formattedFunction."\n";
         }
         my $paramStr = "";
-        foreach my $param(@params)
+        foreach my $param (@params)
         {
-            if(length($paramStr) > 0)
+            if (length($paramStr) > 0)
             {
                 $paramStr = $paramStr.", ";
             }
@@ -382,22 +383,22 @@ sub formatFunction
         $formattedFunction = $formattedFunction.'(';
         my $functionBackup = $formattedFunction;
         my $numLines = 1;
-        foreach my $param(@params)
+        foreach my $param (@params)
         {
-            # Find the length of the parameter, the space before the parameter 
-            # (if not the first parameter), and the comma or closing paren 
+            # Find the length of the parameter, the space before the parameter
+            # (if not the first parameter), and the comma or closing paren
             # after the parameter.
             my $paramLength = length($param) + 1;
-            if($param ne $params[0])
+            if ($param ne $params[0])
             {
                 $paramLength++;
                 $formattedFunction = $formattedFunction.',';
             }
 
-            if(($lastLineLength->() + $paramLength) > MAX_LINE_LENGTH)
+            if ( ($lastLineLength->() + $paramLength) > MAX_LINE_LENGTH)
             {
                 $numLines++;
-                if($numLines > 2)
+                if ($numLines > 2)
                 {
                     last;
                 }
@@ -410,12 +411,12 @@ sub formatFunction
         }
 
         # Can't fit the parameters within two lines, use one line per param.
-        if($numLines >= 2)
+        if ($numLines >= 2)
         {
             $formattedFunction = $functionBackup;
-            foreach my $param(@params)
+            foreach my $param (@params)
             {
-                if($param ne $params[0])
+                if ($param ne $params[0])
                 {
                     $formattedFunction = $formattedFunction.',';
                 }
@@ -424,12 +425,13 @@ sub formatFunction
         }
         $formattedFunction = $formattedFunction.")";
     }
-    
+
     # Add post-parameter keywords (const, etc.)
-    if(length($postParamTxt) > 0 && !($postParamTxt =~ /^\s*$/))
+    if (length($postParamTxt) > 0 && ! ($postParamTxt =~ /^\s*$/))
     {
         $postParamTxt =~ s/^\s*//;
-        if(($lastLineLength->() + length($postParamTxt) + 1) > MAX_LINE_LENGTH)
+        if ( ($lastLineLength->() + length($postParamTxt) + 1)
+                > MAX_LINE_LENGTH)
         {
             $formattedFunction = $formattedFunction."\n$indent$postParamTxt";
         }
@@ -445,14 +447,14 @@ sub formatFunction
 }
 
 
-if(-e $outFileName)
+if (-e $outFileName)
 {
     my $input = "";
-    while($input ne "Y\n")
+    while ($input ne "Y\n")
     {
         print "Replace existing file $outFileName?(Y/n):";
         $input = <STDIN>;
-        if($input ne "Y\n")
+        if ($input ne "Y\n")
         {
             die "Cancelled.\n";
         }
@@ -494,7 +496,7 @@ my $cppOutput = "";
 
 ################################################################################
 # sub processBlock                                                             #
-# ($startIndex = 0, $endIndex = length($headerFile), $namespace = "")          #
+# ($startIndex = 0, $endIndex = length ($headerFile), $namespace = "")         #
 #------------------------------------------------------------------------------#
 # Recursively processes a code block within $headerFile, appending generated   #
 # .cpp code to $cppOutput.                                                     #
@@ -515,15 +517,15 @@ sub processBlock
     my $startIndex = shift;
     my $endIndex = shift;
     my $namespace  = shift;
-    if(!defined($startIndex))
+    if (!defined($startIndex))
     {
         $startIndex = 0;
     }
-    if(!defined($endIndex))
+    if (!defined($endIndex))
     {
         $endIndex = length($headerFile);
     }
-    if(!defined($namespace))
+    if (!defined($namespace))
     {
         $namespace = "";
     }
@@ -533,73 +535,75 @@ sub processBlock
         | BlockSearch::PARENTHESES;
     my ($blockType, $blockIndex, $blockLength) = BlockSearch::findBlock
             ($headerFile, $startIndex, $searchTypes);
-    
-    if(!defined($blockType) || !defined($blockIndex) || !defined($blockLength)
-        || ($blockIndex >= $endIndex))
+
+    if (!defined($blockType) || !defined($blockIndex)
+            || !defined($blockLength) || ($blockIndex >= $endIndex))
     {
         return length($headerFile);
     }
 
-    my $preBlock  = substr($headerFile, $startIndex, $blockIndex - $startIndex);
+    my $preBlock  = substr($headerFile, $startIndex,
+            $blockIndex - $startIndex);
     my $blockText = substr($headerFile, $blockIndex, $blockLength);
     my $blockEndIdx = $blockIndex + $blockLength;
 
-    if($blockType == BlockSearch::COMMENT_BLOCK)
+    if ($blockType == BlockSearch::COMMENT_BLOCK)
     {
         $pendingCommentBlock = formatComments($blockText);
         return $blockEndIdx;
     }
 
     # Possible class/namespace/enum/struct: recursively process contents.
-    if($blockType == BlockSearch::CURLY_BRACKET)
+    if ($blockType == BlockSearch::CURLY_BRACKET)
     {
         $pendingCommentBlock = "";
         my $recurseIndex = $blockIndex + 1;
         my $recurseNamespace = "";
-        if($preBlock =~ /($namedBlockTypeMatch|enum class|enum)\s+($fullIDMatch)/)
+        if ($preBlock
+                =~ /($namedBlockTypeMatch|enum class|enum)\s+($fullIDMatch)/)
         {
-            if(length($namespace) > 0)
+            if (length($namespace) > 0)
             {
                 $recurseNamespace = $namespace.'::';
             }
             $recurseNamespace = $recurseNamespace.$2;
             #print "Found namespace $recurseNamespace\n";
         }
-        while($recurseIndex < $blockEndIdx)
+        while ($recurseIndex < $blockEndIdx)
         {
             # Look for type declarations within the namespace, but outside of
             # nested blocks.
-            if(length($recurseNamespace) > 0)
+            if (length($recurseNamespace) > 0)
             {
                 my ($nextBlockType, $nextBlockIdx) = BlockSearch::findBlock
                 ($blockText, $recurseIndex, $searchTypes);
 
-                if(!defined($nextBlockIdx) || $nextBlockIdx > $blockEndIdx)
+                if (!defined($nextBlockIdx) || $nextBlockIdx > $blockEndIdx)
                 {
                     $nextBlockIdx = $blockEndIdx;
                 }
-                my $blockContent = substr($headerFile, $recurseIndex, 
+                my $blockContent = substr($headerFile, $recurseIndex,
                         $nextBlockIdx - $recurseIndex);
-                my @types = ($blockContent =~ 
+                my @types = ($blockContent =~
                         /(?:$namedBlockTypeMatch|enum)\s+($fullIDMatch)/g);
                 my @typedefs = ($blockContent =~
                         /typedef[^\v]*?($fullIDMatch);/g);
                 push(@types, @typedefs);
-                foreach my $type(@types)
+                foreach my $type (@types)
                 {
                     #print "Found type $type in namespace $recurseNamespace\n";
                     $typeNamespaces{$type} = $recurseNamespace;
                 }
             }
 
-            $recurseIndex 
+            $recurseIndex
                 = processBlock($recurseIndex, $blockEndIdx, $recurseNamespace);
         }
         return $blockEndIdx;
     }
 
     # Create function definition from function declaration.
-    elsif($blockType == BlockSearch::PARENTHESES)
+    elsif ($blockType == BlockSearch::PARENTHESES)
     {
         # Remove any extra lines caught in the pre-block text:
         $preBlock =~ s/.*;\n*//gs;
@@ -607,7 +611,7 @@ sub processBlock
         # Ignore functions defined in the header.
         my $nextBraceIdx = index($headerFile, '{', $blockEndIdx);
         my $nextSemicolonIdx = index($headerFile, ';', $blockEndIdx);
-        if((($nextBraceIdx < $nextSemicolonIdx) && ($nextBraceIdx >= 0))
+        if ( ( ($nextBraceIdx < $nextSemicolonIdx) && ($nextBraceIdx >= 0))
                 || ($nextSemicolonIdx < 0))
         {
             $pendingCommentBlock = "";
@@ -618,7 +622,7 @@ sub processBlock
         # Ignore pure virtual functions.
         chomp(my $postParams = substr($headerFile, $blockEndIdx,
                 ($nextSemicolonIdx - $blockEndIdx)));
-        if($postParams =~ /=\s*0/)
+        if ($postParams =~ /=\s*0/)
         {
             $pendingCommentBlock = "";
             return $nextSemicolonIdx;
@@ -627,7 +631,7 @@ sub processBlock
         my $formattedFunction = formatFunction($preBlock, $blockText,
                 $postParams, $namespace);
 
-        if(length($formattedFunction) > 0)
+        if (length($formattedFunction) > 0)
         {
             # Add only one newline above the function.
             $cppOutput =~ s/\v*$//gs;
@@ -644,7 +648,7 @@ sub processBlock
 }
 
 my $parseIndex = 0;
-while($parseIndex < length($headerFile))
+while ($parseIndex < length($headerFile))
 {
     $parseIndex = processBlock($parseIndex);
 }
@@ -653,14 +657,14 @@ while($parseIndex < length($headerFile))
 
 my $includeFile = $inFileName;
 my $lastPathCharIdx = rindex($includeFile, "/");
-if($lastPathCharIdx >= 0)
+if ($lastPathCharIdx >= 0)
 {
     $includeFile = substr($includeFile, $lastPathCharIdx + 1);
 }
 
 my $includeStatement = "#include \"$includeFile\"";
 # Make sure the #include statement is followed by a new line:
-if($cppOutput =~ /^\v?[^\v]/)
+if ($cppOutput =~ /^\v?[^\v]/)
 {
     $includeStatement = $includeStatement."\n";
 }

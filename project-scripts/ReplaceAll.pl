@@ -10,7 +10,7 @@ use File::Slurp;
 use FindBin;
 use Cwd 'abs_path';
 
-#Text color codes:
+#Text colour codes:
 my $red = "\33[41m\33[37m";
 my $green = "\33[42m\33[37m";
 my $white = "\33[47m\33[30m";
@@ -35,7 +35,7 @@ sub rewindLines
 {
     my $numLines = shift;
     print("\r\033[K");
-    for(my $y = 0; $y < $numLines; $y++)
+    for (my $y = 0; $y < $numLines; $y++)
     {
         print("\33[1A\r\033[K");
     }
@@ -44,27 +44,40 @@ sub rewindLines
 chdir($FindBin::Bin);
 my $projectDir = "../";
 
-my $toFind, my $replace, my $fileApprove;
-foreach my $arg(@ARGV)
+my $toFind, my $replace, my $fileApprove, my $ignorePattern;
+my $patternFlag = 0;
+foreach my $arg (@ARGV)
 {
-    if($arg =~ /^-*h(elp)?$/i)
+    if ($arg =~ /^-*h (elp)?$/i)
     {
         print("Usage:\n");
         print("./project_scripts/ReplaceAll.pl [flags] \"pattern\" "
                 ."\"replacement\"\n");
         print("\t-h/-H/--help/etc: Print this help text and exit.\n");
         print("\t-a: Approve replacements by file instead of line.\n");
+        print("\t-i \"pattern\": Ignore files with names that match this"
+                ." pattern.\n");
         exit(0);
     }
-    if($arg eq "-a")
+    if ($patternFlag)
+    {
+        $ignorePattern = $arg;
+        $patternFlag = 0;
+        next;
+    }
+    if ($arg eq "-a")
     {
         $fileApprove = 1;
     }
-    elsif(!defined($toFind))
+    elsif ($arg eq "-i")
+    {
+        $patternFlag = 1;
+    }
+    elsif (!defined($toFind))
     {
         $toFind = $arg;
     }
-    elsif(!defined($replace))
+    elsif (!defined($replace))
     {
         $replace = $arg;
     }
@@ -86,7 +99,7 @@ my @excluded = (
     "../.git"
     );
 
-if(!defined($toFind) || !defined($replace))
+if (!defined($toFind) || !defined($replace))
 {
     die("Missing arguments!\n");
 }
@@ -99,31 +112,35 @@ print(".\n");
 
 sub readFiles
 {
-    if(-d) # Stop recursion from continuing under excluded directories.
+    if (-d) # Stop recursion from continuing under excluded directories.
     {
         my $file = $_;
-        foreach my $dir(@excluded)
+        foreach my $dir (@excluded)
         {
-            if($File::Find::name =~ /$dir/)
+            if ($File::Find::name =~ /$dir/)
             {
                 $File::Find::prune = 1;
                 return;
             }
         }
     }
-    if(-f)
+    if (-f)
     {
         my $file = $_;
+        if ($ignorePattern && ($file =~ /$ignorePattern/))
+        {
+            return;
+        }
         my $text= read_file($file);
-        my @matches = ($text =~ /$toFind/g);
+        my @matches = ($text =~ /$toFind/gs);
         my $matchCount = @matches;
         my $approveAll = 0;
-        if($matchCount > 0)
+        if ($matchCount > 0)
         {
             print("Found $matchCount ".($matchCount > 1 ? "matches" : "match")
                     ." in ");
             printGreen($File::Find::name);
-            if($fileApprove)
+            if ($fileApprove)
             {
                 print(". Update file?:(");
                 printGreen('y');
@@ -131,11 +148,11 @@ sub readFiles
                 printRed('n');
                 print("):");
                 my $input = "";
-                while(($input ne 'y') && ($input ne 'n'))
+                while ( ($input ne 'y') && ($input ne 'n'))
                 {
                     chomp($input = <STDIN>);
                 }
-                if($input eq 'y')
+                if ($input eq 'y')
                 {
                     $approveAll = 1;
                 }
@@ -148,65 +165,109 @@ sub readFiles
             my $changesMade = 0;
             my $outText = "";
             my $input = "";
-            while($text =~ /(.*?)(^.*?)($toFind)(.*?$)(.*)/ms)
+            while ($text =~ /^(.*?)($toFind)(.*)$/s)
             {
-                if(!$approveAll)
+                my $preMatch = $1;
+                my $match = $2;
+                my $postMatch = $3;
+                if (!$approveAll)
                 {
-                    print("Found line:\n");
-                    print($2);
-                    printRed($3);
-                    print("$4\n");
+                    print("Found match:\n");
+                    my $prePrint = $preMatch;
+                    if ($prePrint =~ /\v (.*?)$/)
+                    {
+                        $prePrint = $1;
+                    }
+                    my $postPrint = $postMatch;
+                    if ($postPrint =~ /^(.*?)\v/)
+                    {
+                        $postPrint = $1
+                    }
+                    my $preLength = length($prePrint);
+                    my $matchLength = length($match);
+                    my $postLength = length($postPrint);
+                    my $maxLength = 80;
+                    if ( ($preLength + $matchLength + $postLength) > $maxLength)
+                    {
+                        if ($matchLength > $maxLength)
+                        {
+                            $prePrint = "";
+                            $postPrint = "";
+                        }
+                        elsif ( ( ($preLength + $matchLength) > $maxLength)
+                                && ( ($postLength + $matchLength) > $maxLength))
+                        {
+                            my $contextLength = ($maxLength - $matchLength) / 2;
+                            $prePrint = substr($prePrint, -$contextLength);
+                            $postPrint = substr($postPrint, 0, $contextLength);
+                        }
+                        elsif ($preLength > $postLength)
+                        {
+                            $prePrint = substr($prePrint,
+                                    - ($maxLength - $matchLength -$postLength));
+                        }
+                        else
+                        {
+                            $postPrint = substr($postPrint, 0,
+                                    ($maxLength - $matchLength - $preLength));
+                        }
+                    }
 
-                    print($2);
-                    printGreen($replace);
-                    print("$4\n");
-                    
-                    print("Change line? (");
-                    printGreen("y"); print("es/");
-                    printRed("n");   print("o/");
-                    printWhite("s"); print("kip file/");
-                    printGreen("c"); print("hange all in file/");
-                    printRed("q");   print("uit):");
+
+                    print($prePrint);
+                    printRed($match);
+                    print("$postPrint\n");
+
+                    print($prePrint);
+                    printGreen("$replace");
+                    print("$postPrint\n");
+
+                    print("Change match? (");
+                    printGreen("y"); print ("es/");
+                    printRed("n");   print ("o/");
+                    printWhite("s"); print ("kip file/");
+                    printGreen("c"); print ("hange all in file/");
+                    printRed("q");   print ("uit):");
                     chomp($input = <STDIN>);
                 }
                 else
                 {
                     $input = 'y';
                 }
-                if($input eq "c")
+
+
+                if ($input eq "c")
                 {
                     $approveAll = 1;
                     $input = 'y';
                 }
-                if($input eq "y")
+                if ($input eq "y")
                 {
                     $changesMade++;
-                    $outText = "$outText$1$2$replace$4";
-                    $text = $5;
+                    $outText = $outText.$preMatch.$replace;
                 }
-                elsif($input eq "n")
+                elsif ($input eq "n")
                 {
-                    $outText = "$outText$1$2$3$4";
-                    $text = $5;
+                    $outText = $outText.$preMatch.$match;
                 }
-                elsif($input eq "s")
+                elsif ($input eq "s")
                 {
                     rewindLines(3);
                     last;
                 }
-                elsif($input eq "q")
+                elsif ($input eq "q")
                 {
                     rewindLines(5);
                     exit;
                 }
-                rewindLines(5);
-
-                if($input eq "s")
+                else
                 {
-                    last;
+                    print("Invalid option $input selected.\n");
                 }
+                $text = $postMatch;
+                rewindLines(5);
             }
-            if($changesMade)
+            if ($changesMade)
             {
                 print("Writing $changesMade changes back to $file.\n");
                 my $fileText = "$outText$text";
