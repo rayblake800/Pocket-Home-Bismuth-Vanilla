@@ -18,7 +18,7 @@ protected:
     FocusInterface() { }
 
 public:
-    /* Only the FocusTracker resource may use this interface. */
+    // Only the FocusTracker resource may use this interface.
     friend class FocusTracker;
 
     virtual ~FocusInterface() { }

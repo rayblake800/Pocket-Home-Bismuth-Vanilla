@@ -5,16 +5,14 @@
 #include "DesktopEntry_FileError.h"
 #include "DesktopEntry_FormatError.h"
 
-/* NewConfigItemEditor shares a localized object class key inherited from
-   AppMenu::PopupEditor. */
+// NewConfigItemEditor shares a localized object class key inherited from
+// AppMenu::PopupEditor.
 
-/* Localized title text key: */
+// Localized title text key:
 static const juce::Identifier newEntryTitleKey = "newEntryTitleKey";
 
-/*
- * Creates a new editor, setting any additional actions for the editor to 
- * perform on confirmation.
- */
+// Creates a new editor, setting any additional actions for the editor to
+// perform on confirmation.
 AppMenu::NewDesktopAppEditor::NewDesktopAppEditor
 (std::function<void() > onConfirm) :
 AppMenu::PopupEditor(onConfirm, true, true)
@@ -25,9 +23,8 @@ AppMenu::PopupEditor(onConfirm, true, true)
     setEditorTitle(localeText(newEntryTitleKey));
 }
 
-/*
- * Creates a new desktop entry file using the editor's field values.
- */
+
+// Creates a new desktop entry file using the editor's field values.
 void AppMenu::NewDesktopAppEditor::commitEdits()
 {
     using namespace juce;

@@ -7,22 +7,22 @@
 #include "Wifi_Connection_Record_Handler.h"
 #include "Testing_DelayUtils.h"
 
-/* Number of milliseconds to wait for access points to load: */
+// Number of milliseconds to wait for access points to load:
 static const constexpr int apWaitPeriod = 30000;
 
-/* Frequency in milliseconds to check access points when waiting for 
- * them to load: */
+// Frequency in milliseconds to check access points when waiting for them to
+// load:
 static const constexpr int apCheckFrequency = 1000;
 
-/* Number of milliseconds to wait for connection events to occur: */
+// Number of milliseconds to wait for connection events to occur:
 static const constexpr int connectionWaitPeriod = 10000;
 
-/* Frequency in milliseconds to check if an expected connection 
- * event has occurred: */
+// Frequency in milliseconds to check if an expected connection event has
+// occurred:
 static const constexpr int connectionCheckFrequency = 100;
 
 #ifdef JUCE_DEBUG
-/* Print the full namespace before all debug output: */
+// Print the full namespace before all debug output:
 static const constexpr char* dbgPrefix = "Wifi::TestUtils::Waiting::";
 #endif
 
@@ -39,7 +39,7 @@ static const constexpr char* dbgPrefix = "Wifi::TestUtils::Waiting::";
  * @return               Whether the condition was met before the timeout period
  *                       ended.
  */
-static bool apListWait(std::function<bool()> waitCondition, 
+static bool apListWait(std::function<bool()> waitCondition,
         juce::String functionName)
 {
     const juce::int64 endTime = juce::Time::currentTimeMillis() + apWaitPeriod;
@@ -53,10 +53,9 @@ static bool apListWait(std::function<bool()> waitCondition,
     }, apCheckFrequency, apWaitPeriod);
 }
 
-/*
- * Waits until multiple visible access points have been registered to the 
- * APList.
- */
+
+// Waits until multiple visible access points have been registered to the
+// APList.
 bool Wifi::TestUtils::Waiting::waitForAccessPoints()
 {
     APList::Reader listReader;
@@ -66,9 +65,8 @@ bool Wifi::TestUtils::Waiting::waitForAccessPoints()
     }, __func__);
 }
 
-/*
- * Waits for the wifi device to detect a specific access point.
- */
+
+// Waits for the wifi device to detect a specific access point.
 Wifi::AccessPoint Wifi::TestUtils::Waiting::waitForAccessPoint
 (const LibNM::APHash apHash)
 {
@@ -82,9 +80,8 @@ Wifi::AccessPoint Wifi::TestUtils::Waiting::waitForAccessPoint
     return requestedAP;
 }
 
-/*
- * Waits for the next Wifi connection event to be registered.
- */
+
+// Waits for the next Wifi connection event to be registered.
 Wifi::Connection::Event Wifi::TestUtils::Waiting::waitForNextConnectionEvent
 (const juce::Time startTime)
 {
@@ -92,7 +89,8 @@ Wifi::Connection::Event Wifi::TestUtils::Waiting::waitForNextConnectionEvent
     const juce::int64 startTimeMS = startTime.toMilliseconds();
     Record::Handler recordHandler;
     Event lastEvent;
-    if(Testing::DelayUtils::idleUntil([&lastEvent, &recordHandler, startTimeMS]()
+    if (Testing::DelayUtils::idleUntil(
+    [&lastEvent, &recordHandler, startTimeMS]()
     {
         lastEvent = recordHandler.getLatestEvent();
         return lastEvent.getEventTime().toMilliseconds() > startTimeMS;

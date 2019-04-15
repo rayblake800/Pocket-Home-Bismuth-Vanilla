@@ -1,21 +1,19 @@
 #pragma once
 /**
- * @file PageFactory.h
- * 
+ * @file  PageFactory.h
+ *
  * @brief  Creates all page components.
  */
 
 #include "Page_Interface_Factory.h"
 #include <functional>
 
-namespace Page 
-{ 
-    class Factory; 
+namespace Page
+{
+    class Factory;
     class Component;
     enum class Type;
 }
-
-class LoginPage;
 
 /**
  * @brief  Creates all new Page::Component objects, and allows pages to create
@@ -38,7 +36,7 @@ public:
 private:
     /**
      * @brief  Creates a new page to push on top of the page stack.
-     * 
+     *
      * @param PageType  The type of page to create.
      */
     virtual Page::Component* createPage(const Type pageType) override;

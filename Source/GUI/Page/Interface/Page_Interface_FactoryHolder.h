@@ -5,13 +5,13 @@
  * @brief  Allows the page factory to connect itself to page component objects.
  */
 
-namespace Page 
-{ 
-    namespace Interface 
-    { 
-        class Factory; 
+namespace Page
+{
+    namespace Interface
+    {
+        class Factory;
         class FactoryHolder;
-    } 
+    }
     class Factory;
 }
 /**
@@ -28,8 +28,8 @@ protected:
     /**
      * @brief  Gets the factory holder's interface to the page factory.
      *
-     * @return   The factory interface pointer, or nullptr if the factory holder
-     *           was not created by a Page::Factory.
+     * @return   The factory interface pointer, or nullptr if the factory
+     *           holder was not created by a Page::Factory.
      */
     Factory* getFactoryInterface();
 
@@ -39,7 +39,7 @@ private:
     /**
      * @brief  Sets the factory holder's factory interface pointer.
      *
-     *  The Page::Factory must use this method to pass itself to each 
+     *  The Page::Factory must use this method to pass itself to each
      * FactoryHolder it creates that needs to access the factory.
      *
      * @param pageFactory  The factory interface pointer to set.

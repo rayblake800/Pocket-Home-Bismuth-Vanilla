@@ -40,7 +40,7 @@ public:
 
 private:
     /**
-     * @brief  Updates the layout of all child components when the main 
+     * @brief  Updates the layout of all child components when the main
      *         component is resized.
      */
     virtual void resized() override;
@@ -51,21 +51,21 @@ private:
     void connect();
 
     /**
-     * @brief  A TextButton with text that can be replaced by a Spinner to 
+     * @brief  A TextButton with text that can be replaced by a Spinner to
      *         indicate that Wifi is busy.
      */
     class ConnectionButton : public juce::TextButton
     {
     public:
         ConnectionButton();
-        
+
         virtual ~ConnectionButton() { }
-      
+
         /**
-         * @brief  Shows or hide the spinner, ensuring the button is enabled 
-         *         when text is visible and disabled when the spinner is 
+         * @brief  Shows or hide the spinner, ensuring the button is enabled
+         *         when text is visible and disabled when the spinner is
          *         visible.
-         * 
+         *
          * @param showSpinner  True to show the spinner, false to show the
          *                     button text.
          */
@@ -73,22 +73,22 @@ private:
 
     private:
         /**
-         * @brief  Ensures the spinner bounds are updated with connection button 
-         *         bounds.
+         * @brief  Ensures the spinner bounds are updated with connection
+         *         button bounds.
          */
         virtual void resized() override;
-        
-        /* The loading spinner component: */
+
+        // The loading spinner component:
         Widgets::Spinner spinner;
 
-        /* Holds the button text while the spinner is enabled. */
+        // Holds the button text while the spinner is enabled.
         juce::String savedText;
     };
 
     /**
      * @brief  Listens for input from the password field and connection button.
      */
-    class ControlListener : public juce::Button::Listener, 
+    class ControlListener : public juce::Button::Listener,
             public juce::TextEditor::Listener
     {
     public:
@@ -104,17 +104,17 @@ private:
 
     private:
         /**
-         * @brief  Attempts to connect or disconnect from the current selected 
+         * @brief  Attempts to connect or disconnect from the current selected
          *         access point when the connection button is clicked.
-         * 
+         *
          * @param button  This should always be the connection button.
          */
         virtual void buttonClicked(juce::Button* button) final override;
 
         /**
-         * @brief  Attempts to connect if return is pressed after entering a 
+         * @brief  Attempts to connect if return is pressed after entering a
          *         password.
-         * 
+         *
          * @param editor  This should always be the password field.
          */
         void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
@@ -123,30 +123,30 @@ private:
     };
     ControlListener controlListener;
 
-    /* Handles Wifi connection actions, and ensures the Wifi::Resource remains
-     * available: */
+    // Handles Wifi connection actions, and ensures the Wifi::Resource remains
+    // available:
     Wifi::Connection::Control::Handler connectionController;
 
-    /* Manages the layout of all child components: */
+    // Manages the layout of all child components:
     Layout::Group::Manager layoutControl;
 
-    /* The access point object represented and controlled by this component: */
+    // The access point object represented and controlled by this component:
     Wifi::AccessPoint selectedAP;
 
-    /* Displays an access point's last connection time if applicable. */
+    // Displays an access point's last connection time if applicable.
     Widgets::BoundedLabel lastConnectionLabel;
 
-    /* Allows the user to delete all saved connections linked to the access
-     * point. */
+    // Allows the user to delete all saved connections linked to the access
+    // point.
     juce::TextButton savedConnectionDeleteButton;
 
-    /* Used for entering a password for a secured access point. */
+    // Used for entering a password for a secured access point.
     Widgets::BoundedLabel passwordLabel;
     juce::TextEditor passwordEditor;
 
-    /* Clicked to connect or disconnect. */
+    // Clicked to connect or disconnect.
     ConnectionButton connectionButton;
 
-    /* Shows an error message if the connection fails. */
+    // Shows an error message if the connection fails.
     Widgets::BoundedLabel errorLabel;
 };

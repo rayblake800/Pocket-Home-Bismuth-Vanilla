@@ -2,7 +2,7 @@
 /**
  * @file  Util_ShutdownListener.h
  *
- * @brief  Provides a notification system for classes that need to perform 
+ * @brief  Provides a notification system for classes that need to perform
  *         specific actions when the program is about to shut down.
  */
 
@@ -17,8 +17,8 @@ namespace Util
 class PocketHomeApplication;
 
 /**
- * @brief  Receives a notification callback when the application is about to 
- *         shut down. 
+ * @brief  Receives a notification callback when the application is about to
+ *         shut down.
  */
 class Util::ShutdownListener
 {
@@ -34,17 +34,17 @@ public:
     virtual ~ShutdownListener();
 
 private:
-    /* Shutdown messages may only be sent through ShutdownBroadcaster. */
+    // Shutdown messages may only be sent through ShutdownBroadcaster.
     friend class ShutdownBroadcaster;
 
     /**
-     * @brief  The callback function that will run when the program is about
-     *         to shut down.
+     * @brief  The callback function that will run when the program is about to
+     *         shut down.
      */
     virtual void onShutdown() = 0;
 
-    /* Keeps the ShutdownListener from being destroyed as it receives a
-       notification: */
+    // Keeps the ShutdownListener from being destroyed as it receives a
+    // notification:
     juce::CriticalSection notifyGuard;
 };
 
@@ -55,7 +55,7 @@ private:
 class Util::ShutdownBroadcaster
 {
 private:
-    /* Only the main application class may send shutdown messages. */
+    // Only the main application class may send shutdown messages.
     friend PocketHomeApplication;
 
     /**

@@ -3,7 +3,7 @@
 #include <map>
 
 #ifdef JUCE_DEBUG
-/* Print the full namespace name before all debug output: */
+// Print the full namespace name before all debug output:
 static const constexpr char* dbgPrefix = "Theme::Colour::JSONKeys::";
 #endif
 
@@ -11,13 +11,13 @@ namespace ColourKeys = Theme::Colour::JSONKeys;
 
 //=============================== Colour Keys: =================================
 /**
- * @brief  Keys for colour values assigned to UI element colour categories.  
+ * @brief  Keys for colour values assigned to UI element colour categories.
  *
  *  All Juce ColourId values are grouped under one of these categories. When
- * looking up colour values, if no value is explicitly assigned to a given 
+ * looking up colour values, if no value is explicitly assigned to a given
  * ColourId, the value assigned to the associated UICategory will be used.
  */
-static const juce::Array<juce::Identifier> uiCategoryKeys= 
+static const juce::Array<juce::Identifier> uiCategoryKeys=
 {
     "Window background",
     "Widget background",
@@ -41,192 +41,168 @@ namespace Theme { namespace Colour { namespace ColourIds {
 static const std::map<juce::Identifier, const Element*> keyMap
 {
     {"Text button(off) background",
-        &TextButton::buttonOff},
+            &TextButton::buttonOff},
     {"Text button background",
-        &TextButton::button},
-    {"Text button(off) text",
-        &TextButton::textOff},
-    {"Text button text",
-        &TextButton::text},
-    {"Text editor background",
-        &TextEditor::background},
-    {"Text editor text",
-        &TextEditor::text},
-    {"Text editor highlight",
-        &TextEditor::highlight},
-    {"Text editor highlighted text",
-        &TextEditor::highlightedText},
-    {"Text editor outline",
-        &TextEditor::outline},
-    {"Text editor focused outline",
-        &TextEditor::focusedOutline},
-    {"Text editor shadow",
-        &TextEditor::shadow},
+            &TextButton::button},
     {"Label background",
-        &Label::background},
+            &Label::background},
     {"Label text",
-        &Label::text},
+            &Label::text},
     {"Label outline",
-        &Label::outline},
-    {"Label background(editing)",
-        &Label::backgroundWhenEditing},
-    {"Label text(editing)",
-        &Label::textWhenEditing},
-    {"Label outline(editing)",
-        &Label::outlineWhenEditing},
+            &Label::outline},
     {"Combo box text",
-        &ComboBox::text},
+            &ComboBox::text},
     {"Combo box background",
-        &ComboBox::background},
+            &ComboBox::background},
     {"Combo box outline",
-        &ComboBox::outline},
-    {"Combo box button",
-        &ComboBox::button},
+            &ComboBox::outline},
     {"Combo box arrow",
-        &ComboBox::arrow},
+            &ComboBox::arrow},
     {"Combo box focused outline",
-        &ComboBox::focusedOutline},
+            &ComboBox::focusedOutline},
     {"Slider background",
-        &Slider::background},
+            &Slider::background},
     {"Slider thumb",
-        &Slider::thumb},
+            &Slider::thumb},
     {"Slider track",
-        &Slider::track},
+            &Slider::track},
     {"Alert window background",
-        &AlertWindow::background},
+            &AlertWindow::background},
     {"Alert window text",
-        &AlertWindow::text},
+            &AlertWindow::text},
     {"Alert window outline",
-        &AlertWindow::outline},
+            &AlertWindow::outline},
     {"Image0",
-        &Image::image0},
+            &Image::image0},
     {"Image1",
-        &Image::image1},
+            &Image::image1},
     {"Image2",
-        &Image::image2},
+            &Image::image2},
     {"Image3",
-        &Image::image3},
+            &Image::image3},
     {"Image4",
-        &Image::image4},
+            &Image::image4},
     {"List editor background",
-        &ListEditor::background},
+            &ListEditor::background},
     {"List editor item",
-        &ListEditor::listItem},
+            &ListEditor::listItem},
     {"List editor selected item",
-        &ListEditor::selectedListItem},
+            &ListEditor::selectedListItem},
     {"List editor text",
-        &ListEditor::text},
+            &ListEditor::text},
     {"AppMenu button text",
-        &AppMenuButton::text},
+            &AppMenuButton::text},
     {"AppMenu button selected text",
-        &AppMenuButton::selectedText},
+            &AppMenuButton::selectedText},
     {"AppMenu button text background",
-        &AppMenuButton::textBackground},
+            &AppMenuButton::textBackground},
     {"AppMenu button selected text background",
-        &AppMenuButton::selectedTextBG},
+            &AppMenuButton::selectedTextBG},
     {"AppMenu button background",
-        &AppMenuButton::background},
+            &AppMenuButton::background},
     {"AppMenu button selected background",
-        &AppMenuButton::selectedBG},
+            &AppMenuButton::selectedBG},
     {"AppMenu button border",
-        &AppMenuButton::border},
+            &AppMenuButton::border},
     {"AppMenu button selected border",
-        &AppMenuButton::selectedBorder},
+            &AppMenuButton::selectedBorder},
     {"File selection window",
-        &FilePathEditor::fileWindow},
+            &FilePathEditor::fileWindow},
     {"File selection text",
-        &FilePathEditor::text},
+            &FilePathEditor::text},
     {"Overlay spinner background",
-        &OverlaySpinner::background},
+            &OverlaySpinner::background},
     {"Overlay spinner text",
-        &OverlaySpinner::text},
+            &OverlaySpinner::text},
     {"Page background",
-        &Page::background},
-    {"Color picker checkerboard(light)",
-        &ColourPicker::checkerboardLight},
-    {"Color picker checkerboard(dark)",
-        &ColourPicker::checkerboardDark},
-    {"Color picker color outline",
-        &ColourPicker::outline},
-    {"Color picker focused color outline",
-        &ColourPicker::focusedOutline},
+            &Page::background},
+    {"Colour picker checkerboard(light)",
+            &ColourPicker::checkerboardLight},
+    {"Colour picker checkerboard(dark)",
+            &ColourPicker::checkerboardDark},
+    {"Colour picker colour outline",
+            &ColourPicker::outline},
+    {"Colour picker focused colour outline",
+            &ColourPicker::focusedOutline},
     {"Switch background",
-        &Switch::background},
+            &Switch::background},
     {"Switch handle",
-        &Switch::handle},
+            &Switch::handle},
     {"Switch handle(off)",
-        &Switch::handleOff},
+            &Switch::handleOff},
     {"HomePage widget text",
-        &HomePage::text}
+            &HomePage::text}
 };
 
 }}}
 
-/*
- * Gets all Juce ColourId values defined by the colour config file.
- */
+
+// Gets all Juce ColourId values defined by the colour config file.
 juce::Array<int> ColourKeys::getColourIds()
 {
     juce::Array<int> idList;
-    for(const auto iter : ColourIds::allElements)
+    for (const auto iter : ColourIds::allElements)
     {
         idList.add(iter->getColourId());
     }
     return idList;
 }
-    
-/*
- * Gets all UI category color keys.
- */
+
+
+// Gets all UI category colour keys.
 const juce::Array<juce::Identifier>& ColourKeys::getCategoryKeys()
 {
     return uiCategoryKeys;
 }
 
-/*
- * Gets all keys used by the ColourConfigFile.
- */
+
+// Gets all keys used by the ColourConfigFile.
 juce::Array<const juce::Identifier*> ColourKeys::getColourKeys()
 {
     juce::Array<const juce::Identifier*> colourKeys;
-    for(const auto& key : uiCategoryKeys)
+    for (const auto& key : uiCategoryKeys)
     {
         colourKeys.add(&key);
     }
-    for(const auto& keyPair : ColourIds::keyMap)
+    for (const auto& keyPair : ColourIds::keyMap)
     {
         colourKeys.add(&keyPair.first);
     }
     return colourKeys;
 }
 
-/*
- * Gets the UICategory assigned to a Juce ColourId value.
- */
-Theme::Colour::UICategory ColourKeys::getUICategory
-(const int colourId)
+
+// Gets the UICategory assigned to a Juce ColourId value.
+Theme::Colour::UICategory ColourKeys::getUICategory(const int colourId)
 {
-    for(int i = 0; i < ColourIds::allElements.size(); i++)
-    {
-        if(ColourIds::allElements[i]->getColourId() == colourId)
-        {
-            return ColourIds::allElements[i]->getColourCategory();
-        }
-    }
-    return UICategory::none;
+    // for (int i = 0; i < ColourIds::allElements.size(); i++)
+    // {
+    // if (ColourIds::allElements[i]->getColourId() == colourId)
+    // {
+    // return ColourIds::allElements[i]->getColourCategory();
+    // }
+    // }
+    // return UICategory::none;
     int index = -1;
     int min = 0, max = ColourIds::allElements.size() - 1;
-    while(min < max)
+    while (min < max)
     {
         int testIndex = min + (max - min) / 2;
         int testId = ColourIds::allElements[testIndex]->getColourId();
-        if(testId > colourId)
+        if (testId > colourId)
         {
-            min = testIndex + 1;
+            max = testIndex;
         }
-        else if(testId < colourId)
+        else if (testId < colourId)
         {
-            max = testIndex - 1;
+            if (testIndex == min)
+            {
+                ++testIndex;
+            }
+            else
+            {
+                min = testIndex;
+            }
         }
         else
         {
@@ -234,17 +210,19 @@ Theme::Colour::UICategory ColourKeys::getUICategory
             break;
         }
     }
-    if(index < 0)
+    if (index < 0)
     {
+        DBG("Failed to find Element for ID "
+                << juce::String::toHexString(colourId));
+        jassertfalse;
         return UICategory::none;
     }
     return ColourIds::allElements[index]->getColourCategory();
 }
 
+
 //=================== Lookup values using keys: ============================
-/*
- * Finds the Juce ColourId value of a UI element from its key.
- */
+// Finds the Juce ColourId value of a UI element from its key.
 int ColourKeys::getColourId(const juce::Identifier& colourKey)
 {
     auto searchIter = ColourIds::keyMap.find(colourKey);
@@ -257,59 +235,55 @@ int ColourKeys::getColourId(const juce::Identifier& colourKey)
     return searchIter->second->getColourId();
 }
 
-/*
- * Finds the UICategory type represented by a specific key.
- */
+
+// Finds the UICategory type represented by a specific key.
 Theme::Colour::UICategory ColourKeys::getCategoryType
 (const juce::Identifier& categoryKey)
 {
     int enumVal = uiCategoryKeys.indexOf(categoryKey);
-    if(enumVal < 0)
+    if (enumVal < 0)
     {
-        DBG(dbgPrefix << __func__ << ": No category matches key " 
+        DBG(dbgPrefix << __func__ << ": No category matches key "
                 << categoryKey.toString());
 
         return UICategory::none;
     }
-    return (UICategory) enumVal; 
+    return (UICategory) enumVal;
 }
 
- //====================== Lookup keys by value: ============================
-/*
- * Gets the key used to store a specific Juce ColourId in the colour config 
- * file.
- */
+
+//====================== Lookup keys by value: ============================
+// Gets the key used to store a specific Juce ColourId in the colour config
+// file.
 const juce::Identifier& ColourKeys::getColourKey(const int colourId)
 {
     static std::map<int, const juce::Identifier*> idMap;
     static juce::ReadWriteLock mapProtector;
     const juce::ScopedReadLock mapReadLock(mapProtector);
-    if(idMap.empty())
+    if (idMap.empty())
     {
         const juce::ScopedWriteLock mapInitLock(mapProtector);
-        for(const auto& iter : ColourIds::keyMap)
+        for (const auto& iter : ColourIds::keyMap)
         {
             idMap[iter.second->getColourId()] = &iter.first;
         }
     }
     auto keySearch = idMap.find(colourId);
-    if(keySearch == idMap.end())
+    if (keySearch == idMap.end())
     {
         return invalidKey;
     }
     return *keySearch->second;
 }
 
-/*
- * Finds the key representing a UICategory value.
- */
-const juce::Identifier& ColourKeys::getCategoryKey
-(const UICategory category)
+
+// Finds the key representing a UICategory value.
+const juce::Identifier& ColourKeys::getCategoryKey(const UICategory category)
 {
-    if(category == UICategory::none)
+    if (category == UICategory::none)
     {
         DBG(dbgPrefix << __func__ << ": No key, category == none");
         return invalidKey;
     }
-    return uiCategoryKeys.getReference((int) category);
+    return uiCategoryKeys.getReference( (int) category);
 }

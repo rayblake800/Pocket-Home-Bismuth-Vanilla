@@ -10,22 +10,20 @@ namespace WifiConnect = Wifi::Connection;
 
 WifiConnect::Control::Handler::Handler() { }
 
-/*
- * Attempts to open a Wifi network connection point.
- */
+
+// Attempts to open a Wifi network connection point.
 void WifiConnect::Control::Handler::connectToAccessPoint
-(const AccessPoint toConnect, juce::String securityKey) 
+(const AccessPoint toConnect, juce::String securityKey)
 {
     SharedResource::Modular::LockedPtr<Resource, Module> controller
             = getWriteLockedResource();
     controller->connectToAccessPoint(toConnect, securityKey);
 }
 
-/*
- * Disconnects the active Wifi connection. If there is no active wifi 
- * connection, no action is taken.
- */
-void WifiConnect::Control::Handler::disconnect() 
+
+// Disconnects the active Wifi connection. If there is no active wifi
+// connection, no action is taken.
+void WifiConnect::Control::Handler::disconnect()
 {
     SharedResource::Modular::LockedPtr<Resource, Module> controller
             = getWriteLockedResource();

@@ -9,18 +9,18 @@
 #include "Wifi_LibNM_Settings_Object.h"
 #include <nm-setting-wireless-security.h>
 
-namespace Wifi 
-{ 
-    namespace LibNM 
-    { 
+namespace Wifi
+{
+    namespace LibNM
+    {
         namespace Settings { class WirelessSecurity; }
         enum class SecurityType;
-    } 
+    }
 }
 
 /**
- * @brief  Holds NMSettingWirelessSecurity* data, used to store wireless network
- *         connection security settings.
+ * @brief  Holds NMSettingWirelessSecurity* data, used to store wireless
+ *         network connection security settings.
  */
 class Wifi::LibNM::Settings::WirelessSecurity : public Object
 {
@@ -35,8 +35,8 @@ public:
     WirelessSecurity(NMSettingWirelessSecurity* toAssign);
 
     /**
-     * @brief  Creates a WirelessSecurity object holding a new, empty
-     *         LibNM security settings object.
+     * @brief  Creates a WirelessSecurity object holding a new, empty LibNM
+     *         security settings object.
      */
     WirelessSecurity();
 
@@ -64,7 +64,7 @@ public:
     /**
      * @brief  Gets the basic security type defined by this settings object.
      *
-     * @return  The type of security used by this object's connection. 
+     * @return  The type of security used by this object's connection.
      */
     SecurityType getSecurityType() const;
 

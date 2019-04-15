@@ -6,12 +6,10 @@
 #include "AppMenu_MenuItem.h"
 #include "DesktopEntry_Loader.h"
 
-/*
- * Cancels any pending DesktopEntry::Loader callbacks the loader created.
- */
+// Cancels any pending DesktopEntry::Loader callbacks the loader created.
 AppMenu::EntryLoader::~EntryLoader()
-{    
-    if(initialLoadingID != 0)
+{
+    if (initialLoadingID != 0)
     {
         DesktopEntry::Loader entryLoader;
         entryLoader.clearCallback(initialLoadingID);
@@ -19,30 +17,28 @@ AppMenu::EntryLoader::~EntryLoader()
     }
 }
 
-/*
- * Loads all desktop entry menu items for the first time.
- */
+
+// Loads all desktop entry menu items for the first time.
 void AppMenu::EntryLoader::initialEntryLoad(){
     AppMenu::MenuFile appConfig;
     MenuItem rootFolder = appConfig.getRootFolderItem();
     loadFolderEntries(rootFolder);
 }
 
-/*
- * Loads and adds all desktop entry menu items that belong in a menu folder 
- * item, or in any of its child folder items.
- */
-void AppMenu::EntryLoader::loadFolderEntries(MenuItem folderItem) 
+
+// Loads and adds all desktop entry menu items that belong in a menu folder
+// item, or in any of its child folder items.
+void AppMenu::EntryLoader::loadFolderEntries(MenuItem folderItem)
 {
     DesktopEntry::Loader entryLoader;
     initialLoadingID = entryLoader.waitUntilLoaded([this, folderItem]()
     {
         // The folder should have zero desktop entry items at this point!
-        jassert(folderItem.getMovableChildCount() 
+        jassert(folderItem.getMovableChildCount()
                 == folderItem.getFolderSize());
 
         DesktopEntry::Loader entryLoader;
-        juce::Array<DesktopEntry::EntryFile> allEntries 
+        juce::Array<DesktopEntry::EntryFile> allEntries
             = entryLoader.getAllEntries();
         EntryActions::recursiveFolderAction(folderItem, [this, &allEntries]
             (MenuItem folder)

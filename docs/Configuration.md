@@ -10,8 +10,8 @@ Setting the structure of the application menu using appMenu.json.
 [AppMenu Format Configuration](TODO!)
 Configuring the application menu format and properties using menuOptions.json.
 
-[Color Configuration](TODO!)
-Configuring application UI colors using colours.json.
+[Colour Configuration](TODO!)
+Configuring application UI colours using colours.json.
 
 [Image Asset Configuration](TODO!)
 Configuring custom application image assets using imageAssets.json.

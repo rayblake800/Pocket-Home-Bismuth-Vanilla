@@ -10,6 +10,10 @@
 
 namespace Settings { class HomeBackgroundPicker; }
 
+/**
+ * @brief  A file selection widget that saves a user-selected image path as the
+ *         HomePage background image.
+ */
 class Settings::HomeBackgroundPicker : public Widgets::FilePathEditor,
         public Widgets::FilePathEditor::Listener
 {
@@ -30,7 +34,7 @@ private:
      */
     virtual void fileSelected(Widgets::FilePathEditor* thisEditor) override;
 
-    /* Reads and writes the background image, and ensures the image JSON file
-     * resource remains available. */
+    // Reads and writes the background image, and ensures the image JSON file
+    // resource remains available.
     Theme::Image::ConfigFile imageConfig;
 };

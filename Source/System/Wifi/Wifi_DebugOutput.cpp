@@ -1,10 +1,8 @@
 #include "Wifi_DebugOutput.h"
-/*
- * Gets text describing a NMState enum value.
- */
+// Gets text describing a NMState enum value.
 const char* Wifi::nmStateString(NMState state)
 {
-    switch (state)
+    switch(state)
     {
         case NM_STATE_UNKNOWN:
             return "NM_STATE_UNKNOWN";
@@ -26,12 +24,11 @@ const char* Wifi::nmStateString(NMState state)
     return "[Unknown NMState!]";
 }
 
-/*
- * Gets text describing a NMConnectivityState enum value.
- */
+
+// Gets text describing a NMConnectivityState enum value.
 const char* Wifi::nmConnectivityStateString(NMConnectivityState state)
 {
-    switch (state)
+    switch(state)
     {
         case NM_CONNECTIVITY_UNKNOWN:
             return "NM_CONNECTIVITY_UNKNOWN";
@@ -47,12 +44,11 @@ const char* Wifi::nmConnectivityStateString(NMConnectivityState state)
     return "[Unknown NMConnectivityState!]";
 }
 
-/*
- * Gets text describing a NMDeviceState enum value.
- */
+
+// Gets text describing a NMDeviceState enum value.
 const char* Wifi::deviceStateString(NMDeviceState state)
 {
-    switch (state)
+    switch(state)
     {
         case NM_DEVICE_STATE_ACTIVATED:
             return "NM_DEVICE_STATE_ACTIVATED";
@@ -84,12 +80,11 @@ const char* Wifi::deviceStateString(NMDeviceState state)
     return "[Unknown NMDeviceState!]";
 }
 
-/*
- * Gets text describing a NMDeviceStateReason enum value.
- */
+
+// Gets text describing a NMDeviceStateReason enum value.
 const char* Wifi::deviceStateReasonString(NMDeviceStateReason stateReason)
 {
-    switch (stateReason)
+    switch(stateReason)
     {
         case NM_DEVICE_STATE_REASON_NONE:
             return "NM_DEVICE_STATE_REASON_NONE";
@@ -211,23 +206,20 @@ const char* Wifi::deviceStateReasonString(NMDeviceStateReason stateReason)
             return "NM_DEVICE_STATE_REASON_MODEM_AVAILABLE";
         case NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT:
             return "NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT";
-            /*
-        case NM_DEVICE_STATE_REASON_NEW_ACTIVATION:
-            return "NM_DEVICE_STATE_REASON_NEW_ACTIVATION";
-        case NM_DEVICE_STATE_REASON_PARENT_CHANGED:
-            return "NM_DEVICE_STATE_REASON_PARENT_CHANGED";           
-        case NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED:
-            return "NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED";            
-             */
+            // case NM_DEVICE_STATE_REASON_NEW_ACTIVATION:
+            // return "NM_DEVICE_STATE_REASON_NEW_ACTIVATION";
+            // case NM_DEVICE_STATE_REASON_PARENT_CHANGED:
+            // return "NM_DEVICE_STATE_REASON_PARENT_CHANGED";
+            // case NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED:
+            // return "NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED";
         default:
             return "[Unknown NMDeviceStateReason!]";
     }
     return "[Unknown NMDeviceStateReason!]";
 }
-   
-/*
- * Gets text describing a NMActiveConnectionState enum value.
- */
+
+
+// Gets text describing a NMActiveConnectionState enum value.
 const char* Wifi::activeConnectionStateString(NMActiveConnectionState state)
 {
     switch(state)

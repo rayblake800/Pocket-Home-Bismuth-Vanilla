@@ -3,12 +3,10 @@
 #include "Layout_Component_TextSize.h"
 #include "Util_Math.h"
 
-/* The minimum width:height ratio of all Counter objects. */
+// The minimum width:height ratio of all Counter objects:
 static const constexpr int widthToHeightRatio = 3;
 
-/*
- * Sets the stored value and range of the counter on construction.
- */
+// Sets the stored value and range of the counter on construction.
 Widgets::Counter::Counter
 (const int initialValue, const int minimum, const int maximum) :
 count(initialValue),
@@ -29,45 +27,40 @@ plusButton("+")
     setTextFieldFromCounter();
 }
 
-/*
- * Gets the counter's stored value.
- */
+
+// Gets the counter's stored value.
 int Widgets::Counter::getCount() const
 {
     return count;
 }
 
-/*
- * Sets the counter's stored integer to a new value.
- */
+
+// Sets the counter's stored integer to a new value.
 void Widgets::Counter::setCount(const int newValue)
 {
     count = Util::Math::median<int>(minimum, newValue, maximum);
     setTextFieldFromCounter();
 }
 
-/*
- * Sets a new minimum value, updating the counter value if necessary.
- */
+
+// Sets a new minimum value, updating the counter value if necessary.
 void Widgets::Counter::setMinimum(int newMin)
 {
     minimum = newMin;
     setCount(count);
 }
 
-/*
- * Sets a new maximum value, updating the counter value if necessary.
- */
+
+// Sets a new maximum value, updating the counter value if necessary.
 void Widgets::Counter::setMaximum(int newMax)
 {
     maximum = newMax;
     setCount(count);
 }
 
-/*
- * Increments or decrements the counter value when the plus or minus 
- * buttons are clicked.
- */
+
+// Increments or decrements the counter value when the plus or minus buttons
+// are clicked.
 void Widgets::Counter::buttonClicked(juce::Button* button)
 {
     if (button == &minusButton)
@@ -80,52 +73,46 @@ void Widgets::Counter::buttonClicked(juce::Button* button)
     }
 }
 
-/*
- * Parses the counter's text field as an integer, and uses it to change the 
- * counter value.
- */
+
+// Parses the counter's text field as an integer, and uses it to change the
+// counter value.
 void Widgets::Counter::setCounterFromTextField()
 {
     setCount(textField.getText().getIntValue());
 }
 
-/*
- * Sets the counter's text field to display the counter value.
- */
+
+// Sets the counter's text field to display the counter value.
 void Widgets::Counter::setTextFieldFromCounter()
 {
     textField.setText(juce::String(count));
 }
 
-/*
- * Sets the counter's value from the text field when the text field loses focus.
- */
+
+// Sets the counter's value from the text field when the text field loses focus.
 void Widgets::Counter::textEditorFocusLost(juce::TextEditor& editor)
 {
     setCounterFromTextField();
 }
 
-/*
- * Sets the counter's value from the text field when the text field is focused 
- * and the user presses the return key.
- */
+
+// Sets the counter's value from the text field when the text field is focused
+// and the user presses the return key.
 void Widgets::Counter::textEditorReturnKeyPressed(juce::TextEditor& editor)
 {
     setCounterFromTextField();
 }
 
-/*
- * Sets the counter's value from the text field when the text field is focused 
- * and the user presses the escape key.
- */
+
+// Sets the counter's value from the text field when the text field is focused
+// and the user presses the escape key.
 void Widgets::Counter::textEditorEscapeKeyPressed(juce::TextEditor& editor)
 {
     setCounterFromTextField();
 }
 
-/*
- * Arranges the buttons and number field to fit in the component bounds.
- */
+
+// Arranges the buttons and number field to fit in the component bounds.
 void Widgets::Counter::resized()
 {
     using juce::Rectangle;
@@ -134,9 +121,9 @@ void Widgets::Counter::resized()
     {
         return;
     }
-    const float currentRatio = (float) bounds.getWidth() 
+    const float currentRatio = (float) bounds.getWidth()
             / (float) bounds.getHeight();
-    if(currentRatio < widthToHeightRatio) // Too tall, reduce height:
+    if (currentRatio < widthToHeightRatio) // Too tall, reduce height:
     {
         bounds = bounds.withSizeKeepingCentre(getWidth(),
                 getWidth() / widthToHeightRatio);

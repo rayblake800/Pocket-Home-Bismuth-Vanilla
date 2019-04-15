@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -13,9 +13,10 @@
 namespace AppMenu { namespace Scrolling { class FolderComponent; } }
 
 /**
- *  The Scrolling::FolderComponent arranges its menu buttons in a simple
- * vertical list. To assist the Scrolling::MenuComponent in creating the folder
- * layout, it also shares how wide it needs to be to fit the widest menu item
+ * @brief  Arranges its menu buttons in a simple vertical list.
+ *
+ *  To assist the Scrolling::MenuComponent in creating the folder layout, the
+ * FolderComponent shares how wide it needs to be to fit the widest menu item
  * title, and the pixel offset of the current selected menu item.
  */
 class AppMenu::Scrolling::FolderComponent : public AppMenu::FolderComponent
@@ -35,14 +36,14 @@ public:
      *
      * @param xPos  The x-coordinate of the spot that was clicked, measured in
      *              pixels from the left edge of the folder component.
-     * 
+     *
      * @param yPos  The y-coordinate of the spot that was clicked, measured in
      *              pixels from the top edge of the folder component.
      *
      * @return      The closest menu index to the clicked spot, to use when
      *              inserting new menu items.
      */
-    virtual int closestIndex(const int xPos, const int yPos) 
+    virtual int closestIndex(const int xPos, const int yPos)
         const final override;
 
     /**
@@ -51,7 +52,7 @@ public:
      *
      * @param folderItem  The menu item data that will define the new button.
      *
-     * @return            The button component, initialized as a 
+     * @return            The button component, initialized as a
      *                    AppMenu::Scrolling::MenuButton.
      */
     virtual AppMenu::MenuButton* createMenuButton(const MenuItem folderItem)

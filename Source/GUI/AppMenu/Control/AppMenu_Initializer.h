@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -19,8 +19,8 @@ namespace AppMenu { class InputHandler; }
 /**
  * @brief  Creates and initializes the main AppMenu component.
  *
- *  Each AppMenu format must provide its own implementation of 
- * AppMenu::Initializer.  Each format's initializer will need to be added to the
+ *  Each AppMenu format must provide its own implementation of
+ * AppMenu::Initializer. Each format's initializer will need to be added to the
  * switch statement within the createInitializer function in AppMenu.cpp.
  */
 struct AppMenu::Initializer
@@ -28,12 +28,12 @@ struct AppMenu::Initializer
     /**
      * @brief  Gets the menu format initialized by this object.
      *
-     * @return  The AppMenu::Format that identifies this AppMenu implementation.
+     * @return  The AppMenu::Format this object initializes.
      */
     virtual Format getMenuFormat() const = 0;
 
     /**
-     * @brief  Creates a new MenuComponent object appropriate for this menu 
+     * @brief  Creates a new MenuComponent object appropriate for this menu
      *         format.
      *
      * @return  An instance of the MenuComponent subclass defined by the format.
@@ -49,8 +49,8 @@ struct AppMenu::Initializer
      *
      * @param controller     A menu controller connected to the menu component.
      *
-     * @return               An instance of the InputHandler subclass defined by
-     *                       the format.
+     * @return               An instance of the InputHandler subclass defined
+     *                       by the format.
      */
     virtual InputHandler* createInputHandler(
             MenuComponent* const menuComponent,

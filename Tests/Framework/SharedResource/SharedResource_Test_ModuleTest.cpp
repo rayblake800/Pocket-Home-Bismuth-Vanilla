@@ -1,11 +1,15 @@
 #include "SharedResource_Test_ModuleTestClasses.h"
 
+/**
+ * @brief  Tests that SharedResource::Modular::Resource manages resource modules
+ *         and resource module handlers without problems.
+ */
 class ModuleTest : public juce::UnitTest
 {
 public:
     ModuleTest() : juce::UnitTest("SharedResource::Module Testing",
             "SharedResource") {}
-    
+
     void runTest()
     {
         beginTest("Resource Module initialization");
@@ -29,15 +33,15 @@ public:
         const int bCount = 5;
         const int cCount = 9;
 
-        while(aHandlers.size() < aCount)
+        while (aHandlers.size() < aCount)
         {
             aHandlers.add(new TestHandlerA);
         }
-        while(bHandlers.size() < bCount)
+        while (bHandlers.size() < bCount)
         {
             bHandlers.add(new TestHandlerB);
         }
-        while(cHandlers.size() < cCount)
+        while (cHandlers.size() < cCount)
         {
             cHandlers.add(new TestHandlerC);
         }
@@ -87,7 +91,7 @@ public:
                 "Error restoring TestModuleB with default values.");
         expectEquals<int>(defaultValueC, cHandler.getValue(),
                 "Error restoring TestModuleC with default values.");
-        
+
         expectEquals(aHandler.actOnHandlers(), 1,
                 "Unexpected TestHandlerA object count after reset.");
         expectEquals(bHandler.actOnHandlers(), 1,

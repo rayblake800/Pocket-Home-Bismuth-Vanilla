@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -10,18 +10,18 @@
  *         disabled.
  */
 
-namespace Wifi 
-{ 
-    namespace Device 
-    { 
-        class UpdateInterface; 
+namespace Wifi
+{
+    namespace Device
+    {
+        class UpdateInterface;
         class Module;
-    } 
+    }
 }
 
 /**
- * @brief  An interface used to send updates when wireless networking is enabled
- *         or disabled.
+ * @brief  An interface used to send updates when wireless networking is
+ *         enabled or disabled.
  */
 class Wifi::Device::UpdateInterface
 {
@@ -31,11 +31,11 @@ public:
     virtual ~UpdateInterface() { }
 
 private:
-    /* Only the Module may send update notifications.  */
+    // Only the Module may send update notifications.
     friend class Module;
 
     /**
-     * @brief  Called whenever wireless networking is enabled. 
+     * @brief  Called whenever wireless networking is enabled.
      *
      * Implement this to define how the Device::Listener should handle the
      * update.
@@ -43,7 +43,7 @@ private:
     virtual void wirelessEnabled() = 0;
 
     /**
-     * @brief  Called whenever wireless networking is disabled. 
+     * @brief  Called whenever wireless networking is disabled.
      *
      * Implement this to define how the Device::Listener should handle the
      * update.

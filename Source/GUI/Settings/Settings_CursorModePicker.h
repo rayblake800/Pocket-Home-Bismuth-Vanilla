@@ -13,7 +13,7 @@ namespace Settings { class CursorModePicker; }
 /**
  * @brief  Allows the user to choose between showing or hiding the mouse cursor.
  */
-class Settings::CursorModePicker : public juce::ComboBox, 
+class Settings::CursorModePicker : public juce::ComboBox,
         public Locale::TextUser, private juce::ComboBox::Listener
 {
 public:
@@ -27,7 +27,7 @@ public:
 
 private:
     /**
-     * @brief  Updates the cursor visibility mode when the user selects a new 
+     * @brief  Updates the cursor visibility mode when the user selects a new
      *         mode.
      *
      * @param comboBox  This combo box.

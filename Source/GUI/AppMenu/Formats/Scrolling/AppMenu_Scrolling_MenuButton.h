@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -13,9 +13,8 @@
 namespace AppMenu { namespace Scrolling { class MenuButton; } }
 
 /**
- *  The Scrolling::MenuButton displays the icon on the left side of the button,
- * with the title printed directly to the right of the icon.  The button's
- * background and outline are always drawn.
+ * @brief  A MenuButton that displays its icon on the left side of the button,
+ *         with the title printed directly to the right of the icon.
  */
 class AppMenu::Scrolling::MenuButton : public AppMenu::MenuButton
 {
@@ -54,13 +53,13 @@ private:
     virtual bool shouldDrawBorder() const final override;
 
     /**
-     * @brief  Checks if this button will fill in its background with its 
-     *         background color.
+     * @brief  Checks if this button will fill in its background with its
+     *         background colour.
      *
      * @return  True, as the scrolling menu always draws button backgrounds.
      */
     virtual bool shouldFillBackground() const final override;
-    
+
     /**
      * @brief  Gets the text justification of the button title.
      *

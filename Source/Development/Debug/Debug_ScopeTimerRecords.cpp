@@ -7,6 +7,7 @@ enum class RecordType
     start,
     stop
 };
+
 struct RecordData
 {
     juce::String scopeName;
@@ -17,38 +18,37 @@ struct RecordData
 static juce::CriticalSection recordGuard;
 static std::map<juce::Thread::ThreadID, juce::Array<RecordData>> timeRecords;
 
-/*
- * Records the start of a ScopeTimer's measurement period.
- */
+
+// Records the start of a ScopeTimer's measurement period.
 void Debug::ScopeTimerRecords::addStartRecord(
         const juce::String scopeName,
         const juce::Thread::ThreadID threadID)
 {
     const juce::ScopedLock recordLock(recordGuard);
-    RecordData newRecord = 
-    { 
-        scopeName, 
-        juce::Time::getMillisecondCounter(), 
-        RecordType::start 
+    RecordData newRecord =
+    {
+        scopeName,
+        juce::Time::getMillisecondCounter(),
+        RecordType::start
     };
     timeRecords[threadID].add(newRecord);
 }
 
-/*
- * Records the end of a ScopeTimer's measurement period.
- */
+
+// Records the end of a ScopeTimer's measurement period.
 void Debug::ScopeTimerRecords::addStopRecord(const juce::String scopeName,
         const juce::Thread::ThreadID threadID)
 {
     const juce::ScopedLock recordLock(recordGuard);
-    RecordData newRecord = 
-    { 
-        scopeName, 
-        juce::Time::getMillisecondCounter(), 
-        RecordType::stop 
+    RecordData newRecord =
+    {
+        scopeName,
+        juce::Time::getMillisecondCounter(),
+        RecordType::stop
     };
     timeRecords[threadID].add(newRecord);
 }
+
 
 /**
  * @brief  Processes record data to print nested scope record times in order.
@@ -78,7 +78,7 @@ public:
     static int compareElements(RecordData first, RecordData second);
 
     /**
-     * @brief  Prints all scope timer records in order, showing time between 
+     * @brief  Prints all scope timer records in order, showing time between
      *         scopes and the total duration recorded by each timer.
      */
     void printRecords();
@@ -96,11 +96,11 @@ private:
     juce::uint32 lastPrintedTime = 0;
 };
 
-/*
- * Create a RecordPrinter to print a single thread's timer records.
- */
+
+// Create a RecordPrinter to print a single thread's timer records.
 RecordPrinter::RecordPrinter(juce::Array<RecordData>& recordsToPrint) :
     records(recordsToPrint) { }
+
 
 /**
  * @brief  Gets a string representation of a duration in time.
@@ -110,46 +110,45 @@ RecordPrinter::RecordPrinter(juce::Array<RecordData>& recordsToPrint) :
  * @param endTime    The end of the represented time period.
  *
  * @return           A formatted string containing the difference between
- *                   startTime and endTime, labeled as a duration in 
+ *                   startTime and endTime, labeled as a duration in
  *                   milliseconds.
  */
 static juce::String durationString(const juce::int64 startTime,
         const juce::int64 endTime)
 {
-    juce::String duration = "(";
+    juce::String duration = " (";
     duration << juce::String(endTime - startTime) << " ms)";
     return duration;
 }
 
-/*
- * Prints all scope timer records in order, showing time between scopes and the 
- * total duration recorded by each timer.
- */
+
+// Prints all scope timer records in order, showing time between scopes and the
+// total duration recorded by each timer.
 void RecordPrinter::printRecords()
 {
     using std::cout;
     lastPrintedTime = 0;
 
-    for(int i = 0; i < records.size(); i++)
+    for (int i = 0; i < records.size(); i++)
     {
         RecordData record = records[i];
-        if(record.recordType == RecordType::start)
+        if (record.recordType == RecordType::start)
         {
             juce::uint32 endTime = 0;
             int recursionCount = 0;
-            for(int endIdx = i + 1; endIdx < records.size(); endIdx++)
+            for (int endIdx = i + 1; endIdx < records.size(); endIdx++)
             {
                 RecordData nextRecord = records[endIdx];
-                if(nextRecord.scopeName == record.scopeName)
+                if (nextRecord.scopeName == record.scopeName)
                 {
-                    if(nextRecord.recordType == RecordType::start)
+                    if (nextRecord.recordType == RecordType::start)
                     {
                         recursionCount++;
                     }
                     else
                     {
                         recursionCount--;
-                        if(recursionCount < 0)
+                        if (recursionCount < 0)
                         {
                             endTime = nextRecord.time;
                             break;
@@ -159,7 +158,7 @@ void RecordPrinter::printRecords()
             }
             jassert(endTime > 0);
 
-            if(lastPrintedTime > 0 && record.time > lastPrintedTime)
+            if (lastPrintedTime > 0 && record.time > lastPrintedTime)
             {
                 printRecordLine("");
                 printRecordLine(durationString(lastPrintedTime, record.time));
@@ -175,9 +174,9 @@ void RecordPrinter::printRecords()
         else
         {
             jassert(record.scopeName == openRecords.top().scopeName);
-            if(record.time > lastPrintedTime
+            if (record.time > lastPrintedTime
                     && records[i - 1].scopeName != record.scopeName)
-                
+
             {
                 printRecordLine("");
                 printRecordLine(durationString(lastPrintedTime, record.time));
@@ -189,31 +188,30 @@ void RecordPrinter::printRecords()
     jassert(openRecords.empty());
 }
 
-/*
- * Prints a single line of text within the record.
- */
+
+// Prints a single line of text within the record.
 void RecordPrinter::printRecordLine(const juce::String line)
 {
     std::cout << "  ";
-    for(int i = 0; i < openRecords.size(); i++)
+    for (int i = 0; i < openRecords.size(); i++)
     {
         std::cout << "| ";
     }
     std::cout << line << "\n";
 }
-/*
- * Organizes and prints all records chronologically.
- */
+
+
+// Organizes and prints all records chronologically.
 void Debug::ScopeTimerRecords::printRecords()
 {
     using std::cout;
     const juce::ScopedLock recordLock(recordGuard);
-    if(!timeRecords.empty())
+    if (!timeRecords.empty())
     {
-        cout << "\nPrinting timer records for " << timeRecords.size() 
+        cout << "\nPrinting timer records for " << timeRecords.size()
                 << " threads:\n";
     }
-    for(auto threadRecords : timeRecords)
+    for (auto threadRecords : timeRecords)
     {
         cout << "\nThread " << threadRecords.first << ":\n";
         RecordPrinter threadRecordPrinter(threadRecords.second);

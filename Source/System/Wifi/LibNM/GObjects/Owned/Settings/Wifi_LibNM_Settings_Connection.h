@@ -36,7 +36,7 @@ public:
     /**
      * @brief  Gets the basic ID used by this object's connection.
      *
-     * @return  The connection's display name. 
+     * @return  The connection's display name.
      */
     juce::String getID() const;
 

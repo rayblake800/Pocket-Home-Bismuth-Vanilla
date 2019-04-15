@@ -1,8 +1,8 @@
 #pragma once
 /**
  * @file  Windows_FocusListener.h
- * 
- * @brief  Checks if the main application window is focused, and receives 
+ *
+ * @brief  Checks if the main application window is focused, and receives
  *         notifications whenever it gains or loses focus.
  */
 
@@ -10,18 +10,17 @@
 #include "SharedResource_Handler.h"
 #include "JuceHeader.h"
 
-namespace Windows 
-{ 
-    class FocusListener; 
+namespace Windows
+{
+    class FocusListener;
     class FocusTracker;
 }
 
 /**
- * @brief  Connects to the FocusTracker resource to check if the MainWindow
- *         is focused, and to receive updates when the window gains or loses
- *         focus.
- * 
- *  All background tasks should either inherit FocusListener or own a 
+ * @brief  Connects to the FocusTracker resource to check if the MainWindow is
+ *         focused, and to receive updates when the window gains or loses focus.
+ *
+ *  All background tasks should either inherit FocusListener or own a
  * FocusListener object so they can ensure that they aren't wasting resources
  * when the application isn't being actively used.
  */
@@ -34,7 +33,7 @@ public:
      *         tracker instance if necessary.
      */
     FocusListener();
-    
+
     virtual ~FocusListener() { }
 
     /**
@@ -48,7 +47,7 @@ private:
     /**
      * @brief  Signals that the main application window just gained focus.
      *
-     *  This takes no action by default. FocusListener subclasses should 
+     *  This takes no action by default. FocusListener subclasses should
      * override this method if they need to act when the window gains focus.
      */
     virtual void windowFocusGained() override;
@@ -56,7 +55,7 @@ private:
     /**
      * @brief  Signals that the main application window just lost focus.
      *
-     *  This takes no action by default. FocusListener subclasses should 
+     *  This takes no action by default. FocusListener subclasses should
      * override this method if they need to act when the window loses focus.
      */
     virtual void windowFocusLost() override;

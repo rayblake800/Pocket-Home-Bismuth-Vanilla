@@ -1,9 +1,9 @@
 #pragma once
 /**
  * @file  Page_QuickSettings.h
- * 
- * @brief  Provides wireless device controls, brightness and volume sliders, and 
- *         a button to open additional settings pages.
+ *
+ * @brief  Provides wireless device controls, brightness and volume sliders,
+ *         and a button to open additional settings pages.
  */
 
 #include "Page_Component.h"
@@ -29,7 +29,7 @@ public:
 
     virtual ~QuickSettings() { }
 
-private:    
+private:
     /**
      * @brief  Updates the settings list button when the page is resized.
      */
@@ -46,13 +46,13 @@ private:
          *
          * @param settingsPage  The page component that owns this Listener.
          */
-        PageListener(QuickSettings& settingsPage) : 
+        PageListener(QuickSettings& settingsPage) :
             settingsPage(settingsPage) { }
 
     private:
         /**
          * @brief  Opens the settings list page when its button is clicked.
-         * 
+         *
          * @param button  This should always be the settingsListBtn.
          */
         void buttonClicked(juce::Button* button) override;
@@ -61,23 +61,23 @@ private:
     };
     PageListener pageListener;
 
-    /* Optional IP address label component: */
+    // Optional IP address label component:
     std::unique_ptr<Info::IPLabel> ipLabel;
 
 #ifdef WIFI_SUPPORTED
-    /* Turns wifi on or off, shows connection state, and opens the wifi page. */
+    // Turns wifi on or off, shows connection state, and opens the wifi page.
     Settings::WifiControl wifiComponent;
 #endif
 
-    /* Sets the display brightness */
+    // Sets the display brightness
     Settings::BrightnessSlider brightnessSlider;
 
-    /* Sets system volume levels */
+    // Sets system volume levels
     Settings::VolumeSlider volumeSlider;
 
-    /* Opens the settings list page */
+    // Opens the settings list page
     Theme::Image::Component<Widgets::DrawableImageButton> settingsListBtn;
 
-    /* Sets the bounds of the settings list button: */
-    Layout::Component::Manager listButtonManager; 
+    // Sets the bounds of the settings list button:
+    Layout::Component::Manager listButtonManager;
 };

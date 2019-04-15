@@ -8,13 +8,13 @@
 
 #include "JuceHeader.h"
 
-namespace SharedResource 
-{ 
-    namespace Thread 
-    { 
-        class ScopedWriteLock; 
+namespace SharedResource
+{
+    namespace Thread
+    {
+        class ScopedWriteLock;
         class Lock;
-    } 
+    }
 }
 
 /**
@@ -30,11 +30,11 @@ public:
      *
      * @param threadLock  The resource lock object to lock.
      */
-    ScopedWriteLock(Lock& threadLock); 
+    ScopedWriteLock(Lock& threadLock);
 
     virtual ~ScopedWriteLock() { }
 
 private:
-    /* Private lock object that provides all lock functionality: */
+    // Private lock object that provides all lock functionality:
     juce::ScopedWriteLock juceLock;
 };

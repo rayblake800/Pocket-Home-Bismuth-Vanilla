@@ -14,49 +14,45 @@
 #include "Wifi_LibNM_ContextTest.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Wifi::Connection::Record::Module::";
 #endif
 
 namespace WifiRecord = Wifi::Connection::Record;
 
-/* Stores all connection events: */
+// Stores all connection events:
 static juce::Array<Wifi::Connection::Event> connectionEvents;
 
-/* Sorts the event list from newest to oldest. */
+// Sorts the event list from newest to oldest.
 class
 {
 public:
-    static int compareElements(Wifi::Connection::Event first, 
+    static int compareElements(Wifi::Connection::Event first,
             Wifi::Connection::Event second)
     {
         juce::int64 timeDifference = first.getEventTime().toMilliseconds()
             - second.getEventTime().toMilliseconds();
-        if(timeDifference == 0)
+        if (timeDifference == 0)
         {
             return 0;
         }
-        return ((timeDifference < 0) ? 1 : -1);
+        return ( (timeDifference < 0) ? 1 : -1);
     }
 } eventSorter;
 
-/*
- * Connects the module to its Resource.
- */
-WifiRecord::Module::Module(Resource& parentResource) : 
+// Connects the module to its Resource.
+WifiRecord::Module::Module(Resource& parentResource) :
 Wifi::Module(parentResource) { }
 
-/*
- * Checks if the system has an active, established Wifi network connection.
- */
+
+// Checks if the system has an active, established Wifi network connection.
 bool WifiRecord::Module::isConnected() const
 {
     return connectionEvents.getFirst().getEventType() == EventType::connected;
 }
 
-/*
- * Checks if NetworkManager is currently opening a network connection.
- */
+
+// Checks if NetworkManager is currently opening a network connection.
 bool WifiRecord::Module::isConnecting() const
 {
     EventType latestEventType = connectionEvents.getFirst().getEventType();
@@ -64,13 +60,12 @@ bool WifiRecord::Module::isConnecting() const
         || latestEventType == EventType::startedConnecting;
 }
 
-/*
- * Gets the access point being used by the active or activating connection.
- */
+
+// Gets the access point being used by the active or activating connection.
 Wifi::AccessPoint WifiRecord::Module::getActiveAP() const
 {
     Event latestEvent = connectionEvents.getFirst();
-    if(latestEvent.getEventType() == EventType::disconnected
+    if (latestEvent.getEventType() == EventType::disconnected
             || latestEvent.getEventType() == EventType::invalid)
     {
         return AccessPoint();
@@ -79,12 +74,10 @@ Wifi::AccessPoint WifiRecord::Module::getActiveAP() const
 }
 
 
-/*
- * Adds a new event to the list of saved events.
- */
+// Adds a new event to the list of saved events.
 void WifiRecord::Module::addConnectionEvent(const Event newEvent)
 {
-    if(!newEvent.isNull())
+    if (!newEvent.isNull())
     {
         DBG(dbgPrefix << __func__ << ": adding " << newEvent.toString());
         connectionEvents.addSorted(eventSorter, newEvent);
@@ -115,34 +108,33 @@ void WifiRecord::Module::addConnectionEvent(const Event newEvent)
     }
 }
 
-/*
- * Adds a new event to the list of saved events if the most recent saved event 
- * doesn't have the same access point and event type.
- */
+
+// Adds a new event to the list of saved events if the most recent saved event
+// doesn't have the same access point and event type.
 void WifiRecord::Module::addEventIfNotDuplicate(const Event newEvent)
 {
-    if(newEvent.getEventAP().isNull())
+    if (newEvent.getEventAP().isNull())
     {
         return;
     }
 
     Event lastEvent = getLatestEvent();
-    if(lastEvent.getEventAP() == newEvent.getEventAP())
+    if (lastEvent.getEventAP() == newEvent.getEventAP())
     {
         // Get an event's type, treating EventType::connectionFailed and
-        // EventType::connectionAuthFailed as equivalent to 
+        // EventType::connectionAuthFailed as equivalent to
         // EventType::disconnected.
-        const auto getCompEventType = [](const Event& event)
+        const auto getCompEventType = [] (const Event& event)
         {
             EventType type = event.getEventType();
-            if(type == EventType::connectionFailed
+            if (type == EventType::connectionFailed
                     || type == EventType::connectionAuthFailed)
             {
                 return EventType::disconnected;
             }
             return type;
         };
-        if(getCompEventType(newEvent) == getCompEventType(lastEvent))
+        if (getCompEventType(newEvent) == getCompEventType(lastEvent))
         {
             return;
         }
@@ -150,36 +142,36 @@ void WifiRecord::Module::addEventIfNotDuplicate(const Event newEvent)
     addConnectionEvent(newEvent);
 }
 
-/*
- * Connects with NetworkManager to initialize or update the most recent 
- * connection record.
- */
+
+// Connects with NetworkManager to initialize or update the most recent
+// connection record.
 void WifiRecord::Module::updateRecords()
 {
     connectionEvents.clear();
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->call([this, &nmThread]()
     {
         const LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
         const LibNM::Client networkClient = nmThread->getClient();
-        
-        LibNM::ActiveConnection connection 
+
+        LibNM::ActiveConnection connection
                 = networkClient.getActivatingConnection();
-        if(connection.isNull())
+        if (connection.isNull())
         {
             connection = networkClient.getPrimaryConnection();
         }
-        const bool isConnecting 
-                = wifiDevice.getState() != NM_DEVICE_STATE_ACTIVATED; 
+        const bool isConnecting
+                = wifiDevice.getState() != NM_DEVICE_STATE_ACTIVATED;
 
-        if(connection.isNull())
+        if (connection.isNull())
         {
             return;
         }
 
         const LibNM::AccessPoint nmAP = wifiDevice.getAccessPoint
                 (connection.getAccessPointPath());
-        if(nmAP.isNull())
+        if (nmAP.isNull())
         {
             return;
         }
@@ -188,7 +180,7 @@ void WifiRecord::Module::updateRecords()
         jassert(!apHash.isNull());
         Wifi::APList::Module* apList = getSiblingModule<APList::Module>();
         AccessPoint activeAP = apList->getAccessPoint(nmAP.generateHash());
-        if(activeAP.isNull())
+        if (activeAP.isNull())
         {
             apList->updateAllAccessPoints();
             activeAP = apList->getAccessPoint(apHash);
@@ -203,28 +195,26 @@ void WifiRecord::Module::updateRecords()
     });
 }
 
-/*
- * Gets the most recent connection event in the connection history.
- */
+
+// Gets the most recent connection event in the connection history.
 Wifi::Connection::Event WifiRecord::Module::getLatestEvent() const
 {
     return connectionEvents.getFirst();
 }
 
-/*
- * Gets the most recent connection event that involves a particular access
- * point.
- */
+
+// Gets the most recent connection event that involves a particular access
+// point.
 Wifi::Connection::Event WifiRecord::Module::getLatestEvent
 (const AccessPoint eventAP) const
 {
-    if(eventAP.isNull())
+    if (eventAP.isNull())
     {
         return Event();
     }
-    for(Event& event : connectionEvents)
+    for (Event& event : connectionEvents)
     {
-        if(event.getEventAP() == eventAP)
+        if (event.getEventAP() == eventAP)
         {
             return event;
         }
@@ -232,19 +222,18 @@ Wifi::Connection::Event WifiRecord::Module::getLatestEvent
     return Event();
 }
 
-/*
- * Gets the most recent connection event with a specific event type.
- */
+
+// Gets the most recent connection event with a specific event type.
 Wifi::Connection::Event WifiRecord::Module::getLatestEvent
 (const EventType eventType) const
 {
-    if(eventType == EventType::invalid)
+    if (eventType == EventType::invalid)
     {
         return Event();
     }
-    for(Event& event : connectionEvents)
+    for (Event& event : connectionEvents)
     {
-        if(event.getEventType() == eventType)
+        if (event.getEventType() == eventType)
         {
             return event;
         }
@@ -252,20 +241,19 @@ Wifi::Connection::Event WifiRecord::Module::getLatestEvent
     return Event();
 }
 
-/*
- * Gets the most recent connection event with a specific event type and access
- * point.
- */
+
+// Gets the most recent connection event with a specific event type and access
+// point.
 Wifi::Connection::Event WifiRecord::Module::getLatestEvent
 (const AccessPoint eventAP, const EventType eventType) const
 {
-    if(eventAP.isNull() || eventType == EventType::invalid)
+    if (eventAP.isNull() || eventType == EventType::invalid)
     {
         return Event();
     }
-    for(Event& event : connectionEvents)
+    for (Event& event : connectionEvents)
     {
-        if(event.getEventAP() == eventAP && event.getEventType() == eventType)
+        if (event.getEventAP() == eventAP && event.getEventType() == eventType)
         {
             return event;
         }

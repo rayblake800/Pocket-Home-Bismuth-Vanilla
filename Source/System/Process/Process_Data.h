@@ -1,19 +1,19 @@
 #pragma once
 /**
  * @file  Process_Data.h
- * 
+ *
  * @brief  Stores information about a Linux process.
  */
 
 #include <sys/types.h>
 #include "JuceHeader.h"
 
-namespace Process 
-{ 
-    class Data; 
+namespace Process
+{
+    class Data;
     enum class State;
 }
-    
+
 /**
  * @brief  Reads and stores basic information about a single process.
  */
@@ -30,20 +30,21 @@ public:
     ~Data() { }
 
     /**
-     * @brief  Gets data for all direct child processes of the process this Data
-     *         object represents.
-     * 
-     * @return  An array of process data structures, containing Data objects for
-     *          each process that lists the stored processId as their parent ID.
-     *          This array will be sorted with the newest elements listed first.
+     * @brief  Gets data for all direct child processes of the process this
+     *         Data object represents.
+     *
+     * @return  An array of process data structures, containing Data objects
+     *          for each process that lists the stored processId as their
+     *          parent ID. This array will be sorted with the newest elements
+     *          listed first.
      */
     juce::Array<Data> getChildProcesses();
 
     /**
      * @brief  Checks whether this object found process data on construction.
      *
-     * @return  True if process data was accessed, false if no process was found
-     *          using the process ID given on construction.
+     * @return  True if process data was accessed, false if no process was
+     *          found using the process ID given on construction.
      */
     bool isValid() const;
 
@@ -62,8 +63,8 @@ public:
     int getParentId() const;
 
     /**
-     * @brief  Gets the name of the executable this Data process was created
-     *         to run.
+     * @brief  Gets the name of the executable this Data process was created to
+     *         run.
      *
      * @return  The process executable name, or the empty string if this Data
      *          is invalid.
@@ -71,7 +72,7 @@ public:
     juce::String getExecutableName() const;
 
     /**
-     * @brief  Gets the state of the Data process recorded when it was 
+     * @brief  Gets the state of the Data process recorded when it was
      *         constructed.
      *
      * @return  The saved process state, or State::invalid if this Data is
@@ -95,14 +96,14 @@ private:
      */
     Data(const juce::File statFile);
 
-    /* Process ID number: */
+    // Process ID number:
     int processId = -1;
-    /* ID of the parent process that created this process: */
+    // ID of the parent process that created this process:
     int parentId = -1;
-    /* Executable the process was created to launch: */
+    // Executable the process was created to launch:
     juce::String executableName;
-    /* Last recorded process state: */
+    // Last recorded process state:
     State lastState;
-    /* Time when the process was started: */
+    // Time when the process was started:
     juce::uint64 startTime;
 };

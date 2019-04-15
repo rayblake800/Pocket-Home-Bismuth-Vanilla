@@ -1,13 +1,13 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
  * @file  AppMenu_Controller.h
  *
- * @brief  Implements core menu functionality. This includes opening and closing
- *         folders, creating menu editors, handling popup context menus, and 
- *         launching application shortcuts.
+ * @brief  Implements core menu functionality. This includes opening and
+ *         closing folders, creating menu editors, handling popup context
+ *         menus, and launching application shortcuts.
  */
 
 #include "Locale_TextUser.h"
@@ -17,22 +17,21 @@
 #include "Process_Launcher.h"
 #include "JuceHeader.h"
 
-namespace AppMenu 
-{ 
-    class Controller; 
+namespace AppMenu
+{
+    class Controller;
     class MenuItem;
     class PopupEditor;
 }
 
 /**
- *  @brief  Implements all menu functionality not related to menu display or 
- *          input handling. 
+ * @brief  Implements all menu functionality not related to menu display or
+ *         input handling.
  *
- *  The controller defines the behavior of activated menu items, launches 
- * applications, opens or closes menu folders, creates and handles popup context
- * menus, and creates appropriate popup editors when necessary.
+ *  The controller defines the behavior of activated menu items, launches
+ * applications, opens or closes menu folders, creates and handles popup
+ * context menus, and creates appropriate popup editors when necessary.
  */
-
 class AppMenu::Controller : public Locale::TextUser
 {
 public:
@@ -68,7 +67,7 @@ public:
      * @param menuItem  The menu item the context menu should edit.
      */
     void showContextMenu(const MenuItem menuItem);
-     
+
     /**
      * @brief  Activates an item in the menu, launching application shortcut
      *         menu items, and opening folder menu items.
@@ -76,18 +75,18 @@ public:
      * @param clickedItem  The item in the menu that should be activated.
      */
     void activateMenuItem(const MenuItem clickedItem);
-    
+
     /**
-     * @brief  Sets if the Controller should show the loading spinner and ignore
-     *         input.
+     * @brief  Sets if the Controller should show the loading spinner and
+     *         ignore input.
      *
-     * @param isLoading    Whether the Controller is currently busy and should 
+     * @param isLoading    Whether the Controller is currently busy and should
      *                     ignore input.
      *
      * @param loadingText  An optional loading message to print on the loading
      *                     spinner.
      */
-    void setLoadingState(const bool isLoading, 
+    void setLoadingState(const bool isLoading,
             const juce::String loadingText = juce::String());
 
     /**
@@ -99,7 +98,7 @@ public:
     bool ignoringInput() const;
 
 private:
-    /* Context menu option codes: */
+    // Context menu option codes:
     enum class OptionCode
     {
         Cancelled,
@@ -121,7 +120,7 @@ private:
      *
      * @param editedItem      A menu item that the action should be applied to.
      *
-     * @param insertIndex     An insertion index where new items should be 
+     * @param insertIndex     An insertion index where new items should be
      *                        inserted into a folder targetItem.
      */
     void handleContextMenuAction(OptionCode selectedOption,
@@ -142,10 +141,10 @@ private:
     void openFolder(const MenuItem folderItem);
 
     /**
-     * @brief  Creates and shows a new PopupEditor component that can create a 
+     * @brief  Creates and shows a new PopupEditor component that can create a
      *         new application shortcut menu item.
      *
-     * @param folder       The menu folder where the editor may insert a new 
+     * @param folder       The menu folder where the editor may insert a new
      *                     item.
      *
      * @param insertIndex  The index in the folder where any new item would be
@@ -153,11 +152,11 @@ private:
      */
     void createNewShortcutEditor(const MenuItem folder, const int insertIndex);
 
-     /**
-     * @brief  Creates and shows a new PopupEditor component that can create a 
+    /**
+     * @brief  Creates and shows a new PopupEditor component that can create a
      *         new folder menu item.
      *
-     * @param folder       The menu folder where the editor may insert a new 
+     * @param folder       The menu folder where the editor may insert a new
      *                     item.
      *
      * @param insertIndex  The index in the folder where any new item would be
@@ -166,7 +165,7 @@ private:
     void createNewFolderEditor(const MenuItem folder, const int insertIndex);
 
     /**
-     * @brief  Creates and shows a new PopupEditor component that can create a 
+     * @brief  Creates and shows a new PopupEditor component that can create a
      *         new desktop entry.
      *
      * @param categorySource  A MenuItem used to set the initial categories of
@@ -175,7 +174,7 @@ private:
     void createNewEntryEditor(const MenuItem categorySource);
 
     /**
-     * @brief  Creates and shows a new PopupEditor component that edits an 
+     * @brief  Creates and shows a new PopupEditor component that edits an
      *         existing item in the menu.
      *
      * @param toEdit  The menu item that will be edited.
@@ -189,21 +188,21 @@ private:
      *
      * @param copyFolder   The folder where the copy will be inserted.
      *
-     * @param insertIndex  The index in copyFolder where the copy will be 
+     * @param insertIndex  The index in copyFolder where the copy will be
      *                     inserted.
      */
     void copyMenuItem(const MenuItem toCopy, MenuItem copyFolder,
             const int insertIndex);
 
-    /* Holds a reference to the loading spinner */
+    // Holds a reference to the loading spinner
     Widgets::OverlaySpinner& loadingSpinner;
 
-    /* The main menu component */
+    // The main menu component
     MenuComponent* const menuComponent;
 
-    /* Launches or focuses applications from the menu */
+    // Launches or focuses applications from the menu
     Process::Launcher appLauncher;
 
-    /* Updates desktop entry folder items after changing folder categories */
+    // Updates desktop entry folder items after changing folder categories
     EntryLoader entryLoader;
 };

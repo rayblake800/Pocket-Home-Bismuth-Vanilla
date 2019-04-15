@@ -16,8 +16,8 @@ namespace Wifi { namespace LibNM { class SSID; } }
  *
  *  SSID values are stored as byte arrays. SSID values are usually descriptive
  * string values, but they may contain unprintable characters or lack a null
- * terminator. SSID object store one of these values, allowing it to be accessed
- * as a raw byte array or a sanitized String object.
+ * terminator. SSID object store one of these values, allowing it to be
+ * accessed as a raw byte array or a sanitized String object.
  */
 class Wifi::LibNM::SSID
 {
@@ -51,14 +51,14 @@ public:
     /**
      * @brief  Gets a text representation of this SSID.
      *
-     * @return  The SSID, as a text string suitable for display or debugging. 
+     * @return  The SSID, as a text string suitable for display or debugging.
      */
     juce::String toString() const;
 
     /**
      * @brief  Gets this SSID's internal SSID byte string.
      *
-     * @return  The SSID's exact value, as a byte array that may contain 
+     * @return  The SSID's exact value, as a byte array that may contain
      *          unprintable characters.
      */
     GByteArray* getByteArray() const;
@@ -70,7 +70,7 @@ public:
      *
      * @return        This SSID object.
      */
-    SSID& operator=(const SSID& toCopy);
+    SSID& operator= (const SSID& toCopy);
 
     /**
      * @brief  Assigns a copy of an SSID bytestring to this SSID.
@@ -80,25 +80,25 @@ public:
      *
      * @return          This SSID object.
      */
-    SSID& operator=(GByteArray* toAssign);
+    SSID& operator= (GByteArray* toAssign);
 
     /**
      * @brief  Checks if two SSIDs are equivalent.
      *
      * @param rhs  Another SSID to compare with this one.
      *
-     * @return     Whether both SSIDs have identical stored values. 
+     * @return     Whether both SSIDs have identical stored values.
      */
-    bool operator==(const SSID& rhs) const;
+    bool operator== (const SSID& rhs) const;
 
     /**
      * @brief  Checks if two SSIDs are not equivalent.
      *
      * @param rhs  Another SSID to compare with this one.
      *
-     * @return     Whether both SSIDs do not have identical stored values. 
+     * @return     Whether both SSIDs do not have identical stored values.
      */
-    bool operator!=(const SSID& rhs) const;
+    bool operator!= (const SSID& rhs) const;
 
     /**
      * @brief  Compares this object with another SSID alphabetically.
@@ -107,7 +107,7 @@ public:
      *
      * @return     Whether this SSID's byte string comes before rhs.
      */
-    bool operator<(const SSID& rhs) const;
+    bool operator< (const SSID& rhs) const;
 
     /**
      * @brief  Checks if a SSID and a raw SSID byte string are equivalent.
@@ -116,7 +116,7 @@ public:
      *
      * @return     Whether this object's internal byte string matches rhs.
      */
-    bool operator==(GByteArray* rhs) const;
+    bool operator== (GByteArray* rhs) const;
 
 
     /**
@@ -124,25 +124,25 @@ public:
      *
      * @param rhs  A raw SSID bytestring to compare to this object.
      *
-     * @return     Whether this object's internal byte string does not match 
+     * @return     Whether this object's internal byte string does not match
      *             rhs.
      */
-    bool operator!=(GByteArray* rhs) const;
+    bool operator!= (GByteArray* rhs) const;
 
 private:
     /**
      * @brief  Copies a SSID byte string, storing it in this object.
      *
-     * @param toCopy  An SSID byte string to copy, or nullptr to set this object
-     *                to a null value.
+     * @param toCopy  An SSID byte string to copy, or nullptr to set this
+     *                object to a null value.
      */
     void copyByteArray(const GByteArray* ssidBytes);
-    
+
     /**
      * @brief  Frees any non-null SSID byte string stored in this object.
      */
     void clearByteArray();
 
-    /* Stores the SSID value as a byte string. */
+    // Stores the SSID value as a byte string.
     GByteArray* ssidBytes = nullptr;
 };

@@ -12,45 +12,43 @@
 #include "Wifi_Device_Listener.h"
 #include "Wifi_FocusUpdater.h"
 
-/* The SharedResource::Resource object instance key: */
+// The SharedResource::Resource object instance key:
 const juce::Identifier Wifi::Resource::resourceKey = "Wifi::Resource";
 
-/* Updates connection records when window focus is regained: */
+// Updates connection records when window focus is regained:
 static std::unique_ptr<Wifi::FocusUpdater> focusUpdater;
 
-/*##################### Shared resource modules: #############################*/
+//##################### Shared resource modules: #############################
 
-/* Runs the LibNM Wifi thread: */
+// Runs the LibNM Wifi thread:
 static std::unique_ptr<Wifi::LibNM::Thread::Module> nmThread;
 
-/* Tracks the state of the active Wifi device: */
+// Tracks the state of the active Wifi device:
 static std::unique_ptr<Wifi::Device::Module> deviceTracker;
 
-/* Accesses saved connections:*/
+// Accesses saved connections:
 static std::unique_ptr<Wifi::Connection::Saved::Module> savedConnections;
 
-/* Tracks the list of visible Wifi access points: */
+// Tracks the list of visible Wifi access points:
 static std::unique_ptr<Wifi::APList::Module> apList;
 
-/* Keeps a record of Wifi connection events: */
+// Keeps a record of Wifi connection events:
 static std::unique_ptr<Wifi::Connection::Record::Module> connectionRecord;
 
-/* Opens and closes Wifi connections: */
+// Opens and closes Wifi connections:
 static std::unique_ptr<Wifi::Connection::Control::Module> connectionControl;
 
-/* Handles all signals from LibNM AccessPoint objects. */
+// Handles all signals from LibNM AccessPoint objects.
 static std::unique_ptr<Wifi::Signal::APModule> apSignalHandler;
 
-/* Handles all signals from the LibNM thread resource's DeviceWifi object.*/
+// Handles all signals from the LibNM thread resource's DeviceWifi object.
 static std::unique_ptr<Wifi::Signal::DeviceModule> deviceSignalHandler;
 
-/* Handles all signals from the LibNM thread resource's Client object. */
+// Handles all signals from the LibNM thread resource's Client object.
 static std::unique_ptr<Wifi::Signal::ClientModule> clientSignalHandler;
 
-/*######################  Resource method definitions:  #######################*/
-/*
- * Initializes all Wifi resource modules.
- */
+//######################  Resource method definitions:  #######################
+// Initializes all Wifi resource modules.
 Wifi::Resource::Resource() : SharedResource::Modular::Resource<>(resourceKey)
 {
     DBG("Wifi::Resource::Resource: Initializing Wifi resources.");
@@ -78,9 +76,8 @@ Wifi::Resource::Resource() : SharedResource::Modular::Resource<>(resourceKey)
     });
 }
 
-/*
- * Shuts down all Wifi resource modules.
- */
+
+// Shuts down all Wifi resource modules.
 Wifi::Resource::~Resource()
 {
     clientSignalHandler.reset(nullptr);
@@ -95,20 +92,20 @@ Wifi::Resource::~Resource()
     focusUpdater.reset(nullptr);
 }
 
-/*
- * Packages an asynchronous action so that it will check if the Wifi::Resource 
- * instance that created it is still valid.  
- */
+
+// Packages an asynchronous action so that it will check if the Wifi::Resource
+// instance that created it is still valid.
 std::function<void()> Wifi::Resource::buildAsyncFunction
 (SharedResource::LockType lockType, std::function<void()> action)
 {
     return SharedResource::Resource::buildAsyncFunction(lockType, action);
 }
 
-/*###############  Module access method specializations:  ####################*/
 
-/* Older compiler versions will not allow template specializations outside of
-   the original namespace. */
+//###############  Module access method specializations:  ####################
+
+// Older compiler versions will not allow template specializations outside of
+// the original namespace.
 namespace SharedResource { namespace Modular {
 
 template<> template<> Wifi::LibNM::Thread::Module*
@@ -117,52 +114,52 @@ SharedResource::Modular::Resource<>::getModule<Wifi::LibNM::Thread::Module>()
     return nmThread.get();
 }
 
-template<> template<> Wifi::Device::Module* 
+template<> template<> Wifi::Device::Module*
 SharedResource::Modular::Resource<>::getModule<Wifi::Device::Module>()
 {
     return deviceTracker.get();
 }
 
-template<> template<> Wifi::Connection::Saved::Module* 
+template<> template<> Wifi::Connection::Saved::Module*
 SharedResource::Modular::Resource<>::getModule
         <Wifi::Connection::Saved::Module>()
 {
     return savedConnections.get();
 }
 
-template<> template<> Wifi::Connection::Record::Module* 
+template<> template<> Wifi::Connection::Record::Module*
 SharedResource::Modular::Resource<>::getModule
         <Wifi::Connection::Record::Module>()
 {
     return connectionRecord.get();
 }
 
-template<> template<> Wifi::Connection::Control::Module* 
+template<> template<> Wifi::Connection::Control::Module*
 SharedResource::Modular::Resource<>::getModule
         <Wifi::Connection::Control::Module>()
 {
     return connectionControl.get();
 }
 
-template<> template<> Wifi::APList::Module* 
+template<> template<> Wifi::APList::Module*
 SharedResource::Modular::Resource<>::getModule <Wifi::APList::Module>()
 {
     return apList.get();
 }
 
-template<> template<> Wifi::Signal::APModule* 
+template<> template<> Wifi::Signal::APModule*
 SharedResource::Modular::Resource<>::getModule <Wifi::Signal::APModule>()
 {
     return apSignalHandler.get();
 }
 
-template<> template<> Wifi::Signal::DeviceModule* 
+template<> template<> Wifi::Signal::DeviceModule*
 SharedResource::Modular::Resource<>::getModule <Wifi::Signal::DeviceModule>()
 {
     return deviceSignalHandler.get();
 }
 
-template<> template<> Wifi::Signal::ClientModule* 
+template<> template<> Wifi::Signal::ClientModule*
 SharedResource::Modular::Resource<>::getModule <Wifi::Signal::ClientModule>()
 {
     return clientSignalHandler.get();
@@ -175,54 +172,54 @@ SharedResource::Modular::Resource<>::getModule
     return nmThread.get();
 }
 
-template<> template<> const Wifi::Device::Module* 
+template<> template<> const Wifi::Device::Module*
 SharedResource::Modular::Resource<>::getModule <const Wifi::Device::Module>()
 {
     return deviceTracker.get();
 }
 
-template<> template<> const Wifi::Connection::Saved::Module* 
+template<> template<> const Wifi::Connection::Saved::Module*
 SharedResource::Modular::Resource<>::getModule
         <const Wifi::Connection::Saved::Module>()
 {
     return savedConnections.get();
 }
 
-template<> template<> const Wifi::Connection::Record::Module* 
+template<> template<> const Wifi::Connection::Record::Module*
 SharedResource::Modular::Resource<>::getModule
         <const Wifi::Connection::Record::Module>()
 {
     return connectionRecord.get();
 }
 
-template<> template<> const Wifi::Connection::Control::Module* 
+template<> template<> const Wifi::Connection::Control::Module*
 SharedResource::Modular::Resource<>::getModule
         <const Wifi::Connection::Control::Module>()
 {
     return connectionControl.get();
 }
 
-template<> template<> const Wifi::APList::Module* 
+template<> template<> const Wifi::APList::Module*
 SharedResource::Modular::Resource<>::getModule<const Wifi::APList::Module>()
 {
     return apList.get();
 }
 
-template<> template<> const Wifi::Signal::APModule* 
+template<> template<> const Wifi::Signal::APModule*
 SharedResource::Modular::Resource<>::getModule <const Wifi::Signal::APModule>()
 {
     return apSignalHandler.get();
 }
 
-template<> template<> const Wifi::Signal::DeviceModule* 
-SharedResource::Modular::Resource<>::getModule 
+template<> template<> const Wifi::Signal::DeviceModule*
+SharedResource::Modular::Resource<>::getModule
         <const Wifi::Signal::DeviceModule>()
 {
     return deviceSignalHandler.get();
 }
 
-template<> template<> const Wifi::Signal::ClientModule* 
-SharedResource::Modular::Resource<>::getModule 
+template<> template<> const Wifi::Signal::ClientModule*
+SharedResource::Modular::Resource<>::getModule
         <const Wifi::Signal::ClientModule>()
 {
     return clientSignalHandler.get();

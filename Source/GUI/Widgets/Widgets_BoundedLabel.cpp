@@ -2,7 +2,7 @@
 #include "Layout_Component_ConfigFile.h"
 
 Widgets::BoundedLabel::BoundedLabel(const juce::String componentName,
-        const juce::String labelText, const int fontPadding) : 
+        const juce::String labelText, const int fontPadding) :
 juce::Label(componentName, labelText),
 fontPadding(fontPadding)
 {
@@ -11,9 +11,8 @@ fontPadding(fontPadding)
 #endif
 }
 
-/*
- * Sets the maximum height of the label text.
- */
+
+// Sets the maximum height of the label text.
 void Widgets::BoundedLabel::setMaximumTextSize
 (const Layout::Component::TextSize newMaximum)
 {
@@ -21,9 +20,8 @@ void Widgets::BoundedLabel::setMaximumTextSize
     resized();
 }
 
-/*
- * Updates the font size when label bounds change.
- */
+
+// Updates the font size when label bounds change.
 void Widgets::BoundedLabel::resized()
 {
     Layout::Component::ConfigFile config;

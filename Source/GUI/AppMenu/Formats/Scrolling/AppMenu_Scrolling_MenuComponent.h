@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -16,12 +16,15 @@
 namespace AppMenu { namespace Scrolling { class MenuComponent; } }
 
 /**
- *  The Scrolling::MenuComponent arranges open FolderComponent objects from left
- * to right. It attempts to keep the selected menu item in the active folder
- * as centered as possible, only moving off-center when doing so would keep more
- * of the menu visible. It ensures each FolderComponent is wide enough to
- * fully print the titles of all MenuButtons, and tall enough to fit the number
- * of rows specified by the AppMenu config file.
+ * @brief  A MenuComponent that creates and positions folder components for
+ *         the Scrolling menu format.
+ *
+ *  The Scrolling::MenuComponent arranges open FolderComponent objects from
+ * left to right. It attempts to keep the selected menu item in the active
+ * folder as centered as possible, only moving off-center when doing so would
+ * keep more of the menu visible. It ensures each FolderComponent is wide
+ * enough to fully print the titles of all MenuButtons, and tall enough to fit
+ * the number of rows specified by the AppMenu config file.
  */
 class AppMenu::Scrolling::MenuComponent : public AppMenu::MenuComponent,
     public ConfigFile::Listener
@@ -43,14 +46,14 @@ private:
      * @param newFolderIndex  The index the newly opened folder component will
      *                        have in the list of open folders.
      *
-     * @return                The initial bounds to apply to the component 
+     * @return                The initial bounds to apply to the component
      *                        before fully updating the folder layout.
      */
     virtual juce::Rectangle<int> initialFolderBounds(const int newFolderIndex)
         const final override;
 
     /**
-     * @brief  Prepares to update the folder layout, updating cached layout 
+     * @brief  Prepares to update the folder layout, updating cached layout
      *         values.
      *
      * @param closingFolder  Whether the active folder is being closed.
@@ -59,17 +62,17 @@ private:
         final override;
 
     /**
-     * @brief   Finds the bounds where a menu folder should be placed.
+     * @brief  Finds the bounds where a menu folder should be placed.
      *
      * @param folderIndex    The index of an open folder component.
      *
-     * @param closingFolder  Whether the active folder (not necessarily this
+     * @param closingFolder  Whether the active folder(not necessarily this
      *                       folder!) is about to be closed.
      *
      * @return               The bounds within the MenuComponent where the
      *                       folder should be placed.
      */
-     virtual juce::Rectangle<int> getFolderBounds(const int folderIndex,
+    virtual juce::Rectangle<int> getFolderBounds(const int folderIndex,
             const bool closingFolder = false) const final override;
 
     /**
@@ -87,8 +90,8 @@ private:
      *
      * @return            The new Scrolling::FolderComponent object.
      */
-    virtual AppMenu::FolderComponent* createFolderComponent(MenuItem folderItem)
-        const final override;
+    virtual AppMenu::FolderComponent* createFolderComponent
+    (MenuItem folderItem) const final override;
 
     /**
      * @brief  Updates the menu's bounds whenever its parent component is
@@ -108,16 +111,16 @@ private:
     virtual void configValueChanged(const juce::Identifier& propertyKey)
         final override;
 
-    /* Sets the menu's bounds relative to the application window. */
+    // Sets the menu's bounds relative to the application window.
     Layout::Component::Manager boundsManager;
 
-    /* Cached folder widths to reuse when calculating layout changes: */
+    // Cached folder widths to reuse when calculating layout changes:
     juce::Array<int> folderWidths;
 
-    /* Holds the position of the last folder's right edge, relative to the
-       MenuComponent's left edge: */
+    // Holds the position of the last folder's right edge, relative to the
+    // MenuComponent's left edge:
     int folderRightEdge;
 
-    /* Holds the number of visible button rows to fit on the screen: */
+    // Holds the number of visible button rows to fit on the screen:
     int maxRows;
 };

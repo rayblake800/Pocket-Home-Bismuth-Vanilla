@@ -1,8 +1,9 @@
 #!/bin/bash
+### BuildLabel.sh ##############################################################
 # Generates an appropriate build label to apply while compiling.
-releasePath="/etc/os-release"
-altReleasePath="/usr/lib/os-release"
+################################################################################
 
+# Removes quotes from around a string parameter and prints the result.
 unquote()
 {
     unquoted="${1%\"}"
@@ -10,6 +11,8 @@ unquote()
     echo $unquoted
 }
 
+# Attempts to generate and print a build label using the contents of a release
+# file, printing an appropriate build name if the file contains expected data.
 readReleaseFile()
 {
     filePath=$1
@@ -31,6 +34,11 @@ readReleaseFile()
     fi
 }
 
+# Standard and alternate paths to the Linux OS release files:
+releasePath="/etc/os-release"
+altReleasePath="/usr/lib/os-release"
+
+# Attempt to read build information from either release file:
 if [ -f $releasePath ]; then
     readReleaseFile $releasePath
 elif [ -f $altReleasePath ]; then

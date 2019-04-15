@@ -4,10 +4,10 @@
 #include "AppMenu_ConfigFile.h"
 #include "AppMenu_Format.h"
 
-/* Localized object class key */
+// Localized object class key
 static const juce::Identifier localeClassKey = "Page::HomeSettings";
 
-/* Localized text value keys: */
+// Localized text value keys:
 namespace TextKey
 {
     static const juce::Identifier title      = "title";
@@ -15,7 +15,8 @@ namespace TextKey
     static const juce::Identifier clockMode  = "clockMode";
 }
 
-/* Page layout constants: */
+
+// Page layout constants:
 static const constexpr int titleRowWeight   = 30;
 static const constexpr int contentRowWeight = 20;
 static const constexpr int rowPaddingWeight = 3;
@@ -29,9 +30,7 @@ static const constexpr int counterWeight      = 10;
 static const constexpr int xPaddingWeight = 1;
 static const constexpr float yMarginFraction = 0.05;
 
-/*
- * Initializes the page layout.
- */
+// Initializes the page layout.
 Page::HomeSettings::HomeSettings() :
 Locale::TextUser(localeClassKey),
 title("personalizeTitle", localeText(TextKey::title)),
@@ -47,7 +46,7 @@ menuController(menuFormatLabel, menuFormatPicker, columnCountLabel,
     using namespace Layout::Group;
     RelativeLayout layout({
         Row(titleRowWeight,
-        { 
+        {
             RowItem(&title)
         }),
         Row(contentRowWeight,
@@ -86,9 +85,8 @@ menuController(menuFormatLabel, menuFormatPicker, columnCountLabel,
     menuController.updateForCurrentSettings();
 }
 
-/*
- * Updates AppMenu settings when the page closes.
- */
+
+// Updates AppMenu settings when the page closes.
 Page::HomeSettings::~HomeSettings()
 {
     menuController.applySettingsChanges();

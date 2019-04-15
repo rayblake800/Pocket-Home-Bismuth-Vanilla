@@ -1,31 +1,31 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
  * @file  Wifi_Signal_DeviceModule.h
  *
- * @brief  Handles signals from the Wifi device object, updating Wifi connection
- *         state and visible access points. 
+ * @brief  Handles signals from the Wifi device object, updating Wifi
+ *         connection state and visible access points.
  */
 
 #include "Wifi_LibNM_Signal_DeviceHandler.h"
 #include "Wifi_Module.h"
 #include <nm-device-wifi.h>
 
-namespace Wifi 
-{ 
+namespace Wifi
+{
     class Resource;
-    namespace Signal { class DeviceModule; } 
-    namespace LibNM 
-    { 
+    namespace Signal { class DeviceModule; }
+    namespace LibNM
+    {
         class DeviceWifi;
         class ActiveConnection;
-    } 
+    }
 }
 
 /**
- * @brief  Receives and handles all LibNM::DeviceWifi signals for the Wifi 
+ * @brief  Receives and handles all LibNM::DeviceWifi signals for the Wifi
  *         module.
  */
 class Wifi::Signal::DeviceModule : public LibNM::Signal::DeviceHandler,
@@ -50,8 +50,8 @@ public:
 
     /**
      * @brief  Stops tracking the LibNM thread's DeviceWifi object.
-     * 
-     * Signals will not be received after the signal handler is disconnected 
+     *
+     * Signals will not be received after the signal handler is disconnected
      * until it is connected again.
      */
     void disconnect();
@@ -87,8 +87,8 @@ private:
     /**
      * @brief  Updates the connection record when the active network connection
      *         changes.
-     * 
-     * @param activeConnection   The new active Wifi connection. If the device 
+     *
+     * @param activeConnection   The new active Wifi connection. If the device
      *                           has disconnected, this will be a null object.
      */
     virtual void activeConnectionChanged

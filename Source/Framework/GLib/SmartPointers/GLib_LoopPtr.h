@@ -2,7 +2,7 @@
 /**
  * @file  GLib_LoopPtr.h
  *
- * @brief  Provides a ScopedGPointer class that holds GMainLoop data pointers. 
+ * @brief  Provides a ScopedGPointer class that holds GMainLoop data pointers.
  */
 
 #include "GLib_ScopedGPointer.h"

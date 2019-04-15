@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -12,8 +12,8 @@
 #include "Wifi_LibNM_Signal_ClientHandler.h"
 #include "Wifi_Module.h"
 
-namespace Wifi 
-{ 
+namespace Wifi
+{
     class Resource;
     namespace Signal { class ClientModule; }
 }
@@ -42,26 +42,26 @@ public:
     /**
      * @brief  Starts tracking the LibNM::ThreadResource's Client object.
      *
-     * wirelessStateChange() notifications will not be received until the signal
+     * WirelessStateChange notifications will not be received until the signal
      * handler is connected.
      */
     void connect();
 
     /**
      * @brief  Stops tracking the LibNM::ThreadResource's Client object.
-     * 
-     * wirelessStateChange() notifications will not be received after the signal
-     * handler is disconnected until it is connected again.
+     *
+     *  wirelessStateChange() notifications will not be received after the
+     * signal handler is disconnected until it is connected again.
      */
     void disconnect();
 
 private:
     /**
-     * @brief  Notifies the Device::Module when wireless networking is enabled 
+     * @brief  Notifies the Device::Module when wireless networking is enabled
      *         or disabled.
      *
-     * @param wifiEnabled  True if Wifi was just enabled, false if Wifi was just
-     *                     disabled.
+     * @param wifiEnabled  True if Wifi was just enabled, false if Wifi was
+     *                     just disabled.
      */
     virtual void wirelessStateChange(bool wifiEnabled) override;
 };

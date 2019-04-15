@@ -1,9 +1,9 @@
 #pragma once
 /**
  * @file  Page_HomeSettings.h
- * 
- * @brief  Allows the user to configure the HomePage, setting the page 
- *         background, the application menu type, and the application menu 
+ *
+ * @brief  Allows the user to configure the HomePage, setting the page
+ *         background, the application menu type, and the application menu
  *         dimensions.
  */
 
@@ -35,29 +35,29 @@ public:
     virtual ~HomeSettings();
 
 private:
-    /* Page title label: */
+    // Page title label:
     Widgets::BoundedLabel title;
-    
-    /* Used to set the HomePage's background image: */
+
+    // Used to set the HomePage's background image:
     Widgets::BoundedLabel bgLabel;
     Settings::HomeBackgroundPicker homeBGPicker;
 
-    /* Used to set the Clock display mode: */
+    // Used to set the Clock display mode:
     Widgets::BoundedLabel clockLabel;
     Settings::ClockModePicker clockModePicker;
 
-    /* Used to manage AppMenu setting controls: */
+    // Used to manage AppMenu setting controls:
     AppMenu::SettingsController menuController;
 
-    /* Used to select the AppMenu format: */
+    // Used to select the AppMenu format:
     Widgets::BoundedLabel menuFormatLabel;
     juce::ComboBox menuFormatPicker;
 
-    /* Used to select the maximum column count for AppMenu grids: */
+    // Used to select the maximum column count for AppMenu grids:
     Widgets::BoundedLabel columnCountLabel;
     Widgets::Counter columnCounter;
 
-    /* Used to select the maximum row count for AppMenu grids: */
+    // Used to select the maximum row count for AppMenu grids:
     Widgets::BoundedLabel rowCountLabel;
     Widgets::Counter rowCounter;
 

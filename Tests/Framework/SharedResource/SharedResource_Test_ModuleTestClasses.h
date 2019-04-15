@@ -2,8 +2,8 @@
 /**
  * @file  Test_SharedResource_Modular_TestClasses.h
  *
- * @brief  Defines a SharedResource::Modular::Resource, three resource Module 
- *         classes, and corresponding module Handler classes with a few basic 
+ * @brief  Defines a SharedResource::Modular::Resource, three resource Module
+ *         classes, and corresponding module Handler classes with a few basic
  *         methods useful for testing.
  */
 
@@ -12,20 +12,20 @@
 #include "SharedResource_Modular_Handler.h"
 #include "JuceHeader.h"
 
-/* Modular resource class: */
+// Modular resource class:
 class TestResource;
 
-/* Resource module classes: */
+// Resource module classes:
 class TestModuleA;
 class TestModuleB;
 class TestModuleC;
 
-/* Module handler classes: */
+// Module handler classes:
 class TestHandlerA;
 class TestHandlerB;
 class TestHandlerC;
 
-/* Default stored test values: */
+// Default stored test values:
 static const constexpr char* defaultValueA = "Module A";
 static const constexpr double defaultValueB = 0.5;
 static const constexpr int defaultValueC = 2;
@@ -43,8 +43,8 @@ public:
     virtual ~TestResource();
 
 private:
-    /* Allow getModule() specializations to access resource modules: */
-    template<class ModuleType> 
+    // Allow getModule() specializations to access resource modules:
+    template<class ModuleType>
     friend ModuleType* SharedResource::Modular::Resource<>::getModule();
 
     TestModuleA* moduleA;
@@ -85,10 +85,10 @@ public:
     {
         int count = 0;
         juce::String handlerName;
-        foreachHandler<Interface>([&count, &handlerName](Interface* handler)
+        foreachHandler<Interface>([&count, &handlerName] (Interface* handler)
         {
             count++;
-            if(!handlerName.isEmpty())
+            if (!handlerName.isEmpty())
             {
                 jassert(handlerName == handler->getName());
             }
@@ -144,11 +144,11 @@ public:
     }
 };
 
-/* Test module implementations: */
+// Test module implementations:
 class TestModuleA : public TestModule<juce::String>
 {
 public:
-    TestModuleA(TestResource& resource); 
+    TestModuleA(TestResource& resource);
 };
 
 class TestModuleB : public TestModule<double>
@@ -169,7 +169,7 @@ public:
     int actOnAllHandlers();
 };
 
-/* Test handler implementations: */
+// Test handler implementations:
 class TestHandlerA : public TestHandler<TestModuleA, juce::String>
 {
 public:
@@ -194,25 +194,25 @@ public:
     int actOnAllHandlers();
 };
 
-/* getModule template specialization declarations: */
+// getModule template specialization declarations:
 namespace SharedResource { namespace Modular {
 
-template<> template<> TestModuleA* 
+template<> template<> TestModuleA*
 SharedResource::Modular::Resource<>::getModule<TestModuleA>();
 
-template<> template<> TestModuleB* 
+template<> template<> TestModuleB*
 SharedResource::Modular::Resource<>::getModule<TestModuleB>();
 
-template<> template<> TestModuleC* 
+template<> template<> TestModuleC*
 SharedResource::Modular::Resource<>::getModule<TestModuleC>();
 
-template<> template<> const TestModuleA* 
+template<> template<> const TestModuleA*
 SharedResource::Modular::Resource<>::getModule<const TestModuleA>();
 
-template<> template<> const TestModuleB* 
+template<> template<> const TestModuleB*
 SharedResource::Modular::Resource<>::getModule<const TestModuleB>();
 
-template<> template<> const TestModuleC* 
+template<> template<> const TestModuleC*
 SharedResource::Modular::Resource<>::getModule<const TestModuleC>();
 
 } }

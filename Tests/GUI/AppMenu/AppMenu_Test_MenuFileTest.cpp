@@ -3,11 +3,17 @@
 #include "AppMenu_MenuItem.h"
 #include "JuceHeader.h"
 
-class AppMenuTest : public juce::UnitTest
+namespace AppMenu { namespace Test { class MenuFileTest; } }
+
+/**
+ * @brief  Tests that the AppMenu successfully loads the root menu folder from
+ *         the AppMenu configuration file.
+ */
+class AppMenu::Test::MenuFileTest : public juce::UnitTest
 {
 public:
-    AppMenuTest() : juce::UnitTest("AppMenu::MenuFile testing") {}
-    
+    MenuFileTest() : juce::UnitTest("AppMenu::MenuFile testing") {}
+
     void runTest() override
     {
         using namespace AppMenu;
@@ -21,4 +27,4 @@ public:
     }
 };
 
-static AppMenuTest test;
+static AppMenu::Test::MenuFileTest test;

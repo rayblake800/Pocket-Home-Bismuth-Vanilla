@@ -1,6 +1,6 @@
 ##### Namespace.pm #############################################################
 # Represents an inner ColourId namespace containing Element object definitions.#
-################################################################################ 
+################################################################################
 
 #==============================================================================#
 #--- new: ---
@@ -15,7 +15,7 @@
 #--- getName: ---
 # Gets the Namespace object's name.
 #--- Returns: ---
-# The name value set on construction. 
+# The name value set on construction.
 #==============================================================================#
 
 #==============================================================================#
@@ -42,7 +42,7 @@
 #--- getElements: ---
 # Gets all Element objects in the Namespace.
 #--- Returns: ---
-# All stored Element objects, sorted by ID. 
+# All stored Element objects, sorted by ID.
 #==============================================================================#
 
 #==============================================================================#
@@ -57,7 +57,7 @@
 # Creates a C++ declaration of this object's namespace and all Element objects
 # it contains.
 #--- Returns: ---
-# The full C++ declaration text. 
+# The full C++ declaration text.
 #==============================================================================#
 
 use strict;
@@ -101,7 +101,7 @@ sub addElement
 {
     my $self = shift;
     my $element = shift;
-    if(blessed($element) && (blessed($element) eq 'Element')
+    if (blessed($element) && (blessed($element) eq 'Element')
         && ($element->getNamespace() eq $self->getName()))
     {
         push(@{$self->{_elements}}, $element);
@@ -118,16 +118,16 @@ sub removeElement
 {
     my $self = shift;
     my $id = shift;
-    if(!$id)
+    if (!$id)
     {
         print("Namespace::removeElement: missing ID parameter\n");
         return;
     }
     my $numElements = @{$self->{_elements}};
-    for(my $i = 0; $i < $numElements; $i++)
+    for (my $i = 0; $i < $numElements; $i++)
     {
         my $element = $self->{_elements}->[$i];
-        if($element && ($element->getID() eq $id))
+        if ($element && ($element->getID() eq $id))
         {
             splice(@{$self->{_elements}}, $i, 1);
             $self->sortElements();
@@ -148,7 +148,7 @@ sub getElements
 sub getFirstID
 {
     my $self = shift;
-    if((scalar @{$self->{_elements}}) == 0)
+    if ( (scalar @{$self->{_elements}}) == 0)
     {
         return -1;
     }
@@ -162,9 +162,9 @@ sub getDeclarationText
     my $self = shift;
     my $decl = "namespace ".$self->getName()."\n{\n";
     my @elements = $self->getElements();
-    foreach my $element(@elements)
+    foreach my $element (@elements)
     {
-       $decl = $decl.$element->getDeclaration(1)."\n"; 
+        $decl = $decl.$element->getDeclaration(1)."\n";
     }
     return $decl."}\n";
 }

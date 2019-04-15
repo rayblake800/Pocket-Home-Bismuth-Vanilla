@@ -10,23 +10,27 @@
 
 namespace Config { class MainResource; }
 
+/**
+ * @brief  A FileResource that manages access to the main application
+ *         configuration file.
+ */
 class Config::MainResource : public FileResource
 {
 public:
-    /* SharedResource object key */
+    // SharedResource object key
     static const juce::Identifier resourceKey;
 
     MainResource();
 
-    virtual ~MainResource() { } 
-    
+    virtual ~MainResource() { }
+
 private:
     /**
-     * @brief   Gets the set of all basic (non-array, non-object) properties 
-     *          tracked by this ConfigJSON.
-     * 
+     * @brief  Gets the set of all basic(non-array, non-object) properties
+     *         tracked by this ConfigJSON.
+     *
      * @return  The keys to all variables tracked in this config file.
      */
-    virtual const std::vector<Config::DataKey>& getConfigKeys() 
+    virtual const std::vector<Config::DataKey>& getConfigKeys()
         const final override;
 };

@@ -7,7 +7,7 @@ LOCALE_OBJ := $(JUCE_OBJDIR)/$(LOCALE_PREFIX)
 OBJECTS_LOCALE := \
   $(LOCALE_OBJ)Time.o \
   $(LOCALE_OBJ)TextUser.o \
-  $(LOCALE_OBJ)Locale.o 
+  $(LOCALE_OBJ)Locale.o
 
 OBJECTS_LOCALE_TEST :=
 

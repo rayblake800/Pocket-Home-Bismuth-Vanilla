@@ -2,17 +2,17 @@
 /**
  * @file  SharedResource_Reference.h
  *
- * @brief  Provides access to a Resource object's Instance and lock, and ensures
- *         the resource is destroyed if and only if all of its References have 
- *         been destroyed.
+ * @brief  Provides access to a Resource object's Instance and lock, and
+ *         ensures the resource is destroyed if and only if all of its
+ *         References have been destroyed.
  */
 
 #include "JuceHeader.h"
 #include "SharedResource_ReferenceInterface.h"
 
-namespace SharedResource 
-{ 
-    class Reference; 
+namespace SharedResource
+{
+    class Reference;
     class Instance;
 }
 
@@ -23,13 +23,13 @@ class SharedResource::Reference : public ReferenceInterface
 {
 private:
     /**
-     * @brief  Connects this new Reference to its resource Instance, creating 
+     * @brief  Connects this new Reference to its resource Instance, creating
      *         the Instance object if necessary.
      *
      * @param resourceKey     The key identifying this object's resource.
      *
-     * @param createResource  A function that can be used to create the Instance
-     *                        if necessary.
+     * @param createResource  A function that can be used to create the
+     *                        Instance if necessary.
      */
     Reference(const juce::Identifier& resourceKey,
             const std::function<Instance*()> createResource);
@@ -40,8 +40,8 @@ public:
      */
     virtual ~Reference();
 
-    /* Reference objects may only be created as the parent class of a 
-       Handler<ResourceType> object.*/
+    // Reference objects may only be created as the parent class of a
+    // Handler<ResourceType> object.
     template<class ResourceType> friend class Handler;
 
 protected:
@@ -60,6 +60,6 @@ private:
      */
     Instance* getResourceInstance() const;
 
-    /* The resource's unique key identifier. */
+    // The resource's unique key identifier.
     const juce::Identifier& resourceKey;
 };

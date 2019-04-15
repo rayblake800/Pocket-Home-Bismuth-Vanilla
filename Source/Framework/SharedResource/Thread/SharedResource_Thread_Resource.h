@@ -1,8 +1,8 @@
 #pragma once
 /**
  * @file  SharedResource_Thread_Resource.h
- * 
- * @brief  An abstract basis for SharedResource Thread Resource objects. 
+ *
+ * @brief  An abstract basis for SharedResource Thread Resource objects.
  */
 
 #include "SharedResource_Handler.h"
@@ -13,18 +13,18 @@ namespace SharedResource { namespace Thread { class Resource; } }
 namespace SharedResource { namespace Thread { class Lock; } }
 
 /**
- * @brief  Manages a single child thread using the SharedResource control 
- *         pattern. 
+ * @brief  Manages a single child thread using the SharedResource control
+ *         pattern.
  *
  *  ThreadResource threads may be accessed through any of their Handler objects,
- * and will only be destroyed when all of their handlers are destroyed. 
+ * and will only be destroyed when all of their handlers are destroyed.
  *
  *  ThreadResource objects guarantee that they will not be deleted while their
  * thread still runs. While running within their own thread, ThreadResource
- * objects are able to access their own resource locks to prevent handlers 
- * from modifying their data.
+ * objects are able to access their own resource locks to prevent handlers from
+ * modifying their data.
  */
-class SharedResource::Thread::Resource : public SharedResource::Resource, 
+class SharedResource::Thread::Resource : public SharedResource::Resource,
         public Thread
 {
 public:
@@ -35,7 +35,7 @@ public:
      *
      * @param threadName   The name used to identify the thread to the system.
      */
-    Resource(const juce::Identifier& resourceKey, 
+    Resource(const juce::Identifier& resourceKey,
             const juce::String& threadName);
 
     virtual ~Resource() { }

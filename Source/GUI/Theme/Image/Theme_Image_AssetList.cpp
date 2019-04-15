@@ -2,26 +2,22 @@
 
 namespace ThemeImages = Theme::Image;
 
-/* The key used to store the list of image asset files: */
+// The key used to store the list of image asset files:
 static const constexpr char* imageFileKey = "image files";
 
-/* The key used to store the list of image asset colors: */
+// The key used to store the list of image asset colours:
 static const constexpr char* imageColourKey = "colours";
 
-/*
- * Creates an empty asset list object.
- */
+// Creates an empty asset list object.
 ThemeImages::AssetList::AssetList() { }
 
-/*
- * Initializes the image asset list from JSON data.
- */
-ThemeImages::AssetList::AssetList
-(juce::DynamicObject* jsonObj)
+
+// Initializes the image asset list from JSON data.
+ThemeImages::AssetList::AssetList(juce::DynamicObject* jsonObj)
 {
     using juce::var;
     using juce::Colour;
-    if(jsonObj == nullptr)
+    if (jsonObj == nullptr)
     {
         DBG("Theme::Image::AssetList::AssetList: Invalid JSON object!");
         jassertfalse;
@@ -48,9 +44,8 @@ ThemeImages::AssetList::AssetList
     }
 }
 
-/*
- * Packages the asset list into a juce::DynamicObject.
- */
+
+// Packages the asset list into a juce::DynamicObject.
 juce::DynamicObject* ThemeImages::AssetList::getDynamicObject() const
 {
     using juce::DynamicObject;
@@ -78,18 +73,15 @@ juce::DynamicObject* ThemeImages::AssetList::getDynamicObject() const
     return componentObject;
 }
 
-/*
- * Gets the configurable list of image files.
- */
+
+// Gets the configurable list of image files.
 const juce::StringArray& ThemeImages::AssetList::getImageFiles() const
 {
     return imageFiles;
 }
 
 
-/*
- * Gets the list of configurable color values.
- */
+// Gets the list of configurable colour values.
 const juce::Array<juce::Colour>&
 ThemeImages::AssetList::getImageColours() const
 {

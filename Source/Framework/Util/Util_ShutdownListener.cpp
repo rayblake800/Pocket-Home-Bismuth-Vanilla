@@ -2,18 +2,15 @@
 
 juce::Array<Util::ShutdownListener*, juce::CriticalSection> listeners;
 
-/*
- * Registers the listener to receive shutdown messages.
- */
+// Registers the listener to receive shutdown messages.
 Util::ShutdownListener::ShutdownListener()
 {
     const juce::ScopedLock listenerLock(listeners.getLock());
     listeners.add(this);
 }
 
-/*
- * Unregisters the listener from shutdown messages.
- */
+
+// Unregisters the listener from shutdown messages.
 Util::ShutdownListener::~ShutdownListener()
 {
     const juce::ScopedLock listLock(listeners.getLock());
@@ -21,28 +18,25 @@ Util::ShutdownListener::~ShutdownListener()
     listeners.removeAllInstancesOf(this);
 }
 
-/*
- * Sends the shutdown message to all shutdown listeners.
- */
+
+// Sends the shutdown message to all shutdown listeners.
 void Util::ShutdownBroadcaster::broadcastShutdown()
 {
-    DBG("ShutdownBroadcaster::" << __func__ 
+    DBG("ShutdownBroadcaster::" << __func__
             << ": Broadcasting to all ShutdownListener objects");
     const juce::ScopedLock listLock(listeners.getLock());
-    
-    /* 
-     * Ensure all shutdown listeners are notified exactly once, even if they
-     * create new shutdown listeners within the onShutdown method. 
-     */
+
+    // Ensure all shutdown listeners are notified exactly once, even if they
+    // create new shutdown listeners within the onShutdown method.
     juce::Array<ShutdownListener*> gotNotification;
     int shutdownCalls;
     do
     {
         shutdownCalls = 0;
-        for(int i = 0; i < listeners.size(); i++)
+        for (int i = 0; i < listeners.size(); i++)
         {
             ShutdownListener* listener = listeners[i];
-            if(listener != nullptr && !gotNotification.contains(listener))
+            if (listener != nullptr && !gotNotification.contains(listener))
             {
                 const juce::ScopedLock listenerLock(listener->notifyGuard);
                 const juce::ScopedUnlock listUnlock(listeners.getLock());
@@ -52,6 +46,6 @@ void Util::ShutdownBroadcaster::broadcastShutdown()
             }
         }
     }
-    while(shutdownCalls > 0);
+    while (shutdownCalls > 0);
     DBG("ShutdownBroadcaster::" << __func__ << ": Finished broadcasting.");
 }

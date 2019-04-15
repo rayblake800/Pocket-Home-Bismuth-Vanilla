@@ -14,11 +14,11 @@
 
 namespace Settings
 {
-    namespace WifiList 
-    { 
-        class ListButton; 
+    namespace WifiList
+    {
+        class ListButton;
         class ControlComponent;
-    } 
+    }
 }
 namespace Wifi { class AccessPoint; }
 
@@ -45,7 +45,7 @@ public:
     void updateForAccessPoint(const Wifi::AccessPoint accessPoint);
 
     /**
-     * @brief  Adds a connection control component to the bottom of the 
+     * @brief  Adds a connection control component to the bottom of the
      *         ListButton.
      *
      * @param controlComponent  The control component to add and show.
@@ -57,7 +57,7 @@ public:
      *         present.
      */
     void removeControlComponent();
-    
+
 private:
     /**
      * @brief  Updates child components to fit the updated button bounds.
@@ -69,7 +69,7 @@ private:
      *
      * @param graphics           The graphics context used to draw the outline.
      *
-     * @param isMouseOverButton  Whether the mouse is currently over this 
+     * @param isMouseOverButton  Whether the mouse is currently over this
      *                           button.
      *
      * @param isButtonDown       Whether this button is currently being held
@@ -78,15 +78,15 @@ private:
     virtual void paintButton(juce::Graphics& graphics, bool isMouseOverButton,
             bool isButtonDown) final override;
 
-    /* Handles the relative layout of child components: */
+    // Handles the relative layout of child components:
     Layout::Group::Manager layoutManager;
 
-    /* Prints the access point name: */
+    // Prints the access point name:
     Widgets::BoundedLabel apNameLabel;
 
-    /* Shows an image representing signal strength: */
+    // Shows an image representing signal strength:
     Info::SignalIcon signalIcon;
 
-    /* Shows a lock icon if the access point is secured: */
+    // Shows a lock icon if the access point is secured:
     Theme::Image::Component<> lockIcon;
 };

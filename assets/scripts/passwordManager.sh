@@ -9,8 +9,8 @@
 # ./passwordManager.sh [User]
 #
 # This needs to be run as root, to ensure the password file/folder
-# are secured.  Pocket-home will attempt to use pkexec to run this script as 
-# root.  
+# are secured. Pocket-home will attempt to use pkexec to run this script as
+# root.
 #
 
 #return values
@@ -40,15 +40,15 @@ fi
 
 # Ensure the pocket-home data directory exists:
 dataDir="/home/$targetUser/.local/share"
-if [ ! -d "$dataDir" ]; then 
+if [ ! -d "$dataDir" ]; then
     echo "missing pocket home directory $dataDir"
     exit $MISSING_APP_DIR
 fi
 appDir="$dataDir/pocket-home"
-if [ ! -d "$appDir" ]; then 
+if [ ! -d "$appDir" ]; then
     mkdir $appDir
 fi
-if [ ! -d "$appDir" ]; then 
+if [ ! -d "$appDir" ]; then
     echo "couldn't create pocket home directory $appDir"
     exit $MISSING_APP_DIR
 fi
@@ -63,7 +63,7 @@ if [ "$USER" = "root" ]; then
     passfile="$passdir/passwd"
     if [[ ${newValue} =~ ^\s*$ ]]; then
         rm "$passfile"
-        
+
         if [ -f "$passfile" ]; then
             echo "Couldn't remove password!"
             exit $FAILED_TO_REMOVE_PASSWORD
@@ -74,18 +74,18 @@ if [ "$USER" = "root" ]; then
     else
         fileText=$(printf "%s\n%s" "$newValue" "$saltValue")
         printf "$fileText" >| "$passfile"
-        writtenFile=$(cat "$passfile") 
+        writtenFile=$(cat "$passfile")
         if [ ! -f "$passfile" ]; then
             echo "Couldn't create password file!"
             exit $FAILED_TO_SET_PASSWORD
         fi
         if [ "$fileText" != "$writtenFile" ]; then
-            echo "Couldn't change password!"            
+            echo "Couldn't change password!"
             exit $FAILED_TO_SET_PASSWORD
         fi
         echo "Updated the password file correctly."
         exit $ACTION_SUCCEEDED
-        
+
     fi
 else
     echo "You need to be running this as root."

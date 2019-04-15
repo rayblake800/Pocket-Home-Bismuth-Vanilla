@@ -1,11 +1,11 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
  * @file  AppMenu_ItemData.h
  *
- * @brief  Reads and writes properties of a menu item in the application menu. 
+ * @brief  Reads and writes properties of a menu item in the application menu.
  */
 
 #include "JuceHeader.h"
@@ -13,25 +13,27 @@
 namespace AppMenu { class ItemData; }
 
 /**
+ * @brief  Stores all data for a single item in the application menu.
+ *
  *  All menu items have a title string and an icon name or path. Menu items
  * define either an application to launch or a folder of other menu items.
- * 
+ *
  *  Menu item data is stored through shared, referenced-counted objects. Like
  * other UI elements, menu item data is absolutely not threadsafe, and should
  * not be handled outside of the Juce message thread.
- * 
+ *
  */
 class AppMenu::ItemData : public juce::ReferenceCountedObject
 {
 public:
-    
-    /* Custom reference-counting pointer object type. */
+
+    // Custom reference-counting pointer object type.
     typedef juce::ReferenceCountedObjectPtr<ItemData> Ptr;
 
     ItemData() { }
-    
+
     virtual ~ItemData() { }
-    
+
     /**
      * @brief  Gets the menu item's displayed title.
      *
@@ -58,7 +60,7 @@ public:
      * @brief  Checks if this menu item launches an application in a new
      *         terminal window.
      *
-     * @return  Whether the menu item has a launch command it should run in a 
+     * @return  Whether the menu item has a launch command it should run in a
      *          new terminal window
      */
     virtual bool getLaunchedInTerm() const = 0;
@@ -104,19 +106,19 @@ public:
      * @brief  Sets if this menu item runs its command in a new terminal window.
      *
      * @param launchInTerm  True to run any launch command assigned to this
-     *                      menu item within a new terminal window, false to run
-     *                      menu commands normally.
+     *                      menu item within a new terminal window, false to
+     *                      run menu commands normally.
      */
     virtual void setLaunchedInTerm(const bool launchInTerm) = 0;
 
     /**
      * @brief  Sets the application categories connected to this menu item.
      *
-     * @param categories  The new set of category strings to assign to this menu
-     *                    item.
+     * @param categories  The new set of category strings to assign to this
+     *                    menu item.
      */
     virtual void setCategories(const juce::StringArray& categories) = 0;
-    
+
     /**
      * @brief  Gets this menu item's parent folder.
      *
@@ -142,8 +144,8 @@ public:
     /**
      * @brief  Gets the number of folder items held by this menu item.
      *
-     * @return  The number of folder items this menu item holds, or zero if this
-     *          menu item is not a folder.
+     * @return  The number of folder items this menu item holds, or zero if
+     *          this menu item is not a folder.
      */
     int getFolderSize() const;
 
@@ -151,7 +153,7 @@ public:
      * @brief  Gets the number of folder items held by this menu item that can
      *         be reordered.
      *
-     * Movable child folder items always come before un-movable ones, so any
+     *  Movable child folder items always come before un-movable ones, so any
      * child folder items with an index less than the movable child count can
      * have their positions swapped.
      *
@@ -174,8 +176,8 @@ public:
      *
      * @param childIndex  The index of the child menu item to get.
      *
-     * @return            The child menu item, or nullptr if the index is out of
-     *                    bounds or this menu item is not a folder.
+     * @return            The child menu item, or nullptr if the index is out
+     *                    of bounds or this menu item is not a folder.
      */
     ItemData::Ptr getChild(const int childIndex) const;
 
@@ -186,8 +188,8 @@ public:
      *
      * @param newChild    The new child menu item to insert.
      *
-     * @param childIndex  The index in the folder where the menu item should
-     *                    be inserted.  This should be between 0 and
+     * @param childIndex  The index in the folder where the menu item should be
+     *                    inserted. This should be between 0 and
      *                    getMovableChildCount(), inclusive.
      *
      * @return            True if the new menu item was inserted, false if the
@@ -197,14 +199,14 @@ public:
     bool insertChild(const ItemData::Ptr newChild, const int childIndex);
 
     /**
-     * @brief  Removes this menu item from its folder, optionally deleting it 
+     * @brief  Removes this menu item from its folder, optionally deleting it
      *         from its data source.
      *
-     * @param  updateSource  Whether the menu item should be deleted from its 
+     * @param  updateSource  Whether the menu item should be deleted from its
      *                       data source.
      *
-     * @return               True if a menu item was removed, false if this menu
-     *                       item was not located in a folder.
+     * @return               True if a menu item was removed, false if this
+     *                       menu item was not located in a folder.
      */
     bool remove(const bool deleteFromSource);
 
@@ -212,26 +214,26 @@ public:
      * @brief  Swaps the positions of two menu items, saving the change to this
      *         menu item's data source if both items may be moved by the user.
      *
-     * This method may be used to change the order of non-movable items, but the
-     * changes will not be saved if this is the case.
+     * This method may be used to change the order of non-movable items, but
+     * the changes will not be saved if this is the case.
      *
      * @param childIdx1  The index of the first child item to move.
      *
      * @param childIdx2  The index of the second child item to move.
      *
      * @return  True if the child menu items were swapped, false if the indices
-     *          did not specify two valid menu items within the folder's
-     *          child menu items.
+     *          did not specify two valid menu items within the folder's child
+     *          menu items.
      */
     bool swapChildren(const int childIdx1, const int childIdx2);
-    
+
     /**
      * @brief  Saves all changes to this menu item back to its data source.
      */
     virtual void saveChanges() = 0;
-    
+
     /**
-     * @brief  Gets an appropriate title to use for a deletion confirmation 
+     * @brief  Gets an appropriate title to use for a deletion confirmation
      *         window.
      *
      * @return  A localized confirmation title string.
@@ -239,7 +241,7 @@ public:
     virtual juce::String getConfirmDeleteTitle() const = 0;
 
     /**
-     * @brief  Gets appropriate descriptive text for a deletion confirmation 
+     * @brief  Gets appropriate descriptive text for a deletion confirmation
      *         window.
      *
      * @return  A localized confirmation description string.
@@ -275,24 +277,24 @@ public:
     virtual bool isEditable(const DataField dataField) const = 0;
 
     /**
-     * @brief  Receives updates when tracked menu items change. 
+     * @brief  Receives updates when tracked menu items change.
      *
-     *  Listeners connected to a menu item through its addListener method
-     * are notified whenever the menu item's data changes, whenever the menu
-     * item is removed from the menu, and whenever the menu item's child 
-     * folder items are added, removed, or swapped.  Each Listener may only
-     * connect to one ItemData at a time.
+     *  Listeners connected to a menu item through its addListener method are
+     * notified whenever the menu item's data changes, whenever the menu item is
+     * removed from the menu, and whenever the menu item's child folder items
+     * are added, removed, or swapped. Each Listener may only connect to one
+     * ItemData at a time.
      *
      *  Listeners automatically disconnect from their tracked ItemData source
-     * when they are destroyed.  ItemData is also automatically disconnected
+     * when they are destroyed. ItemData is also automatically disconnected
      * from all listeners when it is removed from the menu, after calling
      * dataRemoved on each listener.
      */
     class Listener
     {
     public:
-        /* Allows ItemData objects to add themselves to this Listener's tracked
-           item list when addListener is called. */
+        // Allows ItemData objects to add themselves to this Listener's tracked
+        // item list when addListener is called.
         friend class ItemData;
 
         Listener() { }
@@ -333,15 +335,15 @@ public:
         (const int swapIndex1, const int swapIndex2) { }
 
         /**
-         * @brief  This method will be called once whenever any other element of
-         *         the tracked ItemData object's data changes.
+         * @brief  This method will be called once whenever any other element
+         *         of the tracked ItemData object's data changes.
          *
          * @param changedField  Indicates what part of the menu item's data
          *                      changed.
          */
         virtual void dataChanged(const DataField changedField) { }
 
-        /* The ItemData object tracked by this Listener. */
+        // The ItemData object tracked by this Listener.
         ItemData::Ptr trackedItemData = nullptr;
     };
 
@@ -361,8 +363,8 @@ public:
 
 protected:
     /**
-     * @brief  Signal to all listeners tracking this ItemData that the item
-     *         has changed.
+     * @brief  Signal to all listeners tracking this ItemData that the item has
+     *         changed.
      *
      * @param changedField  Indicates what part of the menu item's data changed.
      */
@@ -373,7 +375,7 @@ private:
      * @brief  Runs an arbitrary operation on each listener tracking this
      *         ItemData.
      *
-     * @param listenerAction  An action to perform on all listeners. Each time 
+     * @param listenerAction  An action to perform on all listeners. Each time
      *                        it is called, a different listener will be passed
      *                        to it as its sole parameter.
      */
@@ -384,18 +386,18 @@ private:
      */
     virtual void deleteFromSource() = 0;
 
-    /* The folder menu item that contains this menu item.
-       This is not a reference-counted pointer so child items don't prevent
-       their parents from being destroyed.  */
+    // The folder menu item that contains this menu item.
+    // This is not a reference-counted pointer so child items don't prevent
+    // their parents from being destroyed.
     ItemData* parent = nullptr;
 
-    /* The menu item's index within its parent folder. */
+    // The menu item's index within its parent folder.
     int index = -1;
 
-    /* Menu items contained in this menu item, if it is a folder. */
+    // Menu items contained in this menu item, if it is a folder.
     juce::ReferenceCountedArray<ItemData> children;
 
-    /* Objects that should be notified if this menu item changes. */
+    // Objects that should be notified if this menu item changes.
     juce::Array<Listener*> listeners;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ItemData)

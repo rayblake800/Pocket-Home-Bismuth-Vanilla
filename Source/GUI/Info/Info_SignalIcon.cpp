@@ -1,15 +1,13 @@
 #include "Info_SignalIcon.h"
 #include "Theme_Image_JSONKeys.h"
 
-/*
- * Initializes the icon with the image assets defined in the image
- * configuration file.
- */
-Info::SignalIcon::SignalIcon() : 
+// Initializes the icon with the image assets defined in the image
+// configuration file.
+Info::SignalIcon::SignalIcon() :
     Theme::Image::Component<>(Theme::Image::JSONKeys::signalIcon) { }
 
 /**
- * @brief  All signal state icon images.  
+ * @brief  All signal state icon images.
  *
  * Each should correspond to an image asset file defined in components.json.
  */
@@ -22,9 +20,7 @@ enum class ImageAsset
     strength3
 };
 
-/*
- * Updates the Wifi signal icon to represent a new signal strength.
- */
+// Updates the Wifi signal icon to represent a new signal strength.
 void Info::SignalIcon::setSignalStrengthImage
 (const unsigned int signalStrength)
 {
@@ -36,10 +32,9 @@ void Info::SignalIcon::setSignalStrengthImage
     setImageAssetIndex(strengthIndex);
 }
 
-/*
- * Updates the Wifi signal icon to show that Wifi is disabled.
- */
+
+// Updates the Wifi signal icon to show that Wifi is disabled.
 void Info::SignalIcon::setDisabledImage()
 {
-    setImageAssetIndex((int) ImageAsset::off);
+    setImageAssetIndex( (int) ImageAsset::off);
 }

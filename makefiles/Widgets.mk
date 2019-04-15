@@ -21,7 +21,7 @@ OBJECTS_WIDGET := \
   $(WIDGET_OBJ)ListEditor.o \
   $(WIDGET_OBJ)Spinner.o \
   $(WIDGET_OBJ)OverlaySpinner.o \
-  $(WIDGET_OBJ)Switch.o 
+  $(WIDGET_OBJ)Switch.o
 
 OBJECTS_WIDGET_TEST :=
 

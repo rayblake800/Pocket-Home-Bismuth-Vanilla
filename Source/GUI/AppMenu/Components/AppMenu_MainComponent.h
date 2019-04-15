@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -23,18 +23,18 @@ namespace AppMenu { class MainComponent; }
 namespace AppMenu { class Initializer; }
 
 /**
- *  @brief  A container component that holds the AppMenu's menu component, along
- *          with the menu's loading spinner. 
+ * @brief  A container component that holds the AppMenu's menu component,
+ *         along with the menu's loading spinner.
  *
- *  When the menu is created by AppMenu::createAppMenu, the generic 
- * juce::Component pointer returned by that function is actually an 
+ *  When the menu is created by AppMenu::createAppMenu, the generic
+ * juce::Component pointer returned by that function is actually an
  * AppMenu::MainComponent.
  *
  *  The MainComponent's main responsibility is to initialize the menu component
- * in a particular AppMenu format, and automatically update the menu whenever
- * a new menu format is selected. 
+ * in a particular AppMenu format, and automatically update the menu whenever a
+ * new menu format is selected.
  */
-class AppMenu::MainComponent : public juce::Component 
+class AppMenu::MainComponent : public juce::Component
 {
 public:
     /**
@@ -84,7 +84,7 @@ private:
         virtual ~FormatUpdater() { }
 
         /**
-         * @brief  Applies the selected menu format to the updater's 
+         * @brief  Applies the selected menu format to the updater's
          *         MainComponent.
          */
         void applySelectedFormat();
@@ -102,31 +102,31 @@ private:
     };
     FormatUpdater formatUpdater;
 
-    /* Tracks the current AppMenu format. */
+    // Tracks the current AppMenu format.
     AppMenu::Format currentMenuFormat = Format::Invalid;
 
-    /* Creates and listens to the resource that loads, caches, and updates 
-       desktop entry files.  This resource should exist as long as the AppMenu 
-       exists. */
+    // Creates and listens to the resource that loads, caches, and updates
+    // desktop entry files. This resource should exist as long as the AppMenu
+    // exists.
     EntryUpdater entryUpdater;
 
-    /* Ensures JSON menu data stays in memory as long as the AppMenu does. */
+    // Ensures JSON menu data stays in memory as long as the AppMenu does.
     MenuFile menuConfig;
 
-    /* Ensures the icon cache exists as long as the AppMenu does. */
+    // Ensures the icon cache exists as long as the AppMenu does.
     const Icon::Loader iconLoader;
 
-    /* The menu's loading spinner. */
+    // The menu's loading spinner.
     Widgets::OverlaySpinner loadingSpinner;
 
-    /* Handles the appearance and layout of the menu. */
+    // Handles the appearance and layout of the menu.
     std::unique_ptr<MenuComponent> menuComponent;
 
-    /* Allows the inputHandler to control menu behavior. */
+    // Allows the inputHandler to control menu behavior.
     std::unique_ptr<Controller> controller;
 
-    /* Listens to key, mouse, and window focus events, and responds by
-       triggering appropriate menu events. */
+    // Listens to key, mouse, and window focus events, and responds by
+    // triggering appropriate menu events.
     std::unique_ptr<InputHandler> inputHandler;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)

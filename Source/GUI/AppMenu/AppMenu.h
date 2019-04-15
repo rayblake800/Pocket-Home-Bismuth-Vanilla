@@ -9,9 +9,11 @@
 #include "JuceHeader.h"
 
 /**
- *  This defines the interface used outside the AppMenu to create application
- * menu objects. The application menu is returned as a generic juce::Component
- * pointer, and can be treated like any other Component.
+ * @brief  Provides the interface used outside the AppMenu to create application
+ *         menu objects.
+ *
+ *  The application menu is returned as a generic juce::Component pointer, and
+ * can be treated like any other Component.
  */
 namespace AppMenu
 {
@@ -19,7 +21,7 @@ namespace AppMenu
      * @brief  Creates an AppMenu::MainComponent, initialized with the menu
      *         format saved through AppMenu::Settings.
      *
-     * @return  A pointer to a newly allocated and initialized 
+     * @return  A pointer to a newly allocated and initialized
      *          AppMenu::MainComponent.
      */
     juce::Component* createAppMenu();

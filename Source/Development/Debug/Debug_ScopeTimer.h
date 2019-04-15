@@ -9,14 +9,18 @@
 
 namespace Debug { class ScopeTimer; }
 
+/**
+ * @brief  Measures execution time by logging the time between its creation and
+ *         destruction.
+ */
 class Debug::ScopeTimer
 {
 public:
     /**
      * @brief  Starts the timer on construction.
      *
-     * @param scopeName  A name identifying the portion of the program the timer
-     *                   is tracking.
+     * @param scopeName  A name identifying the portion of the program the
+     *                   timer is tracking.
      */
     ScopeTimer(const juce::String scopeName);
 
@@ -27,9 +31,9 @@ public:
     virtual ~ScopeTimer();
 
 private:
-    /* The timer name saved on construction: */
+    // The timer name saved on construction:
     const juce::String scopeName;
 
-    /* The ID of the thread where this timer was created: */
+    // The ID of the thread where this timer was created:
     const juce::Thread::ThreadID threadID;
 };

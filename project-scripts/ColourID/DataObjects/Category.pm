@@ -1,6 +1,6 @@
 ##### Category.pm: #############################################################
 # Represents a Theme::Colour::UICategory value.
-################################################################################ 
+################################################################################
 
 ##### Functions: #####
 
@@ -79,7 +79,7 @@ my @categoryKeys = (
         'Window background',
         'Widget background',
         'Widget',
-        'Widget(off)',
+        'Widget (off)',
         'Menu background',
         'Outline',
         'Focused outline',
@@ -97,14 +97,14 @@ sub new
     my $class = shift;
     my $type = shift;
     my $self = undef;
-    if(isint($type) && ($type >= 0) && ($type < NUM_TYPES))
+    if (isint($type) && ($type >= 0) && ($type < NUM_TYPES))
     {
-        $self = 
+        $self =
         {
             _value => $type
         };
     }
-    elsif(blessed($type) && blessed($type) eq 'Category')
+    elsif (blessed($type) && blessed($type) eq 'Category')
     {
         $self =
         {
@@ -116,11 +116,11 @@ sub new
         my $self = shift;
         my $type = shift;
         my @nameArray = @_;
-        if(!defined($self))
+        if (!defined($self))
         {
-            foreach my $i(0 ... (NUM_TYPES - 1))
+            foreach my $i (0 ...(NUM_TYPES - 1))
             {
-                if($type eq $nameArray[$i])
+                if ($type eq $nameArray[$i])
                 {
                     $self =
                     {
@@ -134,7 +134,7 @@ sub new
     }
     $self = checkNames($self, $type, @categoryNames);
     $self = checkNames($self, $type, @categoryKeys);
-    if(defined($self))
+    if (defined($self))
     {
         bless($self, $class);
     }

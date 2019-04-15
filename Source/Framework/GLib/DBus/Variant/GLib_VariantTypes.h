@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file GLib_VariantTypes.h
+ * @file  GLib_VariantTypes.h
  *
  * @brief  Defines all types that may be stored in GLib::Variant objects.
  */
@@ -21,7 +21,7 @@ namespace GLib
 
         // no typedef/declaration needed: bool, double, Variant
 
-        /* Integer data types: */
+        // Integer data types:
         typedef juce::uint8  byte;
         typedef juce::int16  int16;
         typedef juce::uint16 uint16;
@@ -30,8 +30,8 @@ namespace GLib
         typedef juce::int64  int64;
         typedef juce::uint64 uint64;
 
-        /* Used as an index into an array of file descriptors sent alongside a 
-           D-Bus message: */
+        // Used as an index into an array of file descriptors sent alongside a
+        // D-Bus message:
         struct Handle : public BasicValueWrapper<uint32>
         {
             using BasicValueWrapper::BasicValueWrapper;
@@ -39,13 +39,13 @@ namespace GLib
 
         typedef juce::String String;
 
-        /* Used to identify DBus objects: */
+        // Used to identify DBus objects:
         class Path : public BasicValueWrapper<String>
         {
             using BasicValueWrapper::BasicValueWrapper;
         };
 
-        /* Strings used for DBus type signatures: */
+        // Strings used for DBus type signatures:
         class Signature : public BasicValueWrapper<String>
         {
             using BasicValueWrapper::BasicValueWrapper;
@@ -53,28 +53,28 @@ namespace GLib
 
         typedef GVariant* GVariantType;
 
-        /* All array types: */
+        // All array types:
         template<class T>
         using Array = juce::Array<T>;
 
-        /* All tuple types: */
+        // All tuple types:
         template< class... Types >
         using Tuple = std::tuple< Types ... >;
 
-        /* The empty tuple type: */
+        // The empty tuple type:
         typedef std::tuple<> Unit;
 
-        /* All key/value pair types: */
+        // All key/value pair types:
         template<class KeyType, class ValueType>
         using DictEntry = std::pair<KeyType, ValueType>;
 
-        /* All dictionary types: */
+        // All dictionary types:
         template<class KeyType, class ValueType>
         using Dictionary = std::map<KeyType, ValueType>;
 
         typedef juce::StringArray StringArray;
 
-        /* An array of object path strings: */
+        // An array of object path strings:
         class ObjectPathArray : public BasicValueWrapper<StringArray>
         {
             using BasicValueWrapper::BasicValueWrapper;
@@ -84,6 +84,6 @@ namespace GLib
 
         typedef juce::Array<ByteString>    ByteStringArray;
 
-        typedef Dictionary<String,Variant> VarDict;
+        typedef Dictionary<String, Variant> VarDict;
     }
 }

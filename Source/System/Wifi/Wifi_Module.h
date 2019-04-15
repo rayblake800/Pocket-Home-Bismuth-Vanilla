@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -18,7 +18,7 @@ namespace Wifi
 }
 
 /**
- * @brief  A basis for module objects that handle part of the responsibilities 
+ * @brief  A basis for module objects that handle part of the responsibilities
  *         of the Wifi::Resource object.
  */
 class Wifi::Module : public SharedResource::Modular::Module<Resource>
@@ -35,23 +35,23 @@ public:
 
 protected:
     /**
-     * @brief  Packages an asynchronous action so that it will check if the 
-     *         Wifi::Resource instance that created it is still valid.  
+     * @brief  Packages an asynchronous action so that it will check if the
+     *         Wifi::Resource instance that created it is still valid.
      *
-     *  If it is valid, the Resource instance will be locked and the action will
-     * be executed.
+     *  If it is valid, the Resource instance will be locked and the action
+     * will be executed.
      *
-     * @param lockType     Sets how the resource will be locked while the action
-     *                     function runs.
+     * @param lockType     Sets how the resource will be locked while the
+     *                     action function runs.
      *
      * @param action       A function to call if the Resource still exists.
      */
-    std::function<void()> buildAsyncFunction(SharedResource::LockType lockType, 
+    std::function<void()> buildAsyncFunction(SharedResource::LockType lockType,
             std::function<void()> action);
 
     /**
-     * @brief  Runs a callback function on the Juce message thread for each
-     *         of this module's handler objects that share a specific class.
+     * @brief  Runs a callback function on the Juce message thread for each of
+     *         this module's handler objects that share a specific class.
      *
      * @tparam HandlerType   The type of handler that should be acted on.
      *

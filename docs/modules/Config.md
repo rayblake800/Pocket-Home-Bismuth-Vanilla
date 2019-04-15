@@ -35,7 +35,7 @@ MainListener objects listen for changes to values defined in the main.json file.
 MainResource is the FileResource class that handles all access to the main.json configuration file.
 
 #### [Config\::MainKeys](../../Source/Files/Config/Config_MainKeys.h)
-MainKeys provides the keys to all values accessed through MainFile and defined in main.json. 
+MainKeys provides the keys to all values accessed through MainFile and defined in main.json.
 
 #### [Config\::ListenerInterface](../../Source/Files/Config/Implementation/Config_ListenerInterface.h)
 ListenerInterface is the interface used by FileResource objects to send notifications to associated Listener objects.

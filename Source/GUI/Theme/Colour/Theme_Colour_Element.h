@@ -2,7 +2,7 @@
 /**
  * @file  Theme_Colour_Element.h
  *
- * @brief  Stores information about a configurable UI colour element. 
+ * @brief  Stores information about a configurable UI colour element.
  */
 
 #include "Theme_Colour_UICategory.h"
@@ -11,7 +11,7 @@
 namespace Theme { namespace Colour { class Element; } }
 
 /**
- * @brief  Stores the JUCE ColourId value, and general colour category of a UI 
+ * @brief  Stores the JUCE ColourId value, and general colour category of a UI
  *         colour element.
  */
 class Theme::Colour::Element
@@ -50,8 +50,8 @@ public:
     UICategory getColourCategory() const;
 
 private:
-    /* The element's JUCE ColourId value: */
+    // The element's JUCE ColourId value:
     int colourId;
-    /* The element's general UI element category */
+    // The element's general UI element category
     UICategory category;
 };

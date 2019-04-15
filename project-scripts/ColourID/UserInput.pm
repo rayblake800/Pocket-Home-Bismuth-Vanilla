@@ -1,6 +1,6 @@
 ##### UserInput.pm #############################################################
 # Reads, processes, and validates command line input entered through STDIN.
-################################################################################ 
+################################################################################
 
 ##### Functions: #####
 
@@ -36,8 +36,8 @@
 #                     used.
 #
 # [$confirmMessage]:  A message to print asking the user to confirm their
-#                     selected input. If undefined, the first valid input 
-#                     received will be accepted without prompting for 
+#                     selected input. If undefined, the first valid input
+#                     received will be accepted without prompting for
 #                     confirmation.
 #--- Returns: ---
 # A valid text input value, or the empty string if the user chose not to confirm
@@ -54,12 +54,12 @@ sub checkInput
 {
     my @options = @_;
     my $input = "";
-    while((scalar @options) > 0)
+    while ( (scalar @options) > 0)
     {
         $input = <STDIN>;
-        foreach my $option(@options)
+        foreach my $option (@options)
         {
-            if($input =~ /^$option\n?$/i)
+            if ($input =~ /^$option\n?$/i)
             {
                 return $option;
             }
@@ -72,7 +72,7 @@ sub checkInput
 sub confirm
 {
     print("(y/n):");
-    return (checkInput('y','n') eq 'y');
+    return (checkInput('y', 'n') eq 'y');
 }
 
 # Prompts the user to enter a new text value until a valid choice is made.
@@ -84,17 +84,17 @@ sub inputText
     my $confirmMessage = shift;
     my $newText;
     print($renameMessage);
-    while(!defined($newText))
+    while (!defined($newText))
     {
         $newText = <STDIN>;
         #strip trailing newline
         $newText =~ s/\n$//g;
-        if($newText =~ /$validatorRegex/)
+        if ($newText =~ /$validatorRegex/)
         {
-            if(defined($confirmMessage))
+            if (defined($confirmMessage))
             {
                 print($confirmMessage);
-                if(!confirm())
+                if (!confirm())
                 {
                     return "";
                 }

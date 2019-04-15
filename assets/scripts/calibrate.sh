@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Calibrates the touch screen.  If possible, the calibration settings are saved.
+# Calibrates the touch screen. If possible, the calibration settings are saved.
 #
 settings=$(xinput_calibrator)
 

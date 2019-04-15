@@ -29,8 +29,8 @@ public:
     /**
      * @brief  Gets a string describing the error.
      *
-     * @return  A string containing the file's path and a short description
-     *          of the file error.
+     * @return  A string containing the file's path and a short description of
+     *          the file error.
      */
     virtual const char* what() const noexcept override
     {

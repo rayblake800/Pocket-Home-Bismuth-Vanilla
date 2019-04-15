@@ -2,26 +2,24 @@
 #include "Wifi_LibNM_AccessPoint.h"
 #include "Wifi_LibNM_APHash.h"
 
-/* The NetworkManager's DBus path: */
+// The NetworkManager's DBus path:
 const constexpr char* busName = "org.freedesktop.NetworkManager";
-/* SavedConnectionLoader's DBus interface name: */
+// SavedConnectionLoader's DBus interface name:
 const constexpr char* interface = "org.freedesktop.NetworkManager.Settings";
-/* SavedConnectionLoader's DBus interface path: */
+// SavedConnectionLoader's DBus interface path:
 const constexpr char* path = "/org/freedesktop/NetworkManager/Settings";
 
-/* DBus listConnections method key: */
+// DBus listConnections method key:
 const constexpr char* listConnectionMethod = "ListConnections";
 
 namespace NMDBus = Wifi::LibNM::DBus;
 
-/*
- * Connects to NetworkManager over DBus to initialize the saved connection list.
- */
+// Connects to NetworkManager over DBus to initialize the saved connection list.
 NMDBus::SavedConnectionLoader::SavedConnectionLoader() :
-GLib::DBus::Proxy(busName, path, interface) 
-{ 
+GLib::DBus::Proxy(busName, path, interface)
+{
     juce::StringArray paths = getConnectionPaths();
-    for(const juce::String& path : paths)
+    for (const juce::String& path : paths)
     {
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }
@@ -29,48 +27,45 @@ GLib::DBus::Proxy(busName, path, interface)
             << connectionList.size() << " connections.");
 }
 
-/*
- * Reads all connection paths from NetworkManager, and returns all the wifi
- * connections as SavedConnection objects.
- */
-juce::Array<NMDBus::SavedConnection> 
+
+// Reads all connection paths from NetworkManager, and returns all the wifi
+// connections as SavedConnection objects.
+juce::Array<NMDBus::SavedConnection>
 NMDBus::SavedConnectionLoader::getWifiConnections() const
 {
     juce::Array<SavedConnection> connections;
-    for(const SavedConnection& con : connectionList)
+    for (const SavedConnection& con : connectionList)
     {
-        if(con.isWifiConnection())
+        if (con.isWifiConnection())
         {
             connections.add(con);
         }
     }
     return connections;
 }
-    
-/*
- * Checks saved connection paths to see if one exists at the given path.
- */
+
+
+// Checks saved connection paths to see if one exists at the given path.
 bool NMDBus::SavedConnectionLoader::connectionExists
 (const juce::String& connectionPath) const
 {
     return connectionPaths.contains(connectionPath);
 }
- 
-/*
- * Finds a saved connection from its DBus path.
- */
+
+
+// Finds a saved connection from its DBus path.
 NMDBus::SavedConnection NMDBus::SavedConnectionLoader::getConnection
 (const juce::String& connectionPath)
 {
-    if(!connectionExists(connectionPath))
+    if (!connectionExists(connectionPath))
     {
         updateSavedConnections();
     }
-    if(connectionExists(connectionPath))
+    if (connectionExists(connectionPath))
     {
-        for(const SavedConnection& connection : connectionList)
+        for (const SavedConnection& connection : connectionList)
         {
-            if(connection.getPath() == connectionPath)
+            if (connection.getPath() == connectionPath)
             {
                 return connection;
             }
@@ -79,23 +74,22 @@ NMDBus::SavedConnection NMDBus::SavedConnectionLoader::getConnection
     SavedConnection emptyConnection;
     return emptyConnection;
 }
-  
-/*
- * Finds all saved connections that are compatible with a given wifi access 
- * point.
- */
-juce::Array<NMDBus::SavedConnection> 
+
+
+// Finds all saved connections that are compatible with a given wifi access
+// point.
+juce::Array<NMDBus::SavedConnection>
 NMDBus::SavedConnectionLoader::findConnectionsForAP
 (const LibNM::AccessPoint& accessPoint)
 {
     using juce::Array;
     Array<SavedConnection> compatible;
-    if(!isNull() && !accessPoint.isNull())
+    if (!isNull() && !accessPoint.isNull())
     {
         Array<SavedConnection> wifiCons = getWifiConnections();
-        for(SavedConnection& con : wifiCons)
+        for (SavedConnection& con : wifiCons)
         {
-            if(con.getNMConnection().isCompatibleAccessPoint(accessPoint))
+            if (con.getNMConnection().isCompatibleAccessPoint(accessPoint))
             {
                 compatible.add(con);
             }
@@ -104,16 +98,15 @@ NMDBus::SavedConnectionLoader::findConnectionsForAP
     return compatible;
 }
 
-/*
- * Get the list of all available connection paths
- */
-inline juce::StringArray 
+
+// Get the list of all available connection paths
+inline juce::StringArray
 NMDBus::SavedConnectionLoader::getConnectionPaths() const
 {
     using namespace GLib::VariantConverter;
     using juce::StringArray;
     GVariant* conArrayVar = callMethod(listConnectionMethod);
-    if(conArrayVar != nullptr)
+    if (conArrayVar != nullptr)
     {
         StringArray paths = getValue<StringArray>(conArrayVar);
         g_variant_unref(conArrayVar);
@@ -123,18 +116,17 @@ NMDBus::SavedConnectionLoader::getConnectionPaths() const
     return StringArray();
 }
 
-/*
- * Checks if a saved connection exists that is compatible with an access point.
- */
+
+// Checks if a saved connection exists that is compatible with an access point.
 bool NMDBus::SavedConnectionLoader::matchingConnectionExists
 (const AccessPoint& accessPoint) const
 {
-    if(!accessPoint.isNull())
+    if (!accessPoint.isNull())
     {
         juce::Array<SavedConnection> wifiConnections = getWifiConnections();
-        for(SavedConnection& con : wifiConnections)
+        for (SavedConnection& con : wifiConnections)
         {
-            if(con.getNMConnection().isCompatibleAccessPoint(accessPoint))
+            if (con.getNMConnection().isCompatibleAccessPoint(accessPoint))
             {
                 return true;
             }
@@ -143,17 +135,16 @@ bool NMDBus::SavedConnectionLoader::matchingConnectionExists
     return false;
 }
 
-/*
- * Checks the list of saved connections against an updated connection path
- * list, adding any new connections and removing any deleted connections.
- */
+
+// Checks the list of saved connections against an updated connection path
+// list, adding any new connections and removing any deleted connections.
 void NMDBus::SavedConnectionLoader::updateSavedConnections()
 {
     connectionPaths = getConnectionPaths();
     juce::Array<SavedConnection> toRemove;
-    for(const SavedConnection& saved : connectionList)
+    for (const SavedConnection& saved : connectionList)
     {
-        if(!connectionPaths.contains(saved.getPath()))
+        if (!connectionPaths.contains(saved.getPath()))
         {
             toRemove.add(saved);
         }
@@ -162,11 +153,11 @@ void NMDBus::SavedConnectionLoader::updateSavedConnections()
             connectionPaths.removeString(saved.getPath());
         }
     }
-    for(const SavedConnection& removing : toRemove)
+    for (const SavedConnection& removing : toRemove)
     {
         connectionList.removeAllInstancesOf(removing);
     }
-    for(const juce::String& path : connectionPaths)
+    for (const juce::String& path : connectionPaths)
     {
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }

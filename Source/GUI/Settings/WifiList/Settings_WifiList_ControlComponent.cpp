@@ -9,15 +9,15 @@
 #include "Windows_Alert.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
-static const constexpr char* dbgPrefix 
+// Print the full class name before all debug output:
+static const constexpr char* dbgPrefix
         = "Settings::WifiList::ControlComponent::";
 #endif
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "Settings::WifiList";
 
-/* Localized text value keys: */
+// Localized text value keys:
 namespace TextKey
 {
     static const juce::Identifier password         = "password";
@@ -32,24 +32,24 @@ namespace TextKey
     static const juce::Identifier confirmDelete    = "confirmDelete";
 }
 
-//===================== List item Layout values ================================
-/* Vertical weight values: */
+
+//===================== List item Layout values ===============================
+// Vertical weight values:
 static const constexpr unsigned int baseRowWeight = 3;
 static const constexpr unsigned int errorMsgRowWeight = 2;
-/* Margin and Padding fractions: */
+// Margin and Padding fractions:
 static const constexpr float xMarginFraction = 0.03;
 static const constexpr float yMarginFraction = 0.05;
 static const constexpr float xPaddingFraction = 0.04;
 static const constexpr float yPaddingFraction = 0.02;
 
-/*
- * Initializes all child components.
- */
+// Initializes all child components.
 Settings::WifiList::ControlComponent::ControlComponent() :
     Locale::TextUser(localeClassKey),
     controlListener(*this)
-{ 
-    savedConnectionDeleteButton.setButtonText(localeText(TextKey::deleteSaved));
+{
+    savedConnectionDeleteButton.setButtonText(
+            localeText(TextKey::deleteSaved));
     passwordLabel.setText(localeText(TextKey::password),
             juce::NotificationType::dontSendNotification);
 
@@ -77,7 +77,7 @@ Settings::WifiList::ControlComponent::ControlComponent() :
             RowItem(&passwordLabel, 1),
             RowItem(&passwordEditor, 2)
         }),
-        Row(errorMsgRowWeight,{RowItem(&errorLabel)}),
+        Row(errorMsgRowWeight, {RowItem(&errorLabel)}),
         Row(baseRowWeight,
         {
             RowItem(),
@@ -92,9 +92,8 @@ Settings::WifiList::ControlComponent::ControlComponent() :
     layoutControl.setLayout(newLayout, this);
 }
 
-/*
- * Updates all components to represent a specific Wifi access point.
- */
+
+// Updates all components to represent a specific Wifi access point.
 void Settings::WifiList::ControlComponent::updateComponentsForAP
 (Wifi::AccessPoint newAP)
 {
@@ -103,31 +102,31 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
     using Wifi::Connection::EventType;
 
     const Wifi::Connection::Record::Handler connectionRecord;
-    DBG(dbgPrefix << __func__ << ": Updating connection controls for AP " 
+    DBG(dbgPrefix << __func__ << ": Updating connection controls for AP "
             << newAP.getSSID().toString());
-    const bool requiresAuth = newAP.getSecurityType() 
+    const bool requiresAuth = newAP.getSecurityType()
             != Wifi::LibNM::SecurityType::unsecured;
     const bool hasSavedConnection = newAP.hasSavedConnection();
     const bool isActiveAP = connectionRecord.getActiveAP() == newAP;
     const bool isConnected = isActiveAP && connectionRecord.isConnected();
     const bool isConnecting = isActiveAP && connectionRecord.isConnecting();
-    const EventType lastEventType 
-             = connectionRecord.getLatestEvent(newAP).getEventType();
+    const EventType lastEventType
+            = connectionRecord.getLatestEvent(newAP).getEventType();
 
     // Update last connection time label:
     String lastConnectionText;
     juce::int64 lastConnectionTime = 0;
-    if(isConnected)
+    if (isConnected)
     {
         lastConnectionTime = juce::Time::currentTimeMillis();
     }
-    else if(hasSavedConnection)
+    else if (hasSavedConnection)
     {
         lastConnectionTime = newAP.getLastConnectionTime();
     }
-    if(lastConnectionTime > 0)
+    if (lastConnectionTime > 0)
     {
-        Locale::Time localizedTime((juce::Time(lastConnectionTime)));
+        Locale::Time localizedTime( (juce::Time(lastConnectionTime)));
 
         lastConnectionText = localeText(TextKey::lastConnected)
                 + localizedTime.approxTimePassed();
@@ -136,51 +135,53 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
             juce::NotificationType::dontSendNotification);
 
     // Update saved connection delete button:
-    const bool showDeleteButton = !isConnected && !isConnecting 
+    const bool showDeleteButton = !isConnected && !isConnecting
             && hasSavedConnection;
     savedConnectionDeleteButton.setVisible(showDeleteButton);
     savedConnectionDeleteButton.setEnabled(showDeleteButton);
 
     // Update password label and entry field:
-    const bool showPasswordEntry = !isConnected && !isConnecting && requiresAuth
-            && (!hasSavedConnection || lastEventType 
+    const bool showPasswordEntry
+            = !isConnected && !isConnecting && requiresAuth
+            && (!hasSavedConnection || lastEventType
                 == EventType::connectionAuthFailed);
     passwordLabel.setVisible(showPasswordEntry);
     passwordEditor.setVisible(showPasswordEntry);
     passwordEditor.setEnabled(showPasswordEntry);
-    if(selectedAP != newAP)
+    if (selectedAP != newAP)
     {
         passwordEditor.clear();
     }
 
     // Update error label:
     String errorText;
-    if(selectedAP == newAP)
+    if (selectedAP == newAP)
     {
         errorText = errorLabel.getText();
     }
-    if(!isConnected && !isConnecting)
+    if (!isConnected && !isConnecting)
     {
-        if(lastEventType == Wifi::Connection::EventType::connectionFailed)
+        if (lastEventType == Wifi::Connection::EventType::connectionFailed)
         {
             errorText = localeText(TextKey::connectionFailed);
         }
-        else if(lastEventType 
+        else if (lastEventType
                 == Wifi::Connection::EventType::connectionAuthFailed)
         {
             errorText = localeText(TextKey::wrongPassword);
         }
     }
-    errorLabel.setText(errorText, juce::NotificationType::dontSendNotification);
+    errorLabel.setText(errorText,
+            juce::NotificationType::dontSendNotification);
 
     // Update connection button:
     connectionButton.setSpinnerVisible(isConnecting);
     String connectionBtnText;
-    if(isConnected)
+    if (isConnected)
     {
         connectionBtnText = localeText(TextKey::disconnect);
     }
-    else if(!isConnecting)
+    else if (!isConnecting)
     {
         connectionBtnText = localeText(TextKey::connect);
     }
@@ -189,18 +190,16 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
     selectedAP = newAP;
 }
 
-/*
- * Updates the layout of all child components when the main component is 
- * resized.
- */
+
+// Updates the layout of all child components when the main component is
+// resized.
 void Settings::WifiList::ControlComponent::resized()
 {
     layoutControl.layoutComponents(getLocalBounds());
 }
 
-/*
- * Attempts to open a connection using the selected access point.
- */
+
+// Attempts to open a connection using the selected access point.
 void Settings::WifiList::ControlComponent::connect()
 {
     using juce::String;
@@ -228,31 +227,30 @@ void Settings::WifiList::ControlComponent::connect()
     else
     {
         DBG(dbgPrefix << __func__ << ": connecting to "
-                << selectedAP.getSSID().toString() 
+                << selectedAP.getSSID().toString()
                 << " with no psk required.");
         connectionController.connectToAccessPoint(selectedAP);
     }
     passwordEditor.clear();
-    errorLabel.setText(String(), 
+    errorLabel.setText(String(),
             juce::NotificationType::dontSendNotification);
 }
 
 using Control = Settings::WifiList::ControlComponent;
 
-Control::ConnectionButton::ConnectionButton() 
-{ 
+Control::ConnectionButton::ConnectionButton()
+{
     addChildComponent(spinner);
 }
 
-/*
- * Shows or hide the spinner, ensuring the button is enabled when text is
- * visible and disabled when the spinner is visible.
- */
+
+// Shows or hide the spinner, ensuring the button is enabled when text is
+// visible and disabled when the spinner is visible.
 void Control::ConnectionButton::setSpinnerVisible(bool showSpinner)
 {
     spinner.setVisible(showSpinner);
     setEnabled(!showSpinner);
-    if(showSpinner)
+    if (showSpinner)
     {
         savedText = getButtonText();
         setButtonText(juce::String());
@@ -264,9 +262,8 @@ void Control::ConnectionButton::setSpinnerVisible(bool showSpinner)
     }
 }
 
-/*
- * Ensures the spinner bounds are updated with connection button bounds.
- */
+
+// Ensures the spinner bounds are updated with connection button bounds.
 void Control::ConnectionButton::resized()
 {
     int spinnerSize = getHeight();
@@ -274,37 +271,35 @@ void Control::ConnectionButton::resized()
                 spinnerSize));
 }
 
-/*
- * Connects this listener to its ControlComponent.
- */
+
+// Connects this listener to its ControlComponent.
 Control::ControlListener::ControlListener
 (ControlComponent& controlComponent) : controlComponent(controlComponent) { }
 
-/*
- * Attempts to connect or disconnect from the current selected access point when
- * the connection button is clicked.
- */
+
+// Attempts to connect or disconnect from the current selected access point
+// when the connection button is clicked.
 void Control::ControlListener::buttonClicked(juce::Button* button)
 {
     Wifi::AccessPoint selectedAP = controlComponent.selectedAP;
-    if(selectedAP.isNull())
+    if (selectedAP.isNull())
     {
         DBG(dbgPrefix << __func__ << ": ap is null!");
         return;
     }
-    if(button == &controlComponent.connectionButton)
+    if (button == &controlComponent.connectionButton)
     {
         const Wifi::Connection::Record::Handler connectionRecords;
-        if(connectionRecords.getActiveAP() == selectedAP)
+        if (connectionRecords.getActiveAP() == selectedAP)
         {
-            if(connectionRecords.isConnecting())
+            if (connectionRecords.isConnecting())
             {
-                DBG(dbgPrefix << __func__ 
+                DBG(dbgPrefix << __func__
                         << ": Currently connecting, the connection button "
                         << "should have been disabled or hidden!");
                 return;
             }
-            else if(connectionRecords.isConnected())
+            else if (connectionRecords.isConnected())
             {
                 DBG(dbgPrefix << __func__ << ": Disconnecting from "
                         << selectedAP.getSSID().toString());
@@ -313,13 +308,15 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
             }
         }
         else
-        DBG(dbgPrefix << __func__ << ": Connecting to "
-                << selectedAP.getSSID().toString());
-        controlComponent.connect();
+        {
+            DBG(dbgPrefix << __func__ << ": Connecting to "
+                    << selectedAP.getSSID().toString());
+            controlComponent.connect();
+        }
     }
-    else if(button == &controlComponent.savedConnectionDeleteButton)
+    else if (button == &controlComponent.savedConnectionDeleteButton)
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Getting confirmation before deleting saved connection:");
         Windows::Alert::confirmAction(
                 controlComponent.localeText(TextKey::deleteSaved),
@@ -333,9 +330,8 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
     }
 }
 
-/*
- * Attempts to connect if return is pressed after entering a password.
- */
+
+// Attempts to connect if return is pressed after entering a password.
 void Control::ControlListener::textEditorReturnKeyPressed
 (juce::TextEditor& editor)
 {

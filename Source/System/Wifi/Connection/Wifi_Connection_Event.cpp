@@ -3,9 +3,7 @@
 
 namespace WifiConnect = Wifi::Connection;
 
-/*
- * Gets a string representation of a Wifi connection event type.
- */
+// Gets a string representation of a Wifi connection event type.
 juce::String Wifi::Connection::eventTypeString(const EventType type)
 {
     switch(type)
@@ -29,9 +27,8 @@ juce::String Wifi::Connection::eventTypeString(const EventType type)
     return "invalid Wifi::Connection::EventType value";
 }
 
-/*
- * Creates a new connection event with initial connection data.
- */
+
+// Creates a new connection event with initial connection data.
 WifiConnect::Event::Event(
         const AccessPoint eventAP,
         const EventType eventType,
@@ -40,47 +37,41 @@ eventAP(eventAP),
 eventType(eventType),
 eventTime(eventTime) { }
 
-/*
- * Creates the connection event as a copy of another event.
- */
+
+// Creates the connection event as a copy of another event.
 WifiConnect::Event::Event(const Event& rhs) :
 eventAP(rhs.eventAP),
 eventType(rhs.eventType),
 eventTime(rhs.eventTime) { }
 
-/*
- * Creates a null Event object that does not represent a real connection event.
- */
+
+// Creates a null Event object that does not represent a real connection event.
 WifiConnect::Event::Event() : eventType(EventType::invalid) { }
 
-/*
- * Gets the access point involved in the event.
- */
+
+// Gets the access point involved in the event.
 Wifi::AccessPoint WifiConnect::Event::getEventAP() const
 {
     return eventAP;
 }
 
-/*
- * Gets the type of event that occurred.
- */
+
+// Gets the type of event that occurred.
 WifiConnect::EventType WifiConnect::Event::getEventType() const
 {
     return eventType;
 }
 
-/*
- * Gets the event's time.
- */
+
+// Gets the event's time.
 juce::Time WifiConnect::Event::getEventTime() const
 {
     return eventTime;
 }
 
-/*
- * Makes this event into a copy of another event. 
- */
-WifiConnect::Event& WifiConnect::Event::operator=(const Event& rhs)
+
+// Makes this event into a copy of another event.
+WifiConnect::Event& WifiConnect::Event::operator= (const Event& rhs)
 {
     eventAP = rhs.eventAP;
     eventType = rhs.eventType;
@@ -88,54 +79,47 @@ WifiConnect::Event& WifiConnect::Event::operator=(const Event& rhs)
     return *this;
 }
 
-/*
- * Checks if two connection events are equivalent.
- */
-bool WifiConnect::Event::operator==(const Event& rhs) const
+
+// Checks if two connection events are equivalent.
+bool WifiConnect::Event::operator== (const Event& rhs) const
 {
-    return eventAP == rhs.eventAP
-        && eventType == rhs.eventType
+    return eventAP == rhs.eventAP && eventType == rhs.eventType
         && eventTime == rhs.eventTime;
 }
 
 
-/*
- * Checks if two connection events are not equivalent.
- */
-bool WifiConnect::Event::operator!=(const Event& rhs) const
+// Checks if two connection events are not equivalent.
+bool WifiConnect::Event::operator!= (const Event& rhs) const
 {
-    return !(*this == rhs);
+    return ! (*this == rhs);
 }
 
-/*
- * Compares two connection Event objects using their event times.
- */
-bool WifiConnect::Event::operator<(const Event& rhs) const
+
+// Compares two connection Event objects using their event times.
+bool WifiConnect::Event::operator< (const Event& rhs) const
 {
     return eventTime.toMilliseconds() < rhs.eventTime.toMilliseconds();
 }
 
-/*
- * Checks if this Event object is null.
- */
+
+// Checks if this Event object is null.
 bool WifiConnect::Event::isNull() const
 {
     return eventType == WifiConnect::EventType::invalid
         || eventAP.isNull() || eventTime.toMilliseconds() == 0;
 }
 
-/*
- * Represents this Event object as a string, usable for debugging.
- */
+
+// Represents this Event object as a string, usable for debugging.
 juce::String WifiConnect::Event::toString() const
 {
-    if(isNull())
+    if (isNull())
     {
         return "Null Event";
     }
 
     juce::String eventString = "AP:[";
-    if(eventAP.isNull())
+    if (eventAP.isNull())
     {
         eventString << "Null AP";
     }
@@ -144,10 +128,7 @@ juce::String WifiConnect::Event::toString() const
         eventString << eventAP.getSSID().toString();
     }
     eventString << "], Type:[" << eventTypeString(eventType)
-                << "], Time:["
-                << eventTime.toString(true, true, true, true)
-                << " ("
-                << juce::String(eventTime.toMilliseconds())
-                << " ms)]";
+                << "], Time:[" << eventTime.toString(true, true, true, true)
+                << " (" << juce::String(eventTime.toMilliseconds()) << " ms)]";
     return eventString;
 }

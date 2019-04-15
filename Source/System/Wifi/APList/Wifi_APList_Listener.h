@@ -2,18 +2,18 @@
 /**
  * @file  Wifi_APList_Listener.h
  *
- * @brief  Provides a basis for classes that should receive updates whenever the
- *         list of visible Wifi access points changes.
+ * @brief  Provides a basis for classes that should receive updates whenever
+ *         the list of visible Wifi access points changes.
  */
 
 #ifndef WIFI_IMPLEMENTATION
-  #define APLIST_LISTENER_IMPLEMENTATION
-  #define WIFI_IMPLEMENTATION
+    #define APLIST_LISTENER_IMPLEMENTATION
+    #define WIFI_IMPLEMENTATION
 #endif
 #include "Wifi_APList_UpdateInterface.h"
 #ifdef APLIST_LISTENER_IMPLEMENTATION
-  #undef APLIST_LISTENER_IMPLEMENTATION
-  #undef WIFI_IMPLEMENTATION
+    #undef APLIST_LISTENER_IMPLEMENTATION
+    #undef WIFI_IMPLEMENTATION
 #endif
 #include "SharedResource_Modular_Handler.h"
 
@@ -37,7 +37,7 @@ public:
     virtual ~Listener() { }
 
     /**
-     * @brief  Gets the list of all visible access points from the access point 
+     * @brief  Gets the list of all visible access points from the access point
      *         list resource.
      *
      * @return  All visible access points.

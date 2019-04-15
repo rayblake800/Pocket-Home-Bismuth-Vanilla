@@ -26,7 +26,7 @@
 #--- Parameters: ---
 # $description: Text to print describing the option.
 #
-# $optionData:  The first parameter to pass to the action command if the user 
+# $optionData:  The first parameter to pass to the action command if the user
 #               selects this option.
 #==============================================================================#
 
@@ -71,15 +71,15 @@ sub new
     my $exitText = shift;
     my $action   = shift;
     my @args     = @_;
-    if(!$title)
+    if (!$title)
     {
         $title = "Select a menu option:";
     }
-    if(!$exitText)
+    if (!$exitText)
     {
         $exitText = "Exit";
     }
-    if(!$action)
+    if (!$action)
     {
         $action = sub
         {
@@ -132,21 +132,21 @@ sub openMenu
     my $self = shift;
     delete($self->{_shouldClose});
     my $input = "";
-    while(!($input =~ /q/))
+    while (! ($input =~ /q/))
     {
-        if(exists($self->{_shouldClose}))
+        if (exists($self->{_shouldClose}))
         {
             return;
         }
         $self->{_refresh}->($self);
-        if(exists($self->{_shouldClose}))
+        if (exists($self->{_shouldClose}))
         {
             return;
         }
         my $infoText = "\n".$self->{_title}."\n";
         my $index = 1;
         my $numOptions = @{$self->{_options}};
-        foreach my $option(@{$self->{_options}})
+        foreach my $option (@{$self->{_options}})
         {
             $infoText = $infoText."$index: ".$option->[0]."\n";
             $index++;
@@ -154,10 +154,10 @@ sub openMenu
         $infoText = $infoText."q: ".$self->{_exitText}."\n";
         print($infoText);
         $input = <STDIN>;
-        if($input =~ /(\d+)/)
+        if ($input =~ /(\d+)/)
         {
             my $index = $1 - 1;
-            if(($index >= 0) && ($index < $numOptions))
+            if ( ($index >= 0) && ($index < $numOptions))
             {
                 my $optionData = $self->{_options}->[$index]->[1];
                 {

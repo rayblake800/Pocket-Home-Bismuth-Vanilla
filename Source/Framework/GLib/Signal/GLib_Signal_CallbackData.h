@@ -16,27 +16,26 @@ namespace GLib
     }
 }
 
-
 /**
- * @brief  Saves a copy of the signal source object and a signal handler pointer
- *         to use as callback data when handling GLib object signals.
+ * @brief  Saves a copy of the signal source object and a signal handler
+ *         pointer to use as callback data when handling GLib object signals.
  *
- * @tparam SourceType  The GLib::Object subclass of the signal source. 
+ * @tparam SourceType  The GLib::Object subclass of the signal source.
  *
  *  Whenever a GObject emits a signal, if a Signal::Handler is connected for
  * that signal type and signal source, a CallbackData object is passed in as an
  * argument to a static callback function provided by the signal hander class.
- * The CallbackData object contains the address of the signal handler, and a 
- * copy of the GLib::Object containing the GObject signal source. The static 
- * callback function should use the CallbackData to call an appropriate signal 
- * handling method on the signal handler, optionally passing in the GLib::Object
- * containing the signal source as a parameter.
+ * The CallbackData object contains the address of the signal handler, and a
+ * copy of the GLib::Object containing the GObject signal source. The static
+ * callback function should use the CallbackData to call an appropriate signal
+ * handling method on the signal handler, optionally passing in the
+ * GLib::Object containing the signal source as a parameter.
  *
  *  Signal handlers must create and provide a new CallbackData object for each
  * connection they have with a signal source. Signal handlers may create and
  * use subclasses of CallbackData to provide additional signal handling data.
  */
-template <class SourceType> 
+template <class SourceType>
 class GLib::Signal::CallbackData
 {
 public:
@@ -67,7 +66,7 @@ public:
     /**
      * @brief  Gets a pointer to the signal handler object.
      *
-     * @return  The signal handler pointer. 
+     * @return  The signal handler pointer.
      */
     Handler<SourceType>* getSignalHandler() const
     {
@@ -75,8 +74,8 @@ public:
     }
 
 private:
-    /* A copy of the GLib::Object signal source container: */
+    // A copy of the GLib::Object signal source container:
     SourceType signalSource;
-    /* A pointer to the Signal::Handler that created this CallbackData: */
+    // A pointer to the Signal::Handler that created this CallbackData:
     Handler<SourceType>* signalHandler;
 };

@@ -4,8 +4,8 @@
 
 #==============================================================================#
 #--- openMenu: ---
-# Displays the namespace menu, repeatedly accepting input and running the menu 
-# action with the selected option parameter until the user enters 'q'.
+# Displays the namespace list menu, repeatedly accepting input and running the
+# menu action with the selected option parameter until the user enters 'q'.
 #--- Parameters: ---
 # $cache: an IDCache object to use for menu options.
 #==============================================================================#
@@ -18,7 +18,7 @@ use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 use NamespaceMenu;
 
-# Displays the namespace list menu, repeatedly accepting input and running the 
+# Displays the namespace list menu, repeatedly accepting input and running the
 # menu action with the selected option parameter until the user enters 'q'.
 sub openMenu
 {
@@ -34,7 +34,7 @@ sub openMenu
         my $menu = shift;
         $menu->clearOptions();
         my @namespaceNames = $cache->getNamespaceNames();
-        foreach my $name(@namespaceNames)
+        foreach my $name (@namespaceNames)
         {
             $menu->addOption($name, $name);
         }

@@ -9,11 +9,11 @@
 namespace Layout { namespace Component { enum class TextSize; } }
 
 /**
- * @brief  Represents the three main text size options.  
+ * @brief  Represents the three main text size options.
  *
- *  The actual size of each of these options is set in layout.json, 
- * either as a fraction of the window height (if textSize <= 1) or as a 
- * fixed height in pixels (if textSize > 1).
+ *  The actual size of each of these options is set in layout.json, either as a
+ * fraction of the window height(if textSize <= 1) or as a fixed height in
+ * pixels(if textSize > 1).
  */
 enum class Layout::Component::TextSize
 {

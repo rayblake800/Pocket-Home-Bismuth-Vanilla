@@ -11,9 +11,9 @@ namespace Locale
 {
     /**
      * @brief  Gets the name of the system locale.
-     * 
+     *
      * @return   The short locale name, used for naming locale text files and
-     *           identifying locale in .desktop files. 
+     *           identifying locale in .desktop files.
      */
     juce::String getLocaleName();
 

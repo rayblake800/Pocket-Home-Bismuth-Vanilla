@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  Widgets_ListEditor.h
- * 
+ *
  * @brief  Provides a UI component used for editing a list of strings.
  */
 
@@ -12,8 +12,8 @@
 namespace Widgets { class ListEditor; }
 
 /**
- * @brief A UI component used for editing a list of strings.
- * 
+ * @brief  A UI component used for editing a list of strings.
+ *
  *  The user can add new strings, edit existing ones by double clicking them,
  * and delete list items. The edited list of strings can then be obtained with
  * getListItems().
@@ -45,7 +45,7 @@ public:
     };
 
     /**
-     * @brief  Gets the number of rows to use within the editor's list 
+     * @brief  Gets the number of rows to use within the editor's list
      *         component.
      *
      * @return  The number of items in the list.
@@ -61,27 +61,27 @@ public:
 
     /**
      * @brief  Sets the contents of the edited list.
-     * 
+     *
      * @param newItems  The new list of strings to edit.
      */
     void setListItems(const juce::StringArray newItems);
 
 private:
     /**
-     * @brief  Calls updateColours whenever component color values are changed. 
+     * @brief  Calls updateColours whenever component colour values are changed.
      */
     void colourChanged() override;
 
     /**
-     * @brief  Sets the colors of child components to match ListEditor colors.
+     * @brief  Sets the colours of child components to match ListEditor colours.
      */
     void updateColours();
 
     /**
      * @brief  Receives notifications when ListItem text is changed.
      *
-     * These changes are then copied back to the appropriate string in the list.
-     * 
+     * These changes will be copied back to the appropriate string in the list.
+     *
      * @param source  The label component holding an updated list value.
      */
     virtual void labelTextChanged(juce::Label* source) override;
@@ -90,9 +90,9 @@ private:
      * @brief  Handles click events for all list items.
      *
      *  Clicking a list box item selects that item's row.
-     * 
+     *
      * @param row         The clicked list item index.
-     * 
+     *
      * @param mouseEvent  Holds more information about the registered event.
      */
     virtual void listBoxItemClicked
@@ -102,9 +102,9 @@ private:
      * @brief  Handles double click events for all list items.
      *
      * Double clicking a list box item makes it editable.
-     * 
+     *
      * @param row         The clicked list item index.
-     * 
+     *
      * @param mouseEvent  Holds more information about the registered event.
      */
     virtual void listBoxItemDoubleClicked
@@ -112,16 +112,16 @@ private:
 
     /**
      * @brief  Removes a row when the delete key is pressed.
-     * 
+     *
      * @param lastRowSelected  The last selected row, which shall be deleted if
      *                         is still within the list bounds.
      */
     virtual void deleteKeyPressed(int lastRowSelected) override;
 
     /**
-     * @brief  Removes a row from the list component along with the 
+     * @brief  Removes a row from the list component along with the
      *         corresponding index in the string list.
-     * 
+     *
      * @param rowNumber  The list row to remove.
      */
     void removeRow(const int rowNumber);
@@ -138,11 +138,11 @@ private:
          *         on construction.
          *
          * @param text   The initial list item text.
-         * 
+         *
          * @param owner  The ListEditor containing this list item.
          */
         ListItemComponent(const juce::String text, ListEditor * owner);
-        
+
         virtual ~ListItemComponent() { }
 
         /**
@@ -162,26 +162,26 @@ private:
         void setDeleteButtonColour(const juce::Colour colour);
 
         /**
-         * @brief  Update the font and delete button to match when the list 
+         * @brief  Update the font and delete button to match when the list
          *         item's bounds change.
          */
         void resized() override;
 
     private:
-        /* The list item's delete button: */
+        // The list item's delete button:
         DrawableImageButton deleteButton;
     };
 
     /**
      * @brief  Creates or recycles a list component to fit a list row.
-     * 
+     *
      * @param rowNumber      The list index that the component should represent.
-     * 
+     *
      * @param isRowSelected  Whether the list row is selected.
-     * 
-     * @param toUpdate       Either an old list component to update, or nullptr 
+     *
+     * @param toUpdate       Either an old list component to update, or nullptr
      *                       if a new component should be created.
-     * 
+     *
      * @return               The created or updated list component.
      */
     virtual juce::Component* refreshComponentForRow(
@@ -193,7 +193,7 @@ private:
      * @brief  Adds the contents of the text editor as a new list item when the
      *         addItem button is clicked, or removes the associated list item
      *         if a delete button is clicked.
-     * 
+     *
      * @param buttonClicked  The button component that was clicked.
      */
     virtual void buttonClicked(juce::Button* buttonClicked) override;
@@ -211,19 +211,19 @@ private:
      */
     virtual void resized() override;
 
-    /* Holds all list strings: */
+    // Holds all list strings:
     juce::StringArray listItems;
 
-    /* Handles the layout of the list and the editor components: */
+    // Handles the layout of the list and the editor components:
     Layout::Group::Manager layoutManager;
 
-    /* Displays all list items: */
+    // Displays all list items:
     juce::ListBox listContainer;
 
-    /* Text field for entering a new list item: */
+    // Text field for entering a new list item:
     juce::TextEditor newItemField;
 
-    /* Adds the contents of newItemField as a new list item when clicked. */
+    // Adds the contents of newItemField as a new list item when clicked.
     juce::TextButton addItemButton;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ListEditor)

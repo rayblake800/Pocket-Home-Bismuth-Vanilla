@@ -1,18 +1,18 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
- * @file Wifi_APList_UpdateInterface.h
+ * @file  Wifi_APList_UpdateInterface.h
  *
  * @brief  The interface used by the Wifi::APList::Module to update all
- *         Wifi::APList::Listener objects when access points are added or 
+ *         Wifi::APList::Listener objects when access points are added or
  *         removed.
  */
 
-namespace Wifi 
-{ 
-    namespace APList { class UpdateInterface; } 
+namespace Wifi
+{
+    namespace APList { class UpdateInterface; }
     class AccessPoint;
 }
 

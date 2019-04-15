@@ -1,6 +1,6 @@
-{  
-    "small text"  : 0.075,  
-    "medium text" : 0.085,  
+{
+    "small text"  : 0.075,
+    "medium text" : 0.085,
     "large text"  : 0.09,
 
     "scrolling app menu": {
@@ -60,7 +60,7 @@
         "y": 0.01,
         "width": 0.085,
         "height": 0.085
-    },  
+    },
     "popup menu": {
         "width": 0.7,
         "height": 0.7

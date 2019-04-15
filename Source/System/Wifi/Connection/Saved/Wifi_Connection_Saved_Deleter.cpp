@@ -6,9 +6,8 @@
 
 Wifi::Connection::Saved::Deleter::Deleter() { }
 
-/*
- * Removes all saved network connections that match a particular access point.
- */
+
+// Removes all saved network connections that match a particular access point.
 void Wifi::Connection::Saved::Deleter::removeSavedConnection
 (const AccessPoint toRemove) const
 {

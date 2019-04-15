@@ -2,18 +2,18 @@
 /**
  * @file  SharedResource_Modular_Module.h
  *
- * @brief  An abstract basis for a classes that handle part of the 
+ * @brief  An abstract basis for a classes that handle part of the
  *         responsibilities of a SharedResource::Modular::Resource object.
  */
 
 #include "SharedResource_Modular_Handler.h"
 #include <functional>
 
-namespace SharedResource { namespace Modular { 
+namespace SharedResource { namespace Modular {
         template<class ResourceType> class Module; } }
 
 /**
- * @brief  Handles a portion of the responsibilities of a Modular::Resource 
+ * @brief  Handles a portion of the responsibilities of a Modular::Resource
  *         object.
  *
  * @tparam ResourceType  The Modular::Resource subclass that owns this Module.
@@ -22,7 +22,7 @@ template<class ResourceType>
 class SharedResource::Modular::Module
 {
 private:
-    /* The resource that owns this module: */
+    // The resource that owns this module:
     ResourceType& parentResource;
 
 protected:
@@ -34,8 +34,8 @@ protected:
     Module(ResourceType& parentResource) : parentResource(parentResource) { }
 
     /**
-     * @brief  Runs a callback function on each of this module's handler objects
-     *         that share a specific class.
+     * @brief  Runs a callback function on each of this module's handler
+     *         objects that share a specific class.
      *
      * @tparam HandlerType   The type of handler that should be acted on.
      *
@@ -67,15 +67,15 @@ protected:
     {
         return parentResource;
     }
-    
+
     /**
-     * @brief  Gets one of the other Module types shared by this Module object's
-     *         resource.
+     * @brief  Gets one of the other Module types shared by this Module
+     *         object's resource.
      *
      * @tparam ModuleType  The type of Module to get from the resource.
      *
-     * @return             A pointer to the Resource object's instance of the 
-     *                     requested module type, or nullptr if the Resource 
+     * @return             A pointer to the Resource object's instance of the
+     *                     requested module type, or nullptr if the Resource
      *                     doesn't have a module of type ModuleType.
      */
     template<class ModuleType>
@@ -83,15 +83,15 @@ protected:
     {
         return parentResource.template getModule<ModuleType>();
     }
-    
+
     /**
-     * @brief  Gets one of the other Module types shared by this Module object's
-     *         resource.
+     * @brief  Gets one of the other Module types shared by this Module
+     *         object's resource.
      *
      * @tparam ModuleType  The type of Module to get from the resource.
      *
      * @return             A constant pointer to the Resource object's instance
-     *                     of the requested module type, or nullptr if the 
+     *                     of the requested module type, or nullptr if the
      *                     Resource doesn't have a module of type ModuleType.
      */
     template<class ModuleType>

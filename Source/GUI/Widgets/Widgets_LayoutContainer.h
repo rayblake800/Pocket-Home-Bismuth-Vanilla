@@ -10,6 +10,10 @@
 
 namespace Widgets { class LayoutContainer; }
 
+/**
+ * @brief  A container Component that displays and arranges a set of child
+ *         components using a Layout::Group::RelativeLayout object.
+ */
 class Widgets::LayoutContainer : public juce::Component
 {
 public:
@@ -22,32 +26,32 @@ public:
      */
     enum ColourIds
     {
-        /* Colour used to fill in the background if no image is set: */
-        backgroundColourId = 0x1900500
+        // Colour used to fill in the background if no image is set:
+        backgroundColourId = 0x1900499
     };
 
     /**
-     * @brief  Sets the layout of the container component.  
+     * @brief  Sets the layout of the container component.
      *
-     *  If the layout was set previously, the old layout will be cleared, and 
+     *  If the layout was set previously, the old layout will be cleared, and
      * its components will be removed.
-     * 
+     *
      * @param layout  Provides the new layout of child components.
      */
     virtual void setLayout(const Layout::Group::RelativeLayout layout);
 
     /**
      * @brief  Sets a background image to draw behind all child components.
-     * 
-     * @param bgImage   The image to draw, or a null Image(). If a null image is
-     *                  used, the background will be filled with the background 
-     *                  color instead of an image.
+     *
+     * @param bgImage   The image to draw, or a null Image(). If a null image
+     *                  is used, the background will be filled with the
+     *                  background colour instead of an image.
      */
     void setBackgroundImage(const juce::Image bgImage);
 
     /**
-     * @brief  Adds all components in the layout to the container and makes them 
-     *         visible.
+     * @brief  Adds all components in the layout to the container and makes
+     *         them visible.
      */
     void addAndShowLayoutComponents();
 
@@ -60,21 +64,21 @@ protected:
 
 private:
     /**
-     * @brief  Updates component layout and back button bounds when the 
+     * @brief  Updates component layout and back button bounds when the
      *         container is resized.
      */
     virtual void resized() override;
 
     /**
-     * @brief  Fills the container background with an image or color.
+     * @brief  Fills the container background with an image or colour.
      *
      * @param graphics  The graphics context used to draw the container.
      */
     virtual void paint(juce::Graphics& graphics) override;
 
-    /* Manages the relative layout of container child components: */
+    // Manages the relative layout of container child components:
     Layout::Group::Manager layoutManager;
 
-    /* Optional container background image: */
+    // Optional container background image:
     juce::Image backgroundImage;
 };

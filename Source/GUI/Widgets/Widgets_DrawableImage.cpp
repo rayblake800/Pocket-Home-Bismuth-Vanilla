@@ -4,16 +4,14 @@
 #include <map>
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Widgets::DrawableImage::";
 #endif
 
-/* Default color values to replace with custom image colors: */
+// Default colour values to replace with custom image colours:
 static juce::Array<juce::Colour> defaultColours;
 
-/*
- * Creates a DrawableImage using an image file path.
- */
+// Creates a DrawableImage using an image file path.
 Widgets::DrawableImage::DrawableImage
 (const juce::String assetFilename, const juce::RectanglePlacement placement) :
 DrawableImage(placement)
@@ -21,9 +19,8 @@ DrawableImage(placement)
     setImage(assetFilename);
 }
 
-/*
- * Creates a DrawableImage using an image file.
- */
+
+// Creates a DrawableImage using an image file.
 Widgets::DrawableImage::DrawableImage
 (const juce::File imageFile, const juce::RectanglePlacement placement) :
 DrawableImage(placement)
@@ -31,9 +28,8 @@ DrawableImage(placement)
     setImage(imageFile);
 }
 
-/*
- * Creates a DrawableImage using an image object.
- */
+
+// Creates a DrawableImage using an image object.
 Widgets::DrawableImage::DrawableImage
 (const juce::Image image, const juce::RectanglePlacement placement) :
 DrawableImage(placement)
@@ -41,9 +37,8 @@ DrawableImage(placement)
     setImage(image);
 }
 
-/*
- * Creates DrawableImage using a Drawable object.
- */
+
+// Creates DrawableImage using a Drawable object.
 Widgets::DrawableImage::DrawableImage
 (juce::Drawable* drawable, const juce::RectanglePlacement placement) :
 DrawableImage(placement)
@@ -51,9 +46,8 @@ DrawableImage(placement)
     setImage(drawable);
 }
 
-/*
- * Creates a DrawableImage without an initial image.
- */
+
+// Creates a DrawableImage without an initial image.
 Widgets::DrawableImage::DrawableImage
 (const juce::RectanglePlacement placement) :
 placement(placement)
@@ -62,28 +56,26 @@ placement(placement)
     setName("Widgets::DrawableImage");
 #    endif
     setInterceptsMouseClicks(false, false);
-    if(defaultColours.isEmpty())
+    if (defaultColours.isEmpty())
     {
         Theme::Colour::ConfigFile colourConfig;
-        defaultColours.add(colourConfig.getColour((int) imageColour0Id));
-        defaultColours.add(colourConfig.getColour((int) imageColour1Id));
-        defaultColours.add(colourConfig.getColour((int) imageColour2Id));
-        defaultColours.add(colourConfig.getColour((int) imageColour3Id));
-        defaultColours.add(colourConfig.getColour((int) imageColour4Id));
+        defaultColours.add(colourConfig.getColour( (int) imageColour0Id));
+        defaultColours.add(colourConfig.getColour( (int) imageColour1Id));
+        defaultColours.add(colourConfig.getColour( (int) imageColour2Id));
+        defaultColours.add(colourConfig.getColour( (int) imageColour3Id));
+        defaultColours.add(colourConfig.getColour( (int) imageColour4Id));
     }
 }
 
-/*
- * Changes the image drawn by this component.
- */
+
+// Changes the image drawn by this component.
 void Widgets::DrawableImage::setImage(const juce::String assetFilename)
 {
     setImage(Assets::findAssetFile(assetFilename));
 }
 
-/*
- * Changes the image drawn by this component.
- */
+
+// Changes the image drawn by this component.
 void Widgets::DrawableImage::setImage(const juce::File imageFile)
 {
     if (imageFile.existsAsFile())
@@ -106,9 +98,8 @@ void Widgets::DrawableImage::setImage(const juce::File imageFile)
     }
 }
 
-/*
- * Changes the image drawn by this component.
- */
+
+// Changes the image drawn by this component.
 void Widgets::DrawableImage::setImage(const juce::Image image)
 {
     juce::DrawableImage * drawable = new juce::DrawableImage();
@@ -117,59 +108,54 @@ void Widgets::DrawableImage::setImage(const juce::Image image)
     initImage();
 }
 
-/*
- * Changes the image drawn by this component.
- */
+
+// Changes the image drawn by this component.
 void Widgets::DrawableImage::setImage(juce::Drawable* drawable)
 {
     imageDrawable.reset(drawable);
     initImage();
 }
- 
-/*
- * Checks if an image is set for this component.
- */
+
+
+// Checks if an image is set for this component.
 bool Widgets::DrawableImage::hasImage()
 {
     return imageDrawable != nullptr && !imageDrawable->getBounds().isEmpty();
 }
 
-/*
- * Checks if an image is set for this component.
- */
+
+// Checks if an image is set for this component.
 bool Widgets::DrawableImage::isEmpty()
 {
     return !hasImage();
 }
 
-/*
- * Reloads the image and applies the new colour values.
- */
+
+// Reloads the image and applies the new colour values.
 void Widgets::DrawableImage::colourChanged()
 {
-    if(imageSource.existsAsFile())
+    if (imageSource.existsAsFile())
     {
         setImage(imageSource);
     }
 }
 
-/*
- * Adjusts image size and placement whenever component size changes.
- */
+
+// Adjusts image size and placement whenever component size changes.
 void Widgets::DrawableImage::resized()
 {
-    if(imageDrawable != nullptr)
+    if (imageDrawable != nullptr)
     {
-        imageDrawable->setTransformToFit(getLocalBounds().toFloat(), placement);
+        imageDrawable->setTransformToFit(getLocalBounds().toFloat(),
+                placement);
     }
 }
 
-/*
- * Sets the initial image colors and scale.
- */
+
+// Sets the initial image colours and scale.
 void Widgets::DrawableImage::initImage()
 {
-    if(imageDrawable == nullptr)
+    if (imageDrawable == nullptr)
     {
         return;
     }
@@ -183,13 +169,13 @@ void Widgets::DrawableImage::initImage()
     for (int i = 0; i < defaultColours.size(); i++)
     {
         juce::Colour newColour = findColour(imageColour0Id + i);
-        if(!replacementFound && newColour != defaultColours[i])
+        if (!replacementFound && newColour != defaultColours[i])
         {
             replacementFound = true;
         }
         imageColours.add(newColour);
     }
-    if(!replacementFound)
+    if (!replacementFound)
     {
         return;  // No colours changed, no other actions are needed.
     }
@@ -200,29 +186,28 @@ void Widgets::DrawableImage::initImage()
     for (int i = 0; i < defaultColours.size(); i++)
     {
         const int colourId = imageColour0Id + i;
-        /*  Let i and j be colour indices where j > i. If colour[i] is changing 
-         * from a to b, and colour[j] is changing from b to c, set colour[i] to 
-         * some temporary value so that in the end we get colour[i] = b,
-         * colour[j] = c and not colour[i] = c,  colour[j] = c 
-         * (unless b equals c).
-         *
-         * TLDR: Prevent conflicts if one of the new colours is also a default
-         *       colour.
-         */
+        //  Let i and j be colour indices where j > i. If colour[i] is changing
+        // from a to b, and colour[j] is changing from b to c, set colour[i] to
+        // some temporary value so that in the end we get colour[i] = b,
+        // colour[j] = c and not colour[i] = c,  colour[j] = c
+        // (unless b equals c).
+
+        // TLDR: Prevent conflicts if one of the new colours is also a default
+        //       colour.
         const int existingIndex = defaultColours.indexOf(imageColours[i]);
         if (existingIndex < i)
         {
-            // Color conflict doesn't exist, or involves a color that has
+            //  Colour conflict doesn't exist, or involves a colour that has
             // already been changed, so direct replacement is possible.
             imageDrawable->replaceColour(defaultColours[i], imageColours[i]);
         }
         else if (existingIndex > i)
         {
-            // Color conflict exists, replace the color with a temporary color
-            // that's not already used.
+            //  Colour conflict exists, replace the colour with a temporary
+            //  colour that's not already in use.
             Colour tempColour = juce::Colour(0x0);
-            while(defaultColours.contains(tempColour) 
-                    || imageColours.contains(tempColour) 
+            while (defaultColours.contains(tempColour)
+                    || imageColours.contains(tempColour)
                     || tempColours.count(tempColour.getARGB()) != 0)
             {
                 tempColour = Colour(tempColour.getARGB() + 1);
@@ -230,10 +215,11 @@ void Widgets::DrawableImage::initImage()
             tempColours[tempColour.getARGB()] = imageColours[i].getARGB();
             imageDrawable->replaceColour(defaultColours[i], tempColour);
         }
-        // If existingIndex == i, the color doesn't change, so no action needed.
+        // If existingIndex == i, the colour doesn't change, so no action is
+        // needed.
     }
-    // Temporary colors can now be safely replaced with their actual values.
-    for(auto it = tempColours.begin(); it != tempColours.end(); it++)
+    // Temporary colours can now be safely replaced with their actual values.
+    for (auto it = tempColours.begin(); it != tempColours.end(); it++)
     {
         imageDrawable->replaceColour(Colour(it->first), Colour(it->second));
     }

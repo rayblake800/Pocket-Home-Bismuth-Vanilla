@@ -7,75 +7,69 @@
 #include <nm-setting-wireless.h>
 #include <nm-setting-wireless-security.h>
 
-/* The NetworkManager's DBus path: */
+// The NetworkManager's DBus path:
 static const constexpr char * busName = "org.freedesktop.NetworkManager";
-/* SavedConnection's DBus interface name: */
-static const constexpr char * interfaceName 
+// SavedConnection's DBus interface name:
+static const constexpr char * interfaceName
         = "org.freedesktop.NetworkManager.Settings.Connection";
 
-/* DBus getSettings method key: */
+// DBus getSettings method key:
 static const constexpr char * getSettingsMethod = "GetSettings";
-/* DBus getSecrets method key: */
+// DBus getSecrets method key:
 static const constexpr char * getSecretsMethod = "GetSecrets";
 
-/* DBus delete method key: */
+// DBus delete method key:
 static const constexpr char * deleteConnectionMethod = "Delete";
-/* DBus update method key: */
+// DBus update method key:
 static const constexpr char * updateMethod = "Update";
 
 namespace NMDBus = Wifi::LibNM::DBus;
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before debug messages: */
-static const constexpr char* dbgPrefix = "Wifi::LibNM::DBus::SavedConnection::";
+// Print the full class name before debug messages:
+static const constexpr char* dbgPrefix
+        = "Wifi::LibNM::DBus::SavedConnection::";
 #endif
 
-/*
- * Creates an empty object with no linked connection.
- */
+// Creates an empty object with no linked connection.
 NMDBus::SavedConnection::SavedConnection() :
-GLib::DBus::Proxy(nullptr, nullptr, nullptr) { } 
+GLib::DBus::Proxy(nullptr, nullptr, nullptr) { }
 
-/*
- * Initializes a SavedConnection from a DBus connection path.
- */ 
+
+// Initializes a SavedConnection from a DBus connection path.
 NMDBus::SavedConnection::SavedConnection(const char * path) :
 GLib::DBus::Proxy(busName, path, interfaceName), path(path) { }
 
-/*
- * Gets the connection's DBus path.
- */
+
+// Gets the connection's DBus path.
 const juce::String& NMDBus::SavedConnection::getPath() const
 {
     return path;
 }
 
-/*
- * Checks if this connection is a wifi connection.
- */
+
+// Checks if this connection is a wifi connection.
 bool NMDBus::SavedConnection::isWifiConnection() const
 {
-    if(isNull())
+    if (isNull())
     {
         return false;
     }
     return hasSetting(NM_SETTING_WIRELESS_SETTING_NAME);
 }
 
-/*
- * Gets the NMConnection object generated from this connection's data.
- */
-Wifi::LibNM::Connection 
-NMDBus::SavedConnection::getNMConnection()
+
+// Gets the NMConnection object generated from this connection's data.
+Wifi::LibNM::Connection NMDBus::SavedConnection::getNMConnection()
 {
     Connection nmConnection;
-    if(isNull())
+    if (isNull())
     {
         return nmConnection;
     }
     using juce::String;
     using namespace GLib::VariantConverter;
-    nmConnection = nm_connection_new(); 
+    nmConnection = nm_connection_new();
     nmConnection.setPath(path.toRawUTF8());
     GVariant* settings = callMethod(getSettingsMethod);
     if (settings == nullptr)
@@ -83,20 +77,20 @@ NMDBus::SavedConnection::getNMConnection()
         return nmConnection;
     }
     NMSetting* nmSetting = nullptr;
-    
+
     // Iterates through all properties of a settings object:
-    std::function<void(GVariant*, GVariant*) > copyDict 
-            = [this, &nmSetting](GVariant* key, GVariant * val)
+    std::function<void(GVariant*, GVariant*) > copyDict
+            = [this, &nmSetting] (GVariant* key, GVariant * val)
     {
         String keyStr = getValue<String>(key);
         if (keyStr.isNotEmpty())
         {
-            /* Most data types packaged as GValue data can be directly added to
-             * the GObject as new properties, but byte arrays need to be
-             * extracted from the GValue as a GByteArray. */
-            if(getGType(val) == G_TYPE_BYTE_ARRAY)
+            // Most data types packaged as GValue data can be directly added to
+            // the GObject as new properties, but byte arrays need to be
+            // extracted from the GValue as a GByteArray.
+            if (getGType(val) == G_TYPE_BYTE_ARRAY)
             {
-                GByteArray* byteArray = getValue<GByteArray*>(val);
+                GByteArray* byteArray = getValue<GByteArray*> (val);
                 g_object_set(G_OBJECT(nmSetting),
                         keyStr.toRawUTF8(),
                         byteArray,
@@ -106,20 +100,20 @@ NMDBus::SavedConnection::getNMConnection()
             else
             {
                 GValue propValue = getGValue(val);
-                g_object_set_property(G_OBJECT(nmSetting), 
+                g_object_set_property(G_OBJECT(nmSetting),
                         keyStr.toRawUTF8(), &propValue);
             }
         }
     };
 
-    /* Iterates through all connection settings objects: */
-    std::function<void(GVariant*, GVariant*) > copySetting 
+    // Iterates through all connection settings objects:
+    std::function<void(GVariant*, GVariant*) > copySetting
             = [this, &nmSetting, &nmConnection, &copyDict]
             (GVariant* key, GVariant * val)
     {
-        /* If the settings data corresponds to a supported NMSetting type,
-         * create an appropriate NMSetting object, copy the settings data into
-         * it, and add the NMSetting object to the NMConnection. */
+        // If the settings data corresponds to a supported NMSetting type,
+        // create an appropriate NMSetting object, copy the settings data into
+        // it, and add the NMSetting object to the NMConnection.
         String keyStr = getValue<String>(key);
         if (keyStr == NM_SETTING_CONNECTION_SETTING_NAME)
         {
@@ -133,7 +127,7 @@ NMDBus::SavedConnection::getNMConnection()
         {
             nmSetting = nm_setting_wireless_security_new();
         }
-        
+
         if (nmSetting != nullptr)
         {
             iterateDict(val, copyDict);
@@ -146,34 +140,33 @@ NMDBus::SavedConnection::getNMConnection()
     iterateDict(settings, copySetting);
     return nmConnection;
 }
- 
-/*
- * Gets the last recorded time this saved connection was active.
- */
+
+
+// Gets the last recorded time this saved connection was active.
 juce::Time NMDBus::SavedConnection::lastConnectionTime() const
-{ 
+{
     juce::Time lastTime;
-    if(!isNull())
+    if (!isNull())
     {
-        GVariant* timestamp = getSettingProp(NM_SETTING_CONNECTION_SETTING_NAME,
+        GVariant* timestamp = getSettingProp(
+                NM_SETTING_CONNECTION_SETTING_NAME,
                 NM_SETTING_CONNECTION_TIMESTAMP);
-        if(timestamp != nullptr)
+        if (timestamp != nullptr)
         {
-	        lastTime = juce::Time(1000 
-                    * GLib::VariantConverter::getValue<juce::uint64> 
-                        (timestamp));
+            juce::uint64 savedTime
+                    = GLib::VariantConverter::getValue<juce::uint64>(timestamp);
+            lastTime = juce::Time(savedTime * 1000);
             g_variant_unref(timestamp);
         }
     }
     return lastTime;
 }
 
-/*
- * Checks if the connection has a saved wireless security key.
- */
+
+// Checks if the connection has a saved wireless security key.
 bool NMDBus::SavedConnection::hasSavedKey() const
 {
-    if(isNull())
+    if (isNull())
     {
         return false;
     }
@@ -191,27 +184,27 @@ bool NMDBus::SavedConnection::hasSavedKey() const
                 (secrets, NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, nullptr);
         if (securitySecrets != nullptr)
         {
-            juce::Array<const char*> keyTypes = 
+            juce::Array<const char*> keyTypes =
             {
                 NM_SETTING_WIRELESS_SECURITY_PSK,
                 NM_SETTING_WIRELESS_SECURITY_WEP_KEY0,
                 NM_SETTING_WIRELESS_SECURITY_WEP_KEY1,
                 NM_SETTING_WIRELESS_SECURITY_WEP_KEY2,
-                NM_SETTING_WIRELESS_SECURITY_WEP_KEY3          
+                NM_SETTING_WIRELESS_SECURITY_WEP_KEY3
             };
-            for(const char* keyType : keyTypes)
+            for (const char* keyType : keyTypes)
             {
                 GVariant* keyVal = g_variant_lookup_value(securitySecrets,
                         keyType, nullptr);
-                if(keyVal != nullptr)
+                if (keyVal != nullptr)
                 {
                     String keyString = getValue<String>(keyVal);
                     g_variant_unref(keyVal);
-                    if(keyString.isNotEmpty())
+                    if (keyString.isNotEmpty())
                     {
                         keyFound = true;
                         break;
-                    }             
+                    }
                 }
             }
             g_variant_unref(securitySecrets);
@@ -220,22 +213,20 @@ bool NMDBus::SavedConnection::hasSavedKey() const
         g_variant_unref(secrets);
         secrets = nullptr;
     }
-    if(secretsError != nullptr)
+    if (secretsError != nullptr)
     {
-        DBG(dbgPrefix << __func__ 
-                << ": Reading secrets failed, error="
+        DBG(dbgPrefix << __func__ << ": Reading secrets failed, error="
                 << secretsError->message);
         g_clear_error(&secretsError);
     }
     return keyFound;
 }
 
-/*
- * Deletes this connection from the list of saved connections.
- */
+
+// Deletes this connection from the list of saved connections.
 void NMDBus::SavedConnection::deleteConnection()
 {
-    if(!isNull())
+    if (!isNull())
     {
         callMethod(deleteConnectionMethod);
         clearGObject();
@@ -243,29 +234,26 @@ void NMDBus::SavedConnection::deleteConnection()
     }
 }
 
-/*
- * Compares SavedConnections using their connection paths.
- */
+
+// Compares SavedConnections using their connection paths.
 bool NMDBus::SavedConnection::operator==
         (const SavedConnection& rhs) const
 {
     return path == rhs.path;
 }
 
-/*
- * Compares SavedConnections with NMConnections using their connection paths.
- */
-bool NMDBus::SavedConnection::operator==(NMConnection* rhs) const
+
+// Compares SavedConnections with NMConnections using their connection paths.
+bool NMDBus::SavedConnection::operator== (NMConnection* rhs) const
 {
     return path == juce::String(nm_connection_get_path(rhs));
 }
 
-/*
- * Returns one of this connection's settings objects.
- */
+
+// Returns one of this connection's settings objects.
 GVariant* NMDBus::SavedConnection::getSetting(const char* name) const
-{  
-    if(isNull())
+{
+    if (isNull())
     {
         return nullptr;
     }
@@ -280,13 +268,12 @@ GVariant* NMDBus::SavedConnection::getSetting(const char* name) const
     return setting;
 }
 
-/*
- * Returns the value of a specific settings object property.
- */
+
+// Returns the value of a specific settings object property.
 GVariant* NMDBus::SavedConnection::getSettingProp
 (const char* settingName, const char* propName) const
-{  
-    if(isNull())
+{
+    if (isNull())
     {
         return nullptr;
     }
@@ -301,13 +288,12 @@ GVariant* NMDBus::SavedConnection::getSettingProp
     return property;
 }
 
-/*
- * Returns the value of a specific settings object property.
- */
+
+// Returns the value of a specific settings object property.
 GVariant* NMDBus::SavedConnection::getSettingProp
 (GVariant* settingsObject, const char* propName) const
 {
-    if(isNull())
+    if (isNull())
     {
         return nullptr;
     }
@@ -316,14 +302,13 @@ GVariant* NMDBus::SavedConnection::getSettingProp
     return property;
 }
 
-/*
- * Checks if this connection has a particular setting type.
- */
+
+// Checks if this connection has a particular setting type.
 bool NMDBus::SavedConnection::hasSetting(const char* settingName) const
 {
     using namespace juce;
     bool settingFound = false;
-    if(!isNull())
+    if (!isNull())
     {
         GVariant* setting = getSetting(settingName);
         if (setting != nullptr)
@@ -335,14 +320,13 @@ bool NMDBus::SavedConnection::hasSetting(const char* settingName) const
     return settingFound;
 }
 
-/*
- * Checks if this connection has a specific settings property in a specific 
- * settings type.
- */
+
+// Checks if this connection has a specific settings property in a specific
+// settings type.
 bool NMDBus::SavedConnection::hasSettingProperty(const char* settingName,
         const char* propName) const
 {
-    if(isNull())
+    if (isNull())
     {
         return false;
     }

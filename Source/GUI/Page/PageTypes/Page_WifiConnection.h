@@ -34,6 +34,6 @@ private:
      */
     virtual bool overrideBackButton() override;
 
-    /* The list component used to view and control possible connections: */
+    // The list component used to view and control possible connections:
     Settings::WifiList::ListComponent connectionList;
 };

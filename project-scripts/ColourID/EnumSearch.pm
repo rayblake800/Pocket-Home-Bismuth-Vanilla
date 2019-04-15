@@ -53,7 +53,7 @@ sub extractColourEnums
     my $namespace = shift;
     my $text = shift;
     my @enums = ($text =~ /enum\s+ColourIds\s*\{.*?\}/gs);
-    for(my $i = 0; $i < (scalar @enums); $i++)
+    for (my $i = 0; $i < (scalar @enums); $i++)
     {
         $enums[$i] = new ColourEnum($namespace, $enums[$i]);
     }
@@ -65,13 +65,13 @@ sub extractColourEnums
 sub fileToNamespaceName
 {
     my $filename = shift;
-    $filename =~ s/juce(r)?//g;
+    $filename =~ s/juce (r)?//g;
     $filename =~ s/.*\///g;
     $filename =~ s/\.h$//g;
-    for(my $i = 0; $i < (length($filename) - 1); $i++)
+    for (my $i = 0; $i < (length($filename) - 1); $i++)
     {
         my $char = substr($filename, $i, 1);
-        if($char eq "_")
+        if ($char eq "_")
         {
             $filename = substr($filename, 0, $i).uc($char)
                     .substr($filename, $i + 1);
@@ -89,7 +89,7 @@ sub findEnums
     my $headerSearch = sub
     {
         my $filename = $File::Find::name;
-        if($filename && $filename =~ /.*\.h$/)
+        if ($filename && $filename =~ /.*\.h$/)
         {
             my $namespace = fileToNamespaceName($filename);
             my $headerFile = read_file($filename);

@@ -3,16 +3,14 @@
 #include "Util_TempTimer.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Page::StackComponent::";
 #endif
 
-/* Page transition animation duration in milliseconds: */
+// Page transition animation duration in milliseconds:
 static const constexpr int transitionDurationMS = 300;
 
-/*
- * Sets the juce::Component properties of the StackComponent.
- */
+// Sets the juce::Component properties of the StackComponent.
 Page::StackComponent::StackComponent()
 {
 #if JUCE_DEBUG
@@ -22,21 +20,19 @@ Page::StackComponent::StackComponent()
     setWantsKeyboardFocus(false);
 }
 
-/*
- * Sets the root page on the page stack.
- */
+
+// Sets the root page on the page stack.
 void Page::StackComponent::setRootPage(Interface::Component* page)
 {
-    if(page != nullptr && stack.isEmpty())
+    if (page != nullptr && stack.isEmpty())
     {
         pushPage(page, Layout::Transition::Type::none);
     }
 }
 
-/*
- * Pushes a new PageComponent on top of the stack, optionally animating
- * the transition. 
- */
+
+// Pushes a new PageComponent on top of the stack, optionally animating the
+// transition.
 void Page::StackComponent::pushPage(Interface::Component* page,
         const Layout::Transition::Type transition)
 {
@@ -47,18 +43,16 @@ void Page::StackComponent::pushPage(Interface::Component* page,
     transitionPage(page, transition, transitionDurationMS);
 }
 
-/*
- * Removes the top page from the stack, optionally animating the transition.  
- * This will not remove the last page from the stack.
- */
+
+// Removes the top page from the stack, optionally animating the transition.
+// This will not remove the last page from the stack.
 void Page::StackComponent::popPage(const Layout::Transition::Type transition)
 {
     if (stack.size() > 1)
     {
         Interface::Component* page = stack.getLast();
-        page->setEnabled(false);
         transitionPage(page, transition, transitionDurationMS,
-        [this](Interface::Component * page)
+        [this] (Interface::Component * page)
         {
             removeChildComponent(page);
             stack.removeObject(page);
@@ -67,28 +61,25 @@ void Page::StackComponent::popPage(const Layout::Transition::Type transition)
     }
 }
 
-/*
- * Checks if a page is the top page on the stack.
- */
+
+// Checks if a page is the top page on the stack.
 bool Page::StackComponent::isTopPage(const Interface::Component* page)
 {
     return page == stack.getLast();
 }
 
-/*
- * Sets all page component bounds to match the page stack component.
- */
+
+// Sets all page component bounds to match the page stack component.
 void Page::StackComponent::resized()
 {
-    for(Interface::Component* page : stack)
+    for (Interface::Component* page : stack)
     {
         page->setBounds(getBounds());
     }
 }
 
-/*
- * Animates a page as it is added to or removed from the stack.
- */
+
+// Animates a page as it is added to or removed from the stack.
 void Page::StackComponent::transitionPage(Interface::Component* page,
         const Layout::Transition::Type transition,
         const int duration,
@@ -100,7 +91,7 @@ void Page::StackComponent::transitionPage(Interface::Component* page,
         addAndMakeVisible(page);
     }
     page->setEnabled(false);
-    if(addingPage)
+    if (addingPage)
     {
         Layout::Transition::Animator::transitionIn(page, transition,
                 getLocalBounds(), duration);

@@ -1,40 +1,36 @@
 #include "Windows_FocusedTimer.h"
 
-/*
- * Stops the timer if it is active, or cancels it if it is suspended.
- */
+// Stops the timer if it is active, or cancels it if it is suspended.
 void Windows::FocusedTimer::stopTimer()
 {
     juce::Timer::stopTimer();
     suspendedEndTime = 0;
 }
 
-/*
- * Starts the timer, setting the amount of time until the timer's callback 
- * method will run. 
- */
+
+// Starts the timer, setting the amount of time until the timer's callback
+// method will run.
 void Windows::FocusedTimer::startTimer(const int timerMilliseconds)
 {
-    if(getFocusState())
+    if (getFocusState())
     {
         Timer::startTimer(timerMilliseconds);
     }
     else
-    {   
-        suspendedEndTime = juce::Time::getMillisecondCounter() 
+    {
+        suspendedEndTime = juce::Time::getMillisecondCounter()
                 + timerMilliseconds;
         onSuspend();
     }
 }
 
-/*
- * Suspends the timer when the window loses focus.
- */
+
+// Suspends the timer when the window loses focus.
 void Windows::FocusedTimer::windowFocusLost()
 {
     if (isTimerRunning())
     {
-        juce::uint32 endTime = juce::Time::getMillisecondCounter() 
+        juce::uint32 endTime = juce::Time::getMillisecondCounter()
                 + getTimerInterval();
         stopTimer();
         suspendedEndTime = endTime;
@@ -42,15 +38,14 @@ void Windows::FocusedTimer::windowFocusLost()
     }
 }
 
-/*
- * Resumes the timer when the window gains focus.
- */
+
+// Resumes the timer when the window gains focus.
 void Windows::FocusedTimer::windowFocusGained()
 {
     if (suspendedEndTime > 0)
     {
         const juce::uint32 now = juce::Time::getMillisecondCounter();
-        if(now > suspendedEndTime)
+        if (now > suspendedEndTime)
         {
             timerCallback();
         }

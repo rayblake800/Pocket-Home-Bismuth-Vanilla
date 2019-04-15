@@ -1,11 +1,11 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
  * @file  AppMenu_Paged_InputHandler.h
  *
- * @brief  Handles input events for a paged AppMenu.
+ * @brief  Handles input events for a Paged AppMenu.
  */
 
 #include "AppMenu_InputHandler.h"
@@ -14,10 +14,14 @@ namespace AppMenu { namespace Paged { class InputHandler; } }
 namespace AppMenu { namespace Paged { class MenuComponent; } }
 namespace AppMenu { namespace Paged { class FolderComponent; } }
 
-/*/
+
+/**
+ * @brief  Reads user input, controlling how input events will affect the Paged
+ *         AppMenu format.
+ *
  *  The Paged::InputHandler's primary task is handling key events, determining
  * what index to select next based on the active folder page, the dimensions of
- * the folder page grid, and the position of the current selected menu item.  
+ * the folder page grid, and the position of the current selected menu item.
  * It also handles button events from the Paged::MenuComponent's navigation
  * buttons, changing the visible folder page when the left and right navigation
  * buttons are clicked, and closing the last opened FolderComponent when the up
@@ -51,7 +55,7 @@ private:
      */
     virtual bool keyPressed(const AppMenu::InputHandler::KeyType keyType)
         final override;
-    
+
     /**
      * @brief  Handles button click events from the folder navigation buttons.
      *

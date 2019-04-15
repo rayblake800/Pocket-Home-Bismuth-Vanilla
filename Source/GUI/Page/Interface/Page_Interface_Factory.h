@@ -5,12 +5,12 @@
  * @brief  Allows individual page components to create new pages.
  */
 
-namespace Page 
-{ 
-    namespace Interface 
-    { 
-        class Factory; 
-    } 
+namespace Page
+{
+    namespace Interface
+    {
+        class Factory;
+    }
     class Component;
     enum class Type;
 }
@@ -30,7 +30,7 @@ protected:
 
     /**
      * @brief  Creates a new page to push on top of the page stack.
-     * 
+     *
      * @param PageType  The type of page to create.
      */
     virtual Component* createPage(const Type pageType) = 0;

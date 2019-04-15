@@ -1,13 +1,13 @@
 #include "Page_InputSettings.h"
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "Page::InputSettings";
 
-/* Localized text value keys: */
+// Localized text value keys:
 static const juce::Identifier inputSettingsTextKey = "inputSettings";
 static const juce::Identifier showCursorTextKey    = "showCursor";
 
-/* Page layout constants: */
+// Page layout constants:
 static const constexpr int titleRowWeight     = 20;
 static const constexpr int cursorRowWeight    = 10;
 static const constexpr int gapRowWeight       = 30;
@@ -20,9 +20,7 @@ static const constexpr int xPaddingWeight = 1;
 
 static const constexpr float yMarginFraction = 0.06;
 
-/*
- * Loads the page layout on construction.
- */
+// Loads the page layout on construction.
 Page::InputSettings::InputSettings() : Locale::TextUser(localeClassKey)
 {
 #if JUCE_DEBUG

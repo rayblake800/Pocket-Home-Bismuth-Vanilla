@@ -17,7 +17,7 @@ The Configurable Component layout submodule defines the positions of individual 
 ConfigLayout holds the position and size of a single UI component. Positions and sizes are relative to the dimensions of the application window. Width and x-coordinate are stored as fractions of the window's width, and height and y-coordinate are stored as fractions of the window's height.
 
 #### [Layout\::Component\::Manager](../../Source/Framework/Layout/Component/Layout_Component_Manager.h)
-Manager objects store a juce\::Component pointer and a ConfigLayout object loaded from the config file. The Manager will apply the layout to the Component on request, or allow the layout to be viewed directly. 
+Manager objects store a juce\::Component pointer and a ConfigLayout object loaded from the config file. The Manager will apply the layout to the Component on request, or allow the layout to be viewed directly.
 
 #### [Layout\::Component\::ConfigFile](../../Source/Framework/Layout/Component/Layout_Component_ConfigFile.h)
 ConfigFile objects share access to the component layout JSON file resource. They are used to load specific component layout objects, and to calculate ideal font heights using  the configurable font heights saved in the JSON file.

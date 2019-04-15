@@ -8,7 +8,7 @@ OBJECTS_PASSWORD := \
   $(PASSWORD_OBJ)Password.o \
   $(PASSWORD_OBJ)UpdateController.o \
   $(PASSWORD_OBJ)RemovalController.o \
-  $(PASSWORD_OBJ)LoginScreen.o 
+  $(PASSWORD_OBJ)LoginScreen.o
 
 OBJECTS_PASSWORD_TEST :=
 

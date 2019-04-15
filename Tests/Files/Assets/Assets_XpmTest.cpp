@@ -5,13 +5,13 @@
 #include "JuceHeader.h"
 #include <X11/xpm.h>
 
-/* Test window bounds: */
+// Test window bounds:
 static const constexpr int winX = 5;
 static const constexpr int winY = 5;
 static const constexpr int winWidth = 480;
 static const constexpr int winHeight = 272;
 
-/* Test file paths: */
+// Test file paths:
 static const juce::StringArray testFiles =
 {
     "testing/XPM/test1.xpm",
@@ -21,31 +21,34 @@ static const juce::StringArray testFiles =
 
 namespace Assets { class XpmTest; }
 
+/**
+ * @brief  Tests loading images with the .xpm image format using
+ *         Assets::xpmImage.
+ */
 class Assets::XpmTest : public juce::UnitTest
 {
 public:
     XpmTest() : juce::UnitTest("xpm Image Testing",
             "Assets") {}
 
-    
+
     void runTest() override
     {
         beginTest("Displaying xpm images");
 
         int testIndex = 0;
-        for(const juce::String& assetPath : testFiles)
+        for (const juce::String& assetPath : testFiles)
         {
             juce::File assetFile(findAssetFile(assetPath, false));
             expect(assetFile.existsAsFile(), assetPath + " not found!");
             juce::Image xpmImage = Assets::XPMLoader::loadXPMImage(assetFile);
             expect(xpmImage.isValid(), assetPath
                     + " not loaded as a valid image.");
-            Widgets::DrawableImage* drawnImage 
+            Widgets::DrawableImage* drawnImage
                     = new Widgets::DrawableImage(xpmImage);
-            Testing::Window imageWindow("XPM Testing", drawnImage, winX, winY, 
+            Testing::Window imageWindow("XPM Testing", drawnImage, winX, winY,
                     winWidth, winHeight);
-            juce::MessageManager::getInstance()->runDispatchLoopUntil
-                (5000);
+            juce::MessageManager::getInstance()->runDispatchLoopUntil(5000);
         }
 
     }

@@ -17,8 +17,8 @@ namespace AppMenu { class SettingsController; }
  * @brief  Configures a set of UI components so they can be used to change
  *         AppMenu behavior.
  *
- *  The SettingsController object controls UI components that allow the user to 
- * select the AppMenu format, and change the maximum number of applications the 
+ *  The SettingsController object controls UI components that allow the user to
+ * select the AppMenu format, and change the maximum number of applications the
  * AppMenu shows on screen. It updates these components to reflect the current
  * settings, and updates the settings with changes made through its components.
  */
@@ -29,13 +29,13 @@ public:
     /**
      * @brief  Connects the controller to the components it will control.
      *
-     * @param menuFormatLabel   The label used to identify the menu format 
+     * @param menuFormatLabel   The label used to identify the menu format
      *                          selection box.
      *
      * @param menuFormatPicker  The component used to select the active AppMenu
      *                          format.
      *
-     * @param columnCountLabel  The label used to identify the column count 
+     * @param columnCountLabel  The label used to identify the column count
      *                          editor.
      *
      * @param columnCounter     The component used to select the maximum number
@@ -69,7 +69,7 @@ public:
 
 private:
     /**
-     * @brief  Updates counter components when the format selection box changes. 
+     * @brief  Updates counter components when the format selection box changes.
      *
      * @param box  The AppMenu::Format selection ComboBox.
      */
@@ -79,29 +79,29 @@ private:
      * @brief  Updates the column and row counters for the current format shown
      *         by the menuFormatPicker.
      *
-     *  This sets the counters to whatever value is currently saved for the 
-     * selected format, and shows or hides the column counter and its label 
+     *  This sets the counters to whatever value is currently saved for the
+     * selected format, and shows or hides the column counter and its label
      * depending on whether the selected format uses it.
      */
     void updateCountersForSelectedFormat();
 
-    /* Tracks whether the controller has already loaded initial menu text and
-     * set itself as the selection box listener: */
+    // Tracks whether the controller has already loaded initial menu text and
+    // set itself as the selection box listener:
     bool initialized = false;
 
-    /* Saves and loads AppMenu settings, and ensures AppMenu settings are always
-     * available while this object exists: */
+    // Saves and loads AppMenu settings, and ensures AppMenu settings are
+    // always available while this object exists:
     ConfigFile formatConfig;
 
-    /* Used to select the AppMenu format: */
+    // Used to select the AppMenu format:
     Widgets::BoundedLabel& menuFormatLabel;
     juce::ComboBox& menuFormatPicker;
 
-    /* Used to select the maximum column count for AppMenu grids: */
+    // Used to select the maximum column count for AppMenu grids:
     Widgets::BoundedLabel& columnCountLabel;
     Widgets::Counter& columnCounter;
 
-    /* Used to select the maximum row count for AppMenu grids: */
+    // Used to select the maximum row count for AppMenu grids:
     Widgets::BoundedLabel& rowCountLabel;
     Widgets::Counter& rowCounter;
 };

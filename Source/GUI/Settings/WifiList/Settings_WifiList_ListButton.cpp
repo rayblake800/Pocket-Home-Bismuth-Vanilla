@@ -2,27 +2,25 @@
 #include "Settings_WifiList_ControlComponent.h"
 #include "Theme_Image_JSONKeys.h"
 
-/* List item border width in pixels: */
+// List item border width in pixels:
 static const constexpr unsigned int borderWidth = 4;
 
-//===================== List item Layout values ================================
-/* Horizontal weights for components in each access point list item: */
+//===================== List item Layout values ===============================
+// Horizontal weights for components in each access point list item:
 static const constexpr unsigned int labelWeight      = 8;
 static const constexpr unsigned int iconWeight       = 1;
-/* Relative weights of the main component row and the control component row: */
+// Relative weights of the main component row and the control component row:
 static const constexpr unsigned int mainRowWeight    = 2;
 static const constexpr unsigned int controlRowWeight = 14;
-/* Margin and Padding fractions: */
+// Margin and Padding fractions:
 static const constexpr float xMarginFraction = 0.03;
 static const constexpr float yMarginFraction = 0.17;
 static const constexpr float xPaddingFraction = 0.04;
 static const constexpr float yPaddingFraction = 0.03;
 static const constexpr float selectedYMarginFraction = 0.03;
 
-/*
- * Sets up the initial button layout.
- */
-Settings::WifiList::ListButton::ListButton() : 
+// Sets up the initial button layout.
+Settings::WifiList::ListButton::ListButton() :
         juce::Button("Settings::WifiList::ListButton"),
         lockIcon(Theme::Image::JSONKeys::lockIcon)
 {
@@ -48,9 +46,8 @@ Settings::WifiList::ListButton::ListButton() :
     signalIcon.setInterceptsMouseClicks(false, false);
 }
 
-/*
- * Updates this list button to represent a specific access point.
- */
+
+// Updates this list button to represent a specific access point.
 void Settings::WifiList::ListButton::updateForAccessPoint
 (const Wifi::AccessPoint accessPoint)
 {
@@ -62,21 +59,19 @@ void Settings::WifiList::ListButton::updateForAccessPoint
 }
 
 
-/*
- * Adds a connection control component to the bottom of the ListButton.
- */
+// Adds a connection control component to the bottom of the ListButton.
 void Settings::WifiList::ListButton::addControlComponent
 (ControlComponent& controlComponent)
 {
     using namespace Layout::Group;
     Component* oldParent = controlComponent.getParentComponent();
-    if(oldParent != nullptr && oldParent != this)
+    if (oldParent != nullptr && oldParent != this)
     {
-        static_cast<ListButton*>(oldParent)->removeControlComponent();
+        static_cast<ListButton*> (oldParent)->removeControlComponent();
     }
 
     RelativeLayout layout = layoutManager.getLayout();
-    if(layout.rowCount() == 1)
+    if (layout.rowCount() == 1)
     {
         layout.addRow(Row(controlRowWeight,
         {
@@ -85,41 +80,39 @@ void Settings::WifiList::ListButton::addControlComponent
         addAndMakeVisible(controlComponent);
         layout.setYMarginFraction(selectedYMarginFraction);
         layoutManager.setLayout(layout);
-        layoutManager.layoutComponents(getLocalBounds()); 
+        layoutManager.layoutComponents(getLocalBounds());
     }
 }
 
-/*
- * Removes the control component from the ListButton if it is present.
- */
+
+// Removes the control component from the ListButton if it is present.
 void Settings::WifiList::ListButton::removeControlComponent()
 {
     using namespace Layout::Group;
     RelativeLayout layout = layoutManager.getLayout();
-    while(layout.rowCount() > 1)
+    while (layout.rowCount() > 1)
     {
         layout.removeRow(1, true);
     }
     layout.setYMarginFraction(yMarginFraction);
     layoutManager.setLayout(layout);
-    layoutManager.layoutComponents(getLocalBounds()); 
+    layoutManager.layoutComponents(getLocalBounds());
 }
 
-/*
- * Updates child components to fit the updated button bounds.
- */
+
+// Updates child components to fit the updated button bounds.
 void Settings::WifiList::ListButton::resized()
 {
-    layoutManager.layoutComponents(getLocalBounds()); 
+    layoutManager.layoutComponents(getLocalBounds());
 }
 
-/*
- * Draws an outline around the ListButton.
- */
+
+// Draws an outline around the ListButton.
 void Settings::WifiList::ListButton::paintButton
 (juce::Graphics& graphics, bool isMouseOverButton, bool isButtonDown)
 {
-    /* TODO: define custom ColourIDs rather than using label text color. */
+    // TODO: define custom ColourIDs rather than using label text colour.
     graphics.setColour(findColour(juce::Label::ColourIds::textColourId));
-    graphics.drawRoundedRectangle(0, 0, getWidth(), getHeight(), 1, borderWidth);
+    graphics.drawRoundedRectangle(0, 0, getWidth(), getHeight(), 1,
+            borderWidth);
 }

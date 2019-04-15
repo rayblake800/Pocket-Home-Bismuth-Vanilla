@@ -1,26 +1,26 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
  * @file  Wifi_Connection_UpdateInterface.h
  *
  * @brief  The interface used by the Wifi::Connection::Record::Module instance
- *         to notify all Wifi::Connection::Record::Listener objects of new Wifi 
+ *         to notify all Wifi::Connection::Record::Listener objects of new Wifi
  *         network connection events.
  */
 
-namespace Wifi 
-{ 
+namespace Wifi
+{
     class AccessPoint;
-    namespace Connection 
-    { 
-        namespace Record 
-        { 
-            class UpdateInterface; 
+    namespace Connection
+    {
+        namespace Record
+        {
+            class UpdateInterface;
             class Module;
-        } 
-    } 
+        }
+    }
 }
 
 /**
@@ -39,7 +39,7 @@ private:
     /**
      * @brief  Signals that a new active Wifi connection is being opened.
      *
-     * @param connectingAP  The Wifi access point the system is trying to 
+     * @param connectingAP  The Wifi access point the system is trying to
      *                      connect to.
      */
     virtual void startedConnecting(const AccessPoint connectingAP) = 0;
@@ -59,13 +59,13 @@ private:
      *
      * @param connectedAP  The access point used to open the connection.
      */
-    virtual void connected(const AccessPoint connectedAP) = 0; 
+    virtual void connected(const AccessPoint connectedAP) = 0;
 
     /**
      * @brief  Signals that an active Wifi connection was closed.
      *
-     * @param disconnectedAP  The access point that was being used by the closed
-     *                        connection.
+     * @param disconnectedAP  The access point that was being used by the
+     *                        closed connection.
      */
-    virtual void disconnected(const AccessPoint disconnectedAP) = 0; 
+    virtual void disconnected(const AccessPoint disconnectedAP) = 0;
 };

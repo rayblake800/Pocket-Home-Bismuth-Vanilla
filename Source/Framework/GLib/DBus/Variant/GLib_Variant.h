@@ -7,6 +7,10 @@
 
 namespace GLib { class Variant; }
 
+/**
+ * @brief  An immutable object that may be created to hold data using one of
+ *         many different data types.
+ */
 class GLib::Variant
 {
     enum class GVarType
@@ -44,6 +48,6 @@ class GLib::Variant
     //
     // template<typename StoredType>
     // StoredType getValue(StoredType defaultValue);
-    // 
+    //
 
 };

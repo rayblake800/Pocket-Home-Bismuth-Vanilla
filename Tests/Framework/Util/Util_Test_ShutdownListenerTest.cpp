@@ -10,7 +10,7 @@ namespace Util
     }
 }
 /**
- * @brief  A fake application class to trigger the shutdown notification. 
+ * @brief  A fake application class to trigger the shutdown notification.
  */
 class PocketHomeApplication
 {
@@ -31,8 +31,8 @@ public:
 class Util::Test::TestListener : public ShutdownListener
 {
 private:
-    /* Tracks the number of times that any ShutdownListener ran onShutdown()
-       since the test began: */
+    // Tracks the number of times that any ShutdownListener ran onShutdown()
+    // since the test began:
     int& notifyCount;
 
     /**
@@ -54,31 +54,35 @@ public:
     TestListener(int& notifyCount) : notifyCount(notifyCount) { }
 };
 
+/**
+ * @brief  Tests that application shutdown messages are communicated
+ *         appropriately to all ShutdownListener objects.
+ */
 class Util::Test::ShutdownListenerTest : public juce::UnitTest
 {
 public:
     ShutdownListenerTest() : juce::UnitTest("ShutdownListener Testing",
             "Util") {}
-    
+
     void runTest() override
     {
         juce::OwnedArray<TestListener> testListeners;
         int notifyCount = 0;
         beginTest("Shutdown notification testing");
-        
-        /* Make sure the shutdown notification runs safely if no listeners 
-           exist: */
+
+        // Make sure the shutdown notification runs safely if no listeners
+        // exist:
         PocketHomeApplication::broadcastShutdown();
 
         int listenerCount = 5;
-        for(int i = 0; i < listenerCount; i++)
+        for (int i = 0; i < listenerCount; i++)
         {
             testListeners.add(new TestListener(notifyCount));
         }
         PocketHomeApplication::broadcastShutdown();
         expectEquals(notifyCount, listenerCount,
                 "Notification count does not match listener count.");
-        
+
         notifyCount = 0;
         listenerCount --;
         testListeners.removeLast();
@@ -86,7 +90,7 @@ public:
         expectEquals(notifyCount, listenerCount,
                 juce::String("After removing listener, notification count does")
                 + juce::String("not match listener count."));
-        
+
         notifyCount = 0;
         listenerCount += 2;
         testListeners.add(new TestListener(notifyCount));
@@ -95,7 +99,7 @@ public:
         expectEquals(notifyCount, listenerCount,
                 juce::String("After adding listeners, notification count does")
                 + juce::String("not match listener count."));
-        
+
         notifyCount = 0;
         listenerCount = 0;
         testListeners.clear();

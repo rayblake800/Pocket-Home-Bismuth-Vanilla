@@ -5,15 +5,12 @@
 #include "Wifi_AccessPoint.h"
 #include "Wifi_LibNM_Connection.h"
 
-/*
- * Initializes the Wifi::Resource object if necessary.
- */
+// Initializes the Wifi::Resource object if necessary.
 Wifi::Connection::Saved::Reader::Reader() { }
 
-/*
- * Checks if NetworkManager has a saved connection that is compatible with an 
- * access point.
- */
+
+// Checks if NetworkManager has a saved connection that is compatible with an
+// access point.
 bool Wifi::Connection::Saved::Reader::hasSavedConnection
 (const AccessPoint toCheck)
 {
@@ -22,12 +19,10 @@ bool Wifi::Connection::Saved::Reader::hasSavedConnection
     return savedConnections->hasSavedConnection(toCheck);
 }
 
-/*
- * Attempts to find and return a saved connection object that is compatible with
- * an access point.
- */
-Wifi::LibNM::Connection 
-Wifi::Connection::Saved::Reader::getSavedConnection
+
+// Attempts to find and return a saved connection object that is compatible
+// with an access point.
+Wifi::LibNM::Connection Wifi::Connection::Saved::Reader::getSavedConnection
 (const AccessPoint connectionAP)
 {
     SharedResource::Modular::LockedPtr<Resource, Module> savedConnections
@@ -35,10 +30,9 @@ Wifi::Connection::Saved::Reader::getSavedConnection
     return savedConnections->getSavedConnection(connectionAP);
 }
 
-/*
- * Finds the last time the system was fully connected to a particular wifi 
- * access point's connection.
- */
+
+// Finds the last time the system was fully connected to a particular wifi
+// access point's connection.
 juce::Time Wifi::Connection::Saved::Reader::lastConnectionTime
 (const AccessPoint connectionAP)
 {

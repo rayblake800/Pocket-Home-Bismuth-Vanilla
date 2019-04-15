@@ -43,8 +43,8 @@
    - Wifi thread now only runs when the application window is focused.
    - Began documentation overhaul with better task management in TODO.txt.
 #### Jul 14 2018
-   - Finalized color management improvements.
-   - All Component colors are now controlled through the ColourConfigFile object and the associated colours.json file.
+   - Finalized colour management improvements.
+   - All Component colours are now controlled through the ColourConfigFile object and the associated colours.json file.
 #### Jul 12 2018
    - AdvancedSettingsPage, PageStackComponent, and WifiSettingsComponent now use new layout functionality for animating transitions.
 #### Jun 24 2018

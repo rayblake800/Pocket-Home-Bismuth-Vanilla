@@ -1,5 +1,5 @@
 # Assets Module Documentation
-The Assets module locates and loads application asset files. Default asset files are stored in /usr/share/pocket-home, but custom asset files may be loaded from other directories. 
+The Assets module locates and loads application asset files. Default asset files are stored in /usr/share/pocket-home, but custom asset files may be loaded from other directories.
 
 #### [Assets](../../Source/Files/Assets/Assets.h)
 Assets provides functions to find and loads application asset files, preferring matches found in the default application data directory. Assets provides functions to load generic file objects, juce\::Image objects from image files, or juce\::var objects from JSON files.

@@ -4,7 +4,7 @@
 #include "Config_MainFile.h"
 #include "Page_Type.h"
 
-/* Page layout constants: */
+// Page layout constants:
 
 static const constexpr int ipRowWeight = 3;
 static const constexpr int wifiRowWeight = 10;
@@ -21,7 +21,7 @@ wifiComponent([this]()
 }),
 #endif
 settingsListBtn(Theme::Image::JSONKeys::settingsListBtn),
-listButtonManager(&settingsListBtn, 
+listButtonManager(&settingsListBtn,
         Layout::Component::JSONKeys::settingsListBtn)
 {
 #if JUCE_DEBUG
@@ -32,26 +32,26 @@ listButtonManager(&settingsListBtn,
     RelativeLayout layout(
     {
 #ifdef WIFI_SUPPORTED
-        Row(wifiRowWeight, 
-        { 
-            RowItem(&wifiComponent) 
+        Row(wifiRowWeight,
+        {
+            RowItem(&wifiComponent)
         }),
 #endif
-        Row(sliderRowWeight, 
-        { 
-            RowItem(&brightnessSlider) 
+        Row(sliderRowWeight,
+        {
+            RowItem(&brightnessSlider)
         }),
-        Row(sliderRowWeight, 
-        { 
-            RowItem(&volumeSlider) 
+        Row(sliderRowWeight,
+        {
+            RowItem(&volumeSlider)
         })
     });
-    layout.setXMarginFraction(1.0 
+    layout.setXMarginFraction(1.0
             - listButtonManager.getLayout().getXFraction());
     layout.setYMarginFraction(yMarginFraction);
     layout.setYPaddingWeight(rowPaddingWeight);
     Config::MainFile mainConfig;
-    if(mainConfig.getIPLabelOnSettingsPage())
+    if (mainConfig.getIPLabelOnSettingsPage())
     {
         ipLabel.reset(new Info::IPLabel());
         layout.insertRow(0, Row(ipRowWeight, { RowItem(ipLabel.get()) }));
@@ -62,17 +62,15 @@ listButtonManager(&settingsListBtn,
     settingsListBtn.addListener(&pageListener);
 }
 
-/*
- * Updates the settings list button when the page is resized.
- */
+
+// Updates the settings list button when the page is resized.
 void Page::QuickSettings::pageResized()
 {
     listButtonManager.applyConfigBounds();
 }
 
-/*
- * Opens the settings list page when its button is clicked.
- */
+
+// Opens the settings list page when its button is clicked.
 void Page::QuickSettings::PageListener::buttonClicked(juce::Button *button)
 {
     jassert(button == &settingsPage.settingsListBtn);

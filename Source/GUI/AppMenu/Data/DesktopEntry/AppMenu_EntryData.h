@@ -1,13 +1,12 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
- * @file AppMenu_EntryData.h 
- * 
- * @brief  An AppMenuItem that gets its data from a DesktopEntry::EntryFile
- *         object, loaded from a .desktop file. It represents a shortcut to an 
- *         installed application located in the application menu.
+ * @file  AppMenu_EntryData.h
+ *
+ * @brief  Represents menu item data loaded from a .desktop application shortcut
+ *         file.
  */
 
 #include "DesktopEntry_EntryFile.h"
@@ -17,16 +16,22 @@
 namespace AppMenu { class EntryData; }
 
 /**
+ * @brief  An ItemData subclass that gets its data from a
+ *         DesktopEntry::EntryFile object, loaded from a .desktop file.
+ *
+ *  EntryData objects store and update menu item data stored in a single
+ * desktop entry file.
+ *
  *  Editing desktop entries works by updating or creating .desktop files in the
- * user's local directory. Changes to desktop entries through this interface 
- * will be visible in other applications for the current user, but will not 
+ * user's local directory. Changes to desktop entries through this interface
+ * will be visible in other applications for the current user, but will not
  * affect other users.
  */
 class AppMenu::EntryData : public ItemData, public Locale::TextUser
 {
 public:
     /**
-     * @brief  Creates menu item data from a desktop entry. 
+     * @brief  Creates menu item data from a desktop entry.
      *
      * @param desktopEntry  The desktop entry supplying application menu data.
      */
@@ -104,8 +109,8 @@ public:
     /**
      * @brief  Sets if this menu item runs its command in a new terminal window.
      *
-     * @param termLaunch  True to run any launch command assigned to this
-     *                    menu item within a new terminal window.
+     * @param termLaunch  True to run any launch command assigned to this menu
+     *                    item within a new terminal window.
      */
     virtual void setLaunchedInTerm(const bool termLaunch) override;
 
@@ -124,7 +129,7 @@ public:
      * @return  Zero, as desktop entry menu items are never folders.
      */
     virtual int getMovableChildCount() const override;
-    
+
     /**
      * @brief  Checks if this menu item could be moved within its folder,
      *         assuming that another movable menu item exists that could be
@@ -139,9 +144,9 @@ public:
      * @brief  Writes all changes to this menu item back to its data source.
      */
     virtual void saveChanges() override;
-    
+
     /**
-     * @brief  Gets an appropriate title to use for a deletion confirmation 
+     * @brief  Gets an appropriate title to use for a deletion confirmation
      *         window.
      *
      * @return  A localized confirmation title string.
@@ -149,7 +154,7 @@ public:
     virtual juce::String getConfirmDeleteTitle() const override;
 
     /**
-     * @brief  Gets appropriate descriptive text for a deletion confirmation 
+     * @brief  Gets appropriate descriptive text for a deletion confirmation
      *         window.
      *
      * @return  A localized confirmation description string.
@@ -179,6 +184,6 @@ private:
      */
     virtual void deleteFromSource() override;
 
-    /* Application data source, set on construction. */
+    // Application data source, set on construction.
     DesktopEntry::EntryFile desktopEntry;
 };

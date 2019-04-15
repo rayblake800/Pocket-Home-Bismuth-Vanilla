@@ -1,8 +1,8 @@
 #pragma once
 /**
  * @file  Theme_Image_ConfigFile.h
- * 
- * @brief  Gets and sets the component settings held by the 
+ *
+ * @brief  Gets and sets the component settings held by the
  *         Theme::Image::JSONResource.
  */
 
@@ -12,10 +12,12 @@ namespace Theme { namespace Image { class ConfigFile; } }
 namespace Theme { namespace Image { class JSONResource; } }
 namespace Theme { namespace Image { class AssetList; } }
 
-/** 
- *  The ConfigFile reads and writes settings defined in 
- * Theme::Image::JSONResource's configurable JSON file. This includes lists of
- * image assets, along with lists of colors to apply to those image assets.
+/**
+ * @brief  Reads and writes settings defined in Theme::Image::JSONResource's
+ *         configurable JSON file.
+ *
+ *  This includes individual image assets, lists of related image assets,
+ * and lists of colours to apply to those image asset lists.
  */
 class Theme::Image::ConfigFile : public Config::FileHandler<JSONResource>
 {
@@ -25,10 +27,10 @@ public:
     virtual ~ConfigFile() { }
 
     /**
-     * @brief   Gets a configured image asset list from shared JSON file data.
-     * 
+     * @brief  Gets a configured image asset list from shared JSON file data.
+     *
      * @param componentKey  A configurable UI component's key string.
-     * 
+     *
      * @return              The image asset list defined for that component.
      */
     AssetList getAssetList(const juce::Identifier& componentKey) const;
@@ -36,9 +38,9 @@ public:
     /**
      * @brief  Gets the path to the HomePage background image.
      *
-     * @return  The HopePage background path. This may be either a global path,
-     *          or relative to the application's assets folder. This may be
-     *          the empty string.
+     * @return  The HomePage background path. This may be either a global path,
+     *          or relative to the application's assets folder. This may be the
+     *          empty string.
      */
     juce::String getHomeBackgroundPath() const;
 
@@ -46,27 +48,27 @@ public:
      * @brief  Gets the path to the LoginPage background image.
      *
      * @return  The LoginPage background path. This may be either a global path,
-     *          or relative to the application's assets folder. This may be
-     *          the empty string.
+     *          or relative to the application's assets folder. This may be the
+     *          empty string.
      */
     juce::String getLoginBackgroundPath() const;
 
     /**
      * @brief  Gets the path to the default AppMenu icon image.
      *
-     * @return  The default icon path. This may be either a global path,
-     *          or relative to the application's assets folder. This may be
-     *          the empty string.
+     * @return  The default icon path. This may be either a global path, or
+     *          relative to the application's assets folder. This may be the
+     *          empty string.
      */
     juce::String getDefaultIconPath() const;
 
     /**
-     * @brief  Gets the path to the image displayed in the center of the 
+     * @brief  Gets the path to the image displayed in the center of the
      *         LoginPage.
      *
-     * @return  The LoginPage path. This may be either a global path,
-     *          or relative to the application's assets folder. This may be
-     *          the empty string.
+     * @return  The LoginPage path. This may be either a global path, or
+     *          relative to the application's assets folder. This may be the
+     *          empty string.
      */
     juce::String getLoginImagePath() const;
 
@@ -74,8 +76,8 @@ public:
      * @brief  Gets the path to the Wifi::ControlWidget object's Wifi icon.
      *
      * @return  The Wifi icon path. This may be either a global path,
-     *          or relative to the application's assets folder. This may be
-     *          the empty string.
+     *          or relative to the application's assets folder. This may be the
+     *          empty string.
      */
     juce::String getWifiIconPath() const;
 

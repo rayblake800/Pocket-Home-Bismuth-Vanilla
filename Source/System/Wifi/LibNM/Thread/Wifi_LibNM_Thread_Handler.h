@@ -6,20 +6,20 @@
  */
 
 #include "Wifi_LibNM_Client.h"
-#include "Wifi_LibNM_DeviceWifi.h" 
+#include "Wifi_LibNM_DeviceWifi.h"
 #include "Wifi_LibNM_ActiveConnection.h"
 #include "GLib_ThreadHandler.h"
 #include "SharedResource_Modular_Handler.h"
 #include "JuceHeader.h"
 
-namespace Wifi 
-{ 
+namespace Wifi
+{
     class Resource;
-    namespace LibNM { namespace Thread 
+    namespace LibNM { namespace Thread
     {
-        class Handler; 
+        class Handler;
         class Module;
-    } } 
+    } }
 }
 
 /**
@@ -46,7 +46,7 @@ public:
     Client getClient() const;
 
     /**
-     * @brief  Gets the shared DeviceWifi object used to control the 
+     * @brief  Gets the shared DeviceWifi object used to control the
      *         LibNM-managed Wifi device if called within the LibNM event loop.
      *
      * @return  The DeviceWifi object used to control the LibNM-managed Wifi
@@ -56,7 +56,7 @@ public:
     DeviceWifi getWifiDevice() const;
 
     /**
-     * @brief  Schedules a function to run asynchronously within the LibNM 
+     * @brief  Schedules a function to run asynchronously within the LibNM
      *         thread module's event loop.
      *
      * @param toCall  A function to call within the thread's event loop.

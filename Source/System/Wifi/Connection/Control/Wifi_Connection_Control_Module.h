@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -12,13 +12,13 @@
 #include "Wifi_LibNM_ConnectionHandler.h"
 #include <gio/gio.h>
 
-namespace Wifi 
-{ 
-    namespace Connection 
-    { 
+namespace Wifi
+{
+    namespace Connection
+    {
         class Event;
-        namespace Control { class Module; } 
-    } 
+        namespace Control { class Module; }
+    }
     class Resource;
     class AccessPoint;
     namespace LibNM
@@ -67,11 +67,11 @@ public:
      * @brief  Attempts to open a Wifi network connection using a nearby access
      *         point.
      *
-     * @param toConnect          The access point to use in the attempted 
+     * @param toConnect          The access point to use in the attempted
      *                           connection.
      *
-     * @param securityKey        An optional security key to use when opening 
-     *                           the connection. This will be ignored if it 
+     * @param securityKey        An optional security key to use when opening
+     *                           the connection. This will be ignored if it
      *                           equals the empty string or if the access point
      *                           is unsecured.
      */
@@ -79,7 +79,7 @@ public:
             juce::String securityKey = juce::String());
 
     /**
-     * @brief  Continues the connection attempt if a pending connection is 
+     * @brief  Continues the connection attempt if a pending connection is
      *         currently in progress.
      *
      *  This method should only be called within the LibNM::Thread::Module's
@@ -94,8 +94,8 @@ public:
     void disconnect();
 
     /**
-     * @brief  Notifies the Control::Module that a new access point was spotted,
-     *         just in case it is needed to establish a connection.
+     * @brief  Notifies the Control::Module that a new access point was
+     *         spotted, just in case it is needed to establish a connection.
      *
      * @param addedAP  An access point object that was just added.
      */
@@ -113,7 +113,7 @@ public:
      *
      *  If this is a connection failure attempt and the Module is attempting to
      * connect, this event will not have been sent to the Record::Module. The
-     * Control::Module is responsible for deciding when a Wifi connection 
+     * Control::Module is responsible for deciding when a Wifi connection
      * attempt has failed, passing the failure event to the Record::Module at
      * that point.
      *
@@ -134,42 +134,43 @@ private:
     void cancelPendingConnection();
 
     /**
-     * @brief  Cancels a pending connection event if it doesn't finish within
-     *         a timeout period.
+     * @brief  Cancels a pending connection event if it doesn't finish within a
+     *         timeout period.
      */
     virtual void timerCallback() override;
 
     /**
      * @brief  Signals that a connection is being opened.
-     * 
-     * @param connection  A new active connection object representing the 
-     *                    added connection. This connection object might not
-     *                    be completely connected yet.
+     *
+     * @param connection  A new active connection object representing the added
+     *                    connection. This connection object might not be
+     *                    completely connected yet.
      */
-    virtual void openingConnection(LibNM::ActiveConnection connection) override;
-    
+    virtual void openingConnection
+    (LibNM::ActiveConnection connection) override;
+
     /**
-     * @brief   Signals that an attempt to open a connection failed.
-     * 
-     * @param connection  The connection that failed to activate. This may 
-     *                    be a null connection.
-     * 
-     * @param error       A GError object describing the problem. 
+     * @brief  Signals that an attempt to open a connection failed.
+     *
+     * @param connection  The connection that failed to activate. This may be a
+     *                    null connection.
+     *
+     * @param error       A GError object describing the problem.
      */
-    virtual void openingConnectionFailed(LibNM::ActiveConnection connection, 
+    virtual void openingConnectionFailed(LibNM::ActiveConnection connection,
             GError* error) override;
 
-    /* Pending connection data: */
+    // Pending connection data:
 
-    /* Whether the module is attempting to open a connection: */
+    // Whether the module is attempting to open a connection:
     bool connectionStarted = false;
 
-    /* Whether a connection is currently being activated: */
+    // Whether a connection is currently being activated:
     bool connectionActivating = false;
 
-    /* The security key used to establish the connection: */
+    // The security key used to establish the connection:
     juce::String pendingPSK;
 
-    /* Whether a new connection is being used to open the connection: */
+    // Whether a new connection is being used to open the connection:
     bool creatingNewConnection = false;
 };

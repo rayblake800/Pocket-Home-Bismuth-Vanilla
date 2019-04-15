@@ -19,11 +19,11 @@ namespace Info { class IPLabel; }
  *         public IP addresses.
  *
  *  IPLabel is used to show the user their system's current IP address. The
- * label may show the system's IP address on the local network, the system's 
- * public IP address as seen outside the network, or both. The IPLabel will 
- * not print any text when the system is not connected to a network, or when
- * both local and public IP addresses are disabled. IPLabel's properties are
- * set in the config.json file, accessed through Config::MainFile.
+ * label may show the system's IP address on the local network, the system's
+ * public IP address as seen outside the network, or both. The IPLabel will not
+ * print any text when the system is not connected to a network, or when both
+ * local and public IP addresses are disabled. IPLabel's properties are set in
+ * the config.json file, accessed through Config::MainFile.
  */
 class Info::IPLabel : public Locale::TextUser,
 #ifdef WIFI_SUPPORTED
@@ -64,13 +64,13 @@ private:
      * @brief  Updates the label text whenever the active network connection is
      *         closed.
      *
-     * @param connectedAP  The access point used by the former active 
+     * @param connectedAP  The access point used by the former active
      *                     connection.
      */
     virtual void disconnected(const Wifi::AccessPoint connectedAP) override;
 #endif
 
-    /* Runs system commands and ensures the system command resource remains
-     * loaded. */
+    // Runs system commands and ensures the system command resource remains
+    // loaded.
     Util::Commands commandLoader;
 };

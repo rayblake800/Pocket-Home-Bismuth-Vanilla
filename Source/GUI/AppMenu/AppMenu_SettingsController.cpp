@@ -2,14 +2,14 @@
 #include "AppMenu_Format.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "AppMenu::SettingsController::";
 #endif
 
-/* Localized object class key */
+// Localized object class key
 static const juce::Identifier localeClassKey = "AppMenu::SettingsController";
 
-/* Localized text value keys: */
+// Localized text value keys:
 namespace TextKey
 {
     static const juce::Identifier menuType      = "menuType";
@@ -19,29 +19,29 @@ namespace TextKey
     static const juce::Identifier menuRows      = "menuRows";
 }
 
-/* Smallest number of menu columns to allow: */
+
+// Smallest number of menu columns to allow:
 static const constexpr int minColumns = 1;
-/* Largest number of menu columns to allow: */
+// Largest number of menu columns to allow:
 static const constexpr int maxColumns = 15;
 
-/* Smallest number of menu rows to allow: */
+// Smallest number of menu rows to allow:
 static const constexpr int minRows = 1;
-/* Largest number of menu rows to allow: */
+// Largest number of menu rows to allow:
 static const constexpr int maxRows = 15;
 
-/* AppMenu format selection ComboBox selection IDs: */
+// AppMenu format selection ComboBox selection IDs:
 static const constexpr int pagedMenuID     = 1;
 static const constexpr int scrollingMenuID = 2;
 
-/*
- * Initializes all components to match the current AppMenu settings. */
+// Initializes all components to match the current AppMenu settings.
 AppMenu::SettingsController::SettingsController(
-        Widgets::BoundedLabel& menuFormatLabel, 
+        Widgets::BoundedLabel& menuFormatLabel,
         juce::ComboBox& menuFormatPicker,
         Widgets::BoundedLabel& columnCountLabel,
         Widgets::Counter& columnCounter,
         Widgets::BoundedLabel& rowCountLabel,
-        Widgets::Counter& rowCounter) : 
+        Widgets::Counter& rowCounter) :
 Locale::TextUser(localeClassKey),
 menuFormatLabel(menuFormatLabel),
 menuFormatPicker(menuFormatPicker),
@@ -50,12 +50,11 @@ columnCounter(columnCounter),
 rowCountLabel(rowCountLabel),
 rowCounter(rowCounter) { }
 
-/*
- * Updates all settings components to match the current AppMenu settings.
- */
+
+// Updates all settings components to match the current AppMenu settings.
 void AppMenu::SettingsController::updateForCurrentSettings()
 {
-    if(!initialized)
+    if (!initialized)
     {
         menuFormatLabel.setText(localeText(TextKey::menuType),
                 juce::NotificationType::dontSendNotification);
@@ -92,10 +91,9 @@ void AppMenu::SettingsController::updateForCurrentSettings()
     updateCountersForSelectedFormat();
 }
 
-/*
- * Saves the settings selected by the SettingsController so they will be
- * applied to the AppMenu.
- */
+
+// Saves the settings selected by the SettingsController so they will be
+// applied to the AppMenu.
 void AppMenu::SettingsController::applySettingsChanges()
 {
     const int selectedId = menuFormatPicker.getSelectedId();
@@ -117,18 +115,16 @@ void AppMenu::SettingsController::applySettingsChanges()
     }
 }
 
-/*
- * Updates counter components when the format selection box changes.
- */
+
+// Updates counter components when the format selection box changes.
 void AppMenu::SettingsController::comboBoxChanged(juce::ComboBox* box)
 {
     updateCountersForSelectedFormat();
 }
 
-/*
- * Updates the column and row counters for the current format shown by the
- * menuFormatPicker.
- */
+
+// Updates the column and row counters for the current format shown by the
+// menuFormatPicker.
 void AppMenu::SettingsController::updateCountersForSelectedFormat()
 {
     const int selectedId = menuFormatPicker.getSelectedId();

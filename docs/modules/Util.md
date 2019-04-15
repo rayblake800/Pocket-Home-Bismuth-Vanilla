@@ -20,4 +20,4 @@ TempTimer creates single-use timer objects that execute a function after a speci
 ShutdownListener is an abstract basis for classes that need to perform an action before the application shuts down.
 
 #### [Util\::ConditionChecker](../../Source/Framework/Util/Util_ConditionChecker.h)
- ConditionChecker objects handle tasks that require waiting for an event that will occur after an indeterminate delay or not at all. They periodically check for a condition to be true, then run a callback function once it is. 
+ ConditionChecker objects handle tasks that require waiting for an event that will occur after an indeterminate delay or not at all. They periodically check for a condition to be true, then run a callback function once it is.

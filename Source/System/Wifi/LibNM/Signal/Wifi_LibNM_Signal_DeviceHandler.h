@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -12,23 +12,23 @@
 #include "GLib_Signal_Handler.h"
 #include <nm-device-wifi.h>
 
-namespace Wifi 
-{ 
-    namespace LibNM 
-    { 
-        namespace Signal { class DeviceHandler; } 
+namespace Wifi
+{
+    namespace LibNM
+    {
+        namespace Signal { class DeviceHandler; }
         class DeviceWifi;
         class AccessPoint;
         class ActiveConnection;
-    } 
+    }
 }
 
 /**
- * @brief  Handles signals from the active LibNM::DeviceWifi object, receiving 
- *         updates when Wifi connection state or the list of visible access 
- *         points change. 
+ * @brief  Handles signals from the active LibNM::DeviceWifi object, receiving
+ *         updates when Wifi connection state or the list of visible access
+ *         points change.
  */
-class Wifi::LibNM::Signal::DeviceHandler : 
+class Wifi::LibNM::Signal::DeviceHandler :
         public GLib::Signal::Handler<DeviceWifi>
 {
 public:
@@ -38,9 +38,9 @@ public:
 
 protected:
     /**
-     * @brief  Subscribes to all relevant signals from a single GObject 
-     *         signal source.
-     * 
+     * @brief  Subscribes to all relevant signals from a single GObject signal
+     *         source.
+     *
      * @param source  A DeviceWifi object this signal handler should track.
      */
     virtual void connectAllSignals(const DeviceWifi source) override;
@@ -84,20 +84,20 @@ protected:
      *
      *  This takes no action by default. Subclasses should override this method
      * to define how new active connections should be handled.
-     * 
-     * @param activeConnection   The new active Wifi connection. If the device 
+     *
+     * @param activeConnection   The new active Wifi connection. If the device
      *                           has disconnected, this will be a null object.
      */
     virtual void activeConnectionChanged(ActiveConnection activeConnection);
-        
+
     /**
-     * @brief  Converts generic property change notifications into 
+     * @brief  Converts generic property change notifications into
      *         activeConnectionChanged calls.
-     * 
+     *
      * @param source    The GObject that emitted the signal. This should be a
      *                  NMDeviceWifi object.
-     * 
-     * @param property  This should be the active connection property, 
+     *
+     * @param property  This should be the active connection property,
      *                  "active-connection"
      */
     virtual void propertyChanged(const DeviceWifi source,
@@ -105,12 +105,12 @@ protected:
 
 private:
     /**
-     * @brief  The GCallback method called directly by LibNM code when sending 
-     *         state-changed signals.  
+     * @brief  The GCallback method called directly by LibNM code when sending
+     *         state-changed signals.
      *
-     * This will use the signal data to call the listener object's stateChanged 
+     * This will use the signal data to call the listener object's stateChanged
      * method.
-     * 
+     *
      * @param device    The GObject sending the state change signal.
      *
      * @param newState  The new device state.
@@ -129,12 +129,12 @@ private:
             GLib::Signal::CallbackData<DeviceWifi>* data);
 
     /**
-     * @brief  The GCallback method called directly by LibNM code when sending 
-     *         access-point-added signals.  
+     * @brief  The GCallback method called directly by LibNM code when sending
+     *         access-point-added signals.
      *
-     * This will use the signal data to call the listener object's 
+     *  This will use the signal data to call the listener object's
      * accessPointAdded method
-     * 
+     *
      * @param device    The GObject sending the signal.
      *
      * @param ap        An access point object representing a newly discovered
@@ -146,12 +146,12 @@ private:
             GLib::Signal::CallbackData<DeviceWifi>* data);
 
     /**
-     * @brief  The GCallback method called directly by LibNM code when sending 
-     *         access-point-removed signals.  
+     * @brief  The GCallback method called directly by LibNM code when sending
+     *         access-point-removed signals.
      *
-     * This will use the signal data to call the listener object's 
+     * This will use the signal data to call the listener object's
      * accessPointRemoved method.
-     * 
+     *
      * @param device    The GObject sending the signal.
      *
      * @param ap        An access point object representing a wifi access point

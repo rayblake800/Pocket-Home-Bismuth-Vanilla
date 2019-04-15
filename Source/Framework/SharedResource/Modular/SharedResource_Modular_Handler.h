@@ -9,14 +9,14 @@
 #include "SharedResource_Handler.h"
 #include "SharedResource_Modular_LockedPtr.h"
 
-namespace SharedResource 
-{ 
-    namespace Modular 
-    { 
-        template<class ResourceType> class Module; 
-        template<class ResourceType, class ModuleType> class Handler; 
-        template<class ResourceType, class ModuleType> class LockedPtr; 
-    } 
+namespace SharedResource
+{
+    namespace Modular
+    {
+        template<class ResourceType> class Module;
+        template<class ResourceType, class ModuleType> class Handler;
+        template<class ResourceType, class ModuleType> class LockedPtr;
+    }
 }
 
 /**
@@ -30,7 +30,7 @@ namespace SharedResource
  *                       resource.
  */
 template <class ResourceType, class ModuleType>
-class SharedResource::Modular::Handler : 
+class SharedResource::Modular::Handler :
         public SharedResource::Handler<ResourceType>
 {
 public:

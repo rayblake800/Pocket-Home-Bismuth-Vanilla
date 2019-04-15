@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file SharedResource/Resource.h
+ * @file  SharedResource/Resource.h
  *
  * @brief  A basis for threadsafe, RAII-managed Singleton objects.
  */
@@ -13,10 +13,10 @@
 namespace SharedResource { class Resource; }
 
 /**
- * @brief  A basis for access-controlled, reference counted singletons.  
+ * @brief  A basis for access-controlled, reference counted singletons.
  *
- *  Each Reference subclass is automatically created and destroyed by its 
- * corresponding SharedResource::Handler class or classes, and may only be 
+ *  Each Reference subclass is automatically created and destroyed by its
+ * corresponding SharedResource::Handler class or classes, and may only be
  * accessed through those Handler classes.
  *
  *  Each concrete Resource subclass must declare a unique, constant identifying
@@ -25,11 +25,11 @@ namespace SharedResource { class Resource; }
  */
 class SharedResource::Resource : public Instance
 {
-public: 
+public:
     /**
      * @brief  Creates the single resource object instance.
      *
-     * @param resourceKey  The unique key used to identify this resource.     
+     * @param resourceKey  The unique key used to identify this resource.
      */
     Resource(const juce::Identifier& resourceKey);
 
@@ -37,23 +37,23 @@ public:
 
 protected:
     /**
-     * @brief  Packages an asynchronous action so that it will check if the 
-     *         SharedResource instance that created it is still valid.  
+     * @brief  Packages an asynchronous action so that it will check if the
+     *         SharedResource instance that created it is still valid.
      *
-     *  If it is valid, the SharedResource instance will be locked and the 
+     *  If it is valid, the SharedResource instance will be locked and the
      * action will be executed.
      *
-     * @param lockType     Sets how the resource will be locked while the action
-     *                     function runs.
+     * @param lockType     Sets how the resource will be locked while the
+     *                     action function runs.
      *
-     * @param action       A function to call if the SharedResource still 
+     * @param action       A function to call if the SharedResource still
      *                     exists.
      *
      * @param ifDestroyed  An optional alternate function to call if the
      *                     SharedResource was destroyed.
      */
     std::function<void()> buildAsyncFunction(
-            LockType lockType, 
+            LockType lockType,
             std::function<void()> action,
             std::function<void()> ifDestroyed = [](){});
 
@@ -71,17 +71,17 @@ protected:
     template<class HandlerType>
     void foreachHandler(const std::function<void(HandlerType*)> handlerAction)
     {
-        /* Through template shenanigans, it is possible for one object to
-         * inherit from multiple Handler subclasses that are all connected to
-         * this resource. Tracking notified HandlerType* object here is
-         * necessary to prevent these objects from being acted upon multiple
-         * times. */
+        // Through template shenanigans, it is possible for one object to
+        // inherit from multiple Handler subclasses that are all connected to
+        // this resource. Tracking notified HandlerType* object here is
+        // necessary to prevent these objects from being acted upon multiple
+        // times.
         juce::Array<HandlerType*> alreadyActedOn;
         foreachReference([&handlerAction, &alreadyActedOn]
                 (ReferenceInterface* reference)
         {
-            HandlerType* handler = dynamic_cast<HandlerType*>(reference);
-            if(handler != nullptr && !alreadyActedOn.contains(handler))
+            HandlerType* handler = dynamic_cast<HandlerType*> (reference);
+            if (handler != nullptr && !alreadyActedOn.contains(handler))
             {
                 handlerAction(handler);
                 alreadyActedOn.add(handler);

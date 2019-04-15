@@ -2,8 +2,8 @@
 /**
  * @file  Windows_Info.h
  *
- * @brief  Provides functions for getting information about the main application
- *         window.
+ * @brief  Provides functions for getting information about the main
+ *         application window.
  */
 
 namespace juce { template <typename T> class Rectangle; }
@@ -14,7 +14,7 @@ namespace Windows
     {
         /**
          * @brief  Gets the size of the main application window.
-         * 
+         *
          * @return  The bounds of the application window, measured in pixels.
          */
         juce::Rectangle<int> getBounds();

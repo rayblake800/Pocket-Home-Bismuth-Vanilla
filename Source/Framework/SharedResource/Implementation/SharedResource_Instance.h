@@ -32,16 +32,16 @@ private:
     Instance(const juce::Identifier& resourceKey);
 
 public:
-    /* References need to add themselves to the handlers list on
-       construction, and remove themselves on destruction. */
+    // References need to add themselves to the handlers list on
+    // construction, and remove themselves on destruction.
     friend class Reference;
 
-    /* Instance may only be created as the parent class of Resource objects. */
+    // Instance may only be created as the parent class of Resource objects.
     friend class Resource;
 
     /**
-     * @brief  Destroys the resource instance once all of its references 
-     *         have been destroyed.
+     * @brief  Destroys the resource instance once all of its references have
+     *         been destroyed.
      */
     virtual ~Instance();
 
@@ -61,19 +61,19 @@ public:
 
 private:
     /**
-     * @brief  Runs an arbitrary function on each Reference object connected to 
-     *         the resource.  
+     * @brief  Runs an arbitrary function on each Reference object connected to
+     *         the resource.
      *
      * @param handlerAction  Some action that should run for every reference
-     *                       connected to this resource instance, passing in
-     *                       a pointer to the Reference as a parameter.
+     *                       connected to this resource instance, passing in a
+     *                       pointer to the Reference as a parameter.
      */
     void foreachReference
     (std::function<void(ReferenceInterface*)> referenceAction);
 
-    /* The resource's unique key identifier. */
+    // The resource's unique key identifier.
     const juce::Identifier& resourceKey;
 
-    /* Tracks all reference object associated with the resource. */
+    // Tracks all reference object associated with the resource.
     juce::Array<ReferenceInterface*> references;
 };

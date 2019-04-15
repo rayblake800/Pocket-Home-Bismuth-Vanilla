@@ -53,4 +53,4 @@ PopupEditor is an abstract component class used to display popup content editor 
 ListEditor is a PopupEditor class used to edit a list of strings.
 
 #### [Widgets\::ColourPicker](../../Source/GUI/Widgets/Widgets_ColourPicker.h)
-ColourPicker provides a component used to select color values.
+ColourPicker provides a component used to select colour values.

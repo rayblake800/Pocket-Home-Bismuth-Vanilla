@@ -8,19 +8,18 @@
 
 Wifi::Device::Controller::Controller() { }
 
-/*
- * Enables or disables the Wifi device.
- */
+
+// Enables or disables the Wifi device.
 void Wifi::Device::Controller::setEnabled(const bool enableWifi)
 {
     const LibNM::Thread::Handler nmThreadHandler;
     nmThreadHandler.call([this, enableWifi, &nmThreadHandler]()
     {
-        SharedResource::Modular::LockedPtr<Resource, Module> deviceModule 
+        SharedResource::Modular::LockedPtr<Resource, Module> deviceModule
                 = getWriteLockedResource();
-        if(deviceModule->wifiDeviceExists())
+        if (deviceModule->wifiDeviceExists())
         {
-            if(enableWifi != deviceModule->wifiDeviceEnabled())
+            if (enableWifi != deviceModule->wifiDeviceEnabled())
             {
                 deviceModule->signalDeviceStateChanging();
             }
@@ -29,16 +28,15 @@ void Wifi::Device::Controller::setEnabled(const bool enableWifi)
         }
         else
         {
-            DBG("Wifi::Controller::setEnabled: Couldn't " 
+            DBG("Wifi::Controller::setEnabled: Couldn't "
                     << (enableWifi ? "enable" : "disable")
                     << " Wifi, no Wifi device found.");
         }
     });
 }
 
-/*
- * Makes the Wifi device rescan nearby access points.
- */
+
+// Makes the Wifi device rescan nearby access points.
 void Wifi::Device::Controller::scanAccessPoints()
 {
     const LibNM::Thread::Handler nmThreadHandler;

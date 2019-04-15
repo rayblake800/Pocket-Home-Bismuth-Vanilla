@@ -2,7 +2,7 @@
 /**
  * @file  Theme_Image_JSONResource.h
  *
- * @brief  Reads and writes component image assets and image colors in the
+ * @brief  Reads and writes component image assets and image colours in the
  *         imageAssets.json file.
  */
 
@@ -11,10 +11,14 @@
 
 namespace Theme { namespace Image { class JSONResource; } }
 
+/**
+ * @brief  The FileResource class responsible for managing the image asset
+ *         configuration file.
+ */
 class Theme::Image::JSONResource : public Config::FileResource
 {
 public:
-    /* SharedResource object key */
+    // SharedResource object key
     static const juce::Identifier resourceKey;
 
     JSONResource();
@@ -23,9 +27,9 @@ public:
 
     /**
      * @brief  Gets the configured image asset list for a particular component.
-     * 
+     *
      * @param componentKey  A configurable UI component's key string.
-     * 
+     *
      * @return              The image asset list defined for that component.
      */
     AssetList getAssetList(const juce::Identifier& componentKey) const;
@@ -37,15 +41,15 @@ private:
     virtual void writeDataToJSON() final override;
 
     /**
-     * @brief   Gets the key string and data type for each basic value stored in
-     *          imageAsset.json.
-     * 
+     * @brief  Gets the key string and data type for each basic value stored in
+     *         imageAsset.json.
+     *
      * @return  Keys to all basic image paths stored in the JSON file.
      */
-    virtual const std::vector<Config::DataKey>& getConfigKeys() 
+    virtual const std::vector<Config::DataKey>& getConfigKeys()
         const final override;
 
-    /* Stores all image asset lists loaded from the image asset config file */
+    // Stores all image asset lists loaded from the image asset config file
     std::map<juce::Identifier, AssetList> assetLists;
 };
 

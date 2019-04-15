@@ -1,5 +1,5 @@
 {
-    "AppMenu::ConfigData": 
+    "AppMenu::ConfigData":
     {
         "removeAPP"        : "Remove \"",
         "fromMenu"         : "\" from the menu?",
@@ -10,7 +10,7 @@
         "willRemoveFolder" : "This will permanently remove this folder from the menu.",
         "editFolder"       : "Edit Folder"
     },
-    "AppMenu::Controller": 
+    "AppMenu::Controller":
     {
         "edit"         : "Edit",
         "delete"       : "Delete",
@@ -26,7 +26,7 @@
     {
         "editCategoryTitle" : "Edit Categories"
     },
-    "AppMenu::EntryData":    
+    "AppMenu::EntryData":
     {
         "removeLinkTo"  : "Remove link to ",
         "questionMark"  : "?",
@@ -38,7 +38,7 @@
         "newAppTitleKey"    : "New application shortcut",
         "newFolderTitleKey" : "New application folder"
     },
-    "AppMenu::PopupEditor": 
+    "AppMenu::PopupEditor":
     {
         "name"             : "Name:",
         "icon"             : "Icon path:",
@@ -56,7 +56,7 @@
         "menuColumns"     : "Menu columns:",
         "menuRows"        : "Menu rows:"
     },
-    "ConfigAlertWindows": 
+    "ConfigAlertWindows":
     {
         "failedSaving"     : "Failed to save changes to ",
         "checkPermissions" : "Make sure you have permission to write to this file.",
@@ -69,7 +69,7 @@
     },
     "Locale::Time":
     {
-	    "never"          : "never",
+        "never"          : "never",
         "now"            : "now",
         "momentsAgo"     : "moments ago",
         "secondsPrefix"  : "",
@@ -90,15 +90,15 @@
         "reboot"       : "Reboot into software flashing mode?",
         "yes"          : "Yes",
         "no"           : "No",
-        "flashingInfo" : "For instructions, visit https://archive.org/details/C.h.i.p.FlashCollection" 
+        "flashingInfo" : "For instructions, visit https://archive.org/details/C.h.i.p.FlashCollection"
     },
-    "Page::HomeSettings": 
+    "Page::HomeSettings":
     {
         "title"         : "Homepage Settings",
         "background"    : "Background image:",
         "clockMode"     : "Clock mode:"
     },
-    "Page::InputSettings": 
+    "Page::InputSettings":
     {
         "inputSettings" : "Input settings",
         "showCursor"    : "Mouse cursor mode:"
@@ -118,7 +118,7 @@
         "apply"              : "Apply",
         "success"            : "Success"
     },
-    "Page::Power": 
+    "Page::Power":
     {
         "shutdown"      : "Shutdown",
         "reboot"        : "Reboot",
@@ -127,16 +127,16 @@
         "build"         : "Build: ",
         "version"       : "Version "
     },
-    "Page::SettingsList": 
+    "Page::SettingsList":
     {
         "homeSettings"   : "Personalize your homepage",
-        "colorSettings"  : "Set colors",
+        "colourSettings"  : "Set colors",
         "setPassword"    : "Set your password",
         "changePassword" : "Change your password",
         "removePassword" : "Remove your password",
         "inputSettings"  : "Input settings"
     },
-    "Password::LoginScreen": 
+    "Password::LoginScreen":
     {
         "passwordLabel" : "Password:",
         "logIn"         : "Log In",
@@ -154,7 +154,7 @@
         "filesMissing"       : "Important application files are missing! Please reinstall pocket-home.",
         "polkitMissing"      : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
-    "Password::UpdateController": 
+    "Password::UpdateController":
     {
         "confirmationFailed": "Password confirmation failed",
         "fieldsDontMatch"   : "The new password fields don't match, try again.",
@@ -171,7 +171,7 @@
         "filesMissing"      : "Important application files are missing! Please reinstall pocket-home.",
         "polkitMissing"     : "Unable to authenticate, pkaction not found. Please install the policykit-1 package."
     },
-    "Process::Launcher": 
+    "Process::Launcher":
     {
         "couldNotOpen"    : "Couldn't open application",
         "notValidCommand" : " is not a valid command."
@@ -199,9 +199,9 @@
         "connectingAP"      : "Connecting to ",
         "missingPSK"        : "Incorrect Password",
         "connectingUnknown" : "Connecting...",
-        "disconnecting"     : "Disconnecting..."   
+        "disconnecting"     : "Disconnecting..."
     },
-    "Settings::WifiList": 
+    "Settings::WifiList":
     {
         "password"         : "Password:",
         "connect"          : "Connect",
@@ -213,11 +213,11 @@
         "lastConnected"    : "Last connected: ",
         "deleteSaved"      : "Delete saved connection"
     },
-    "Widgets::ColourPicker" : 
+    "Widgets::ColourPicker" :
     {
-	    "setColour" : "Set Color"
+        "setColour" : "Set Color"
     },
-    "Widgets::FilePathEditor": 
+    "Widgets::FilePathEditor":
     {
         "defaultTitle"       : "Select an image file",
         "defaultDescription" : "Please select an image file"

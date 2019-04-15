@@ -1,10 +1,10 @@
 #include "Page_PasswordEditor.h"
 #include "Layout_Component_ConfigFile.h"
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "Page::PasswordEditor";
 
-/* Localized text value keys: */
+// Localized text value keys:
 namespace TextKey
 {
     static const juce::Identifier title           = "changePassword";
@@ -14,7 +14,8 @@ namespace TextKey
     static const juce::Identifier update          = "update";
 }
 
-/* Page layout constants: */
+
+// Page layout constants:
 static const constexpr int titleRowWeight   = 20;
 static const constexpr int contentRowWeight = 10;
 static const constexpr int labelWeight      = 20;
@@ -37,8 +38,8 @@ updateController(currentPasswordField, newPasswordField, confirmPasswordField,
     setBackButton(BackButtonType::left);
     using namespace Layout::Group;
     RelativeLayout layout({
-        Row(titleRowWeight, 
-        { 
+        Row(titleRowWeight,
+        {
             RowItem(&titleLabel)
         }),
         Row(contentRowWeight,
@@ -52,12 +53,12 @@ updateController(currentPasswordField, newPasswordField, confirmPasswordField,
             RowItem(&newPasswordField, textFieldWeight)
         }),
         Row(contentRowWeight,
-        { 
+        {
             RowItem(&confirmPasswordLabel, labelWeight),
             RowItem(&confirmPasswordField, textFieldWeight)
         }),
-        Row(contentRowWeight, 
-        { 
+        Row(contentRowWeight,
+        {
             RowItem(&updateButton)
         })
     });
@@ -69,7 +70,7 @@ updateController(currentPasswordField, newPasswordField, confirmPasswordField,
     titleLabel.setJustificationType(juce::Justification::centred);
     titleLabel.setText(localeText(TextKey::title),
             juce::NotificationType::dontSendNotification);
-    
+
     Layout::Component::ConfigFile config;
     const auto initLabel = [this, &config]
         (Widgets::BoundedLabel& label, const juce::Identifier& key)

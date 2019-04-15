@@ -21,10 +21,10 @@ enum class Page::Type
     removePassword,
     colourSettings,
     homeSettings,
-#ifdef CHIP_FEATURES
+    #ifdef CHIP_FEATURES
     fel,
-#endif
-#ifdef WIFI_SUPPORTED
+    #endif
+    #ifdef WIFI_SUPPORTED
     wifiConnection
-#endif
+    #endif
 };

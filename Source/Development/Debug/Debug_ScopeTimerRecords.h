@@ -16,7 +16,7 @@ namespace Debug
          *
          * @param scopeName  A name identifying the measured scope.
          *
-         * @param threadID   The thread where the timer was created and 
+         * @param threadID   The thread where the timer was created and
          *                   destroyed.
          */
         void addStartRecord(const juce::String scopeName,
@@ -27,7 +27,7 @@ namespace Debug
          *
          * @param scopeName  A name identifying the measured scope.
          *
-         * @param threadID   The thread where the timer was created and 
+         * @param threadID   The thread where the timer was created and
          *                   destroyed.
          */
         void addStopRecord(const juce::String scopeName,

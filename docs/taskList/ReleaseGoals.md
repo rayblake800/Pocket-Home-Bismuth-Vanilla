@@ -8,7 +8,7 @@
     1. Fix problems with recreating hidden entries.
 
 ## Configuration Improvements
-    1. Add config. option for enabling/disabling that PocketCHIP audio hack. 
+    1. Add config. option for enabling/disabling that PocketCHIP audio hack.
     2. Recreate config test class.
 
 ## Settings Page Improvements

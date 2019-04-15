@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  Page_Power.h
- * 
+ *
  * @brief  Provides the system power control page.
  */
 
@@ -15,13 +15,13 @@ namespace Page { class Power; }
  * @brief  A UI menu page that shows buttons that perform actions related to
  *         system power state.
  *
- * From this page, the user can shut down the system, reboot the system, turn 
+ * From this page, the user can shut down the system, reboot the system, turn
  * off the display, or enter PocketCHIP flashing mode.
  */
 class Page::Power : public Component, private Locale::TextUser
 {
 public:
-    
+
     Power();
 
     virtual ~Power() { }
@@ -29,13 +29,13 @@ public:
 private:
     /**
      * @brief  Turns off the display until key or mouse input is detected.
-     * 
+     *
      * The lock screen will be visible when the display turns on again.
      */
     void startSleepMode();
 
     /**
-     * @brief  Shows the power spinner to indicate to the user that the system 
+     * @brief  Shows the power spinner to indicate to the user that the system
      *         is restarting or shutting down.
      */
     void showPowerSpinner();
@@ -59,7 +59,8 @@ private:
         /**
          * @brief  Handles all button clicks within the power page.
          *
-         * @param button  A button component on the power page that was clicked.
+         * @param button  The button component on the power page that was
+         *                clicked.
          */
         virtual void buttonClicked(juce::Button* button) override;
 
@@ -67,22 +68,22 @@ private:
     };
     PageListener pageListener;
 
-    /* Identifies this pocket-home build: */
+    // Identifies this pocket-home build:
     Widgets::BoundedLabel buildLabel;
-    /* Turns off the system: */
+    // Turns off the system:
     juce::TextButton powerOffButton;
-    /* Starts sleep mode: */
+    // Starts sleep mode:
     juce::TextButton sleepButton;
-    /* Restarts the system: */
+    // Restarts the system:
     juce::TextButton rebootButton;
 #ifdef CHIP_FEATURES
-    /* Shows a page that gives the user the option to enter flashing mode: */
+    // Shows a page that gives the user the option to enter flashing mode:
     juce::TextButton felButton;
 #endif
-    /* Identifies the pocket-home version:*/
+    // Identifies the pocket-home version:
     Widgets::BoundedLabel versionLabel;
-    /* Spinner to indicate that the system is rebooting/shutting down: */
+    // Spinner to indicate that the system is rebooting/shutting down:
     Widgets::OverlaySpinner overlaySpinner;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Power)
 };

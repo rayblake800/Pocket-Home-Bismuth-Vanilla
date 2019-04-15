@@ -1,12 +1,12 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
  * @file  AppMenu_PopupEditor.h
- * 
- * @brief  A pop-up editor component that provides a user interface for creating
- *         and editing application menu items.
+ *
+ * @brief  A pop-up editor component that provides a user interface for
+ *         creating and editing application menu items.
  */
 
 #include "Locale_TextUser.h"
@@ -20,10 +20,10 @@
 namespace AppMenu { class PopupEditor; }
 
 /**
- *  @brief  Provides editor components for setting all relevant menu item 
- *          properties of a new or existing menu item. 
+ * @brief  Provides editor components for setting all relevant menu item
+ *         properties of a new or existing menu item.
  *
- *  The user may edit any of these data fields, then press the cancel button to 
+ *  The user may edit any of these data fields, then press the cancel button to
  * discard all changes, or the confirm button to save changes.
  *
  *  All saved changes are applied by the abstract commitEdits function, which
@@ -37,14 +37,14 @@ public:
     /**
      * @brief  Creates a new editor component for an application menu item.
      *
-     * @param onConfirm         An optional callback function to run when the 
+     * @param onConfirm         An optional callback function to run when the
      *                          confirm button is pressed.
-     * 
+     *
      * @param showCategoryList  Sets if the editor will contain a button that
      *                          shows the category list.
-     * 
+     *
      * @param showCommandField  Sets if the editor will contain a terminal
-     *                          command field and an "open in terminal" check 
+     *                          command field and an "open in terminal" check
      *                          box.
      */
     PopupEditor(
@@ -60,7 +60,7 @@ public:
     /**
      * @brief  Gets the contents of the menu item title field.
      *
-     * @return  The contents of the editable title field. 
+     * @return  The contents of the editable title field.
      */
     juce::String getTitleField() const;
 
@@ -75,7 +75,7 @@ public:
      * @brief  Gets the list of application categories assigned in the category
      *         editor.
      *
-     * @return  The contents of the editable category list. 
+     * @return  The contents of the editable category list.
      */
     const juce::StringArray& getCategories() const;
 
@@ -89,7 +89,7 @@ public:
     /**
      * @brief  Gets the state of the terminal checkbox.
      *
-     * @return  Whether the checkbox is selected and the command should run in 
+     * @return  Whether the checkbox is selected and the command should run in
      *          the terminal.
      */
     bool getTerminalCheckboxState() const;
@@ -102,7 +102,7 @@ public:
     void setTitleField(const juce::String& title);
 
     /**
-     * @brief  Sets the value stored in the editable icon name field, and 
+     * @brief  Sets the value stored in the editable icon name field, and
      *         updates the preview icon.
      *
      * @param icon  The new icon name or path.
@@ -125,7 +125,10 @@ public:
     void setCommandField(const juce::String& command);
 
     /**
-     * Sets the state of the "launch in terminal" checkbox.
+     * @brief  Sets the state of the "launch in terminal" checkbox.
+     *
+     * @param launchInTerm  Whether the "launch in terminal" checkbox will be
+     *                      marked.
      */
     void setTerminalCheckboxState(const bool launchInTerm);
 
@@ -143,55 +146,55 @@ protected:
 private:
     /**
      * @brief  Triggers whenever the icon field is set to a new value.
-     * 
+     *
      * @param iconEditor  The icon name editor.
      */
     virtual void fileSelected(Widgets::FilePathEditor* iconEditor) override;
 
     /**
      * @brief  Triggers whenever the category editor button is clicked.
-     * 
+     *
      * @param button  The category editor button.
      */
     virtual void editorButtonClicked(juce::Button* button) override;
 
     /**
-     * @brief  Ensures that the CategoryEditor bounds always match the main 
+     * @brief  Ensures that the CategoryEditor bounds always match the main
      *         editor bounds.
      */
     virtual void editorResized() final override;
 
-    /* Used to cancel pending icon requests on destruction. */
+    // Used to cancel pending icon requests on destruction.
     Icon::RequestID iconRequestID;
 
-    /* Label text: "Name:" */
-    Widgets::BoundedLabel nameLabel;     
-    /* Edits the application/folder display name. */
+    // Label text: "Name:"
+    Widgets::BoundedLabel nameLabel;
+    // Edits the application/folder display name.
     Widgets::TextEditor titleEditor;
 
-    /* Label text: "Icon path:" */
-    Widgets::BoundedLabel iconLabel; 
-    /* Draws a preview of the selected icon. */
+    // Label text: "Icon path:"
+    Widgets::BoundedLabel iconLabel;
+    // Draws a preview of the selected icon.
     Widgets::DrawableImage iconPreview;
-    /* Edits the application/folder icon */
+    // Edits the application/folder icon
     Widgets::FilePathEditor iconNameEditor;
 
-    /* Launches a category editor pop-up */
-    juce::TextButton categoryEditButton; 
-    /* Holds the category editor when it's launched. */
+    // Launches a category editor pop-up
+    juce::TextButton categoryEditButton;
+    // Holds the category editor when it's launched.
     std::unique_ptr<CategoryEditor> categoryEditor;
-    /* List of editable categories associated with this application/folder: */
+    // List of editable categories associated with this application/folder:
     juce::StringArray categories;
 
-    /* Label text: "Command:" */
+    // Label text: "Command:"
     Widgets::BoundedLabel commandLabel;
-    /* Edits the application launch command */
+    // Edits the application launch command
     Widgets::TextEditor commandEditor;
 
-    /* Label text: "Run in terminal:" */
+    // Label text: "Run in terminal:"
     Widgets::BoundedLabel terminalCheckboxLabel;
-    /* Sets if this application launches as a terminal application: */
+    // Sets if this application launches as a terminal application:
     Widgets::Switch terminalCheckbox;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopupEditor)
 };

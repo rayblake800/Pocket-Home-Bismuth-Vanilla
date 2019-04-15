@@ -2,8 +2,8 @@
 /**
  * @file  Testing_StressTest.h
  *
- * @brief Tests for thread safety by performing many simultaneous actions in
- *        many threads.
+ * @brief  Tests for thread safety by performing many simultaneous actions in
+ *         many threads.
  */
 
 #include <map>
@@ -26,8 +26,8 @@ public:
      *
      * @param testName     The name used to identify this action in test logs.
      *
-     * @param testAction   The test function the object will run. This 
-     *                     function's return value indicates whether the test 
+     * @param testAction   The test function the object will run. This
+     *                     function's return value indicates whether the test
      *                     passed.
      *
      * @param allowAction  An optional function to check if the test can run
@@ -57,8 +57,8 @@ public:
     bool canRunAction();
 
     /**
-     * @brief  Runs the test action and saves the results, assuming canRunAction
-     *         allows it.
+     * @brief  Runs the test action and saves the results, assuming
+     *         canRunAction allows it.
      */
     void runTestAction();
 
@@ -77,23 +77,23 @@ public:
     int getSuccessfulActionCount() const;
 
 private:
-    /* Test description: */
+    // Test description:
     const juce::String testName;
-    /* Runs the test, returning the result: */
+    // Runs the test, returning the result:
     std::function<bool()> testAction;
-    /* Returns whether the test may run: */
+    // Returns whether the test may run:
     std::function<bool()> allowAction;
-    /* Tracks how many times the test ran: */
+    // Tracks how many times the test ran:
     juce::Atomic<int> testsRan;
-    /* Tracks how many times the test passed: */
+    // Tracks how many times the test passed:
     juce::Atomic<int> testsPassed;
 };
 
 /**
- * @brief  A UnitTest class that can run a stress test, attempting many 
+ * @brief  A UnitTest class that can run a stress test, attempting many
  *         simultaneous actions on many threads.
  */
-class Testing::StressTest : public juce::UnitTest 
+class Testing::StressTest : public juce::UnitTest
 {
 public:
     /**
@@ -107,22 +107,22 @@ public:
      *
      * @param maxThreads    Maximum number of testing threads to run at once.
      *
-     * @param actionFreq    Longest amount of time (in milliseconds) that
+     * @param actionFreq    Longest amount of time(in milliseconds) that
      *                      threads should sleep between actions.
      *
      * @param testDuration  Duration to run tests, in seconds.
      */
     StressTest(
-            const juce::String testName, 
+            const juce::String testName,
             const juce::String testCategory,
             const int minThreads,
             const int maxThreads,
             const int actionFreq,
             const int testDuration);
-            
+
 protected:
     /**
-     * Adds a new action for threads to randomly perform while testing. 
+     * @brief  Adds a new action for threads to randomly perform while testing.
      *
      * @param testAction  A function that threads may randomly select to run
      *                    while testing.
@@ -130,18 +130,18 @@ protected:
     void addAction(Action testAction);
 
     /**
-     * @brief  Starts the threaded stress test.  
+     * @brief  Starts the threaded stress test.
      *
-     * This creates the minimum number of threads, and allows them to perform 
-     * random actions for <testDuration> seconds.  This should be called once in
+     * This creates the minimum number of threads, and allows them to perform
+     * random actions for <testDuration> seconds. This should be called once in
      * the runTest() method of StressTest unit tests.
      */
     void runThreads();
-    
+
 private:
     /**
-     * @brief  Runs a child thread that randomly selects and performs actions for
-     *         the duration of a test. 
+     * @brief  Runs a child thread that randomly selects and performs actions
+     *         for the duration of a test.
      */
     class TestThread : public juce::Thread
     {
@@ -157,31 +157,31 @@ private:
 
     private:
         /**
-         * @brief  Runs a random test from the list of test actions, then sleeps 
-         *         for a random amount of time less than the maximum test delay
-         *         period.
+         * @brief  Runs a random test from the list of test actions, then
+         *         sleeps for a random amount of time less than the maximum
+         *         test delay period.
          */
         virtual void run() override;
-        
-        /* The UnitTest that created the thread, used to access test actions and
-         * frequency. */
+
+        // The UnitTest that created the thread, used to access test actions
+        // and frequency.
         StressTest& testSource;
     };
 
-    /* All actions that TestThreads may select while testing: */
+    // All actions that TestThreads may select while testing:
     juce::Array<Action> testActions;
-    /* Minimum number of TestThreads to run at once. */
+    // Minimum number of TestThreads to run at once.
     const int minThreads;
-    /* Maximum number of TestThreads to run at once: */
+    // Maximum number of TestThreads to run at once:
     const int maxThreads;
-    /* Maximum amount of time for threads to sleep between actions, in 
-     * milliseconds. */
+    // Maximum amount of time for threads to sleep between actions, in
+    // milliseconds.
     const int actionFreq;
-    /* Amount of time to allow TestThreads to act, in seconds: */
+    // Amount of time to allow TestThreads to act, in seconds:
     const int testDuration;
-    /* The time an active test should end, in milliseconds since the Unix
-     * epoch. */
+    // The time an active test should end, in milliseconds since the Unix
+    // epoch.
     juce::uint64 endTime;
-    /* Holds all active test threads: */
+    // Holds all active test threads:
     juce::OwnedArray<TestThread, juce::CriticalSection> threads;
 };

@@ -7,14 +7,11 @@
 
 namespace WifiRecord = Wifi::Connection::Record;
 
-/*
- * Initializes the RecordModule if necessary.
- */
+// Initializes the RecordModule if necessary.
 WifiRecord::Handler::Handler() { }
 
-/*
- * Checks if the system has an active, established Wifi network connection.
- */
+
+// Checks if the system has an active, established Wifi network connection.
 bool WifiRecord::Handler::isConnected() const
 {
     SharedResource::Modular::LockedPtr<Resource, const Module> recordModule
@@ -22,9 +19,8 @@ bool WifiRecord::Handler::isConnected() const
     return recordModule->isConnected();
 }
 
-/*
- * Checks if NetworkManager is currently opening a network connection.
- */
+
+// Checks if NetworkManager is currently opening a network connection.
 bool WifiRecord::Handler::isConnecting() const
 {
     SharedResource::Modular::LockedPtr<Resource, const Module> recordModule
@@ -32,9 +28,8 @@ bool WifiRecord::Handler::isConnecting() const
     return recordModule->isConnecting();
 }
 
-/*
- * Gets the access point being used by the active or activating connection.
- */
+
+// Gets the access point being used by the active or activating connection.
 Wifi::AccessPoint WifiRecord::Handler::getActiveAP() const
 {
     SharedResource::Modular::LockedPtr<Resource, const Module> recordModule
@@ -42,9 +37,8 @@ Wifi::AccessPoint WifiRecord::Handler::getActiveAP() const
     return recordModule->getActiveAP();
 }
 
-/*
- * Gets the most recent connection event in the connection history.
- */
+
+// Gets the most recent connection event in the connection history.
 Wifi::Connection::Event WifiRecord::Handler::getLatestEvent() const
 {
     SharedResource::Modular::LockedPtr<Resource, const Module> recordModule
@@ -52,10 +46,9 @@ Wifi::Connection::Event WifiRecord::Handler::getLatestEvent() const
     return recordModule->getLatestEvent();
 }
 
-/*
- * Gets the most recent connection event that involves a particular access 
- * point.
- */
+
+// Gets the most recent connection event that involves a particular access
+// point.
 Wifi::Connection::Event WifiRecord::Handler::getLatestEvent
 (const AccessPoint eventAP) const
 {
@@ -64,9 +57,8 @@ Wifi::Connection::Event WifiRecord::Handler::getLatestEvent
     return recordModule->getLatestEvent(eventAP);
 }
 
-/*
- * Gets the most recent connection event with a specific event type.
- */
+
+// Gets the most recent connection event with a specific event type.
 Wifi::Connection::Event WifiRecord::Handler::getLatestEvent
 (const EventType eventType) const
 {
@@ -75,10 +67,9 @@ Wifi::Connection::Event WifiRecord::Handler::getLatestEvent
     return recordModule->getLatestEvent(eventType);
 }
 
-/*
- * Gets the most recent connection event with a specific event type and access 
- * point.
- */
+
+// Gets the most recent connection event with a specific event type and access
+// point.
 Wifi::Connection::Event WifiRecord::Handler::getLatestEvent
 (const AccessPoint eventAP, const EventType eventType) const
 {
@@ -86,11 +77,10 @@ Wifi::Connection::Event WifiRecord::Handler::getLatestEvent
             = getReadLockedResource();
     return recordModule->getLatestEvent(eventAP, eventType);
 }
-    
-/*
- * Connects with NetworkManager to initialize or update the most recent 
- * connection record.
- */
+
+
+// Connects with NetworkManager to initialize or update the most recent
+// connection record.
 void WifiRecord::Handler::updateRecords()
 {
     SharedResource::Modular::LockedPtr<Resource, Module> recordModule

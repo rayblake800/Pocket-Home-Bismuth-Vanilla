@@ -23,6 +23,7 @@ use CategoryMenu;
 use ExportMenu;
 use UpdateMenu;
 
+
 # Displays the main menu, repeatedly accepting input and running the menu action
 # with the selected option parameter until the user enters 'q'.
 sub openMenu
@@ -34,8 +35,8 @@ sub openMenu
     $menu->addOption("Scan project for new ColourId enums",
             sub { EnumMenu::openMenu($cache); });
     $menu->addOption("Find next open ID value",
-            sub 
-            { 
+            sub
+            {
                 my @elements = $cache->getElements();
                 my $lastID = hex($elements[-1]->getID()) + 0x100;
                 $lastID = sprintf("0x%x", $lastID);
@@ -51,7 +52,6 @@ sub openMenu
             sub { ExportMenu::openMenu($cache); });
     $menu->addOption("Update project files",
             sub { UpdateMenu::openMenu($cache); });
-
     $menu->openMenu();
 }
 1;

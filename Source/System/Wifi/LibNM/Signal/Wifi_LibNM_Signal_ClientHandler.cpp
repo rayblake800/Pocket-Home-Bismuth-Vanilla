@@ -10,38 +10,35 @@
 #include "SharedResource_Modular_Handler.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
-static const constexpr char* dbgPrefix = "Wifi::LibNM::Signal::ClientHandler::";
+// Print the full class name before all debug output:
+static const constexpr char* dbgPrefix
+        = "Wifi::LibNM::Signal::ClientHandler::";
 #endif
 
 namespace NMSignal = Wifi::LibNM::Signal;
 
-/*
- * Notifies the ClientHandler when wireless networking is enabled or disabled.
- */
+// Notifies the ClientHandler when wireless networking is enabled or disabled.
 void NMSignal::ClientHandler::wirelessStateChange(bool wifiEnabled) { }
 
-/*
- * Subscribes to all relevant signals from a single Client signal source.
- */
+
+// Subscribes to all relevant signals from a single Client signal source.
 void NMSignal::ClientHandler::connectAllSignals(const Client source)
 {
     ASSERT_NM_CONTEXT;
-    if(!source.isNull())
+    if (!source.isNull())
     {
         createPropertyConnection(NM_CLIENT_WIRELESS_ENABLED, source);
     }
 }
 
-/*
- * Converts generic propertyChanged calls to class-specific wirelessStateChange 
- * calls.
- */
+
+// Converts generic propertyChanged calls to class-specific wirelessStateChange
+// calls.
 void NMSignal::ClientHandler::propertyChanged
 (const Client source, juce::String property)
-{ 
+{
     ASSERT_NM_CONTEXT;
-    if(!source.isNull() && property == NM_CLIENT_WIRELESS_ENABLED)
+    if (!source.isNull() && property == NM_CLIENT_WIRELESS_ENABLED)
     {
         const bool enabled = source.wirelessEnabled();
         wirelessStateChange(enabled);

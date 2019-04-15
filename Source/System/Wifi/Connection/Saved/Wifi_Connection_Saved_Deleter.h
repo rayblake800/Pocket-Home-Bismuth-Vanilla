@@ -5,25 +5,25 @@
  */
 #include "Wifi_Module.h"
 
-namespace Wifi 
-{ 
+namespace Wifi
+{
     class Resource;
     class AccessPoint;
-    namespace Connection 
-    {  
-        namespace Saved 
-        { 
-            class Deleter; 
+    namespace Connection
+    {
+        namespace Saved
+        {
+            class Deleter;
             class Module;
-        } 
+        }
     }
 }
 
 /**
- * @brief  Connects to the Connection::Saved::Module to delete saved 
+ * @brief  Connects to the Connection::Saved::Module to delete saved
  *         connections.
  */
-class Wifi::Connection::Saved::Deleter : 
+class Wifi::Connection::Saved::Deleter :
         public SharedResource::Modular::Handler<Resource, Module>
 {
 public:

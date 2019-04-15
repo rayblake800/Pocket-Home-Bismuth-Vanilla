@@ -36,7 +36,7 @@
     - Ensure all focusable UI components provide some sort of indication that they're focused.
     - Consider handling focus traversal at the Page::Component level.
 - Implement or include an on-screen keyboard
-    - Keyboard should be usable with a mouse, touch screen, or simple navigation buttons. 
+    - Keyboard should be usable with a mouse, touch screen, or simple navigation buttons.
 
 ### Better testing for UI components:
 - Create a TestPage Component class that displays a single UI component along with controls for triggering various component tests.
@@ -60,7 +60,7 @@
 ### Admin and authentication tools:
 - Write a setuid program to handle root actions.
     - Updating the application password.
-    - Saving calibration data. 
+    - Saving calibration data.
     - Changing the date and time.
 - Create custom PolKit policies for interacting with the setuid program.
 - Implement a PolKit authentication agent within the application to eliminate the dependancy on the GNOME authentication agent.
@@ -86,4 +86,4 @@
 ### Component editing:
 - Set component layouts within a UI settings page.
 - Provide controls for setting font sizes within the application.
-- Provide controls for selecting image resources within the application. 
+- Provide controls for selecting image resources within the application.

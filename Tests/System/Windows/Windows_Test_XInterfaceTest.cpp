@@ -8,12 +8,16 @@
 
 namespace Windows { namespace Test { class XInterfaceTest; } }
 
+/**
+ * @brief  Tests window information reading and window focus control through
+ *         Windows::Xinterface.
+ */
 class Windows::Test::XInterfaceTest : public juce::UnitTest
 {
 public:
     XInterfaceTest() : juce::UnitTest("Windows::XInterface testing",
             "Windows") {}
-    
+
     void runTest() override
     {
         using namespace Process;
@@ -21,35 +25,35 @@ public:
         beginTest("Home Window Tests");
         XInterface xwin;
         Window homeWin = xwin.getMainAppWindow();
-        expect(homeWin != 0, "pocket-home window couldn't be found."); 
+        expect(homeWin != 0, "pocket-home window couldn't be found.");
         xwin.activateWindow(homeWin);
 
-        expect(Testing::DelayUtils::idleUntil([&xwin, &homeWin]() 
-        { 
+        expect(Testing::DelayUtils::idleUntil([&xwin, &homeWin]()
+        {
             return xwin.isActiveWindow(homeWin);
         }, 500, 5000), "pocket-home window should have been active.");
 
         expectEquals(xwin.getDesktopIndex(), xwin.getWindowDesktop(homeWin),
-		"pocket-home window should have been on the current desktop");
-        
+        "pocket-home window should have been on the current desktop");
+
         StringArray testApps = { "xeyes", "xclock",  "xterm" };
         String testApp;
-        for(const String& app : testApps)
+        for (const String& app : testApps)
         {
-            if(Launcher::testCommand(app))
+            if (Launcher::testCommand(app))
             {
                 logMessage(String("Test application:") + app);
                 testApp = app;
                 break;
             }
         }
-        if(testApp.isEmpty())
+        if (testApp.isEmpty())
         {
             logMessage("No valid test application found, skipping last test.");
             return;
         }
 
-        
+
         beginTest("Other window test");
 
         ChildProcess c;
@@ -60,9 +64,9 @@ public:
             using namespace Process;
             Data runningProcess(getpid());
             Array<Data> childProcs = runningProcess.getChildProcesses();
-            for(const Data& process : childProcs)
+            for (const Data& process : childProcs)
             {
-                if(process.getExecutableName().containsIgnoreCase(testApp))
+                if (process.getExecutableName().containsIgnoreCase(testApp))
                 {
                     windowProcess = (int) process.getProcessId();
                     return true;
@@ -74,30 +78,30 @@ public:
                 && windowProcess != -1,
                 String("New child process for ") + testApp + " not found.");
         DBG("Process ID = " << windowProcess);
-        
+
         std::function<bool(const Window)> validWindow =
-            [&xwin, windowProcess](const Window win)
+            [&xwin, windowProcess] (const Window win)
             {
-                return ((xwin.getWindowName(win).isNotEmpty()
+                return ( (xwin.getWindowName(win).isNotEmpty()
                     || xwin.getWindowClass(win).isNotEmpty()
                     || xwin.getWindowClassName(win).isNotEmpty())
                         && xwin.getWindowPID(win) == windowProcess);
             };
-        
+
         Window testWin;
-        std::function<bool()> findWindow 
+        std::function<bool()> findWindow
             = [this, &xwin, &validWindow, &testWin]()
         {
             Array<Window> testWindows = xwin.getMatchingWindows(validWindow);
-            if(testWindows.size() == 1)
+            if (testWindows.size() == 1)
             {
                 testWin = testWindows[0];
                 return true;
             }
-            if(testWindows.size() > 1)
+            if (testWindows.size() > 1)
             {
-               DBG("Found too many matching windows, " <<testWindows.size()
-                       << " windows found.");
+                DBG("Found too many matching windows, " <<testWindows.size()
+                        << " windows found.");
             }
             return false;
         };
@@ -107,21 +111,21 @@ public:
         xwin.activateWindow(testWin);
         expect(Testing::DelayUtils::idleUntil([&xwin, &testWin]()->bool
         {
-            return xwin.isActiveWindow(testWin); 
+            return xwin.isActiveWindow(testWin);
         }, 500, 8000), "test window should have been active.");
-        expect(!xwin.isActiveWindow(homeWin), 
+        expect(!xwin.isActiveWindow(homeWin),
                 "pocket-home window should not have been active.");
-        
+
         logMessage("Activating home window:");
         xwin.activateWindow(homeWin);
         expect(Testing::DelayUtils::idleUntil([&xwin, &testWin]()->bool
         {
-            return !xwin.isActiveWindow(testWin); 
+            return !xwin.isActiveWindow(testWin);
         }, 500, 8000), "test window should not have been active.");
-        expect(xwin.isActiveWindow(homeWin), 
+        expect(xwin.isActiveWindow(homeWin),
                 "pocket-home window should have been active.");
         c.kill();
-     }
+    }
 };
 
 static Windows::Test::XInterfaceTest test;

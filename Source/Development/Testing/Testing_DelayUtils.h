@@ -9,15 +9,19 @@
  */
 namespace Testing { class DelayUtils; }
 
+/**
+ * @brief  Provides the static idleUntil method used to run the JUCE event loop
+ *         until some condition is met or times out.
+ */
 class Testing::DelayUtils
 {
 public:
     /**
-     * @brief  Runs the juce dispatch loop until an expected condition is true. 
+     * @brief  Runs the juce dispatch loop until an expected condition is true.
      *
      * @param waitCondition     Tests if the expected condition is true yet.
      *
-     * @param testFrequencyMS   Milliseconds to wait between tests of the 
+     * @param testFrequencyMS   Milliseconds to wait between tests of the
      *                          expected condition.
      *
      * @param timeoutMS         Milliseconds to wait before assuming the

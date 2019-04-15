@@ -2,26 +2,25 @@
 #include "Assets.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Assets::JSONFile::";
 #endif
 
-/* Maximum number of decimal places saved when writing double values to JSON: */
+// Maximum number of decimal places saved when writing double values to JSON:
 static const constexpr int decimalPlacesSaved = 5;
 
-/*
- * Creates a JSON data file interface, creating a new JSON file or reading an
- * existing JSON file's data.
- */
-Assets::JSONFile::JSONFile(const juce::String filePath) : filePath(filePath) 
-{ 
+
+// Creates a JSON data file interface, creating a new JSON file or reading an
+// existing JSON file's data.
+Assets::JSONFile::JSONFile(const juce::String filePath) : filePath(filePath)
+{
     using juce::var;
     jsonData = Assets::loadJSONAsset(filePath);
-    if(!jsonData.isObject())
+    if (!jsonData.isObject())
     {
-        jsonData = var(); 
+        jsonData = var();
         juce::File sourceFile = Assets::findAssetFile(filePath);
-        if(sourceFile.existsAsFile())
+        if (sourceFile.existsAsFile())
         {
             if (sourceFile.getSize() > 0)
             {
@@ -31,7 +30,7 @@ Assets::JSONFile::JSONFile(const juce::String filePath) : filePath(filePath)
         else
         {
             juce::Result createFile = sourceFile.create();
-            if(!createFile)
+            if (!createFile)
             {
                 throw FileException(filePath, createFile.getErrorMessage());
             }
@@ -40,23 +39,20 @@ Assets::JSONFile::JSONFile(const juce::String filePath) : filePath(filePath)
     }
 }
 
-/*
- * Constructs the JSONFile object with no actual file.
- */
+
+// Constructs the JSONFile object with no actual file.
 Assets::JSONFile::JSONFile() { }
 
-/*
- * Checks if this object has a valid JSON file it controls.
- */
+
+// Checks if this object has a valid JSON file it controls.
 bool Assets::JSONFile::isValidFile() const
 {
     juce::File sourceFile = Assets::findAssetFile(filePath);
     return sourceFile.existsAsFile() && sourceFile.getSize() > 0;
 }
 
-/*
- * Saves all changes back to the source file if applicable.
- */
+
+// Saves all changes back to the source file if applicable.
 Assets::JSONFile::~JSONFile()
 {
     try
@@ -69,10 +65,9 @@ Assets::JSONFile::~JSONFile()
     }
 }
 
-/*
- * Re-writes all data back to the config file, as long as there are
- * changes to write.
- */
+
+// Re-writes all data back to the config file, as long as there are changes to
+// write.
 void Assets::JSONFile::writeChanges()
 {
     using namespace juce;
@@ -88,17 +83,16 @@ void Assets::JSONFile::writeChanges()
     }
     else
     {
-	jsonFile.setLastModificationTime(Time::getCurrentTime());
+    jsonFile.setLastModificationTime(Time::getCurrentTime());
         unwrittenChanges = false;
     }
 }
- 
+
+
 // Specializations need to be in the same namespace as the original:
-namespace Assets 
+namespace Assets
 {
-    /*
-     * Removes and returns a value of type T from a var container. 
-     */
+    // Removes and returns a value of type T from a var container.
     template<> juce::String JSONFile::extractProperty<juce::String>
     (juce::var& container) const { return container; }
 
@@ -114,17 +108,17 @@ namespace Assets
     template<> juce::var JSONFile::extractProperty<juce::var>
     (juce::var& container) const { return container; }
 
-    template<> juce::Array<juce::var> JSONFile::extractProperty 
+    template<> juce::Array<juce::var> JSONFile::extractProperty
     <juce::Array<juce::var>>
     (juce::var& container) const
     {
         using juce::Array;
         using juce::var;
         Array<var>* arrayProperty = container.getArray();
-        if(arrayProperty != nullptr)
+        if (arrayProperty != nullptr)
         {
             return Array<var>(*container.getArray());
-        } 
+        }
             DBG(dbgPrefix << __func__ << ": Array is null!");
         return Array<var>();
     }
@@ -137,9 +131,8 @@ namespace Assets
     }
 }
 
-/*
- * Gets the name of the data type held in the JSON var object.
- */
+
+// Gets the name of the data type held in the JSON var object.
 juce::String Assets::JSONFile::getTypeName(const juce::var& property) const
 {
     if (property.isVoid())
@@ -189,12 +182,11 @@ juce::String Assets::JSONFile::getTypeName(const juce::var& property) const
     return "var";
 }
 
+
 // Specializations need to be in the same namespace as the original:
-namespace Assets 
+namespace Assets
 {
-    /*
-     * Gets the name of a data type that may be contained in a JSON var object.
-     */
+    // Gets the name of a data type that may be contained in a JSON var object.
     template<>juce::String JSONFile::getTypeName<int>() const
     {
         return "int";
@@ -215,13 +207,13 @@ namespace Assets
         return "String";
     }
 
-    template<>juce::String JSONFile::getTypeName<juce::DynamicObject*>() 
+    template<>juce::String JSONFile::getTypeName<juce::DynamicObject*>()
             const
     {
         return "DynamicObject*";
     }
 
-    template<>juce::String JSONFile::getTypeName<juce::Array<juce::var>>() 
+    template<>juce::String JSONFile::getTypeName<juce::Array<juce::var>>()
             const
     {
         return "Array<var>";

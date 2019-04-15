@@ -2,7 +2,7 @@
 /**
  * @file  GLib_Test_OwnedObject.h
  *
- * @brief  A minimal GLib::Owned::Object test class to use for thread safety 
+ * @brief  A minimal GLib::Owned::Object test class to use for thread safety
  *         testing.
  */
 
@@ -13,6 +13,10 @@
 
 namespace GLib { namespace Test { class OwnedObject; } }
 
+/**
+ * @brief  A simple GLib::Owned::Object class used to test Owned::Object thread
+ *         safety and reference count handling.
+ */
 class GLib::Test::OwnedObject : public GLib::Owned::Object
 {
 public:
@@ -27,9 +31,9 @@ public:
      * @param toCopy  An existing OwnedObject instance.
      */
     OwnedObject(const OwnedObject& toCopy);
-    
+
     /**
-     * @brief  Creates an OwnedObject holding a GTestObject. 
+     * @brief  Creates an OwnedObject holding a GTestObject.
      *
      * @param toAssign  The GTestObject instance to assign.
      */
@@ -44,24 +48,24 @@ public:
      *          null.
      */
     juce::String getTestString() const;
-    
+
     /**
-     * @brief  Gets the object's testInt value. 
+     * @brief  Gets the object's testInt value.
      *
      * @return  The testInt value, or -1 if this object is null.
      */
     int getTestInt() const;
 
     /**
-     * @brief  Changes the object's testString value, or does nothing if this 
+     * @brief  Changes the object's testString value, or does nothing if this
      *         object is null.
      *
      * @param newString  The new value to store as the test string.
      */
     void setTestString(juce::String newString);
-    
+
     /**
-     * @brief  Changes the object's testInt value, or does nothing if this 
+     * @brief  Changes the object's testInt value, or does nothing if this
      *         object is null.
      *
      * @param newInt  The new value to store as the test int.
@@ -81,7 +85,7 @@ public:
         virtual ~Listener();
 
         using GLib::Signal::Handler<OwnedObject>::isConnected;
-        
+
     protected:
         /**
          * @brief  Connects to property change signals from an OwnedObject.
@@ -92,14 +96,14 @@ public:
 
     private:
         /**
-         * @brief  Handles property change signals, and checks that the signals 
+         * @brief  Handles property change signals, and checks that the signals
          *         are valid.
          *
          * @param source    A connected OwnedObject.
          *
          * @param property  The updated GTestObject property.
          */
-        virtual void propertyChanged(const OwnedObject source, 
+        virtual void propertyChanged(const OwnedObject source,
                 juce::String property) override;
 
         std::map<GObject*, juce::String> trackedStrings;
@@ -107,19 +111,19 @@ public:
     };
 
     /**
-     * Adds a new listener to this OwnedObject's property updates.
+     * @brief  Adds a new listener to this OwnedObject's property updates.
      *
      * @param listener  The listener object to connect.
      */
     void addListener(Listener& listener);
 
     /**
-     * Disconnects a listener from this OwnedObject's property updates.
+     * @brief  Disconnects a listener from this OwnedObject's property updates.
      *
      * @param listener  The listener object to disconnect.
      *
-     * @return          True if the listener was removed from this object, 
-     *                  false if the listener was never listening to this 
+     * @return          True if the listener was removed from this object,
+     *                  false if the listener was never listening to this
      *                  object.
      */
     bool removeListener(Listener& listener);

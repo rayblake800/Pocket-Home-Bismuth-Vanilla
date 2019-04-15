@@ -1,11 +1,11 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
  * @file  Wifi_AP_Data.h
  *
- * @brief  Defines the access point data class used by equivalent AccessPoint 
+ * @brief  Defines the access point data class used by equivalent AccessPoint
  *         objects to share data.
  */
 
@@ -53,8 +53,8 @@ public:
      *
      * @return     Whether this and rhs have identical hash values.
      */
-    bool operator==(const Data& rhs) const;
-    
+    bool operator== (const Data& rhs) const;
+
     /**
      * @brief  Compares Data objects using their hash values.
      *
@@ -62,18 +62,18 @@ public:
      *
      * @return     Whether this and rhs do not have identical hash values.
      */
-    bool operator!=(const Data& rhs) const;
-    
+    bool operator!= (const Data& rhs) const;
+
     /**
      * @brief  Compares Data objects using their hash values so they can be
      *         sorted.
      *
      * @param rhs  The Data object to compare with this one.
      *
-     * @return     Whether this access point's hash value should come before the 
-     *             rhs Data's hash value.
+     * @return     Whether this access point's hash value should come before
+     *             the rhs Data's hash value.
      */
-    bool operator<(const Data& rhs) const;
+    bool operator< (const Data& rhs) const;
 
     /**
      * @brief  Gets the access point's primary identifier.
@@ -102,16 +102,16 @@ public:
      * @brief  Gets the last recorded time the system was connected using this
      *         access point's connection.
      *
-     * @return  The last connection time as the number of milliseconds since the
-     *          Unix epoch, or 0 if no record exists of the system using this 
-     *          access point's connection.
+     * @return  The last connection time as the number of milliseconds since
+     *          the Unix epoch, or 0 if no record exists of the system using
+     *          this access point's connection.
      */
     juce::int64 getLastConnectionTime() const;
 
     /**
      * @brief  Gets the access point's general security type.
      *
-     * @return  The type of security, if any, protecting the access point. 
+     * @return  The type of security, if any, protecting the access point.
      */
     LibNM::SecurityType getSecurityType() const;
 
@@ -119,7 +119,7 @@ public:
      * @brief  Checks if a security key is formatted correctly for this access
      *         point's security type.
      *
-     * @param psk  A possible access point security key. 
+     * @param psk  A possible access point security key.
      *
      * @return     Whether the psk is a valid security key for this access
      *             point's security type.
@@ -129,7 +129,7 @@ public:
     /**
      * @brief  Gets the hash value used to identify and sort the access point.
      *
-     * @return  The access point's APHash value. 
+     * @return  The access point's APHash value.
      */
     LibNM::APHash getHashValue() const;
 
@@ -153,8 +153,8 @@ public:
      * @brief  Stores the last time the system was connected to a network using
      *         a connection that is compatible with this access point.
      *
-     * @param newTime  The new connection time to store, expressed as the number
-     *                 of milliseconds since the Unix epoch.
+     * @param newTime  The new connection time to store, expressed as the
+     *                 number of milliseconds since the Unix epoch.
      */
     void setLastConnectionTime(const juce::int64 newTime);
 
@@ -173,23 +173,23 @@ public:
     juce::String toString() const;
 
 private:
-    /* The hash value used to compare access points and identify access points
-       with equivalent connections. */
+    // The hash value used to compare access points and identify access points
+    // with equivalent connections.
     LibNM::APHash hash;
 
-    /* The access point's displayed name and primary ID. */
+    // The access point's displayed name and primary ID.
     LibNM::SSID ssid;
 
-    /* The access point's basic security type. */
+    // The access point's basic security type.
     LibNM::SecurityType securityType;
 
-    /* The access point's signal strength, between 0 and 100. */
+    // The access point's signal strength, between 0 and 100.
     juce::Atomic<unsigned int> signalStrength;
 
-    /* Tracks if a saved connection exists that is compatible with this
-       access point. */
+    // Tracks if a saved connection exists that is compatible with this
+    // access point.
     juce::Atomic<unsigned int> connectionSaved;
 
-    /* The last recorded time this access point was connected. */
+    // The last recorded time this access point was connected.
     juce::Atomic<juce::int64> connectionTime;
 };

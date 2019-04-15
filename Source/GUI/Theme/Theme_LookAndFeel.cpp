@@ -21,34 +21,33 @@ mainListener(*this)
     using juce::Array;
     using juce::Identifier;
     const Array<int>& colourIds = Colour::JSONKeys::getColourIds();
-    for(const int& id : colourIds)
+    for (const int& id : colourIds)
     {
         addTrackedColourId(id);
     }
-    const Array<Identifier>& categoryKeys = Colour::JSONKeys::getCategoryKeys();
-    for(const Identifier& key : categoryKeys)
+    const Array<Identifier>& categoryKeys
+            = Colour::JSONKeys::getCategoryKeys();
+    for (const Identifier& key : categoryKeys)
     {
         addTrackedKey(key);
     }
     DBG("Theme::LookAndFeel::LookAndFeel: Tracking " << colourIds.size()
-            << " color id values, " << categoryKeys.size()
+            << " colour id values, " << categoryKeys.size()
             << " category keys.");
     loadAllConfigProperties();
     mainListener.loadSettings();
 }
 
-/*
- * Get the appropriate typeface for the given font.
- */
+
+// Get the appropriate typeface for the given font.
 juce::Typeface::Ptr Theme::LookAndFeel::getTypefaceForFont
 (const juce::Font &font)
 {
     return seguibl;
 }
 
-/*
- * Draws the thumb portion of a linear Slider.
- */
+
+// Draws the thumb portion of a linear Slider.
 void Theme::LookAndFeel::drawLinearSliderThumb(
         juce::Graphics &g,
         int x,
@@ -82,9 +81,8 @@ void Theme::LookAndFeel::drawLinearSliderThumb(
     g.fillPath(circle);
 }
 
-/*
- * Draws the background of a linear slider.
- */
+
+// Draws the background of a linear slider.
 void Theme::LookAndFeel::drawLinearSliderBackground(
         juce::Graphics &g,
         int x,
@@ -122,9 +120,8 @@ void Theme::LookAndFeel::drawLinearSliderBackground(
     g.fillPath(indent);
 }
 
-/*
- * Draws the entire linear slider component.
- */
+
+// Draws the entire linear slider component.
 void Theme::LookAndFeel::drawLinearSlider(
         juce::Graphics &g,
         int x,
@@ -145,24 +142,22 @@ void Theme::LookAndFeel::drawLinearSlider(
             slider);
 }
 
-/*
- * Defines the radius in pixels of the slider thumb.
- */
+
+// Defines the radius in pixels of the slider thumb.
 int Theme::LookAndFeel::getSliderThumbRadius(juce::Slider &slider)
 {
     return juce::jmin(14, slider.getHeight() / 2, slider.getWidth() / 2);
 }
 
-/*
- * Draws the text onto a TextButton.
- */
+
+// Draws the text onto a TextButton.
 void Theme::LookAndFeel::drawButtonText(
-        juce::Graphics &g, 
+        juce::Graphics &g,
         juce::TextButton &button,
         bool isMouseOverButton,
         bool isButtonDown)
 {
-    if(button.getButtonText().isEmpty() || button.getBounds().isEmpty())
+    if (button.getButtonText().isEmpty() || button.getBounds().isEmpty())
     {
         return;
     }
@@ -188,7 +183,7 @@ void Theme::LookAndFeel::drawButtonText(
             (textBounds, button.getButtonText());
     font.setHeight(fontHeight);
     g.setFont(font);
-    
+
     juce::Colour buttonColour = button.findColour(button.getToggleState() ?
             TextButton::textColourOnId : TextButton::textColourOffId);
     if (!button.isEnabled())
@@ -205,13 +200,12 @@ void Theme::LookAndFeel::drawButtonText(
             width, height, juce::Justification::centred, 2);
 }
 
-/*
- * Draws the background of a Button component.
- */
+
+// Draws the background of a Button component.
 void Theme::LookAndFeel::drawButtonBackground(
-        juce::Graphics &g, 
+        juce::Graphics &g,
         juce::Button &button,
-        const juce::Colour &backgroundColour, 
+        const juce::Colour &backgroundColour,
         bool isMouseOverButton,
         bool isButtonDown)
 {
@@ -222,8 +216,8 @@ void Theme::LookAndFeel::drawButtonBackground(
     juce::Path path;
     path.addRoundedRectangle(0, 0, width, height, 1);
     juce::Colour buttonColour = (button.getToggleState() ?
-                           findColour(TextButton::ColourIds::buttonOnColourId) :
-                           findColour(TextButton::ColourIds::buttonColourId));
+            findColour(TextButton::ColourIds::buttonOnColourId)
+            : findColour(TextButton::ColourIds::buttonColourId));
     if (isButtonDown && isMouseOverButton)
     {
         buttonColour = buttonColour.darker();
@@ -232,18 +226,16 @@ void Theme::LookAndFeel::drawButtonBackground(
     g.fillPath(path);
 }
 
-/*
- * Get the cursor to display over a given component.
- */
+
+// Get the cursor to display over a given component.
 juce::MouseCursor Theme::LookAndFeel::getMouseCursorFor
 (juce::Component &component)
 {
     return cursor;
 }
 
-/*
- * Gets the default font to use for popup menu text.
- */
+
+// Gets the default font to use for popup menu text.
 juce::Font Theme::LookAndFeel::getPopupMenuFont()
 {
     using TextSize = Layout::Component::TextSize;
@@ -251,27 +243,26 @@ juce::Font Theme::LookAndFeel::getPopupMenuFont()
     return juce::Font(config.getFontHeight(TextSize::mediumText));
 }
 
-/*
- * Gets the default font to use for combo box text.
- */  
+
+// Gets the default font to use for combo box text.
 juce::Font Theme::LookAndFeel::getComboBoxFont(juce::ComboBox& comboBox)
 {
     using TextSize = Layout::Component::TextSize;
     Layout::Component::ConfigFile config;
-    int height = std::min(config.getFontHeight(TextSize::mediumText),
-            config.getFontHeight(comboBox.getLocalBounds(), comboBox.getText()));
+    int height = config.getFontHeight(comboBox.getLocalBounds(),
+            comboBox.getText());
+    height = std::min( config.getFontHeight(TextSize::mediumText), height);
     return juce::Font(height);
 }
 
-/*
- * Gets the default font to use for Label components.
- */ 
+
+// Gets the default font to use for Label components.
 juce::Font Theme::LookAndFeel::getLabelFont(juce::Label& label)
 {
     // Let bounded labels set their own font
     Widgets::BoundedLabel* testBounded = dynamic_cast<Widgets::BoundedLabel*>
             (&label);
-    if(testBounded != nullptr)
+    if (testBounded != nullptr)
     {
         return label.getFont();
     }
@@ -282,19 +273,17 @@ juce::Font Theme::LookAndFeel::getLabelFont(juce::Label& label)
     return juce::Font(height);
 }
 
-/*
- * Gets the default font to use for alert window title text.
- */ 
+
+// Gets the default font to use for alert window title text.
 juce::Font Theme::LookAndFeel::getAlertWindowTitleFont()
 {
     Layout::Component::ConfigFile config;
     using TextSize = Layout::Component::TextSize;
     return juce::Font(config.getFontHeight(TextSize::largeText));
 }
-   
-/*
- * Gets the default font to use for alert window message text.
- */ 
+
+
+// Gets the default font to use for alert window message text.
 juce::Font Theme::LookAndFeel::getAlertWindowMessageFont()
 {
     Layout::Component::ConfigFile config;
@@ -308,9 +297,8 @@ owner(owner)
     addTrackedKey(Config::MainKeys::showCursor);
 }
 
-/*
- * Updates the cursor visibility when the associated config key is changed. 
- */
+
+// Updates the cursor visibility when the associated config key is changed.
 void Theme::LookAndFeel::MainListener::configValueChanged
 (const juce::Identifier& key)
 {
@@ -319,13 +307,12 @@ void Theme::LookAndFeel::MainListener::configValueChanged
     {
         Config::MainFile config;
         owner.cursor = (config.getShowCursor() ?
-                  MouseCursor::ParentCursor : MouseCursor::NoCursor);
+                    MouseCursor::ParentCursor : MouseCursor::NoCursor);
     }
 }
- 
-/*
- * Updates Component colours when they're changed in the ColourConfigFile.
- */
+
+
+// Updates Component colours when they're changed in the ColourConfigFile.
 void Theme::LookAndFeel::colourChanged(const int colourId,
         const juce::Identifier& colourKey, const juce::Colour newColour)
 {

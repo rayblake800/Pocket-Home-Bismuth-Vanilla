@@ -2,7 +2,7 @@
 /**
  * @file  Windows_FocusTracker.h
  *
- * @brief  Tracks whether the main application window is focused, and sends 
+ * @brief  Tracks whether the main application window is focused, and sends
  *         window focus changes to all Windows::FocusListener objects.
  */
 
@@ -18,7 +18,7 @@ namespace Windows { class FocusTracker; }
 class Windows::FocusTracker : public SharedResource::Resource
 {
 public:
-    /* SharedResource object key: */
+    // SharedResource object key:
     static const juce::Identifier resourceKey;
 
     FocusTracker();
@@ -33,9 +33,9 @@ public:
     /**
      * @brief  Updates whether the main application window is currently focused.
      *
-     * @param windowFocused    Whether the MainWindow object is the focused 
+     * @param windowFocused    Whether the MainWindow object is the focused
      *                         window.
-     *                         
+     *
      * @param notifyListeners  Whether listeners should be notified if the
      *                         window focus state is changed.
      */
@@ -43,6 +43,6 @@ public:
             const bool notifyListeners = true);
 
 private:
-    /* Saves the last value sent by setFocusState: */
+    // Saves the last value sent by setFocusState:
     bool isFocused = true;
 };

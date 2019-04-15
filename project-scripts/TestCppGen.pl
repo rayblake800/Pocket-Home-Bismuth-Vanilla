@@ -17,21 +17,21 @@ my @commands;
 sub findModules
 {
     my $header = substr($File::Find::name, length($projectDir) + 1);
-    if($header =~ /^.+\.h$/)
-	{
+    if ($header =~ /^.+\.h$/)
+    {
         my $cppFile = substr($File::Find::name, length($sourceDir));
         $cppFile =~ s/\..*/.cpp/;
         $cppFile =~ s/\//-/g;
         $cppFile = $testDir.'/'.$cppFile;
         my $command = "./project-scripts/MakeCpp.pl $header $cppFile";
         push(@commands, $command);
-	}
+    }
 }
-find(\&findModules,$sourceDir);
+find(\&findModules, $sourceDir);
 
 system("rm -r $testDir");
 system("mkdir $testDir");
-foreach my $command(@commands)
+foreach my $command (@commands)
 {
     system($command);
 }

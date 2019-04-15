@@ -8,27 +8,27 @@
 
 #include "SharedResource_Resource.h"
 
-namespace SharedResource { namespace Modular { 
+namespace SharedResource { namespace Modular {
         template<class ResourceType> class Resource; } }
-namespace SharedResource { namespace Modular { 
+namespace SharedResource { namespace Modular {
         template<class ResourceType> class Module; } }
 
 /**
- * @brief  A basis for shared resource classes that divide their 
- *         responsibilities between several Modular::Module classes. 
+ * @brief  A basis for shared resource classes that divide their
+ *         responsibilities between several Modular::Module classes.
  *
  *  Each Modular::Resource holds a single object instance of each Module class
- * associated with it. These modules are accessed as if they each were separate 
+ * associated with it. These modules are accessed as if they each were separate
  * Resource types, but all of them are initialized and destroyed together, and
  * all of them share a single lock. This approach allows Resources that perform
  * a large number of interconnected tasks to be divided up without the risk of
  * deadlocks involved when multiple resources interact.
  *
- * @tparam ResourceType  The Modular::Resource's parent class. This will be 
+ * @tparam ResourceType  The Modular::Resource's parent class. This will be
  *                       SharedResource::Resource by default. Only classes that
  *                       inherit from SharedResource::Resource are valid
  *                       options.
- *                      
+ *
  */
 template <class ResourceType = SharedResource::Resource>
 class SharedResource::Modular::Resource : public ResourceType
@@ -37,9 +37,9 @@ protected:
     /**
      * @brief  Creates the single instance of a Resource subclass.
      *
-     * @param resourceKey  The Resource subclass instance's unique key. 
+     * @param resourceKey  The Resource subclass instance's unique key.
      */
-    Resource(const juce::Identifier& resourceKey) : 
+    Resource(const juce::Identifier& resourceKey) :
             ResourceType(resourceKey) { }
 
 public:
@@ -49,9 +49,9 @@ public:
      *  Resource class implementations must provide a specialization of this
      * function for each module type that they contain.
      *
-     * @tparam ModuleType  The class of the requested module instance. 
+     * @tparam ModuleType  The class of the requested module instance.
      *
-     * @return             A pointer to the single Module of that type held by 
+     * @return             A pointer to the single Module of that type held by
      *                     the Resource.
      */
     template<class ModuleType> ModuleType* getModule()
@@ -64,11 +64,11 @@ public:
     }
 
 private:
-    /* Allows modules to act on their Handler objects: */
+    // Allows modules to act on their Handler objects:
     template<class ModularResourceType> friend class Module;
-    
+
     /**
-     * @brief  Performs an action on all of a module's Handlers that share a 
+     * @brief  Performs an action on all of a module's Handlers that share a
      *         specific type.
      *
      * @tparam HandlerType   The Handler subclass that will be notified.

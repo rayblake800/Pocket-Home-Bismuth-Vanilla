@@ -1,8 +1,8 @@
 #pragma once
 /**
  * @file  Widgets_BoundedLabel.h
- * 
- * @brief  Provides a Label component with an optional maximum text size and 
+ *
+ * @brief  Provides a Label component with an optional maximum text size and
  *         component padding height.
  */
 
@@ -20,14 +20,14 @@ public:
     /**
      * @brief  Creates the label with optional initial text and padding values.
      *
-     * @param componentName  Sets the component's internal name value. 
-     * 
+     * @param componentName  Sets the component's internal name value.
+     *
      * @param labelText      Sets the initial label display text.
-     * 
+     *
      * @param fontPadding    Sets the minimum number of pixels to leave between
      *                       the text top and bottom and the label edges.
      */
-    BoundedLabel(const juce::String componentName = juce::String(), 
+    BoundedLabel(const juce::String componentName = juce::String(),
             const juce::String labelText = juce::String(),
             const int fontPadding = 0);
 
@@ -46,12 +46,12 @@ private:
      * @brief  Updates the font size when label bounds change.
      */
     void resized() override;
-    
-    /* Pixels of vertical space to leave between text and component bounds. */
+
+    // Pixels of vertical space to leave between text and component bounds:
     int fontPadding = 0;
 
-    /* Maximum text height setting. */
-    Layout::Component::TextSize maxSize 
+    // Maximum text height setting:
+    Layout::Component::TextSize maxSize
             = Layout::Component::TextSize::largeText;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BoundedLabel)

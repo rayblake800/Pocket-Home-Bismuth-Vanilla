@@ -11,22 +11,22 @@ namespace Util { template<class PtrType> class Nullable; }
  * @brief  A template for classes that wrap abstract pointer types that may hold
  *         null values.
  *
- *  Each Nullable class has a specific data pointer type. Nullable classes 
+ *  Each Nullable class has a specific data pointer type. Nullable classes
  * should copy the interface of their data object, forwarding all function calls
- * to their object data pointer. For each copied interface method, the nullable 
- * class must check if its data pointer is null, and handle the problem 
+ * to their object data pointer. For each copied interface method, the nullable
+ * class must check if its data pointer is null, and handle the problem
  * appropriately if it is.
  *
- *  This pattern provides all of the convenience of polymorphic data pointers, 
+ *  This pattern provides all of the convenience of polymorphic data pointers,
  * without the hassle of debugging segmentation faults or manually managing
- * memory. In circumstances where a function returning a default value or 
+ * memory. In circumstances where a function returning a default value or
  * occasionally being no-op would be inappropriate, Nullable objects should use
  * exceptions to ensure that unchecked function calls can be easily found and
  * fixed.
  *
- * @tparam PtrType  The type of data pointer held by the Nullable object. This 
- *                  may be a normal pointer, an std::shared_ptr, a 
- *                  juce::ReferenceCountedObjectPtr, or any sort of similar 
+ * @tparam PtrType  The type of data pointer held by the Nullable object. This
+ *                  may be a normal pointer, an std::shared_ptr, a
+ *                  juce::ReferenceCountedObjectPtr, or any sort of similar
  *                  value that might equal nullptr.
  */
 template<class PtrType>
@@ -73,7 +73,7 @@ protected:
     /**
      * @brief  Gets the value held by this object's data pointer.
      *
-     * @return  The data pointer's value. 
+     * @return  The data pointer's value.
      */
     PtrType getData() const
     {
@@ -91,6 +91,6 @@ protected:
     }
 
 private:
-    /* Holds a pointer to object data that might be null. */
+    // Holds a pointer to object data that might be null.
     PtrType dataPtr;
 };

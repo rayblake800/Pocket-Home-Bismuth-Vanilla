@@ -13,19 +13,19 @@
 namespace Password { class UpdateController; }
 
 /**
- * @brief  Controls the set of UI components used to set the application 
+ * @brief  Controls the set of UI components used to set the application
  *         password.
- * 
+ *
  *  When the password update button is clicked, the UpdateController checks the
- * contents of the text fields it manages. It ensures that the new password 
- * field matches the confirm password field, and that the value in the current 
- * password field is correct if a password is currently set. 
+ * contents of the text fields it manages. It ensures that the new password
+ * field matches the confirm password field, and that the value in the current
+ * password field is correct if a password is currently set.
  *
  *  If these conditions are met, the controller attempts to change the password,
  * and shows an alert window describing if the password could be changed. If the
- * field values are not correct, it will show an alert window explaining what 
+ * field values are not correct, it will show an alert window explaining what
  * was wrong. In all cases, all input fields will be cleared whenever the update
- * button is clicked. Finally, a callback function may be provided on 
+ * button is clicked. Finally, a callback function may be provided on
  * construction that will run when the password changes successfully.
  */
 class Password::UpdateController : public Locale::TextUser,
@@ -70,11 +70,11 @@ private:
     virtual void buttonClicked(juce::Button* updateButton) override;
 
     /**
-     * @brief  Opens a message box to display an error message, and clears all 
+     * @brief  Opens a message box to display an error message, and clears all
      *         text entry fields.
-     * 
+     *
      * @param title  The title to print on the message box.
-     * 
+     *
      * @param error  The error message to print in the message box.
      */
     void showErrorMessage(const juce::String title, const juce::String error);
@@ -84,19 +84,19 @@ private:
      */
     void clearAllFields();
 
-    /* Used to enter in the existing password, if one exists: */
+    // Used to enter in the existing password, if one exists:
     juce::TextEditor& currentPasswordField;
 
-    /* Used to enter in a new password: */
+    // Used to enter in a new password:
     juce::TextEditor& newPasswordField;
 
-    /* Used to confirm the new password: */
+    // Used to confirm the new password:
     juce::TextEditor& confirmPasswordField;
 
-    /* Sets the password when clicked: */
+    // Sets the password when clicked:
     juce::Button& updateButton;
 
-    /* An action to perform after setting the password correctly: */
+    // An action to perform after setting the password correctly:
     std::function<void()> passwordChangeCallback;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(UpdateController)

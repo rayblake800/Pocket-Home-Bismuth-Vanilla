@@ -15,9 +15,7 @@
 #include "Page_WifiConnection.h"
 #endif
 
-/*
- * Creates an instance of the application's home page.
- */
+// Creates an instance of the application's home page.
 Page::Component* Page::Factory::createHomePage()
 {
     Component* homePage = new HomePage;
@@ -25,9 +23,8 @@ Page::Component* Page::Factory::createHomePage()
     return homePage;
 }
 
-/*
- * Creates a new page to push on top of the page stack.
- */
+
+// Creates a new page to push on top of the page stack.
 Page::Component* Page::Factory::createPage(const Type pageType)
 {
     Component* newPage = nullptr;
@@ -68,7 +65,7 @@ Page::Component* Page::Factory::createPage(const Type pageType)
             break;
 #endif
     }
-    if(newPage != nullptr)
+    if (newPage != nullptr)
     {
         newPage->setFactoryInterface(this);
     }

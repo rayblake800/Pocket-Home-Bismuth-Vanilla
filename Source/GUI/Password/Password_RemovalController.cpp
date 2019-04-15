@@ -2,17 +2,17 @@
 #include "Password.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Password::RemovalController::";
 #endif
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "Password::RemovalController";
 
-/* Character used to mask current password input: */
+// Character used to mask current password input:
 static const constexpr juce::juce_wchar passwordChar = 0x2022;
 
-/* Localized text value keys: */
+// Localized text value keys:
 namespace TextKey
 {
     static const juce::Identifier success            = "success";
@@ -27,10 +27,9 @@ namespace TextKey
     static const juce::Identifier polkitMissing      = "polkitMissing";
 }
 
-/*
- * Connects the controller to the UI components it will control, and sets the 
- * action it should take after the password is removed.
- */
+
+// Connects the controller to the UI components it will control, and sets the
+// action it should take after the password is removed.
 Password::RemovalController::RemovalController(
         juce::TextEditor& passwordField,
         juce::Button& removerButton,
@@ -44,10 +43,9 @@ onRemoveCallback(onRemove)
     passwordField.setPasswordCharacter(passwordChar);
 }
 
-/*
- * Attempts to delete the Pocket-Home password when the remove button is 
- * pressed.
- */
+
+// Attempts to delete the Pocket-Home password when the remove button is
+// pressed.
 void Password::RemovalController::buttonClicked(juce::Button* button)
 {
     using juce::AlertWindow;
@@ -72,9 +70,9 @@ void Password::RemovalController::buttonClicked(juce::Button* button)
                     localeText(TextKey::passwordRemoved),
                     "",
                     nullptr,
-                    juce::ModalCallbackFunction::create([this](int i)
+                    juce::ModalCallbackFunction::create([this] (int i)
                     {
-                        if(onRemoveCallback)
+                        if (onRemoveCallback)
                         {
                             onRemoveCallback();
                         }

@@ -1,9 +1,9 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
- * @file  AppMenu_EntryLoader.h 
+ * @file  AppMenu_EntryLoader.h
  *
  * @brief  Finds and adds desktop entry menu items to menu folders.
  */
@@ -14,13 +14,16 @@ namespace AppMenu { class EntryLoader; }
 namespace AppMenu { class MenuItem; }
 
 /**
+ * @brief  Handles the process of locating menu items by category to add to new
+ *         menu folders.
+ *
  *  Each menu folder may contain a list of application categories. When a menu
- * folder is initialized, an EntryLoader is used to find all desktop entry
- * file objects with matching categories, and add them to the folder as child
- * menu items.
+ * folder is initialized, an EntryLoader is used to find all desktop entry file
+ * objects with matching categories, and add them to the folder as child menu
+ * items.
  */
 class AppMenu::EntryLoader
-{         
+{
 public:
     EntryLoader() { }
 
@@ -44,7 +47,7 @@ public:
     void loadFolderEntries(MenuItem folderItem);
 
 private:
-    /* Holds the loading callback ID if waiting for the desktop entry thread to
-       load entry files. */
+    // Holds the loading callback ID if waiting for the desktop entry thread to
+    // load entry files.
     DesktopEntry::CallbackID initialLoadingID = 0;
 };

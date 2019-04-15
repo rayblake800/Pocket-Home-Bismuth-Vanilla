@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -12,8 +12,8 @@
 #include "Wifi_LibNM_Signal_APHandler.h"
 #include "Wifi_Module.h"
 
-namespace Wifi 
-{ 
+namespace Wifi
+{
     class Resource;
     namespace Signal { class APModule; }
 }
@@ -21,9 +21,9 @@ namespace Wifi
 /**
  * @brief  Receives and handles all LibNM::AccessPoint signal strength updates.
  *
- *  The Signal::APModule subscribes to signals from all LibNM::AccessPoint 
+ *  The Signal::APModule subscribes to signals from all LibNM::AccessPoint
  * objects. When it receives signal strength change signals, it passes the
- * update to the APList::Module so it can update AccessPoint object data and 
+ * update to the APList::Module so it can update AccessPoint object data and
  * notify AP::Listener objects.
  */
 class Wifi::Signal::APModule : public LibNM::Signal::APHandler,

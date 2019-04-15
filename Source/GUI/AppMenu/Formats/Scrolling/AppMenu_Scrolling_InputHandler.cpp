@@ -4,17 +4,14 @@
 #include "AppMenu_Scrolling_MenuComponent.h"
 #include "Layout_Transition_Animator.h"
 
-/*
- * Initializes the InputHandler, setting it to handle the menu component's input
- * events.
- */
+// Initializes the InputHandler, setting it to handle the menu component's
+// input events.
 AppMenu::Scrolling::InputHandler::InputHandler
 (AppMenu::MenuComponent* menuComponent, AppMenu::Controller* controller) :
-    AppMenu::InputHandler(menuComponent, controller) { } 
+    AppMenu::InputHandler(menuComponent, controller) { }
 
-/*
- * Handles a key event received from the menu.
- */
+
+// Handles a key event received from the menu.
 bool AppMenu::Scrolling::InputHandler::keyPressed
 (const AppMenu::InputHandler::KeyType keyType)
 {
@@ -29,28 +26,28 @@ bool AppMenu::Scrolling::InputHandler::keyPressed
         (getMenuComponent()->getOpenFolder(openFolderCount - 1));
     // The open folder component should always be a scrolling folder
     jassert(activeFolder != nullptr);
-    
+
     // Ignore key events if the folder is animating
-    if(Layout::Transition::Animator::isAnimating(activeFolder))
+    if (Layout::Transition::Animator::isAnimating(activeFolder))
     {
         return true;
     }
 
     const int selectedIndex = activeFolder->getSelectedIndex();
     const bool firstItemSelected = (selectedIndex == 0);
-    const bool lastItemSelected = 
+    const bool lastItemSelected =
         (selectedIndex == activeFolder->getFolderSize() - 1);
     switch(keyType)
     {
         case KeyType::Up:
-            if(!firstItemSelected)
+            if (!firstItemSelected)
             {
                 activeFolder->setSelectedIndex(selectedIndex - 1);
                 scrollingMenu->updateMenuLayout(false);
             }
             return true;
         case KeyType::Down:
-            if(!lastItemSelected)
+            if (!lastItemSelected)
             {
                 activeFolder->setSelectedIndex(selectedIndex + 1);
                 scrollingMenu->updateMenuLayout(false);
@@ -58,19 +55,19 @@ bool AppMenu::Scrolling::InputHandler::keyPressed
             return true;
         case KeyType::Left:
         case KeyType::Cancel:
-            if(selectedIndex >= 0)
+            if (selectedIndex >= 0)
             {
                 activeFolder->setSelectedIndex(-1);
                 scrollingMenu->updateMenuLayout(true);
             }
-            else if(openFolderCount > 1)
+            else if (openFolderCount > 1)
             {
                 getMenuComponent()->closeActiveFolder();
             }
             return true;
         case KeyType::Right:
         case KeyType::Select:
-            if(selectedIndex >= 0)
+            if (selectedIndex >= 0)
             {
                 getController()->activateMenuItem
                     (activeFolder->getSelectedItem());
@@ -84,7 +81,7 @@ bool AppMenu::Scrolling::InputHandler::keyPressed
         case KeyType::Edit:
         {
             MenuItem folder= activeFolder->getFolderMenuItem();
-            if(selectedIndex >= 0)
+            if (selectedIndex >= 0)
             {
                 getController()->showContextMenu
                     (folder.getFolderItem(selectedIndex));
@@ -97,31 +94,30 @@ bool AppMenu::Scrolling::InputHandler::keyPressed
             return true;
         }
         case KeyType::Tab:
-            activeFolder->setSelectedIndex(lastItemSelected ? 
+            activeFolder->setSelectedIndex(lastItemSelected ?
                     0 : selectedIndex + 1);
-            scrollingMenu->updateMenuLayout(lastItemSelected); 
+            scrollingMenu->updateMenuLayout(lastItemSelected);
             return true;
     }
     return false;
 }
 
-/*
- * Handles clicks to menu item buttons.
- */
+
+// Handles clicks to menu item buttons.
 void AppMenu::Scrolling::InputHandler::menuItemClicked
-(const AppMenu::MenuButton* clickedButton, const bool rightClicked) 
+(const AppMenu::MenuButton* clickedButton, const bool rightClicked)
 {
-    if(!clickedButton->isSelected())
+    if (!clickedButton->isSelected())
     {
-        FolderComponent* parentFolder 
-            = static_cast<FolderComponent*>
-            (clickedButton->getParentComponent());
-        parentFolder->setSelectedIndex(clickedButton->getMenuItem().getIndex());
+        FolderComponent* parentFolder = static_cast<FolderComponent*> (
+                clickedButton->getParentComponent());
+        parentFolder->setSelectedIndex(
+                clickedButton->getMenuItem().getIndex());
         getMenuComponent()->updateMenuLayout();
     }
     else
     {
-        if(rightClicked)
+        if (rightClicked)
         {
             DBG("Right-Clicked " << clickedButton->getMenuItem().getTitle());
             getController()->showContextMenu(clickedButton->getMenuItem());

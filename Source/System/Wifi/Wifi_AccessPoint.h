@@ -7,21 +7,21 @@
  */
 
 #ifndef WIFI_IMPLEMENTATION
-  #define WIFI_IMPLEMENTATION
-  #define WIFI_TEMP
+    #define WIFI_IMPLEMENTATION
+    #define WIFI_TEMP
 #endif
 #include "Wifi_AP_Data.h"
 #ifdef WIFI_TEMP
-  #undef WIFI_IMPLEMENTATION
-  #undef WIFI_TEMP
+    #undef WIFI_IMPLEMENTATION
+    #undef WIFI_TEMP
 #endif
 
 #include "Util_Nullable.h"
 #include "JuceHeader.h"
 
-namespace Wifi 
-{ 
-    class AccessPoint; 
+namespace Wifi
+{
+    class AccessPoint;
     enum class SecurityType;
     namespace APList { class Module; }
     namespace Connection { namespace Saved { class Module; } }
@@ -34,8 +34,8 @@ namespace Wifi
         class Connection;
         class AccessPoint;
     }
-    
-    /* Restricted property update interfaces used by the AccessPoint class: */
+
+    // Restricted property update interfaces used by the AccessPoint class:
     namespace APInterface
     {
         class SignalStrength;
@@ -57,9 +57,8 @@ protected:
 };
 
 /**
- * @brief  Allows only the Connection::Saved::Module and the 
- *         Signal::DeviceModule to update AccessPoint saved connection 
- *         state.
+ * @brief  Allows only the Connection::Saved::Module and the
+ *         Signal::DeviceModule to update AccessPoint saved connection state.
  */
 class Wifi::APInterface::SavedConnection
 {
@@ -74,19 +73,19 @@ protected:
 };
 
 /**
- * @brief  Holds shared data describing a Wifi network and all visible access 
+ * @brief  Holds shared data describing a Wifi network and all visible access
  *         points that share that network.
  *
- *  Wifi::AccessPoint represents one or more LibNM::AccessPoints, which in 
- * turn represent a Wifi access point found by NetworkManager through the 
- * network device. Wifi::AccessPoint objects hold shared, reference counted 
- * data. This allows access point data to be freely shared between threads, 
- * while keeping interaction with LibNM confined to the LibNM thread resource.
+ *  Wifi::AccessPoint represents one or more LibNM::AccessPoints, which in turn
+ * represent a Wifi access point found by NetworkManager through the network
+ * device. Wifi::AccessPoint objects hold shared, reference counted data. This
+ * allows access point data to be freely shared between threads, while keeping
+ * interaction with LibNM confined to the LibNM thread resource.
  *
  *  AccessPoint data is mostly immutable. Only the signal strength, saved
  * connection state, and last connection time may be updated.
  */
-class Wifi::AccessPoint : 
+class Wifi::AccessPoint :
     public Util::Nullable<juce::ReferenceCountedObjectPtr<AP::Data>>,
     public APInterface::SignalStrength, public APInterface::SavedConnection
 {
@@ -110,7 +109,7 @@ public:
     /**
      * @brief  Initializes the AccessPoint with another AccessPoint's data.
      *
-     * @param rhs  An access point that will share data with the new 
+     * @param rhs  An access point that will share data with the new
      *             AccessPoint.
      */
     AccessPoint(const AccessPoint& rhs);
@@ -129,8 +128,8 @@ public:
      *
      * @return     Whether this and rhs have identical hash values.
      */
-    bool operator==(const AccessPoint& rhs) const;
-    
+    bool operator== (const AccessPoint& rhs) const;
+
     /**
      * @brief  Compares AccessPoint objects using their hash values.
      *
@@ -138,10 +137,10 @@ public:
      *
      * @return     Whether this and rhs do not have identical hash values.
      */
-    bool operator!=(const AccessPoint& rhs) const;
+    bool operator!= (const AccessPoint& rhs) const;
 
     /**
-     * @brief  Checks if this AccessPoint represents a particular 
+     * @brief  Checks if this AccessPoint represents a particular
      *         LibNM::AccessPoint.
      *
      * @param rhs  A LibNM access point to check against this AccessPoint.
@@ -149,10 +148,10 @@ public:
      * @return     Whether rhs is one of the LibNM::AccessPoint objects
      *             represented by this AccessPoint.
      */
-    bool operator==(const LibNM::AccessPoint& rhs) const;
-    
+    bool operator== (const LibNM::AccessPoint& rhs) const;
+
     /**
-     * @brief  Checks if this AccessPoint does not represent a particular 
+     * @brief  Checks if this AccessPoint does not represent a particular
      *         LibNM::AccessPoint.
      *
      * @param rhs  A LibNM access point to check against this AccessPoint.
@@ -160,19 +159,19 @@ public:
      * @return     Whether rhs is not one of the LibNM::AccessPoint objects
      *             represented by this AccessPoint.
      */
-    bool operator!=(const LibNM::AccessPoint& rhs) const;
+    bool operator!= (const LibNM::AccessPoint& rhs) const;
 
     /**
-     * @brief  Compares AccessPoint objects using their hash values so they can 
+     * @brief  Compares AccessPoint objects using their hash values so they can
      *         be sorted.
      *
      * @param rhs  The AccessPoint object to compare with this one.
      *
-     * @return     Whether this access point's hash value should come before the 
-     *             rhs AccessPoint's hash value.
+     * @return     Whether this access point's hash value should come before
+     *             the rhs AccessPoint's hash value.
      */
-    bool operator<(const AccessPoint& rhs) const;
-    
+    bool operator< (const AccessPoint& rhs) const;
+
     /**
      * @brief  Gets the access point's primary identifier.
      *
@@ -189,7 +188,7 @@ public:
     unsigned int getSignalStrength() const;
 
     /**
-     * @brief  Checks whether this access point is compatible with a saved 
+     * @brief  Checks whether this access point is compatible with a saved
      *         network connection.
      *
      * @return  Whether any saved network connection is compatible with this
@@ -201,16 +200,16 @@ public:
      * @brief  Gets the last recorded time the system was connected using this
      *         access point's connection.
      *
-     * @return  The last connection time as the number of milliseconds since the
-     *          Unix epoch, or 0 if no record exists of the system using this 
-     *          access point's connection.
+     * @return  The last connection time as the number of milliseconds since
+     *          the Unix epoch, or 0 if no record exists of the system using
+     *          this access point's connection.
      */
     juce::int64 getLastConnectionTime() const;
 
     /**
      * @brief  Gets the access point's general security type.
      *
-     * @return  The type of security, if any, protecting the access point. 
+     * @return  The type of security, if any, protecting the access point.
      */
     LibNM::SecurityType getSecurityType() const;
 
@@ -218,7 +217,7 @@ public:
      * @brief  Checks if a security key is formatted correctly for this access
      *         point's security type.
      *
-     * @param psk  A possible access point security key. 
+     * @param psk  A possible access point security key.
      *
      * @return     Whether the psk is a valid security key for this access
      *             point's security type.
@@ -228,7 +227,7 @@ public:
     /**
      * @brief  Gets the hash value used to identify and sort the access point.
      *
-     * @return  The access point's APHash value. 
+     * @return  The access point's APHash value.
      */
     LibNM::APHash getHashValue() const;
 
@@ -260,8 +259,8 @@ protected:
      * @brief  Stores the last time the system was connected to a network using
      *         a connection that is compatible with this access point.
      *
-     * @param newTime  The new connection time to store, expressed as the number
-     *                 of milliseconds since the Unix epoch.
+     * @param newTime  The new connection time to store, expressed as the
+     *                 number of milliseconds since the Unix epoch.
      */
     virtual void setLastConnectionTime(const juce::int64 newTime) override;
 };

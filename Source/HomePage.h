@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  HomePage.h
- * 
+ *
  * @brief  Creates the application's primary UI page.
  */
 
@@ -27,7 +27,7 @@
  * @brief  The root Page::Component within the application.
  *
  *  HomePage displays the application menu, time, battery percentage, and Wifi
- * connection state. HomePage also provides navigation buttons used to access 
+ * connection state. HomePage also provides navigation buttons used to access
  * the power and settings pages.
  *
  *  HomePage is Pocket-Home's base page component, and the first page shown,
@@ -41,10 +41,10 @@ public:
      * @brief  Initializes all page components and creates the AppMenu.
      */
     HomePage();
-    
+
     virtual ~HomePage() { }
 
-    /* Juce ColourId values: */
+    // Juce ColourId values:
     enum ColourIds
     {
         textColourId = 0x1900800
@@ -52,11 +52,11 @@ public:
 
 protected:
     /**
-     * @brief  Tracks page background changes. 
+     * @brief  Tracks page background changes.
      *
      *  Only the MainConfigFile should be call this method. This will update the
-     * page background. 
-     * 
+     * page background.
+     *
      * @param key  The page background key.
      */
     virtual void configValueChanged(const juce::Identifier& key) override;
@@ -84,9 +84,9 @@ private:
 
     private:
         /**
-         * @brief  Opens the power page or the quick settings page, depending on 
+         * @brief  Opens the power page or the quick settings page, depending on
          *         which button was clicked.
-         * 
+         *
          * @param button  The page button that was clicked.
          */
         void buttonClicked(juce::Button* button) override;
@@ -95,50 +95,50 @@ private:
     };
     PageListener pageListener;
 
-    /* Loads system commands.  This resource should exist as long as the home
-       page exists. */
+    // Loads system commands. This resource should exist as long as the home
+    // page exists.
     Util::Commands systemCommands;
 
-    /* Loads desktop entry file data.  This resource should exist as long as
-       the home page exists. */
+    // Loads desktop entry file data. This resource should exist as long as
+    // the home page exists.
     DesktopEntry::Loader entryLoader;
 
-    /* Loads icon images. This resource should exist as long as the home page
-       exists. */
+    // Loads icon images. This resource should exist as long as the home page
+    // exists.
     Icon::Loader iconLoader;
-    
-    /* Displays the time: */
+
+    // Displays the time:
     Info::Clock clock;
 
-    /* Optional system IP address label: */
+    // Optional system IP address label:
     std::unique_ptr<Info::IPLabel> ipLabel;
-   
-    /* The application menu. This is automatically updated whenever the menu 
-       type preference changes in MainConfigFile. */
+
+    // The application menu. This is automatically updated whenever the menu
+    // type preference changes in MainConfigFile.
     std::unique_ptr<juce::Component> appMenu;
-    
-    /* Displays the current battery status: */
+
+    // Displays the current battery status:
     Info::BatteryIcon batteryIcon;
-    
+
 #ifdef WIFI_SUPPORTED
-    /* Displays the current wifi status: */
+    // Displays the current wifi status:
     Info::ConnectionIcon wifiIcon;
 #endif
 
-    /* Loads the background image and ensures the image asset JSON resource
-     * remains available: */
+    // Loads the background image and ensures the image asset JSON resource
+    // remains available:
     const Theme::Image::ConfigFile imageConfig;
 
-    /* Opens the power page when clicked: */
+    // Opens the power page when clicked:
     Theme::Image::Component<Widgets::DrawableImageButton> powerButton;
-    
-    /* Opens the settings page when clicked: */
+
+    // Opens the settings page when clicked:
     Theme::Image::Component<Widgets::DrawableImageButton> settingsButton;
 
-    /* Page frame image. This component is entirely decorative. */
+    // Page frame image. This component is entirely decorative.
     Theme::Image::Component<> frame;
 
-    /* Manages the layouts of configurable components: */ 
+    // Manages the layouts of configurable components:
     juce::Array<Layout::Component::Manager> layoutManagers;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HomePage);

@@ -1,23 +1,23 @@
 #pragma once
 /**
  * @file  Hardware_Battery.h
- * 
+ *
  * @brief  Tracks the state of the system's battery.
  */
 
 #include "JuceHeader.h"
 
 namespace Hardware { class Battery; }
+
 /**
- * @brief  Finds and shares the current charge percentage and charging state of 
+ * @brief  Finds and shares the current charge percentage and charging state of
  *         the system's battery.
  *
  *  Battery objects will try several methods to determine the state of the
  * system's battery. These methods are currently specialized for the PocketCHIP,
- * and new methods for finding battery and power state on more diverse systems 
+ * and new methods for finding battery and power state on more diverse systems
  * should be added.
  */
-
 class Hardware::Battery
 {
 public:
@@ -30,7 +30,7 @@ public:
     virtual ~Battery() { }
 
     /**
-     * @brief  Stores battery charge percentage and whether the battery is 
+     * @brief  Stores battery charge percentage and whether the battery is
      *         currently charging.
      */
     struct Status
@@ -49,9 +49,9 @@ public:
 
     /**
      * @brief  Finds the current battery charge percentage and charging state.
-     * 
+     *
      * @return  An integer between 0 and 100 representing battery charge state,
-     *          and a boolean value indicating if the battery is charging. If 
+     *          and a boolean value indicating if the battery is charging. If
      *          battery information can't be found, percent is set to -1.
      */
     Status getBatteryStatus();
@@ -65,15 +65,15 @@ private:
      */
     enum DataSource
     {
-        /* Execute a command from the command file and read the output: */
+        // Execute a command from the command file and read the output:
         customCommand,
-        /* Read battery percentage from the gauge file: */
+        // Read battery percentage from the gauge file:
         gaugeFile,
-        /* Calculate battery percentage from the voltage file: */
+        // Calculate battery percentage from the voltage file:
         voltageFile,
-        /* Directly query the I2C bus to read the battery percentage: */
+        // Directly query the I2C bus to read the battery percentage:
         i2cBus,
-        /* Unable to find battery percentage, return no data: */
+        // Unable to find battery percentage, return no data:
         noBattery
     };
     DataSource dataSource;

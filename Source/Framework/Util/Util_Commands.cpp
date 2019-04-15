@@ -4,24 +4,24 @@
 #include "SharedResource_Resource.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Util::Commands::";
 #endif
 
-/* Script directory key */
+// Script directory key
 static const juce::Identifier scriptDirKey("POCKET_HOME_SCRIPTS");
 
-/* SharedResource object key */
+// SharedResource object key
 static const juce::Identifier jsonResourceKey("Util::CommandJSON");
 
-/* Default JSON command file name */
+// Default JSON command file name
 static const juce::String defaultFilename("commands.json");
 
-/* Replacement JSON command file name */
+// Replacement JSON command file name
 static const juce::String overrideFilename("overrideCommands.json");
 
 /**
- * @brief Gets the Identifier key used to store an action command.
+ * @brief  Gets the Identifier key used to store an action command.
  *
  * @param commandType  The requested system command.
  *
@@ -33,43 +33,43 @@ static const juce::Identifier& actionCommandKey
     using ActionCommand = Util::CommandTypes::Action;
     switch(commandType)
     {
-        /* Shutdown the system: */
+        // Shutdown the system:
         case ActionCommand::shutdown:
         {
             static const juce::Identifier shutdownKey("shutdown");
             return shutdownKey;
         }
-        /* Restart the system: */
+        // Restart the system:
         case ActionCommand::restart:
         {
             static const juce::Identifier restartKey("restart");
             return restartKey;
         }
-        /* Enter sleep mode: */
+        // Enter sleep mode:
         case ActionCommand::sleep:
         {
             static const juce::Identifier sleepKey("sleep");
             return sleepKey;
         }
-        /* Exit sleep mode: */
+        // Exit sleep mode:
         case ActionCommand::wake:
         {
             static const juce::Identifier wakeKey("wake");
             return wakeKey;
         }
-        /* Calibrate the touch screen: */
+        // Calibrate the touch screen:
         case ActionCommand::calibrate:
         {
             static const juce::Identifier calibrateKey("calibrate");
             return calibrateKey;
         }
-        /* Sets the system volume percentage: */
+        // Sets the system volume percentage:
         case ActionCommand::setVolume:
         {
             static const juce::Identifier setVolumeKey("set volume");
             return setVolumeKey;
         }
-        /* Sets the display brightness percentage: */
+        // Sets the display brightness percentage:
         case ActionCommand::setBrightness:
         {
             static const juce::Identifier setBrightnessKey("set brightness");
@@ -82,7 +82,7 @@ static const juce::Identifier& actionCommandKey
 }
 
 /**
- * @brief Gets the Identifier key used to store an int command.
+ * @brief  Gets the Identifier key used to store an int command.
  *
  * @param commandType  The requested system command.
  *
@@ -94,19 +94,19 @@ static const juce::Identifier& intCommandKey
     using IntCommand = Util::CommandTypes::Int;
     switch(commandType)
     {
-        /* Returns 0 if and only if the system is sleeping: */
+        // Returns 0 if and only if the system is sleeping:
         case IntCommand::sleepCheck:
         {
             static const juce::Identifier sleepCheckKey("sleep check");
             return sleepCheckKey;
         }
-        /* Returns 0 if and only if a command is valid: */
+        // Returns 0 if and only if a command is valid:
         case IntCommand::commandCheck:
         {
             static const juce::Identifier commandTestKey("command check");
             return commandTestKey;
         }
-        /* Sets the application password, returning an error code on failure: */
+        // Sets the application password, returning an error code on failure:
         case IntCommand::setPassword:
         {
             static const juce::Identifier setPasswordKey("set password");
@@ -131,19 +131,19 @@ static const juce::Identifier& textCommandKey
     using TextCommand = Util::CommandTypes::Text;
     switch(commandType)
     {
-        /* Prints the system volume percentage */
+        // Prints the system volume percentage
         case TextCommand::getVolume:
         {
             static const juce::Identifier getVolumeKey("get volume");
             return getVolumeKey;
         }
-        /* Gets the battery percentage */
+        // Gets the battery percentage
         case TextCommand::getBatteryPercent:
         {
             static const juce::Identifier getBatteryKey("get battery percent");
             return getBatteryKey;
         }
-        /* Gets the display brightness percentage */
+        // Gets the display brightness percentage
         case TextCommand::getBrightness:
         {
             static const juce::Identifier getBrightnessKey("get brightness");
@@ -166,28 +166,31 @@ static const juce::Identifier& textCommandKey
 }
 
 
-/* Private SharedResource class: */
+/**
+ * @brief  The private SharedResource class used to load and store system
+ *         commands.
+ */
 class Util::CommandJSON : public SharedResource::Resource
 {
 private:
-    /* Pocket-Home script directory path: */
+    // Pocket-Home script directory path:
     juce::String scriptDir;
 
-    /* JSON file storing default command definitions: */
+    // JSON file storing default command definitions:
     Assets::JSONFile defaultCommands;
 
-    /* Alternate JSON file storing replacement command definitions: */
+    // Alternate JSON file storing replacement command definitions:
     Assets::JSONFile overrideCommands;
 
 public:
     friend class Commands;
 
-    CommandJSON() : SharedResource::Resource(jsonResourceKey), 
+    CommandJSON() : SharedResource::Resource(jsonResourceKey),
     overrideCommands(overrideFilename),
     defaultCommands(defaultFilename)
     {
         scriptDir = getCommandString(scriptDirKey);
-        if(scriptDir.isEmpty())
+        if (scriptDir.isEmpty())
         {
             DBG(dbgPrefix << __func__ << ": " << scriptDir <<
                     " is not a valid script directory.");
@@ -209,21 +212,21 @@ public:
     {
         using juce::String;
         String command;
-        if(overrideCommands.isValidFile()
+        if (overrideCommands.isValidFile()
                 && overrideCommands.propertyExists<String>(key))
         {
             command = overrideCommands.getProperty<String>(key);
         }
-        if(command.isEmpty() && defaultCommands.isValidFile()
+        if (command.isEmpty() && defaultCommands.isValidFile()
                 && defaultCommands.propertyExists<String>(key))
         {
             command = defaultCommands.getProperty<String>(key);
         }
-        if(command.isNotEmpty())
+        if (command.isNotEmpty())
         {
             String dirKeyString = scriptDirKey.toString();
             int index = command.indexOf(dirKeyString);
-            if(index != -1)
+            if (index != -1)
             {
                 command = command.substring(0, index) + scriptDir
                     + command.substring(index + dirKeyString.length());
@@ -236,15 +239,14 @@ public:
 Util::Commands::Commands() :
 SharedResource::Handler<CommandJSON>(jsonResourceKey) { }
 
-/*
- * Asynchronously runs a command in a new process.
- */
+
+// Asynchronously runs a command in a new process.
 bool Util::Commands::runActionCommand(const CommandTypes::Action commandType,
         const juce::String& args)
 {
-    juce::String command 
+    juce::String command
             = getCommandString(actionCommandKey(commandType), args);
-    if(command.isEmpty())
+    if (command.isEmpty())
     {
         return false;
     }
@@ -252,28 +254,26 @@ bool Util::Commands::runActionCommand(const CommandTypes::Action commandType,
     return true;
 }
 
-/*
- * Runs a command, waits for it to finish, and return its exit code.
- */
+
+// Runs a command, waits for it to finish, and return its exit code.
 int Util::Commands::runIntCommand(const CommandTypes::Int commandType,
         const juce::String& args)
 {
     juce::String command = getCommandString(intCommandKey(commandType), args);
-    if(command.isEmpty())
+    if (command.isEmpty())
     {
         return -1;
     }
     return system(command.toRawUTF8());
 }
 
-/*
- * Runs a command, waits for it to finish, and returns its text output.
- */
+
+// Runs a command, waits for it to finish, and returns its text output.
 juce::String Util::Commands::runTextCommand
 (const CommandTypes::Text commandType, const juce::String& args)
 {
     juce::String command = getCommandString(textCommandKey(commandType), args);
-    if(command.isEmpty())
+    if (command.isEmpty())
     {
         return juce::String();
     }
@@ -282,32 +282,32 @@ juce::String Util::Commands::runTextCommand
     return commandProcess.getProcessOutput().trim();
 }
 
-/*
- * Gets a system command string.
- */
+
+// Gets a system command string.
 juce::String Util::Commands::getCommandString
 (const juce::Identifier& commandKey, const juce::String& args)
-{   
+{
     using juce::String;
-    SharedResource::LockedPtr<const CommandJSON> json = getReadLockedResource();
+    SharedResource::LockedPtr<const CommandJSON> json
+            = getReadLockedResource();
     juce::String command = json->getCommandString(commandKey);
-    if(command.isEmpty())
+    if (command.isEmpty())
     {
         DBG(dbgPrefix << __func__ << ": No command defined for key "
                 << commandKey.toString());
         return String();
     }
-    if(json->scriptDir.isNotEmpty())
+    if (json->scriptDir.isNotEmpty())
     {
         String dirKeyString = scriptDirKey.toString();
         int index = command.indexOf(dirKeyString);
-        if(index != -1)
+        if (index != -1)
         {
             command = command.substring(0, index) + json->scriptDir
                 + command.substring(index + dirKeyString.length());
         }
     }
-    if(args.isNotEmpty())
+    if (args.isNotEmpty())
     {
         command += " ";
         command += args;

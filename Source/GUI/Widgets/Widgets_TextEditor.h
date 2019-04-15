@@ -10,6 +10,11 @@
 
 namespace Widgets { class TextEditor; }
 
+/**
+ * @brief  A widget class that allows the user to input or edit text values,
+ *         displaying those values at an appropriate size to fit within the
+ *         object bounds.
+ */
 class Widgets::TextEditor : public juce::TextEditor
 {
 public:
@@ -27,7 +32,7 @@ private:
     void setFontHeight(const int newHeight);
 
     /**
-     * @brief  Update internal text size to match changes to the component's
+     * @brief  Updates internal text size to match changes to the component's
      *         height.
      */
     virtual void resized() override;

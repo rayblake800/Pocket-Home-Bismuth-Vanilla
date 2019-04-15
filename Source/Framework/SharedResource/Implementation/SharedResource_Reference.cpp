@@ -3,10 +3,8 @@
 #include "SharedResource_Holder.h"
 #include "SharedResource_Instance.h"
 
-/*
- * Removes this Reference from its resource Instance object, destroying the 
- * resource if no references to it remain.
- */
+// Removes this Reference from its resource Instance object, destroying the
+// resource if no references to it remain.
 SharedResource::Reference::~Reference()
 {
     {
@@ -15,7 +13,7 @@ SharedResource::Reference::~Reference()
         Instance* resourceInstance = getResourceInstance();
         jassert(resourceInstance != nullptr);
         resourceInstance->references.removeFirstMatchingValue(this);
-        if(resourceInstance->references.isEmpty())
+        if (resourceInstance->references.isEmpty())
         {
             Holder::setResource(resourceKey, nullptr);
             delete resourceInstance;
@@ -25,17 +23,16 @@ SharedResource::Reference::~Reference()
     Holder::clearIfEmpty();
 }
 
-/*
- * Connects this new Reference to its resource Instance, creating the Instance
- * object if necessary.
- */
+
+// Connects this new Reference to its resource Instance, creating the Instance
+// object if necessary.
 SharedResource::Reference::Reference(const juce::Identifier& resourceKey,
         const std::function<Instance*()> createResource) :
 resourceKey(resourceKey)
 {
     const juce::ScopedWriteLock initLock(getResourceLock());
     Instance* resourceInstance = getResourceInstance();
-    if(resourceInstance == nullptr)
+    if (resourceInstance == nullptr)
     {
         resourceInstance = createResource();
         jassert(getResourceInstance() != nullptr);
@@ -48,18 +45,17 @@ resourceKey(resourceKey)
     }
 }
 
-/*
- * Gets the lock used to control access to the referenced resource.
- */
+
+// Gets the lock used to control access to the referenced resource.
 const juce::ReadWriteLock& SharedResource::Reference::getResourceLock() const
 {
     return Holder::getResourceLock(resourceKey);
 }
 
-/*
- * Gets a pointer to this reference's resource object Instance.
- */
-SharedResource::Instance* SharedResource::Reference::getResourceInstance() const
+
+// Gets a pointer to this reference's resource object Instance.
+SharedResource::Instance*
+SharedResource::Reference::getResourceInstance() const
 {
     return Holder::getResource(resourceKey);
 }

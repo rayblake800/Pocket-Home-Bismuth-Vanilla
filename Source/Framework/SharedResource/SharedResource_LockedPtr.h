@@ -22,8 +22,8 @@ template<class ResourceType>
 class SharedResource::LockedPtr : public LockedInstancePtr
 {
 private:
-    /* LockedPtr objects should only be created and used internally by 
-       Handler objects. */
+    // LockedPtr objects should only be created and used internally by
+    // Handler objects.
     template <class LockType> friend class Handler;
 
     /**
@@ -35,7 +35,7 @@ private:
      *
      * @param lockType     The type of lock used to secure the resource.
      */
-    LockedPtr(const juce::Identifier& resourceKey, const LockType lockType) : 
+    LockedPtr(const juce::Identifier& resourceKey, const LockType lockType) :
         LockedInstancePtr(resourceKey, lockType) { }
 
 public:
@@ -48,7 +48,7 @@ public:
      */
     ResourceType* operator->() const
     {
-        return static_cast<ResourceType*>(getInstance());
+        return static_cast<ResourceType*> (getInstance());
     }
 };
 

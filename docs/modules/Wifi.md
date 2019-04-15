@@ -49,7 +49,7 @@ AP\::UpdateInterface is the interface inherited by StrengthListener and used by 
 The APList submodule monitors updates to the list of visible Wifi access points, caching and sharing visible access point data.
 
 #### [Wifi\::APList\::Module](../../Source/System/Wifi/APList/Wifi_APList_Module.h)
-The APList\::Module object uses LibNM access point data to construct, update, and share a list of AccessPoint objects representing all Wifi access points visible to the system's Wifi device. 
+The APList\::Module object uses LibNM access point data to construct, update, and share a list of AccessPoint objects representing all Wifi access points visible to the system's Wifi device.
 
 #### [Wifi\::APList\::Reader](../../Source/System/Wifi/APList/Wifi_APList_Reader.h)
 APList\::Reader objects connect to the APList module to read the list of visible access points. Reader objects may search for a single access point by its hash value, or get the entire access point list.
@@ -118,7 +118,7 @@ Saved\::Deleter objects connect to the Saved\::Module objects to delete saved ne
 The Wifi module accesses the Wifi device and network connections through NetworkManager, using libnm-glib. Wifi\::LibNM manages LibNM data resources and provides a more convenient interface for using LibNM functions.
 
 #### [Wifi\::LibNM\::APHash](../../Source/System/Wifi/LibNM/Wifi_LibNM_APHash.h)
-APHash objects uniquely identify a Wifi connection point. Each Wifi\::AccessPoint object will have a unique APHash value.  LibNM\::AccessPoint objects will share an APHash value if they are associated with the same network, otherwise their APHash values will also be unique.
+APHash objects uniquely identify a Wifi connection point. Each Wifi\::AccessPoint object will have a unique APHash value. LibNM\::AccessPoint objects will share an APHash value if they are associated with the same network, otherwise their APHash values will also be unique.
 
 #### [Wifi\::LibNM\::APMode](../../Source/System/Wifi/LibNM/Wifi_LibNM_APMode.h)
 APMode is an enum class representing the four access point modes tracked by LibNM.

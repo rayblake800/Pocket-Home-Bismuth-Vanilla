@@ -3,19 +3,19 @@
 #include "Theme_Image_JSONKeys.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Widgets::PopupEditor::";
 #endif
 
-/* Default layout margin/padding values: */
+// Default layout margin/padding values: */
 static const constexpr int defaultMarginPixels = 6;
 static const constexpr int defaultXPaddingPixels = 3;
 static const constexpr int defaultYPaddingPixels = 4;
 
 // TODO: load button images from imageAssets.json
-Widgets::PopupEditor::PopupEditor 
+Widgets::PopupEditor::PopupEditor
 (const std::function<void(PopupEditor*)> onConfirm) :
-Theme::Image::Component<>( Theme::Image::JSONKeys::popupMenu, 0, 
+Theme::Image::Component<>(Theme::Image::JSONKeys::popupMenu, 0,
         juce::RectanglePlacement::stretchToFit),
 boundsManager(this, Layout::Component::JSONKeys::popupMenu),
 onConfirm(onConfirm),
@@ -31,11 +31,11 @@ yPaddingPixels(defaultYPaddingPixels)
     setName(juce::String("Widgets::PopupEditor"));
 #endif
     titleLabel.setJustificationType(juce::Justification::centred);
-    
-    //TODO: use custom component ColorId values
+
+    // TODO: use custom component ColourId values
     juce::Colour btnColour = findColour(juce::Label::textColourId);
-    cancelButton.setColour(DrawableImage::imageColour0Id,btnColour);
-    confirmButton.setColour(DrawableImage::imageColour0Id,btnColour);
+    cancelButton.setColour(DrawableImage::imageColour0Id, btnColour);
+    confirmButton.setColour(DrawableImage::imageColour0Id, btnColour);
 
     cancelButton.setWantsKeyboardFocus(false);
     cancelButton.addListener(this);
@@ -46,9 +46,8 @@ yPaddingPixels(defaultYPaddingPixels)
     setInterceptsMouseClicks(true, true);
 }
 
-/*
- * Removes this component from the window.
- */
+
+// Removes this component from the window.
 void Widgets::PopupEditor::closePopup()
 {
     setVisible(false);
@@ -59,27 +58,23 @@ void Widgets::PopupEditor::closePopup()
     }
 }
 
-/*
- * Applies the editor bounds defined in the layout configuration file.
- */
+
+// Applies the editor bounds defined in the layout configuration file.
 void Widgets::PopupEditor::applyConfigBounds()
 {
     boundsManager.applyConfigBounds();
 }
 
-/*
- * Sets the title printed across the top of the component.
- */
+
+// Sets the title printed across the top of the component.
 void Widgets::PopupEditor::setEditorTitle(const juce::String newTitle)
 {
-    titleLabel.setText(newTitle, juce::NotificationType::dontSendNotification);
+    titleLabel.setText(newTitle,
+            juce::NotificationType::dontSendNotification);
 }
 
-/*
- * Adds all Components in a layout as child components, and uses the layout to 
- * place the new child components below the title label and above the cancel and
- * confirm buttons.
- */
+
+// Adds all Components in a layout as child components.
 void Widgets::PopupEditor::setLayout(Layout::Group::RelativeLayout layout)
 {
     using namespace Layout::Group;
@@ -96,28 +91,25 @@ void Widgets::PopupEditor::setLayout(Layout::Group::RelativeLayout layout)
     }
 }
 
-/*
- * Sets the amount of space in pixels to leave between all child components and 
- * the outer component bounds.
- */
+
+// Sets the amount of space in pixels to leave between all child components and
+// the outer component bounds.
 void Widgets::PopupEditor::setMargin(const int margin)
 {
     marginPixels = margin;
 }
 
-/*
- * Sets the amount of space in pixels to leave between child components.
- */
+
+// Sets the amount of space in pixels to leave between child components.
 void Widgets::PopupEditor::setPadding(int xPadding, int yPadding)
 {
     xPaddingPixels = xPadding;
     yPaddingPixels = yPadding;
 }
 
-/*
- * Manages click events from the cancel and confirm buttons, passing all other 
- * button events to editorButtonClicked method.
- */
+
+// Manages click events from the cancel and confirm buttons, passing all other
+// button events to editorButtonClicked method.
 void Widgets::PopupEditor::buttonClicked(juce::Button* buttonClicked)
 {
     if (buttonClicked == &cancelButton)
@@ -135,12 +127,11 @@ void Widgets::PopupEditor::buttonClicked(juce::Button* buttonClicked)
     }
 }
 
-/*
- * Handles key press events.
- */
+
+// Handles key press events.
 bool Widgets::PopupEditor::keyPressed(const juce::KeyPress & key)
 {
-    if(key == juce::KeyPress::escapeKey)
+    if (key == juce::KeyPress::escapeKey)
     {
         closePopup();
     }
@@ -152,9 +143,8 @@ bool Widgets::PopupEditor::keyPressed(const juce::KeyPress & key)
     return true;
 }
 
-/*
- * Reapplies the child component layout when the component bounds are updated.
- */
+
+// Reapplies the child component layout when the component bounds are updated.
 void Widgets::PopupEditor::resized()
 {
     DrawableImage::resized();
@@ -162,12 +152,11 @@ void Widgets::PopupEditor::resized()
     editorResized();
 }
 
-/*
- * Grabs keyboard focus when the component becomes visible.
- */
+
+// Grabs keyboard focus when the component becomes visible.
 void Widgets::PopupEditor::visibilityChanged()
 {
-    if(isShowing())
+    if (isShowing())
     {
         grabKeyboardFocus();
     }

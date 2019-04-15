@@ -1,6 +1,6 @@
 #pragma once
 /**
- * @file DesktopEntry/UpdateListener.h"
+ * @file  DesktopEntry/UpdateListener.h"
  *
  * @brief  Receives notifications when desktop entry data is updated.
  */
@@ -12,9 +12,12 @@ namespace DesktopEntry { class UpdateListener; }
 namespace DesktopEntry { class LoadingThread; }
 
 /**
+ * @brief  Listens for updates to the DesktopEntry resource's cache of saved
+ *         desktop entry data.
+ *
  *  Whenever the desktop entry loader updates its cached desktop entry data, it
  * notifies all UpdateListeners of all added, changed, or removed entries.
- * UpdateListener classes must implement DesktopEntry::UpdateInterface's 
+ * UpdateListener classes must implement DesktopEntry::UpdateInterface's
  * methods to handle these notifications.
  *
  * @see DesktopEntry/UpdateInterface.h

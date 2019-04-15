@@ -1,31 +1,31 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
- * @file Wifi_Connection_Record_Module.h
+ * @file  Wifi_Connection_Record_Module.h
  *
  * @brief  Tracks all major Wifi connection events.
  */
 #include "Wifi_Module.h"
 
-namespace Wifi 
-{ 
+namespace Wifi
+{
     class Resource;
     class AccessPoint;
-    namespace Connection 
-    { 
+    namespace Connection
+    {
         class Event;
         enum class EventType;
-        namespace Record { class Module; } 
-    } 
+        namespace Record { class Module; }
+    }
 }
 
 /**
- * @brief  Records all Wifi connection events relevant to this application that 
- *         occur after the program is launched. 
+ * @brief  Records all Wifi connection events relevant to this application that
+ *         occur after the program is launched.
  *
- *  RecordModule finds and shares the most recent connection events, optionally 
+ *  RecordModule finds and shares the most recent connection events, optionally
  * filtering by access point or event type.
  */
 class Wifi::Connection::Record::Module final : public Wifi::Module
@@ -49,10 +49,10 @@ public:
     bool isConnected() const;
 
     /**
-     * @brief  Checks if NetworkManager is currently opening a network 
+     * @brief  Checks if NetworkManager is currently opening a network
      *         connection.
      *
-     * @return  Whether a network connection is currently being established. 
+     * @return  Whether a network connection is currently being established.
      */
     bool isConnecting() const;
 
@@ -74,7 +74,7 @@ public:
     void addConnectionEvent(const Event newEvent);
 
     /**
-     * @brief  Adds a new event to the list of saved events if the most recent 
+     * @brief  Adds a new event to the list of saved events if the most recent
      *         saved event doesn't have the same access point and event type.
      *
      *  For the purposes of this function, disconnect, connection failure, and
@@ -94,8 +94,8 @@ public:
     /**
      * @brief  Gets the most recent connection event in the connection history.
      *
-     * @return  The stored Connection::Event with the most recent time value, or
-     *          a null Connection::Event if no events were found.
+     * @return  The stored Connection::Event with the most recent time value,
+     *          or a null Connection::Event if no events were found.
      */
     Event getLatestEvent() const;
 
@@ -105,9 +105,9 @@ public:
      *
      * @param eventAP  The access point to find in the connection history.
      *
-     * @return         The most recent stored Connection::Event that has eventAP 
-     *                 as its access point, or a null Connection::Event if no
-     *                 stored event has the given access point.
+     * @return         The most recent stored Connection::Event that has
+     *                 eventAP as its access point, or a null Connection::Event
+     *                 if no stored event has the given access point.
      */
     Event getLatestEvent(const AccessPoint eventAP) const;
 
@@ -116,8 +116,8 @@ public:
      *
      * @param eventType  The requested event type.
      *
-     * @return           The most recent stored Connection::Event with that 
-     *                   type, or a null Event if no stored event is of type 
+     * @return           The most recent stored Connection::Event with that
+     *                   type, or a null Event if no stored event is of type
      *                   eventType.
      */
     Event getLatestEvent(const EventType eventType) const;
@@ -130,7 +130,7 @@ public:
      *
      * @param eventType  The type of event to find.
      *
-     * @return           The most recent Event with that type and access point, 
+     * @return           The most recent Event with that type and access point,
      *                   or a null Event if no matching event is found.
      */
     Event getLatestEvent(const AccessPoint eventAP,

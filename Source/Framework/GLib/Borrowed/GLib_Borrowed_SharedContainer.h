@@ -18,15 +18,15 @@ namespace GLib { namespace Borrowed { class SharedContainer; } }
  *  This lets the ObjectLender remove a GObject* value from every single Object
  * that holds it by calling clearData() on a single SharedContainer.
  *
- *  SharedContainer holds a single GObject* provided to it on construction.
- * That value may be replaced with nullptr using the clearData() method, but
- * it may not be changed in any other way.
+ *  SharedContainer holds a single GObject* provided to it on construction. That
+ * value may be replaced with nullptr using the clearData() method, but it may
+ * not be changed in any other way.
  */
 class GLib::Borrowed::SharedContainer : public Util::Nullable<GObject*>,
     public juce::ReferenceCountedObject
 {
 public:
-    /* Reference-counted pointer type used to share a SharedContainer. */
+    // Reference-counted pointer type used to share a SharedContainer.
     typedef juce::ReferenceCountedObjectPtr<SharedContainer> Ptr;
 
     /**

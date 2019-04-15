@@ -8,15 +8,15 @@
 
 #include "JuceHeader.h"
 
-namespace Wifi 
-{ 
+namespace Wifi
+{
     class AccessPoint;
     namespace Connection { class Event; }
     namespace LibNM { class APHash; }
 
-    namespace TestUtils 
-    { 
-        namespace Waiting 
+    namespace TestUtils
+    {
+        namespace Waiting
         {
 
             /**
@@ -24,13 +24,13 @@ namespace Wifi
              *         registered to the APList.
              *
              * @return  True if multiple access points were found, false if the
-             *          function times out before multiple access points 
+             *          function times out before multiple access points
              *          appeared.
              */
             bool waitForAccessPoints();
 
             /**
-             * @brief  Waits for the wifi device to detect a specific access 
+             * @brief  Waits for the wifi device to detect a specific access
              *         point.
              *
              * @param apHash  The hash value identifying an access point.
@@ -42,7 +42,7 @@ namespace Wifi
             AccessPoint waitForAccessPoint(const LibNM::APHash apHash);
 
             /**
-             * @brief  Waits for the next Wifi connection event to be 
+             * @brief  Waits for the next Wifi connection event to be
              *         registered.
              *
              * @param startTime  The time that the connection event should come
@@ -55,6 +55,6 @@ namespace Wifi
             Connection::Event waitForNextConnectionEvent
                     (const juce::Time startTime);
 
-        } 
-    } 
+        }
+    }
 }

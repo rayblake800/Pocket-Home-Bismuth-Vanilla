@@ -2,23 +2,23 @@
 #include "Util_Commands.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Process::Launcher::";
 #endif
 
-/* Timer interval in milliseconds. */
+// Timer interval in milliseconds.
 static const int timerFrequency = 2000;
 
-/* Milliseconds to wait before forcibly terminating a window focus operation. */
+// Milliseconds to wait before forcibly terminating a window focus operation.
 static const int windowFocusTimeout = 1000;
 
-/* Milliseconds to wait before assuming the last application launch failed. */
+// Milliseconds to wait before assuming the last application launch failed.
 static const int pendingLaunchTimeout = 15000;
 
-/* Class key: */
+// Class key:
 static const juce::Identifier localeClassKey = "Process::Launcher";
 
-/* Localized text value keys: */
+// Localized text value keys:
 static const juce::Identifier couldNotOpenTextKey    = "couldNotOpen";
 static const juce::Identifier notValidCommandTextKey = "notValidCommand";
 
@@ -31,10 +31,9 @@ void Process::Launcher::setLaunchFailureCallback
     launchFailureCallback = failureCallback;
 }
 
-/*
- * Launches a new application, or focuses its window if the application is
- * already running
- */
+
+// Launches a new application, or focuses its window if the application is
+// already running
 void Process::Launcher::startOrFocusApp(const juce::String& command)
 {
     DBG(dbgPrefix << __func__ << ": command = " << command);
@@ -48,7 +47,7 @@ void Process::Launcher::startOrFocusApp(const juce::String& command)
         {
             toRemove.push_back(app);
         }
-        else if(app->getLaunchCommand() == command)
+        else if (app->getLaunchCommand() == command)
         {
             appInstance = app;
         }
@@ -78,7 +77,7 @@ void Process::Launcher::startOrFocusApp(const juce::String& command)
         }
     }
     Launched* newApp = startApp(command);
-    if(newApp != nullptr)
+    if (newApp != nullptr)
     {
         runningApps.add(newApp);
     }
@@ -88,9 +87,8 @@ void Process::Launcher::startOrFocusApp(const juce::String& command)
     }
 }
 
-/*
- * Checks a string to see if it is a valid shell command.
- */
+
+// Checks a string to see if it is a valid shell command.
 bool Process::Launcher::testCommand(const juce::String& command)
 {
     Util::Commands systemCommands;
@@ -99,9 +97,7 @@ bool Process::Launcher::testCommand(const juce::String& command)
 }
 
 
-/*
- * Starts a new instance of an application process
- */
+// Starts a new instance of an application process
 Process::Launched* Process::Launcher::startApp(const juce::String& command)
 {
     using juce::AlertWindow;
@@ -117,18 +113,17 @@ Process::Launched* Process::Launcher::startApp(const juce::String& command)
         launchFailureCallback();
         return nullptr;
     }
-    
-    Launched* newApp = new Launched(command);    
+
+    Launched* newApp = new Launched(command);
     timedProcess = newApp;
     lastLaunch = juce::Time::getMillisecondCounter();
     startTimer(timerFrequency);
     return newApp;
 }
 
-/*
- * Checks if the last launched application started successfully, and displays an
- * error message if the application process died.
- */
+
+// Checks if the last launched application started successfully, and displays an
+// error message if the application process died.
 void Process::Launcher::timerCallback()
 {
     if (timedProcess != nullptr)
@@ -137,7 +132,7 @@ void Process::Launcher::timerCallback()
         {
             // If the process is still going and we have yet to reach timeout,
             // wait longer.
-            if (juce::Time::getMillisecondCounter() - lastLaunch 
+            if (juce::Time::getMillisecondCounter() - lastLaunch
                     < pendingLaunchTimeout)
             {
                 return;
@@ -156,7 +151,7 @@ void Process::Launcher::timerCallback()
             juce::StringArray lines = juce::StringArray::fromLines(output);
             output = "";
             for (int i = lines.size() - 1;
-                 i > lines.size() - 6 && i >= 0; i--)
+                i > lines.size() - 6 && i >= 0; i--)
             {
                 output = lines[i] + juce::String("\n") + output;
             }
@@ -170,10 +165,9 @@ void Process::Launcher::timerCallback()
     stopTimer();
 }
 
-/*
- * Cancels pending checks on the last launched application if the pocket-home
- * window loses focus.
- */
+
+// Cancels pending checks on the last launched application if the pocket-home
+// window loses focus.
 void Process::Launcher::onSuspend()
 {
     stopTimer();

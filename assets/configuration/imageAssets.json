@@ -1,4 +1,4 @@
-{  
+{
     "home page background"    : "wallpaper/chipBackground.png",
     "login page background"   : "login/background.png",
     "default icon"            : "icons/chip.png",
@@ -43,7 +43,7 @@
             "component assets/WifiIcon/wifiStrength2.svg",
             "component assets/WifiIcon/wifiStrength3.svg"
         ]
-    },  
+    },
     "power button": {
         "colours": [
             "0xffeb008b"

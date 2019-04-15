@@ -2,17 +2,17 @@
 /**
  * @file  Wifi_LibNM_APHash.h
  *
- * @brief  Generates and holds a unique value to identify a Wifi connection 
- *         point. 
+ * @brief  Generates and holds a unique value to identify a Wifi connection
+ *         point.
  */
 
 #include "JuceHeader.h"
 #include <gio/gio.h>
 #include <NetworkManager.h>
 
-namespace Wifi { namespace LibNM 
-{ 
-    class APHash; 
+namespace Wifi { namespace LibNM
+{
+    class APHash;
     enum class APMode;
     enum class SecurityType;
 } }
@@ -24,20 +24,20 @@ namespace Wifi { namespace LibNM
  * access point mode, and security settings. APHash values are immutable, and
  * should be used to compare and sort access point objects.
  *
- *  In most circumstances, access points with the same SSID, mode, and security 
- * settings are treated as interchangeable, to allow devices to easily stay 
- * connected to a network with multiple Wifi routers. However, it is possible 
- * for two access points to exist with the same APHash but different passwords, 
+ *  In most circumstances, access points with the same SSID, mode, and security
+ * settings are treated as interchangeable, to allow devices to easily stay
+ * connected to a network with multiple Wifi routers. However, it is possible
+ * for two access points to exist with the same APHash but different passwords,
  * so this should be considered when handling connection failures.
  */
 class Wifi::LibNM::APHash
 {
 public:
     /**
-     * @brief  Generates a Wifi access point identifier using the access point's
-     *         SSID, mode, and security settings.
+     * @brief  Generates a Wifi access point identifier using the access
+     *         point's SSID, mode, and security settings.
      *
-     * @param ssid           The raw SSID bytestring of a Wifi access point. 
+     * @param ssid           The raw SSID bytestring of a Wifi access point.
      *                       This may possibly contain unprintable characters.
      *
      * @param mode           The access point's mode of operation.
@@ -66,18 +66,18 @@ public:
      *
      * @param rhs  Another hash value to compare with this APHash.
      *
-     * @return     True if and only if both hash values are identical. 
+     * @return     True if and only if both hash values are identical.
      */
-    bool operator==(const APHash& rhs) const;
+    bool operator== (const APHash& rhs) const;
 
     /**
      * @brief  Checks if another APHash is not equivalent to this one.
      *
      * @param rhs  Another hash value to compare with this APHash.
      *
-     * @return     True if and only if both hash values are not identical. 
+     * @return     True if and only if both hash values are not identical.
      */
-    bool operator!=(const APHash& rhs) const;
+    bool operator!= (const APHash& rhs) const;
 
     /**
      * @brief  Compares this APHash with another, so hash values can be sorted.
@@ -87,7 +87,7 @@ public:
      * @return     True if and only if this hash value comes before rhs when
      *             sorted alphabetically.
      */
-    bool operator<(const APHash& rhs) const;
+    bool operator< (const APHash& rhs) const;
 
     /**
      * @brief  Checks if this hash object is invalid.

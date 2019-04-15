@@ -1,6 +1,6 @@
 ##### IDCache.pm ###############################################################
 # Stores a set of cached ColourId Element Namespace objects.                   #
-################################################################################ 
+################################################################################
 
 ##### Functions: #####
 
@@ -13,7 +13,7 @@
 
 #==============================================================================#
 #--- addElement: ---
-# Adds an Element object to the cache. 
+# Adds an Element object to the cache.
 #--- Parameters: ---
 # $element: A new valid Element object to store. If this element's namespace
 #           name is not in the cache already, a new Namespace object will also
@@ -32,7 +32,7 @@
 #--- assignKey: ---
 # Assigns a JSON colour value key string to an Element.
 #--- Parameters: ---
-# $searchValue: The full name, current key, or hex ColourId value of the element 
+# $searchValue: The full name, current key, or hex ColourId value of the element
 #               being updated.
 #
 # $key:         The new key to assign to the matching element.
@@ -42,10 +42,10 @@
 #--- findElement: ---
 # Finds a cached Element objects.
 #--- Parameters: ---
-# @searchValues: The full name, current key, or hex ColourId value of the 
+# @searchValues: The full name, current key, or hex ColourId value of the
 #                Element that should be found.
 #--- Returns: ---
-# The requested Element, or undef if the search value that did not match a 
+# The requested Element, or undef if the search value that did not match a
 # cached Element.
 #==============================================================================#
 
@@ -134,7 +134,7 @@ sub addElement
 {
     my $self = shift;
     my $element = shift;
-    if(!blessed($element) || blessed($element) ne 'Element')
+    if (!blessed($element) || blessed($element) ne 'Element')
     {
         die "Invalid Element param $element!\n";
     }
@@ -143,7 +143,7 @@ sub addElement
     # everywhere in the cache.
     my $id = $element->getID();
     my $replacedElement = $self->{_ids}->{$id};
-    if(defined($replacedElement))
+    if (defined($replacedElement))
     {
         $self->removeElement($replacedElement);
     }
@@ -151,14 +151,14 @@ sub addElement
 
     my $nsName = $element->getNamespace();
     my $namespace = $self->{_namespaces}->{$nsName};
-    if(!defined($namespace))
+    if (!defined($namespace))
     {
         $namespace = new Namespace($nsName);
         $self->{_namespaces}->{$nsName} = $namespace;
     }
     $namespace->addElement($element);
     my $key = $element->getKey();
-    if($key)
+    if ($key)
     {
         $self->{_keys}->{$key} = $element;
     }
@@ -169,22 +169,22 @@ sub removeElement
 {
     my $self = shift;
     my $element = shift;
-    if(defined($element) && !blessed($element))
+    if (defined($element) && !blessed($element))
     {
         $element = $self->findElement($element);
     }
-    if(blessed($element) && (blessed($element) eq 'Element'))
+    if (blessed($element) && (blessed($element) eq 'Element'))
     {
         my $namespaceName = $element->getNamespace();
         my $namespace = $self->findNamespace($namespaceName);
         $namespace->removeElement($element->getID());
-        if((scalar $namespace->getElements()) == 0)
+        if ( (scalar $namespace->getElements()) == 0)
         {
             delete($self->{_namespaces}->{$namespaceName});
         }
         delete($self->{_elements}->{$element->getFullName()});
         my $key = $element->getKey();
-        if($key)
+        if ($key)
         {
             delete($self->{_keys}->{$key});
         }
@@ -199,21 +199,15 @@ sub assignKey
     my $searchVal = shift;
     my $key = shift;
 
-    if(exists($self->{_keys}->{$key}))
+    if (exists($self->{_keys}->{$key}))
     {
         print("IDCache::assignKey: key \"$key\" is already in use!\n");
         return;
     }
     my $element = $self->findElement($searchVal);
-    if(defined($element))
+    if (defined($element))
     {
-        my $replacement = new Element(
-                $element->getNamespace(),
-                $element->getName(),
-                $element->getID(),
-                $element->getCategory(),
-                $key,
-                $element->getDefaultColour());
+        my $replacement = $element->withKey($key);
         $self->removeElement($element);
         $self->addElement($replacement);
     }
@@ -229,15 +223,15 @@ sub findElement
     my $self = shift;
     my $searchValue = shift;
     my $element;
-    if(exists($self->{_elements}->{$searchValue}))
+    if (exists($self->{_elements}->{$searchValue}))
     {
         $element = $self->{_elements}->{$searchValue};
     }
-    elsif(exists($self->{_keys}->{$searchValue}))
+    elsif (exists($self->{_keys}->{$searchValue}))
     {
         $element = $self->{_keys}->{$searchValue};
     }
-    elsif(exists($self->{_ids}->{$searchValue}))
+    elsif (exists($self->{_ids}->{$searchValue}))
     {
         $element = $self->{_ids}->{$searchValue};
     }
@@ -249,7 +243,7 @@ sub findNamespace
 {
     my $self = shift;
     my $name = shift;
-    if(exists($self->{_namespaces}->{$name}))
+    if (exists($self->{_namespaces}->{$name}))
     {
         return $self->{_namespaces}->{$name};
     }
@@ -271,7 +265,7 @@ sub sortValue
     my $self = shift;
     my $searchValue = shift;
     my $element = $self->findElement($searchValue);
-    if(!defined($element))
+    if (!defined($element))
     {
         return -1;
     }
@@ -298,7 +292,7 @@ sub getNamespace
 {
     my $self = shift;
     my $name = shift;
-    if(exists($self->{_namespaces}->{$name}))
+    if (exists($self->{_namespaces}->{$name}))
     {
         return $self->{_namespaces}->{$name};
     }
@@ -311,7 +305,7 @@ sub getElements
     my $self = shift;
     my @names = $self->getElementNames();
     my @elements;
-    foreach my $name(@names)
+    foreach my $name (@names)
     {
         push(@elements, $self->findElement($name));
     }

@@ -2,7 +2,7 @@
 /**
  * @file  Wifi_LibNM_Thread_Module.h
  *
- * @brief  Runs the GLib event loop shared by all LibNM NMObject classes, and 
+ * @brief  Runs the GLib event loop shared by all LibNM NMObject classes, and
  *         creates and allows access to the NetworkManager client and wifi
  *         device objects within the event loop.
  */
@@ -15,20 +15,20 @@
 #include "Wifi_LibNM_ActiveConnection.h"
 #include "GLib_Borrowed_ObjectLender.h"
 
-namespace Wifi 
-{ 
-    namespace LibNM { namespace Thread { class Module; } } 
+namespace Wifi
+{
+    namespace LibNM { namespace Thread { class Module; } }
     class Resource;
 }
 
 /**
- * @brief  The Wifi::Module responsible for creating and managing the LibNM 
+ * @brief  The Wifi::Module responsible for creating and managing the LibNM
  *         event loop thread, and for initializing the LibNM client and wifi
  *         device objects.
  *
  *  All interaction with LibNM::Object subclasses should occur within the
- * LibNM::ThreadResource thread, using its call and callAsync methods. The 
- * Client and DeviceWifi objects provided by the thread should be requested as 
+ * LibNM::ThreadResource thread, using its call and callAsync methods. The
+ * Client and DeviceWifi objects provided by the thread should be requested as
  * needed, and not saved for future use.
  */
 class Wifi::LibNM::Thread::Module : public GLib::SharedThread,
@@ -75,16 +75,16 @@ public:
     GLib::Borrowed::ObjectLender<LibNM::AccessPoint>& getAccessPointLender();
 
     /**
-     * @brief  Gets the set of ActiveConnection objects managed by the active 
+     * @brief  Gets the set of ActiveConnection objects managed by the active
      *         Wifi device.
      *
      *  Only the ThreadResource and the DeviceWifi's private ThreadHandler
      * should access this method.
      *
-     * @return  The ObjectLender used to manage the Wifi device's 
+     * @return  The ObjectLender used to manage the Wifi device's
      *          NMActiveConnection* data.
      */
-    GLib::Borrowed::ObjectLender<LibNM::ActiveConnection>& 
+    GLib::Borrowed::ObjectLender<LibNM::ActiveConnection>&
     getWifiConnectionLender();
 
 private:
@@ -112,31 +112,31 @@ private:
      */
     virtual int getThreadReferenceCount() const override;
 
-    /* The main NetworkManager client object. */
+    // The main NetworkManager client object.
     Client networkClient;
 
-    /* The managed Wifi device object. */
+    // The managed Wifi device object.
     DeviceWifi wifiDevice;
 
-    /*#### Borrowed::Objects managed by the networkClient: ####*/
+    //#### Borrowed::Objects managed by the networkClient: ####
 
-    /* Holds DeviceWifi objects for all valid wifi devices. */
+    // Holds DeviceWifi objects for all valid wifi devices.
     GLib::Borrowed::ObjectLender<DeviceWifi> wifiDeviceLender;
 
-    /* Holds ActiveConnection objects for all valid NMActiveConnection* values
-       taken from the Client. */
+    // Holds ActiveConnection objects for all valid NMActiveConnection* values
+    // taken from the Client.
     GLib::Borrowed::ObjectLender<ActiveConnection> connectionLender;
 
-    /*#### Borrowed::Objects managed by the wifiDevice: ####*/
+    //#### Borrowed::Objects managed by the wifiDevice: ####
 
-    /* Holds AccessPoint objects for all valid NMAccessPoint* values. */
+    // Holds AccessPoint objects for all valid NMAccessPoint* values.
     GLib::Borrowed::ObjectLender<AccessPoint> accessPointLender;
 
-    /* Holds ActiveConnection objects for all valid NMActiveConnection* values
-       taken from the DeviceWifi. */
+    // Holds ActiveConnection objects for all valid NMActiveConnection* values
+    // taken from the DeviceWifi.
     GLib::Borrowed::ObjectLender<ActiveConnection> wifiConnectionLender;
 
-    /* Tracks if no Wifi device exists, to make sure the thread doesn't waste 
-       time trying to find it every single time getWifiDevice() is called. */
+    // Tracks if no Wifi device exists, to make sure the thread doesn't waste
+    // time trying to find it every single time getWifiDevice() is called.
     bool missingWifiDevice = false;
 };

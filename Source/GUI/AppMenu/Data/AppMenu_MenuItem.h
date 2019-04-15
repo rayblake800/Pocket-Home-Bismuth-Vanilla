@@ -1,10 +1,10 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
  * @file  AppMenu_MenuItem.h
- * 
+ *
  * @brief  Defines an item in the application menu.
  */
 
@@ -14,34 +14,34 @@
 namespace AppMenu { class MenuItem; }
 
 /**
- *  @brief  A nullable interface for AppMenu::ItemData objects of any type.
+ * @brief  A nullable interface for AppMenu::ItemData objects of any type.
  *
- *  MenuItems mirror the ItemData interface, allowing them to be used 
+ *  MenuItems mirror the ItemData interface, allowing them to be used
  * interchangeably no matter what type of ItemData they contain.
  *
  *  MenuItem also takes care of memory management issues with ItemData objects.
  * All MenuItem methods check if their ItemData is null before dereferencing it,
  * returning an appropriate default value instead if it does turn out to be
- * null. ItemData objects are automatically deleted when the 
+ * null. ItemData objects are automatically deleted when the
  * AppMenu::JSONResource object and every MenuItem referencing them have been
  * destroyed.
  *
  *  Multiple MenuItem objects may hold the same ItemData object, but there are
- * no controls used to prevent concurrent access errors.  All AppMenu classes
+ * no controls used to prevent concurrent access errors. All AppMenu classes
  * are not threadsafe, and should only be used within the Juce message thread.
  */
 class AppMenu::MenuItem : public Util::Nullable<AppMenu::ItemData::Ptr>
 {
 public:
     /**
-     * @brief  Creates a menu item from some source of menu data. 
+     * @brief  Creates a menu item from some source of menu data.
      *
      * @param dataSource  A menu data source the new MenuItem will clone.
      */
     MenuItem(ItemData::Ptr dataSource);
 
     /**
-     * @brief  Creates a menu item copying data from another menu item. 
+     * @brief  Creates a menu item copying data from another menu item.
      *
      * @param toCopy  A menu item to copy when constructing a new menu item.
      */
@@ -51,7 +51,7 @@ public:
      * @brief  Creates a null menu item, holding no data.
      */
     MenuItem() { }
-    
+
     virtual ~MenuItem() { }
 
     /**
@@ -64,7 +64,7 @@ public:
     /**
      * @brief  Gets the menu item's icon name.
      *
-     * @return  The name or path used to load the menu item's icon file. 
+     * @return  The name or path used to load the menu item's icon file.
      */
     juce::String getIconName() const;
 
@@ -79,7 +79,7 @@ public:
     /**
      * @brief  Checks if this menu item is a terminal application.
      *
-     * @return  Whether the menu item has a launch command that should run 
+     * @return  Whether the menu item has a launch command that should run
      *          within a new terminal window.
      */
     bool getLaunchedInTerm() const;
@@ -88,7 +88,7 @@ public:
      * @brief  Gets all application categories associated with this menu item.
      *
      * @return  Categories of application used to find this menu item's folder
-     *          items, or the list of categories that define an application 
+     *          items, or the list of categories that define an application
      *          launched by this menu item.
      */
     juce::StringArray getCategories() const;
@@ -100,12 +100,12 @@ public:
      *           null or is the root folder item.
      */
     MenuItem getParentFolder() const;
-    
+
     /**
      * @brief  Gets the menu item's index within its folder.
      *
-     * @return  The menu item index, or -1 if the menu item is null or not 
-     *          placed within a folder. 
+     * @return  The menu item index, or -1 if the menu item is null or not
+     *          placed within a folder.
      */
     int getIndex() const;
 
@@ -132,7 +132,7 @@ public:
      *          open a folder.
      */
     int getFolderSize() const;
-    
+
     /**
      * @brief  Gets the number of folder items held by this menu item that can
      *         be reordered.
@@ -144,8 +144,8 @@ public:
      * @return  The number of child folder items held that can be re-arranged
      *          in any order.
      */
- 
-    int getMovableChildCount() const; 
+
+    int getMovableChildCount() const;
 
     /**
      * @brief  Gets a menu item held within this menu item.
@@ -154,8 +154,8 @@ public:
      *                     folder data.
      *
      * @return             The folder item at the given index, or a null menu
-     *                     item if this menu item doesn't have a folder item
-     *                     at the given index.
+     *                     item if this menu item doesn't have a folder item at
+     *                     the given index.
      */
     MenuItem getFolderItem(const int folderIndex) const;
 
@@ -168,7 +168,7 @@ public:
     juce::Array<MenuItem> getFolderItems() const;
 
     /**
-     * @brief  Gets an appropriate title to use for a deletion confirmation 
+     * @brief  Gets an appropriate title to use for a deletion confirmation
      *         window.
      *
      * @return  A localized confirmation title string.
@@ -176,7 +176,7 @@ public:
     juce::String getConfirmDeleteTitle() const;
 
     /**
-     * @brief  Gets appropriate descriptive text for a deletion confirmation 
+     * @brief  Gets appropriate descriptive text for a deletion confirmation
      *         window.
      *
      * @return  A localized confirmation description string.
@@ -194,34 +194,34 @@ public:
      * @brief  Checks if two menu items represent the same item in the menu.
      *
      * @param toCompare  Another menu item to compare with this one.
-     * 
+     *
      * @return           Whether both menu items store the same data object.
      */
-    bool operator==(const MenuItem& toCompare) const;
-    
+    bool operator== (const MenuItem& toCompare) const;
+
     /**
-     * @brief  Checks if two menu items do not represent the same item in the 
+     * @brief  Checks if two menu items do not represent the same item in the
      *         menu.
      *
      * @param toCompare  Another menu item to compare with this one.
-     * 
-     * @return           Whether the menu items do not store the same data 
+     *
+     * @return           Whether the menu items do not store the same data
      *                   object.
      */
-    bool operator!=(const MenuItem& toCompare) const;
+    bool operator!= (const MenuItem& toCompare) const;
 
     /**
      * @brief  Compares this menu item with another.
      *
      * @param toCompare  Another menu item to compare with this one.
-     * 
+     *
      * @return           Whether this menu item's title comes before toCompare's
      *                   title alphabetically.
      */
-    bool operator<(const MenuItem& toCompare) const;
-        
-    /* Describes the different data items held by the menu item. */
-    typedef ItemData::DataField DataField; 
+    bool operator< (const MenuItem& toCompare) const;
+
+    // Describes the different data items held by the menu item.
+    typedef ItemData::DataField DataField;
 
     /**
      * @brief  Checks if a data field within the menu item can be edited.
@@ -251,7 +251,7 @@ public:
     void setIconName(const juce::String& iconName);
 
     /**
-     * @brief   Sets the menu item's application launch command.
+     * @brief  Sets the menu item's application launch command.
      *
      * This will do nothing if the menu item's command field is not editable.
      *
@@ -261,14 +261,13 @@ public:
     void setCommand(const juce::String& command);
 
     /**
-     * @brief  Sets if the menu item runs its command in a new terminal 
-     *         window.
+     * @brief  Sets if the menu item runs its command in a new terminal window.
      *
-     * This will do nothing if the menu item's launchInTerm option is not
+     *  This will do nothing if the menu item's launchInTerm option is not
      * editable.
      *
      * @param launchInTerm   True to run any launch command assigned to this
-     *                       menu item within a new terminal window, false to 
+     *                       menu item within a new terminal window, false to
      *                       run menu commands normally.
      */
     void setLaunchedInTerm(const bool launchInTerm);
@@ -301,7 +300,7 @@ public:
     bool insertChild(const MenuItem childItem, const int index);
 
     /**
-     * @brief  Attempts to remove a menu item from the menu, optionally saving 
+     * @brief  Attempts to remove a menu item from the menu, optionally saving
      *         the change to the menu item's data source.
      *
      * @param updateSource  Whether the menu item should be deleted from its
@@ -313,18 +312,18 @@ public:
     bool remove(const bool updateSource);
 
     /**
-     * @brief  Swaps the positions of two folder items, saving the change to 
+     * @brief  Swaps the positions of two folder items, saving the change to
      *         the folder menu item's data source if both folder items were
      *         user-movable.
      *
-     * @param childIdx1   The index within the folder item of the first 
-     *                    child item to move.
+     * @param childIdx1   The index within the folder item of the first child
+     *                    item to move.
      *
-     * @param childIdx2   The index within the folder item of the second 
-     *                    child item to move.
+     * @param childIdx2   The index within the folder item of the second child
+     *                    item to move.
      *
-     * @return            True if the child menu items were swapped, false if 
-     *                    the indices did not specify two valid menu items 
+     * @return            True if the child menu items were swapped, false if
+     *                    the indices did not specify two valid menu items
      *                    within the folder's child menu items, or if the folder
      *                    item was null.
      */
@@ -344,8 +343,8 @@ public:
     class Listener : protected ItemData::Listener
     {
     public:
-        /* Allow MenuItem to cast Listeners to their protected base when adding
-           or removing them. */
+        // Allow MenuItem to cast Listeners to their protected base when adding
+        // or removing them.
         friend class MenuItem;
 
         Listener() { }

@@ -8,9 +8,9 @@
 #include "SharedResource_Handler.h"
 #include "GLib_SharedContextPtr.h"
 
-namespace GLib 
-{ 
-    template <class ResourceType> class ThreadHandler; 
+namespace GLib
+{
+    template <class ResourceType> class ThreadHandler;
     class SharedContextPtr;
 }
 
@@ -31,7 +31,7 @@ public:
      *
      * @param resourceKey     The ThreadResource's unique SharedResource key.
      *
-     * @param 
+     * @param
      */
     ThreadHandler(const juce::Identifier& resourceKey) :
         HandlerType(resourceKey) { }
@@ -39,17 +39,17 @@ public:
     virtual ~ThreadHandler() { }
 
     /**
-     * @brief  Calls a function on this GLib event loop, waiting until the 
+     * @brief  Calls a function on this GLib event loop, waiting until the
      *         function has finished.
-     * 
-     * @param toCall     A function that needs to be called on the GLib event 
+     *
+     * @param toCall     A function that needs to be called on the GLib event
      *                   loop.
      *
      * @param onFailure  An optional function to call if accessing the event
      *                   loop failed.
      */
-    void call(const std::function<void()> toCall, 
-            const std::function<void()> onFailure 
+    void call(const std::function<void()> toCall,
+            const std::function<void()> onFailure
                 = std::function<void()>()) const
     {
         auto glibThread = HandlerType::getWriteLockedResource();
@@ -60,18 +60,17 @@ public:
         });
     }
 
-
     /**
      * @brief  Asynchronously calls a function once on this GLib event loop.
-     * 
-     * @param toCall     A function that needs to be called on the GLib event 
+     *
+     * @param toCall     A function that needs to be called on the GLib event
      *                   loop.
      *
      * @param onFailure  An optional function to call if accessing the event
      *                   loop failed.
      */
     void callAsync(const std::function<void()> toCall,
-            const std::function<void()> onFailure 
+            const std::function<void()> onFailure
                 = std::function<void()>()) const
     {
         auto glibThread = HandlerType::getWriteLockedResource();
@@ -82,7 +81,7 @@ public:
      * @brief  Checks if the thread resource is currently running.
      *
      * @return  Whether the thread is currently running. This will return true
-     *          even if the thread is waiting and not running the GLib event 
+     *          even if the thread is waiting and not running the GLib event
      *          loop.
      */
     bool isThreadRunning() const
@@ -90,7 +89,7 @@ public:
         auto glibThread = HandlerType::getReadLockedResource();
         return glibThread->isThreadRunning();
     }
-    
+
     /**
      * @brief  Gets the GLib event thread's context.
      *
@@ -101,7 +100,7 @@ public:
         auto glibThread = HandlerType::getReadLockedResource();
         return glibThread->getContext();
     }
-    
+
     /**
      * @brief  Starts the thread resource if it is currently not running.
      */

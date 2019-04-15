@@ -9,14 +9,14 @@
 #include "JuceHeader.h"
 #include "SharedResource_LockType.h"
 
-namespace SharedResource 
-{ 
-    class LockedInstancePtr; 
+namespace SharedResource
+{
+    class LockedInstancePtr;
     class Instance;
     template<class ResourceType> class LockedPtr;
-    namespace Modular 
-    { 
-        template<class ResourceType, class ModuleType> class LockedPtr; 
+    namespace Modular
+    {
+        template<class ResourceType, class ModuleType> class LockedPtr;
     }
 }
 
@@ -33,18 +33,18 @@ class SharedResource::LockedInstancePtr
 {
 public:
 
-    /* LockedInstancePtr may only be created as the parent class of a LockedPtr 
-       object. */
+    // LockedInstancePtr may only be created as the parent class of a LockedPtr
+    // object.
     template<class ResourceType> friend class LockedPtr;
-    template<class ResourceType, class ModuleType> 
+    template<class ResourceType, class ModuleType>
             friend class Modular::LockedPtr;
 
 private:
     /**
      * @brief  Initializes the instance pointer, locking the resource.
      *
-     * @param resourceKey  Identifies the resource Instance this pointer 
-     *                     will access.
+     * @param resourceKey  Identifies the resource Instance this pointer will
+     *                     access.
      *
      * @param lockType     The type of lock used to secure the resource.
      */
@@ -53,13 +53,12 @@ private:
 
 public:
     /**
-     * @brief  Unlocks the resource when the LockedInstancePtr is 
-     *         destroyed.
+     * @brief  Unlocks the resource when the LockedInstancePtr is destroyed.
      */
     virtual ~LockedInstancePtr();
 
     /**
-     * @brief  Unlocks the resource. Once the resource is unlocked, the 
+     * @brief  Unlocks the resource. Once the resource is unlocked, the
      *         LockedInstancePtr may no longer access the resource Instance or
      *         lock.
      */
@@ -83,10 +82,10 @@ protected:
     Instance* getInstance() const;
 
 private:
-    /* The type of resource lock the LockedInstancePtr maintains. */
+    // The type of resource lock the LockedInstancePtr maintains.
     const LockType lockType;
-    /* Identifies the resource accessed by this LockedInstancePtr. */
+    // Identifies the resource accessed by this LockedInstancePtr.
     const juce::Identifier& resourceKey;
-    /* Stores if the resource is currently locked and may be accessed. */
+    // Stores if the resource is currently locked and may be accessed.
     bool locked = false;
 };

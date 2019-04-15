@@ -11,6 +11,7 @@
 namespace Layout { namespace Component { namespace JSONKeys {
 
 //######################### Text Size Keys #################################
+
 static const Config::DataKey smallText
     ("small text", Config::DataKey::doubleType);
 static const Config::DataKey mediumText
@@ -19,6 +20,7 @@ static const Config::DataKey largeText
     ("large text", Config::DataKey::doubleType);
 
 //######################### UI Component Data ##############################
+
 //Defines all component types managed in the config file
 static const juce::Identifier scrollingAppMenu
         ("scrolling app menu");
@@ -82,4 +84,5 @@ static const juce::Array<juce::Identifier> components =
     settingsListBtn,
     spinner
 };
+
 }}}

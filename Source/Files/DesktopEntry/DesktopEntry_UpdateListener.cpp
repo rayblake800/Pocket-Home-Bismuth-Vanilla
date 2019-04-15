@@ -2,5 +2,5 @@
 #include "DesktopEntry_UpdateListener.h"
 #include "DesktopEntry_LoadingThread.h"
 
-DesktopEntry::UpdateListener::UpdateListener() : 
+DesktopEntry::UpdateListener::UpdateListener() :
     SharedResource::Handler<LoadingThread>() { }

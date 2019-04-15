@@ -20,8 +20,8 @@ namespace Assets
          *
          * @param xpmFile  An xpm file object.
          *
-         * @return         An image loaded from the file, or a null image if the 
-         *                 file was not a valid xpm file.
+         * @return         An image loaded from the file, or a null image if
+         *                 the file was not a valid xpm file.
          */
         juce::Image loadXPMImage(const juce::File xpmFile);
     }

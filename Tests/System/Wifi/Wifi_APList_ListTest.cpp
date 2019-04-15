@@ -24,7 +24,7 @@ class Wifi::APList::ListTest : public juce::UnitTest
 public:
     ListTest() : juce::UnitTest("Wifi::APList Testing",
             "Wifi") {}
-    
+
     void runTest() override
     {
         beginTest("APList Reading Test");
@@ -41,7 +41,7 @@ public:
         logMessage(juce::String("Found ") + juce::String(visibleAPs.size())
                 + " access points.");
 
-        for(AccessPoint& visibleAP : visibleAPs)
+        for (AccessPoint& visibleAP : visibleAPs)
         {
             DBG(visibleAP.toString());
             expect(!visibleAP.isNull(), "Received null access point!");

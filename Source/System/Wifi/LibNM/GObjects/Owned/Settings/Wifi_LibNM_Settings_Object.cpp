@@ -4,15 +4,11 @@
 
 namespace WifiNMSettings = Wifi::LibNM::Settings;
 
-/*
- * Creates a Settings object to contain NMSetting data.
- */
-WifiNMSettings::Object::Object
-(NMSetting* toAssign, const GType settingType) :
+// Creates a Settings object to contain NMSetting data.
+WifiNMSettings::Object::Object(NMSetting* toAssign, const GType settingType) :
 GLib::Owned::Object(G_OBJECT(toAssign), settingType) { }
 
-/*
- * @brief  Creates a null Settings object.
- */
+
+// @brief  Creates a null Settings object.
 WifiNMSettings::Object::Object(const GType settingType) :
 GLib::Owned::Object(settingType) { }

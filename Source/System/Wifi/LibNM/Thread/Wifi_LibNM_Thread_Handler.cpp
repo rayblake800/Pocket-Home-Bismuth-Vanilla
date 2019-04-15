@@ -5,17 +5,14 @@
 
 namespace NMThread = Wifi::LibNM::Thread;
 
-/*
- * Creates the shared Wifi::Resource if it doesn't already exist.
- */
+// Creates the shared Wifi::Resource if it doesn't already exist.
 NMThread::Handler::Handler() :
 GLib::ThreadHandler <SharedResource::Modular::Handler<Resource, Module>>
-    (Resource::resourceKey) { } 
+    (Resource::resourceKey) { }
 
-/*
- * Gets the shared NetworkManager client object if called within the LibNM event
- * loop.
- */
+
+// Gets the shared NetworkManager client object if called within the LibNM
+// event loop.
 Wifi::LibNM::Client NMThread::Handler::getClient() const
 {
     SharedResource::Modular::LockedPtr<Resource, Module> nmThread
@@ -23,10 +20,9 @@ Wifi::LibNM::Client NMThread::Handler::getClient() const
     return nmThread->getClient();
 }
 
-/*
- * Gets the shared DeviceWifi object used to control the LibNM-managed Wifi 
- * device if called within the LibNM event loop.
- */
+
+// Gets the shared DeviceWifi object used to control the LibNM-managed Wifi
+// device if called within the LibNM event loop.
 Wifi::LibNM::DeviceWifi NMThread::Handler::getWifiDevice() const
 {
     SharedResource::Modular::LockedPtr<Resource, Module> nmThread
@@ -34,20 +30,18 @@ Wifi::LibNM::DeviceWifi NMThread::Handler::getWifiDevice() const
     return nmThread->getWifiDevice();
 }
 
-/*
- * Schedules a function to run asynchronously within the LibNM thread module's 
- * event loop.
- */
+
+// Schedules a function to run asynchronously within the LibNM thread module's
+// event loop.
 void NMThread::Handler::callAsync(std::function<void()> toCall) const
 {
     GLib::ThreadHandler<SharedResource::Modular::Handler<Resource, Module>>
             ::callAsync(toCall);
 }
-    
-/*
- * Calls a function within the LibNM thread module's event loop, waiting until 
- * the function finishes executing.
- */
+
+
+// Calls a function within the LibNM thread module's event loop, waiting until
+// the function finishes executing.
 void NMThread::Handler::call(std::function<void()> toCall) const
 {
     GLib::ThreadHandler<SharedResource::Modular::Handler<Resource, Module>>

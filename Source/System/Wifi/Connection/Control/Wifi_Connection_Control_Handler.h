@@ -8,13 +8,13 @@
 
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi 
-{ 
-    namespace Connection { namespace Control 
-    { 
-        class Handler; 
+namespace Wifi
+{
+    namespace Connection { namespace Control
+    {
+        class Handler;
         class Module;
-    } } 
+    } }
     class Resource;
     class AccessPoint;
     namespace LibNM { class ActiveConnection; }
@@ -24,7 +24,7 @@ namespace Wifi
  * @brief  Connects to the Connection::Control::Module to open or close Wifi
  *         connections.
  */
-class Wifi::Connection::Control::Handler : 
+class Wifi::Connection::Control::Handler :
         public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
@@ -36,11 +36,11 @@ public:
      * @brief  Attempts to open a Wifi network connection using a nearby access
      *         point.
      *
-     * @param toConnect          The access point to use in the attempted 
+     * @param toConnect          The access point to use in the attempted
      *                           connection.
      *
-     * @param securityKey        An optional security key to use when opening 
-     *                           the connection. This will be ignored if it 
+     * @param securityKey        An optional security key to use when opening
+     *                           the connection. This will be ignored if it
      *                           equals the empty string or if the access point
      *                           is unsecured.
      */

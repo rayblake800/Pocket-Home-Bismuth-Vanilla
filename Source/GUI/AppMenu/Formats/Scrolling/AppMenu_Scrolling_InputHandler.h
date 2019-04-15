@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -13,10 +13,12 @@
 namespace AppMenu { namespace Scrolling { class InputHandler; } }
 
 /**
- *  The Scrolling::InputHandler processes key events for the Scrolling menu,
- * using them to scroll through the active folder component, close the folder,
- * or activate menu items. The InputHandler also slightly changes the behavior
- * of clicked menu items, only activating them if they are currently selected.
+ * @brief  Processes key events for the Scrolling menu, using them to scroll
+ *         through the active folder component, close the folder, or activate
+ *         menu items.
+ *
+ *  The InputHandler also slightly changes the behavior of clicked menu items,
+ * only activating them if they are currently selected.
  */
 class AppMenu::Scrolling::InputHandler : public AppMenu::InputHandler
 {

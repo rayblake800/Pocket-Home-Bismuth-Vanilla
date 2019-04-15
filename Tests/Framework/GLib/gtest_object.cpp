@@ -23,7 +23,7 @@ static void gtest_object_init(GTestObject* object)
 static void finalize(GObject* object)
 {
     GTestObject* testObject = GTEST_OBJECT(object);
-    if(testObject->testString != NULL)
+    if (testObject->testString != NULL)
     {
         g_free(testObject->testString);
         testObject->testString = NULL;
@@ -54,7 +54,7 @@ static void set_property(GObject* object, guint prop_id,
             testObject->testInt = g_value_get_int(value);
             break;
         default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id,pspec);
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
 }
 
@@ -72,7 +72,7 @@ static void get_property(GObject* object, guint prop_id,
             g_value_set_int(value, testObject->testInt);
             break;
         default:
-            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id,pspec);
+            G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
 }
 
@@ -83,13 +83,13 @@ void gtest_object_class_init(GTestObjectClass* klass)
     objectClass->get_property = get_property;
     objectClass->finalize = finalize;
 
-    objectProperties[testStringProp] = g_param_spec_string (
+    objectProperties[testStringProp] = g_param_spec_string(
             GTEST_OBJECT_TEST_STRING,
             "testString",
             "Testing thread safety with string editing",
             NULL,
             G_PARAM_READWRITE);
-    objectProperties[testIntProp] = g_param_spec_int (
+    objectProperties[testIntProp] = g_param_spec_int(
             GTEST_OBJECT_TEST_INT,
             "testInt",
             "Testing thread safety with int editing",

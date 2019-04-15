@@ -25,33 +25,32 @@ static const constexpr char* dbgPrefix = "Wifi::Connection::Control::Module::";
 
 namespace WifiConnect = Wifi::Connection;
 
-/* Maximum number of milliseconds to wait before abandoning a connection 
- * attempt: */
+// Maximum number of milliseconds to wait before abandoning a connection
+// attempt:
 static const constexpr int connectionTimeout = 300000;
 
-/* Additional pending connection data: 
- * 
- * These items are defined here to reduce the number of dependencies that need
- * to be defined in the header file. This approach is only valid because 
- * SharedResource::Module classes are singletons, and Control::Module will 
- * never have any subclasses.
- */
+// Additional pending connection data:
 
-/* The access point used to establish the connection: */
+// These items are defined here to reduce the number of dependencies that need
+// to be defined in the header file. This approach is only valid because
+// SharedResource::Module classes are singletons, and Control::Module will
+// never have any subclasses.
+
+// The access point used to establish the connection:
 static Wifi::AccessPoint connectingAP;
 
-/* The last recorded connection event: */
+// The last recorded connection event:
 static Wifi::Connection::Event lastEvent;
 
-/* Saved connection objects to try and use to connect: */
-static juce::Array<Wifi::LibNM::DBus::SavedConnection> 
+// Saved connection objects to try and use to connect:
+static juce::Array<Wifi::LibNM::DBus::SavedConnection>
         potentialSavedConnections;
-/* Index of the saved connection object to try next: */
+// Index of the saved connection object to try next:
 static int savedConnectionIdx = -1;
 
-/* LibNM access point objects to try and use to connect: */
+// LibNM access point objects to try and use to connect:
 static juce::Array<Wifi::LibNM::AccessPoint> potentialNMAPs;
-/* Index of the LibNM::AccessPoint object to try next: */
+// Index of the LibNM::AccessPoint object to try next:
 static int nmAPIdx = -1;
 
 namespace Wifi { class ConnectionComparator; }
@@ -77,7 +76,8 @@ public:
     static int compareElements(LibNM::AccessPoint firstAP,
             LibNM::AccessPoint secondAP)
     {
-        return (int) secondAP.getSignalStrength() - firstAP.getSignalStrength();
+        return (int) secondAP.getSignalStrength()
+                - firstAP.getSignalStrength();
     }
 
     /**
@@ -100,80 +100,76 @@ public:
     }
 };
 
-/*
- * Connects the module to its Resource.
- */
+// Connects the module to its Resource.
 WifiConnect::Control::Module::Module(Resource& wifiResource) :
     Wifi::Module(wifiResource) { }
 
-/*
- * Ensures all pending connection data is removed.
- */
+
+// Ensures all pending connection data is removed.
 WifiConnect::Control::Module::~Module()
 {
-    if(connectionStarted)
+    if (connectionStarted)
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Destroying module despite pending connection to "
                 << connectingAP.toString());
     }
     clearPendingConnectionData();
 }
 
-/*
- * Checks if the Control::Module is currently attempting to open a Wifi 
- * connection.
- */
+
+// Checks if the Control::Module is currently attempting to open a Wifi
+// connection.
 bool WifiConnect::Control::Module::tryingToConnect() const
 {
     return connectionStarted;
 }
 
-/*
- * Attempts to open a Wifi network connection using a nearby access point.
- */
+
+// Attempts to open a Wifi network connection using a nearby access point.
 void WifiConnect::Control::Module::connectToAccessPoint
 (const AccessPoint toConnect, juce::String securityKey)
 {
-    if(toConnect.isNull())
+    if (toConnect.isNull())
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Can't connect, selected access point is null.");
         return;
     }
 
-    if(!toConnect.hasSavedConnection() 
-            && !toConnect.isValidKeyFormat(securityKey)) 
+    if (!toConnect.hasSavedConnection()
+            && !toConnect.isValidKeyFormat(securityKey))
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Can't connect, missing valid security key.");
         return;
     }
 
     Record::Module* connectionRecord = getSiblingModule<Record::Module>();
-    if(connectionRecord->isConnected() || connectionRecord->isConnecting())
+    if (connectionRecord->isConnected() || connectionRecord->isConnecting())
     {
-        if(toConnect == connectionRecord->getActiveAP())
+        if (toConnect == connectionRecord->getActiveAP())
         {
             DBG(dbgPrefix << __func__ << ": Cancelling connection, access point"
-                    << " is already connected or connecting.");
+                    " is already connected or connecting.");
             return;
         }
         else
         {
-            DBG(dbgPrefix << __func__ 
+            DBG(dbgPrefix << __func__
                     << ": Closing previous active connection.");
             disconnect();
         }
     }
 
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
 
-    if(connectionStarted)
+    if (connectionStarted)
     {
         jassert(connectingAP != toConnect);
         DBG(dbgPrefix << __func__ << ": Cancelling connection with "
-                << connectingAP.toString() << " to connect with " 
+                << connectingAP.toString() << " to connect with "
                 << toConnect.toString());
         nmThread->call([this]() { cancelPendingConnection(); });
     }
@@ -193,20 +189,20 @@ void WifiConnect::Control::Module::connectToAccessPoint
     nmThread->call([this, nmThread]()
     {
         // Cancel if Wifi has been disabled:
-        if(!nmThread->getClient().wirelessEnabled())
+        if (!nmThread->getClient().wirelessEnabled())
         {
-            DBG(dbgPrefix << __func__ 
+            DBG(dbgPrefix << __func__
                     << ": Cancelling connection, Wifi was disabled.");
             cancelPendingConnection();
             return;
         }
-        // Load matching LibNM access points 
+        // Load matching LibNM access points
         APList::Module* apList = getSiblingModule<APList::Module>();
         potentialNMAPs = apList->getNMAccessPoints(connectingAP);
         // Sort by signal strength
         ConnectionComparator nmComparator;
         potentialNMAPs.sort(nmComparator);
-        if(potentialNMAPs.isEmpty())
+        if (potentialNMAPs.isEmpty())
         {
             DBG(dbgPrefix << __func__ << ": no visible matching LibNM access"
                     << " points, requesting scan.");
@@ -226,10 +222,9 @@ void WifiConnect::Control::Module::connectToAccessPoint
     });
 }
 
-/*
- * Continues the connection attempt if a pending connection is currently in 
- * progress.
- */
+
+// Continues the connection attempt if a pending connection is currently in
+// progress.
 void Wifi::Connection::Control::Module::continueConnectionAttempt()
 {
     ASSERT_NM_CONTEXT;
@@ -245,37 +240,37 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
     DBG(dbgPrefix << __func__ << ": Trying to create a connection using "
             << connectingAP.toString());
 
-    // If the current LibNM AccessPoint is null or it has failed to connect with
-    // either a saved connection or a new connection, advance to the next access
-    // point.
-    while(potentialNMAPs[nmAPIdx].isNull() 
+    // If the current LibNM AccessPoint is null or it has failed to connect
+    // with either a saved connection or a new connection, advance to the next
+    // access point.
+    while (potentialNMAPs[nmAPIdx].isNull()
             || savedConnectionIdx > potentialSavedConnections.size())
     {
         nmAPIdx++;
         savedConnectionIdx = -1;
-        if(nmAPIdx >= potentialNMAPs.size())
+        if (nmAPIdx >= potentialNMAPs.size())
         {
             DBG(dbgPrefix << __func__ << ": all " << potentialNMAPs.size()
                     << " potential LibNM access point(s) failed, "
                     << "cancelling connection attempt.");
             EventType lastEventType = lastEvent.getEventType();
-            if(lastEventType != EventType::connectionFailed
+            if (lastEventType != EventType::connectionFailed
                     && lastEventType != EventType::connectionAuthFailed)
             {
                 // Treat the event as an authentication failure if the access
                 // point is secured and at least one of its NMAccessPoints is
                 // still valid.
                 lastEventType = EventType::connectionAuthFailed;
-                if(connectingAP.getSecurityType() 
+                if (connectingAP.getSecurityType()
                         == LibNM::SecurityType::unsecured)
                 {
                     lastEventType = EventType::connectionFailed;
                 }
                 else
                 {
-                    for(LibNM::AccessPoint& nmAP : potentialNMAPs)
+                    for (LibNM::AccessPoint& nmAP : potentialNMAPs)
                     {
-                        if(!nmAP.isNull())
+                        if (!nmAP.isNull())
                         {
                             lastEventType = EventType::connectionFailed;
                             break;
@@ -291,12 +286,13 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
     }
     LibNM::AccessPoint nmAccessPoint = potentialNMAPs[nmAPIdx];
 
-    if(connectingAP.hasSavedConnection() && savedConnectionIdx < 0)
+    if (connectingAP.hasSavedConnection() && savedConnectionIdx < 0)
     {
-        // Load the list of saved connections for the current LibNM AccessPoint.
-        Saved::Module* savedConnectionLoader 
+        // Load the list of saved connections for the current LibNM
+        // AccessPoint.
+        Saved::Module* savedConnectionLoader
                 = getSiblingModule<Saved::Module>();
-        potentialSavedConnections 
+        potentialSavedConnections
                 = savedConnectionLoader->getMatchingConnections(nmAccessPoint);
         ConnectionComparator savedConnectionComparator;
         potentialSavedConnections.sort(savedConnectionComparator);
@@ -304,7 +300,7 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
     savedConnectionIdx = 0;
 
     LibNM::Connection newConnection;
-    if(savedConnectionIdx < potentialSavedConnections.size())
+    if (savedConnectionIdx < potentialSavedConnections.size())
     {
         // Attempt to use the next saved connection.
         DBG(dbgPrefix << __func__ << " Attempting connection with LibNM AP "
@@ -327,10 +323,10 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
         // Add security settings if necessary.
         using WifiSecurity = LibNM::SecurityType;
         LibNM::SecurityType securityType = connectingAP.getSecurityType();
-        if(connectingAP.isValidKeyFormat(pendingPSK) 
+        if (connectingAP.isValidKeyFormat(pendingPSK)
                 && securityType != WifiSecurity::unsecured)
         {
-            if(securityType == WifiSecurity::securedWEP)
+            if (securityType == WifiSecurity::securedWEP)
             {
                 newConnection.addWEPSettings(pendingPSK);
             }
@@ -341,20 +337,21 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
         }
     }
     savedConnectionIdx++;
-    
+
     // Check if the new connection object is valid:
     GLib::ErrorPtr gError;
-    if(!newConnection.verify(gError.getAddress()))
+    if (!newConnection.verify(gError.getAddress()))
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Verifying connection resulted in error:");
         gError.handleError();
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Trying connection despite failing to verify.");
     }
 
     // Have the Client activate the connection:
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     LibNM::Client networkClient = nmThread->getClient();
     networkClient.activateConnection(
             newConnection,
@@ -365,79 +362,76 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
     connectionActivating = true;
 }
 
-/*
- * Disconnects the active Wifi connection.
- */
+
+// Disconnects the active Wifi connection.
 void WifiConnect::Control::Module::disconnect()
 {
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->callAsync([this, nmThread]()
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Closing any connection on the managed Wifi device.");
         LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
-        if(!wifiDevice.getActiveConnection().isNull())
+        if (!wifiDevice.getActiveConnection().isNull())
         {
             wifiDevice.disconnect();
         }
     });
 }
 
-/*
- * Notifies the Control::Module that a new access point was spotted, just in 
- * case it is needed to establish a connection.
- */
+
+// Notifies the Control::Module that a new access point was spotted, just in
+// case it is needed to establish a connection.
 void WifiConnect::Control::Module::signalAPAdded(LibNM::AccessPoint newAP)
 {
     ASSERT_NM_CONTEXT;
-    if(connectionStarted && connectingAP == newAP)
+    if (connectionStarted && connectingAP == newAP)
     {
         potentialNMAPs.add(newAP);
         DBG(dbgPrefix << __func__ << ": Found new compatible LibNM AP, "
                 << potentialNMAPs.size() << " potential APs now tracked.");
-        if(!connectionActivating)
+        if (!connectionActivating)
         {
             continueConnectionAttempt();
         }
     }
 }
 
-/*
- * Notifies the Control::Module that wireless networking was disabled.
- */
+
+// Notifies the Control::Module that wireless networking was disabled.
 void WifiConnect::Control::Module::signalWifiDisabled()
 {
     ASSERT_NM_CONTEXT;
-    if(connectionStarted)
+    if (connectionStarted)
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Wifi disabled, stopping connection attempt.");
         clearPendingConnectionData();
         stopTimer();
     }
 }
 
-/*
- * Notifies the Control::Module when a new connection event is recorded.
- */
+
+// Notifies the Control::Module when a new connection event is recorded.
 void WifiConnect::Control::Module::wifiEventRecorded(const Event newEvent)
 {
     ASSERT_NM_CONTEXT;
-    if(newEvent == lastEvent)
+    if (newEvent == lastEvent)
     {
         return;
     }
-    DBG(dbgPrefix << __func__ << ": Received new event " 
+    DBG(dbgPrefix << __func__ << ": Received new event "
             << newEvent.toString());
     lastEvent = newEvent;
-    if(!connectionStarted)
+    if (!connectionStarted)
     {
         return;
     }
     switch(lastEvent.getEventType())
     {
         case EventType::connected:
-            DBG(dbgPrefix << __func__ 
+            DBG(dbgPrefix << __func__
                     << ": Connection activated, clearing connection data.");
             clearPendingConnectionData();
             return;
@@ -454,26 +448,26 @@ void WifiConnect::Control::Module::wifiEventRecorded(const Event newEvent)
             // No action needed even if a connection is in progress.
             return;
         case EventType::invalid:
-            DBG(dbgPrefix << __func__ 
+            DBG(dbgPrefix << __func__
                     << ": Received invalid connection event!");
     }
 }
 
-/*
- * Signals that a connection is being opened.
- */
+
+// Signals that a connection is being opened.
 void WifiConnect::Control::Module::openingConnection
 (LibNM::ActiveConnection connection)
 {
     ASSERT_NM_CONTEXT;
-    /* Asynchronous callbacks must lock the Wifi Resource. */
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    // Asynchronous callbacks must lock the Wifi Resource.
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->lockForAsyncCallback(SharedResource::LockType::write,
             [this, connection]()
     {
         Record::Module* record = getSiblingModule<Record::Module>();
         Event latestEvent = record->getLatestEvent();
-        if(latestEvent.getEventAP() == connectingAP
+        if (latestEvent.getEventAP() == connectingAP
                 && latestEvent.getEventType() == EventType::startedConnecting)
         {
             DBG(dbgPrefix << "openingConnection: Wifi device signal handler "
@@ -483,43 +477,43 @@ void WifiConnect::Control::Module::openingConnection
         {
             DBG(dbgPrefix << "openingConnection"
                     << ": Recording new connection attempt.");
-            record->addEventIfNotDuplicate(Event(connectingAP, 
+            record->addEventIfNotDuplicate(Event(connectingAP,
                         EventType::startedConnecting));
         }
     });
 }
 
-/*
- * Signals that an attempt to open a connection failed.
- */
+
+// Signals that an attempt to open a connection failed.
 void WifiConnect::Control::Module::openingConnectionFailed
 (LibNM::ActiveConnection connection, GError* error)
 {
     ASSERT_NM_CONTEXT;
-    /* Asynchronous callbacks must lock the Wifi Resource. */
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    // Asynchronous callbacks must lock the Wifi Resource.
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->lockForAsyncCallback(SharedResource::LockType::write,
             [this, connection, error]()
     {
-        DBG(dbgPrefix << __func__ << ": Error " << error->code << ":" 
+        DBG(dbgPrefix << __func__ << ": Error " << error->code << ":"
                 << error->message);
 
-        Saved::Module* savedConnectionLoader 
+        Saved::Module* savedConnectionLoader
                 = getSiblingModule<Saved::Module>();
 
-        if(savedConnectionIdx >= potentialSavedConnections.size())
+        if (savedConnectionIdx >= potentialSavedConnections.size())
         {
             LibNM::AccessPoint connectingNMAP = potentialNMAPs[nmAPIdx];
             juce::Array<LibNM::DBus::SavedConnection> newSavedConnections
                     = savedConnectionLoader->getMatchingConnections(
                             connectingNMAP);
-            for(LibNM::DBus::SavedConnection& savedConnection 
+            for (LibNM::DBus::SavedConnection& savedConnection
                     : newSavedConnections)
             {
-                if(!potentialSavedConnections.contains(savedConnection))
+                if (!potentialSavedConnections.contains(savedConnection))
                 {
-                    DBG(dbgPrefix << __func__ 
-                            << ": Deleting failed new saved connection " 
+                    DBG(dbgPrefix << __func__
+                            << ": Deleting failed new saved connection "
                             << connection.getID());
                     savedConnection.deleteConnection();
                     break;
@@ -528,19 +522,18 @@ void WifiConnect::Control::Module::openingConnectionFailed
         }
         else
         {
-           DBG(dbgPrefix << __func__ << ": Previously established connection " 
-                   << connection.getID() << " failed to activate fully.");
+            DBG(dbgPrefix << __func__ << ": Previously established connection "
+                    << connection.getID() << " failed to activate fully.");
         }
-           
+
         // Continue trying other compatible LibNM APs or saved connections:
         connectionActivating = false;
         continueConnectionAttempt();
     });
 }
 
-/*
- * Clears all saved data being used for an ongoing Wifi connection attempt.
- */
+
+// Clears all saved data being used for an ongoing Wifi connection attempt.
 void WifiConnect::Control::Module::clearPendingConnectionData()
 {
     connectionStarted = false;
@@ -552,9 +545,8 @@ void WifiConnect::Control::Module::clearPendingConnectionData()
     creatingNewConnection = false;
 }
 
-/*
- * Cancels any pending connection attempt.
- */
+
+// Cancels any pending connection attempt.
 void WifiConnect::Control::Module::cancelPendingConnection()
 {
     ASSERT_NM_CONTEXT;
@@ -563,12 +555,12 @@ void WifiConnect::Control::Module::cancelPendingConnection()
     clearPendingConnectionData();
 
     Record::Module* record = getSiblingModule<Record::Module>();
-    if(record->isConnected())
+    if (record->isConnected())
     {
         DBG(dbgPrefix << "cancelPendingConnection: connection completed, "
                 << "no need to cancel.");
     }
-    else if(record->isConnecting())
+    else if (record->isConnecting())
     {
         record->addEventIfNotDuplicate(Event(connectingAP,
                     EventType::connectionFailed));
@@ -576,18 +568,18 @@ void WifiConnect::Control::Module::cancelPendingConnection()
     connectingAP = Wifi::AccessPoint();
 }
 
-/*
- * Cancels a pending connection event if it doesn't finish within a timeout 
- * period.
- */
+
+// Cancels a pending connection event if it doesn't finish within a timeout
+// period.
 void WifiConnect::Control::Module::timerCallback()
 {
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->call([this, &nmThread]()
     {
         SharedResource::Thread::ScopedWriteLock timeoutLock(
-                *nmThread->getThreadLock());
-        DBG(dbgPrefix << "timerCallback" 
+                 *nmThread->getThreadLock());
+        DBG(dbgPrefix << "timerCallback"
                 << ": Connection attempt timed out, cancelling:");
         cancelPendingConnection();
     });

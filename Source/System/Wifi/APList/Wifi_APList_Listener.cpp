@@ -6,24 +6,21 @@
 
 Wifi::APList::Listener::Listener() { }
 
-/*
- * Gets the list of all visible access points from the access point list 
- * resource.
- */
+
+// Gets the list of all visible access points from the access point list
+// resource.
 juce::Array<Wifi::AccessPoint> Wifi::APList::Listener::getVisibleAPs() const
 {
-    SharedResource::Modular::LockedPtr<Resource, const Module> apList 
+    SharedResource::Modular::LockedPtr<Resource, const Module> apList
             = getReadLockedResource();
     return apList->getAccessPoints();
 }
 
-/*
- * Signals that a new access point was discovered.
- */
+
+// Signals that a new access point was discovered.
 void Wifi::APList::Listener::accessPointAdded(const AccessPoint newAP) { }
 
-/*
- * Signals that a tracked access point was lost.
- */
+
+// Signals that a tracked access point was lost.
 void Wifi::APList::Listener::accessPointRemoved
 (const AccessPoint removedAP) { }

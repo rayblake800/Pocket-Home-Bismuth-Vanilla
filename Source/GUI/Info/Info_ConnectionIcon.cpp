@@ -4,7 +4,7 @@
 #include "Wifi_Connection_Record_Handler.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Info::ConnectionIcon::";
 #endif
 
@@ -14,7 +14,7 @@ Info::ConnectionIcon::ConnectionIcon()
     setName("Info::ConnectionIcon");
 #endif
     const Wifi::Connection::Record::Handler connectionRecords;
-    if(connectionRecords.isConnected())
+    if (connectionRecords.isConnected())
     {
         Wifi::AccessPoint connectedAP = connectionRecords.getActiveAP();
         setTrackedAccessPoint(connectedAP);
@@ -25,7 +25,7 @@ Info::ConnectionIcon::ConnectionIcon()
     }
 
     const Wifi::Device::Reader deviceReader;
-    if(deviceReader.wifiDeviceEnabled())
+    if (deviceReader.wifiDeviceEnabled())
     {
         DBG(dbgPrefix << __func__ << ": Initializing with wifi disconnected.");
         setSignalStrengthImage(0);
@@ -37,20 +37,18 @@ Info::ConnectionIcon::ConnectionIcon()
     }
 }
 
-/*
- * Updates the selected icon when the active connection's signal strength 
- * changes.
- */
+
+// Updates the selected icon when the active connection's signal strength
+// changes.
 void Info::ConnectionIcon::signalStrengthUpdate
-(const Wifi::AccessPoint updatedAP) 
+(const Wifi::AccessPoint updatedAP)
 {
     setSignalStrengthImage(updatedAP.getSignalStrength());
 }
 
-/*
- * Changes the tracked AccessPoint and selected status icon when a new Wifi 
- * connection is activated.
- */
+
+// Changes the tracked AccessPoint and selected status icon when a new Wifi
+// connection is activated.
 void Info::ConnectionIcon::connected(const Wifi::AccessPoint connectedAP)
 {
     setTrackedAccessPoint(connectedAP);
@@ -59,30 +57,28 @@ void Info::ConnectionIcon::connected(const Wifi::AccessPoint connectedAP)
             << connectedAP.getSSID().toString());
 }
 
-/*
- * Stops tracking signal strength changes and updates the status icon when the 
- * Wifi connection is lost.
- */
+
+// Stops tracking signal strength changes and updates the status icon when the
+// Wifi connection is lost.
 void Info::ConnectionIcon::disconnected(const Wifi::AccessPoint disconnectedAP)
 {
     const Wifi::Device::Reader deviceReader;
-    if(deviceReader.wifiDeviceEnabled())
+    if (deviceReader.wifiDeviceEnabled())
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Wifi disconnected, setting image to signal strength 0");
         ignoreAllUpdates();
         setSignalStrengthImage(0);
     }
 }
 
-/*
- * Updates the selected icon when Wifi is turned on.
- */
+
+// Updates the selected icon when Wifi is turned on.
 void Info::ConnectionIcon::wirelessEnabled()
 {
     DBG(dbgPrefix << __func__ << ": Wifi connected, updating signal image");
     Wifi::Connection::Record::Handler connectionRecord;
-    if(connectionRecord.isConnected())
+    if (connectionRecord.isConnected())
     {
         connected(connectionRecord.getActiveAP());
     }
@@ -92,10 +88,9 @@ void Info::ConnectionIcon::wirelessEnabled()
     }
 }
 
-/*
- * Updates the selected icon and stops tracking signal strength when Wifi is 
- * turned off.
- */
+
+// Updates the selected icon and stops tracking signal strength when Wifi is
+// turned off.
 void Info::ConnectionIcon::wirelessDisabled()
 {
     DBG(dbgPrefix << __func__ << ": Wifi disabled, setting disabled image");

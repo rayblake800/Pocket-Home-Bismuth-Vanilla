@@ -7,11 +7,11 @@
  */
 #include "Wifi_AccessPoint.h"
 
-namespace Wifi 
-{ 
-    namespace Connection 
-    { 
-        class Event; 
+namespace Wifi
+{
+    namespace Connection
+    {
+        class Event;
         enum class EventType;
 
         /**
@@ -22,7 +22,7 @@ namespace Wifi
          * @return      The event type's string representation.
          */
         juce::String eventTypeString(const EventType type);
-    } 
+    }
 }
 
 /**
@@ -30,20 +30,20 @@ namespace Wifi
  */
 enum class Wifi::Connection::EventType
 {
-    /* A new connection was requested. */
+    // A new connection was requested.
     connectionRequested,
-    /* NetworkManager is attempting to open a connection. */ 
+    // NetworkManager is attempting to open a connection.
     startedConnecting,
-    /* A connection attempt was stopped due to an incorrect or missing network
-       key. */
+    // A connection attempt was stopped due to an incorrect or missing network
+    // key.
     connectionAuthFailed,
-    /* A connection event failed for some other reason. */
+    // A connection event failed for some other reason.
     connectionFailed,
-    /* A new connection opened successfully. */
+    // A new connection opened successfully.
     connected,
-    /* The active connection was closed or lost. */
+    // The active connection was closed or lost.
     disconnected,
-    /* The ConnectionEvent does not represent a connection event. */
+    // The ConnectionEvent does not represent a connection event.
     invalid
 };
 
@@ -75,7 +75,7 @@ public:
     Event(const Event& rhs);
 
     /**
-     * @brief  Creates a null Event object that does not represent a real 
+     * @brief  Creates a null Event object that does not represent a real
      *         connection event.
      */
     Event();
@@ -85,11 +85,11 @@ public:
     /**
      * @brief  Gets the access point involved in the event.
      *
-     * @return  The connected, connecting, or disconnecting access point 
+     * @return  The connected, connecting, or disconnecting access point
      *          relevant to the event.
      */
     AccessPoint getEventAP() const;
-    
+
     /**
      * @brief  Gets the type of event that occurred.
      *
@@ -105,13 +105,13 @@ public:
     juce::Time getEventTime() const;
 
     /**
-     * @brief  Makes this event into a copy of another event. 
+     * @brief  Makes this event into a copy of another event.
      *
      * @param rhs  The other event to copy.
      *
      * @return     This ConnectionEvent object.
      */
-    Event& operator=(const Event& rhs);
+    Event& operator= (const Event& rhs);
 
     /**
      * @brief  Checks if two connection events are equivalent.
@@ -121,7 +121,7 @@ public:
      * @return     Whether both Event objects have identical AccessPoint
      *             objects, event times, and event types.
      */
-    bool operator==(const Event& rhs) const;
+    bool operator== (const Event& rhs) const;
 
 
     /**
@@ -132,22 +132,21 @@ public:
      * @return     Whether the Event objects have different AccessPoint
      *             objects, event times, or event types.
      */
-    bool operator!=(const Event& rhs) const;
+    bool operator!= (const Event& rhs) const;
 
     /**
      * @brief  Compares two connection Event objects using their event times.
      *
      * @param rhs  Another saved Event.
      *
-     * @return     Whether this connection event happened before the rhs
-     *             Event.
+     * @return     Whether this connection event happened before the rhs Event.
      */
-    bool operator<(const Event& rhs) const;
+    bool operator< (const Event& rhs) const;
 
     /**
      * @brief  Checks if this Event object is null.
      *
-     * @return  Whether this Event is a null object that does not represent an 
+     * @return  Whether this Event is a null object that does not represent an
      *          actual connection event.
      */
     bool isNull() const;
@@ -161,12 +160,12 @@ public:
 
 private:
 
-    /* The access point used in the connection event. */
+    // The access point used in the connection event.
     AccessPoint eventAP;
 
-    /* The type of event this object records. */
+    // The type of event this object records.
     EventType eventType;
 
-    /* The time the event occurred. */
+    // The time the event occurred.
     juce::Time eventTime;
 };

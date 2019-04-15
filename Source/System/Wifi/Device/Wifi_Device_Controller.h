@@ -7,21 +7,21 @@
 
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi 
-{ 
-    namespace Device 
-    { 
-        class Controller; 
+namespace Wifi
+{
+    namespace Device
+    {
+        class Controller;
         class Module;
-    } 
+    }
     class Resource;
 }
 
 /**
- * @brief  Accesses the wifi device module to turn Wifi on and off, and to make 
- *         the Wifi * device rescan visible access points. 
+ * @brief  Accesses the wifi device module to turn Wifi on and off, and to make
+ *         the Wifi * device rescan visible access points.
  */
-class Wifi::Device::Controller : 
+class Wifi::Device::Controller :
     public SharedResource::Modular::Handler<Resource, Module>
 {
 public:

@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -15,17 +15,20 @@
 namespace AppMenu { class FolderComponent; }
 
 /**
+ * @brief  Creates and displays MenuButton components for each item in a menu
+ *         folder.
+ *
  *  The FolderComponent is assigned a folder MenuItem on construction. It is
- * responsible for creating MenuButton components for each of that MenuItem's 
- * child menu items, holding those MenuButtons as child components, and setting 
+ * responsible for creating MenuButton components for each of that MenuItem's
+ * child menu items, holding those MenuButtons as child components, and setting
  * how they are arranged within its bounds. It listens for changes to its
  * MenuItem, updating its child items whenever its menu data changes. It also
  * tracks which one of its MenuButtons, if any, is currently selected by the
  * user.
  *
  *  FolderComponent is an abstract base class. Each AppMenu Format should have
- * a FolderComponent implementation that defines how that format arranges 
- * menu buttons within its folders.
+ * a FolderComponent implementation that defines how that format arranges menu
+ * buttons within its folders.
  */
 class AppMenu::FolderComponent : public juce::Component,
     private MenuItem::Listener
@@ -34,8 +37,7 @@ public:
     /**
      * @brief  Creates a new folder component.
      *
-     * @param folderItem     The menu data object used to construct the
-     *                       folder.
+     * @param folderItem     The menu data object used to construct the folder.
      */
     FolderComponent(MenuItem folderItem);
 
@@ -64,8 +66,8 @@ public:
     /**
      * @brief  Gets the current selected folder item.
      *
-     * @return  The item currently selected by the user, or a null MenuItem
-     *          if no item is selected.
+     * @return  The item currently selected by the user, or a null MenuItem if
+     *          no item is selected.
      */
     MenuItem getSelectedItem() const;
 
@@ -91,7 +93,7 @@ public:
      *
      * @param xPos  The x-coordinate of the spot that was clicked, measured in
      *              pixels from the left edge of the folder component.
-     * 
+     *
      * @param yPos  The y-coordinate of the spot that was clicked, measured in
      *              pixels from the top edge of the folder component.
      *
@@ -128,8 +130,8 @@ private:
     virtual MenuButton* createMenuButton(const MenuItem folderItem) const = 0;
 
     /**
-     * @brief  Creates and inserts a new MenuButton when a new child menu button
-     *         is created.
+     * @brief  Creates and inserts a new MenuButton when a new child menu
+     *         button is created.
      *
      * @param childIndex  The index of the new menu item.
      */
@@ -144,8 +146,8 @@ private:
     virtual void childRemoved(const int removedIndex) final override;
 
     /**
-     * @brief  Swaps the positions of two of the folder's MenuButtons when their
-     *         corresponding MenuItems are swapped.
+     * @brief  Swaps the positions of two of the folder's MenuButtons when
+     *         their corresponding MenuItems are swapped.
      *
      * @param swapIndex1  The index of the first swapped child item.
      *
@@ -159,14 +161,14 @@ private:
      */
     virtual void resized() override;
 
-    /* Holds the button components representing the menu's child folder items.*/
+    // Holds the button components representing the menu's child folder items.
     juce::OwnedArray<MenuButton> folderButtons;
 
-    /* The current selected button index. */
+    // The current selected button index.
     int selectedIndex = -1;
 
-    /* The menu item defining this folder. */
+    // The menu item defining this folder.
     MenuItem folderItem;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FolderComponent)
 };

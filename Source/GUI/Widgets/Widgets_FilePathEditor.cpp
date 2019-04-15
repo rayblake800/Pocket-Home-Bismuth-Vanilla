@@ -2,21 +2,18 @@
 #include "Layout_Component_ConfigFile.h"
 #include "Windows_Info.h"
 
-/* Default file filter, allowing image types: */
+// Default file filter, allowing image types:
 const juce::WildcardFileFilter Widgets::FilePathEditor::imageFilter
 ("*.png;*.jpg;*.jpeg;*.svg;*.gif;*.xpm", "", "Image files");
 
-/* Class localized text key: */
+// Class localized text key:
 static const juce::Identifier localeClassKey = "Widgets::FilePathEditor";
 
-/* Localized text value keys: */
+// Localized text value keys:
 static const juce::Identifier defaultTitleKey       = "defaultTitle";
 static const juce::Identifier defaultDescriptionKey = "defaultDescription";
 
-/*
- * Creates a new FilePathEditor, optionally setting its initial 
- * properties.
- */
+// Creates a new FilePathEditor, optionally setting its initial properties.
 Widgets::FilePathEditor::FilePathEditor(
         const juce::String& selectionTitle,
         const juce::String& selectionText,
@@ -30,11 +27,11 @@ fileSelectButton("...")
 #if JUCE_DEBUG
     setName("Widgets::FilePathEditor");
 #endif
-    if(selectionTitle.isEmpty())
+    if (selectionTitle.isEmpty())
     {
         this->selectionTitle = localeText(defaultTitleKey);
     }
-    if(selectionText.isEmpty())
+    if (selectionText.isEmpty())
     {
         this->selectionText = localeText(defaultDescriptionKey);
     }
@@ -51,9 +48,8 @@ fileSelectButton("...")
     addAndMakeVisible(fileSelectButton);
 }
 
-/*
- * Sets the text value held by this editor.
- */
+
+// Sets the text value held by this editor.
 void Widgets::FilePathEditor::setText
 (const juce::String newText, const bool shouldNotify)
 {
@@ -64,20 +60,18 @@ void Widgets::FilePathEditor::setText
     }
 }
 
-/*
- * Gets the text value held by this editor.
- */
+
+// Gets the text value held by this editor.
 juce::String Widgets::FilePathEditor::getText() const
 {
     return filePath.getText();
 }
 
-/*
- * Sets the visibility of the editor's file selection button.
- */
+
+// Sets the visibility of the editor's file selection button.
 void Widgets::FilePathEditor::showFileSelectButton(const bool shouldShow)
 {
-    if(shouldShow == fileSelectButton.isShowing())
+    if (shouldShow == fileSelectButton.isShowing())
     {
         return;
     }
@@ -94,17 +88,15 @@ void Widgets::FilePathEditor::showFileSelectButton(const bool shouldShow)
     resized();
 }
 
-/*
- * Adds a Listener to the list of Listeners that will be notified of changes.
- */
+
+// Adds a Listener to the list of Listeners that will be notified of changes.
 void Widgets::FilePathEditor::addFileSelectListener(Listener * listener)
 {
     listeners.insert(listener);
 }
 
-/*
- * Signals to all listeners that editor data has updated.
- */
+
+// Signals to all listeners that editor data has updated.
 void Widgets::FilePathEditor::notifyListeners()
 {
     for (auto iter = listeners.begin(); iter != listeners.end(); iter++)
@@ -113,9 +105,8 @@ void Widgets::FilePathEditor::notifyListeners()
     }
 }
 
-/*
- * Calls notifyListeners when the editor loses focus.
- */
+
+// Calls notifyListeners when the editor loses focus.
 void Widgets::FilePathEditor::textEditorFocusLost(juce::TextEditor& editor)
 {
     if (editor.getText().isNotEmpty())
@@ -124,10 +115,9 @@ void Widgets::FilePathEditor::textEditorFocusLost(juce::TextEditor& editor)
     }
 }
 
-/*
- * Calls notifyListeners when the editor is focused and the return key is 
- * pressed.
- */
+
+// Calls notifyListeners when the editor is focused and the return key is
+// pressed.
 void Widgets::FilePathEditor::textEditorReturnKeyPressed
 (juce::TextEditor & editor)
 {
@@ -137,9 +127,8 @@ void Widgets::FilePathEditor::textEditorReturnKeyPressed
     }
 }
 
-/*
- * Opens the file selection window when the file selection button is clicked.
- */
+
+// Opens the file selection window when the file selection button is clicked.
 void Widgets::FilePathEditor::buttonClicked(juce::Button* button)
 {
     using juce::FileBrowserComponent;
@@ -168,9 +157,8 @@ void Widgets::FilePathEditor::buttonClicked(juce::Button* button)
     }
 }
 
-/*
- * Resizes child components to fit within the parent component.
- */
+
+// Resizes child components to fit within the parent component.
 void Widgets::FilePathEditor::resized()
 {
     using juce::Rectangle;
@@ -188,11 +176,9 @@ void Widgets::FilePathEditor::resized()
 
     filePath.setBounds(textBounds);
     fileSelectButton.setBounds(buttonBounds);
-    /*
-    Layout::Component::ConfigFile componentConfig;
-    int fontSize = componentConfig.getFontHeight
-            (Layout::Component::TextSize::smallText);
-    fontSize = std::min(fontSize, textBounds.getHeight());
-    filePath.applyFontToAllText(juce::Font(fontSize));
-    */
+    // Layout::Component::ConfigFile componentConfig;
+    // int fontSize = componentConfig.getFontHeight
+    // (Layout::Component::TextSize::smallText);
+    // fontSize = std::min(fontSize, textBounds.getHeight());
+    // filePath.applyFontToAllText(juce::Font(fontSize));
 }

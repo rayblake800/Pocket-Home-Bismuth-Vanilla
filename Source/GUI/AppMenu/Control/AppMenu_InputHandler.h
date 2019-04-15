@@ -1,9 +1,9 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
- * @file AppMenu_InputHandler.h
+ * @file  AppMenu_InputHandler.h
  *
  * @brief  Captures key, mouse, and window focus input events, and defines how
  *         they are applied to the menu.
@@ -14,30 +14,30 @@
 #include "Windows_FocusListener.h"
 #include "JuceHeader.h"
 
-namespace AppMenu 
-{ 
-    class InputHandler; 
+namespace AppMenu
+{
+    class InputHandler;
     class FolderComponent;
 }
 
 /**
- *  @brief  Captures key and mouse events for the MenuComponent and its 
- *          FolderComponent and MenuButton child components. 
+ * @brief  Captures key and mouse events for the MenuComponent and its
+ *         FolderComponent and MenuButton child components.
  *
- *  These events are sorted based on their type and target, and used to call 
+ *  These events are sorted based on their type and target, and used to call
  * various virtual methods that InputHandler subclasses may override.
  *
  *  A default implementation for handling mouse clicks is provided. This
  * activates selected menu items, selects un-selected menu items, sets clicked
- * folders as active, and calls for context menus to be created when menu
- * items or folders are right-clicked. InputHandler implementations can override
- * these methods to change how the menu behaves when folders or menu items are 
+ * folders as active, and calls for context menus to be created when menu items
+ * or folders are right-clicked. InputHandler implementations can override these
+ * methods to change how the menu behaves when folders or menu items are
  * clicked.
  *
  *  The InputHandler listens for key events created while the menu is visible,
- * identifies if the key events are relevant to the menu, categorizes them
- * as a specific KeyType, and passes them to the virtual keyPressed method.
- * All key event handling from this point must be implemented by an InputHandler
+ * identifies if the key events are relevant to the menu, categorizes them as a
+ * specific KeyType, and passes them to the virtual keyPressed method. All key
+ * event handling from this point must be implemented by an InputHandler
  * subclass defined by the active AppMenu::Format.
  *
  *  The InputHandler also registers when the application window gains and loses
@@ -120,18 +120,18 @@ protected:
      *
      * @param rightClicked   Whether the folder was right clicked.
      */
-    virtual void folderClicked(const FolderComponent* clickedFolder, 
+    virtual void folderClicked(const FolderComponent* clickedFolder,
             const int closestIndex, const bool rightClicked);
 
     /**
-     * @brief   Gets the menu component tracked by this InputHandler.
+     * @brief  Gets the menu component tracked by this InputHandler.
      *
      * @return  The AppMenu's menu component.
      */
     MenuComponent* getMenuComponent();
 
     /**
-     * @brief   Gets the menu controller used by this InputHandler.
+     * @brief  Gets the menu controller used by this InputHandler.
      *
      * @return   The Controller used to control the AppMenu.
      */
@@ -139,7 +139,7 @@ protected:
 
 private:
     /**
-     * @brief  Convert generic mouse events into calls to InputHandler clicked 
+     * @brief  Convert generic mouse events into calls to InputHandler clicked
      *         methods.
      *
      * @param event  A mouse click event over some child component of the
@@ -153,7 +153,7 @@ private:
      *
      * @param keyPress         The key or keys that were pressed.
      *
-     * @param sourceComponent  The source of the key event.  This should always
+     * @param sourceComponent  The source of the key event. This should always
      *                         be the menu component.
      *
      * @return                 True to signal that the key event was handled,
@@ -170,14 +170,14 @@ private:
     virtual void windowFocusGained() final override;
 
     /**
-     * @brief  Hides the loading spinner and stops waiting for applications to 
+     * @brief  Hides the loading spinner and stops waiting for applications to
      *         launch when window focus is lost.
      */
     virtual void windowFocusLost() final override;
 
-    /* The menu component that is the source of all key and mouse events. */
+    // The menu component that is the source of all key and mouse events.
     MenuComponent* const menuComponent;
 
-    /* Used by the InputHandler to control the menu's behavior. */
+    // Used by the InputHandler to control the menu's behavior.
     Controller* const controller;
 };

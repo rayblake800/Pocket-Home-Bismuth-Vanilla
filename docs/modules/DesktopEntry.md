@@ -1,5 +1,5 @@
 # DesktopEntry Module Documentation
-Desktop entry files are a standardized form of shared application shortcut used on Linux desktops. This standard is provided so that application launchers can provide organized lists of available applications. The DesktopEntry module loads these files into data objects, and provides an interface for reading, updating, and creating desktop entry data. 
+Desktop entry files are a standardized form of shared application shortcut used on Linux desktops. This standard is provided so that application launchers can provide organized lists of available applications. The DesktopEntry module loads these files into data objects, and provides an interface for reading, updating, and creating desktop entry data.
 
 The DesktopEntry module exists to help the [AppMenu](./AppMenu.md) module create and edit the application menu. See the full [FreeDesktop Desktop Entry Specifications](https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html) for more information about the desktop entry standard.
 

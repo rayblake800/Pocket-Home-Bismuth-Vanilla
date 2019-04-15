@@ -6,43 +6,38 @@
 #include "Wifi_LibNM_DeviceWifi.h"
 #include "Wifi_LibNM_Client.h"
 
-/*
- * Checks the initial Wifi device state.
- */ 
-Wifi::Device::Module::Module(Resource& parentResource) : 
-    Wifi::Module(parentResource) { } 
+// Checks the initial Wifi device state.
+Wifi::Device::Module::Module(Resource& parentResource) :
+    Wifi::Module(parentResource) { }
 
-/*
- * Checks if a Wifi device managed by NetworkManager exists.
- */
+
+// Checks if a Wifi device managed by NetworkManager exists.
 bool Wifi::Device::Module::wifiDeviceExists() const
 {
     return deviceExists;
 }
 
-/*
- * Checks if the wifi device is enabled. 
- */
+
+// Checks if the wifi device is enabled.
 bool Wifi::Device::Module::wifiDeviceEnabled() const
 {
     return deviceExists && deviceEnabled;
 }
 
-/*
- * Checks if wifi is currently being enabled or disabled.
- */
+
+// Checks if wifi is currently being enabled or disabled.
 bool Wifi::Device::Module::isDeviceStateChanging() const
 {
     return stateChanging;
 }
 
-/*
- * Connects to NetworkManager to update the Wifi device state, notifying all 
- * DeviceListeners if the state changes.
- */
+
+// Connects to NetworkManager to update the Wifi device state, notifying all
+// DeviceListeners if the state changes.
 void Wifi::Device::Module::updateDeviceState(const bool notifyListeners)
 {
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->call([this, notifyListeners, &nmThread]()
     {
         LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
@@ -53,10 +48,9 @@ void Wifi::Device::Module::updateDeviceState(const bool notifyListeners)
     });
 }
 
-/*
- * Updates the Device::Module's saved wifi device state, notifying all 
- * DeviceListeners if the state changes.
- */
+
+// Updates the Device::Module's saved wifi device state, notifying all
+// DeviceListeners if the state changes.
 void Wifi::Device::Module::updateDeviceState
 (const bool exists, const bool enabled, const bool notifyListeners)
 {
@@ -65,12 +59,12 @@ void Wifi::Device::Module::updateDeviceState
     deviceExists = exists;
     deviceEnabled = enabled;
     const bool isEnabled = wifiDeviceEnabled();
-    if(isEnabled != wasEnabled && notifyListeners)
+    if (isEnabled != wasEnabled && notifyListeners)
     {
         foreachModuleHandler<UpdateInterface>([isEnabled]
         (UpdateInterface* listener)
         {
-            if(isEnabled)
+            if (isEnabled)
             {
                 listener->wirelessEnabled();
             }
@@ -81,10 +75,9 @@ void Wifi::Device::Module::updateDeviceState
         });
     }
 }
-    
-/*
- * Notifies the device tracker that Wifi is about to be enabled or disabled.
- */
+
+
+// Notifies the device tracker that Wifi is about to be enabled or disabled.
 void Wifi::Device::Module::signalDeviceStateChanging()
 {
     stateChanging = true;

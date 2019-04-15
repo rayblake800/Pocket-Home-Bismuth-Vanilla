@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -13,9 +13,8 @@
 namespace AppMenu { namespace Paged { class MenuButton; } }
 
 /**
- *  The Paged::MenuButton prints the menu item title at the bottom of the 
- * button, with the menu item's icon centered above it. The button's background 
- * and outline are only drawn if the button is currently selected.
+ * @brief  A MenuButton that prints the menu item title at the bottom of the
+ *         button, with the menu item's icon centered above it.
  */
 class AppMenu::Paged::MenuButton : public AppMenu::MenuButton
 {
@@ -55,13 +54,13 @@ private:
     virtual bool shouldDrawBorder() const final override;
 
     /**
-     * @brief  Checks if this button will fill in its background with its 
-     *         background color.
+     * @brief  Checks if this button will fill in its background with its
+     *         background colour.
      *
      * @return  True only when the button is selected.
      */
     virtual bool shouldFillBackground() const final override;
-    
+
     /**
      * @brief  Gets the text justification of the button title.
      *

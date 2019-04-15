@@ -5,10 +5,10 @@
 #include "PocketHomeWindow.h"
 #include <map>
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "Page::Power";
 
-/* Localized text keys: */
+// Localized text keys:
 namespace TextKey
 {
     static const juce::Identifier shutdown      = "shutdown";
@@ -21,7 +21,8 @@ namespace TextKey
 #endif
 }
 
-/* Page layout constants: */
+
+// Page layout constants:
 static const constexpr int labelRowWeight   = 6;
 static const constexpr int buttonRowWeight  = 10;
 static const constexpr int rowPaddingWeight = 4;
@@ -36,7 +37,7 @@ sleepButton(localeText(TextKey::sleep)),
 #ifdef CHIP_FEATURES
 felButton(localeText(TextKey::flashSoftware)),
 #endif
-versionLabel(localeText(TextKey::version) 
+versionLabel(localeText(TextKey::version)
         + juce::JUCEApplication::getInstance()->getApplicationVersion())
 {
 #ifdef JUCE_DEBUG
@@ -44,50 +45,51 @@ versionLabel(localeText(TextKey::version)
 #endif
     using namespace Layout::Group;
     RelativeLayout layout({
-        Row(labelRowWeight, 
-        { 
-            RowItem(&versionLabel) 
+        Row(labelRowWeight,
+        {
+            RowItem(&versionLabel)
         }),
         Row(buttonRowWeight,
-        { 
-            RowItem(&powerOffButton) 
-        }),
-        Row(buttonRowWeight, 
-        { 
-            RowItem(&sleepButton) 
+        {
+            RowItem(&powerOffButton)
         }),
         Row(buttonRowWeight,
-        { 
-            RowItem(&rebootButton) 
+        {
+            RowItem(&sleepButton)
+        }),
+        Row(buttonRowWeight,
+        {
+            RowItem(&rebootButton)
         }),
 #ifdef CHIP_FEATURES
         Row(buttonRowWeight,
         {
-            RowItem(&felButton) 
+            RowItem(&felButton)
         }),
 #endif
         Row(labelRowWeight,
-        { 
-            RowItem(&buildLabel) 
+        {
+            RowItem(&buildLabel)
         })
     });
     layout.setYMarginFraction(yMarginFraction);
     layout.setYPaddingWeight(rowPaddingWeight);
     setBackButton(BackButtonType::right);
     setLayout(layout);
- 
+
     versionLabel.setJustificationType(juce::Justification::centred);
-    versionLabel.setText(localeText(TextKey::version) 
+    versionLabel.setText(localeText(TextKey::version)
             + juce::JUCEApplication::getInstance()->getApplicationVersion(),
             juce::NotificationType::dontSendNotification);
-    
+
     // Determine release label contents
     juce::String buildText = localeText(TextKey::build) + " ";
 #ifdef BUILD_NAME
     buildText += juce::String(BUILD_NAME);
 #endif
     buildLabel.setJustificationType(juce::Justification::centred);
-    buildLabel.setText(buildText, juce::NotificationType::dontSendNotification);
+    buildLabel.setText(buildText,
+            juce::NotificationType::dontSendNotification);
 
     powerOffButton.addListener(&pageListener);
     sleepButton.addListener(&pageListener);
@@ -99,13 +101,12 @@ versionLabel(localeText(TextKey::version)
     addAndShowLayoutComponents();
 }
 
-/*
- * Turns off the display until key or mouse input is detected.
- */
+
+// Turns off the display until key or mouse input is detected.
 void Page::Power::startSleepMode()
 {
     Util::Commands systemCommands;
-    if(systemCommands.runIntCommand(Util::CommandTypes::Int::sleepCheck) == 0)
+    if (systemCommands.runIntCommand(Util::CommandTypes::Int::sleepCheck) == 0)
     {
         systemCommands.runActionCommand(Util::CommandTypes::Action::wake);
     }
@@ -118,10 +119,9 @@ void Page::Power::startSleepMode()
     }
 }
 
-/*
- * Shows the power spinner to indicate to the user that the system is
- * restarting or shutting down.
- */
+
+// Shows the power spinner to indicate to the user that the system is
+// restarting or shutting down.
 void Page::Power::showPowerSpinner()
 {
     powerOffButton.setVisible(false);
@@ -133,17 +133,15 @@ void Page::Power::showPowerSpinner()
     overlaySpinner.setVisible(true);
 }
 
-/*
- * Resizes the lock screen and overlay spinner to fit the page.
- */
+
+// Resizes the lock screen and overlay spinner to fit the page.
 void Page::Power::pageResized()
 {
     overlaySpinner.setBounds(getLocalBounds());
 }
 
-/*
- * Handles all button clicks.
- */
+
+// Handles all button clicks.
 void Page::Power::PageListener::buttonClicked(juce::Button *button)
 {
 #ifdef CHIP_FEATURES

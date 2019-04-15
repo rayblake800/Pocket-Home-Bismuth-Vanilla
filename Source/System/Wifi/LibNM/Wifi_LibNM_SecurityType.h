@@ -10,8 +10,8 @@ namespace Wifi { namespace LibNM { enum class SecurityType; } }
 /**
  * @brief  Enumerates all basic Wifi security types.
  *
- *  Any combination of APMode and SecurityType values may be used as bitflags in
- * a single byte.
+ *  Any combination of APMode and SecurityType values may be used as bitflags
+ * in a single byte.
  */
 enum class Wifi::LibNM::SecurityType
 {

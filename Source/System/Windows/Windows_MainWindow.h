@@ -8,10 +8,10 @@
 
 #include "JuceHeader.h"
 
-namespace Windows 
-{ 
+namespace Windows
+{
     class FocusInterface;
-    class MainWindow; 
+    class MainWindow;
 }
 
 /**
@@ -24,31 +24,31 @@ namespace Windows
  * the MainWindow object, whenever it gains or loses window focus it will pass
  * the focus state update to the FocusTracker resource.
  */
-class Windows::MainWindow : public juce::DocumentWindow 
+class Windows::MainWindow : public juce::DocumentWindow
 {
 public:
     /**
      * @brief  Ensures the focus tracker is initialized and sets initial window
      *         properties.
      *
-     * @param title              Sets the window's title as printed on the title
-     *                           bar.
-     * 
-     * @param backgroundColour   The background color to draw behind window
+     * @param title              Sets the window's title as printed on the
+     *                           title bar.
+     *
+     * @param backgroundColour   The background colour to draw behind window
      *                           components.
-     * 
+     *
      * @param requiredButtons    Sets which title bar buttons will be shown.
      */
-    MainWindow(const juce::String& title, juce::Colour backgroundColour, 
+    MainWindow(const juce::String& title, juce::Colour backgroundColour,
             int requiredButtons);
 
     /**
      * @brief  Closes the window's connection to the FocusTracker resource.
      */
     virtual ~MainWindow();
-    
+
     /**
-     * @brief  Ensures all future window focus changes will be sent to the 
+     * @brief  Ensures all future window focus changes will be sent to the
      *         FocusTracker resource.
      *
      *  Until this method is called, focus events will never be sent to the
@@ -58,7 +58,7 @@ public:
 
 private:
     /**
-     * @brief  Ensures all listeners are notified when the window focus state 
+     * @brief  Ensures all listeners are notified when the window focus state
      *         changes after tracking is enabled.
      */
     void activeWindowStatusChanged() override;

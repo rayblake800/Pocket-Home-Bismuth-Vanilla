@@ -13,7 +13,7 @@ my $projectRoot = $ENV{'HOME'}."/Workspace/C++/PocketCHIP-pocket-home";
 my $path = $ARGV[0] or die "Missing source file path!\n";
 my $category = $ARGV[1] or die "Missing test category!\n";
 my $className;
-if($path =~ /\/(.+)\.cpp$/)
+if ($path =~ /\/(.+)\.cpp$/)
 {
     $className = $1;
 }
@@ -34,7 +34,7 @@ class $testClassName : public juce::UnitTest
 public:
     $testClassName() : juce::UnitTest("$category\::$className Testing",
             "$category") {}
-    
+
     void runTest() override
     {
     }

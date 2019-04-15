@@ -5,53 +5,52 @@
 #endif
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Hardware::Battery::";
 #endif
 
 #ifdef CHIP_FEATURES
-/* Battery status files:
- *  These files are created and actively updated by the pocketCHIP's battery 
- * monitor program, pocketchipp-batt. If these files exist and are being 
- * actively updated, they will be used as a source of battery info. Otherwise 
- * the I2C-bus will need to be directly queried. */
+// Battery status files:
+// These files are created and actively updated by the pocketCHIP's battery
+// monitor program, pocketchipp-batt. If these files exist and are being
+// actively updated, they will be used as a source of battery info. Otherwise
+// the I2C-bus will need to be directly queried.
 
-/* Holds the battery percentage as reported by the I2C bus battery gauge. You'd
- * think this would be the most accurate measurement, but it often varies wildly
- * from moment to moment. This file source is only available when using the 
- * PocketCHIP battery script from https://github.com/aleh/pocketchip-batt */
+// Holds the battery percentage as reported by the I2C bus battery gauge. You'd
+// think this would be the most accurate measurement, but it often varies wildly
+// from moment to moment. This file source is only available when using the
+// PocketCHIP battery script from https://github.com/aleh/pocketchip-batt
 static constexpr const char* gaugePath = "/usr/lib/pocketchip-batt/gauge";
 
-/* Holds the battery voltage level, which can be used to calculate battery
- * percentage. */
+// Holds the battery voltage level, which can be used to calculate battery
+// percentage.
 static constexpr const char* voltagePath = "/usr/lib/pocketchip-batt/voltage";
 
-/* Holds 1 if the battery is charging, 0 if it is not charging. */
-static constexpr const char* chargingPath = "/usr/lib/pocketchip-batt/charging";
+// Holds 1 if the battery is charging, 0 if it is not charging.
+static constexpr const char* chargingPath
+        = "/usr/lib/pocketchip-batt/charging";
 
-/* Longest amount of time since last modification time (in seconds) before a
- * battery gauge or voltage file is judged an invalid data source: */
+// Longest amount of time since last modification time(in seconds) before a
+// battery gauge or voltage file is judged an invalid data source:
 static const constexpr int validFilePeriod = 600;
 
-/*
- * If the voltage file is being used for battery percentage, these values 
- * will be needed to calculate the battery percentage from the voltage data.
- */
+// If the voltage file is being used for battery percentage, these values will
+// be needed to calculate the battery percentage from the voltage data.
 static constexpr const int maxVoltage = 4250;
 static constexpr const int minVoltage = 3275;
 #endif
 
-/*
- * Determines the most appropriate way to monitor battery state on construction.
- */
+// Determines the most appropriate way to monitor battery state on construction.
 Hardware::Battery::Battery()
 {
     // TODO: Provide battery checking command accessed through Util::Commands,
     //       and a way of determining whether that command should be used.
-#ifdef CHIP_FEATURES
-    /* Checks if a battery file was modified recently enough for it to qualify
-     * as a valid data source. */
-    const std::function<bool(const char*)> validFile = [](const char* filename)
+
+    #ifdef CHIP_FEATURES
+    // Checks if a battery file was modified recently enough for it to qualify
+    // as a valid data source.
+    const std::function<bool(const char*)> validFile =
+    [] (const char* filename)
     {
         const juce::File testFile(filename);
         const juce::Time oldestValidTime = juce::Time::getCurrentTime()
@@ -74,7 +73,7 @@ Hardware::Battery::Battery()
             return;
         }
     }
-    else //Check if valid i2cBus data is available:
+    else // Check if valid i2cBus data is available:
     {
         try
         {
@@ -83,28 +82,26 @@ Hardware::Battery::Battery()
             DBG(dbgPrefix << __func__ << ": data source set to i2c bus.");
             dataSource = i2cBus;
         }
-        catch (I2CBus::I2CException e)
+        catch(I2CBus::I2CException e)
         {
             DBG(dbgPrefix << __func__ << ": no available battery source.");
             dataSource = noBattery;
         }
     }
-#else
+    #else
     dataSource = noBattery;
-#endif
+    #endif
 }
 
-/*
- * Checks if the Battery object is able to detect and read battery information.
- */
+
+// Checks if the Battery object is able to detect and read battery information.
 bool Hardware::Battery::isBatteryAvailable() const
 {
     return dataSource != noBattery;
 }
 
-/*
- * Find the current battery charge percentage and charging state
- */
+
+// Find the current battery charge percentage and charging state
 Hardware::Battery::Status Hardware::Battery::getBatteryStatus()
 {
     Status currentStatus;
@@ -122,7 +119,7 @@ Hardware::Battery::Status Hardware::Battery::getBatteryStatus()
             currentStatus.isCharging = i2c.batteryIsCharging();
             currentStatus.percent = i2c.batteryGaugePercent();
         }
-        catch (I2CBus::I2CException e)
+        catch(I2CBus::I2CException e)
         {
             DBG(e.getErrorMessage());
             DBG(dbgPrefix << __func__ << ": I2C bus access failed, disabling "
@@ -133,7 +130,7 @@ Hardware::Battery::Status Hardware::Battery::getBatteryStatus()
     }
     else
     {
-        juce::String chargeFile 
+        juce::String chargeFile
                 = juce::File(chargingPath).loadFileAsString().substring(0, 1);
         if (chargeFile.isNotEmpty())
         {
@@ -153,7 +150,7 @@ Hardware::Battery::Status Hardware::Battery::getBatteryStatus()
         }
         else // data source is the gauge file:
         {
-            currentStatus.percent 
+            currentStatus.percent
                     = juce::File(gaugePath).loadFileAsString().getIntValue();
         }
     }

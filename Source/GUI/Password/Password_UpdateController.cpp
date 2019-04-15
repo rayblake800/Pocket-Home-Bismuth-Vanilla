@@ -4,14 +4,14 @@
 #include "Password.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Password::UpdateController::";
 #endif
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "Password::UpdateController";
 
-/* Localized text value keys: */
+// Localized text value keys:
 namespace TextKey
 {
     static const juce::Identifier confirmationFailed = "confirmationFailed";
@@ -36,10 +36,8 @@ namespace TextKey
 
 static const constexpr juce::juce_wchar passwordChar = 0x2022;
 
-/*
- * Initialize all editor components, configuring them based on whether the
- * application password is set.
- */
+// Initialize all editor components, configuring them based on whether the
+// application password is set.
 Password::UpdateController::UpdateController(
         juce::TextEditor& currentPasswordField,
         juce::TextEditor& newPasswordField,
@@ -60,14 +58,13 @@ passwordChangeCallback(onUpdate)
     updateButton.addListener(this);
 }
 
-/*
- * Attempts to set a new password when the update button is clicked.
- */
+
+// Attempts to set a new password when the update button is clicked.
 void Password::UpdateController::buttonClicked(juce::Button* button)
 {
     // Only the updateButton should trigger this method
     jassert(button == &updateButton);
-    if(newPasswordField.getText() != confirmPasswordField.getText())
+    if (newPasswordField.getText() != confirmPasswordField.getText())
     {
         showErrorMessage(
                 localeText(TextKey::confirmationFailed),
@@ -95,9 +92,9 @@ void Password::UpdateController::buttonClicked(juce::Button* button)
                         localeText(TextKey::passwordUpdated),
                         "",
                         nullptr,
-                        juce::ModalCallbackFunction::create([this](int i)
+                        juce::ModalCallbackFunction::create([this] (int i)
                         {
-                            if(passwordChangeCallback)
+                            if (passwordChangeCallback)
                             {
                                 passwordChangeCallback();
                             }
@@ -150,10 +147,8 @@ void Password::UpdateController::buttonClicked(juce::Button* button)
 }
 
 
-/*
- * Opens a message box to display an error message, and clears all text entry
- * fields on the page.
- */
+// Opens a message box to display an error message, and clears all text entry
+// fields on the page.
 void Password::UpdateController::showErrorMessage
 (const juce::String title, const juce::String error)
 {
@@ -165,9 +160,8 @@ void Password::UpdateController::showErrorMessage
     clearAllFields();
 }
 
-/*
- * Clears the text in all text entry fields on the page.
- */
+
+// Clears the text in all text entry fields on the page.
 void Password::UpdateController::clearAllFields()
 {
     currentPasswordField.clear();

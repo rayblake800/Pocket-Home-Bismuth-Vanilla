@@ -13,8 +13,8 @@ define HELPTEXT
    check-pkg-config:  Verify all pkg-config libraries.
    clean:             Remove all compiled binaries.
    strip:             Remove symbols from compiled binaries.
-   uninstall:	      Uninstall the application.
-   help:              Print this help information
+   uninstall:          Uninstall the application.
+   help:              Print this help information.
 
 # Main build Options:
 # Format:
@@ -22,12 +22,12 @@ define HELPTEXT
 #   Description of what the option controls.
 
 CONFIG=(Debug, Release)
-  Selects between debug and release builds. By default, gdb flags, console 
-  logging, assertions, and tests are enabled only in debug builds, while 
-  optimization is enabled only in release builds.                     
+  Selects between debug and release builds. By default, gdb flags, console
+  logging, assertions, and tests are enabled only in debug builds, while
+  optimization is enabled only in release builds.
 
 V=(1)
-  Enable verbose build output.                
+  Enable verbose build output.
 
 CHECK_DEPS=(1)
   Find and remove build files that have missing or renamed dependencies before
@@ -38,12 +38,12 @@ OPTIMIZE=(0, 1)
 
 GDB_SUPPORT=(0, 1)
   Disable or enable compiling with gdb debugging flags.
-  
+
 BUILD_TESTS=(0, 1)
   Disable or enable compilation of test classes.
 
 WIFI_SUPPORT=(0, 1)
-  Disable or enable Wifi connection status and controls. Wifi is enabled by 
+  Disable or enable Wifi connection status and controls. Wifi is enabled by
   default.
 
 CHIP_FEATURES=(0, 1)
@@ -70,7 +70,7 @@ CHECK_DEPS ?= 0
 JUCE_TARGET_APP = pocket-home
 # Version number:
 APP_VERSION = 0.0.8.10
-# Version hex 
+# Version hex.
 APP_VERSION_HEX = 0x80a
 
 # Build directories:
@@ -85,27 +85,27 @@ DATA_PATH := /usr/share/$(JUCE_TARGET_APP)
 
 # Pkg-config libraries:
 PKG_CONFIG_LIBS = NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 \
-	              x11 xext xinerama xpm
-  
+                  x11 xext xinerama xpm
+
 # Additional library flags:
 LDFLAGS := -lcrypto -ldl -lpthread -lrt $(LDFLAGS)
 
 # Preprocessor values used by the JUCE library:
 JUCE_DEFS := -DDONT_SET_USING_JUCE_NAMESPACE=1 \
-	         -DJUCER_LINUX_MAKE_6D53C8B4=1 \
-	         -DJUCE_APP_VERSION=$(APP_VERSION) \
-	         -DJUCE_APP_VERSION_HEX=$(APP_VERSION_HEX) \
+             -DJUCER_LINUX_MAKE_6D53C8B4=1 \
+             -DJUCE_APP_VERSION=$(APP_VERSION) \
+             -DJUCE_APP_VERSION_HEX=$(APP_VERSION_HEX) \
 
 JUCE_CPPFLAGS_APP := -DJucePlugin_Build_VST=0 \
-	                 -DJucePlugin_Build_VST3=0 \
-	                 -DJucePlugin_Build_AU=0 \
-	                 -DJucePlugin_Build_AUv3=0 \
-	                 -DJucePlugin_Build_RTAS=0 \
-	                 -DJucePlugin_Build_AAX=0 \
-	                 -DJucePlugin_Build_Standalone=0
+                     -DJucePlugin_Build_VST3=0 \
+                     -DJucePlugin_Build_AU=0 \
+                     -DJucePlugin_Build_AUv3=0 \
+                     -DJucePlugin_Build_RTAS=0 \
+                     -DJucePlugin_Build_AAX=0 \
+                     -DJucePlugin_Build_Standalone=0
 
 # Extra compilation flags:
-CPPFLAGS := -pthread $(CPPFLAGS) 
+CPPFLAGS := -pthread $(CPPFLAGS)
 
 # Extra compilation flags (C++ only):
 CXXFLAGS := -std=gnu++14 $(CXXFLAGS)
@@ -122,13 +122,13 @@ WIFI_SUPPORT ?= 1
 # Whether PocketCHIP-specific features should be included:
 CHIP_FEATURES ?= 1
 
-#### Setup: #### 
+#### Setup: ####
 
 # build with "V=1" for verbose builds
 ifeq ($(V), 1)
-	V_AT =
+    V_AT =
 else
-	V_AT = @
+    V_AT = @
 endif
 
 # Disable dependency generation if multiple architectures are set
@@ -136,8 +136,8 @@ DEPFLAGS := $(if $(word 2, $(TARGET_ARCH)), , -MMD)
 
 # Generate the list of directory include flags:
 DIR_FLAGS := $(shell echo $(INCLUDE_DIRS) | xargs printf " -I'%s'") \
-	         $(shell find $(RECURSIVE_INCLUDE_DIRS) -type d \
-	                 -printf " -I'%p'")
+             $(shell find $(RECURSIVE_INCLUDE_DIRS) -type d \
+                     -printf " -I'%p'")
 
 # Generate the build label from the /etc/os-release file:
 BUILD_NAME := $(shell ./project-scripts/BuildLabel.sh)
@@ -147,23 +147,23 @@ JUCE_OBJDIR := $(JUCE_OBJDIR)/$(CONFIG)
 JUCE_OUTDIR := $(JUCE_OUTDIR)/$(CONFIG)
 
 ifeq ($(CONFIG),Debug)
-    # Disable optimization and enable gdb flags and tests unless otherwise 
+    # Disable optimization and enable gdb flags and tests unless otherwise
     # specified:
     OPTIMIZATION ?= 0
     GDB_SUPPORT ?= 1
     BUILD_TESTS ?= 1
-	# Debug-specific preprocessor definitions:
-	JUCE_CONFIG_FLAGS = -DDEBUG=1 -D_DEBUG=1
+    # Debug-specific preprocessor definitions:
+    JUCE_CONFIG_FLAGS = -DDEBUG=1 -D_DEBUG=1
 endif
 
 ifeq ($(CONFIG),Release)
-    # Enable optimization and disable gdb flags and tests unless otherwise 
+    # Enable optimization and disable gdb flags and tests unless otherwise
     # specified:
     OPTIMIZATION ?= 1
     GDB_SUPPORT ?= 0
     BUILD_TESTS ?= 0
-	# Release-specific preprocessor definitions:
-	JUCE_CONFIG_FLAGS = -DNDEBUG=1
+    # Release-specific preprocessor definitions:
+    JUCE_CONFIG_FLAGS = -DNDEBUG=1
 endif
 
 # Set optimization level flags:
@@ -191,9 +191,9 @@ endif
 ifeq ($(CHIP_FEATURES), 1)
     FEATURE_DEFS := $(FEATURE_DEFS) -DCHIP_FEATURES
 endif
-  
+
 JUCE_CPPFLAGS := $(DEPFLAGS) \
-	             $(JUCE_CONFIG_FLAGS) \
+                 $(JUCE_CONFIG_FLAGS) \
 	             $(JUCE_DEFS)\
 	             $(FEATURE_DEFS)\
                  -DBUILD_NAME="\"$(shell ./project-scripts/BuildLabel.sh)\"" \
@@ -233,7 +233,7 @@ OBJECTS_MAIN := \
   $(JUCE_OBJDIR)/Main.o \
   $(JUCE_OBJDIR)/PocketHomeApplication.o \
   $(JUCE_OBJDIR)/PocketHomeWindow.o \
-  $(JUCE_OBJDIR)/HomePage.o 
+  $(JUCE_OBJDIR)/HomePage.o
 
 OBJECTS_MAIN_TEST :=
 
@@ -245,19 +245,19 @@ OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_MAIN)
 
 # Module group build targets:
 framework : $(FRAMEWORK_MODULES)
-	@echo "Built Framework modules" 
+	@echo "Built Framework modules"
 
 development : $(DEVELOPMENT_MODULES)
-	@echo "Built Development modules" 
+	@echo "Built Development modules"
 
 system : $(SYSTEM_MODULES)
-	@echo "Built System modules" 
+	@echo "Built System modules"
 
 file : $(FILE_MODULES)
-	@echo "Built File modules" 
+	@echo "Built File modules"
 
 gui : $(GUI_MODULES)
-	@echo "Built GUI modules" 
+	@echo "Built GUI modules"
 
 main : $(OBJECTS_MAIN)
 	@echo "Built pocket-home"

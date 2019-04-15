@@ -4,13 +4,11 @@
 #include "DesktopEntry_Loader.h"
 #include <map>
 
-/*
- * Initializes the InputHandler, setting it to handle the menu component's input
- * events.
- */
+// Initializes the InputHandler, setting it to handle the menu component's
+// input events.
 AppMenu::InputHandler::InputHandler
 (MenuComponent* const menuComponent, Controller* const controller) :
-     menuComponent(menuComponent), controller(controller)
+    menuComponent(menuComponent), controller(controller)
 {
     jassert(menuComponent != nullptr);
     jassert(controller != nullptr);
@@ -21,18 +19,16 @@ AppMenu::InputHandler::InputHandler
     menuComponent->openFolder(appConfig.getRootFolderItem());
 }
 
-/*
- * Unsubscribes the InputHandler from menu input events before destruction.
- */ 
+
+// Unsubscribes the InputHandler from menu input events before destruction.
 AppMenu::InputHandler::~InputHandler()
 {
     menuComponent->removeKeyListener(this);
     menuComponent->removeMouseListener(this);
 }
 
-/*
- * Handles clicks to menu item buttons in the active folder.
- */
+
+// Handles clicks to menu item buttons in the active folder.
 void AppMenu::InputHandler::menuItemClicked
 (const MenuButton* clickedButton, const bool rightClicked)
 {
@@ -40,7 +36,7 @@ void AppMenu::InputHandler::menuItemClicked
     FolderComponent* parentFolder = static_cast<FolderComponent*>
         (clickedButton->getParentComponent());
     parentFolder->setSelectedIndex(buttonItem.getIndex());
-    if(rightClicked)
+    if (rightClicked)
     {
         controller->showContextMenu(buttonItem);
     }
@@ -50,44 +46,40 @@ void AppMenu::InputHandler::menuItemClicked
     }
 }
 
-/*
- * Handles clicks to menu folders, or menu item buttons in inactive folders.
- */
-void AppMenu::InputHandler::folderClicked(const FolderComponent* clickedFolder, 
+
+// Handles clicks to menu folders, or menu item buttons in inactive folders.
+void AppMenu::InputHandler::folderClicked(const FolderComponent* clickedFolder,
         const int closestIndex, const bool rightClicked)
 {
     MenuItem folderItem = clickedFolder->getFolderMenuItem();
-    while(folderItem != menuComponent->getActiveFolder()
+    while (folderItem != menuComponent->getActiveFolder()
             && menuComponent->openFolderCount() > 1)
     {
         menuComponent->closeActiveFolder();
     }
-    if(rightClicked)
+    if (rightClicked)
     {
         controller->showContextMenu(folderItem, closestIndex);
     }
 }
 
-/*
- * Gets the menu component tracked by this InputHandler.
- */
+
+// Gets the menu component tracked by this InputHandler.
 AppMenu::MenuComponent* AppMenu::InputHandler::getMenuComponent()
 {
     return menuComponent;
 }
 
-/*
- * Gets the menu controller used by this InputHandler.
- */
+
+// Gets the menu controller used by this InputHandler.
 AppMenu::Controller* AppMenu::InputHandler::getController()
 {
     return controller;
 }
 
-/*
- * Converts generic mouse events into calls to InputHandler clicked methods.
- */
-void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event) 
+
+// Converts generic mouse events into calls to InputHandler clicked methods.
+void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
 {
     // TODO: Don't just assume ctrl+click is equivalent to right click, define
     //       it in the input settings.
@@ -95,12 +87,12 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
         || event.mods.isPopupMenu()
         || event.mods.isCtrlDown();
     AppMenu::FolderComponent* clickedFolder = nullptr;
-    if((MenuComponent*) event.eventComponent == menuComponent)
+    if ( (MenuComponent*) event.eventComponent == menuComponent)
     {
         const int activeFolderIndex = menuComponent->openFolderCount() - 1;
-        if(activeFolderIndex >= 0)
+        if (activeFolderIndex >= 0)
         {
-            clickedFolder = menuComponent->getOpenFolder(activeFolderIndex); 
+            clickedFolder = menuComponent->getOpenFolder(activeFolderIndex);
         }
         else
         {
@@ -109,29 +101,28 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
             return;
         }
     }
-    if(clickedFolder == nullptr)
+    if (clickedFolder == nullptr)
     {
         MenuButton* clickedButton = dynamic_cast<MenuButton*>
             (event.eventComponent);
-        if(clickedButton != nullptr)
+        if (clickedButton != nullptr)
         {
             clickedFolder = dynamic_cast<FolderComponent*>
                 (clickedButton->getParentComponent());
-            if(clickedFolder != nullptr 
-                    && clickedFolder->getFolderMenuItem() 
+            if (clickedFolder != nullptr && clickedFolder->getFolderMenuItem()
                     == menuComponent->getActiveFolder())
             {
                 menuItemClicked(clickedButton, rightClicked);
                 return;
             }
         }
-        if(clickedFolder == nullptr)
+        if (clickedFolder == nullptr)
         {
             clickedFolder = dynamic_cast<FolderComponent*>
                 (event.eventComponent);
         }
     }
-    if(clickedFolder != nullptr)
+    if (clickedFolder != nullptr)
     {
         juce::Point<int> clickPos = event.getPosition();
         int closestIndex = clickedFolder->closestIndex(clickPos.x, clickPos.y);
@@ -139,12 +130,11 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
     }
 }
 
-/*
- * Converts generic key events into calls to the InputHandler's protected 
- * keyPress method.
- */
+
+// Converts generic key events into calls to the InputHandler's protected
+// keyPress method.
 bool AppMenu::InputHandler::keyPressed(const juce::KeyPress& keyPress,
-        juce::Component* sourceComponent) 
+        juce::Component* sourceComponent)
 {
     // TODO: don't hardcode in key bindings, read them from input settings.
     using juce::KeyPress;
@@ -160,27 +150,25 @@ bool AppMenu::InputHandler::keyPressed(const juce::KeyPress& keyPress,
         {"ctrl + E",      KeyType::Edit}
     };
     const juce::String keyString = keyPress.getTextDescription();
-    if(keyMap.count(keyString))
+    if (keyMap.count(keyString))
     {
         return keyPressed(keyMap.at(keyString));
     }
     return false;
 }
 
-/*
- * Scans desktop entries for updates whenever window focus is gained.
- */
-void AppMenu::InputHandler::windowFocusGained() 
+
+// Scans desktop entries for updates whenever window focus is gained.
+void AppMenu::InputHandler::windowFocusGained()
 {
     DesktopEntry::Loader entryLoader;
     entryLoader.scanForChanges();
 }
 
-/*
- * Hides the loading spinner and stops waiting for applications to launch when
- * window focus is lost.
- */
-void AppMenu::InputHandler::windowFocusLost() 
+
+// Hides the loading spinner and stops waiting for applications to launch when
+// window focus is lost.
+void AppMenu::InputHandler::windowFocusLost()
 {
     controller->setLoadingState(false);
 }

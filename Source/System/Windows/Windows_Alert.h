@@ -15,17 +15,19 @@ namespace Windows
     {
         /**
          * @brief  Requests user confirmation before performing some action.
-         * 
-         * @param title      The text to print at the top of the confirmation 
+         *
+         * @param title      The text to print at the top of the confirmation
          *                   box.
-         * 
-         * @param message    Detailed information text about the action being 
+         *
+         * @param message    Detailed information text about the action being
          *                   confirmed.
-         * 
-         * @param onConfirm  If the user presses the "OK" button, this callback 
+         *
+         * @param onConfirm  If the user presses the "OK" button, this callback
          *                   function will run.
          */
-        void confirmAction(const juce::String title, const juce::String message,
+        void confirmAction(
+                const juce::String title,
+                const juce::String message,
                 const std::function<void()> onConfirm);
     }
 }

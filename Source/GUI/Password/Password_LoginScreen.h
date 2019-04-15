@@ -1,7 +1,7 @@
 #pragma once
 /**
- * @file Password_LoginScreen.h
- * 
+ * @file  Password_LoginScreen.h
+ *
  * @brief  Provides the application's login screen.
  */
 
@@ -19,7 +19,7 @@ namespace Password { class LoginScreen; }
 /**
  * @brief  The screen shown whenever the system exits sleep mode, or when the
  *         application starts if the pocket-home password is set.
- * 
+ *
  *  When a pocket-home password is set, the user has to enter the password to
  * close the LoginScreen. Otherwise, the page just functions as a lock screen,
  * and can be closed by pressing a button.
@@ -35,15 +35,15 @@ public:
      *         the user logs in.
      *
      * @param loginCallback  A callback function to run when the user logs in
-     *                       successfully. This should close the LoginScreen and
-     *                       show normal application content.
+     *                       successfully. This should close the LoginScreen
+     *                       and show normal application content.
      */
     LoginScreen(const std::function<void()> loginCallback);
 
     virtual ~LoginScreen() { }
 
     /**
-     * @brief  Grants keyboard focus to the password field, so it doesn't need 
+     * @brief  Grants keyboard focus to the password field, so it doesn't need
      *         to be clicked before the user can start typing their password.
      */
     void getKeyboardFocus();
@@ -56,7 +56,7 @@ private:
 
     /**
      * @brief  Attempts to login when the user clicks the login button.
-     * 
+     *
      * @param button  The login page's login button.
      */
     virtual void buttonClicked(juce::Button* button) override;
@@ -64,10 +64,11 @@ private:
     /**
      * @brief  Attempts to login when the return key is pressed while the
      *         password editor is focused.
-     * 
+     *
      * @param editor  The login page's password editor field
      */
-    virtual void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
+    virtual void textEditorReturnKeyPressed
+    (juce::TextEditor& editor) override;
 
     /**
      * @brief  Checks that an application password hasn't been recently added
@@ -75,14 +76,14 @@ private:
      */
     virtual void visibilityChanged() override;
 
-    /* Callback function to run after successfully logging in: */
+    // Callback function to run after successfully logging in:
     const std::function<void()> loginCallback;
 
-    /* Loads image asset paths, and ensures the JSON image path resource remains
-     * available: */
+    // Loads image asset paths, and ensures the JSON image path resource
+    // remains available:
     const Theme::Image::ConfigFile imageConfig;
 
-    /* Page child components: */
+    // Page child components:
     juce::TextButton loginButton;
     Widgets::BoundedLabel passwordLabel;
     Widgets::TextEditor passwordField;

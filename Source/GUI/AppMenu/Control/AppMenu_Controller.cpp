@@ -8,14 +8,14 @@
 #include "Windows_Alert.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "AppMenu::Controller::";
 #endif
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "AppMenu::Controller";
 
-/* Localized text value keys: */
+// Localized text value keys:
 namespace TextKey
 {
     static const juce::Identifier edit           = "edit";
@@ -29,45 +29,42 @@ namespace TextKey
     static const juce::Identifier launchingAPP   = "launchingAPP";
 }
 
-/*
- * Creates a new menu controller.
- */
-AppMenu::Controller::Controller
-(MenuComponent* menuComponent, Widgets::OverlaySpinner& loadingSpinner) : 
-menuComponent(menuComponent), 
-loadingSpinner(loadingSpinner),
-Locale::TextUser(localeClassKey) { } 
 
-/*
- * Displays a context menu with options for editing an open menu folder.
- */
+// Creates a new menu controller.
+AppMenu::Controller::Controller
+(MenuComponent* menuComponent, Widgets::OverlaySpinner& loadingSpinner) :
+menuComponent(menuComponent),
+loadingSpinner(loadingSpinner),
+Locale::TextUser(localeClassKey) { }
+
+
+// Displays a context menu with options for editing an open menu folder.
 void AppMenu::Controller::showContextMenu
 (const MenuItem folderItem, const int insertIndex)
 {
     // Ignore request if a menu editor is visible or input is disabled.
-    if(ignoringInput())
+    if (ignoringInput())
     {
         return;
     }
     juce::PopupMenu contextMenu;
     jassert(!folderItem.isNull());
-    contextMenu.addItem(int(OptionCode::NewShortcut), 
+    contextMenu.addItem(int(OptionCode::NewShortcut),
             localeText(TextKey::newShortcut));
-    contextMenu.addItem(int(OptionCode::NewFolder), 
+    contextMenu.addItem(int(OptionCode::NewFolder),
             localeText(TextKey::newFolder));
-    contextMenu.addItem(int(OptionCode::NewDesktopEntry), 
+    contextMenu.addItem(int(OptionCode::NewDesktopEntry),
             localeText(TextKey::newEntry));
     handleContextMenuAction(OptionCode(contextMenu.show()), folderItem,
             insertIndex);
 }
 
-/*
- * Displays a context menu with options for editing a single menu item.
- */
+
+// Displays a context menu with options for editing a single menu item.
 void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
-{  
+{
     // Ignore request if a menu editor is visible or input is disabled.
-    if(ignoringInput())
+    if (ignoringInput())
     {
         return;
     }
@@ -77,19 +74,19 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     contextMenu.addItem(int(OptionCode::Edit), localeText(TextKey::edit));
     contextMenu.addItem(int(OptionCode::Delete),
             localeText(TextKey::deleteItem));
-    
+
     MenuFile appConfig;
     const MenuItem rootFolder = appConfig.getRootFolderItem();
     const MenuItem parent = menuItem.getParentFolder();
-    if(parent != rootFolder)
+    if (parent != rootFolder)
     {
-        contextMenu.addItem(int(OptionCode::PinToRoot), 
+        contextMenu.addItem(int(OptionCode::PinToRoot),
                 localeText(TextKey::pinItem));
     }
 
-    if(menuItem.isFolder())
+    if (menuItem.isFolder())
     {
-        contextMenu.addItem(int(OptionCode::NewShortcut), 
+        contextMenu.addItem(int(OptionCode::NewShortcut),
                 localeText(TextKey::newShortcut));
     }
 
@@ -97,16 +94,16 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     jassert(menuItem.getIndex() >= 0);
     jassert(!parent.isNull());
     int lastMovableIndex = parent.getMovableChildCount() - 1;
-    if(menuItem.getIndex() <= lastMovableIndex)
+    if (menuItem.getIndex() <= lastMovableIndex)
     {
-        if(menuItem.getIndex() != 0)
+        if (menuItem.getIndex() != 0)
         {
-            contextMenu.addItem(int(OptionCode::MoveBack), 
+            contextMenu.addItem(int(OptionCode::MoveBack),
                     localeText(TextKey::moveBack));
         }
-        if(menuItem.getIndex() != lastMovableIndex)
+        if (menuItem.getIndex() != lastMovableIndex)
         {
-            contextMenu.addItem(int(OptionCode::MoveForward), 
+            contextMenu.addItem(int(OptionCode::MoveForward),
                     localeText(TextKey::moveForward));
         }
     }
@@ -114,22 +111,22 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
             rootFolder.getMovableChildCount());
 }
 
-/*
- * Activates an item in the menu, launching application shortcut menu items, and
- * opening folder menu items.
- */
+
+// Activates an item in the menu, launching application shortcut menu items,
+// and opening folder menu items.
 void AppMenu::Controller::activateMenuItem(const MenuItem clickedItem)
 {
     // Ignore clicks if a menu editor is visible or input is disabled.
-    if(ignoringInput())
+    if (ignoringInput())
     {
         return;
     }
-    // If the menu item is not in the active folder, close folders until it is.
+    // If the menu item is not in the active folder, close folders until it
+    // is.
     const MenuItem parentFolder = clickedItem.getParentFolder();
-    if(parentFolder != menuComponent->getActiveFolder())
+    if (parentFolder != menuComponent->getActiveFolder())
     {
-        while(parentFolder != menuComponent->getActiveFolder()
+        while (parentFolder != menuComponent->getActiveFolder()
             && menuComponent->openFolderCount() > 1)
         {
             menuComponent->closeActiveFolder();
@@ -137,22 +134,21 @@ void AppMenu::Controller::activateMenuItem(const MenuItem clickedItem)
         jassert(parentFolder == menuComponent->getActiveFolder());
     }
     // Open folder items and launch/focus shortcut items.
-    if(clickedItem.isFolder())
+    if (clickedItem.isFolder())
     {
         openFolder(clickedItem);
     }
     else
     {
-        const juce::String loadingText = localeText(TextKey::launchingAPP) 
+        const juce::String loadingText = localeText(TextKey::launchingAPP)
             + " " + clickedItem.getTitle();
         setLoadingState(true, loadingText);
         launchOrFocusApplication(clickedItem);
     }
 }
-    
-/*
- * Sets if the Controller should show the loading spinner and ignore input.
- */
+
+
+// Sets if the Controller should show the loading spinner and ignore input.
 void AppMenu::Controller::setLoadingState
 (const bool isLoading, const juce::String loadingText)
 {
@@ -160,18 +156,15 @@ void AppMenu::Controller::setLoadingState
     loadingSpinner.setVisible(isLoading);
 }
 
-/*
- * Checks if the controller is currently ignoring user input.
- */
+
+// Checks if the controller is currently ignoring user input.
 bool AppMenu::Controller::ignoringInput() const
 {
     return loadingSpinner.isVisible() || menuComponent->showingEditor();
 }
 
 
-/*
- * Performs the appropriate action for a selected context menu option.
- */
+// Performs the appropriate action for a selected context menu option.
 void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
         MenuItem editedItem,
         const int insertIndex)
@@ -188,8 +181,8 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             jassert(!editedItem.isNull());
             Windows::Alert::confirmAction(editedItem.getConfirmDeleteTitle(),
                     editedItem.getConfirmDeleteMessage(),
-                    [editedItem]() 
-                    { 
+                    [editedItem]()
+                    {
                         MenuItem(editedItem).remove(true);
                     });
             break;
@@ -200,7 +193,7 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             MenuItem rootFolder = appConfig.getRootFolderItem();
             copyMenuItem(editedItem, rootFolder, insertIndex);
             // Move to the new selected item:
-            while(menuComponent->openFolderCount() > 1)
+            while (menuComponent->openFolderCount() > 1)
             {
                 menuComponent->closeActiveFolder();
             }
@@ -215,10 +208,10 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             MenuItem parent = editedItem.getParentFolder();
             int itemIndex = editedItem.getIndex();
             int swapIndex = itemIndex +
-                ((selectedOption == OptionCode::MoveBack) ? -1 : 1);
-            if(!parent.swapChildren(itemIndex, swapIndex))
+                ( (selectedOption == OptionCode::MoveBack) ? -1 : 1);
+            if (!parent.swapChildren(itemIndex, swapIndex))
             {
-                DBG(dbgPrefix << __func__ << ": Couldn't swap indices " 
+                DBG(dbgPrefix << __func__ << ": Couldn't swap indices "
                         << itemIndex << " and " << swapIndex);
             }
             break;
@@ -233,20 +226,19 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             createNewEntryEditor(editedItem);
             break;
         default:
-            DBG(dbgPrefix << __func__ << ": Unhandled menu option " 
+            DBG(dbgPrefix << __func__ << ": Unhandled menu option "
                     << int(selectedOption));
             jassertfalse;
     }
 }
 
-/*
- * Launches or focuses an application from the menu.
- */
+
+// Launches or focuses an application from the menu.
 void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
 {
     using juce::String;
     String command = toLaunch.getCommand();
-    if(toLaunch.getLaunchedInTerm())
+    if (toLaunch.getLaunchedInTerm())
     {
         Config::MainFile mainConfig;
         String termPrefix = mainConfig.getTermLaunchPrefix();
@@ -256,33 +248,30 @@ void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
     appLauncher.startOrFocusApp(command);
 }
 
-/*
- * Opens a folder menu item as a new FolderComponent.
- */
+
+// Opens a folder menu item as a new FolderComponent.
 void AppMenu::Controller::openFolder(const MenuItem folderItem)
 {
     menuComponent->openFolder(folderItem);
 }
 
-/*
- * Creates and shows a new PopupEditor component that can create a new 
- * application shortcut menu item.
- */
+
+// Creates and shows a new PopupEditor component that can create a new
+// application shortcut menu item.
 void AppMenu::Controller::createNewShortcutEditor
 (const MenuItem folder, const int insertIndex)
 {
-    PopupEditor* newEditor = new NewConfigItemEditor(folder, false, insertIndex,
-    [this]()
+    PopupEditor* newEditor = new NewConfigItemEditor(
+            folder, false, insertIndex, [this]()
     {
         menuComponent->removeEditor();
     });
     menuComponent->saveAndShowEditor(newEditor);
 }
 
-/*
- * Creates and shows a new PopupEditor component that can create a new folder 
- * menu item.
- */
+
+// Creates and shows a new PopupEditor component that can create a new folder
+// menu item.
 void AppMenu::Controller::createNewFolderEditor
 (const MenuItem folder, const int insertIndex)
 {
@@ -294,10 +283,9 @@ void AppMenu::Controller::createNewFolderEditor
     menuComponent->saveAndShowEditor(newEditor);
 }
 
-/*
- * Creates and shows a new PopupEditor component that can create a new desktop 
- * entry.
- */
+
+// Creates and shows a new PopupEditor component that can create a new desktop
+// entry.
 void AppMenu::Controller::createNewEntryEditor(const MenuItem categorySource)
 {
     PopupEditor* newEditor = new NewDesktopAppEditor([this]()
@@ -308,39 +296,39 @@ void AppMenu::Controller::createNewEntryEditor(const MenuItem categorySource)
     menuComponent->saveAndShowEditor(newEditor);
 }
 
-/*
- * Creates and shows a new PopupEditor component that edits an existing item
- * in the menu.
- */
+
+// Creates and shows a new PopupEditor component that edits an existing item in
+// the menu.
 void AppMenu::Controller::createExistingItemEditor(MenuItem toEdit)
 {
     juce::StringArray oldCategories = toEdit.getCategories();
     juce::String oldIcon = toEdit.getIconName();
-    PopupEditor* newEditor = new ExistingItemEditor(toEdit, 
+    PopupEditor* newEditor = new ExistingItemEditor(toEdit,
     [this, oldCategories, oldIcon, toEdit]()
     {
         // Refresh desktop entry items if folder categories change.
-        if(toEdit.isFolder() && oldCategories != toEdit.getCategories())
+        if (toEdit.isFolder() && oldCategories != toEdit.getCategories())
         {
-            for(int i = toEdit.getFolderSize() - 1;
+            for (int i = toEdit.getFolderSize() - 1;
                     i >= toEdit.getMovableChildCount(); i--)
             {
-               toEdit.getFolderItem(i).remove(false); 
+                toEdit.getFolderItem(i).remove(false);
             }
             entryLoader.loadFolderEntries(toEdit);
         }
         // Force the menu button to reload the icon if the icon changes.
-        if(oldIcon != toEdit.getIconName())
+        if (oldIcon != toEdit.getIconName())
         {
             int folderIndex = 0;
-            for(MenuItem m = toEdit.getParentFolder();
+            for (MenuItem m = toEdit.getParentFolder();
                     !m.getParentFolder().isNull();
                     m = m.getParentFolder())
             {
                 folderIndex++;
             }
-            FolderComponent* folder = menuComponent->getOpenFolder(folderIndex);
-            MenuButton* editedButton 
+            FolderComponent* folder
+                    = menuComponent->getOpenFolder(folderIndex);
+            MenuButton* editedButton
                     = folder->getButtonComponent(toEdit.getIndex());
             editedButton->dataChanged(MenuItem::DataField::icon);
         }
@@ -349,9 +337,8 @@ void AppMenu::Controller::createExistingItemEditor(MenuItem toEdit)
     menuComponent->saveAndShowEditor(newEditor);
 }
 
-/*
- * Creates a copy of a menu item at a new index in the menu.
- */
+
+// Creates a copy of a menu item at a new index in the menu.
 void AppMenu::Controller::copyMenuItem
 (const MenuItem toCopy, MenuItem copyFolder, const int insertIndex)
 {

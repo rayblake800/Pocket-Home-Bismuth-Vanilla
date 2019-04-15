@@ -1,18 +1,18 @@
 #pragma once
 /**
  * @file  Process_State.h
- * 
+ *
  * @brief  Lists all possible Linux process states.
  */
 
 namespace juce { class String; }
 
-namespace Process 
-{ 
-    enum class State; 
+namespace Process
+{
+    enum class State;
 
     /**
-     * @brief  Returns the process state represented by the state field 
+     * @brief  Returns the process state represented by the state field
      *         character in the /proc/<pid>/stat file.
      *
      * @param stateCode  A character used to represent a process state.
@@ -27,7 +27,7 @@ namespace Process
      *
      * @param state  One of the possible Linux process states.
      *
-     * @return       The process state's string representation. 
+     * @return       The process state's string representation.
      */
     juce::String stateString(const State state);
 }
@@ -43,10 +43,10 @@ enum class Process::State
     stopped,     // T: finished, sending SIGCHLD to its parent process.
     zombie,      // Z: waiting to be removed by its parent process.
     tracingStop, // t: stopped by a debugger.
-    paging,      // W: waiting for paged memory (only before 2.6.xx kernel).
+    paging,      // W: waiting for paged memory(only before 2.6.xx kernel).
     dead,        // X: finished and removed from the process table.
     idle,        // I: a kernel thread waiting in the TASK_IDLE state.
-    /* Error states: */
+    // Error states:
     unknown, // Process exists, but its state can't be determined.
     invalid  // Not a process.
 };

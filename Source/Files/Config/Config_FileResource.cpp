@@ -2,15 +2,15 @@
 #include "Assets_XDGDirectories.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Config::FileResource::";
 #endif
-    
-/* The directory within the user's config folder where all config files will be 
- * located: */
+
+// The directory within the user's config folder where all config files will be
+// located:
 static const constexpr char* appDirectory = "pocket-home";
 
-/* The pocket-home asset folder subdirectory containing default config files. */
+// The pocket-home asset folder subdirectory containing default config files.
 static const constexpr char* defaultAssetPath = "configuration/";
 
 /**
@@ -27,35 +27,32 @@ static juce::String getFullConfigPath(const juce::String configFilename)
             + "/" + configFilename;
 }
 
-/*
- * Loads the resource's JSON data files.
- */
+
+// Loads the resource's JSON data files.
 Config::FileResource::FileResource(
         const juce::Identifier& resourceKey,
         const juce::String& configFilename) :
-SharedResource::Resource(resourceKey), 
+SharedResource::Resource(resourceKey),
 filename(configFilename),
 configJson(getFullConfigPath(configFilename)),
 defaultJson(defaultAssetPath + filename) { }
 
-/*
- * Writes any pending changes to the file before destruction.
- */
+
+// Writes any pending changes to the file before destruction.
 Config::FileResource::~FileResource()
 {
     writeChanges();
 }
 
-/*
- * Sets a configuration data value back to its default setting.
- */
+
+// Sets a configuration data value back to its default setting.
 void Config::FileResource::restoreDefaultValue(const juce::Identifier& key)
 {
     // Check key validity, find expected data type:
     const std::vector<DataKey>& keys = getConfigKeys();
-    for(const DataKey& configKey : keys)
+    for (const DataKey& configKey : keys)
     {
-        if(configKey.key == key)
+        if (configKey.key == key)
         {
             restoreDefaultValue(configKey);
             return;
@@ -66,22 +63,20 @@ void Config::FileResource::restoreDefaultValue(const juce::Identifier& key)
     jassertfalse;
 }
 
-/*
- * Restores all values in the configuration file to their defaults.
- */
+
+// Restores all values in the configuration file to their defaults.
 void Config::FileResource::restoreDefaultValues()
 {
     const std::vector<DataKey>& keys = getConfigKeys();
-    for(const DataKey& key : keys)
+    for (const DataKey& key : keys)
     {
         restoreDefaultValue(key);
     }
     writeChanges();
 }
 
-/*
- * Loads all initial configuration data from the JSON config file.
- */
+
+// Loads all initial configuration data from the JSON config file.
 void Config::FileResource::loadJSONData()
 {
     const std::vector<DataKey>& keys = getConfigKeys();
@@ -89,7 +84,7 @@ void Config::FileResource::loadJSONData()
     {
         try
         {
-            switch (key.dataType)
+            switch(key.dataType)
             {
                 case DataKey::stringType:
                     initProperty<juce::String>(key);
@@ -104,31 +99,32 @@ void Config::FileResource::loadJSONData()
                     initProperty<double>(key);
                     break;
                 default:
-                    DBG(dbgPrefix << __func__ << ": Unexpected type for key \"" 
+                    DBG(dbgPrefix << __func__ << ": Unexpected type for key \""
                             << key.key << "\" in file " << filename);
             }
         }
         catch(Assets::JSONFile::FileException e)
         {
-            DBG(dbgPrefix << __func__ << ": Caught FileException:" << e.what());
+            DBG(dbgPrefix << __func__ << ": Caught FileException:"
+                    << e.what());
         }
         catch(Assets::JSONFile::TypeException e)
         {
-            DBG(dbgPrefix << __func__ << ": Caught TypeException:" << e.what());
+            DBG(dbgPrefix << __func__ << ": Caught TypeException:"
+                    << e.what());
         }
     }
     writeChanges();
 }
- 
-/*
- * Checks if a key string is valid for this FileResource.
- */
+
+
+// Checks if a key string is valid for this FileResource.
 bool Config::FileResource::isValidKey(const juce::Identifier& key) const
 {
     const std::vector<DataKey>& keys = getConfigKeys();
-    for(const DataKey& configKey : keys)
+    for (const DataKey& configKey : keys)
     {
-        if(configKey.key == key)
+        if (configKey.key == key)
         {
             return true;
         }
@@ -136,10 +132,9 @@ bool Config::FileResource::isValidKey(const juce::Identifier& key) const
     return false;
 }
 
-/*
- * Re-writes all data back to the config file, as long as there are changes to 
- * write.
- */
+
+// Re-writes all data back to the config file, as long as there are changes to
+// write.
 void Config::FileResource::writeChanges()
 {
     writeDataToJSON();
@@ -157,10 +152,9 @@ void Config::FileResource::writeChanges()
     }
 }
 
-/*
- * Sets a configuration data value back to its default setting, notifying 
- * listeners if the value changes.
- */
+
+// Sets a configuration data value back to its default setting, notifying
+// listeners if the value changes.
 void Config::FileResource::restoreDefaultValue(const DataKey& key)
 {
     try

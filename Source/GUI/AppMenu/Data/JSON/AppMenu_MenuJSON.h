@@ -1,12 +1,12 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
- * @file AppMenu_MenuJSON.h
+ * @file  AppMenu_MenuJSON.h
  *
- * @brief  Reads from and writes to the menu tree defined in the appMenu.json 
- *         configuration file
+ * @brief  Manages the configuration file where the application menu structure
+ *         is saved.
  */
 
 #include "Config_FileResource.h"
@@ -18,18 +18,21 @@
 namespace AppMenu { class MenuJSON; }
 
 /**
- *  MenuJSON is the class of the singleton SharedResource object that accesses 
+ * @brief  Reads from and writes to the menu tree defined in the appMenu.json
+ *         configuration file.
+ *
+ *  MenuJSON is the class of the singleton SharedResource object that accesses
  * appMenu.json, the configuration file where the application menu structure is
- * defined. Only AppMenu::ConfigFile objects are allowed to directly access the 
+ * defined. Only AppMenu::ConfigFile objects are allowed to directly access the
  * MenuJSON object.
  *
  *  MenuJSON reads in the JSON data used to create AppMenu::MenuItem objects,
- * and writes any changes to those objects back to appMenu.json as JSON data. 
+ * and writes any changes to those objects back to appMenu.json as JSON data.
  */
 class AppMenu::MenuJSON : public Config::FileResource
 {
 public:
-    /* SharedResource object key */
+    // SharedResource object key
     static const juce::Identifier resourceKey;
 
     /**
@@ -57,16 +60,16 @@ public:
      *
      * @param icon             The name or path of the menu item's icon.
      *
-     * @param command          The menu item's application launch command, or 
-     *                         the empty string if the menu item does not launch 
+     * @param command          The menu item's application launch command, or
+     *                         the empty string if the menu item does not launch
      *                         an application.
      *
      * @param launchInTerm     Whether the menu item launches an application
      *                         within a new terminal window.
-     * 
+     *
      * @param categories       A list of application categories associated with
      *                         the menu item.
-     * 
+     *
      * @param parentFolder     The parent folder item the new menu item will be
      *                         inserted into.
      *
@@ -77,7 +80,7 @@ public:
      *                         creating the menu item failed.
      */
     MenuItem addMenuItem(
-            const juce::String& title, 
+            const juce::String& title,
             const juce::String& icon,
             const juce::String& command,
             const bool launchInTerm,
@@ -89,7 +92,7 @@ public:
      * @brief  Copies all menu data back to the resource's cached JSON data.
      */
     void writeDataToJSON() override final;
-    
+
     /**
      * @brief  Writes all menu changes back to the menu JSON file.
      */
@@ -97,39 +100,39 @@ public:
 
 private:
     /**
-     * @brief   Gets all parameters with basic data types tracked by this
-     *          ConfigFile.
-     * 
+     * @brief  Gets all parameters with basic data types tracked by this
+     *         ConfigFile.
+     *
      * @return  The empty list, as MenuJSON only reads the JSON object used to
      *          create the menu.
      */
-    virtual const std::vector<Config::DataKey>& getConfigKeys() const final 
+    virtual const std::vector<Config::DataKey>& getConfigKeys() const final
         override;
-    
+
     /**
      * @brief  Recursively copies a menu item and all of its child folder items
      *         into a juce::var object.
      *
      * @param menuItem  A non-null item located in the application menu.
      *
-     * @return          All menu item data packaged in an object var. 
+     * @return          All menu item data packaged in an object var.
      */
     static juce::var itemToVar(const AppMenu::MenuItem& menuItem);
 
-    /* Holds the root folder item */
+    // Holds the root folder item
     MenuItem rootFolderItem;
 
-    /* Loads desktop entry folder items. */
+    // Loads desktop entry folder items.
     EntryLoader entryLoader;
-    
-    /* Private JSON menu data class */
+
+    // Private JSON menu data class
     class ConfigData : public AppMenu::ConfigData
     {
     public:
         ConfigData() { }
 
         virtual ~ConfigData() { }
-    
+
         /**
          * @brief  Writes all changes to this menu item back to its data source.
          */
@@ -149,7 +152,7 @@ private:
         virtual ConfigData::Ptr createChildItem() override;
 
         /**
-         * @brief  A private Config::FileHandler used only for writing menu 
+         * @brief  A private Config::FileHandler used only for writing menu
          *         changes.
          */
         class JSONWriter : public Config::FileHandler<MenuJSON>
@@ -159,8 +162,8 @@ private:
             virtual ~JSONWriter() { }
 
             /**
-             * @brief  Writes all config-defined menu data back to the JSON 
-             *         file.  
+             * @brief  Writes all config-defined menu data back to the JSON
+             *         file.
              */
             void writeChanges();
         };

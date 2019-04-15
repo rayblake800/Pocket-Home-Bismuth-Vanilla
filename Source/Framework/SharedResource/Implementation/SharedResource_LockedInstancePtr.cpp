@@ -2,17 +2,15 @@
 #include "SharedResource_LockedInstancePtr.h"
 #include "SharedResource_Holder.h"
 
-/*
- * Initializes the resource pointer, locking the resource.
- */
+// Initializes the resource pointer, locking the resource.
 SharedResource::LockedInstancePtr::LockedInstancePtr
 (const juce::Identifier& resourceKey, const LockType lockType) :
 resourceKey(resourceKey),
 lockType(lockType)
 {
-    const juce::ReadWriteLock& resourceLock 
+    const juce::ReadWriteLock& resourceLock
         = Holder::getHolderInstance()->getResourceLock(resourceKey);
-    if(lockType == LockType::read)
+    if (lockType == LockType::read)
     {
         resourceLock.enterRead();
     }
@@ -23,25 +21,23 @@ lockType(lockType)
     locked = true;
 }
 
-/*
- * Unlocks the resource when the LockedInstancePtr is destroyed.
- */
+
+// Unlocks the resource when the LockedInstancePtr is destroyed.
 SharedResource::LockedInstancePtr::~LockedInstancePtr()
 {
     unlock();
 }
 
-/*
- * Unlocks the resource. Once the resource is unlocked, the LockedInstancePtr 
- * may no longer access the resource Instance or lock.
- */
+
+// Unlocks the resource. Once the resource is unlocked, the LockedInstancePtr
+// may no longer access the resource Instance or lock.
 void SharedResource::LockedInstancePtr::unlock()
 {
-    if(locked)
+    if (locked)
     {
-        const juce::ReadWriteLock& resourceLock 
+        const juce::ReadWriteLock& resourceLock
             = Holder::getHolderInstance()->getResourceLock(resourceKey);
-        if(lockType == LockType::read)
+        if (lockType == LockType::read)
         {
             resourceLock.exitRead();
         }
@@ -54,20 +50,18 @@ void SharedResource::LockedInstancePtr::unlock()
 }
 
 
-/*
- * Checks if the resource is still locked by this pointer.
- */
+// Checks if the resource is still locked by this pointer.
 bool SharedResource::LockedInstancePtr::isLocked() const
 {
     return locked;
 }
 
-/*
- * Accesses the resource Instance's methods or data.
- */
-SharedResource::Instance* SharedResource::LockedInstancePtr::getInstance() const
+
+// Accesses the resource Instance's methods or data.
+SharedResource::Instance*
+SharedResource::LockedInstancePtr::getInstance() const
 {
-    if(locked)
+    if (locked)
     {
         return Holder::getHolderInstance()->getResource(resourceKey);
     }

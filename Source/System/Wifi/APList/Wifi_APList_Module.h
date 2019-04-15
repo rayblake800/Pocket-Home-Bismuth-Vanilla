@@ -1,5 +1,5 @@
 #ifndef WIFI_IMPLEMENTATION
-  #error File included directly outside of Wifi module implementation.
+    #error File included directly outside of Wifi module implementation.
 #endif
 #pragma once
 /**
@@ -10,9 +10,9 @@
 
 #include "Wifi_Module.h"
 
-namespace Wifi 
-{ 
-    namespace APList { class Module; } 
+namespace Wifi
+{
+    namespace APList { class Module; }
     class Resource;
     class AccessPoint;
     namespace LibNM
@@ -30,8 +30,8 @@ namespace Wifi
  * library connects to NetworkManager to read this data, and share it in the
  * form of GLib object pointers. However, object data provided by LibNM is only
  * safe to access on the LibNM thread run by the LibNM::Thread::Module.
- * 
- *  The APList::Module reads in all access point data provided by LibNM, and 
+ *
+ *  The APList::Module reads in all access point data provided by LibNM, and
  * uses it to create a list of AccessPoint objects. These objects can be safely
  * shared between threads, minimizing the need to interact directly with LibNM.
  *
@@ -40,15 +40,15 @@ namespace Wifi
  * network connection point, and a single AccessPoint object will be used to
  * represent all of them.
  *
- *  The APList::Module also ensures all updates to LibNM access point data are 
- * properly processed and shared. Whenever an AccessPoint object's first 
+ *  The APList::Module also ensures all updates to LibNM access point data are
+ * properly processed and shared. Whenever an AccessPoint object's first
  * LibNM::AccessPoint is added, or its last LibNM::AccessPoint is removed, the
  * module will notify all APList::Listener objects. The module will also
  * directly update the saved signal strength of all equivalent AccessPoint
  * objects whenever that objects list of LibNM::AccessPoint objects changes.
  *
- *  Other modules that interact with LibNM may need access to the GLib object 
- * pointers used to create the AccessPoint list. The APList module can provide 
+ *  Other modules that interact with LibNM may need access to the GLib object
+ * pointers used to create the AccessPoint list. The APList module can provide
  * these object pointers, wrapped in LibNM::AccessPoint objects. These should
  * only be requested and used within the LibNM::Thread::Module thread.
  */
@@ -56,7 +56,7 @@ class Wifi::APList::Module : public Wifi::Module
 {
 public:
     /**
-     * @brief  Creates the APList module. The constructed list module will be 
+     * @brief  Creates the APList module. The constructed list module will be
      *         empty, and should be initialized with the updateAllAccessPoints
      *         method from within the LibNM thread.
      *
@@ -72,10 +72,10 @@ public:
     /**
      * @brief  Gets AccessPoint objects for all visible access points.
      *
-     * @return  The entire list of visible access points. 
+     * @return  The entire list of visible access points.
      */
     juce::Array<AccessPoint> getAccessPoints() const;
-    
+
     /**
      * @brief  Finds a single AccessPoint using its hash value.
      *
@@ -96,17 +96,17 @@ public:
      * @param accessPoint  A non-null AccessPoint object provided by the APList
      *                     module.
      *
-     * @return             A LibNM::AccessPoint object described by the 
+     * @return             A LibNM::AccessPoint object described by the
      *                     accessPoint object. If multiple LibNM::AccessPoint
-     *                     objects match accessPoint, the one with the strongest
-     *                     signal strength is returned. If no match is found, a
-     *                     null LibNM::AccessPoint is returned.
+     *                     objects match accessPoint, the one with the
+     *                     strongest signal strength is returned. If no match
+     *                     is found, a null LibNM::AccessPoint is returned.
      */
-    LibNM::AccessPoint getStrongestNMAccessPoint(const AccessPoint accessPoint) 
+    LibNM::AccessPoint getStrongestNMAccessPoint(const AccessPoint accessPoint)
         const;
 
     /**
-     * @brief  Gets the list of all LibNM::AccessPoint objects provided by 
+     * @brief  Gets the list of all LibNM::AccessPoint objects provided by
      *         LibNM.
      *
      *  This method should only be called on the thread created by the
@@ -123,7 +123,7 @@ public:
      *  This method should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
      *
-     * @param accessPoint  An AccessPoint representing one or more 
+     * @param accessPoint  An AccessPoint representing one or more
      *                     LibNM::AccessPoint objects.
      *
      * @return             All unique LibNM::AccessPoint objects represented by
@@ -134,7 +134,7 @@ public:
 
     /**
      * @brief  Adds a new LibNM::AccessPoint to the list, creating an
-     *         AccessPoint object to represent it if necessary. 
+     *         AccessPoint object to represent it if necessary.
      *
      *  This method should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
@@ -144,13 +144,13 @@ public:
     void addAccessPoint(const LibNM::AccessPoint addedAP);
 
     /**
-     * @brief  Removes a LibNM::AccessPoint from the list. 
+     * @brief  Removes a LibNM::AccessPoint from the list.
      *
      *  This method should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
-     * 
-     *  If this was the only remaining LibNM::AccessPoint represented by an 
-     * AccessPoint object, that AccessPoint object's signal strength is set to 
+     *
+     *  If this was the only remaining LibNM::AccessPoint represented by an
+     * AccessPoint object, that AccessPoint object's signal strength is set to
      * zero and it will no longer be shared outside this module.
      *
      * @param removedAP  The LibNM::AccessPoint that NetworkResource can no
@@ -174,8 +174,8 @@ public:
     void clearAccessPoints();
 
     /**
-     * @brief  Reloads all LibNM::AccessPoint objects from LibNM, updating
-     *         the list of AccessPoint objects as necessary.
+     * @brief  Reloads all LibNM::AccessPoint objects from LibNM, updating the
+     *         list of AccessPoint objects as necessary.
      */
     void updateAllAccessPoints();
 
@@ -186,15 +186,15 @@ public:
 
 private:
     /**
-     * @brief  Sets an AccessPoint object's signal strength to zero and notifies
-     *         all listeners that it has been removed, if and only if all 
-     *         LibNM::AccessPoint objects represented by the access point have
-     *         been removed.
+     * @brief  Sets an AccessPoint object's signal strength to zero and
+     *         notifies all listeners that it has been removed, if and only if
+     *         all LibNM::AccessPoint objects represented by the access point
+     *         have been removed.
      *
      *  This method should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
      *
-     * @param toCheck  The AccessPoint object to check and potentially update. 
+     * @param toCheck  The AccessPoint object to check and potentially update.
      */
     void updateAPIfLost(AccessPoint toCheck);
 };

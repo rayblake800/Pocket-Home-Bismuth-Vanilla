@@ -1,20 +1,18 @@
 #define APPMENU_IMPLEMENTATION
 #include "AppMenu_CategoryEditor.h"
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "AppMenu::CategoryEditor";
 
-/* Localized text value key: */
+// Localized text value key:
 static const juce::Identifier editCategoryTitleKey = "editCategoryTitle";
 
-/*
- * Creates a new category editor, setting the initial categories and the 
- * confirmation callback function.
- */
+// Creates a new category editor, setting the initial categories and the
+// confirmation callback function.
 AppMenu::CategoryEditor::CategoryEditor(juce::StringArray categories,
         std::function<void(juce::StringArray) > onConfirm) :
 Locale::TextUser(localeClassKey),
-Widgets::PopupEditor( [this, onConfirm](Widgets::PopupEditor* thisPopup)
+Widgets::PopupEditor( [this, onConfirm] (Widgets::PopupEditor* thisPopup)
 {
     onConfirm(categoryList.getListItems());
 }),

@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  Widgets_DrawableImageButton.h
- * 
+ *
  * @brief  Provides a button component drawn using a Widgets::DrawableImage.
  */
 
@@ -18,85 +18,85 @@ public:
 
     /**
      * @brief  Creates a DrawableImageButton using an image file path.
-     * 
-     * @param assetFilename  The filename of an image in the asset folder, or
-     *                       a full image path. If not a valid image file, the
+     *
+     * @param assetFilename  The filename of an image in the asset folder, or a
+     *                       full image path. If not a valid image file, the
      *                       constructed object will have no initial image.
-     * 
+     *
      * @param placement      The way the image will be scaled to fit the
      *                       component.
      */
-    DrawableImageButton(const juce::String assetFileName, 
-            const juce::RectanglePlacement placement 
+    DrawableImageButton(const juce::String assetFileName,
+            const juce::RectanglePlacement placement
                 = juce::RectanglePlacement::centred);
 
     /**
      * @brief  Creates a DrawableImageButton using an image file.
-     * 
+     *
      * @param imageFile  The image file to use. If not a valid image file, the
      *                   constructed object will have no initial image.
-     * 
+     *
      * @param placement  The way the image will be scaled to fit the component.
      */
-    DrawableImageButton(const juce::File imageFile, 
+    DrawableImageButton(const juce::File imageFile,
             const juce::RectanglePlacement placement
                 = juce::RectanglePlacement::centred);
 
     /**
      * @brief  Creates a DrawableImageButton using an image object.
-     * 
+     *
      * @param image      Any image object. If invalid, the constructed object
      *                   will have no initial image.
-     * 
+     *
      * @param placement  The way the image will be scaled to fit the component.
      */
     DrawableImageButton(const juce::Image imageObject,
-            const juce::RectanglePlacement placement 
+            const juce::RectanglePlacement placement
                 = juce::RectanglePlacement::centred);
 
     /**
      * @brief  Creates a DrawableImageButton using a Drawable object.
-     * 
-     * @param drawable  A dynamically allocated Drawable object that this 
-     *                  Component will claim. If null, the constructed object 
+     *
+     * @param drawable  A dynamically allocated Drawable object that this
+     *                  Component will claim. If null, the constructed object
      *                  will have no initial image.
-     * 
+     *
      * @param placement  The way the image will be scaled to fit the component.
      */
     DrawableImageButton(juce::Drawable* drawable,
-            const juce::RectanglePlacement placement 
+            const juce::RectanglePlacement placement
                 = juce::RectanglePlacement::centred);
 
     /**
      * @brief  Creates a DrawableImageButton object without an initial image.
-     * 
+     *
      * @param placement  The way images will be scaled to fit the component.
      */
-    DrawableImageButton(const juce::RectanglePlacement placement 
+    DrawableImageButton(const juce::RectanglePlacement placement
             = juce::RectanglePlacement::centred);
 
     virtual ~DrawableImageButton() { }
 
     /**
      * @brief  Changes the image drawn by this component.
-     * 
-     * @param assetFilename  The filename of an image in the asset folder, or
-     *                       a full image path. If invalid, the 
+     *
+     * @param assetFilename  The filename of an image in the asset folder, or a
+     *                       full image path. If invalid, the
      *                       DrawableImageButton will have no image.
      */
     void setImage(const juce::String assetFilename);
 
     /**
      * @brief  Changes the image drawn by this component.
-     * 
+     *
      * @param imageFile  Any image file. If invalid, the DrawableImageButton
      *                   will have no image.
      */
     void setImage(const juce::File imageFile);
-    
+
     /**
      * @brief  Changes the image drawn by this component.
-     * 
+     *
      * @param image  Any image object. If invalid, the DrawableImageButton will
      *               have no image.
      */
@@ -104,8 +104,8 @@ public:
 
     /**
      * @brief  Changes the image drawn by this component.
-     * 
-     * @param drawable  A dynamically allocated Drawable object that this 
+     *
+     * @param drawable  A dynamically allocated Drawable object that this
      *                  Component will claim. If null, the DrawableImageButton
      *                  will have no image.
      */
@@ -113,11 +113,11 @@ public:
 
 protected:
     /**
-     * @brief  Adjusts the image size and placement whenever component size 
+     * @brief  Adjusts the image size and placement whenever component size
      *         changes.
      */
     void resized() override;
-    
+
 private:
     /**
      * @brief  Transfers colour changes to the internal image component.
@@ -127,20 +127,19 @@ private:
     /**
      * @brief  Changes the button opacity when it is held down.
      *
-     * @param graphics           The Juce graphics context used to draw the 
+     * @param graphics           The Juce graphics context used to draw the
      *                           button.
      *
-     * @param isMouseOverButton  Whether the mouse cursor is currently over
-     *                           the button.
+     * @param isMouseOverButton  Whether the mouse cursor is currently over the
+     *                           button.
      *
-     * @param isButtonDown       Whether the button is currently being
-     *                           clicked.
+     * @param isButtonDown       Whether the button is currently being clicked.
      */
     virtual void paintButton(juce::Graphics& graphics, bool isMouseOverButton,
             bool isButtonDown) override;
-    
-    /* The internal button image component: */
+
+    // The internal button image component:
     DrawableImage imageComponent;
-    
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DrawableImageButton)
 };

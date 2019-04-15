@@ -13,7 +13,7 @@ namespace Settings { class CalibrationButton; }
 /**
  * @brief  Launches a touchscreen calibration application when clicked.
  */
-class Settings::CalibrationButton : public juce::TextButton, 
+class Settings::CalibrationButton : public juce::TextButton,
         public Locale::TextUser, private juce::Button::Listener
 {
 public:

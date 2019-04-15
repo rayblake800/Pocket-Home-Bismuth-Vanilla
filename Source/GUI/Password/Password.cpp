@@ -6,30 +6,30 @@
 #include <unistd.h>
 
 #ifdef JUCE_DEBUG
-/* Print the full namespace name before all debug output: */
+// Print the full namespace name before all debug output:
 static const constexpr char* dbgPrefix = "Password::";
 #endif
 
-/* Runs with administrator privileges to create, update, or remove the hashed
- * password file: */
+// Runs with administrator privileges to create, update, or remove the hashed
+// password file:
 static const constexpr char* passwordScript = "scripts/passwordManager.sh";
 
-/* Application data directory, relative to the user home directory: 
- * This ignores XDG_DATA_HOME and always uses the default data directory so the 
- * password can't be bypassed or changed by redefining $XDG_DATA_HOME.*/
+// Application data directory, relative to the user home directory:
+// This ignores XDG_DATA_HOME and always uses the default data directory so the
+// password can't be bypassed or changed by redefining $XDG_DATA_HOME.
 static const constexpr char* dataDir = "/.local/share/pocket-home/";
 
-/* Password file path, relative to the application data directory: */
+// Password file path, relative to the application data directory:
 static const constexpr char* passwordFile = ".passwd/passwd";
 
-/* Password salt length in bytes: */
+// Password salt length in bytes:
 static const constexpr int saltLength = 16;
 
 /**
  * @brief  Gets the application password file.
  *
- *  If the application data directory does not exist, this will also create that
- * directory.
+ *  If the application data directory does not exist, this will also create
+ * that directory.
  *
  * @return  The application password file, or a File object pointing to where
  *          the password file would be if it existed.
@@ -37,7 +37,7 @@ static const constexpr int saltLength = 16;
 juce::File getPasswordFile()
 {
     juce::File dataDirFile(juce::String(getenv("HOME")) + dataDir);
-    if(!dataDirFile.isDirectory())
+    if (!dataDirFile.isDirectory())
     {
         dataDirFile.createDirectory();
     }
@@ -66,11 +66,11 @@ FileData loadPasswordFileData()
     using juce::String;
     juce::File passwordFile = getPasswordFile();
     String saltString;
-    if(passwordFile.existsAsFile() && !passwordFile.hasWriteAccess())
+    if (passwordFile.existsAsFile() && !passwordFile.hasWriteAccess())
     {
-        juce::StringArray passwordLines; 
+        juce::StringArray passwordLines;
         passwordFile.readLines(passwordLines);
-        if(passwordLines.size() == 2)
+        if (passwordLines.size() == 2)
         {
             fileData.hashedPassword = passwordLines[0];
             fileData.salt = passwordLines[1];
@@ -81,7 +81,7 @@ FileData loadPasswordFileData()
 
 /**
  * @brief  Converts a string of hex values into a byte array.
- * 
+ *
  * @param hexString  A string of hexadecimal byte values.
  *
  * @return           The byte array represented by the string of hex values.
@@ -89,7 +89,7 @@ FileData loadPasswordFileData()
 juce::Array<juce::uint8> toByteArray(const juce::String& hexString)
 {
     juce::Array<juce::uint8> byteArray;
-    for(int i = 0; i < (hexString.length() - 1); i += 2)
+    for (int i = 0; i < (hexString.length() - 1); i += 2)
     {
         juce::String byteString = hexString.substring(i, i + 2);
         byteArray.add(byteString.getHexValue32());
@@ -112,11 +112,11 @@ juce::Array<juce::uint8> generateSalt()
 
 /**
  * @brief  Gets the SHA256 hashed value of a string.
- * 
+ *
  * @param string     The string to encrypt.
  *
  * @param saltValue  An array of random bytes to use as a password salt value.
- * 
+ *
  * @return           The hashed string value.
  */
 static juce::String getHashString(const juce::String& string,
@@ -124,7 +124,7 @@ static juce::String getHashString(const juce::String& string,
 {
     // Convert the string to a byte array and append it to the salt:
     juce::Array<juce::uint8> data = saltValue;
-    data.addArray(reinterpret_cast<const unsigned char*>(string.toRawUTF8()),
+    data.addArray(reinterpret_cast<const unsigned char*> (string.toRawUTF8()),
             string.length());
 
     // Get the digest:
@@ -171,9 +171,8 @@ static bool pkexecInstalled()
             testCommand) == 0;
 }
 
-/*
- * Checks if a string matches the existing password.
- */
+
+// Checks if a string matches the existing password.
 bool Password::checkPassword(const juce::String password)
 {
     if (!isPasswordSet())
@@ -188,9 +187,8 @@ bool Password::checkPassword(const juce::String password)
     return testHash == passwordData.hashedPassword;
 }
 
-/*
- * Checks if a password has been set for the application.
- */
+
+// Checks if a password has been set for the application.
 bool Password::isPasswordSet()
 {
     juce::File passwordFile = getPasswordFile();
@@ -198,9 +196,8 @@ bool Password::isPasswordSet()
             && passwordFile.getSize() > 0;
 }
 
-/*
- * Attempts to change or remove the current password.
- */
+
+// Attempts to change or remove the current password.
 static Password::ChangeResult runPasswordScript
 (const juce::String currentPass, const juce::String newPass)
 {
@@ -210,7 +207,7 @@ static Password::ChangeResult runPasswordScript
         return wrongPasswordError;
     }
     juce::String args(getlogin());
-    if(newPass.isNotEmpty())
+    if (newPass.isNotEmpty())
     {
         juce::Array<juce::uint8> salt = generateSalt();
         juce::String hashedPassword = getHashString(newPass, salt);
@@ -220,23 +217,22 @@ static Password::ChangeResult runPasswordScript
         args += juce::String(" \"" + saltString + "\"");
     }
     Util::Commands sysCommands;
-    int result = sysCommands.runIntCommand(Util::CommandTypes::Int::setPassword,
-            args);
+    int result = sysCommands.runIntCommand
+            (Util::CommandTypes::Int::setPassword, args);
     if (result == -1)
     {
         DBG(dbgPrefix << __func__ << ": password update command is missing!");
         return noPasswordScript;
     }
-    if(newPass.isEmpty())
+    if (newPass.isEmpty())
     {
         return passwordFileExists() ? fileDeleteFailed : passwordRemoveSuccess;
     }
     return passwordSetSuccess;
 }
 
-/*
- * Attempts to set, change, or remove the current pocket-home password.
- */
+
+// Attempts to set, change, or remove the current pocket-home password.
 Password::ChangeResult Password::changePassword
 (const juce::String currentPass, const juce::String newPass)
 {
@@ -245,38 +241,38 @@ Password::ChangeResult Password::changePassword
         return missingNewPassword;
     }
     ChangeResult result = runPasswordScript(currentPass, newPass);
-    if(result != passwordSetSuccess)
+    if (result != passwordSetSuccess)
     {
         return result;
     }
-    if(!passwordFileExists())
+    if (!passwordFileExists())
     {
         result = fileCreateFailed;
     }
-    if(!passwordFileProtected())
+    if (!passwordFileProtected())
     {
         getPasswordFile().deleteFile();
         result = fileSecureFailed;
     }
-    if(!checkPassword(newPass)){
+    if (!checkPassword(newPass)){
         result = fileWriteFailed;
     }
-    if(result == passwordSetSuccess)
+    if (result == passwordSetSuccess)
     {
         return result;
     }
     return pkexecInstalled() ? result : noPKExec;
 }
 
-/*
- * Attempts to remove the current pocket-home password.
- */
-Password::ChangeResult Password::removePassword(const juce::String currentPass)
+
+// Attempts to remove the current pocket-home password.
+Password::ChangeResult Password::removePassword
+(const juce::String currentPass)
 {
     ChangeResult result = runPasswordScript(currentPass, "");
-    if(result != fileDeleteFailed)
+    if (result != fileDeleteFailed)
     {
         return result;
     }
-    return pkexecInstalled() ? result : noPKExec;  
+    return pkexecInstalled() ? result : noPKExec;
 }

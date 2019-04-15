@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  Page_SettingsList.h
- * 
+ *
  * @brief  Provides an interface for accessing all other settings pages.
  */
 
@@ -58,9 +58,9 @@ private:
         SettingsList& listPage;
     };
     PageListener pageListener;
-    
+
     /**
-     * @brief  The list component providing all settings page buttons. 
+     * @brief  The list component providing all settings page buttons.
      */
     class PageList : public Widgets::PagedList
     {
@@ -71,45 +71,45 @@ private:
          * @param page  The settings list page that holds this list.
          */
         PageList(SettingsList& page);
-        
+
         virtual ~PageList() { }
-        
+
         /**
-         * @brief Gets the total number of page buttons.
-         * 
-         * @return  The number of page buttons. 
+         * @brief  Gets the total number of page buttons.
+         *
+         * @return  The number of page buttons.
          */
         virtual unsigned int getListSize() const;
-        
+
         /**
-         * @brief  Updates or creates a page TextButton for a specific button 
+         * @brief  Updates or creates a page TextButton for a specific button
          *         index.
-         * 
+         *
          * @param listItem  Either nullptr, or a recycled TextButton to update.
-         * 
+         *
          * @param index     The button's index in the list.
-         * 
-         * @return          The updated list Component. 
+         *
+         * @return          The updated list Component.
          */
         virtual Component* updateListItem(Component* listItem,
                 const unsigned int index);
-        
+
         /**
          * @brief  Refreshes all list components.
          */
         void refresh();
 
     private:
-        /* The page that holds this list component: */
+        // The page that holds this list component:
         SettingsList& page;
     };
     PageList buttonList;
 
-    /* Holds all page titles that should currently have list buttons: */
+    // Holds all page titles that should currently have list buttons:
     juce::StringArray pageTitles;
 
-    /* Tracks if the application password was set the last time the list was
-     * updated: */
+    // Tracks if the application password was set the last time the list was
+    // updated:
     bool passwordSet;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SettingsList)

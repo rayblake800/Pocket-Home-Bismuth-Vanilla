@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -14,36 +14,37 @@
 namespace AppMenu { class MenuButton; }
 
 /**
- *  The MenuButton is responsible for displaying a MenuItem's data to the user.
- * It draws the menu item's icon, prints its title, and draws itself differently
- * depending on whether it is the selected menu item in its folder. The 
- * MenuButton tracks changes to its MenuItem, automatically updating itself
+ * @brief  Displays a MenuItem's data to the user in a UI component.
+ *
+ *  MenuButton draws the menu item's icon, prints its title, and draws itself
+ * differently depending on whether it is the selected menu item in its folder.
+ * The MenuButton tracks changes to its MenuItem, automatically updating itself
  * when relevant menu data changes.
  *
  *  MenuButton is an abstract class. Each AppMenu Format should have its own
  * MenuButton implementation that defines how the button's title and icon are
- * placed, when the background or outline should be drawn, and optionally 
+ * placed, when the background or outline should be drawn, and optionally
  * updates the size of the button's font.
  */
 class AppMenu::MenuButton : public juce::Button, private MenuItem::Listener
 {
 public:
     /**
-     * @brief  ID values used to load the component's colors from the 
+     * @brief  ID values used to load the component's colours from the
      *         application's LookAndFeel object.
      */
     enum ColourIds
     {
-        /* Title text colour: */
+        // Title text colour:
         textColourId = 0x1900200,
         selectedTextColourId = 0x1900201,
-        /* Colour to fill in behind the title: */
+        // Colour to fill in behind the title:
         textBGColourId = 0x1900202,
         selectedTextBGColourId = 0x1900203,
-        /* Colour to fill the entire component background: */
+        // Colour to fill the entire component background:
         bgColourId = 0x1900204,
         selectedBGColourId = 0x1900205,
-        /* Colour to draw the component border: */
+        // Colour to draw the component border:
         borderColourId = 0x1900206,
         selectedBorderColourId = 0x1900207
     };
@@ -63,7 +64,7 @@ public:
     /**
      * @brief  Checks if this button is the selected button in its folder.
      *
-     * @return  Whether the button is selected. 
+     * @return  Whether the button is selected.
      */
     bool isSelected() const;
 
@@ -77,16 +78,16 @@ public:
     /**
      * @brief  Gets the MenuItem that defines this button.
      *
-     * @return  The MenuItem used to create the MenuButton. 
+     * @return  The MenuItem used to create the MenuButton.
      */
     MenuItem getMenuItem() const;
 
     /**
      * @brief  Gets the width of the button's title string.
      *
-     * @return   The number of horizontal pixels needed to print the full button
-     *           title with the current title font.  This may be larger or
-     *           smaller than the width of the title bounds.
+     * @return   The number of horizontal pixels needed to print the full
+     *           button title with the current title font. This may be larger
+     *           or smaller than the width of the title bounds.
      */
     int getTitleWidth() const;
 
@@ -121,8 +122,8 @@ protected:
      *
      * This resizes the font to fit within the current title bounds.
      */
-    void updateFont(); 
-    
+    void updateFont();
+
 private:
     /**
      * @brief  Finds the area relative to the menu button's bounds where the
@@ -138,9 +139,8 @@ private:
      * @brief  Finds the area relative to the menu button's bounds where the
      *         icon should be drawn.
      *
-     * @return  An appropriate icon bounds area for the current button size
-     *          and the needs of the MenuButton subclass implementing this
-     *          method.
+     * @return  An appropriate icon bounds area for the current button size and
+     *          the needs of the MenuButton subclass implementing this method.
      */
     virtual juce::Rectangle<float> findIconBounds() const = 0;
 
@@ -177,19 +177,19 @@ private:
     virtual bool shouldDrawBorder() const = 0;
 
     /**
-     * @brief  Checks if this button will fill in its background with its 
-     *         background color.
-     * 
-     * @return  True to fill in the entire background, false to just fill in the
-     *          area behind the button text.
+     * @brief  Checks if this button will fill in its background with its
+     *         background colour.
+     *
+     * @return  True to fill in the entire background, false to just fill in
+     *          the area behind the button text.
      */
     virtual bool shouldFillBackground() const = 0;
-        
+
     /**
      * @brief  Gets the text justification of the button title.
      *
-     * @return   The justification type used to position the button title within
-     *           the text bounds.
+     * @return   The justification type used to position the button title
+     *           within the text bounds.
      */
     virtual juce::Justification getTextJustification() const = 0;
 
@@ -200,23 +200,23 @@ private:
 
     /**
      * @brief  Runs whenever the menu button is resized, just before
-     *         recalculating icon bounds, text bounds, and font size.  
-     *         
+     *         recalculating icon bounds, text bounds, and font size.
+     *
      * MenuButton subclasses should override this method instead of resized().
      */
     virtual void menuButtonResized() { }
 
     /**
-     * @brief  Calls menuButtonResized() and re-calculates title and icon layout
-     *         whenever the button's bounds change.
+     * @brief  Calls menuButtonResized() and re-calculates title and icon
+     *         layout whenever the button's bounds change.
      */
     virtual void resized() final override;
-    
+
     /**
      * @brief  Draws the button object.
      *
-     * @param g                  The juce graphics object used to access
-     *                           draw commands.
+     * @param g                  The juce graphics object used to access draw
+     *                           commands.
      *
      * @param isMouseOverButton  Whether the mouse is currently over the button.
      *
@@ -227,29 +227,29 @@ private:
     virtual void paintButton
     (juce::Graphics &g, bool isMouseOverButton, bool isButtonDown)
     final override;
-    
-    /* The MenuItem that defines this button's data. */
+
+    // The MenuItem that defines this button's data.
     MenuItem menuItem;
 
-    /* Whether the button is the selected button in its folder. */
+    // Whether the button is the selected button in its folder.
     bool selected = false;
 
-    /* Pre-calculated title text width */
+    // Pre-calculated title text width
     int textWidth = 0;
 
-    /* Area relative to the button's bounds where the icon will be drawn. */
+    // Area relative to the button's bounds where the icon will be drawn.
     juce::Rectangle<float> iconBounds;
 
-    /* Area relative to the button's bounds where the title will be printed. */
+    // Area relative to the button's bounds where the title will be printed.
     juce::Rectangle<float> titleBounds;
 
-    /* The font used to print the button's title */
+    // The font used to print the button's title
     juce::Font titleFont;
 
-    /* The icon to draw on this button */
+    // The icon to draw on this button
     juce::Image icon;
 
-    /* ID used to cancel pending icon requests if necessary */
+    // ID used to cancel pending icon requests if necessary
     Icon::RequestID iconCallbackID = 0;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuButton)

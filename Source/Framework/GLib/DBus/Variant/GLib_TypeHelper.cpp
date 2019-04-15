@@ -1,7 +1,7 @@
 #include "GLib_TypeHelper.h"
 
-/* Use macros to define simple TypeHelper specialization methods and avoid
- * excess repetition: */
+// Use macros to define simple TypeHelper specialization methods and avoid
+// excess repetition:
 
 #define TYPE_DEFINITION(VarType, GVarType)                 \
 template<>                                                 \
@@ -9,11 +9,11 @@ const GVariantType* TypeHelper<VarType>::getGVariantType() \
 {                                                          \
     return GVarType;                                       \
 }                                                          \
-                                                           \
+                                                            \
 template<>                                                 \
 bool TypeHelper<VarType>::isType(GVariant* variant)        \
 {                                                          \
-    return g_variant_is_of_type(variant,                   \
+    return g_variant_is_of_type(variant,                  \
             TypeHelper<VarType>::getGVariantType());       \
 }
 
@@ -31,10 +31,10 @@ juce::String TypeHelper<VarType>::getFormatString()     \
     return formatString;                                \
 }
 
-#define TYPE_CHECK_DEFINITION(VarType, checkFunction) \
-template<>                                            \
+#define TYPE_CHECK_DEFINITION(VarType, checkFunction)  \
+template<>                                             \
 bool TypeHelper<VarType>::isType(GVariant* variant)   \
-{                                                     \
+{                                                      \
     return checkFunction(variant);                    \
 }
 
@@ -43,32 +43,32 @@ template<>                                               \
 VarType TypeHelper<VarType>::getValue                    \
 (GVariant* variant, VarType defaultValue)                \
 {                                                        \
-    if(variant == nullptr                                \
-            || !TypeHelper<VarType>::isType(variant))    \
+    if (variant == nullptr                               \
+            || !TypeHelper<VarType>::isType(variant))   \
     {                                                    \
         return defaultValue;                             \
     }                                                    \
-    return VarType(getFunction(variant));                \
+    return VarType(getFunction(variant));              \
 }
 
-#define GET_VARIANT_DEFINITION(VarType, varFunction)     \
-template<>                                               \
+#define GET_VARIANT_DEFINITION(VarType, varFunction)      \
+template<>                                                \
 GVariant* TypeHelper<VarType>::getVariant(VarType value) \
-{                                                        \
+{                                                         \
     return varFunction(value);                           \
 }
 
 #define BASIC_TYPE_DEFINITION(type, G_TYPE, name, formatStr, getter, setter)  \
-TYPE_DEFINITION(type, G_TYPE);                                                \
-TYPE_NAME_DEFINITION(type, name);                                             \
-FORMAT_STRING_DEFINITION(type, formatStr);                                    \
-GET_VALUE_DEFINITION(type, getter);                                           \
-GET_VARIANT_DEFINITION(type, setter);                                         \
+TYPE_DEFINITION(type, G_TYPE);                                               \
+TYPE_NAME_DEFINITION(type, name);                                            \
+FORMAT_STRING_DEFINITION(type, formatStr);                                   \
+GET_VALUE_DEFINITION(type, getter);                                          \
+GET_VARIANT_DEFINITION(type, setter);                                        \
 
 namespace GLib
 {
     // boolean type:
-    BASIC_TYPE_DEFINITION(bool, 
+    BASIC_TYPE_DEFINITION(bool,
             G_VARIANT_TYPE_BOOLEAN,
             "boolean",
             "b",
@@ -76,7 +76,7 @@ namespace GLib
             g_variant_new_boolean);
 
     // byte type:
-    BASIC_TYPE_DEFINITION(VariantTypes::byte, 
+    BASIC_TYPE_DEFINITION(VariantTypes::byte,
             G_VARIANT_TYPE_BYTE,
             "byte",
             "y",
@@ -84,7 +84,7 @@ namespace GLib
             g_variant_new_byte);
 
     // int16 type:
-    BASIC_TYPE_DEFINITION(VariantTypes::int16, 
+    BASIC_TYPE_DEFINITION(VariantTypes::int16,
             G_VARIANT_TYPE_INT16,
             "int16",
             "n",
@@ -92,7 +92,7 @@ namespace GLib
             g_variant_new_int16);
 
     // uint16 type:
-    BASIC_TYPE_DEFINITION(VariantTypes::uint16, 
+    BASIC_TYPE_DEFINITION(VariantTypes::uint16,
             G_VARIANT_TYPE_UINT16,
             "uint16",
             "q",
@@ -100,7 +100,7 @@ namespace GLib
             g_variant_new_uint16);
 
     // int32 type:
-    BASIC_TYPE_DEFINITION(VariantTypes::int32, 
+    BASIC_TYPE_DEFINITION(VariantTypes::int32,
             G_VARIANT_TYPE_INT32,
             "int32",
             "i",
@@ -108,7 +108,7 @@ namespace GLib
             g_variant_new_int32);
 
     // uint32 type:
-    BASIC_TYPE_DEFINITION(VariantTypes::uint32, 
+    BASIC_TYPE_DEFINITION(VariantTypes::uint32,
             G_VARIANT_TYPE_UINT32,
             "uint32",
             "u",
@@ -116,7 +116,7 @@ namespace GLib
             g_variant_new_uint32);
 
     // int64 type:
-    BASIC_TYPE_DEFINITION(VariantTypes::int64, 
+    BASIC_TYPE_DEFINITION(VariantTypes::int64,
             G_VARIANT_TYPE_INT64,
             "int64",
             "x",
@@ -124,7 +124,7 @@ namespace GLib
             g_variant_new_int64);
 
     // uint64 type:
-    BASIC_TYPE_DEFINITION(VariantTypes::uint64, 
+    BASIC_TYPE_DEFINITION(VariantTypes::uint64,
             G_VARIANT_TYPE_UINT64,
             "uint64",
             "t",
@@ -132,7 +132,7 @@ namespace GLib
             g_variant_new_uint64);
 
     // handle type:
-    BASIC_TYPE_DEFINITION(VariantTypes::Handle, 
+    BASIC_TYPE_DEFINITION(VariantTypes::Handle,
             G_VARIANT_TYPE_HANDLE,
             "handle",
             "h",
@@ -140,7 +140,7 @@ namespace GLib
             g_variant_new_handle);
 
     // double type:
-    BASIC_TYPE_DEFINITION(double, 
+    BASIC_TYPE_DEFINITION(double,
             G_VARIANT_TYPE_DOUBLE,
             "double",
             "d",
@@ -158,7 +158,7 @@ namespace GLib
     }
 
     // String type:
-    BASIC_TYPE_DEFINITION(VariantTypes::String, 
+    BASIC_TYPE_DEFINITION(VariantTypes::String,
             G_VARIANT_TYPE_STRING,
             "String",
             "s",
@@ -166,15 +166,15 @@ namespace GLib
             newVarString);
 
     // Path type:
-    BASIC_TYPE_DEFINITION(VariantTypes::Path, 
+    BASIC_TYPE_DEFINITION(VariantTypes::Path,
             G_VARIANT_TYPE_OBJECT_PATH,
             "Path",
             "o",
             getVarString,
             newVarString);
-    
+
     // Signature type:
-    BASIC_TYPE_DEFINITION(VariantTypes::Signature, 
+    BASIC_TYPE_DEFINITION(VariantTypes::Signature,
             G_VARIANT_TYPE_SIGNATURE,
             "Signature",
             "g",
@@ -182,7 +182,7 @@ namespace GLib
             newVarString);
 
     // Variant type:
-    BASIC_TYPE_DEFINITION(VariantTypes::GVariantType, 
+    BASIC_TYPE_DEFINITION(VariantTypes::GVariantType,
             G_VARIANT_TYPE_VARIANT,
             "GVariant*",
             "v",

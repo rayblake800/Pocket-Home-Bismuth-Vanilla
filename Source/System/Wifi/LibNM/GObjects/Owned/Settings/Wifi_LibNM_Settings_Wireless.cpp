@@ -5,68 +5,62 @@
 
 namespace WifiNMSettings = Wifi::LibNM::Settings;
 
-/*
- * Creates a Wireless object to hold existing wireless settings data.
- */
+// Creates a Wireless object to hold existing wireless settings data.
 WifiNMSettings::Wireless::Wireless(NMSettingWireless* toAssign) :
 Object(NM_SETTING(toAssign), NM_TYPE_SETTING_WIRELESS) { }
 
-/*
- * Creates a new Wireless object holding a new, empty LibNM wireless
- * settings object.
- */
+
+// Creates a new Wireless object holding a new, empty LibNM wireless settings
+// object.
 WifiNMSettings::Wireless::Wireless() :
 Object(NM_SETTING(nm_setting_wireless_new()), NM_TYPE_SETTING_WIRELESS) { }
 
 /**
- * @brief  Casts a GLib::ObjectPtr holding the connection settings data to 
- *         the NMSettingWireless* type.
+ * @brief  Casts a GLib::ObjectPtr holding the connection settings data to the
+ *         NMSettingWireless* type.
  *
- * @param settingsPtr  A RAII pointer object storing the settings object's 
+ * @param settingsPtr  A RAII pointer object storing the settings object's
  *                     GObject* value.
  *
- * @return             The value stored in settingsPtr as a 
- *                     NMSettingWireless*, or nullptr if settingsPtr 
- *                     does not hold a NMSettingWireless*.
+ * @return             The value stored in settingsPtr as a NMSettingWireless*,
+ *                     or nullptr if settingsPtr does not hold a
+ *                     NMSettingWireless*.
  */
 static NMSettingWireless* toNMWireless(GLib::ObjectPtr& settingPtr)
 {
-    return NM_SETTING_WIRELESS((GObject*) settingPtr);
+    return NM_SETTING_WIRELESS( (GObject*) settingPtr);
 }
 
-/*
- * Gets the SSID saved to the wireless connection settings.
- */
+
+// Gets the SSID saved to the wireless connection settings.
 Wifi::LibNM::SSID WifiNMSettings::Wireless::getSSID() const
 {
     GLib::ObjectPtr settingsPtr(*this);
-    if(settingsPtr != nullptr)
+    if (settingsPtr != nullptr)
     {
-        return SSID(nm_setting_wireless_get_ssid
-                (toNMWireless(settingsPtr)));
+        return SSID(nm_setting_wireless_get_ssid(toNMWireless(settingsPtr)));
     }
     return SSID();
 }
 
-/*
- * Gets the access point mode saved to the wireless connection settings.
- */
+
+// Gets the access point mode saved to the wireless connection settings.
 Wifi::LibNM::APMode WifiNMSettings::Wireless::getMode() const
 {
     GLib::ObjectPtr settingsPtr(*this);
-    if(settingsPtr != nullptr)
+    if (settingsPtr != nullptr)
     {
         juce::String mode = nm_setting_wireless_get_mode
                 (toNMWireless(settingsPtr));
-        if(mode == NM_SETTING_WIRELESS_MODE_ADHOC)
+        if (mode == NM_SETTING_WIRELESS_MODE_ADHOC)
         {
             return APMode::adhoc;
         }
-        if(mode == NM_SETTING_WIRELESS_MODE_INFRA)
+        if (mode == NM_SETTING_WIRELESS_MODE_INFRA)
         {
             return APMode::infrastructure;
         }
-        if(mode == NM_SETTING_WIRELESS_MODE_AP)
+        if (mode == NM_SETTING_WIRELESS_MODE_AP)
         {
             return APMode::hotspot;
         }
@@ -74,19 +68,18 @@ Wifi::LibNM::APMode WifiNMSettings::Wireless::getMode() const
     return APMode::unknown;
 }
 
-/*
- * Gets the list of all base ID values associated with this Wireless
- * object's connection.
- */
+
+// Gets the list of all base ID values associated with this Wireless object's
+// connection.
 juce::StringArray WifiNMSettings::Wireless::getSeenBSSIDs() const
 {
     juce::StringArray seenBSSIDs;
     GLib::ObjectPtr settingsPtr(*this);
-    if(settingsPtr != nullptr)
+    if (settingsPtr != nullptr)
     {
         unsigned int bssidCount = nm_setting_wireless_get_num_seen_bssids
                 (toNMWireless(settingsPtr));
-        for(int i = 0; i < bssidCount; i++)
+        for (int i = 0; i < bssidCount; i++)
         {
             seenBSSIDs.add(juce::String(nm_setting_wireless_get_seen_bssid
                     (toNMWireless(settingsPtr), i)));
@@ -95,30 +88,27 @@ juce::StringArray WifiNMSettings::Wireless::getSeenBSSIDs() const
     return seenBSSIDs;
 }
 
-/*
- * Checks if this object's connection is hidden.
- */
+
+// Checks if this object's connection is hidden.
 bool WifiNMSettings::Wireless::isHidden() const
 {
     GLib::ObjectPtr settingsPtr(*this);
-    if(settingsPtr != nullptr)
+    if (settingsPtr != nullptr)
     {
         return nm_setting_wireless_get_hidden(toNMWireless(settingsPtr));
     }
     return false;
 }
 
-/*
- * Changes the SSID saved to the Wifi settings.
- */
+
+// Changes the SSID saved to the Wifi settings.
 void WifiNMSettings::Wireless::setSSID(const SSID newSSID)
 {
     setProperty(NM_SETTING_WIRELESS_SSID, newSSID.getByteArray());
 }
 
-/*
- * Changes the access point mode saved to the Wifi settings.
- */
+
+// Changes the access point mode saved to the Wifi settings.
 void WifiNMSettings::Wireless::setMode(const APMode newMode)
 {
     const char* mode;
@@ -138,9 +128,8 @@ void WifiNMSettings::Wireless::setMode(const APMode newMode)
     setProperty(NM_SETTING_WIRELESS_MODE, mode);
 }
 
-/*
- * Sets if the connection is hidden.
- */
+
+// Sets if the connection is hidden.
 void WifiNMSettings::Wireless::setHidden(const bool isHidden)
 {
     setProperty(NM_SETTING_WIRELESS_HIDDEN, isHidden);

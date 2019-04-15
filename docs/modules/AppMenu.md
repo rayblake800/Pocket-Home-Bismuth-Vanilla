@@ -68,7 +68,7 @@ ConfigKeys defines the JSON keys used within the ConfigJSON object's configurati
 ItemData defines a reference-counted internal data object that holds all menu data for a single item in the menu.
 
 #### [AppMenu\::MenuItem](../../Source/GUI/AppMenu/Data/AppMenu_MenuItem.h)
-MenuItem is a nullable interface used to share and interact with any type of ItemData object. 
+MenuItem is a nullable interface used to share and interact with any type of ItemData object.
 
 #### [AppMenu\::MenuJSON](../../Source/GUI/AppMenu/Data/JSON/AppMenu_MenuJSON.h)
 The shared MenuJSON object reads from and writes to the main menu structure within a configurable JSON file.

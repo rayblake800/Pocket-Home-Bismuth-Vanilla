@@ -15,7 +15,7 @@ UTIL_TEST_PREFIX := $(UTIL_PREFIX)Test_
 UTIL_TEST_OBJ := $(UTIL_OBJ)Test_
 OBJECTS_UTIL_TEST := \
   $(UTIL_TEST_OBJ)ShutdownListenerTest.o \
-  $(UTIL_TEST_OBJ)ConditionTest.o 
+  $(UTIL_TEST_OBJ)ConditionTest.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_UTIL := $(OBJECTS_UTIL) $(OBJECTS_UTIL_TEST)

@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  Widgets_PopupEditor.h
- * 
+ *
  * @brief  A basis for temporary editor UI components.
  */
 
@@ -15,12 +15,12 @@
 namespace Widgets { class PopupEditor; }
 
 /**
- * @brief A generic data editing overlay component.
- * 
+ * @brief  A generic data editing overlay component.
+ *
  *  PopupEditorComponent shows a small pop-up panel containing a title,
- * some type of content editing components, a cancel button, and a confirm 
+ * some type of content editing components, a cancel button, and a confirm
  * button. Both buttons will remove the component, and the confirm button will
- * also run a callback function to save all changes.  Inheriting classes are 
+ * also run a callback function to save all changes. Inheriting classes are
  * responsible for adding all other controls to the component layout.
  */
 class Widgets::PopupEditor : public Theme::Image::Component<>,
@@ -30,9 +30,9 @@ protected:
     /**
      * @brief  Sets on construction how the editor should save changes.
      *
-     * @param onConfirm  The callback function to run when the confirm button is
-     *                   pressed. When called, this editor passes in a pointer
-     *                   to itself as the only argument.
+     * @param onConfirm  The callback function to run when the confirm button
+     *                   is pressed. When called, this editor passes in a
+     *                   pointer to itself as the only argument.
      */
     PopupEditor(std::function<void(PopupEditor*) > onConfirm);
 
@@ -60,31 +60,32 @@ protected:
 
     /**
      * @brief  Adds all Components in a layout as child components, and uses
-     *         the layout to place the new child components below the title 
+     *         the layout to place the new child components below the title
      *         label and above the cancel and confirm buttons.
-     * 
-     * @param layout  The layout of all child components that should be added to
-     *                the editor. The title row will be added to the beginning, 
-     *                and the cancel/confirm row will be added to the end. Each 
-     *                of these rows will have a vertical weight of 1.
+     *
+     * @param layout  The layout of all child components that should be added
+     *                to the editor. The title row will be added to the
+     *                beginning, and the cancel/confirm row will be added to
+     *                the end. Each of these rows will have a vertical weight
+     *                of 1.
      */
     void setLayout(const Layout::Group::RelativeLayout layout);
 
     /**
-     * @brief  Sets the amount of space in pixels to leave between all child 
+     * @brief  Sets the amount of space in pixels to leave between all child
      *         components and the outer component bounds.
-     * 
+     *
      * @param margin  The new child component margin size.
      */
     void setMargin(const int margin);
 
     /**
-     * @brief  Sets the amount of space in pixels to leave between child 
+     * @brief  Sets the amount of space in pixels to leave between child
      *         components.
-     * 
-     * @param xPadding  The number of pixels to leave between child components 
+     *
+     * @param xPadding  The number of pixels to leave between child components
      *                  that are in the same row.
-     * 
+     *
      * @param yPadding  The number of pixels to leave between rows of child
      *                  components.
      */
@@ -92,12 +93,12 @@ protected:
 
 private:
     /**
-     * @brief  Handles button click events for any buttons other than the cancel
-     *         and confirm buttons.  
+     * @brief  Handles button click events for any buttons other than the
+     *         cancel and confirm buttons.
      *
-     * Subclasses should override this instead of buttonClicked to handle button
-     * events.
-     * 
+     *  Subclasses should override this instead of buttonClicked to handle
+     * button events.
+     *
      * @param button  The button component that was clicked.
      */
     virtual void editorButtonClicked(juce::Button * button) { }
@@ -111,12 +112,13 @@ private:
     virtual void editorResized() { }
 
     /**
-     * @brief  Manages click events from the cancel and confirm buttons, passing
-     *         all other button events to the editorButtonClicked method.
-     * 
+     * @brief  Manages click events from the cancel and confirm buttons,
+     *         passing all other button events to the editorButtonClicked
+     *         method.
+     *
      * @param buttonClicked  The button that triggered the click event. If this
      *                       is the cancel or confirm button, the editor will
-     *                       be closed. If it is the confirm button, the 
+     *                       be closed. If it is the confirm button, the
      *                       onConfirm callback will also run to save editor
      *                       changes.
      */
@@ -125,15 +127,15 @@ private:
     /**
      * @brief  Handles key press events.
      *
-     *  The escape and return keys work the same as pressing the cancel and 
+     *  The escape and return keys work the same as pressing the cancel and
      * confirm buttons, respectively. When this component is open, it won't let
-     * any button presses through to the components beneath it. 
+     * any button presses through to the components beneath it.
      *
-     * @param key  A keyPress event that was not handled by the editor's child 
+     * @param key  A keyPress event that was not handled by the editor's child
      *             components.
-     * 
-     * @return     True, to keep the Juce library key handling system from 
-     *             passing the key event to another component. 
+     *
+     * @return     True, to keep the Juce library key handling system from
+     *             passing the key event to another component.
      */
     virtual bool keyPressed(const juce::KeyPress& key) final override;
 
@@ -148,28 +150,28 @@ private:
      */
     virtual void visibilityChanged() override;
 
-    /* Displays the editor title: */
+    // Displays the editor title:
     Widgets::BoundedLabel titleLabel;
 
-    /* Closes the editor without saving changes: */
+    // Closes the editor without saving changes:
     DrawableImageButton cancelButton;
 
-    /* Closes the editor, saving all changes: */
+    // Closes the editor, saving all changes:
     DrawableImageButton confirmButton;
 
-    /* Manages the editor's bounds: */
+    // Manages the editor's bounds:
     Layout::Component::Manager boundsManager;
 
-    /* Manages editor child component layout: */
+    // Manages editor child component layout:
     Layout::Group::Manager layoutManager;
 
-    /* Saved layout margin/padding values: */
+    // Saved layout margin/padding values:
     int marginPixels;
     int xPaddingPixels;
     int yPaddingPixels;
 
-    /* Callback function to run when confirm is pressed, passing "this" as 
-     * the sole parameter: */
+    // Callback function to run when confirm is pressed, passing "this" as
+    // the sole parameter:
     std::function<void(PopupEditor*)> onConfirm;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopupEditor)

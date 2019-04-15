@@ -1,4 +1,4 @@
-###################### SharedResource Module ################################### 
+###################### SharedResource Module ###################################
 SHARED_DIR = Source/Framework/SharedResource
 SHARED_THREAD_DIR = $(SHARED_DIR)/Thread
 SHARED_IMPL_DIR = $(SHARED_DIR)/Implementation

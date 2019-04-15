@@ -2,8 +2,8 @@
 /**
  * @file  Config_Listener.h
  *
- * @brief  A listener that tracks any number of values in a 
- *         Config::FileResource. 
+ * @brief  A listener that tracks any number of values in a
+ *         Config::FileResource.
  */
 
 #include "Config_ListenerInterface.h"
@@ -11,12 +11,20 @@
 
 namespace Config { template <class ResourceClass> class Listener; }
 
+/**
+ * @brief  Connects to a specific configuration file resource on construction,
+ *         receiving notifications whenever relevent values in the resource are
+ *         updated.
+ *
+ * @tparam ResourceClass  The Config::FileResource subclass that should be
+ *                        connected to the Listener.
+ */
 template <class ResourceClass>
 class Config::Listener : public ListenerInterface,
     public SharedResource::Handler<ResourceClass>
 {
 private:
-    /* Tracks all keys this listener follows. */
+    // Tracks all keys this listener follows.
     juce::Array<juce::Identifier, juce::CriticalSection> subscribedKeys;
 
 public:
@@ -25,7 +33,8 @@ public:
     virtual ~Listener() { }
 
     /**
-     * @brief Calls configValueChanged() for every key tracked by this listener.
+     * @brief  Calls configValueChanged() for every key tracked by this
+     *         listener.
      */
     virtual void loadAllConfigProperties()
     {
@@ -37,12 +46,12 @@ public:
         }
         for (const Identifier& key : notifyKeys)
         {
-           configValueChanged(key);
+            configValueChanged(key);
         }
     }
 
     /**
-     * @brief Adds a key to the list of keys tracked by this listener.
+     * @brief  Adds a key to the list of keys tracked by this listener.
      *
      * @param keyToTrack  Whenever a value with this key is updated, the
      *                    Listener will be notified.
@@ -54,7 +63,7 @@ public:
     }
 
     /**
-     * @brief Unsubscribes from updates to a FileResource value.
+     * @brief  Unsubscribes from updates to a FileResource value.
      *
      * @param keyToRemove  This listener will no longer receive updates when
      *                     the value with this key is updated.
@@ -64,17 +73,17 @@ public:
         const juce::ScopedLock keyListLock(subscribedKeys.getLock());
         subscribedKeys.removeAllInstancesOf(keyToRemove);
     }
-    
+
 
     /**
-     * @brief  Requests a stored value directly from this Listener's 
+     * @brief  Requests a stored value directly from this Listener's
      *         FileResource.
      *
      * @tparam ValueType        The type of value requested.
      *
      * @param key               The key to the requested value.
      *
-     * @throws BadKeyException  If the key does not map to a value with the 
+     * @throws BadKeyException  If the key does not map to a value with the
      *                          correct type.
      *
      * @return                  The requested value.
@@ -92,7 +101,7 @@ public:
      *
      * @param key  The key to a value stored in the Listener's file resource.
      *
-     * @return     Whether the value with the given key is tracked by the 
+     * @return     Whether the value with the given key is tracked by the
      *             Listener.
      */
     virtual bool isKeyTracked(const juce::Identifier& key) const override
@@ -103,14 +112,14 @@ public:
 
 private:
     /**
-     * @brief  This method will be called whenever a key tracked by this 
+     * @brief  This method will be called whenever a key tracked by this
      *         listener changes in the config file.
      *
-     *  By default, this takes no action. Override this method to handle config 
+     *  By default, this takes no action. Override this method to handle config
      * value update events.
-     * 
+     *
      * @param propertyKey   Passes in the updated value's key.
      */
-    virtual void configValueChanged(const juce::Identifier& propertyKey) 
+    virtual void configValueChanged(const juce::Identifier& propertyKey)
         override { }
 };

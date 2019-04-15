@@ -2,7 +2,7 @@
 /**
  * @file  Config_FileHandler.h
  *
- * @brief  Controls access to a FileResource object, managing all reading from 
+ * @brief  Controls access to a FileResource object, managing all reading from
  *         and writing to a single JSON configuration file.
  */
 
@@ -11,12 +11,13 @@
 namespace Config { template<class ResourceType> class FileHandler; }
 
 /**
- *  All access to Config::FileResource objects should occur through FileHandler
- * objects. FileHandler objects for a FileResource may be created at any point, 
- * and all of them will safely share access to the same file and JSON data. 
- * 
+ * @brief  Handles all access to Config::FileResource objects.
+ *
+ *  FileHandler objects for a FileResource may be created at any point,
+ * and all of them will safely share access to the same file and JSON data.
+ *
  *  FileHandlers can safely read and write values with basic data types within
- * their ThreadResource. Accessing array and object data types requires a 
+ * their ThreadResource. Accessing array and object data types requires a
  * FileHandler subclass with new methods for handling the JSON file's custom
  * data types.
  *
@@ -36,50 +37,50 @@ public:
      *
      * @tparam ValueType                    The type of value to retrieve.
      *
-     * @param key                           The key identifying the desired 
+     * @param key                           The key identifying the desired
      *                                      value.
      *
      * @return                              The requested configuration value.
      *
-     * @throws FileResource::FileException  If the file is missing or could not 
+     * @throws FileResource::FileException  If the file is missing or could not
      *                                      be read.
      *
-     * @throws FileResource::TypeException  If no property with this key and 
+     * @throws FileResource::TypeException  If no property with this key and
      *                                      type ValueType was found.
      */
     template<typename ValueType>
     ValueType getConfigValue(const juce::Identifier& key) const
     {
-        SharedResource::LockedPtr<const ResourceType> jsonPtr 
+        SharedResource::LockedPtr<const ResourceType> jsonPtr
             = SharedResource::Handler<ResourceType>::getReadLockedResource();
         return jsonPtr->template getConfigValue<ValueType>(key);
     }
-    
+
     /**
      * @brief  Sets a value stored in the JSON configuration file.
-     * 
+     *
      * @param key                           The key used to select the value.
-     * 
-     * @param newValue                      A new value to store in the JSON 
+     *
+     * @param newValue                      A new value to store in the JSON
      *                                      object.
-     * 
+     *
      * @tparam ValueType                    The type of value being stored.
-     * 
-     * @return                              True if the value changed, false if 
-     *                                      the existing value matched the new 
+     *
+     * @return                              True if the value changed, false if
+     *                                      the existing value matched the new
      *                                      value.
-     * 
-     * @throws FileResource::FileException  If the file is missing or could not 
+     *
+     * @throws FileResource::FileException  If the file is missing or could not
      *                                      be read.
-     * 
-     * @throws FileResource::TypeException  If a property exists that shares 
-     *                                      this key but is not of type 
+     *
+     * @throws FileResource::TypeException  If a property exists that shares
+     *                                      this key but is not of type
      *                                      ValueType.
      */
-    template<typename ValueType > 
+    template<typename ValueType >
     bool setConfigValue(const juce::Identifier& key, ValueType newValue)
     {
-        SharedResource::LockedPtr<ResourceType> jsonPtr 
+        SharedResource::LockedPtr<ResourceType> jsonPtr
             = SharedResource::Handler<ResourceType>::getWriteLockedResource();
         return jsonPtr->template setConfigValue<ValueType>(key, newValue);
     }

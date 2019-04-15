@@ -21,7 +21,7 @@ The Page module provides the layout of all UI pages, and handles transitions bet
 The Password module securely creates, validates, and updates the Pocket-Home application password.
 
 #### [Theme](./modules/Theme.md)
-The Theme module controls the general appearance of the application in all ways unrelated to layout. This module is responsible for selecting configurable UI image assets and colors.
+The Theme module controls the general appearance of the application in all ways unrelated to layout. This module is responsible for selecting configurable UI image assets and colours.
 
 #### [Info](./modules/Info.md)
 The Info module provides components that show information to the user.

@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  Widget_ColourPicker.h
- * 
+ *
  * @brief  Provides a UI component for selecting colours.
  */
 
@@ -12,7 +12,7 @@
 namespace Widgets { class ColourPicker; }
 
 /**
- * @brief A UI component that allows the user to select a colour value.
+ * @brief  A UI component that allows the user to select a colour value.
  */
 class Widgets::ColourPicker : public juce::Component, public Locale::TextUser,
         private juce::Slider::Listener,
@@ -23,18 +23,18 @@ public:
     /**
      * @brief  Initializes the colour picker layout.
      *
-     * @param numSavedColours  Sets the number of quick colour selection buttons
-     *                         to show.
+     * @param numSavedColours  Sets the number of quick colour selection
+     *                         buttons to show.
      *
      * @param initialColour    Sets the initial colour value to show in the
      *                         ColourPicker.
      */
-    ColourPicker(const int numSavedColours = 5, 
+    ColourPicker(const int numSavedColours = 5,
             const juce::Colour initialColour = juce::Colours::white);
 
     virtual ~ColourPicker() { }
-    
-    /* Juce ColourId values: */
+
+    // Juce ColourId values:
     enum ColourIds
     {
         // Light area of the checkerboard pattern drawn behind colour previews.
@@ -59,7 +59,7 @@ public:
      *
      * @param colour       The new selected value.
      *
-     * @param runCallback  Sets if the colour selection callback should be 
+     * @param runCallback  Sets if the colour selection callback should be
      *                     called for this colour change.
      */
     void setSelectedColour(const juce::Colour colour,
@@ -68,10 +68,11 @@ public:
     /**
      * @brief  Assigns a callback function to run when a colour is selected.
      *
-     * @param callback  The function to run, passing in the new colour as a 
+     * @param callback  The function to run, passing in the new colour as a
      *                  parameter.
      */
-    void setSelectionCallback(const std::function<void(juce::Colour)> callback);
+    void setSelectionCallback
+    (const std::function<void(juce::Colour)> callback);
 
 private:
     /**
@@ -85,14 +86,14 @@ private:
     void setEditorText();
 
     /**
-     * @brief  If the current colour selection isn't one of the preset colour 
-     *         buttons, add it to the list and remove the oldest value from the 
+     * @brief  If the current colour selection isn't one of the preset colour
+     *         buttons, add it to the list and remove the oldest value from the
      *         list.
      */
     void updateColourButtons();
 
     /**
-     * @brief  Updates the colour preview and text box when slider values 
+     * @brief  Updates the colour preview and text box when slider values
      *         change.
      */
     void sliderValueChanged(juce::Slider* slider) override;
@@ -104,7 +105,7 @@ private:
     void textEditorFocusLost(juce::TextEditor& editor) override;
 
     /**
-     * @brief  Updates the sliders and colour preview after the text box value 
+     * @brief  Updates the sliders and colour preview after the text box value
      *         changes.
      */
     void textEditorReturnKeyPressed(juce::TextEditor& editor) override;
@@ -114,16 +115,16 @@ private:
      *
      * @param button  The button that was clicked.
      *
-     *  If a colour thumbnail is clicked, it is applied to the sliders, text 
-     * box, and preview component. If the apply button is clicked, the selection
-     * colour is added to the preview thumbnails and the selection callback
-     * runs.
+     *  If a colour thumbnail is clicked, it is applied to the sliders, text
+     * box, and preview component. If the apply button is clicked, the
+     * selection colour is added to the preview thumbnails and the selection
+     * callback runs.
      */
     void buttonClicked(juce::Button* button) override;
 
     /**
-     * @brief  Reapplies the layout to all child components to match the updated
-     *         component bounds.
+     * @brief  Reapplies the layout to all child components to match the
+     *         updated component bounds.
      */
     void resized() override;
 
@@ -132,9 +133,9 @@ private:
      */
     class ColourBox: public juce::Component
     {
-    public: 
+    public:
         /**
-         * @brief  Optionally sets the component's color and border on
+         * @brief  Optionally sets the component's colour and border on
          *         construction.
          *
          * @param colour      The colour used to fill the component.
@@ -144,7 +145,7 @@ private:
          */
         ColourBox(const juce::Colour colour = juce::Colour(),
                 const bool drawBorder = true);
-		
+
         virtual ~ColourBox() { };
 
         /**
@@ -159,26 +160,26 @@ private:
          *
          * @param colour  The new colour value to show.
          */
-	    void setColour(const juce::Colour colour);
+        void setColour(const juce::Colour colour);
 
     private:
         /**
          * @brief  Draws the component with its current colour value.
          *
-         * @param graphics  The Juce graphics context used to draw the 
+         * @param graphics  The Juce graphics context used to draw the
          *                  component.
          */
-	    void paint(juce::Graphics& graphics) override;
-		
-        /* Colour used to fill the component bounds: */
-	    juce::Colour colour;
+        void paint(juce::Graphics& graphics) override;
 
-        /* Whether a border should be drawn around the component: */
-	    bool drawBorder;
+        // Colour used to fill the component bounds:
+        juce::Colour colour;
+
+        // Whether a border should be drawn around the component:
+        bool drawBorder;
     };
 
     /**
-     * @brief  A ColourBox button, used for re-selecting previous selected 
+     * @brief  A ColourBox button, used for re-selecting previous selected
      *         colours.
      */
     class ColourButton : public juce::Button
@@ -206,13 +207,13 @@ private:
          * @param colour  The new colour value to save.
          */
         void setColour(const juce::Colour colour);
-        
+
     private:
         /**
-         * @brief  Draws the button, changing the outline colour when the button
-         *         is down.
+         * @brief  Draws the button, changing the outline colour when the
+         *         button is down.
          *
-         * @param graphics           The Juce graphics context used to draw the 
+         * @param graphics           The Juce graphics context used to draw the
          *                           button.
          *
          * @param isMouseOverButton  Whether the mouse cursor is currently over
@@ -222,7 +223,7 @@ private:
          *                           clicked.
          */
         virtual void paintButton(juce::Graphics& graphics,
-                bool isMouseOverButton, bool isButtonDown) override;	
+                bool isMouseOverButton, bool isButtonDown) override;
 
         /**
          * @brief  Updates the internal ColourBox to match changes to this
@@ -230,85 +231,85 @@ private:
          */
         void resized() override;
 
-        /* Controls the button's appearance. */
+        // Controls the button's appearance:
         ColourBox colourBox;
     };
-    
-    /* Current colour selection: */
+
+    // Current colour selection:
     juce::Colour selectedColour;
 
-    /* Handles all child component layout: */
+    // Handles all child component layout:
     Layout::Group::Manager layoutManager;
-    
-    /* Shows the current colour selection over a grid background: */
+
+    // Shows the current colour selection over a grid background:
     ColourBox colourPreview;
 
-    /* Holds the buttons used to re-select previously selected colours: */
+    // Holds the buttons used to re-select previously selected colours:
     juce::OwnedArray<ColourButton> colourButtons;
-    /* Stores how many colourButtons should bu used: */
+    // Stores how many colourButtons should be used:
     int numSavedColours = 0;
 
-    /* A callback action to run when the user selects a colour: */
+    // A callback action to run when the user selects a colour:
     std::function<void(juce::Colour)> selectionCallback;
 
-    /* Red, green, blue, and alpha colour component sliders: */
+    // Red, green, blue, and alpha colour component sliders:
     juce::Slider colourSliders [4];
-    
+
     /**
-     * @brief  Draws a gradient showing all slider values behind a colour 
+     * @brief  Draws a gradient showing all slider values behind a colour
      *         slider.
      */
     class SliderBackground : public juce::Component
     {
     public:
         SliderBackground() { }
-        
+
         virtual ~SliderBackground() { }
-        
+
         /**
-         * @brief  Sets the colour component used to draw this slider 
+         * @brief  Sets the colour component used to draw this slider
          *         background.
-         * 
+         *
          * @param colourMask  The sliderColourMask of this component's slider.
          */
         void setColourComponent(const juce::uint32 colourMask);
-        
+
         /**
-         * @brief  Updates this component with the current selected colour 
+         * @brief  Updates this component with the current selected colour
          *         value.
-         * 
+         *
          * @param colour  The colour selected by the ColourPicker holding this
          *                component.
          */
         void setColour(const juce::Colour colour);
-        
-    private:     
+
+    private:
         /**
-         * @brief  Draws a gradient of all possible slider colour values.  
+         * @brief  Draws a gradient of all possible slider colour values.
          *
-         *  Given the current selected colour, this shows what the selected 
+         *  Given the current selected colour, this shows what the selected
          * colour would become for each slider value.
-         * 
-         * @param graphics  The Juce graphics context used to draw the 
+         *
+         * @param graphics  The Juce graphics context used to draw the
          *                  component.
          */
         void paint(juce::Graphics& graphics) override;
-        
-        /* Bitmask selecting the slider's colour component: */
+
+        // Bitmask selecting the slider's colour component:
         juce::uint32 colourComponent = 0;
-        /* Darkest colour in the component's gradient: */
+        // Darkest colour in the component's gradient:
         juce::Colour minColour;
-        /* Brightest colour in the component's gradient: */
+        // Brightest colour in the component's gradient:
         juce::Colour maxColour;
     };
-    
-    /* Backgrounds drawn behind all colour sliders: */
+
+    // Backgrounds drawn behind all colour sliders:
     SliderBackground sliderBackgrounds [4];
-    
-    /* Holds the selected colour value as an eight digit hex number string: */
+
+    // Holds the selected colour value as an eight digit hex number string:
     juce::TextEditor colourField;
 
-    /* The button clicked to confirm the colour selection: */
+    // The button clicked to confirm the colour selection:
     juce::TextButton selectionButton;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ColourPicker)

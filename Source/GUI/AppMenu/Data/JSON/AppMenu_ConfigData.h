@@ -1,19 +1,24 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
  * @file  AppMenu_ConfigData.h
  *
- * @brief  An ItemData subclass that handles menu data read from the JSON 
- *         configuration file.
+ * @brief  Manages a single menu item defined in the AppMenu JSON configuration
+ *         file.
  */
 
 #include "Locale_TextUser.h"
 #include "AppMenu_ItemData.h"
 
-/** 
- *  ConfigData menu items are defined within the appMenu.json configuration 
+namespace AppMenu { class ConfigData; }
+
+/**
+ * @brief  An ItemData subclass that handles menu data read from the JSON
+ *         configuration file.
+ *
+ *  ConfigData menu items are defined within the appMenu.json configuration
  * file. These menu items may represent either a menu folder, or an application
  * shortcut. Changes to ConfigData objects are written directly back to the
  * source JSON file.
@@ -22,11 +27,7 @@
  * the JSON file are left abstract, and should be implemented in a ConfigData
  * subclass by the Config::FileResource subclass responsible for managing the
  * JSON menu data.
- *
- * @see  AppMenu_ConfigJSON.h
  */
-namespace AppMenu { class ConfigData; }
-
 class AppMenu::ConfigData : public ItemData, public Locale::TextUser
 {
 public:
@@ -36,7 +37,7 @@ public:
     ConfigData();
 
     virtual ~ConfigData() { }
-    
+
     /**
      * @brief  Recursively initializes menu item data, creating and initializing
      *         all its child folder items.
@@ -71,14 +72,14 @@ public:
      * @brief  Checks if this menu item launches an application in a new
      *         terminal window.
      *
-     * @return  Whether the menu item has a launch command it should run in a 
+     * @return  Whether the menu item has a launch command it should run in a
      *          new terminal window.
      */
     virtual bool getLaunchedInTerm() const override;
 
     /**
-     * @brief  Gets the application categories used to load this item's
-     *         desktop entry child folder items.
+     * @brief  Gets the application categories used to load this item's desktop
+     *         entry child folder items.
      *
      * @return  Any category strings assigned to this menu item.
      */
@@ -101,7 +102,7 @@ public:
     /**
      * @brief  Sets the menu item's application launch command.
      *
-     * @param newCommand  The new command string to run when this menu item is 
+     * @param newCommand  The new command string to run when this menu item is
      *                    clicked.
      */
     virtual void setCommand(const juce::String& newCommand) override;
@@ -109,42 +110,42 @@ public:
     /**
      * @brief  Sets if this menu item runs its command in a new terminal window.
      *
-     * @param termLaunch  True to run any launch command assigned to this menu 
-     *                    item within a new terminal window, false to run 
+     * @param termLaunch  True to run any launch command assigned to this menu
+     *                    item within a new terminal window, false to run
      *                    commands normally.
      */
     virtual void setLaunchedInTerm(const bool termLaunch) override;
 
     /**
-     * @brief  Sets the application categories used to load this item's desktop 
+     * @brief  Sets the application categories used to load this item's desktop
      *         entry child folder items.
      *
-     * @param categories  The new set of category strings to assign to this 
-     *                    menu item.
+     * @param categories  The new set of category strings to assign to this menu
+     *                    item.
      */
     virtual void setCategories(const juce::StringArray& categories) override;
 
     /**
-     * @brief  Gets the number of folder items held by this menu item that 
-     *         can be reordered.
+     * @brief  Gets the number of folder items held by this menu item that can
+     *         be reordered.
      *
      * @return  The number of child folder items held by this menu item that are
      *          directly defined by JSON data.
      */
     virtual int getMovableChildCount() const override;
-    
+
     /**
-     * @brief  Checks if this menu item could be moved within its folder, 
+     * @brief  Checks if this menu item could be moved within its folder,
      *         assuming that another movable menu item exists that could be
      *         swapped with this one.
      *
-     * @return  Always true, as JSON data defined menu items can be freely 
+     * @return  Always true, as JSON data defined menu items can be freely
      *          swapped.
      */
     virtual bool isMovable() const override;
-    
+
     /**
-     * @brief  Gets an appropriate title to use for a deletion confirmation 
+     * @brief  Gets an appropriate title to use for a deletion confirmation
      *         window.
      *
      * @return  A localized confirmation title string.
@@ -152,7 +153,7 @@ public:
     virtual juce::String getConfirmDeleteTitle() const override;
 
     /**
-     * @brief  Gets appropriate descriptive text for a deletion confirmation 
+     * @brief  Gets appropriate descriptive text for a deletion confirmation
      *         window.
      *
      * @return  A localized confirmation description string.
@@ -180,30 +181,30 @@ private:
      * @brief  Creates an empty child menu item.
      *
      * This method is used so that ConfigData can define how to recursively
-     * create its child menu items despite being an abstract class. This should 
-     * only be called by initMenuData when recursively initializing the menu 
+     * create its child menu items despite being an abstract class. This should
+     * only be called by initMenuData when recursively initializing the menu
      * item.
      *
      * @return  A pointer to an empty child menu item.
      */
     virtual ConfigData::Ptr createChildItem() = 0;
 
-    /* Tracks whether initMenuData has been called before, to ensure it only
-       runs once. */
+    // Tracks whether initMenuData has been called before, to ensure it only
+    // runs once.
     bool initialized = false;
 
-    /* The displayed title */
+    // The displayed title
     juce::String title;
 
-    /* The icon name or path */
+    // The icon name or path
     juce::String iconName;
 
-    /* An application launch command, or the empty string. */
+    // An application launch command, or the empty string.
     juce::String command;
 
-    /* Whether the menu item launches an application in a terminal window. */
+    // Whether the menu item launches an application in a terminal window.
     bool launchInTerm = false;
 
-    /* Application categories used to select desktop entry folder items. */
+    // Application categories used to select desktop entry folder items.
     juce::StringArray categories;
 };

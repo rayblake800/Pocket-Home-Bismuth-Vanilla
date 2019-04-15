@@ -6,86 +6,80 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-DesktopEntry::Loader::Loader() : 
+DesktopEntry::Loader::Loader() :
 SharedResource::Handler<LoadingThread>() { }
 
-/*
- * Finds a single EntryFile object using its desktop file ID.
- */
+
+// Finds a single EntryFile object using its desktop file ID.
 DesktopEntry::EntryFile DesktopEntry::Loader::getDesktopEntry
 (const juce::String& entryFileID) const
 {
-    SharedResource::LockedPtr<const LoadingThread> loadingThread 
+    SharedResource::LockedPtr<const LoadingThread> loadingThread
             = getReadLockedResource();
     return loadingThread->getDesktopEntry(entryFileID);
 }
 
-/*
- * Gets all loaded desktop entry file objects.
- */
-juce::Array<DesktopEntry::EntryFile> 
+
+// Gets all loaded desktop entry file objects.
+juce::Array<DesktopEntry::EntryFile>
 DesktopEntry::Loader::getAllEntries() const
 {
-    SharedResource::LockedPtr<const LoadingThread> loadingThread 
+    SharedResource::LockedPtr<const LoadingThread> loadingThread
             = getReadLockedResource();
     return loadingThread->getAllEntries();
 }
 
-/*
- * Gets all EntryFile objects in a single category.
- */
+
+// Gets all EntryFile objects in a single category.
 juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
 (const juce::String& category) const
 {
-    SharedResource::LockedPtr<const LoadingThread> loadingThread 
+    SharedResource::LockedPtr<const LoadingThread> loadingThread
             = getReadLockedResource();
     return loadingThread->getCategoryEntries(category);
 }
 
-/*
- * Finds all EntryFile objects within several categories.
- */
+
+// Finds all EntryFile objects within several categories.
 juce::Array<DesktopEntry::EntryFile> DesktopEntry::Loader::getCategoryEntries
 (const juce::StringArray& categoryList) const
 {
-    SharedResource::LockedPtr<const LoadingThread> loadingThread 
+    SharedResource::LockedPtr<const LoadingThread> loadingThread
             = getReadLockedResource();
     return loadingThread->getCategoryEntries(categoryList);
 }
 
-/*
- * Scans all desktop entry files for any changes made since the last time the 
- * DesktopEntry::Loader read the entry files.
- */
+
+// Scans all desktop entry files for any changes made since the last time the
+// DesktopEntry::Loader read the entry files.
 void DesktopEntry::Loader::scanForChanges()
-{ 
-    SharedResource::LockedPtr<LoadingThread> loadingThread 
+{
+    SharedResource::LockedPtr<LoadingThread> loadingThread
             = getWriteLockedResource();
-   if(!loadingThread->isThreadRunning())
-   {
-       loadingThread->startResourceThread();
-   }
-   else //if(loadingThread->isFinishedLoading())
-   {
-       loadingThread->notify();
-   }
+    if (!loadingThread->isThreadRunning())
+    {
+        loadingThread->startResourceThread();
+    }
+    else //if (loadingThread->isFinishedLoading())
+    {
+        loadingThread->notify();
+    }
 }
 
-/*
- * Schedules an action to run once all entries have been loaded.
- */
+
+// Schedules an action to run once all entries have been loaded.
 DesktopEntry::CallbackID DesktopEntry::Loader::waitUntilLoaded
 (std::function<void()> onFinish)
 {
-    SharedResource::LockedPtr<LoadingThread> loadingThread 
+    SharedResource::LockedPtr<LoadingThread> loadingThread
             = getWriteLockedResource();
-    if(loadingThread->isFinishedLoading())
+    if (loadingThread->isFinishedLoading())
     {
         onFinish();
         return 0;
     }
     CallbackID callbackID = loadingThread->addLoadingCallback(onFinish);
-    if(loadingThread->isThreadRunning())
+    if (loadingThread->isThreadRunning())
     {
         loadingThread->notify();
     }
@@ -97,13 +91,11 @@ DesktopEntry::CallbackID DesktopEntry::Loader::waitUntilLoaded
 }
 
 
-/*
- * Removes an onFinish callback functions that is set to run when the thread 
- * finishes loading.
- */
+// Removes an onFinish callback functions that is set to run when the thread
+// finishes loading.
 void DesktopEntry::Loader::clearCallback(CallbackID callbackID)
 {
-    if(callbackID != 0)
+    if (callbackID != 0)
     {
         SharedResource::LockedPtr<LoadingThread> loadingThread
                 = getWriteLockedResource();

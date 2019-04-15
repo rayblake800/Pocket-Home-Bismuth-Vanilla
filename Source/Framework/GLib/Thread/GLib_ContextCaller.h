@@ -7,8 +7,8 @@
  */
 
 #include "GLib_SharedContextPtr.h"
-/* Since the main UI/message thread isn't a Juce thread, standard C++ thread
-   libraries need to be used to wait/notify. */
+// Since the main UI/message thread isn't a Juce thread, standard C++ thread
+// libraries need to be used to wait/notify.
 #include <mutex>
 #include <condition_variable>
 #include "JuceHeader.h"
@@ -19,8 +19,8 @@ namespace GLib { class ContextCaller; }
  * @brief  Holds a GMainContext data pointer, and uses it to call functions
  *         within an associated GLib event loop.
  *
- *  The ContextCaller will not run the event loop itself, or ensure that the 
- * GLib context even has an associated EventLoop. That should be handled 
+ *  The ContextCaller will not run the event loop itself, or ensure that the
+ * GLib context even has an associated EventLoop. That should be handled
  * elsewhere, probably by a GLib::ThreadResource object.
  */
 class GLib::ContextCaller
@@ -29,8 +29,8 @@ public:
     /**
      * @brief  Initializes the ContextCaller, setting its GLib main context.
      *
-     * @param context  A reference to the context where the ContextCaller
-     *                 will schedule function calls.
+     * @param context  A reference to the context where the ContextCaller will
+     *                 schedule function calls.
      */
     ContextCaller(const SharedContextPtr& context);
 
@@ -38,7 +38,7 @@ public:
      * @brief  Cancels all pending calls when the ContextCaller is destroyed.
      */
     virtual ~ContextCaller();
-    
+
     /**
      * @brief  Schedules a function call to run asynchronously within the
      *         context's event loop.
@@ -52,8 +52,8 @@ public:
             std::function<void()> onFailure = std::function<void()>());
 
     /**
-     * @brief  Schedules a function call to run within the context's event loop,
-     *         then waits for the function to execute.
+     * @brief  Schedules a function call to run within the context's event
+     *         loop, then waits for the function to execute.
      *
      * @param toCall        The function that needs to run within the context's
      *                      event loop.
@@ -70,55 +70,51 @@ public:
             std::function<void()> afterAdding = std::function<void()>());
 
 private:
-
     /**
      * @brief  All data needed to call a function within a GLib context's main
      *         event loop.
      */
     struct CallData
     {
-        /* The ContextCaller that scheduled the call, needed to delete this
-           CallData after running the function. */
+        // The ContextCaller that scheduled the call, needed to delete this
+        // CallData after running the function.
         ContextCaller* caller;
-
-        /* The function that needs to be called on the event loop */
+        // The function that needs to be called on the event loop
         std::function<void()> toCall;
-
-        /* A function to run if toCall could not be run.  This value can be an
-           invalid function if no onFailure call is needed. */
+        // A function to run if toCall could not be run. This value can be an
+        // invalid function if no onFailure call is needed.
         std::function<void()> onFailure;
-
-        /* The GSource used to schedule the call on the GMainLoop, and to remove
-           completed calls. */
+        // The GSource used to schedule the call on the GMainLoop, and to
+        // remove completed calls.
         GSource* callSource;
-
-        /* Prevents synchronous calls from running until the calling thread 
-           starts waiting. */
+        // Prevents synchronous calls from running until the calling thread
+        // starts waiting.
         std::mutex* callerMutex = nullptr;
-        /* Used to notify a waiting thread that its function call is complete.*/
+        // Used to notify a waiting thread that its function call is complete.
         std::condition_variable* callPending = nullptr;
     };
-    
+
     /**
-     * @brief  Adds a function to the GMainContext so it will execute on the 
+     * @brief  Adds a function to the GMainContext so it will execute on the
      *         event loop.
-     * 
-     * @param call         The function to run on the event loop..
-     * 
+     *
+     * @param call         The function to run on the event loop.
+     *
      * @param onFailure    The function to run if the call() function couldn't
      *                     run.
-     * 
-     * @param callerMutex  If this value is non-null, the EventLoop will
-     *                     lock it while running this call.
-     * 
-     * @param callPending  If this value is non-null, the EventLoop will
-     *                     use it and callerMutex to wake up the calling
-     *                     thread after running the call.
+     *
+     * @param callerMutex  If this value is non-null, the EventLoop will lock it
+     *                     while running this call.
+     *
+     * @param callPending  If this value is non-null, the EventLoop will use it
+     *                     and callerMutex to wake up the calling thread after
+     *                     running the call.
      */
     void addAndInitCall(std::function<void()> call,
             std::function<void()> onFailure,
             std::mutex* callerMutex = nullptr,
             std::condition_variable* callPending = nullptr);
+
     /**
      * @brief  A callback function used to execute arbitrary functions within
      *         the context's GMainLoop.
@@ -127,18 +123,19 @@ private:
      *                 notify the function's source.
      *
      * @return         False.
+     *
      *                 TODO: Find and document why this always should return
-     *                       false. I know I had a good reason for this, and it
-     *                       works correctly, but I forgot to document why, and
-     *                       GLib callback function documentation is poorly
-     *                       documented and hard to find.
+     *                       false. I remember having a good reason for this,
+     *                       and it works correctly. However, I forgot to
+     *                       document the reason why, and GLib callback
+     *                       function properties are poorly documented and hard
+     *                       to find.
      */
     static gboolean runAsync(CallData* runData);
 
-    /* Holds pending calls, ensuring CallData is not leaked if the EventLoop
-       is destroyed before a call can run. */
+    // Holds pending calls, ensuring CallData is not leaked if the EventLoop
+    // is destroyed before a call can run.
     juce::OwnedArray<CallData, juce::CriticalSection> pendingCalls;
-
-    /* The shared context pointer used by the ContextCaller to schedule calls.*/
+    // The shared context pointer used by the ContextCaller to schedule calls.
     SharedContextPtr contextPtr;
 };

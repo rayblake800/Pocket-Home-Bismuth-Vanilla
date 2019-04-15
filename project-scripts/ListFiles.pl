@@ -16,20 +16,20 @@ my %names;
 sub findModules
 {
     my $name = $File::Find::name;
-    if($name =~ /^.+\.(h|cpp)$/)
-	{
+    if ($name =~ /^.+\.(h|cpp)$/)
+    {
         $name =~ s/\..*//;
         $name =~ s/.*PocketCHIP-pocket-home//g;
 
         $names{$name} = 1;;
-	}
+    }
 }
-find(\&findModules,$sourceDir);
-find(\&findModules,$testDir);
+find(\&findModules, $sourceDir);
+find(\&findModules, $testDir);
 
-my @names = sort( keys (%names));        
+my @names = sort( keys(%names));
 
-foreach my $name(@names)
+foreach my $name (@names)
 {
     print("$name\n");
 }

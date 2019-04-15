@@ -15,28 +15,14 @@
 
     "Text button(off) background"             : "",
     "Text button background"                  : "0xffb8b8b8",
-    "Text button(off) text"                   : "",
-    "Text button text"                        : "",
 
-    "Text editor background"                  : "",
-    "Text editor text"                        : "",
-    "Text editor highlight"                   : "",
-    "Text editor highlighted text"            : "",
-    "Text editor outline"                     : "",
-    "Text editor focused outline"             : "",
-    "Text editor shadow"                      : "",
-
-    "Label background"                        : "0x00000000",
+    "Label background"                        : "0x00ffffff",
     "Label text"                              : "",
-    "Label outline"                           : "0x00000000",
-    "Label background(editing)"               : "",
-    "Label text(editing)"                     : "",
-    "Label outline(editing)"                  : "",
+    "Label outline"                           : "0x00ffffff",
 
     "Combo box text"                          : "",
     "Combo box background"                    : "",
     "Combo box outline"                       : "0xffb88e47",
-    "Combo box button"                        : "0xffbc3662",
     "Combo box arrow"                         : "",
     "Combo box focused outline"               : "",
 
@@ -76,10 +62,10 @@
 
     "Page background"                         : "0xffffffff",
 
-    "Color picker checkerboard(light)"        : "0xffaaaaaa",
-    "Color picker checkerboard(dark)"         : "0xffe0e0e0",
-    "Color picker color outline"              : "",
-    "Color picker focused color outline"      : "",
+    "Colour picker checkerboard(light)"        : "0xffaaaaaa",
+    "Colour picker checkerboard(dark)"         : "0xffe0e0e0",
+    "Colour picker colour outline"              : "",
+    "Colour picker focused colour outline"      : "",
 
     "Switch background"                       : "",
     "Switch handle"                           : "0xffbc3662",

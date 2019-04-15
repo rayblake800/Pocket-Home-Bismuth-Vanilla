@@ -9,7 +9,7 @@ OBJECTS_PROCESS := \
   $(PROCESS_OBJ)State.o \
   $(PROCESS_OBJ)Data.o \
   $(PROCESS_OBJ)Launched.o \
-  $(PROCESS_OBJ)Launcher.o  
+  $(PROCESS_OBJ)Launcher.o
 
 OBJECTS_PROCESS_TEST := \
   $(PROCESS_OBJ)LaunchedTest.o

@@ -1,9 +1,9 @@
 #pragma once
 /**
  * @file  Hardware_I2CBus.h
- * 
- * @brief Accesses the i2c bus on PocketCHIP to read information on battery 
- *        state or put the system in FEL mode.  
+ *
+ * @brief  Accesses the i2c bus on PocketCHIP to read information on battery
+ *         state or put the system in FEL mode.
  */
 
 #include <exception>
@@ -11,9 +11,10 @@
 
 namespace Hardware { class I2CBus; }
 
-/*
+
+/**
  * @brief  Reads and writes information over a connection to the system's I2C
- *         bus.
+ * bus.
  *
  *  This class is designed to access the PocketCHIP's I2C bus. It will not be
  * functional on any other type of system.
@@ -31,7 +32,7 @@ public:
 
     /**
      * @brief  Reads the battery charge state from the I2C bus.
-     * 
+     *
      * @throws I2CException  If unable to access the I2C bus.
      *
      * @return               Whether the battery is currently charging.
@@ -40,24 +41,24 @@ public:
 
     /**
      * @brief  Reads the battery charge percentage from the i2c bus.
-     * 
+     *
      * @throws I2CException  If unable to access the I2C bus.
-     * 
-     * @return               The percent of battery life remaining, between 
+     *
+     * @return               The percent of battery life remaining, between
      *                       zero and 100.
      */
     int batteryGaugePercent();
 
     /**
-     * @brief  Writes a series of bytes to the I2C bus that will force the 
-     *         system to enter Fel (Flashing) mode after the next restart.
-     * 
+     * @brief  Writes a series of bytes to the I2C bus that will force the
+     *         system to enter Fel(Flashing) mode after the next restart.
+     *
      * @throws I2CException  If unable to access the I2C bus.
      */
     void enableFelMode();
 
     /**
-     * @brief  If the I2C bus file was opened, this will close it. Otherwise, 
+     * @brief  If the I2C bus file was opened, this will close it. Otherwise,
      *         nothing will happen.
      */
     void closeBus();
@@ -84,23 +85,23 @@ public:
         juce::String getErrorMessage();
 
     private:
-        /* The I2C failure error message: */
+        // The I2C failure error message:
         juce::String errorMessage;
     };
 
 private:
     /**
      * @brief  Opens access to the I2C bus file.
-     * 
+     *
      * @throws I2CException  If unable to access the i2c bus.
      */
     void openBus();
 
     /**
      * @brief  Reads one byte from an I2C bus register.
-     * 
+     *
      * @param address        The address of the register to access.
-     * 
+     *
      * @throws I2CException  If unable to access the I2C bus.
      *
      * @return               The byte read from the register.
@@ -109,16 +110,16 @@ private:
 
     /**
      * @brief  Writes a byte to an I2C bus register.
-     * 
+     *
      * @param address        The address of the register to access.
-     * 
+     *
      * @param byte           The byte to write to the register.
-     * 
+     *
      * @throws I2CException  If unable to access the I2C bus.
      */
     void writeByte(const uint8_t address, const uint8_t byte);
 
-    /* Stores the file descriptor for an open I2C bus file, or -1 if the file
-     * is not open: */
+    // Stores the file descriptor for an open I2C bus file, or -1 if the file
+    // is not open:
     int busFileDescriptor = -1;
 };

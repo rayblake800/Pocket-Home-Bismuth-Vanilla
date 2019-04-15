@@ -19,10 +19,10 @@ class Locale::TextUser
 public:
     /**
      * @brief  Creates a TextUser, loading locale data if necessary.
-     * 
-     * @param className    Identifies the text values for a particular class
-     *                     in the localization file.  Only text values under
-     *                     this name will be accessed.
+     *
+     * @param className    Identifies the text values for a particular class in
+     *                     the localization file. Only text values under this
+     *                     name will be accessed.
      */
     TextUser(const juce::Identifier& className);
 
@@ -31,19 +31,19 @@ public:
 protected:
     /**
      * @brief  Looks up a localized text string associated with this class.
-     * 
+     *
      * @param key  One of this object's text keys.
-     * 
+     *
      * @return     The localized text string, or the empty string if text
      *             wasn't found.
      */
     juce::String localeText(const juce::Identifier& key) const;
 
 private:
-    /* The key to all localized strings that belong to this class: */
+    // The key to all localized strings that belong to this class:
     const juce::Identifier& className;
 
-    /* All localized text data loaded from the JSON locale file: */
-    static std::map<juce::Identifier, 
+    // All localized text data loaded from the JSON locale file:
+    static std::map<juce::Identifier,
         std::map<juce::Identifier, juce::String>> localeData;
 };

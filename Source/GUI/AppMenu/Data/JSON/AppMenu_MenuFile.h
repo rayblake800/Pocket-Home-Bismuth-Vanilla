@@ -1,11 +1,11 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
- * @file AppMenu_MenuFile.h
- * 
- * @brief  Reads and edits the tree of pinned application shortcuts and folders 
+ * @file  AppMenu_MenuFile.h
+ *
+ * @brief  Reads and edits the tree of pinned application shortcuts and folders
  *         displayed in the AppMenu.
  */
 
@@ -16,18 +16,17 @@ namespace AppMenu { class MenuJSON; }
 namespace AppMenu { class MenuItem; }
 
 /**
- *  The appMenu.json file defines a tree of menu items. Each menu item can hold 
+ * @brief  The configuration file resource that reads and writes the application
+ *         menu structure.
+ *
+ *  The appMenu.json file defines a tree of menu items. Each menu item can hold
  * either an application launch command, or a list of other menu items and
- * application categories to show in a new menu folder.  All menu items have a
+ * application categories to show in a new menu folder. All menu items have a
  * displayed title and icon.
  *
- *  AppMenu::MenuFile uses this JSON menu data to construct the 
- * AppMenu::MenuItem objects used to build the AppMenu, and it provides an 
- * interface for adding new menu items to the JSON file.  
- * 
- * @see  AppMenu_Implementation.h
- *       AppMenu_MenuKeys.h
- *       AppMenu_MenuJSON.h
+ *  AppMenu::MenuFile uses this JSON menu data to construct the
+ * AppMenu::MenuItem objects used to build the AppMenu, and it provides an
+ * interface for adding new menu items to the JSON file.
  */
 class AppMenu::MenuFile : public Config::FileHandler<AppMenu::MenuJSON>
 {
@@ -38,7 +37,7 @@ public:
     MenuFile();
 
     virtual ~MenuFile() { }
-    
+
     /**
      * @brief  Gets a menu item representing the root folder of the application
      *         menu.
@@ -55,16 +54,16 @@ public:
      *
      * @param icon             The name or path of the menu item's icon.
      *
-     * @param command          The menu item's application launch command, or 
-     *                         the empty string if the menu item does not launch 
+     * @param command          The menu item's application launch command, or
+     *                         the empty string if the menu item does not launch
      *                         an application.
      *
      * @param launchInTerm     Whether the menu item launches an application
      *                         within a new terminal window.
-     * 
+     *
      * @param categories       A list of application categories associated with
      *                         the menu item.
-     * 
+     *
      * @param parentFolder     The parent folder item the new menu item will be
      *                         inserted into.
      *
@@ -75,7 +74,7 @@ public:
      *                         creating the menu item failed.
      */
     MenuItem addMenuItem(
-            const juce::String& title, 
+            const juce::String& title,
             const juce::String& icon,
             const juce::String& command,
             const bool launchInTerm,

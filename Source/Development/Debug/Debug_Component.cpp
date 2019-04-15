@@ -1,13 +1,12 @@
 #include "Debug_Component.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full namespace name before all debug output: */
+// Print the full namespace name before all debug output:
 static const constexpr char* dbgPrefix = "Debug::Component::";
 #endif
 
-/*
- * Prints the structure of the component tree to debug output.
- */
+
+// Prints the structure of the component tree to debug output.
 void Debug::Component::trace()
 {
     using namespace juce;
@@ -16,19 +15,19 @@ void Debug::Component::trace()
     highlightFocus.setStrokeFill(FillType(Colour(0xff00ff00)));
     highlightFocus.setStrokeType(PathStrokeType(4));
     std::function<void(juce::Component*, int) > recursiveInfo;
-    recursiveInfo = [&recursiveInfo](juce::Component* component, int depth)
+    recursiveInfo = [&recursiveInfo] (juce::Component* component, int depth)
     {
         String indent = ":";
         for (int i = 0; i < depth; i++)
         {
             indent += "\t";
         }
-        DBG(dbgPrefix << __func__ << indent << "Component:" 
+        DBG(dbgPrefix << __func__ << indent << "Component:"
                 << component->getName());
         indent += " ";
-        DBG(dbgPrefix << __func__ << indent << "Position: (" 
+        DBG(dbgPrefix << __func__ << indent << "Position: ("
                 << component->getX() << "," << component->getY() << ")");
-        DBG(dbgPrefix << __func__ << indent << "Size: " 
+        DBG(dbgPrefix << __func__ << indent << "Size: "
                 << component->getWidth() << "x" << component->getHeight());
         String properties;
         if (component->getWantsKeyboardFocus())

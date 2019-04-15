@@ -13,7 +13,11 @@ namespace GLib { namespace Borrowed { template <class BorrowedClass>
     class ObjectLender; } }
 
 /**
- * @tparam BorrowedClass  The Borrowed::Object subclass shared by this 
+ * @brief  Tracks instances of a Borrowed::Object subclass, sharing its tracked
+ *         objects and all invalidating shared objects when they should no
+ *         longer be used.
+ *
+ * @tparam BorrowedClass  The Borrowed::Object subclass shared by this
  *                        ObjectLender's managed objects.
  */
 template <class BorrowedClass>
@@ -26,12 +30,12 @@ public:
     ObjectLender() { }
 
     /**
-     * @brief  Invalidates all managed objects when the ObjectLender is 
+     * @brief  Invalidates all managed objects when the ObjectLender is
      *         destroyed.
      */
     virtual ~ObjectLender()
     {
-        for(auto& iter : borrowedObjects)
+        for (auto& iter : borrowedObjects)
         {
             iter.second.invalidateObject();
         }
@@ -42,12 +46,12 @@ public:
      * @brief  Creates a BorrowedClass object for an object data pointer if the
      *         ObjectLender isn't already managing that data pointer.
      *
-     * @param objectData  A data pointer that should be wrapped in a 
+     * @param objectData  A data pointer that should be wrapped in a
      *                    BorrowedClass object managed by this ObjectLender.
      */
     void addIfNotAlreadyThere(GObject* objectData)
     {
-        if(objectData != nullptr && borrowedObjects[objectData].isNull())
+        if (objectData != nullptr && borrowedObjects[objectData].isNull())
         {
             borrowedObjects[objectData].setGObject(objectData);
         }
@@ -55,7 +59,7 @@ public:
 
     /**
      * @brief  Gets a BorrowedClass object for an object data pointer, adding
-     *         the data pointer to the list of values managed by the 
+     *         the data pointer to the list of values managed by the
      *         ObjectLender if it isn't already there.
      *
      * @param objectData  A data pointer that needs to be wrapped in a
@@ -66,7 +70,7 @@ public:
      */
     BorrowedClass borrowObject(GObject* objectData)
     {
-        if(objectData == nullptr)
+        if (objectData == nullptr)
         {
             return BorrowedClass();
         }
@@ -86,7 +90,7 @@ public:
      */
     BorrowedClass findObject(GObject* objectData) const
     {
-        if(objectData == nullptr)
+        if (objectData == nullptr)
         {
             return BorrowedClass();
         }
@@ -125,13 +129,13 @@ public:
 
     /**
      * @brief  Invalidates an object data pointer, removing it from every
-     *         BorrowedClass object that holds it. 
+     *         BorrowedClass object that holds it.
      *
      * @param objectData  An object data pointer that is no longer valid.
      */
     void invalidateObject(GObject* objectData)
     {
-        if(borrowedObjects.count(objectData) > 0)
+        if (borrowedObjects.count(objectData) > 0)
         {
             borrowedObjects[objectData].invalidateObject();
             borrowedObjects.erase(objectData);
@@ -147,7 +151,7 @@ public:
     juce::Array<BorrowedClass> getAllBorrowed() const
     {
         juce::Array<BorrowedClass> allBorrowed;
-        for(const auto& iter : borrowedObjects)
+        for (const auto& iter : borrowedObjects)
         {
             allBorrowed.add(iter.second);
         }
@@ -160,12 +164,12 @@ public:
      */
     void invalidateAll()
     {
-        for(auto& iter : borrowedObjects)
+        for (auto& iter : borrowedObjects)
         {
             iter.second.invalidateObject();
         }
         borrowedObjects.clear();
     }
- 
+
     JUCE_LEAK_DETECTOR(ObjectLender);
 };

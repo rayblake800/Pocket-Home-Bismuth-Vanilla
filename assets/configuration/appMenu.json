@@ -34,7 +34,7 @@
         {
             "name": "All",
             "icon": "default",
-            "categories": 
+            "categories":
             [
                 "All"
             ]
@@ -42,7 +42,7 @@
         {
             "name": "Multimedia",
             "icon": "applications-multimedia",
-            "categories": 
+            "categories":
             [
                 "AudioVideo",
                 "Audio",
@@ -52,7 +52,7 @@
         {
             "name": "Development",
             "icon": "applications-development",
-            "categories": 
+            "categories":
             [
                 "Development"
             ]
@@ -60,7 +60,7 @@
         {
             "name": "Education",
             "icon": "applications-accessories",
-            "categories": 
+            "categories":
             [
                 "Education"
             ]
@@ -68,7 +68,7 @@
         {
             "name": "Games",
             "icon": "applications-games",
-            "categories": 
+            "categories":
             [
                 "Game"
             ]
@@ -76,7 +76,7 @@
         {
             "name": "Graphics",
             "icon": "applications-graphics",
-            "categories": 
+            "categories":
             [
                 "Graphics"
             ]
@@ -84,7 +84,7 @@
         {
             "name": "Internet",
             "icon": "applications-internet",
-            "categories": 
+            "categories":
             [
                 "Network"
             ]
@@ -108,7 +108,7 @@
         {
             "name": "Settings",
             "icon": "configuration_section",
-            "categories": 
+            "categories":
             [
                 "Settings"
             ]
@@ -116,7 +116,7 @@
         {
             "name": "System",
             "icon": "applications-system",
-            "categories": 
+            "categories":
             [
                 "System"
             ]
@@ -124,7 +124,7 @@
         {
             "name": "Utility",
             "icon": "applications-utilities",
-            "categories": 
+            "categories":
             [
                 "Utility"
             ]

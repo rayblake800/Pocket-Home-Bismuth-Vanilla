@@ -7,16 +7,16 @@
 #endif
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Hardware::Audio::";
 #endif
 
 #ifdef CHIP_FEATURES
-/* ALSA buffer size in samples: */
+// ALSA buffer size in samples:
 static const constexpr int alsaBufferSize = 4096;
-/* ALSA channel count: */
+// ALSA channel count:
 static const constexpr int alsaChannels = 2;
-/* Audio device to use: */
+// Audio device to use:
 static const constexpr char* deviceName = "default";
 
 /**
@@ -48,8 +48,8 @@ public:
     /**
      * @brief  Gets a string describing the error.
      *
-     * @return  A string containing the error message, and an explanation of the
-     *          error code.
+     * @return  A string containing the error message, and an explanation of
+     *          the error code.
      */
     virtual const char* what() const noexcept override
     {
@@ -57,7 +57,7 @@ public:
     }
 
 private:
-    /* The description of the ALSA error: */
+    // The description of the ALSA error:
     juce::String error;
 };
 
@@ -76,17 +76,16 @@ private:
 static void alsaCheck(const int resultCode,
         const juce::String errorMessage = "")
 {
-    if(resultCode < 0)
+    if (resultCode < 0)
     {
         throw ALSAException(resultCode, errorMessage);
     }
 }
 
-/*
- * Opens a connection to Alsa audio. This is used as a quick fix to a PocketCHIP
- * bug where touch screen presses cause buzzing when no application has opened 
- * Alsa.
- */
+
+// Opens a connection to Alsa audio. This is used as a quick fix to a PocketCHIP
+// bug where touch screen presses cause buzzing when no application has opened
+// Alsa.
 bool Hardware::Audio::chipAudioInit()
 {
     snd_pcm_hw_params_t* hardwareParams = nullptr;
@@ -104,7 +103,7 @@ bool Hardware::Audio::chipAudioInit()
                 "Can't open audio device");
         alsaCheck(snd_pcm_hw_params_any(pcmHandle, hardwareParams),
                 "Can't initialize hardware parameter structure");
-        alsaCheck(snd_pcm_hw_params_set_access(pcmHandle, hardwareParams, 
+        alsaCheck(snd_pcm_hw_params_set_access(pcmHandle, hardwareParams,
                 SND_PCM_ACCESS_RW_INTERLEAVED),
                 "Can't set access type");
         alsaCheck(snd_pcm_hw_params_set_format(pcmHandle, hardwareParams,
@@ -127,7 +126,7 @@ bool Hardware::Audio::chipAudioInit()
                 "Can't set parameters");
         alsaCheck(snd_pcm_prepare(pcmHandle),
                 "Can't prepare audio interface for use");
-        /* Stop PCM device and drop pending frames */
+        // Stop PCM device and drop pending frames
         snd_pcm_drain(pcmHandle);
         initSucceeded = true;
     }
@@ -145,9 +144,7 @@ bool Hardware::Audio::chipAudioInit()
 }
 #endif
 
-/*
- * Gets the system's volume level.
- */
+// Gets the system's volume level.
 int Hardware::Audio::getVolumePercent()
 {
     Util::Commands systemCommands;
@@ -157,9 +154,8 @@ int Hardware::Audio::getVolumePercent()
     return volume.getIntValue();
 }
 
-/*
- * Changes the system audio volume level.
- */
+
+// Changes the system audio volume level.
 void Hardware::Audio::setVolume(int volumePercent)
 {
     juce::String volumeArg(volumePercent);

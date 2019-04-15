@@ -2,37 +2,35 @@
 #include "Layout_Component_ConfigFile.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Widgets::ListEditor::";
 #endif
 
-/* Text to display in the addItemButton: */
+// Text to display in the addItemButton:
 static const constexpr char* addItemButtonText = "+";
 
-/* List Layout Values: */
+// List Layout Values:
 
-/* Row weights: */
+// Row weights:
 static const constexpr int listRowWeight    = 30;
 static const constexpr int editorRowWeight  = 10;
 static const constexpr int rowPaddingWeight = 1;
 
-/* Horizontal editor row item weights: */
+// Horizontal editor row item weights:
 static const constexpr int textEditorWeight       = 40;
 static const constexpr int addButtonWeight        = 10;
 static const constexpr int editorRowPaddingWeight = 1;
 
-/* Layout margin fractions: */
+// Layout margin fractions:
 static const constexpr double xMarginFraction = 0.02;
 static const constexpr double yMarginFraction = 0.02;
 
-/* List outline thickness, as a fraction of the list's smallest side: */
+// List outline thickness, as a fraction of the list's smallest side:
 static const constexpr double outlineThicknessFraction = 0.01;
-/* Minimum size of the list outline in pixels: */
+// Minimum size of the list outline in pixels:
 static const constexpr int outlineMinimumPx = 1;
 
-/*
- * Sets the initial list values to edit on construction.
- */
+// Sets the initial list values to edit on construction.
 Widgets::ListEditor::ListEditor(const juce::StringArray initialList) :
 listItems(initialList),
 listContainer("Widgets::ListEditor", nullptr),
@@ -56,7 +54,7 @@ addItemButton(addItemButtonText)
     layout.setXMarginFraction(xMarginFraction);
     layout.setYMarginFraction(yMarginFraction);
     layoutManager.setLayout(layout, this);
-    
+
     Layout::Component::ConfigFile config;
     newItemField.setFont(juce::Font(config.getFontHeight
             (Layout::Component::TextSize::smallText)));
@@ -69,25 +67,22 @@ addItemButton(addItemButtonText)
     addItemButton.addListener(this);
 }
 
-/*
- * Gets the number of rows to use within the editor's list component.
- */
+
+// Gets the number of rows to use within the editor's list component.
 int Widgets::ListEditor::getNumRows()
 {
     return listItems.size();
 }
 
-/*
- * Gets the edited string list.
- */
+
+// Gets the edited string list.
 juce::StringArray Widgets::ListEditor::getListItems() const
 {
     return listItems;
 }
 
-/*
- * Sets the contents of the edited list.
- */
+
+// Sets the contents of the edited list.
 void Widgets::ListEditor::setListItems(const juce::StringArray newItems)
 {
     listItems = newItems;
@@ -95,17 +90,15 @@ void Widgets::ListEditor::setListItems(const juce::StringArray newItems)
     repaint();
 }
 
-/*
- * Calls updateColours whenever component color values are changed. 
- */
+
+// Calls updateColours whenever component colour values are changed.
 void Widgets::ListEditor::colourChanged()
 {
     updateColours();
 }
 
-/*
- * Sets the colors of child components to match ListEditor colors
- */
+
+// Sets the colours of child components to match ListEditor colours
 void Widgets::ListEditor::updateColours()
 {
     using juce::TextButton;
@@ -124,64 +117,59 @@ void Widgets::ListEditor::updateColours()
     scrollbar.setColour(ScrollBar::thumbColourId, findColour(textColourId));
 }
 
-/*
- * Receives notifications when ListItemComponent text is changed.
- */
+
+// Receives notifications when ListItemComponent text is changed.
 void Widgets::ListEditor::labelTextChanged(juce::Label* source)
 {
     ListItemComponent * listItem = dynamic_cast<ListItemComponent*> (source);
-    if(listItem != nullptr)
+    if (listItem != nullptr)
     {
         int rowNum = listItem->getComponentID().getIntValue();
         listItems.getReference(rowNum) = listItem->getText(true);
-        DBG(dbgPrefix << __func__ << ": Text set to " 
+        DBG(dbgPrefix << __func__ << ": Text set to "
                 << listItem->getText(true));
     }
     listContainer.updateContent();
     listContainer.repaint();
 }
 
-/*
- * Handles click events for all list items.
- */
+
+// Handles click events for all list items.
 void Widgets::ListEditor::listBoxItemClicked
 (int row, const juce::MouseEvent& mouseEvent)
 {
     listContainer.selectRow(row);
 }
 
-/*
- * Handles double click events for all list items.
- */
+
+// Handles double click events for all list items.
 void Widgets::ListEditor::listBoxItemDoubleClicked
 (int row, const juce::MouseEvent & mouseEvent)
 {
     using juce::Label;
-    Label* rowClicked = static_cast<Label*> 
+    Label* rowClicked = static_cast<Label*>
             (listContainer.getComponentForRowNumber(row));
     rowClicked->showEditor();
     juce::TextEditor* editor = rowClicked->getCurrentTextEditor();
-    if(editor != nullptr)
+    if (editor != nullptr)
     {
         editor->setBounds(rowClicked->getBounds());
     }
 }
 
-/*
- * Removes a row when the delete key is pressed.
- */
+
+// Removes a row when the delete key is pressed.
 void Widgets::ListEditor::deleteKeyPressed(int lastRowSelected)
 {
         removeRow(lastRowSelected);
 }
 
-/*
- * Removes a row from the list component along with the corresponding index in 
- * the string list.
- */
+
+// Removes a row from the list component along with the corresponding index in
+// the string list.
 void Widgets::ListEditor::removeRow(const int rowNumber)
 {
-    if(rowNumber >= 0 && rowNumber < listItems.size())
+    if (rowNumber >= 0 && rowNumber < listItems.size())
     {
         listItems.remove(rowNumber);
         listContainer.updateContent();
@@ -189,12 +177,11 @@ void Widgets::ListEditor::removeRow(const int rowNumber)
 
 }
 
-/*
- * Sets the list item's text and connects it to its ListEditor on construction.
- */
+
+// Sets the list item's text and connects it to its ListEditor on construction.
 Widgets::ListEditor::ListItemComponent::ListItemComponent
 (const juce::String text, ListEditor* owner) : juce::Label(text),
-/* TODO: Load delete button image from Theme::Image::ConfigFile. */
+// TODO: Load delete button image from Theme::Image::ConfigFile.
 deleteButton("cancel.svg")
 {
     setJustificationType(juce::Justification::left);
@@ -205,18 +192,16 @@ deleteButton("cancel.svg")
     setInterceptsMouseClicks(false, true);
 }
 
-/*
- * Updates a delete button's component ID to mark its list index.
- */
+
+// Updates a delete button's component ID to mark its list index.
 void Widgets::ListEditor::ListItemComponent::setDeleteButtonID
 (const juce::String id)
 {
     deleteButton.setComponentID(id);
 }
 
-/*
- * Sets the colour of the list item's delete button.
- */
+
+// Sets the colour of the list item's delete button.
 void Widgets::ListEditor::ListItemComponent::setDeleteButtonColour
 (const juce::Colour colour)
 {
@@ -224,18 +209,17 @@ void Widgets::ListEditor::ListItemComponent::setDeleteButtonColour
             findColour(textColourId));
 }
 
-/* List item font margins: */
+
+// List item font margins:
 static const constexpr double listTextMarginFraction = 0.03;
 static const constexpr int listTextMarginMinimum     = 1;
 
-/* Delete button margins: */
+// Delete button margins:
 static const constexpr double deleteButtonMarginFraction = 0.03;
 static const constexpr int deleteButtonMarginMinimum     = 2;
 
-/*
- * Update the font and delete button to match when the list item's bounds 
- * change.
- */
+// Update the font and delete button to match when the list item's bounds
+// change.
 void Widgets::ListEditor::ListItemComponent::resized()
 {
     const int fontMargin = std::max(listTextMarginMinimum,
@@ -250,15 +234,14 @@ void Widgets::ListEditor::ListItemComponent::resized()
             buttonMargin, buttonSize, buttonSize);
 }
 
-/*
- * Creates or recycles a list component to fit a list row.
- */
+
+// Creates or recycles a list component to fit a list row.
 juce::Component * Widgets::ListEditor::refreshComponentForRow
 (int rowNumber, bool isRowSelected, juce::Component * existingComponent)
 {
     using juce::String;
     using juce::Label;
-    if(rowNumber >= getNumRows())
+    if (rowNumber >= getNumRows())
     {
         if (existingComponent != nullptr)
         {
@@ -267,9 +250,9 @@ juce::Component * Widgets::ListEditor::refreshComponentForRow
         return nullptr;
     }
 
-    ListItemComponent * rowLabel = static_cast<ListItemComponent*> 
+    ListItemComponent * rowLabel = static_cast<ListItemComponent*>
             (existingComponent);
-    if(rowLabel == nullptr)
+    if (rowLabel == nullptr)
     {
         rowLabel = new ListItemComponent(listItems[rowNumber], this);
         rowLabel->addListener(this);
@@ -280,20 +263,19 @@ juce::Component * Widgets::ListEditor::refreshComponentForRow
     rowLabel->setDeleteButtonID(String(rowNumber));
     rowLabel->setDeleteButtonColour(findColour(textColourId));
     rowLabel->setComponentID(String(rowNumber));
-    rowLabel->setColour(Label::backgroundColourId, 
-            findColour(isRowSelected ? selectedListItemColourId : 
+    rowLabel->setColour(Label::backgroundColourId,
+            findColour(isRowSelected ? selectedListItemColourId :
                 listItemColourId));
     return rowLabel;
 }
 
-/*
- * Adds the contents of the text editor as a new list item when the addItem 
- * button is clicked, or removes the associated list item if a delete button is 
- * clicked.
- */
+
+// Adds the contents of the text editor as a new list item when the addItem
+// button is clicked, or removes the associated list item if a delete button is
+// clicked.
 void Widgets::ListEditor::buttonClicked(juce::Button* buttonClicked)
 {
-    if(buttonClicked == &addItemButton)
+    if (buttonClicked == &addItemButton)
     {
         const juce::String newListItem = newItemField.getText();
         if (newListItem.isNotEmpty())
@@ -311,11 +293,10 @@ void Widgets::ListEditor::buttonClicked(juce::Button* buttonClicked)
     }
 }
 
-/*
- * Adds the contents of the text editor as a new list item when the addItem 
- * button is clicked, or removes the associated list item if a delete button is 
- * clicked.
- */
+
+// Adds the contents of the text editor as a new list item when the addItem
+// button is clicked, or removes the associated list item if a delete button is
+// clicked.
 void Widgets::ListEditor::resized()
 {
     layoutManager.layoutComponents(getLocalBounds());

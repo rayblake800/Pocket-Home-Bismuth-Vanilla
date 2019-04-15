@@ -7,16 +7,21 @@
 #include "Testing_Window.h"
 #include "Testing_DelayUtils.h"
 
-/* Test window bounds: */
+// Test window bounds:
 static const constexpr int winX = 5;
 static const constexpr int winY = 5;
 static const constexpr int winWidth = 480;
 static const constexpr int winHeight = 272;
 
-class AppMenuTest : public juce::UnitTest
+namespace AppMenu { namespace Test { class MenuTest; } }
+
+/**
+ * @brief  Tests AppMenu creation, format changes, and destruction.
+ */
+class AppMenu::Test::MenuTest : public juce::UnitTest
 {
 public:
-    AppMenuTest() : juce::UnitTest("AppMenu::AppMenu Testing",
+    MenuTest() : juce::UnitTest("AppMenu::AppMenu Testing",
             "AppMenu") {}
 
     /**
@@ -29,24 +34,24 @@ public:
         using namespace AppMenu;
         ConfigFile config;
         Format initial = config.getMenuFormat();
-        logMessage(String("Initial menu format:") 
+        logMessage(String("Initial menu format:")
                 + config.formatToString(initial));
 
-        expectNotEquals((int) initial,(int) Format::Invalid,
+        expectNotEquals( (int) initial, (int) Format::Invalid,
                 "Initial format was invalid!");
 
         config.setMenuFormat(Format::Invalid);
-        expectEquals((int) initial,(int) config.getMenuFormat(), 
+        expectEquals( (int) initial, (int) config.getMenuFormat(),
                 "Trying to set an invalid format should be ignored");
 
-        for(int i = 0; i < (int) Format::Invalid; i++)
+        for (int i = 0; i < (int) Format::Invalid; i++)
         {
-            config.setMenuFormat((Format) i);
+            config.setMenuFormat( (Format) i);
             expectEquals(i, (int) config.getMenuFormat(),
                     "Failed to change menu format!");
         }
         config.setMenuFormat(initial);
-        expectEquals((int) config.getMenuFormat(),(int) initial,
+        expectEquals( (int) config.getMenuFormat(), (int) initial,
                 "Failed to restore initial menu format!");
     }
 
@@ -75,20 +80,20 @@ public:
         };
         juce::Array<std::function<void(int)>> setSettings =
         {
-            [&config](int val){ config.setPagedMenuColumns(val); },
-            [&config](int val){ config.setPagedMenuRows(val); },
-            [&config](int val){ config.setScrollingMenuRows(val); }
+            [&config] (int val){ config.setPagedMenuColumns(val); },
+            [&config] (int val){ config.setPagedMenuRows(val); },
+            [&config] (int val){ config.setScrollingMenuRows(val); }
         };
         juce::Array<int> testValues = { -999, -1, 0, 1, 5, 999};
-        for(int settingNum = 0; settingNum < numSettings; settingNum++)
+        for (int settingNum = 0; settingNum < numSettings; settingNum++)
         {
             int initial = getSettings[settingNum]();
             expectGreaterThan(initial, 0, String("Invalid initial value for ")
                     + settingNames[settingNum]);
-            for(int tVal : testValues)
+            for (int tVal : testValues)
             {
-                setSettings[settingNum](tVal);
-                if(tVal < 1)
+                setSettings[settingNum] (tVal);
+                if (tVal < 1)
                 {
                     expectEquals(getSettings[settingNum](), 1,
                             String("Invalid value for ")
@@ -98,51 +103,51 @@ public:
                 else
                 {
                     expectEquals(getSettings[settingNum](), tVal,
-                            String("Failed to set ") 
+                            String("Failed to set ")
                             + settingNames[settingNum]);
                 }
             }
-            setSettings[settingNum](initial);
+            setSettings[settingNum] (initial);
             expectEquals(getSettings[settingNum](), initial,
                     String("Failed to restore initial setting for ")
                     + settingNames[settingNum]);
         }
     }
-    
+
     void runTest() override
     {
         using juce::String;
         using namespace AppMenu;
         //Create AppMenu::ConfigFile to avoid pointlessly recreating and
-        //destroying JSON data whenever another ConfigFile instance is 
+        //destroying JSON data whenever another ConfigFile instance is
         //destroyed.
         ConfigFile config;
-        
+
         beginTest("Initial AppMenu format tests");
         // Test format strings:
         const int numFormats = 1 + (int) Format::Invalid;
         juce::StringArray formatStrings;
-        for(int i = 0; i < numFormats; i++)
+        for (int i = 0; i < numFormats; i++)
         {
-            String formatString = config.formatToString ((Format) i);
+            String formatString = config.formatToString( (Format) i);
             expect(formatString.isNotEmpty(),
                     String("Missing string for format number ") + String(i));
-            if(i != (int) Format::Invalid)
+            if (i != (int) Format::Invalid)
             {
-                expectNotEquals(formatString, 
+                expectNotEquals(formatString,
                         config.formatToString(Format::Invalid),
                         String("Format number ") + String(i)
                         + String(" treated as invalid!"));
             }
         }
         juce::StringArray invalidFormats = { "", "paged", " Scrolling", "lsk" };
-        for(const String& invalidStr : invalidFormats)
+        for (const String& invalidStr : invalidFormats)
         {
-            expectEquals((int) config.stringToFormat(invalidStr),
+            expectEquals( (int) config.stringToFormat(invalidStr),
                     (int) Format::Invalid,
                     "Invalid format not handled correctly");
         }
-       
+
         // Test format changes before creating the menu
         beginTest("Initial format change test");
         formatChangeTest();
@@ -158,7 +163,7 @@ public:
 
         expect(Testing::DelayUtils::idleUntil([&menuWindow]()
                     {
-                        return menuWindow.isShowing(); 
+                        return menuWindow.isShowing();
                     },
                     200, 2000), "AppMenu window was never shown!");
         expect(!appMenu->getBounds().isEmpty(), "AppMenu bounds are empty!");
@@ -171,7 +176,7 @@ public:
         otherSettingsTest();
 
         // Test menu destruction
-        menuWindow.clearContentComponent();  
+        menuWindow.clearContentComponent();
         menuWindow.removeFromDesktop();
 
         // Test format changes after creating the menu
@@ -183,4 +188,4 @@ public:
     }
 };
 
-static AppMenuTest test;
+static AppMenu::Test::MenuTest test;

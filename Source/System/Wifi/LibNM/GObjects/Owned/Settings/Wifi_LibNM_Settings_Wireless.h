@@ -9,18 +9,18 @@
 #include <nm-setting-wireless.h>
 #include <nm-access-point.h>
 
-namespace Wifi 
-{ 
-    namespace LibNM 
-    { 
+namespace Wifi
+{
+    namespace LibNM
+    {
         namespace Settings { class Wireless; }
         class SSID;
         enum class APMode;
-    } 
+    }
 }
 
 /**
- * @brief  Manages a NMSettingsWireless* value, used to store wireless 
+ * @brief  Manages a NMSettingsWireless* value, used to store wireless
  *         connection settings.
  */
 class Wifi::LibNM::Settings::Wireless : public Object
@@ -30,7 +30,7 @@ public:
      * @brief  Creates a Wireless object to hold existing wireless settings
      *         data.
      *
-     * @param toAssign  The LibNM wireless settings object that the new 
+     * @param toAssign  The LibNM wireless settings object that the new
      *                  Wireless object will hold.
      */
     Wireless(NMSettingWireless* toAssign);
@@ -46,8 +46,7 @@ public:
     /**
      * @brief  Gets the SSID saved to the wireless connection settings.
      *
-     * @return  The main identifier for this Wireless object's 
-     *          connection.
+     * @return  The main identifier for this Wireless object's connection.
      */
     SSID getSSID() const;
 
@@ -55,8 +54,7 @@ public:
      * @brief  Gets the access point mode saved to the wireless connection
      *         settings.
      *
-     * @return  The access point mode for this Wireless object's
-     *          connection.
+     * @return  The access point mode for this Wireless object's connection.
      */
     APMode getMode() const;
 
@@ -64,15 +62,15 @@ public:
      * @brief  Gets the list of all base ID values associated with this
      *         Wireless object's connection.
      *
-     * @return  The list of all access point Mac addresses known to be used
-     *          by this object's connection.
+     * @return  The list of all access point Mac addresses known to be used by
+     *          this object's connection.
      */
     juce::StringArray getSeenBSSIDs() const;
 
     /**
      * @brief  Checks if this object's connection is hidden.
      *
-     * @return  Whether the object's connection is a hidden Wifi connection. 
+     * @return  Whether the object's connection is a hidden Wifi connection.
      */
     bool isHidden() const;
 

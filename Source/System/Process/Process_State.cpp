@@ -1,18 +1,15 @@
 #include "Process_State.h"
 #include "JuceHeader.h"
 
-/*
- * Returns the process state represented by the state field character in the 
- * /proc/<pid>/stat file.
- */
+// Returns the process state represented by the state field character in the
+// /proc/<pid>/stat file.
 Process::State Process::readStateChar(const char stateCode)
 {
-    /* TODO:  Why is state code 'C' included as a running process state? 'C' 
-     *        does not appear to be a valid code according to the proc manpage.
-     *        I suspect it's probably a rare edge case or deprecated option I 
-     *        found earlier, but I didn't document unusual cases well enough
-     *        when implementing process data reading.
-     */
+    // TODO:  Why is state code 'C' included as a running process state? 'C'
+    // does not appear to be a valid code according to the proc manpage.
+    // I suspect it's probably a rare edge case or deprecated option I
+    // found earlier, but I didn't document unusual cases well enough
+    // when implementing process data reading.
     switch(stateCode)
     {
         case 'R':
@@ -41,9 +38,8 @@ Process::State Process::readStateChar(const char stateCode)
     return State::unknown;
 }
 
-/*
- * Gets a string representation of a process state for debugging.
- */
+
+// Gets a string representation of a process state for debugging.
 juce::String Process::stateString(const Process::State state)
 {
     switch(state)

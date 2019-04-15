@@ -10,9 +10,9 @@
 
 namespace Page
 {
-    namespace Interface 
-    { 
-        class Component; 
+    namespace Interface
+    {
+        class Component;
         class Stack;
     }
     class StackComponent;
@@ -44,20 +44,19 @@ private:
     /**
      * @brief  Sets the page component's interface to the page stack.
      *
-     * @param stack  The stack interface pointer of the stack holding this
-     *               page.
+     * @param stack  The stack interface pointer of the stack holding this page.
      */
     void setStackInterface(Stack* stack);
 
     /**
      * @brief  Whenever this page is added to a page stack, the StackComponent
-     *         will call this method. 
+     *         will call this method.
      */
     virtual void pageAddedToStack() { }
 
     /**
-     * @brief  Whenever this page becomes the top page on the page stack, the 
-     *         StackComponent will call this method. 
+     * @brief  Whenever this page becomes the top page on the page stack, the
+     *         StackComponent will call this method.
      */
     virtual void pageRevealedOnStack() { }
 

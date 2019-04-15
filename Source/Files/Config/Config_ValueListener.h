@@ -7,12 +7,12 @@
 
 #include "JuceHeader.h"
 
-namespace Config { template <class ListenerType, typename ValueType> 
+namespace Config { template <class ListenerType, typename ValueType>
         class ValueListener; }
-    
+
 /**
- *  ValueListener tracks a single value in a single JSON file, receiving updates
- * whenever that value changes.
+ * @brief  Tracks a single value in a single JSON file, receiving updates
+ *         whenever that value changes.
  *
  * @tparam ListenerType  A Config::Listener subclass that tracks this
  *                       ValueListener's JSON file.
@@ -57,7 +57,7 @@ private:
          * @brief  Links the InternalListener to its ValueListener on
          *         construction.
          *
-         * @param valueListener  The valueListener holding this 
+         * @param valueListener  The valueListener holding this
          *                       InternalListener.
          */
         InternalListener(ValueListener& valueListener) :
@@ -65,8 +65,8 @@ private:
 
     private:
         /**
-         * @brief  Passes the updated value to the ValueListener whenever
-         *         the FileResource sends an update signal.
+         * @brief  Passes the updated value to the ValueListener whenever the
+         *         FileResource sends an update signal.
          *
          * @param valueKey  The key to the single value tracked by the
          *                  ValueListener.

@@ -9,15 +9,15 @@
 #include "Locale.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "DesktopEntry::EntryFile::";
 #endif
 
-/* Directory where desktop entries are stored within $XDG_DATA_DIRS */
+// Directory where desktop entries are stored within $XDG_DATA_DIRS
 static const juce::String entryDirectory = "/applications/";
 
 /**
- * @brief Creates a DataConverter that gets and sets typical string values.
+ * @brief  Creates a DataConverter that gets and sets typical string values.
  *
  * @param stringParam     The name of a desktop entry string parameter.
  *
@@ -27,23 +27,23 @@ static const juce::String entryDirectory = "/applications/";
  * @return                The DataConverter that gets and sets the string
  *                        parameter.
  */
-#define STRING_CONVERTER(stringParam, isLocaleString)                          \
-{                                                                              \
-    .readValue = [](DesktopEntry::EntryFile* thisEntry,                        \
-        const juce::String& value)                                             \
-    {                                                                          \
-        thisEntry->stringParam = DesktopEntry::FileUtils::processStringValue   \
-            (value, thisEntry->file, isLocaleString);                          \
-    },                                                                         \
-    .getValue = [](DesktopEntry::EntryFile* thisEntry)->juce::String           \
-    {                                                                          \
-        return DesktopEntry::FileUtils::addEscapeSequences                     \
-            (thisEntry->stringParam);                                          \
-    }                                                                          \
+#define STRING_CONVERTER(stringParam, isLocaleString)                        \
+{                                                                            \
+    .readValue = [] (DesktopEntry::EntryFile* thisEntry,                     \
+        const juce::String& value)                                           \
+    {                                                                        \
+        thisEntry->stringParam = DesktopEntry::FileUtils::processStringValue \
+            (value, thisEntry->file, isLocaleString);                        \
+    },                                                                       \
+    .getValue = [] (DesktopEntry::EntryFile* thisEntry)->juce::String        \
+    {                                                                        \
+        return DesktopEntry::FileUtils::addEscapeSequences                   \
+            (thisEntry->stringParam);                                        \
+    }                                                                        \
 }
 
 /**
- * @brief Creates a DataConverter that gets and sets typical list values.
+ * @brief  Creates a DataConverter that gets and sets typical list values.
  *
  * @param listParam       The name of a desktop entry list parameter.
  *
@@ -53,46 +53,47 @@ static const juce::String entryDirectory = "/applications/";
  * @return                The DataConverter that gets and sets the list
  *                        parameter.
  */
-#define LIST_CONVERTER(listParam, isLocaleString)                              \
-{                                                                              \
-    .readValue = [](DesktopEntry::EntryFile* thisEntry,                        \
-        const juce::String& value)                                             \
-    {                                                                          \
-        thisEntry->listParam = DesktopEntry::FileUtils::parseList              \
-            (value, thisEntry->file, isLocaleString);                          \
-    },                                                                         \
-    .getValue = [](DesktopEntry::EntryFile* thisEntry)->juce::String           \
-    {                                                                          \
-        return DesktopEntry::FileUtils::listString(thisEntry->listParam,       \
-            isLocaleString);                                                   \
-    }                                                                          \
+#define LIST_CONVERTER(listParam, isLocaleString)                             \
+{                                                                             \
+    .readValue = [] (DesktopEntry::EntryFile* thisEntry,                      \
+        const juce::String& value)                                            \
+    {                                                                         \
+        thisEntry->listParam = DesktopEntry::FileUtils::parseList             \
+            (value, thisEntry->file, isLocaleString);                         \
+    },                                                                        \
+    .getValue = [] (DesktopEntry::EntryFile* thisEntry)->juce::String         \
+    {                                                                         \
+        return DesktopEntry::FileUtils::listString(thisEntry->listParam,      \
+            isLocaleString);                                                  \
+    }                                                                         \
 }
 
 /**
- * @brief Creates a DataConverter that gets and sets typical boolean values.
+ * @brief  Creates a DataConverter that gets and sets typical boolean values.
  *
  * @param stringParam     The name of a desktop entry boolean parameter.
  *
  * @return                The DataConverter that gets and sets the bool
  *                        parameter.
  */
-#define BOOL_CONVERTER(boolParam)                                              \
-{                                                                              \
-    .readValue = [](DesktopEntry::EntryFile* thisEntry,                        \
-        const juce::String& value)                                             \
-    {                                                                          \
-        thisEntry->boolParam = DesktopEntry::FileUtils::parseBool              \
-            (value, thisEntry->file);                                          \
-    },                                                                         \
-    .getValue = [](DesktopEntry::EntryFile* thisEntry)->juce::String           \
-    {                                                                          \
-        return DesktopEntry::FileUtils::boolString(thisEntry->boolParam);      \
-    }                                                                          \
+#define BOOL_CONVERTER(boolParam)                                             \
+{                                                                             \
+    .readValue = [] (DesktopEntry::EntryFile* thisEntry,                      \
+            const juce::String& value)                                        \
+    {                                                                         \
+        thisEntry->boolParam = DesktopEntry::FileUtils::parseBool             \
+                (value, thisEntry->file);                                     \
+    },                                                                        \
+    .getValue = [] (DesktopEntry::EntryFile* thisEntry)->juce::String         \
+    {                                                                         \
+        return DesktopEntry::FileUtils::boolString(thisEntry->boolParam);     \
+    }                                                                         \
 }
 
-/* Stores all data keys defined in the desktop entry specifications,
-   mapped to functions for importing and exporting that key's data.  */
-const std::map<juce::Identifier, DesktopEntry::EntryFile::DataConverter> 
+
+// Stores all data keys defined in the desktop entry specifications,
+// mapped to functions for importing and exporting that key's data.
+const std::map<juce::Identifier, DesktopEntry::EntryFile::DataConverter>
 DesktopEntry::EntryFile::keyGuide
 {
     { "Name",             STRING_CONVERTER(name, true)            },
@@ -100,7 +101,7 @@ DesktopEntry::EntryFile::keyGuide
     { "Comment",          STRING_CONVERTER(comment, true)         },
     { "Icon",             STRING_CONVERTER(icon, true)            },
     { "TryExec",          STRING_CONVERTER(tryExec, false)        },
-    { "Path",             STRING_CONVERTER(path, false)           },   
+    { "Path",             STRING_CONVERTER(path, false)           },
     { "StartupWMClass",   STRING_CONVERTER(startupWMClass, false) },
     { "URL",              STRING_CONVERTER(url, false)            },
     { "OnlyShowIn",       LIST_CONVERTER(onlyShowIn, false)       },
@@ -113,7 +114,7 @@ DesktopEntry::EntryFile::keyGuide
     { "NoDisplay",        BOOL_CONVERTER(noDisplay)               },
     { "DBusActivatable",  BOOL_CONVERTER(dBusActivatable)         },
     { "Terminal",         BOOL_CONVERTER(terminal)                },
-    { "StartupNotify",    BOOL_CONVERTER(startupNotify)           }, 
+    { "StartupNotify",    BOOL_CONVERTER(startupNotify)           },
     { "Type",
         {
             .readValue = []
@@ -126,9 +127,9 @@ DesktopEntry::EntryFile::keyGuide
                     { "Link",        Type::link }
                 };
                 auto searchIter = typeMap.find(value);
-                if(searchIter == typeMap.end())
+                if (searchIter == typeMap.end())
                 {
-                    const String errorMessage = String("Invalid entry type ") 
+                    const String errorMessage = String("Invalid entry type ")
                         + value + " encountered";
                     throw FileError(thisEntry->file,
                         errorMessage);
@@ -151,14 +152,14 @@ DesktopEntry::EntryFile::keyGuide
         }
     },
     { "Version",
-       {
+        {
             .readValue = []
             (DesktopEntry::EntryFile* thisEntry, const juce::String& value)
             {
-                if(value != "1.1")
+                if (value != "1.1")
                 {
                     //DBG("DesktopEntry::EntryFile::saveLineData: "
-                    // << "Warning, unexpected desktop entry standard version " 
+                    // << "Warning, unexpected desktop entry standard version "
                     // << value);
                 }
             },
@@ -174,7 +175,7 @@ DesktopEntry::EntryFile::keyGuide
             .readValue = []
             (DesktopEntry::EntryFile* thisEntry, const juce::String& value)
             {
-                if(DesktopEntry::FileUtils::parseBool(value, thisEntry->file))
+                if (DesktopEntry::FileUtils::parseBool(value, thisEntry->file))
                 {
                     const juce::String errorMessage
                         ("File marked hidden, should have been deleted");
@@ -193,8 +194,8 @@ DesktopEntry::EntryFile::keyGuide
             .readValue = []
             (DesktopEntry::EntryFile* thisEntry, const juce::String& value)
             {
-                juce::String execString 
-                    = DesktopEntry::FileUtils::processStringValue(value, 
+                juce::String execString
+                    = DesktopEntry::FileUtils::processStringValue(value,
                     thisEntry->file, false);
                 thisEntry->exec = DesktopEntry::FileUtils::unquoteCommandFields
                     (execString);
@@ -202,7 +203,7 @@ DesktopEntry::EntryFile::keyGuide
             .getValue = []
             (DesktopEntry::EntryFile* thisEntry)->juce::String
             {
-                juce::String execString 
+                juce::String execString
                     = DesktopEntry::FileUtils::addEscapeSequences
                     (thisEntry->exec);
                 return DesktopEntry::FileUtils::quoteCommandFields(execString);
@@ -211,9 +212,7 @@ DesktopEntry::EntryFile::keyGuide
     }
 };
 
-/*
- * Loads desktop entry data from a .desktop file.
- */
+// Loads desktop entry data from a .desktop file.
 DesktopEntry::EntryFile::EntryFile
 (const juce::File& sourceFile, const juce::String& desktopFileID) :
 file(sourceFile), desktopFileID(desktopFileID)
@@ -221,11 +220,12 @@ file(sourceFile), desktopFileID(desktopFileID)
     readEntryFile();
 }
 
-/*
- *  Creates a desktop entry object without an existing file.
- */
-DesktopEntry::EntryFile::EntryFile
-(const juce::String& name, const juce::String& desktopFileID, const Type type) :
+
+// Creates a desktop entry object without an existing file.
+DesktopEntry::EntryFile::EntryFile(
+        const juce::String& name,
+        const juce::String& desktopFileID,
+        const Type type) :
 desktopFileID(desktopFileID)
 {
     using juce::String;
@@ -233,39 +233,39 @@ desktopFileID(desktopFileID)
     String filename = desktopFileID;
     // Validate filename:
     bool atElementBeginning = true;
-    for(int i = 0; i < filename.length(); i++)
+    for (int i = 0; i < filename.length(); i++)
     {
         char testChar = filename[i];
-        if(atElementBeginning && (testChar == '.'
+        if (atElementBeginning && (testChar == '.'
                 || (testChar >= '0' && testChar <= '9')))
         {
-            DBG(dbgPrefix << __func__ << ": Invalid element starting char " 
+            DBG(dbgPrefix << __func__ << ": Invalid element starting char "
                     << testChar << " in file name " << filename);
             throw FormatError(filename);
         }
-        if(! ((testChar >= 'A' && testChar <= 'Z')
+        if (! ( (testChar >= 'A' && testChar <= 'Z')
                     || (testChar >= 'a' && testChar <= 'z')
                     || (testChar >= '0' && testChar <= '9')
                     || (testChar == '-')
                     || (testChar == '_')
                     || (testChar == '.')))
         {
-            DBG(dbgPrefix << __func__ << ": Invalid character " << testChar 
+            DBG(dbgPrefix << __func__ << ": Invalid character " << testChar
                     << " in file name " << filename);
             throw FormatError(filename);
         }
         atElementBeginning = (testChar == '.');
     }
-    if(atElementBeginning)
+    if (atElementBeginning)
     {
-        DBG(dbgPrefix << __func__ << ": Filename should not end in a period! " 
+        DBG(dbgPrefix << __func__ << ": Filename should not end in a period! "
                 << " Filename=" << filename);
         throw FormatError(filename);
     }
     file = File(Assets::XDGDirectories::getUserDataPath() + entryDirectory
-        + filename + ".desktop"); 
+        + filename + ".desktop");
     // Check if the file exists already, and if so, read data from it.
-    if(file.existsAsFile())
+    if (file.existsAsFile())
     {
         readEntryFile();
     }
@@ -275,86 +275,75 @@ desktopFileID(desktopFileID)
 }
 
 
-/*
- * Checks if the EntryFile does not contain all data required by a valid desktop
- * entry.
- */
+// Checks if the EntryFile does not contain all data required by a valid
+// desktop entry.
 bool DesktopEntry::EntryFile::isMissingData() const
 {
     return name.isEmpty() || (exec.isEmpty() && !dBusActivatable);
 }
 
-/*
- * Checks if two desktop entries have the same desktop file ID.
- */
-bool DesktopEntry::EntryFile::operator==(const EntryFile& toCompare) const
+
+// Checks if two desktop entries have the same desktop file ID.
+bool DesktopEntry::EntryFile::operator== (const EntryFile& toCompare) const
 {
     return desktopFileID == toCompare.desktopFileID;
 }
-    
-/*
- * Alphabetically compares entries based on their names.
- */
-bool DesktopEntry::EntryFile::operator<(const EntryFile& toCompare) const
+
+
+// Alphabetically compares entries based on their names.
+bool DesktopEntry::EntryFile::operator< (const EntryFile& toCompare) const
 {
     return name.toUpperCase() < toCompare.name.toUpperCase();
 }
 
-/*
- * Gets the desktop entry's type.
- */
+
+// Gets the desktop entry's type.
 DesktopEntry::EntryFile::Type DesktopEntry::EntryFile::getType() const
 {
     return type;
 }
 
-/*
- * Gets the unique desktop file ID that identifies this entry.
- */
+
+// Gets the unique desktop file ID that identifies this entry.
 juce::String DesktopEntry::EntryFile::getDesktopFileID() const
 {
     return desktopFileID;
 }
-    
-/*
- * Gets the desktop entry's name.
- */
+
+
+// Gets the desktop entry's name.
 juce::String DesktopEntry::EntryFile::getName() const
 {
     return name;
 }
 
-/*
- * Gets a generic name describing the entry.
- */
+
+// Gets a generic name describing the entry.
 juce::String DesktopEntry::EntryFile::getGenericName() const
 {
     return genericName;
 }
 
-/*
- * Checks if this desktop entry should appear in application menus.
- */
+
+// Checks if this desktop entry should appear in application menus.
 bool DesktopEntry::EntryFile::shouldBeDisplayed() const
 {
     return !noDisplay && onlyShowIn.isEmpty();
 }
 
-/*
- * Gets the name or path of the desktop entry's icon.
- */
+
+// Gets the name or path of the desktop entry's icon.
 juce::String DesktopEntry::EntryFile::getIcon() const
 {
     return icon;
 }
 
-/*
- * Gets the command string used to launch this entry's application.
- */
+
+// Gets the command string used to launch this entry's application.
 juce::String DesktopEntry::EntryFile::getLaunchCommand() const
 {
     juce::String command = exec;
-    if(terminal && command.isNotEmpty())
+    if (terminal && command.isNotEmpty())
     {
         Config::MainFile config;
         command = config.getTermLaunchPrefix() + " " + command;
@@ -362,189 +351,169 @@ juce::String DesktopEntry::EntryFile::getLaunchCommand() const
     return command;
 }
 
-/*
- * Gets the string value used to construct the launch command.
- */
+
+// Gets the string value used to construct the launch command.
 juce::String DesktopEntry::EntryFile::getExec() const
 {
     return exec;
 }
 
-/*
- * Gets an application name or path to check when determining if this 
- * entry's application is valid.
- */
+
+// Gets an application name or path to check when determining if this entry's
+// application is valid.
 juce::String DesktopEntry::EntryFile::getTryExec() const
 {
     return tryExec;
 }
 
-/*
- * Gets the path where this application should run.
- */
+
+// Gets the path where this application should run.
 juce::String DesktopEntry::EntryFile::getRunDirectory() const
 {
     return path;
 }
 
-/*
- * Checks if this entry's application should be launched in a new terminal 
- * window.
- */
+
+// Checks if this entry's application should be launched in a new terminal
+// window.
 bool DesktopEntry::EntryFile::getLaunchedInTerm() const
 {
     return terminal;
 }
 
-/*
- * Gets the names of all alternate actions supported by this desktop entry.
- */
+
+// Gets the names of all alternate actions supported by this desktop entry.
 juce::StringArray DesktopEntry::EntryFile::getActionIDs() const
 {
     return actionTypes;
 }
 
-/*
- * Gets the display title of a desktop entry action.
- */
+
+// Gets the display title of a desktop entry action.
 juce::String DesktopEntry::EntryFile::getActionTitle
 (const juce::String actionID) const
 {
-    if(actions.count(actionID) == 0)
+    if (actions.count(actionID) == 0)
     {
         return juce::String();
     }
     return actions.at(actionID).title;
 }
 
-/*
- * Gets the name or path of an action's icon.
- */
+
+// Gets the name or path of an action's icon.
 juce::String DesktopEntry::EntryFile::getActionIcon
 (const juce::String actionID) const
 {
-    if(actions.count(actionID) == 0)
+    if (actions.count(actionID) == 0)
     {
         return juce::String();
     }
     return actions.at(actionID).icon;
 }
 
-/*
- * Gets the command used to run a desktop entry action.
- */
+
+// Gets the command used to run a desktop entry action.
 juce::String DesktopEntry::EntryFile::getActionLaunchCommand
 (const juce::String actionID) const
 {
-    if(actions.count(actionID) == 0)
+    if (actions.count(actionID) == 0)
     {
         return juce::String();
     }
     return expandFieldCodes(actions.at(actionID).exec);
 }
 
-/*
- * Gets the list of categories associated with this desktop entry.
- */
+
+// Gets the list of categories associated with this desktop entry.
 juce::StringArray DesktopEntry::EntryFile::getCategories() const
 {
     return categories;
 }
 
-/*
- * Gets a list of keywords associated with this desktop entry.
- */
+
+// Gets a list of keywords associated with this desktop entry.
 juce::StringArray DesktopEntry::EntryFile::getKeywords() const
 {
     return keywords;
 }
 
-/*
- * Sets the desktop entry's name.
- */
+
+// Sets the desktop entry's name.
 void DesktopEntry::EntryFile::setName(const juce::String& newName)
 {
     name = newName;
 }
 
-/*
- * Sets the generic name describing the entry.
- */
-void DesktopEntry::EntryFile::setGenericName(const juce::String& newGenericName)
+
+// Sets the generic name describing the entry.
+void DesktopEntry::EntryFile::setGenericName
+(const juce::String& newGenericName)
 {
     genericName = newGenericName;
 }
 
-/*
- * Sets if this desktop entry should appear in application menus.
- */
+
+// Sets if this desktop entry should appear in application menus.
 void DesktopEntry::EntryFile::setIfDisplayed(const bool showEntry)
 {
     noDisplay = !showEntry;
 }
 
-/*
- * Sets the name or path of the desktop entry's icon.
- */
+
+// Sets the name or path of the desktop entry's icon.
 void DesktopEntry::EntryFile::setIcon(const juce::String& newIcon)
 {
     icon = newIcon;
 }
 
-/*
- * Sets the string value used to construct the entry's launch command.
- */
+
+// Sets the string value used to construct the entry's launch command.
 void DesktopEntry::EntryFile::setExec(const juce::String& newExec)
 {
     exec = newExec;
 }
 
-/*
- * Sets the application name used when checking if this entry's application is 
- * valid.
- */
+
+// Sets the application name used when checking if this entry's application is
+// valid.
 void DesktopEntry::EntryFile::setTryExec(const juce::String& newTryExec)
 {
     tryExec = newTryExec;
 }
 
-/*
- * Sets the path where this entry's application should run.
- */
+
+// Sets the path where this entry's application should run.
 void DesktopEntry::EntryFile::setRunDirectory
 (const juce::String& runningDirectory)
 {
     path = runningDirectory;
 }
 
-/*
- * Sets if this entry's application should be launched in a new terminal window.
- */
+
+// Sets if this entry's application should be launched in a new terminal window.
 void DesktopEntry::EntryFile::setLaunchedInTerm(const bool termLaunch)
 {
     terminal = termLaunch;
 }
 
-/*
- * Sets the list of categories associated with this desktop entry.
- */
+
+// Sets the list of categories associated with this desktop entry.
 void DesktopEntry::EntryFile::setCategories
 (const juce::StringArray& newCategories)
 {
     categories = newCategories;
 }
 
-/*
- * Sets the list of keywords associated with this desktop entry.
- */
+
+// Sets the list of keywords associated with this desktop entry.
 void DesktopEntry::EntryFile::setKeywords(const juce::StringArray& newKeywords)
 {
     keywords = newKeywords;
 }
 
-/*
- * Writes this desktop entry to the user's local application data directory.
- */
+
+// Writes this desktop entry to the user's local application data directory.
 void DesktopEntry::EntryFile::writeFile()
 {
     using juce::String;
@@ -557,26 +526,27 @@ void DesktopEntry::EntryFile::writeFile()
     juce::StringArray lines;
     file.readLines(lines);
     String sectionHeader;
-    for(const String& line : lines)
+    for (const String& line : lines)
     {
-        if(outFileText.isNotEmpty() && line.isNotEmpty())
+        if (outFileText.isNotEmpty() && line.isNotEmpty())
         {
             outFileText += "\n";
         }
         // Copy comments and empty lines without further processing
-        if(line.startsWithChar('#') || line.isEmpty())
+        if (line.startsWithChar('#') || line.isEmpty())
         {
             outFileText += line;
             continue;
         }
         // Find and copy section headers
-        else if(FileUtils::isHeaderLine(line))
+        else if (FileUtils::isHeaderLine(line))
         {
             sectionHeader = FileUtils::extractHeader(line);
         }
-        // Parse lines that aren't section headers, empty, or comments if under 
+        // Parse lines that aren't section headers, empty, or comments if under
         // the main data header.
-        else if(line.isNotEmpty() && FileUtils::isMainDataHeader(sectionHeader))
+        else if (line.isNotEmpty() && FileUtils::isMainDataHeader(
+                    sectionHeader))
         {
             String lineLocale = FileUtils::parseLocale(line);
             if (lineLocale.isEmpty()  || lineLocale == locale)
@@ -584,11 +554,12 @@ void DesktopEntry::EntryFile::writeFile()
                 try
                 {
                     const juce::Identifier& key = FileUtils::parseKey(line);
-                    if(foundLocaleKeys.contains(key) || (lineLocale.isEmpty()
+                    if (foundLocaleKeys.contains(key) || (lineLocale.isEmpty()
                             && foundKeys.contains(key)))
                     {
-                       DBG(dbgPrefix << __func__ << ": Skipping duplicate key " 
-                               << key.toString());
+                        DBG(dbgPrefix << __func__
+                                << ": Skipping duplicate key "
+                                << key.toString());
                     }
                     else
                     {
@@ -606,8 +577,8 @@ void DesktopEntry::EntryFile::writeFile()
                     }
                     continue;
                 }
-                catch(FormatError e) 
-                { 
+                catch(FormatError e)
+                {
                     // Non-standard key, just copy the line without further
                     // processing.
                     DBG(dbgPrefix << __func__ << ": Copying non-standard line="
@@ -617,28 +588,28 @@ void DesktopEntry::EntryFile::writeFile()
         }
         // If no header has been located, the main header must be added before
         // any non-comment content.
-        if(sectionHeader.isEmpty())
+        if (sectionHeader.isEmpty())
         {
             sectionHeader = FileUtils::getMainHeader();
             outFileText += sectionHeader + "\n";
         }
-        // Copy field headers, unexpected lines, Actions, nonstandard keys, and 
+        // Copy field headers, unexpected lines, Actions, nonstandard keys, and
         // data from other locales unedited.
         outFileText += line;
     }
     // Add the main group header if no header has been found yet.
-    if(sectionHeader.isEmpty())
+    if (sectionHeader.isEmpty())
     {
         outFileText += FileUtils::getMainHeader() + "\n";
     }
     // Copy keys not found in the original file
-    for(auto keyIter : keyGuide)
+    for (auto keyIter : keyGuide)
     {
         if (!foundLocaleKeys.contains(keyIter.first)
                 && !foundKeys.contains(keyIter.first))
         {
             String value = keyIter.second.getValue(this);
-            if(value.isNotEmpty())
+            if (value.isNotEmpty())
             {
                 outFileText += String("\n") + keyIter.first + String("=")
                         + value;
@@ -651,90 +622,88 @@ void DesktopEntry::EntryFile::writeFile()
             + entryDirectory + file.getFullPathName().fromLastOccurrenceOf
             (entryDirectory, false, false));
     outFile.create();
-    DBG(dbgPrefix << __func__ << ": writing file " 
-            << outFile.getFullPathName()); 
+    DBG(dbgPrefix << __func__ << ": writing file "
+            << outFile.getFullPathName());
     outFile.replaceWithText(outFileText);
 }
 
-/*
- * Given a standard desktop entry data key, get the value mapped to that key.
- */
+
+// Given a standard desktop entry data key, get the value mapped to that key.
 juce::String DesktopEntry::EntryFile::getValue(const juce::Identifier& key)
 {
     auto searchIter = keyGuide.find(key);
-    if(searchIter == keyGuide.end())
+    if (searchIter == keyGuide.end())
     {
         throw FormatError(key.toString());
     }
     return searchIter->second.getValue(this);
 }
 
-/*
- * Loads all desktop entry data from the desktop entry's file.
- */
+
+// Loads all desktop entry data from the desktop entry's file.
 void DesktopEntry::EntryFile::readEntryFile()
 {
     using juce::StringArray;
     using juce::String;
     StringArray lines;
-    if(!file.existsAsFile())
+    if (!file.existsAsFile())
     {
         String errorMessage("File does not exist.");
         throw FileError(file, errorMessage);
     }
     file.readLines(lines);
     String locale = Locale::getLocaleName();
-    /* Last group header read: */
+    // Last group header read:
     String groupHeader;
-    /* Action ID, if the current header defines an action: */
+    // Action ID, if the current header defines an action:
     String actionId;
-    /*If true, the current group is a custom one that should be skipped: */
+    //If true, the current group is a custom one that should be skipped:
     bool skipCurrentGroup = false;
     for (const String& line : lines)
     {
-        if(line.isEmpty() || line.startsWithChar('#'))
+        if (line.isEmpty() || line.startsWithChar('#'))
         {
             continue; //skip comments and empty lines
         }
-        else if(FileUtils::isHeaderLine(line))
+        else if (FileUtils::isHeaderLine(line))
         {
             skipCurrentGroup = false;
             groupHeader = FileUtils::extractHeader(line);
-            if(FileUtils::isValidActionHeader(groupHeader))
+            if (FileUtils::isValidActionHeader(groupHeader))
             {
                 groupHeader = FileUtils::extractActionID(groupHeader);
             }
-            else if(!FileUtils::isMainDataHeader(groupHeader))
+            else if (!FileUtils::isMainDataHeader(groupHeader))
             {
-                DBG(dbgPrefix << __func__ << ": Ignoring nonstandard group " 
+                DBG(dbgPrefix << __func__ << ": Ignoring nonstandard group "
                         << groupHeader);
                 skipCurrentGroup = true;
             }
             continue;
         }
-        if(skipCurrentGroup)
+        if (skipCurrentGroup)
         {
             continue;
         }
         String lineLocale = FileUtils::parseLocale(line);
-        if(lineLocale.isEmpty() || lineLocale == locale)
+        if (lineLocale.isEmpty() || lineLocale == locale)
         {
             try
             {
                 const juce::Identifier& key = FileUtils::parseKey(line);
                 String value = FileUtils::parseValue(line);
-                if(FileUtils::isMainDataHeader(groupHeader))
+                if (FileUtils::isMainDataHeader(groupHeader))
                 {
                     saveLineData(key, value);
                 }
-                else if(groupHeader.isNotEmpty())
+                else if (groupHeader.isNotEmpty())
                 {
                     saveActionLineData(groupHeader, key, value);
                 }
             }
             catch(FormatError e)
             {
-                if(e.getBadValue() != line)
+                if (e.getBadValue() != line)
                 {
                     continue;
                 }
@@ -747,37 +716,35 @@ void DesktopEntry::EntryFile::readEntryFile()
     }
 }
 
-/*
- * Saves data from a desktop entry line to the appropriate EntryFile fields.
- */
+
+// Saves data from a desktop entry line to the appropriate EntryFile fields.
 void DesktopEntry::EntryFile::saveLineData
 (const juce::Identifier& key, const juce::String& value)
 {
     auto searchIter = keyGuide.find(key);
-    if(searchIter == keyGuide.end())
+    if (searchIter == keyGuide.end())
     {
         throw FormatError(key.toString());
     }
     searchIter->second.readValue(this, value);
 }
 
-/*
- * Saves data from a desktop entry line to the most recently created desktop 
- * action.
- */
-void DesktopEntry::EntryFile::saveActionLineData(const juce::String actionID, 
+
+// Saves data from a desktop entry line to the most recently created desktop
+// action.
+void DesktopEntry::EntryFile::saveActionLineData(const juce::String actionID,
         const juce::Identifier& key, const juce::String& value)
 {
     using juce::StringRef;
-    if(key == StringRef("Name"))
+    if (key == StringRef("Name"))
     {
         actions[actionID].title = value;
     }
-    else if(key == StringRef("Icon"))
+    else if (key == StringRef("Icon"))
     {
         actions[actionID].icon = value;
     }
-    else if(key == StringRef("Exec"))
+    else if (key == StringRef("Exec"))
     {
         actions[actionID].exec = value;
     }
@@ -788,25 +755,24 @@ void DesktopEntry::EntryFile::saveActionLineData(const juce::String actionID,
     }
 }
 
-/*
- * Expands all field codes in a command string, removing them and replacing them
- * with appropriate values.
- */
+
+// Expands all field codes in a command string, removing them and replacing
+// them with appropriate values.
 juce::String DesktopEntry::EntryFile::expandFieldCodes
 (const juce::String& execString) const
-{ 
+{
     using juce::String;
     juce::Array<int> fieldCodes;
     String expanded = execString;
-    for(int i = 0; i < execString.length() - 1; i++)
+    for (int i = 0; i < execString.length() - 1; i++)
     {
-        if(execString[i] == '%')
+        if (execString[i] == '%')
         {
-           fieldCodes.add(i);
-           i++;
+            fieldCodes.add(i);
+            i++;
         }
     }
-    for(int i = fieldCodes.size() - 1; i >= 0; i--)
+    for (int i = fieldCodes.size() - 1; i >= 0; i--)
     {
         String replacementValue;
         switch(execString[i+1])
@@ -825,10 +791,10 @@ juce::String DesktopEntry::EntryFile::expandFieldCodes
             case 'U':
                 break;
             case 'i':
-                if(icon.isNotEmpty())
+                if (icon.isNotEmpty())
                 {
                     replacementValue = String("\"--icon ") + icon + "\"";
-                }   
+                }
                 break;
             case 'c':
                 replacementValue = name;
@@ -840,13 +806,13 @@ juce::String DesktopEntry::EntryFile::expandFieldCodes
                 replacementValue = "%";
                 break;
             default:
-                DBG(dbgPrefix << __func__ << ": Invalid field code %" 
-                        << execString[i+1] 
+                DBG(dbgPrefix << __func__ << ": Invalid field code %"
+                        << execString[i+1]
                         << " found, can't get launch command.");
                 return String();
         }
-        expanded = expanded.substring(0,i) + replacementValue
-                + expanded.substring(i+2);    
+        expanded = expanded.substring(0, i) + replacementValue
+                + expanded.substring(i + 2);
     }
     return expanded;
 }

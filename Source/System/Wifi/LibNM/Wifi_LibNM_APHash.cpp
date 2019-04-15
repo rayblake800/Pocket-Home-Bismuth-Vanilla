@@ -3,15 +3,13 @@
 #include "Wifi_LibNM_SecurityType.h"
 #include "Wifi_LibNM_ContextTest.h"
 
-/*
- * Generates a Wifi access point identifier using the access point's SSID, mode, 
- * and security settings.
- */
-Wifi::LibNM::APHash::APHash(const GByteArray* ssid, 
-         APMode mode, 
-         SecurityType securityType)
+// Generates a Wifi access point identifier using the access point's SSID,
+// mode, and security settings.
+Wifi::LibNM::APHash::APHash(const GByteArray* ssid,
+        APMode mode,
+        SecurityType securityType)
 {
-    if(ssid == nullptr)
+    if (ssid == nullptr)
     {
         hashValue = juce::String();
         jassertfalse;
@@ -23,60 +21,54 @@ Wifi::LibNM::APHash::APHash(const GByteArray* ssid,
     // Use mode and securityType as bitflags
     input[32] |= (unsigned char) mode;
     input[32] |= (unsigned char) securityType;
-    /* duplicate it */
+    // duplicate it
     memcpy(&input[33], &input[0], 32);
     juce::String inputStr;
-    for(int i = 0; i < 66; i++)
+    for (int i = 0; i < 66; i++)
     {
         inputStr += input[i];
     }
     char* hashString = g_compute_checksum_for_data
-            (G_CHECKSUM_MD5, input, sizeof (input));
+            (G_CHECKSUM_MD5, input, sizeof(input));
     hashValue = hashString;
     g_free(hashString);
 }
 
-/*
- * Creates an APHash from a saved hash value string.
- */
-Wifi::LibNM::APHash::APHash(const juce::String hashString) : 
+
+// Creates an APHash from a saved hash value string.
+Wifi::LibNM::APHash::APHash(const juce::String hashString) :
         hashValue(hashString) { }
 
-/*
- * Checks if another APHash is equivalent to this one.
- */
-bool Wifi::LibNM::APHash::operator==(const APHash& rhs) const
+
+// Checks if another APHash is equivalent to this one.
+bool Wifi::LibNM::APHash::operator== (const APHash& rhs) const
 {
     return hashValue == rhs.hashValue;
 }
 
-/*
- * Checks if another APHash is not equivalent to this one.
- */
-bool Wifi::LibNM::APHash::operator!=(const APHash& rhs) const
+
+// Checks if another APHash is not equivalent to this one.
+bool Wifi::LibNM::APHash::operator!= (const APHash& rhs) const
 {
     return hashValue != rhs.hashValue;
 }
 
-/*
- * Compares this APHash with another, so hash values can be sorted.
- */
-bool Wifi::LibNM::APHash::operator<(const APHash& rhs) const
+
+// Compares this APHash with another, so hash values can be sorted.
+bool Wifi::LibNM::APHash::operator< (const APHash& rhs) const
 {
     return hashValue < rhs.hashValue;
 }
 
-/*
- * Checks if this hash object is invalid.
- */
+
+// Checks if this hash object is invalid.
 bool Wifi::LibNM::APHash::isNull() const
 {
     return hashValue.isEmpty();
 }
 
-/*
- * Gets a string representation of the hash value.
- */
+
+// Gets a string representation of the hash value.
 juce::String Wifi::LibNM::APHash::toString() const
 {
     return hashValue;

@@ -2,8 +2,8 @@
 /**
  * @file  SharedResource_Thread_Lock.h
  *
- * @brief  The interface used by object that allow thread resources and modules 
- *         to lock themselves. 
+ * @brief  The interface used by object that allow thread resources and modules
+ *         to lock themselves.
  */
 
 #include "SharedResource_Handler.h"
@@ -18,27 +18,27 @@ namespace SharedResource { class Resource; }
 class SharedResource::Thread::Lock : public Handler<Resource>
 {
 protected:
-    /* The Thread::Lock may only be created by the resource Thread object. */
+    // The Thread::Lock may only be created by the resource Thread object.
     friend class Thread;
 
     /**
      * @brief  Creates a Lock tied to a single thread resource.
      *
-     * @param resourceKey  The thread resource's unique SharedResource object 
+     * @param resourceKey  The thread resource's unique SharedResource object
      *                     key.
      */
     Lock(const juce::Identifier& resourceKey);
 
 public:
     virtual ~Lock() { }
-        
+
     /**
      * @brief  Blocks the thread until it can be locked for reading.
      *
-     * Once locked for reading, the thread will block any attempts to
-     * acquire a write lock until all readers have released their locks.
-     * No changes may be made to the ThreadResource's data members while
-     * this is locked for reading.
+     *  Once locked for reading, the thread will block any attempts to acquire a
+     * write lock until all readers have released their locks. No changes may be
+     * made to the ThreadResource's data members while this is locked for
+     * reading.
      */
     void enterRead() const;
 
@@ -79,8 +79,8 @@ public:
     bool tryEnterWrite() const;
 
 private:
-    /* Allow the SharedResource::Thread scoped lock classes to access the 
-       resource's ReadWriteLock. */
+    // Allow the SharedResource::Thread scoped lock classes to access the
+    // resource's ReadWriteLock.
     friend class ScopedReadLock;
     friend class ScopedWriteLock;
 

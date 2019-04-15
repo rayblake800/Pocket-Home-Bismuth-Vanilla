@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  Locale_Time.h
- * 
+ *
  * @brief  Generates localized time strings.
  */
 
@@ -31,19 +31,19 @@ public:
     virtual ~Time() { }
 
     /**
-     * @brief  Gets a localized string describing the amount of time between the
-     *         present and this object's stored time.  
+     * @brief  Gets a localized string describing the amount of time between
+     *         the present and this object's stored time.
      *
      * This is not intended to be used for time values in the future.
-     * 
-     * @return  The approximate difference between the present and this object's
-     *          time, the localized equivalent of "now" if the time is not in 
-     *          the past, or the localized equivalent of "never" if the time is 
-     *          set to the Unix epoch.
+     *
+     * @return  The approximate difference between the present and this
+     *          object's time, the localized equivalent of "now" if the time is
+     *          not in the past, or the localized equivalent of "never" if the
+     *          time is set to the Unix epoch.
      */
     juce::String approxTimePassed() const;
 
 private:
-    /* Stores the time value described by this object. */
+    // Stores the time value described by this object.
     juce::Time time;
 };

@@ -7,7 +7,7 @@
 #==============================================================================#
 #--- new ---
 # Creates a new Element object from element data params.
-#--- Parameters --- 
+#--- Parameters ---
 # $namespace:   The element's namespace name.
 #
 # $name:        The element's object name.
@@ -28,7 +28,7 @@
 #==============================================================================#
 #--- new: ---
 # Creates a new Element object by parsing a C++ Element definition.
-#--- Parameters: --- 
+#--- Parameters: ---
 # $namespace: The element's namespace name.
 #
 # $text:      The full text of a C++ Element definition.
@@ -75,7 +75,7 @@
 
 #==============================================================================#
 #--- getDefaultColour: ---
-# Gets the colour value assigned to the element in the default colours.json 
+# Gets the colour value assigned to the element in the default colours.json
 # file.
 #--- Returns: ---
 # The default colour assigned to this element in the configuration file, or the
@@ -91,9 +91,9 @@
 
 #==============================================================================#
 #--- getDeclaration: ---
-# Gets a C++ Theme::Colour::Element constant declaration using this object's 
+# Gets a C++ Theme::Colour::Element constant declaration using this object's
 # values.
-#--- Parameters: --- 
+#--- Parameters: ---
 # [$indent]: Optional number of indentations to include at the beginning of
 #            each line in the returned declaration.
 #--- Returns: ---
@@ -106,6 +106,62 @@
 #--- Returns: ---
 # The numeric representation of the Element ID value.
 #==============================================================================#
+
+#==============================================================================#
+#--- withNamespace: ---
+# Gets an element identical to this one, but with a different namespace.
+#--- Parameters: ---
+# $namespace: A new namespace name to apply to the copied element.
+#--- Returns: ---
+# An element identical to this one, except for the new namespace value. 
+#==============================================================================#
+
+#==============================================================================#
+#--- withName: ---
+# Gets an element identical to this one, but with a different name.
+#--- Parameters: ---
+# $name: A new name to apply to the copied element.
+#--- Returns: ---
+# An element identical to this one, except for the new name value. 
+#==============================================================================#
+
+#==============================================================================#
+#--- withID: ---
+# Gets an element identical to this one, but with a different ID.
+#--- Parameters: ---
+# $id: A new ID to apply to the copied element.
+#--- Returns: ---
+# An element identical to this one, except for the new ID value. 
+#==============================================================================#
+
+#==============================================================================#
+#--- withCategory: ---
+# Gets an element identical to this one, but with a different category.
+#--- Parameters: ---
+# $category: A new category to apply to the copied element.
+#--- Returns: ---
+# An element identical to this one, except for the new category value. 
+#==============================================================================#
+
+#==============================================================================#
+#--- withKey: ---
+# Gets an element identical to this one, but with a different JSON key.
+#--- Parameters: ---
+# $key: A new JSON key to apply to the copied element.
+#--- Returns: ---
+# An element identical to this one, except for the new key value. 
+#==============================================================================#
+
+#==============================================================================#
+#--- withDefaultColour: ---
+# Gets an element identical to this one, but with a different default colour
+# value.
+#--- Parameters: ---
+# $colour: A new colour string to apply to the copied element.
+#--- Returns: ---
+# An element identical to this one, except for the new colour value. 
+#==============================================================================#
+
 use strict;
 use warnings;
 
@@ -127,14 +183,14 @@ sub new
     my $namespace = shift;
     my $name, my $id, my $category, my $key, my $colour;
     my $numParams = @_;
-    if($numParams == 1)
+    if ($numParams == 1)
     {
         my $text = shift;
-        if($text =~ /
+        if ($text =~ /
                     (?:Element\s+)?
-                    (\w+)\s*\(\s*           # match object name
-                    (0x[0-9a-fA-F]+),\s*    # match hex ID
-                    UICategory::(\w+)\s*\); # match category name
+                    (\w+)\s*\(\s*            # match object name
+                    (0x[0-9a-fA-F]+),\s*     # match hex ID
+                    UICategory:: (\w+)\s*\); # match category name
                 /sx)
         {
             $name = $1;
@@ -149,13 +205,13 @@ sub new
         $category = shift;
         $key = shift;
         $colour = shift;
-        if($colour)
+        if ($colour)
         {
-            if(!($colour =~ /^0x/i))
+            if (! ($colour =~ /^0x/i))
             {
                 $colour = "0x$colour";
             }
-            if($colour =~ /^0x[0-9a-f]{8}$/i)
+            if ($colour =~ /^0x[0-9a-f]{8}$/i)
             {
                 $colour = lc($colour);
             }
@@ -167,19 +223,19 @@ sub new
             }
         }
     }
-    if(!defined($category))
+    if (!defined($category))
     {
         $category = Category::NONE;
     }
     $category = new Category($category);
-    foreach my $optionalParam(\$colour, \$key)
+    foreach my $optionalParam (\$colour, \$key)
     {
-        if(!defined($$optionalParam))
+        if (!defined($$optionalParam))
         {
             $$optionalParam = "";
         }
     }
-    if(defined($namespace) && defined($name) && defined($id) 
+    if (defined($namespace) && defined($name) && defined($id)
             && defined($category))
     {
         my $self =
@@ -232,7 +288,7 @@ sub getKey
     return $self->{_key};
 }
 
-# Gets the colour value assigned to the element in the default colours.json 
+# Gets the colour value assigned to the element in the default colours.json
 # file.
 sub getDefaultColour
 {
@@ -240,17 +296,16 @@ sub getDefaultColour
     return $self->{_colour};
 }
 
-# Sets the colour value assigned to the element in the default colours.json 
+# Sets the colour value assigned to the element in the default colours.json
 # file.
 sub setDefaultColour
 {
-    my $self = shift;
-    my $colour = shift;
-    if(!($colour =~ /^0x/i))
+    my ($self, $colour) = @_;
+    if (! ($colour =~ /^0x/i))
     {
         $colour = "0x$colour";
     }
-    if($colour =~ /^0x[0-9a-f]{8}$/i)
+    if ($colour =~ /^0x[0-9a-f]{8}$/i)
     {
         $self->{_colour} = lc($colour);
     }
@@ -271,9 +326,8 @@ sub getFullName
 # Gets a C++ declaration for the Element as a Theme::Colour::Element constant.
 sub getDeclaration
 {
-    my $self = shift;
-    my $indent = shift;
-    if(defined($indent))
+    my ($self, $indent) = @_;
+    if (defined($indent))
     {
         $indent = " " x ($indent*4);
     }
@@ -291,5 +345,77 @@ sub sortValue
 {
     my $self = shift;
     return hex($self->getID() || -1);
+}
+
+# Gets an element identical to this one, but with a different namespace.
+sub withNamespace
+{
+    my ($self, $namespaceName) = @_;
+    return new Element($namespaceName,
+            $self->getName(),
+            $self->getID(),
+            $self->getCategory(),
+            $self->getKey(),
+            $self->getDefaultColour());
+}
+
+# Gets an element identical to this one, but with a different name.
+sub withName
+{
+    my ($self, $name) = @_;
+    return new Element($self->getNamespace(),
+            $name,
+            $self->getID(),
+            $self->getCategory(),
+            $self->getKey(),
+            $self->getDefaultColour());
+}
+
+# Gets an element identical to this one, but with a different ID.
+sub withID
+{
+    my ($self, $id) = @_;
+    return new Element($self->getNamespace(),
+            $self->getName(),
+            $id,
+            $self->getCategory(),
+            $self->getKey(),
+            $self->getDefaultColour());
+}
+
+# Gets an element identical to this one, but with a different Category.
+sub withCategory
+{
+    my ($self, $category) = @_;
+    return new Element($self->getNamespace(),
+            $self->getName(),
+            $self->getID(),
+            $category,
+            $self->getKey(),
+            $self->getDefaultColour());
+}
+
+# Gets an element identical to this one, but with a different JSON key.
+sub withKey
+{
+    my ($self, $key) = @_;
+    return new Element($self->getNamespace(),
+            $self->getName(),
+            $self->getID(),
+            $self->getCategory(),
+            $key,
+            $self->getDefaultColour());
+}
+
+# Gets an element identical to this one, but with a different default colour.
+sub withDefaultColour
+{
+    my ($self, $colour) = @_;
+    return new Element($self->getNamespace(),
+            $self->getName(),
+            $self->getID(),
+            $self->getCategory(),
+            $self->getKey(),
+            $colour);
 }
 1;

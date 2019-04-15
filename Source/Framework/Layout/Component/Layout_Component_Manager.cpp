@@ -3,9 +3,7 @@
 
 namespace ComponentLayout = Layout::Component;
 
-/*
- * Sets the layout manager's component and layout on construction.
- */
+// Sets the layout manager's component and layout on construction.
 ComponentLayout::Manager::Manager
 (juce::Component* component, const juce::Identifier& layoutKey) :
 component(component),
@@ -15,12 +13,11 @@ layoutKey(layoutKey)
     layout = layoutReader.getLayout(layoutKey);
 }
 
-/*
- * Uses configuration data to set the component's bounds.
- */
+
+// Uses configuration data to set the component's bounds.
 void ComponentLayout::Manager::applyConfigBounds()
 {
-    if(component != nullptr)
+    if (component != nullptr)
     {
         juce::Rectangle<int> newBounds = component->getBounds();
         newBounds.setX(layout.getX(newBounds.getX()));
@@ -31,19 +28,16 @@ void ComponentLayout::Manager::applyConfigBounds()
     }
 }
 
-/*
- * Gets the key that selects the component's layout.
- */
+
+// Gets the key that selects the component's layout.
 const juce::Identifier& ComponentLayout::Manager::getLayoutKey() const
 {
     return layoutKey;
 }
 
-/*
- * Gets the layout object this Manager will apply.
- */
+
+// Gets the layout object this Manager will apply.
 ComponentLayout::ConfigLayout ComponentLayout::Manager::getLayout() const
 {
     return layout;
 }
-

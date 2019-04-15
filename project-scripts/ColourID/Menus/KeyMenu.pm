@@ -4,7 +4,7 @@
 
 #==============================================================================#
 #--- openMenu: ---
-# Displays the key menu, repeatedly accepting input and running the menu 
+# Displays the key menu, repeatedly accepting input and running the menu
 # action with the selected option parameter until the user enters 'q'.
 #--- Parameters: ---
 # $cache: The cache object used to read and write JSON keys
@@ -19,7 +19,7 @@ use UserInput;
 use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 
-# Displays the category menu, repeatedly accepting input and running the menu 
+# Displays the category menu, repeatedly accepting input and running the menu
 # action with the selected option parameter until the user enters 'q'.
 sub openMenu
 {
@@ -34,7 +34,7 @@ sub openMenu
         my $menu = shift;
         $menu->clearOptions();
         my @keys = $cache->getElementKeys();
-        foreach my $key(@keys)
+        foreach my $key (@keys)
         {
             my $element = $cache->findElement($key);
             $menu->addOption($key, $element);
@@ -50,21 +50,15 @@ sub editKey
     my $cache = shift;
     print("1. Edit key\n2. Delete key\nq. Return to key menu:");
     my $selection = UserInput::checkInput('1', '2', 'q');
-    if($selection == 1)
+    if ($selection == 1)
     {
         print("Enter new key value:");
         my $newKey = UserInput::inputText('.+');
         $cache->assignKey($element->getFullName(), $newKey);
     }
-    elsif($selection == 2)
+    elsif ($selection == 2)
     {
-        my $replacement = new Element(
-                $element->getNamespace(),
-                $element->getName(),
-                $element->getID(),
-                $element->getCategory(),
-                "",
-                $element->getDefaultColour());
+        my $replacement = $element->withKey("");
         $cache->removeElement($element);
         $cache->addElement($replacement);
     }

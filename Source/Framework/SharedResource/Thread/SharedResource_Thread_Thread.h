@@ -1,9 +1,9 @@
 #pragma once
 /**
  * @file  SharedResource_Thread_Thread.h
- * 
- * @brief  An abstract basis for SharedResource Thread Resource and Module 
- *         objects. 
+ *
+ * @brief  An abstract basis for SharedResource Thread Resource and Module
+ *         objects.
  */
 
 #include "SharedResource_Thread_Lock.h"
@@ -14,15 +14,15 @@
 namespace SharedResource { namespace Thread { class Thread; } }
 
 /**
- * @brief  Provides an abstract basis for Resource or Module classes that create
- *         and manage a thread. 
+ * @brief  Provides an abstract basis for Resource or Module classes that
+ *         create and manage a thread.
  *
- *  It provides a single thread interface shared by Thread::Resource and 
- * Thread::Module objects. Thread objects selectively lock themselves to prevent
- * concurrent data access, and stop themselves when the application starts to 
- * shut down.
+ *  It provides a single thread interface shared by Thread::Resource and
+ * Thread::Module objects. Thread objects selectively lock themselves to
+ * prevent concurrent data access, and stop themselves when the application
+ * starts to shut down.
  */
-class SharedResource::Thread::Thread : public Util::ShutdownListener, 
+class SharedResource::Thread::Thread : public Util::ShutdownListener,
         private juce::Thread
 {
 public:
@@ -34,7 +34,7 @@ public:
     Thread(const juce::String name);
 
     /**
-     * @brief  Checks that the thread has successfully stopped before 
+     * @brief  Checks that the thread has successfully stopped before
      *         destruction.
      */
     virtual ~Thread();
@@ -55,14 +55,14 @@ public:
      */
     void stopThreadAndWait();
 
-    /* Checks if the resource's thread is currently running. */
+    // Checks if the resource's thread is currently running.
     using juce::Thread::isThreadRunning;
 
-    /* Allow handlers to notify the thread normally to wake it when waiting. */
+    // Allow handlers to notify the thread normally to wake it when waiting.
     using juce::Thread::notify;
 
 protected:
-    /* Allow thread subclasses limited access to the juce::Thread interface: */
+    // Allow thread subclasses limited access to the juce::Thread interface:
     using juce::Thread::signalThreadShouldExit;
     using juce::Thread::threadShouldExit;
     using juce::Thread::getThreadId;
@@ -83,9 +83,9 @@ protected:
 
 private:
     /**
-     * @brief  Runs once each time the thread starts running. 
+     * @brief  Runs once each time the thread starts running.
      *
-     *  Override this method to define custom initialization routines for a 
+     *  Override this method to define custom initialization routines for a
      * Thread subclass.
      *
      * @param lock  The Thread's resource lock object.
@@ -96,8 +96,9 @@ private:
      * @brief  The main thread action loop. When the thread is running, this
      *         will continually run until something stops the thread.
      *
-     * @param lock  Grants access to the thread's SharedResource lock within the
-     *              loop. This should not be saved or shared outside the thread.
+     * @param lock  Grants access to the thread's SharedResource lock within
+     *              the loop. This should not be saved or shared outside the
+     *              thread.
      */
     virtual void runLoop(Lock& lock) = 0;
 
@@ -112,7 +113,7 @@ private:
 
     /**
      * @brief  Sets if the thread should wait until the next notification to
-     *         resume, running the cleanup function and removing the Lock until 
+     *         resume, running the cleanup function and removing the Lock until
      *         the Thread is notified.
      *
      * @return  Whether the thread should wait for a notification before
@@ -127,22 +128,22 @@ private:
     virtual void run() final override;
 
     /**
-     * @brief  Ensures the thread is stopped when the application starts to shut
-     *         down.
+     * @brief  Ensures the thread is stopped when the application starts to
+     *         shut down.
      */
     virtual void onShutdown() override;
 
-    /* Stores the thread's name: */
+    // Stores the thread's name:
     const juce::String threadName;
 
-    /* Used when waiting for the thread to start: */
+    // Used when waiting for the thread to start:
     std::mutex startMutex;
     std::condition_variable startCondition;
 
-    /* Used when waiting for the thread to stop: */
+    // Used when waiting for the thread to stop:
     std::mutex stopMutex;
     std::condition_variable stopCondition;
 
-    /* Preserves the thread object and controls access while the thread runs: */
+    // Preserves the thread object and controls access while the thread runs:
     std::unique_ptr<Lock> threadLock = nullptr;
 };

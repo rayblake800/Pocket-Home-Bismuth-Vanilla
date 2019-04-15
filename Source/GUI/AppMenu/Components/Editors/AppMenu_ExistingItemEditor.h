@@ -1,5 +1,5 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
@@ -14,10 +14,12 @@
 namespace AppMenu { class ExistingItemEditor; }
 namespace AppMenu { class MenuItem; }
 
-/** 
- *  All editable properties of an existing menu item may be changed through this 
- * component. The PopupEditor's category list editor, command field, and launch 
- * in terminal checkbox will be automatically hidden if their respective data 
+/**
+ * @brief  A pop-up editor component that allows the user to change all editable
+ *         properties of an existing menu item.
+ *
+ *  The PopupEditor's category list editor, command field, and launch in
+ * terminal checkbox will be automatically hidden if their respective data
  * values cannot be edited.
  */
 class AppMenu::ExistingItemEditor : public PopupEditor
@@ -28,8 +30,8 @@ public:
      *
      * @param editedItem  The menu item being edited.
      *
-     * @param onConfirm   An optional callback function to run after
-     *                    the user confirms changes.
+     * @param onConfirm   An optional callback function to run after the user
+     *                    confirms changes.
      */
     ExistingItemEditor(const MenuItem editedItem,
             std::function<void()> onConfirm = [](){});
@@ -43,6 +45,6 @@ protected:
     virtual void commitEdits() override;
 
 private:
-    /*  The menu item being edited */
+    //  The menu item being edited
     MenuItem editedItem;
 };

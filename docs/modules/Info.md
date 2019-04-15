@@ -14,5 +14,5 @@ SignalIcon is an image component used to represent a signal strength.
 ConnectionIcon is a SignalIcon that tracks the strength of the active Wifi connection, or to display that there is no connection or no Wifi device.
 
 #### [Info\::IPLabel](../../Source/GUI/Info/Info_IPLabel.h)
-IPLabel is a configurable label component that can print the system's local IP address, its public IP address, or both. 
+IPLabel is a configurable label component that can print the system's local IP address, its public IP address, or both.
 

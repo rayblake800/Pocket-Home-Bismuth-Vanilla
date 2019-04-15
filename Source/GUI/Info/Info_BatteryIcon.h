@@ -1,7 +1,7 @@
 #pragma once
-/** 
+/**
  * @file  Info_BatteryIcon.h
- * 
+ *
  * @brief  Displays the current charge level and charging state of the battery
  *         as an icon, and writes the battery percentage as text.
  */
@@ -14,10 +14,10 @@
 
 namespace Info { class BatteryIcon; }
 
-/** 
+/**
  * @brief  An icon component and label displaying the current battery level.
  *
- *  While this icon is visible, it will periodically check battery state and 
+ *  While this icon is visible, it will periodically check battery state and
  * update itself accordingly. To reduce inaccuracies, a rolling average of the
  * last several detected battery percentages is used to create the reported
  * battery percentage.
@@ -36,16 +36,16 @@ public:
     void applyConfigBounds();
 
     /**
-     * @brief  Updates the color of the BatteryIcon's text.
+     * @brief  Updates the colour of the BatteryIcon's text.
      *
-     * @param newColour  The new color to use when drawing BatteryIcon battery
+     * @param newColour  The new colour to use when drawing BatteryIcon battery
      *                   percentage text.
      */
     void setTextColour(const juce::Colour newColour);
 
 private:
     /**
-     * @brief  All tracked battery states. Each corresponds with an image asset 
+     * @brief  All tracked battery states. Each corresponds with an image asset
      *         file that should be defined in imageAssets.json.
      */
     enum BatteryIconImage
@@ -63,13 +63,13 @@ private:
 
     /**
      * @brief  Sets the icon's new display status.
-     * 
-     * @param batteryImage  One of the battery resource files loaded from
-     *                      the ComponentConfigFile.
+     *
+     * @param batteryImage  One of the battery resource files loaded from the
+     *                      image asset file.
      *
      * @param percent       The battery charge percentage.
      */
-    void setStatus(const BatteryIconImage imageSelection, 
+    void setStatus(const BatteryIconImage imageSelection,
             const juce::String percent);
 
     /**
@@ -77,9 +77,9 @@ private:
      *         disables them when it's hidden.
      */
     void visibilityChanged() override;
-    
+
     /**
-     * @brief  Clears cached battery percentages when the timer is disabled, so 
+     * @brief  Clears cached battery percentages when the timer is disabled, so
      *         that the values will catch up more quickly on resume.
      */
     void onSuspend() override;
@@ -89,18 +89,18 @@ private:
      */
     virtual void timerCallback() override;
 
-    /* Shows the battery icon */
+    // Shows the battery icon
     Theme::Image::Component<> batteryImage;
     Layout::Component::Manager batteryImageLayout;
-    
-    /* Shows battery percentage text */
+
+    // Shows battery percentage text
     juce::Label batteryPercent;
     Layout::Component::Manager batteryPercentLayout;
-    
-    /* Gets battery info */
+
+    // Gets battery info
     Hardware::Battery batteryMonitor;
 
-    /* Holds the last several recorded battery percentages */
+    // Holds the last several recorded battery percentages
     juce::Array<int> batteryPercents;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(BatteryIcon)

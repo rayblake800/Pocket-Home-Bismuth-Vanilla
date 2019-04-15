@@ -7,13 +7,13 @@
 
 #include "SharedResource_Modular_Handler.h"
 
-namespace Wifi 
-{ 
-    namespace APList 
-    { 
-        class Reader; 
+namespace Wifi
+{
+    namespace APList
+    {
+        class Reader;
         class Module;
-    } 
+    }
     class Resource;
     class AccessPoint;
     namespace LibNM { class APHash; }
@@ -22,21 +22,21 @@ namespace Wifi
 /**
  * @brief  Connects to the APList::Module to read access point list data.
  */
-class Wifi::APList::Reader : 
+class Wifi::APList::Reader :
     public SharedResource::Modular::Handler<Resource, Module>
 {
 public:
     Reader();
 
     virtual ~Reader() { }
-    
+
     /**
      * @brief  Gets Wifi::AccessPoint objects for all visible access points.
      *
-     * @return  The entire list of visible access points. 
+     * @return  The entire list of visible access points.
      */
     juce::Array<AccessPoint> getAccessPoints() const;
-    
+
     /**
      * @brief  Finds a single Wifi::AccessPoint using its hash value.
      *

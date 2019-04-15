@@ -17,21 +17,22 @@
 #include "Testing_DelayUtils.h"
 #include "JuceHeader.h"
 
-namespace Wifi 
-{ 
-    namespace Connection 
-    { 
-        namespace Control 
-        { 
+namespace Wifi
+{
+    namespace Connection
+    {
+        namespace Control
+        {
             class ControlTest;
-        } 
-    } 
+        }
+    }
 }
 
-/* Path to the JSON test data file in the program's assets folder: */
+
+// Path to the JSON test data file in the program's assets folder:
 static const constexpr char* testFilePath = "testing/connectionTest.json";
 
-/* Test data keys: */
+// Test data keys:
 namespace TestKeys
 {
     namespace FirstSavedAP
@@ -53,7 +54,8 @@ namespace TestKeys
     }
 }
 
-/* Holds access point test data: */
+
+// Holds access point test data:
 struct APTestData
 {
     juce::String hashString;
@@ -65,15 +67,15 @@ struct APTestData
 /**
  * @brief  Tests the Wifi::Connection::Control module.
  *
- *   This test is far from complete, lots of unexpected results from 
+ *   This test is far from complete, lots of unexpected results from
  * NetworkManager keep turning up, and differences in NetworkManager behavior
  * between different versions are not handled appropriately.
  */
 class Wifi::Connection::Control::ControlTest : public juce::UnitTest
 {
 private:
-    /* Tracks Wifi events that are expected to occur.  The event times in this
-     * queue's events should be ignored. */
+    // Tracks Wifi events that are expected to occur. The event times in this
+    // queue's events should be ignored.
     juce::Array<Wifi::Connection::Event> expectedEventQueue;
 
     /**
@@ -101,13 +103,13 @@ private:
                     !controlTest.expectedEventQueue.isEmpty(),
                     String("Unexpected event ") + newEvent.toString());
 
-            if(!controlTest.expectedEventQueue.isEmpty())
+            if (!controlTest.expectedEventQueue.isEmpty())
             {
                 Event expectedEvent = controlTest.expectedEventQueue.getLast();
                 controlTest.expectedEventQueue.removeLast();
-                controlTest.expect((expectedEvent.getEventType() 
+                controlTest.expect( (expectedEvent.getEventType()
                             == newEvent.getEventType())
-                        && (expectedEvent.getEventAP() 
+                        && (expectedEvent.getEventAP()
                             == newEvent.getEventAP()),
                         String("Unexpected new event. Expected: ")
                         + expectedEvent.toString() + ", found: "
@@ -143,7 +145,7 @@ private:
         {
             return expectedEventQueue.isEmpty();
         }, 200, millisToWait),
-                juce::String(expectedEventQueue.size()) 
+                juce::String(expectedEventQueue.size())
                 + juce::String(" expected connection events did not occur."));
     }
 
@@ -163,16 +165,16 @@ public:
         // If Wifi is connected, save the current connected AP to restore after
         // tests:
         LibNM::APHash initialAPHash;
-        if(recordHandler.isConnected())
+        if (recordHandler.isConnected())
         {
             AccessPoint initialAP = recordHandler.getActiveAP();
             initialAPHash = initialAP.getHashValue();
             beginTest(String("Saving and disconnecting existing connection ")
                     + initialAP.toString());
             connectionController.disconnect();
-            /* The initial AP connection event may or may not make it through
-             * before the disconnect event, so an EventWatcher and 
-             * waitForAllExpected() aren't usable here. */
+            // The initial AP connection event may or may not make it through
+            // before the disconnect event, so an EventWatcher and
+            // waitForAllExpected() aren't usable here.
             juce::MessageManager::getInstance()->runDispatchLoopUntil(1000);
         }
         else
@@ -183,9 +185,9 @@ public:
         expect(!recordHandler.isConnected(),
                 "Failed to close existing connection.");
         EventWatcher connectionEventWatcher(*this);
-        
-        
-        /* Read in test data from the test JSON file: */
+
+
+        // Read in test data from the test JSON file:
         APTestData firstAP;
         APTestData secondAP;
         APTestData thirdAP;
@@ -226,13 +228,13 @@ public:
         {
             logMessage(juce::String("Failed to find a test string value with ")
                     + "key \"" + e.getPropertyKey() + "\"");
-            logMessage(juce::String("Make sure the JSON file at ") 
+            logMessage(juce::String("Make sure the JSON file at ")
                     + testFilePath + " provides valid data at this key.");
             logMessage("Visible access point values:");
             Wifi::APList::Reader apListReader;
-            juce::Array<AccessPoint> visibleAPs 
+            juce::Array<AccessPoint> visibleAPs
                     = apListReader.getAccessPoints();
-            for(const AccessPoint& ap : visibleAPs)
+            for (const AccessPoint& ap : visibleAPs)
             {
                 logMessage(ap.toString());
             }
@@ -241,15 +243,15 @@ public:
             return;
         }
 
-        /* First main connection test: */
+        // First main connection test:
         beginTest("Valid saved connection test");
-        expect(!recordHandler.isConnected(), 
+        expect(!recordHandler.isConnected(),
                 "Failed to disconnect from Wifi connection before tests");
 
         LibNM::APHash savedAPHash(firstAP.hashString);
         logMessage("Scanning for first test access point...");
-        Wifi::AccessPoint savedAP 
-                = TestUtils::Waiting::waitForAccessPoint(savedAPHash); 
+        Wifi::AccessPoint savedAP
+                = TestUtils::Waiting::waitForAccessPoint(savedAPHash);
         expect(!savedAP.isNull(),
                 String("Failed to find saved AP from hash string, ensure ")
                 + testFilePath + " provides valid test hash values.");
@@ -262,22 +264,21 @@ public:
         expectEvent(EventType::disconnected, savedAP);
         connectionController.disconnect();
         waitForAllExpected(1000);
-        
-        /* Second main connection test: */
+
+        // Second main connection test:
         beginTest("Valid unsaved connection test");
         LibNM::APHash unsavedAPHash = secondAP.hashString;
-        logMessage("Scanning for second test access point..."); 
-        Wifi::AccessPoint unsavedAP 
-                = TestUtils::Waiting::waitForAccessPoint(unsavedAPHash); 
+        logMessage("Scanning for second test access point...");
+        Wifi::AccessPoint unsavedAP
+                = TestUtils::Waiting::waitForAccessPoint(unsavedAPHash);
         Saved::Deleter savedConnectionDeleter;
         savedConnectionDeleter.removeSavedConnection(unsavedAP);
 
         logMessage("Attempting to connect without a saved PSK");
         connectionController.connectToAccessPoint(unsavedAP);
         // Wait briefly for an event that shouldn't occur:
-        juce::MessageManager::getInstance()->runDispatchLoopUntil
-            (2000);
-        
+        juce::MessageManager::getInstance()->runDispatchLoopUntil(2000);
+
         logMessage("Attempting to connect with an invalid saved PSK");
         expectEvent(EventType::connectionRequested, unsavedAP);
         expectEvent(EventType::startedConnecting, unsavedAP);
@@ -286,7 +287,7 @@ public:
         connectionController.connectToAccessPoint(unsavedAP,
                 secondAP.invalidPSK);
         waitForAllExpected(15000);
-        
+
         logMessage("Attempting to connect with a valid saved PSK");
         expectEvent(EventType::connectionRequested, unsavedAP);
         expectEvent(EventType::startedConnecting, unsavedAP);
@@ -294,7 +295,7 @@ public:
         connectionController.connectToAccessPoint(unsavedAP, secondAP.validPSK);
         waitForAllExpected(15000);
 
-        /* Third main connection test: */
+        // Third main connection test:
         beginTest("Invalid unsaved connection test");
         LibNM::APHash invalidAPHash = thirdAP.hashString;
         logMessage("Scanning for third test access point...");
@@ -304,9 +305,8 @@ public:
         logMessage("Attempting to connect without a saved PSK");
         connectionController.connectToAccessPoint(invalidAP);
         // Wait briefly for an event that shouldn't occur:
-        juce::MessageManager::getInstance()->runDispatchLoopUntil
-            (2000);
-        
+        juce::MessageManager::getInstance()->runDispatchLoopUntil(2000);
+
         logMessage("Attempting to connect with an invalid saved PSK");
         expectEvent(EventType::connectionRequested, invalidAP);
         expectEvent(EventType::startedConnecting, invalidAP);
@@ -316,11 +316,11 @@ public:
                 thirdAP.invalidPSK);
         waitForAllExpected(15000);
 
-        if(!initialAPHash.isNull())
+        if (!initialAPHash.isNull())
         {
             beginTest("Restoring original Wifi connection");
-            Wifi::AccessPoint initialAP 
-                    = TestUtils::Waiting::waitForAccessPoint(initialAPHash); 
+            Wifi::AccessPoint initialAP
+                    = TestUtils::Waiting::waitForAccessPoint(initialAPHash);
             expectEvent(EventType::connectionRequested, initialAP);
             expectEvent(EventType::startedConnecting, initialAP);
             expectEvent(EventType::connected, initialAP);

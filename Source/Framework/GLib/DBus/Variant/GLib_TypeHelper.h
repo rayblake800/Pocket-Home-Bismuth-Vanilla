@@ -9,9 +9,9 @@ namespace GLib
         /**
          * @brief  Gets the GVariantType of the TypeHelper's type.
          *
-         * @return  The GVariantType* of type T. 
+         * @return  The GVariantType* of type T.
          */
-        static const GVariantType* getGVariantType() 
+        static const GVariantType* getGVariantType()
         {
             DBG("Invalid variant type!");
             jassertfalse;
@@ -21,7 +21,7 @@ namespace GLib
         /**
          * @brief  Gets a string describing the TypeHelper's type.
          *
-         * @return  The name of type T. 
+         * @return  The name of type T.
          */
         static VariantTypes::String getTypeName()
         {
@@ -33,9 +33,9 @@ namespace GLib
         /**
          * @brief  Gets the TypeHelper's GLib format string.
          *
-         * @return  The format string for type T. 
+         * @return  The format string for type T.
          */
-        static VariantTypes::String getFormatString() 
+        static VariantTypes::String getFormatString()
         {
             DBG("Invalid variant type!");
             jassertfalse;
@@ -47,11 +47,11 @@ namespace GLib
          *
          * @param variant  A non-null GVariant pointer.
          *
-         * @return  Whether the variant holds data of type T. 
+         * @return  Whether the variant holds data of type T.
          */
         static bool isType(GVariant* variant)
         {
-            return g_variant_is_of_type(variant, 
+            return g_variant_is_of_type(variant,
                     TypeHelper<T>::getGVariantType());
         }
 
@@ -63,8 +63,8 @@ namespace GLib
          * @param defaultValue  A default value to return if the variant is
          *                      invalid, or not of type T.
          *
-         * @return              The variant's stored value if possible, or
-         *                      the default value if not.
+         * @return              The variant's stored value if possible, or the
+         *                      default value if not.
          */
         static T getValue(GVariant* variant, T defaultValue)
         {
@@ -74,8 +74,7 @@ namespace GLib
         }
 
         /**
-         * @brief  Creates a GVariant holding a value of this TypeHelper's
-         *         type.
+         * @brief  Creates a GVariant holding a value of this TypeHelper's type.
          *
          * @param value  The value to store in the new variant.
          *

@@ -10,8 +10,8 @@
 #include "GLib_ObjectPtr.h"
 #include "JuceHeader.h"
 
-namespace GLib { namespace Signal { 
-        template <class SourceType> class Connection; } } 
+namespace GLib { namespace Signal {
+        template <class SourceType> class Connection; } }
 
 /**
  * @brief  Represents a connection to a GLib::Object signal source.
@@ -22,7 +22,7 @@ template <class SourceType>
 class GLib::Signal::Connection
 {
 private:
-    /* Only the Handler may create connections to signal sources. */
+    // Only the Handler may create connections to signal sources.
     friend class Handler<SourceType>;
 
     /**
@@ -30,32 +30,31 @@ private:
      *
      * @param signal      The name of a signal the source object may create.
      *
-     * @param callback    The callback function used to handle that signal 
-     *                    type.
+     * @param callback    The callback function used to handle that signal type.
      *
      * @param data        The collection of data needed to handle signal
      *                    callbacks.
      */
-    Connection(const juce::String signal, GCallback callback, 
-            CallbackData<SourceType>* data) 
+    Connection(const juce::String signal, GCallback callback,
+            CallbackData<SourceType>* data)
     {
-        if(data != nullptr)
+        if (data != nullptr)
         {
             signalData.reset(data);
             ObjectPtr sourcePtr(data->getSignalSource());
-            if(sourcePtr != nullptr)
+            if (sourcePtr != nullptr)
             {
                 connectionID = g_signal_connect(sourcePtr, signal.toRawUTF8(),
                         callback, data);
-                if(connectionID != 0)
+                if (connectionID != 0)
                 {
                     signalName = signal;
                 }
             }
         }
     }
-public:
 
+public:
     /**
      * @brief  Creates an invalid connection object.
      */
@@ -64,7 +63,7 @@ public:
     /**
      * @brief  Ensures the connection is disconnected on destruction.
      */
-    virtual ~Connection() 
+    virtual ~Connection()
     {
         disconnect();
     }
@@ -99,7 +98,7 @@ public:
      */
     SourceType& getSignalSource()
     {
-        if(signalData == nullptr)
+        if (signalData == nullptr)
         {
             return nullSource;
         }
@@ -114,22 +113,22 @@ public:
      */
     const SourceType& getConstSignalSource() const
     {
-        if(signalData == nullptr)
+        if (signalData == nullptr)
         {
             return nullSource;
         }
         return signalData->getSignalSource();
     }
-    
+
     /**
      * @brief  Checks if this connection object is valid.
      *
-     * @return  Whether the signal source and the signal handler are linked 
+     * @return  Whether the signal source and the signal handler are linked
      *          through this connection.
      */
     bool isConnected() const
     {
-        if(connectionID != 0 && signalData != nullptr)
+        if (connectionID != 0 && signalData != nullptr)
         {
             ObjectPtr sourcePtr(signalData->getSignalSource());
             return sourcePtr != nullptr;
@@ -146,7 +145,7 @@ public:
     void disconnect()
     {
         ObjectPtr sourcePtr(getSignalSource());
-        if(sourcePtr != nullptr && connectionID != 0)
+        if (sourcePtr != nullptr && connectionID != 0)
         {
             g_signal_handler_disconnect(sourcePtr, connectionID);
             connectionID = 0;
@@ -155,14 +154,14 @@ public:
     }
 
 private:
-    /* Holds the signal source copy and signal handler pointer, possibly with
-     * other relevant callback data: */
+    // Holds the signal source copy and signal handler pointer, possibly with
+    // other relevant callback data:
     std::unique_ptr<CallbackData<SourceType>> signalData;
-    /* The name of the connected signal: */
+    // The name of the connected signal:
     juce::String signalName;
-    /* An ID that may be used to cancel the connection: */
+    // An ID that may be used to cancel the connection:
     gulong connectionID = 0;
-    /* Alternate null source to return if the original source is invalid: */
+    // Alternate null source to return if the original source is invalid:
     SourceType nullSource;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Connection);

@@ -3,14 +3,14 @@
 #include "Hardware_I2CBus.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Page::Fel::";
 #endif
 
-/* Localized object class key: */
+// Localized object class key:
 static const juce::Identifier localeClassKey = "Page::Fel";
 
-/* localized text keys: */
+// localized text keys:
 namespace TextKey
 {
     static const juce::Identifier reboot       = "reboot";
@@ -35,13 +35,13 @@ infoLine2("infoLine2", localeText(TextKey::flashingInfo))
     RelativeLayout layout({
         Row(10, { RowItem(&infoLine1) } ),
         Row(10,
-        { 
+        {
             RowItem(),
             RowItem(&yesButton),
             RowItem()
         }),
         Row(10,
-        { 
+        {
             RowItem(),
             RowItem(&noButton),
             RowItem()
@@ -52,7 +52,7 @@ infoLine2("infoLine2", localeText(TextKey::flashingInfo))
     layout.setYMarginFraction(0.05);
     layout.setYPaddingWeight(3);
     setLayout(layout);
-                
+
     infoLine1.setJustificationType(juce::Justification::centred);
     infoLine2.setJustificationType(juce::Justification::centred);
     yesButton.addListener(&pageListener);
@@ -60,9 +60,8 @@ infoLine2("infoLine2", localeText(TextKey::flashingInfo))
     addAndShowLayoutComponents();
 }
 
-/*
- * Handles button click events for the Fel page.
- */
+
+// Handles button click events for the Fel page.
 void Page::Fel::PageListener::buttonClicked(juce::Button* button)
 {
     if (button == &felPage.noButton)
@@ -80,7 +79,7 @@ void Page::Fel::PageListener::buttonClicked(juce::Button* button)
             systemCommands.runActionCommand(
                     Util::CommandTypes::Action::restart);
         }
-        catch (Hardware::I2CBus::I2CException e)
+        catch(Hardware::I2CBus::I2CException e)
         {
             DBG(dbgPrefix << __func__ << e.getErrorMessage());
         }

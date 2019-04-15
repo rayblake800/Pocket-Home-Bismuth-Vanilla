@@ -8,13 +8,13 @@
     "calibrate"           : "POCKET_HOME_SCRIPTS/calibrate.sh",
     "set volume"          : "amixer sset 'Power Amplifier'",
     "set brightness"      : "POCKET_HOME_SCRIPTS/setBrightness.sh",
-    
+
     "sleep check"         : "POCKET_HOME_SCRIPTS/sleepCheck.sh",
     "command check"       : "command -v",
     "set password"        : "pkexec POCKET_HOME_SCRIPTS/passwordManager.sh",
-    
+
     "get volume"          : "POCKET_HOME_SCRIPTS/printVolume.sh",
-    "get battery percent" : "",
+    "get battery percent" : "cat /usr/lib/pocketchip-batt/gauge",
     "get brightness"      : "cat /sys/class/backlight/backlight/brightness",
 
     "get local IP"        : "POCKET_HOME_SCRIPTS/printLocalIP.sh",

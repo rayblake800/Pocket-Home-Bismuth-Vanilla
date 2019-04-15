@@ -7,24 +7,22 @@
 
 Wifi::APList::Reader::Reader() { }
 
-/*
- * Gets Wifi::AccessPoint objects for all visible access points.
- */
+
+// Gets Wifi::AccessPoint objects for all visible access points.
 juce::Array<Wifi::AccessPoint> Wifi::APList::Reader::getAccessPoints() const
 {
     SharedResource::Modular::LockedPtr<Resource, const Module> apList
             = getReadLockedResource();
     return apList->getAccessPoints();
-    
+
 }
 
-/*
- * Finds a single Wifi::AccessPoint
- */
+
+// Finds a single Wifi::AccessPoint
 Wifi::AccessPoint Wifi::APList::Reader::getAccessPoint
 (LibNM::APHash apHash) const
 {
-    SharedResource::Modular::LockedPtr<Resource, const Module> apList 
+    SharedResource::Modular::LockedPtr<Resource, const Module> apList
             = getReadLockedResource();
     return apList->getAccessPoint(apHash);
 }

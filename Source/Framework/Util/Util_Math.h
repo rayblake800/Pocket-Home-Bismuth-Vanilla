@@ -11,15 +11,15 @@ namespace Util
     {
         /**
          * @brief  Finds the median of three values.
-         * 
+         *
          * @param a   The first of the values to compare.
-         * 
+         *
          * @param b   The second of the values to compare.
-         * 
+         *
          * @param c   The third of the values to compare.
          *
          * @tparam T  The compared value type.
-         * 
+         *
          * @return    The median of a, b, and c.
          */
         template<typename T>

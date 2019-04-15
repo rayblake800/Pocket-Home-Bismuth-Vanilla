@@ -5,9 +5,8 @@
 
 Wifi::Device::Reader::Reader() { }
 
-/*
- * Checks if the wifi device is enabled.
- */
+
+// Checks if the wifi device is enabled.
 bool Wifi::Device::Reader::wifiDeviceEnabled() const
 {
     SharedResource::Modular::LockedPtr<Resource, const Module> deviceModule
@@ -16,9 +15,8 @@ bool Wifi::Device::Reader::wifiDeviceEnabled() const
 
 }
 
-/*
- * Checks if a Wifi device managed by NetworkManager exists.
- */
+
+// Checks if a Wifi device managed by NetworkManager exists.
 bool Wifi::Device::Reader::wifiDeviceExists() const
 {
     SharedResource::Modular::LockedPtr<Resource, const Module> deviceModule
@@ -26,9 +24,8 @@ bool Wifi::Device::Reader::wifiDeviceExists() const
     return deviceModule->wifiDeviceExists();
 }
 
-/*
- * Checks if wifi is currently being enabled or disabled.
- */
+
+// Checks if wifi is currently being enabled or disabled.
 bool Wifi::Device::Reader::isDeviceStateChanging() const
 {
     SharedResource::Modular::LockedPtr<Resource, const Module> deviceModule

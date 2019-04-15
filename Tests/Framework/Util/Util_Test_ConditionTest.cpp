@@ -11,41 +11,41 @@ namespace Util
     }
 }
 
-/* Extra milliseconds to wait for an event that should occur at a specific
- * time: */
+
+// Extra milliseconds to wait for an event that should occur at a specific time:
 static const constexpr int bufferPeriod = 500;
 
-/* Interval used in in checks that should never run more than once: */
+// Interval used in in checks that should never run more than once:
 static const constexpr int neverRunInterval = 9999999;
-    
-/* Default condition check interval: */
+
+// Default condition check interval:
 static const constexpr int defaultInterval = 100;
 
-/* Default amount of time used for delayed condition tests: */
+// Default amount of time used for delayed condition tests:
 static const constexpr int defaultDelay = 1000;
 
-/* An interval multiplier that shouldn't be used: */
+// An interval multiplier that shouldn't be used:
 static const constexpr float invalidMult = -0.1;
-/* An interval multiplier that is valid, but unreasonably low: */
+// An interval multiplier that is valid, but unreasonably low:
 static const constexpr float tooLowMult = 0.00001;
-/* An interval multiplier that is valid, but unreasonably high: */
+// An interval multiplier that is valid, but unreasonably high:
 static const constexpr float tooHighMult = 500;
-/* A reasonable multiplier for checks that are increasingly frequent: */
+// A reasonable multiplier for checks that are increasingly frequent:
 static const constexpr float lowMult = 0.95;
-/* A reasonable multiplier for checks that are increasingly delayed: */
+// A reasonable multiplier for checks that are increasingly delayed:
 static const constexpr float highMult = 1.25;
 
 typedef std::function<bool()> TestFunction;
 typedef std::function<void()> VoidFunction;
 
-/* Test conditions to reuse: */
+// Test conditions to reuse:
 TestFunction alwaysPass = [](){ return true; };
 TestFunction alwaysFail = [](){ return false; };
 
-/* Test callbacks to reuse: */
+// Test callbacks to reuse:
 VoidFunction noAction = [](){};
 
-/* Stores the result of a condition test: */
+// Stores the result of a condition test:
 enum class Result
 {
     pass, fail, none
@@ -57,10 +57,10 @@ enum class Result
 class Util::Test::ConditionTest : public juce::UnitTest
 {
 private:
-    /* Result of the last test: */
+    // Result of the last test:
     Result lastResult;
 
-    /* Reusable callbacks for setting the last result: */
+    // Reusable callbacks for setting the last result:
     VoidFunction markAsPassed = [this]()
     {
         lastResult = Result::pass;
@@ -91,7 +91,7 @@ private:
      * @param expected  The expected result of the last condition check.
      */
     void testResult(const Result expected);
-    
+
     /**
      * @brief  Creates a single use test function that will log every time it
      *         runs its test.
@@ -99,8 +99,8 @@ private:
      * @param test  The condition test function to track.
      *
      * @return      A tracked version of the test function. The returned
-     *              function is valid for a single test or until trackedTest
-     *              is called again, whichever comes first.
+     *              function is valid for a single test or until trackedTest is
+     *              called again, whichever comes first.
      */
     TestFunction trackedTest(const TestFunction test);
 
@@ -114,9 +114,9 @@ private:
      */
     VoidFunction badCallback(const juce::String error);
     /**
-     * @brief  Ensures the object is not running a check, sets its test 
-     *         frequency and multiplier to either new or default values, and 
-     *         resets the last saved test result to Result::none. 
+     * @brief  Ensures the object is not running a check, sets its test
+     *         frequency and multiplier to either new or default values, and
+     *         resets the last saved test result to Result::none.
      *
      * This will test that the object is not currently running a check.
      *
@@ -152,7 +152,7 @@ private:
      */
     void startTestedCheck(ConditionChecker& toTest, TestFunction condition,
             const VoidFunction onPassing = noAction,
-            int timeout = -1, 
+            int timeout = -1,
             const VoidFunction onTimeout = VoidFunction());
 
     /**
@@ -164,7 +164,7 @@ private:
     void immediateSuccessTest(ConditionChecker& toTest);
 
     /**
-     * @brief  Runs a delayed condition test that will succeed after a specific 
+     * @brief  Runs a delayed condition test that will succeed after a specific
      *         duration.
      *
      * @param toTest     The checker to use to run the test.
@@ -195,7 +195,7 @@ private:
 
 public:
     ConditionTest() : juce::UnitTest("ConditionChecker Testing", "Util") {}
-    
+
     void runTest() override
     {
         ConditionChecker checker;
@@ -284,13 +284,11 @@ public:
 
 static Util::Test::ConditionTest test;
 
-/*
- * Creates an error message describing a specific failed condition check result.
- */
+// Creates an error message describing a specific failed condition check result.
 juce::String Util::Test::ConditionTest::errorMessage
 (const Result expected, const Result actual)
 {
-    if(expected == actual)
+    if (expected == actual)
     {
         return "Using an error message, but the expected result occured.";
     }
@@ -322,14 +320,14 @@ juce::String Util::Test::ConditionTest::errorMessage
     return error;
 }
 
-/*
- * Tests if the last condition check resulted in the expected outcome, using an 
- * error message from the errorMessage function if the result was unexpected.
- */
+
+// Tests if the last condition check resulted in the expected outcome, using an
+// error message from the errorMessage function if the result was unexpected.
 void Util::Test::ConditionTest::testResult(const Result expected)
 {
     expect(lastResult == expected, errorMessage(expected, lastResult));
 }
+
 
 // Tracks ongoing condition check data
 struct TrackingData
@@ -340,9 +338,7 @@ struct TrackingData
     juce::int64 lastPrint = -100;
 };
 
-/*
- * Creates a single use test function that will log every time it runs its test.
- */
+// Creates a single use test function that will log every time it runs its test.
 TestFunction Util::Test::ConditionTest::trackedTest(const TestFunction test)
 {
     using juce::String;
@@ -352,10 +348,10 @@ TestFunction Util::Test::ConditionTest::trackedTest(const TestFunction test)
     TestFunction trackedTest = [this, data, test]()
     {
         data->count++;
-        juce::int64 timePassed = juce::Time::currentTimeMillis() 
+        juce::int64 timePassed = juce::Time::currentTimeMillis()
                 - data->startTime - data->runTime;
         data->runTime += timePassed;
-        if(data->runTime > (data->lastPrint + 100))
+        if (data->runTime > (data->lastPrint + 100))
         {
             data->lastPrint = data->runTime;
             String testMessage = "Check ";
@@ -367,7 +363,7 @@ TestFunction Util::Test::ConditionTest::trackedTest(const TestFunction test)
             testMessage += " since last test.";
             logMessage(testMessage);
         }
-        if(test())
+        if (test())
         {
             logMessage("Checked condition has been met");
             delete data;
@@ -378,12 +374,10 @@ TestFunction Util::Test::ConditionTest::trackedTest(const TestFunction test)
     return trackedTest;
 }
 
-/*
- * Gets a callback function that should never run. If it does run, it fails a 
- * test and prints an error message.
- */
-VoidFunction Util::Test::ConditionTest::badCallback
-(const juce::String error)
+
+// Gets a callback function that should never run. If it does run, it fails a
+// test and prints an error message.
+VoidFunction Util::Test::ConditionTest::badCallback(const juce::String error)
 {
     VoidFunction failure = [this, error]()
     {
@@ -392,9 +386,8 @@ VoidFunction Util::Test::ConditionTest::badCallback
     return failure;
 }
 
-/*
- * Resets a ConditionChecker object.
- */
+
+// Resets a ConditionChecker object.
 void Util::Test::ConditionTest::resetConditionChecker
 (ConditionChecker& toReset, const int testFrequency, const float testMultiplier)
 {
@@ -404,24 +397,22 @@ void Util::Test::ConditionTest::resetConditionChecker
     toReset.setCheckInterval(testFrequency, testMultiplier);
 }
 
-/*
- * Starts a condition check, testing if the check successfully starts.
- */
+
+// Starts a condition check, testing if the check successfully starts.
 void Util::Test::ConditionTest::startTestedCheck(
         ConditionChecker& toTest,
         TestFunction condition,
         const VoidFunction onPassing,
-        int timeout, 
+        int timeout,
         const VoidFunction onTimeout)
 {
     expect(toTest.startCheck(condition, onPassing, timeout, onTimeout),
             "Failed to start condition checking.");
 }
 
-/*
- * Tests that a ConditionChecker correctly runs a check that should immediately 
- * succeed.
- */
+
+// Tests that a ConditionChecker correctly runs a check that should immediately
+// succeed.
 void Util::Test::ConditionTest::immediateSuccessTest(ConditionChecker& toTest)
 {
     bool passed = false;
@@ -433,9 +424,8 @@ void Util::Test::ConditionTest::immediateSuccessTest(ConditionChecker& toTest)
     expect(passed, "Condition check failed to run passing callback.");
 }
 
-/*
- * Runs a delayed condition test that will succeed after a specific duration.
- */
+
+// Runs a delayed condition test that will succeed after a specific duration.
 void Util::Test::ConditionTest::delayTest(ConditionChecker& toTest,
         const int delayMS,
         const int timeout,
@@ -457,10 +447,9 @@ void Util::Test::ConditionTest::delayTest(ConditionChecker& toTest,
     expect(!toTest.isChecking(), "Condition check failed to finish");
 }
 
-/*
- * Tests that a Condition checker correctly runs a check that should succeed 
- * after a specific duration.
- */
+
+// Tests that a Condition checker correctly runs a check that should succeed
+// after a specific duration.
 void Util::Test::ConditionTest::delayedSuccessTest
 (ConditionChecker& toTest, const int delayMS)
 {

@@ -2,7 +2,7 @@
 /**
  * @file  Config_ListenerInterface.h
  *
- * @brief  The interface used by Config::FileResource objects to send 
+ * @brief  The interface used by Config::FileResource objects to send
  *         notifications to Config::Listener objects when one of their tracked
  *         values are updated.
  */
@@ -12,13 +12,13 @@
 namespace Config { class ListenerInterface; }
 
 /**
- *  The interface used to update Listeners that track any number of values in a 
- * JSON configuration file.
+ * @brief  The interface used to update Listeners that track any number of
+ *         values in a JSON configuration file.
  */
 class Config::ListenerInterface
 {
 public:
-    /* Only FileResource may send updates to Listeners. */
+    // Only FileResource may send updates to Listeners.
     friend class FileResource;
 
     ListenerInterface() { }
@@ -31,7 +31,7 @@ protected:
      *
      * @param key  The key to a value stored in the Listener's file resource.
      *
-     * @return     Whether the value with the given key is tracked by the 
+     * @return     Whether the value with the given key is tracked by the
      *             Listener.
      */
     virtual bool isKeyTracked(const juce::Identifier& key) const = 0;

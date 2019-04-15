@@ -15,29 +15,27 @@
 
 #ifdef JUCE_DEBUG
 #include "Wifi_DebugOutput.h"
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Wifi::Signal::DeviceModule::";
 #endif
 
-/*
- * Connects the module to its Resource.
- */
+// Connects the module to its Resource.
 Wifi::Signal::DeviceModule::DeviceModule(Resource& parentResource) :
 Wifi::Module(parentResource) { }
 
-/*
- * Starts tracking the LibNM thread's DeviceWifi object.
- */
+
+// Starts tracking the LibNM thread's DeviceWifi object.
 void Wifi::Signal::DeviceModule::connect()
 {
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->call([this, nmThread]()
     {
         LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
         connectAllSignals(wifiDevice);
-        juce::Array<LibNM::AccessPoint> visibleAPs 
+        juce::Array<LibNM::AccessPoint> visibleAPs
                 = wifiDevice.getAccessPoints();
-        for(LibNM::AccessPoint& accessPoint : visibleAPs)
+        for (LibNM::AccessPoint& accessPoint : visibleAPs)
         {
             APModule* apHandler = getSiblingModule<APModule>();
             apHandler->connectAllSignals(accessPoint);
@@ -45,9 +43,8 @@ void Wifi::Signal::DeviceModule::connect()
     });
 }
 
-/*
- * Stops tracking the LibNM::ThreadResource's DeviceWifi object.
- */
+
+// Stops tracking the LibNM::ThreadResource's DeviceWifi object.
 void Wifi::Signal::DeviceModule::disconnect()
 {
     disconnectAll();
@@ -55,31 +52,31 @@ void Wifi::Signal::DeviceModule::disconnect()
     apHandler->disconnect();
 }
 
-/*
- * Handles Wifi device state changes.
- */
+
+// Handles Wifi device state changes.
 void Wifi::Signal::DeviceModule::stateChanged
 (NMDeviceState newState, NMDeviceState oldState, NMDeviceStateReason reason)
 {
     ASSERT_NM_CONTEXT;
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->lockForAsyncCallback(SharedResource::LockType::write,
             [this, newState, oldState, reason]()
     {
-        DBG(dbgPrefix << "stateChanged" << ":  changed to " 
-                << deviceStateString(newState) 
+        DBG(dbgPrefix << "stateChanged" << ":  changed to "
+                << deviceStateString(newState)
                 << ", reason=" << deviceStateReasonString(reason));
-        DBG(dbgPrefix << "stateChanged" << ":  old state = " 
+        DBG(dbgPrefix << "stateChanged" << ":  old state = "
                 << deviceStateString(oldState));
 
         // Find any access point associated with the state change:
-        LibNM::Thread::Module* nmThread 
+        LibNM::Thread::Module* nmThread
                 = getSiblingModule<LibNM::Thread::Module>();
         APList::Module* apList = getSiblingModule<APList::Module>();
         AccessPoint lastActiveAP;
-        LibNM::AccessPoint activeNMAP 
+        LibNM::AccessPoint activeNMAP
                 = nmThread->getWifiDevice().getActiveAccessPoint();
-        if(!activeNMAP.isNull())
+        if (!activeNMAP.isNull())
         {
             lastActiveAP = apList->getAccessPoint(activeNMAP.generateHash());
         }
@@ -91,9 +88,9 @@ void Wifi::Signal::DeviceModule::stateChanged
 
         using Wifi::Connection::EventType;
         using Wifi::Connection::Event;
-        
+
         EventType eventType;
-        switch (newState)
+        switch(newState)
         {
             case NM_DEVICE_STATE_ACTIVATED:
                 eventType = EventType::connected;
@@ -109,11 +106,11 @@ void Wifi::Signal::DeviceModule::stateChanged
             case NM_DEVICE_STATE_DISCONNECTED:
             case NM_DEVICE_STATE_UNMANAGED:
             case NM_DEVICE_STATE_UNAVAILABLE:
-                if(oldState == NM_DEVICE_STATE_NEED_AUTH)
+                if (oldState == NM_DEVICE_STATE_NEED_AUTH)
                 {
                     eventType = EventType::connectionAuthFailed;
                 }
-                else if(oldState == NM_DEVICE_STATE_DEACTIVATING) 
+                else if (oldState == NM_DEVICE_STATE_DEACTIVATING)
                 {
                     eventType = EventType::disconnected;
                 }
@@ -125,33 +122,34 @@ void Wifi::Signal::DeviceModule::stateChanged
             case NM_DEVICE_STATE_DEACTIVATING:
             case NM_DEVICE_STATE_FAILED:
                 eventType = (reason == NM_DEVICE_STATE_REASON_NO_SECRETS) ?
-                        EventType::connectionAuthFailed 
+                        EventType::connectionAuthFailed
                         : EventType::disconnected;
                 break;
             case NM_DEVICE_STATE_UNKNOWN:
             default:
                 eventType = EventType::invalid;
         }
-        if(lastActiveAP.isNull())
+        if (lastActiveAP.isNull())
         {
             lastActiveAP = connectionRecord->getActiveAP();
         }
-        
-        if(eventType != EventType::invalid)
+
+        if (eventType != EventType::invalid)
         {
             Event newEvent(lastActiveAP, eventType);
             Connection::Control::Module* connectionControl
                     = getSiblingModule<Connection::Control::Module>();
-            if(connectionControl->tryingToConnect())
+            if (connectionControl->tryingToConnect())
             {
                 // Notify the Connection::Control::Module if it is opening a
                 // connection and needs to know about new connection events.
                 connectionControl->wifiEventRecorded(newEvent);
 
                 // If the event is a connection failure attempt, don't pass it
-                // to the Record::Module yet. The Control::Module gets the final
-                // say on when its connection attempts have actually failed.
-                if(eventType == EventType::connectionFailed 
+                // to the Record::Module yet. The Control::Module gets the
+                // final say on when its connection attempts have actually
+                // failed.
+                if (eventType == EventType::connectionFailed
                         || eventType == EventType::connectionAuthFailed
                         || eventType == EventType::disconnected)
                 {
@@ -163,21 +161,20 @@ void Wifi::Signal::DeviceModule::stateChanged
     });
 }
 
-/*
- * Updates the access point list whenever a new access point is detected.
- */
-void Wifi::Signal::DeviceModule::accessPointAdded
-(LibNM::AccessPoint addedAP)
+
+// Updates the access point list whenever a new access point is detected.
+void Wifi::Signal::DeviceModule::accessPointAdded(LibNM::AccessPoint addedAP)
 {
     ASSERT_NM_CONTEXT;
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->lockForAsyncCallback(SharedResource::LockType::write,
             [this, addedAP]()
     {
         APModule* apHandler = getSiblingModule<APModule>();
         apHandler->connectAllSignals(addedAP);
 
-        DBG(dbgPrefix << "accessPointAdded" << ": Added Wifi AP " 
+        DBG(dbgPrefix << "accessPointAdded" << ": Added Wifi AP "
                 << addedAP.getSSIDText());
 
         Connection::Control::Module* connectionController
@@ -189,82 +186,82 @@ void Wifi::Signal::DeviceModule::accessPointAdded
     });
 }
 
-/*
- * Updates the access point list whenever a previously seen access point is 
- * lost.
- */
+
+// Updates the access point list whenever a previously seen access point is
+// lost.
 void Wifi::Signal::DeviceModule::accessPointRemoved()
 {
     ASSERT_NM_CONTEXT;
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
     nmThread->lockForAsyncCallback(SharedResource::LockType::write, [this]()
     {
         APList::Module* apList = getSiblingModule<APList::Module>();
         apList->removeInvalidatedAccessPoints();
 
-#ifdef JUCE_DEBUG
+        #ifdef JUCE_DEBUG
         static int lastAPCount = 0;
-        LibNM::Thread::Module* nmThread 
+        LibNM::Thread::Module* nmThread
                 = getSiblingModule<LibNM::Thread::Module>();
         int apsRemaining = nmThread->getWifiDevice().getAccessPoints().size();
-        if(apsRemaining != lastAPCount)
+        if (apsRemaining != lastAPCount)
         {
             lastAPCount = apsRemaining;
-            DBG(dbgPrefix << "accessPointRemoved" << ": " << lastAPCount 
+            DBG(dbgPrefix << "accessPointRemoved" << ": " << lastAPCount
                     << " AP(s) remaining.");
         }
-#endif
+        #endif
     });
 }
 
-/*
- * Updates the connection record when the active network connection changes.
- */
+
+// Updates the connection record when the active network connection changes.
 void Wifi::Signal::DeviceModule::activeConnectionChanged
 (LibNM::ActiveConnection activeConnection)
 {
     ASSERT_NM_CONTEXT;
-    LibNM::Thread::Module* nmThread = getSiblingModule<LibNM::Thread::Module>();
-    nmThread->lockForAsyncCallback(SharedResource::LockType::write, 
+    LibNM::Thread::Module* nmThread
+            = getSiblingModule<LibNM::Thread::Module>();
+    nmThread->lockForAsyncCallback(SharedResource::LockType::write,
             [this, activeConnection]()
     {
         using Wifi::Connection::EventType;
         using Wifi::Connection::Event;
 
-        DBG(dbgPrefix << "activeConnectionChanged" 
-                << ": active connection changed to " 
-                << (activeConnection.isNull() ? 
+        DBG(dbgPrefix << "activeConnectionChanged"
+                << ": active connection changed to "
+                << (activeConnection.isNull() ?
                     "NULL" : activeConnection.getUUID()));
 
         Connection::Record::Module* connectionRecord
                 = getSiblingModule<Connection::Record::Module>();
         Event lastEvent = connectionRecord->getLatestEvent();
         EventType lastEventType = lastEvent.getEventType();
-        
-        EventType updateType = EventType::invalid;        
+
+        EventType updateType = EventType::invalid;
         Wifi::AccessPoint connectionAP = lastEvent.getEventAP();
-        if(activeConnection.isNull())
+        if (activeConnection.isNull())
         {
-            updateType = EventType::disconnected; 
-            static_cast<APInterface::SavedConnection*>(&connectionAP)
+            updateType = EventType::disconnected;
+            static_cast<APInterface::SavedConnection*> (&connectionAP)
                     ->setLastConnectionTime
                     (juce::Time::getCurrentTime().toMilliseconds());
         }
         else
         {
-            LibNM::Thread::Module* nmThread 
+            LibNM::Thread::Module* nmThread
                     = getSiblingModule<LibNM::Thread::Module>();
             const LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
             const LibNM::AccessPoint nmAP = wifiDevice.getAccessPoint(
                     activeConnection.getAccessPointPath());
-            const APList::Module* apList 
+            const APList::Module* apList
                     = getConstSiblingModule<APList::Module>();
             connectionAP = apList->getAccessPoint(nmAP.generateHash());
 
-            NMActiveConnectionState connectionState 
+            NMActiveConnectionState connectionState
                     = activeConnection.getConnectionState();
 
-            if(connectionState == NM_ACTIVE_CONNECTION_STATE_ACTIVATING)
+            if (connectionState == NM_ACTIVE_CONNECTION_STATE_ACTIVATING)
             {
                 updateType = EventType::startedConnecting;
             }
@@ -272,7 +269,7 @@ void Wifi::Signal::DeviceModule::activeConnectionChanged
             {
                 updateType = EventType::connected;
                 APInterface::SavedConnection* apUpdateInterface
-                        = static_cast<APInterface::SavedConnection*>(
+                        = static_cast<APInterface::SavedConnection*> (
                                 &connectionAP);
                 apUpdateInterface->setLastConnectionTime
                         (juce::Time::getCurrentTime().toMilliseconds());

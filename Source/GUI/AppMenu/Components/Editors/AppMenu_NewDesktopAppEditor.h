@@ -1,26 +1,28 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
-/** 
+/**
  * @file  AppMenu_NewDesktopAppEditor.h
- * 
- * @brief  A pop-up editor component that allows the user to create a new 
- *         application link as a local .desktop file.  
+ *
+ * @brief  Allows the user to create new application links as local .desktop
+ *         files.
  */
 
 #include "AppMenu_PopupEditor.h"
 
 namespace AppMenu { class NewDesktopAppEditor; }
 
-/** 
- *  After entering data into this editor and pressing the confirm button, a new 
- * application link is added to the menu, and the .desktop file is written. 
- * These files will be saved to the current user folder under 
- * .local/share/applications. This allows the user to create menu items that
- * are visible to other applications that read desktop entry files.
+/**
+ * @brief  A pop-up editor component that allows the user to create a new
+ *         application link as a local .desktop file.
  *
-*/
+ *  After entering data into this editor and pressing the confirm button, a new
+ * application link is added to the menu, and the .desktop file is written.
+ * These files will be saved to the current user folder under
+ * .local/share/applications. This allows the user to create menu items that are
+ * visible to other applications that read desktop entry files.
+ */
 class AppMenu::NewDesktopAppEditor : public PopupEditor {
 public:
     /**
@@ -34,8 +36,7 @@ public:
 
 private:
     /**
-     * @brief  Creates a new desktop entry file using the editor's field 
-     *         values.
+     * @brief  Creates a new desktop entry file using the editor's field values.
      */
     virtual void commitEdits() override;
 };

@@ -2,14 +2,14 @@
 /**
  * @file  GLib_BasicValueWrapper.h
  *
- * @brief  Wraps a basic value type in an object wrapper, which can be treated 
+ * @brief  Wraps a basic value type in an object wrapper, which can be treated
  *         exactly like the contained type.
  */
 
 namespace GLib { template <typename basicType> class BasicValueWrapper; }
 
 /**
- * Use this to allow different template specializations for synonymous types.
+ * @brief  Allows different template specializations for synonymous types.
  *
  * @tparam basicType  The basic data type this wrapper contains.
  */

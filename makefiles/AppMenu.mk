@@ -25,11 +25,11 @@ OBJECTS_APPMENU_COMPONENT := \
   $(APPMENU_OBJ)MenuButton.o \
   $(APPMENU_OBJ)FolderComponent.o \
   $(APPMENU_OBJ)MenuComponent.o \
-  $(APPMENU_OBJ)MainComponent.o 
+  $(APPMENU_OBJ)MainComponent.o
 
 OBJECTS_APPMENU_CONTROL := \
   $(APPMENU_OBJ)Controller.o \
-  $(APPMENU_OBJ)InputHandler.o 
+  $(APPMENU_OBJ)InputHandler.o
 
 OBJECTS_APPMENU_EDITOR := \
   $(APPMENU_OBJ)NewConfigItemEditor.o \
@@ -46,7 +46,7 @@ OBJECTS_APPMENU_SCROLLING := \
   $(APPMENU_SCROLLING_OBJ)MenuButton.o \
   $(APPMENU_SCROLLING_OBJ)FolderComponent.o \
   $(APPMENU_SCROLLING_OBJ)MenuComponent.o \
-  $(APPMENU_SCROLLING_OBJ)InputHandler.o 
+  $(APPMENU_SCROLLING_OBJ)InputHandler.o
 
 APPMENU_PAGED_DIR := $(APPMENU_DIR)/Formats/Paged
 APPMENU_PAGED_PREFIX := $(APPMENU_PREFIX)Paged_
@@ -56,7 +56,7 @@ OBJECTS_APPMENU_PAGED := \
   $(APPMENU_PAGED_OBJ)FolderComponent.o \
   $(APPMENU_PAGED_OBJ)MenuComponent.o \
   $(APPMENU_PAGED_OBJ)InputHandler.o \
-  $(APPMENU_PAGED_OBJ)Initializer.o 
+  $(APPMENU_PAGED_OBJ)Initializer.o
 
 OBJECTS_APPMENU := \
   $(APPMENU_OBJ)AppMenu.o \
@@ -67,13 +67,13 @@ OBJECTS_APPMENU := \
   $(OBJECTS_APPMENU_CONTROL) \
   $(OBJECTS_APPMENU_EDITOR) \
   $(OBJECTS_APPMENU_SCROLLING) \
-  $(OBJECTS_APPMENU_PAGED)  
+  $(OBJECTS_APPMENU_PAGED)
 
 APPMENU_TEST_PREFIX := $(APPMENU_PREFIX)Test_
 APPMENU_TEST_OBJ := $(APPMENU_OBJ)Test_
 OBJECTS_APPMENU_TEST := \
-  $(APPMENU_TEST_OBJ)AppMenu.o \
-  $(APPMENU_TEST_OBJ)ConfigFile.o
+  $(APPMENU_TEST_OBJ)MenuTest.o \
+  $(APPMENU_TEST_OBJ)MenuFileTest.o
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_APPMENU := $(OBJECTS_APPMENU) $(OBJECTS_APPMENU_TEST)
@@ -164,7 +164,7 @@ $(APPMENU_OBJ)SettingsController.o: \
     $(APPMENU_DIR)/$(APPMENU_PREFIX)SettingsController.cpp
 
 # Tests:
-$(APPMENU_TEST_OBJ)AppMenu.o: \
-    $(APPMENU_TEST_DIR)/AppMenu.cpp
-$(APPMENU_TEST_OBJ)ConfigFile.o: \
-    $(APPMENU_TEST_DIR)/ConfigFile.cpp
+$(APPMENU_TEST_OBJ)MenuTest.o: \
+    $(APPMENU_TEST_DIR)/$(APPMENU_TEST_PREFIX)MenuTest.cpp
+$(APPMENU_TEST_OBJ)MenuFileTest.o: \
+    $(APPMENU_TEST_DIR)/$(APPMENU_TEST_PREFIX)MenuFileTest.cpp

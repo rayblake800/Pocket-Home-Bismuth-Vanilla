@@ -1,5 +1,5 @@
 ########################### Wifi Module ########################################
-# Add this module only if Wifi support is enabled: 
+# Add this module only if Wifi support is enabled:
 ifeq ($(WIFI_SUPPORT), 1)
 
 WIFI_DIR = Source/System/Wifi
@@ -50,7 +50,7 @@ NM_DBUS_PREFIX := $(NM_PREFIX)DBus_
 NM_DBUS_OBJ := $(NM_OBJ)DBus_
 OBJECTS_NM_DBUS := \
   $(NM_DBUS_OBJ)SavedConnection.o \
-  $(NM_DBUS_OBJ)SavedConnectionLoader.o  
+  $(NM_DBUS_OBJ)SavedConnectionLoader.o
 
 NM_SIGNAL_PREFIX := $(NM_PREFIX)Signal_
 NM_SIGNAL_OBJ := $(NM_OBJ)Signal_
@@ -66,7 +66,7 @@ OBJECTS_NM := \
   $(OBJECTS_NM_OWNED) \
   $(OBJECTS_NM_DBUS) \
   $(OBJECTS_NM_THREAD) \
-  $(OBJECTS_NM_SIGNAL) 
+  $(OBJECTS_NM_SIGNAL)
 
 ################ Access Point Submodule ################
 
@@ -168,7 +168,7 @@ WIFI_TESTUTILS_OBJ := $(WIFI_OBJ)TestUtils_
 OBJECTS_WIFI_TESTUTILS := \
   $(WIFI_TESTUTILS_OBJ)ConnectionListener.o \
   $(WIFI_TESTUTILS_OBJ)Waiting.o
-                          
+
 OBJECTS_WIFI_TEST := \
   $(OBJECTS_WIFI_TESTUTILS) \
   $(WIFI_OBJ)APList_ListTest.o \

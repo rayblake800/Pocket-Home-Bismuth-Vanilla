@@ -15,7 +15,7 @@ if [[ ! $(ls -A $buildDir | grep "d\$") ]]; then
    echo "No dependency files to check."
    exit 0
 fi
-    
+
 
 echo "Removing build files with missing dependencies:"
 
@@ -48,4 +48,4 @@ for fileName in $buildDir/*.d; do
     numScanned=$(($numScanned + 1))
 done
 echo -e "\r\033[K$numRemoved/$numScanned build files were removed."
-            
+

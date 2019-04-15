@@ -2,24 +2,23 @@
 #include "Theme_Colour_Element.h"
 
 /**
- * @file Theme_Colour_ColourIds.h
- * 
- * @brief Provides a centralized location for accessing all project ColourId
- *        values.
+ * @file  Theme_Colour_ColourIds.h
  *
- * The Juce library assigns a set of unique ColourId values to each
- * Component class. These values are stored and loaded by the 
- * Theme::Colour::JSONResource, and set by the Theme::LookAndFeel class. This 
- * allows the application's color theme to be centrally managed and easily 
- * configured.
- *   
- * In order easily track all of these ColourId values, the ColourIds namespace
- * lists every one of these values, assigning each Component its own namespace 
- * of ColourIds.
+ * @brief  Provides a centralized location for accessing all project ColourId
+ *         values.
+ *
+ *  The JUCE library assigns a set of unique ColourId values to each Component
+ * class. These values are stored and loaded by the Theme::Colour::JSONResource,
+ * and set by the Theme::LookAndFeel class. This allows the application's colour
+ * theme to be centrally managed and easily configured.
+ *
+ *  In order to more easily manage ColourId values, the ColourIds namespace
+ * lists all ColourIds relevent to this application. Each Component's IDs are
+ * grouped into a separate inner namespace, and each ID is assigned a generic
+ * Colour category used to determine its default value.
  */
 
 namespace Theme { namespace Colour { namespace ColourIds {
-
 
 namespace TextButton
 {
@@ -310,7 +309,8 @@ namespace HomePage
             0x1900800, UICategory::text);
 }
 
-/* The list of all Colour Element objects, sorted by ID: */
+
+// The list of all Colour Element objects, sorted by ID:
 const juce::Array<const Element*> allElements =
 {
     &TextButton::buttonOff,

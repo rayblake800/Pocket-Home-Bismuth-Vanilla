@@ -11,10 +11,10 @@
 namespace Settings { class ClockModePicker; }
 
 /**
- * @brief  Allows the user to choose between hiding the clock, showing twelve 
+ * @brief  Allows the user to choose between hiding the clock, showing twelve
  *         hour time, and showing twenty four hour time.
  */
-class Settings::ClockModePicker : public juce::ComboBox, 
+class Settings::ClockModePicker : public juce::ComboBox,
         public Locale::TextUser, private juce::ComboBox::Listener
 {
 public:

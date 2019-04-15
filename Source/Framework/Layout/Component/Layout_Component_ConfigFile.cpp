@@ -5,7 +5,7 @@
 #include "Windows_Info.h"
 
 #ifdef JUCE_DEBUG
-/* Print the full class name before all debug output: */
+// Print the full class name before all debug output:
 static const constexpr char* dbgPrefix = "Layout::Component::ConfigFile::";
 #endif
 
@@ -13,26 +13,23 @@ namespace ComponentLayout = Layout::Component;
 
 ComponentLayout::ConfigFile::ConfigFile() { }
 
-/*
- * Gets configured component layouts from shared JSON file data.
- */
-ComponentLayout::ConfigLayout 
-ComponentLayout::ConfigFile::getLayout(const juce::Identifier& componentKey)
+
+// Gets configured component layouts from shared JSON file data.
+ComponentLayout::ConfigLayout ComponentLayout::ConfigFile::getLayout
+(const juce::Identifier& componentKey)
 {
-    SharedResource::LockedPtr<const JSONResource> config 
+    SharedResource::LockedPtr<const JSONResource> config
             = getReadLockedResource();
     return config->getLayout(componentKey);
 }
 
-/*
- * Return the most appropriate font size for drawing text
- */
+
+// Return the most appropriate font size for drawing text
 int ComponentLayout::ConfigFile::getFontHeight
 (juce::Rectangle <int> textBounds, juce::String text)
 {
-    SharedResource::LockedPtr<const JSONResource> config 
+    SharedResource::LockedPtr<const JSONResource> config
             = getReadLockedResource();
-
     int numLines = 1;
     for (int i = 0; i < text.length(); i++)
     {
@@ -41,7 +38,6 @@ int ComponentLayout::ConfigFile::getFontHeight
             numLines++;
         }
     }
-
     int height = textBounds.getHeight() / numLines;
     juce::Font defaultFont(height);
     int width = defaultFont.getStringWidth(text);
@@ -49,7 +45,6 @@ int ComponentLayout::ConfigFile::getFontHeight
     {
         height = textBounds.getWidth() * height / width;
     }
-
     int testHeight = getFontHeight(TextSize::largeText);
     if (height > testHeight)
     {
@@ -68,23 +63,22 @@ int ComponentLayout::ConfigFile::getFontHeight
     return height;
 }
 
-/**
- * Gets the height in pixels of one of the three configured text sizes.
- */
+
+// Gets the height in pixels of one of the three configured text sizes.
 int ComponentLayout::ConfigFile::getFontHeight(TextSize sizeType)
 {
     using juce::var;
     namespace Keys = Layout::Component::JSONKeys;
-    const juce::Identifier& key = (sizeType == TextSize::smallText ? 
+    const juce::Identifier& key = (sizeType == TextSize::smallText ?
             Keys::smallText :
             (sizeType == TextSize::mediumText ?
                 Keys::mediumText : Keys::largeText));
     var size = getReadLockedResource()->getConfigValue<var>(key);
-    if(size.isDouble())
+    if (size.isDouble())
     {
-        return (int) ((double) size * Windows::Info::getHeight());
+        return (int) ( (double) size * Windows::Info::getHeight());
     }
-    else if(size.isInt())
+    else if (size.isInt())
     {
         return (int) size;
     }

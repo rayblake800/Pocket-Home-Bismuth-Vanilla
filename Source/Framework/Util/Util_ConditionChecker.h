@@ -2,8 +2,8 @@
 /**
  * @file  Util_ConditionChecker.h
  *
- * @brief  Handles tasks that require waiting for an event that will occur after
- *         an indeterminate delay or not at all.
+ * @brief  Handles tasks that require waiting for an event that will occur
+ *         after an indeterminate delay or not at all.
  */
 
 #include "JuceHeader.h"
@@ -27,8 +27,7 @@ public:
      *         another condition.
      *
      * @param check          The function used to check the condition. This
-     *                       should return true when the condition has been
-     *                       met.
+     *                       should return true when the condition has been met.
      *
      * @param callback       The action to perform once the condition is met.
      *
@@ -50,7 +49,7 @@ public:
             const std::function<void()> onFailure = std::function<void()>());
 
     /**
-     * @brief  Checks if the object is currently waiting for a condition to 
+     * @brief  Checks if the object is currently waiting for a condition to
      *         occur.
      *
      * @return  Whether an ongoing condition check is running.
@@ -64,12 +63,13 @@ public:
      * @param interval    Frequency of checks in milliseconds. This value must
      *                    be greater than zero.
      *
-     * @param multiplier  An optional multiplier to apply to the interval after 
-     *                    each failed test. A multiplier should be provided when
-     *                    it's necessary for checks to become either more or 
-     *                    less frequent over time. The effects of the multiplier 
-     *                    on the interval will not persist between condition 
-     *                    checks. This value must be greater than zero.
+     * @param multiplier  An optional multiplier to apply to the interval after
+     *                    each failed test. A multiplier should be provided
+     *                    when it's necessary for checks to become either more
+     *                    or less frequent over time. The effects of the
+     *                    multiplier on the interval will not persist between
+     *                    condition checks. This value must be greater than
+     *                    zero.
      */
     void setCheckInterval(const int interval, const float multiplier = 1);
 
@@ -77,22 +77,22 @@ public:
      * @brief  Cancels any ongoing condition checking. This takes no action if
      *         no condition is being checked.
      *
-     * @param runFailureCallback  If true, the condition's failure callback will
-     *                            run if valid, as long as the optional final 
-     *                            test doesn't reveal that the condition was 
-     *                            met.
+     * @param runFailureCallback  If true, the condition's failure callback
+     *                            will run if valid, as long as the optional
+     *                            final test doesn't reveal that the condition
+     *                            was met.
      *
      * @param runFinalTest        If true, the object will check one last time
-     *                            if the condition has been met. If it succeeds,
-     *                            the callback will run.
+     *                            if the condition has been met. If it
+     *                            succeeds, the callback will run.
      */
     void cancelCheck(const bool runFailureCallback = false,
             const bool runFinalTest = false);
 
 private:
     /**
-     * @brief  Checks the condition, running the condition callback and clearing 
-     *         condition variables if the condition is met.
+     * @brief  Checks the condition, running the condition callback and
+     *         clearing condition variables if the condition is met.
      *
      * @return  Whether the condition was met.
      */
@@ -104,24 +104,24 @@ private:
      */
     void clearCheckValues();
 
-    /* Condition-specific functions: */
-    /* Returns whether the condition has been met: */
+    // Condition-specific functions:
+    // Returns whether the condition has been met:
     std::function<bool()> conditionCheck;
-    /* The action to perform when the condition is met: */
+    // The action to perform when the condition is met:
     std::function<void()> conditionCallback;
-    /* An optional action to perform if the condition times out: */
+    // An optional action to perform if the condition times out:
     std::function<void()> failureCallback;
-    
-    /* Condition interval and timeout settings: */
-    /* Milliseconds to wait between condition checks: */
+
+    // Condition interval and timeout settings:
+    // Milliseconds to wait between condition checks:
     int checkInterval;
-    /* A multiplier applied to the checkInterval after each failed condition
-     * check. */
+    // A multiplier applied to the checkInterval after each failed condition
+    // check.
     float intervalMultiplier = 1;
-    /* The time (in milliseconds since the Unix epoch) to stop scheduling
-     * condition checks and assume the condition will not be met: */
+    // The time(in milliseconds since the Unix epoch) to stop scheduling
+    // condition checks and assume the condition will not be met:
     juce::int64 timeout;
-    
+
     /**
      * @brief  Runs scheduled condition checks.
      */
@@ -129,7 +129,8 @@ private:
     {
     public:
         /**
-         * @brief  Connects the timer to the ConditionChecker object that owns it.
+         * @brief  Connects the timer to the ConditionChecker object that owns
+         *         it.
          *
          * @param owner  The object that holds this timer.
          */
@@ -156,13 +157,13 @@ private:
         void setCheckTimer();
 
         ConditionChecker& owner;
-        /* Holds the owner's interval value, multiplied by the owner's 
-         * intervalMultiplier once for each previous failed condition. */
+        // Holds the owner's interval value, multiplied by the owner's
+        // intervalMultiplier once for each previous failed condition.
         int nextInterval;
     };
     CheckTimer timer;
 
-    /* Prevents the timer thread and condition functions from acting
-     * simultaneously: */
+    // Prevents the timer thread and condition functions from acting
+    // simultaneously:
     juce::CriticalSection conditionLock;
 };

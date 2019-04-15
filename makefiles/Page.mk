@@ -12,7 +12,7 @@ OBJECTS_PAGE_TYPES := \
   $(PAGE_OBJ)PasswordRemover.o \
   $(PAGE_OBJ)Power.o \
   $(PAGE_OBJ)QuickSettings.o \
-  $(PAGE_OBJ)SettingsList.o 
+  $(PAGE_OBJ)SettingsList.o
 ifeq ($(CHIP_FEATURES), 1)
     OBJECTS_PAGE_TYPES := $(OBJECTS_PAGE_TYPES) $(PAGE_OBJ)Fel.o
 endif

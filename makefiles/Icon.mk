@@ -9,7 +9,7 @@ OBJECTS_ICON := \
   $(ICON_OBJ)Cache.o \
   $(ICON_OBJ)Loader.o \
   $(ICON_OBJ)ThemeIndex.o \
-  $(ICON_OBJ)ThreadResource.o 
+  $(ICON_OBJ)ThreadResource.o
 
 OBJECTS_ICON_TEST :=
 

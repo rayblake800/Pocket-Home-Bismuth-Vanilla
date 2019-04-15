@@ -1,8 +1,8 @@
 #pragma once
 /**
  * @file  Config_MainFile.h
- * 
- * @brief Loads general application settings from the config.json file.
+ *
+ * @brief  Loads general application settings from the config.json file.
  */
 
 #include "Config_FileHandler.h"
@@ -12,6 +12,10 @@ namespace Config { class MainFile; }
 namespace Config { class MainResource; }
 namespace Config { class MainListener; }
 
+/**
+ * @brief  Accesses the main configuration file resource to get and set
+ *         miscellaneous configurable application options.
+ */
 class Config::MainFile : private Config::FileHandler<MainResource>
 {
 public:
@@ -28,9 +32,9 @@ public:
     int getWifiScanFrequency() const;
 
     /**
-     * @brief  Gets the HomePage background image or color.
+     * @brief  Gets the HomePage background image or colour.
      *
-     * @return  The background to display behind the HomePage component. 
+     * @return  The background to display behind the HomePage component.
      */
     juce::String getHomeBackground() const;
 
@@ -54,20 +58,20 @@ public:
      * @brief  Gets if the mouse cursor should be shown when pocket-home is
      *         active.
      *
-     * @return  Whether the cursor should be shown. 
+     * @return  Whether the cursor should be shown.
      */
     bool getShowCursor() const;
 
     /**
      * @brief  Gets if the clock will be shown within the HomePage component.
      *
-     * @return  Whether the clock label should be shown. 
+     * @return  Whether the clock label should be shown.
      */
     bool getShowClock() const;
 
     /**
-     * @brief  Gets if the clock label will show time in 24 hour mode, or in 
-     *         12 hour AM/PM mode.
+     * @brief  Gets if the clock label will show time in 24 hour mode, or in 12
+     *         hour AM/PM mode.
      *
      * @return  True if 24 hour mode should be used, false if 12 hour mode
      *          should be used.
@@ -84,7 +88,7 @@ public:
     /**
      * @brief  Checks if an IPLabel should be shown on the quick settings page.
      *
-     * @return   Whether Page::QuickSettings will include an Info::IPLabel 
+     * @return   Whether Page::QuickSettings will include an Info::IPLabel
      *           component.
      */
     bool getIPLabelOnSettingsPage() const;
@@ -131,14 +135,14 @@ public:
      * @brief  Sets if the IPLabel should print the local IP address.
      *
      * @param printLocal  Whether the IPLabel should print the system's local
-     *                    network address 
+     *                    network address
      */
     void setIPLabelPrintsLocal(const bool printLocal);
 
     /**
      * @brief  Sets if the IPLabel should print the public IP address.
      *
-     * @param printPublic  Whether the IPLabel should print the system's public 
+     * @param printPublic  Whether the IPLabel should print the system's public
      *                     IP address used outside the local network.
      */
     void setIPLabelPrintsPublic(const bool printPublic);

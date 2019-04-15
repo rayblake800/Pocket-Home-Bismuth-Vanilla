@@ -1,9 +1,9 @@
 #ifndef APPMENU_IMPLEMENTATION
-  #error File included directly outside of AppMenu implementation.
+    #error File included directly outside of AppMenu implementation.
 #endif
 #pragma once
 /**
- * @file AppMenu_MenuComponent.h
+ * @file  AppMenu_MenuComponent.h
  *
  * @brief  Creates and arranges application menu folder components.
  */
@@ -15,15 +15,17 @@ namespace AppMenu { class MenuComponent; }
 namespace AppMenu { class MenuItem; }
 
 /**
- *  The MenuComponent provides the interface used by AppMenu::Controller
- * and AppMenu::InputHandler to interact with menu components. It opens,
- * closes, and positions child FolderComponent objects when folder MenuItem
- * objects are opened, closed, or otherwise adjusted. It allows other objects
- * to access open folder components within the menu. It updates the positions of
- * its FolderComponents as necessary, optionally animating component
- * transitions.  Finally, when PopupEditor components are created, it holds
- * those as well, adding them as child components, and keeping them centered
- * within its bounds.
+ * @brief  The component class responsible for creating, arranging, and
+ *         displaying all menu folders as FolderComponent objects.
+ *
+ *  The MenuComponent provides the interface used by AppMenu::Controller and
+ * AppMenu::InputHandler to interact with menu components. It opens, closes, and
+ * positions child FolderComponent objects when folder MenuItem objects are
+ * opened, closed, or otherwise adjusted. It allows other objects to access open
+ * folder components within the menu. It updates the positions of its
+ * FolderComponents as necessary, optionally animating component transitions.
+ * When PopupEditor components are created, it holds those as well, adding them
+ * as child components, and keeping them centered within its bounds.
  *
  *  MenuComponent is an abstract class. Each AppMenu format should have its own
  * MenuComponent implementation that defines exactly where child folders should
@@ -58,8 +60,8 @@ public:
     int openFolderCount() const;
 
     /**
-     * @brief  Closes the current active folder as long as more than one
-     *         folder is open. 
+     * @brief  Closes the current active folder as long as more than one folder
+     *         is open.
      */
     void closeActiveFolder();
 
@@ -121,9 +123,9 @@ private:
      * @return            The new component, as some concrete subclass of
      *                    AppMenu::FolderComponent.
      */
-    virtual FolderComponent* createFolderComponent(MenuItem folderItem) 
+    virtual FolderComponent* createFolderComponent(MenuItem folderItem)
         const = 0;
-    
+
     /**
      * @brief  Finds the initial bounds to apply to a newly created folder
      *         component.
@@ -131,7 +133,7 @@ private:
      * @param newFolderIndex  The index the newly opened folder component will
      *                        have in the list of open folders.
      *
-     * @return                The initial bounds to apply to the component 
+     * @return                The initial bounds to apply to the component
      *                        before fully updating the folder layout.
      */
     virtual juce::Rectangle<int> initialFolderBounds(const int newFolderIndex)
@@ -139,9 +141,9 @@ private:
 
     /**
      * @brief  Prepares to update the folder layout, updating cached data as
-     *         necessary.  
+     *         necessary.
      *
-     * This does nothing by default, but MenuComponent subclasses may override 
+     * This does nothing by default, but MenuComponent subclasses may override
      * it to define actions that should be taken at the start of each call to
      * updateMenuLayout.
      *
@@ -150,11 +152,11 @@ private:
     virtual void layoutUpdateStarting(const bool closingFolder = false) { }
 
     /**
-     * @brief   Finds the bounds where a menu folder should be placed.
+     * @brief  Finds the bounds where a menu folder should be placed.
      *
      * @param folderIndex    The index of an open folder component.
      *
-     * @param closingFolder  Whether the active folder (not necessarily this
+     * @param closingFolder  Whether the active folder(not necessarily this
      *                       folder!) is about to be closed.
      *
      * @return               The bounds within the MenuComponent where the
@@ -185,11 +187,11 @@ private:
      * @brief  Updates the menu layout when the component is resized.
      */
     virtual void resized() final override;
-    
-    /* The list of open folder components */
+
+    // The list of open folder components
     juce::OwnedArray<FolderComponent> openFolders;
 
-    /* Holds any popup menu editor component: */
+    // Holds any popup menu editor component:
     std::unique_ptr<PopupEditor> menuEditor = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuComponent)

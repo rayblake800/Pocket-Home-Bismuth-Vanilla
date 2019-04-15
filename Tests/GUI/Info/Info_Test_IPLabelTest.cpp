@@ -11,6 +11,11 @@ namespace Info
     }
 }
 
+/**
+ * @brief  Tests that the Info::IPLabel class correctly loads local and/or
+ *         public IP addresses using the Config::MainFile resource's IP label
+ *         settings.
+ */
 class Info::Test::IPLabelTest : public juce::UnitTest
 {
 private:
@@ -22,7 +27,7 @@ private:
      *
      * @param showLocalIP   Whether the label should print the local IP address.
      *
-     * @param showPublicIP  Whether the label should print the public IP 
+     * @param showPublicIP  Whether the label should print the public IP
      *                      address.
      *
      * @return              The label's text after the update.
@@ -40,7 +45,7 @@ private:
 public:
     IPLabelTest() : juce::UnitTest("IPLabel Testing",
             "Info") {}
-    
+
     void runTest() override
     {
         // Save existing config options:
@@ -68,7 +73,7 @@ public:
 
         beginTest("Empty IP loading");
         juce::String emptyLabel = getUpdatedLabelText(ipLabel, false, false);
-        juce::String failureText 
+        juce::String failureText
                 = "Label should be empty when both IP types are disabled.";
         failureText += " Actual text:" + emptyLabel;
         expect(emptyLabel.isEmpty(), failureText);

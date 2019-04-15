@@ -1,7 +1,7 @@
 #pragma once
 /**
  * @file  Info_ConnectionIcon.h
- * 
+ *
  * @brief  Displays an icon indicating Wifi connection signal strength.
  */
 
@@ -13,9 +13,13 @@
 namespace Info { class ConnectionIcon; }
 
 
-class Info::ConnectionIcon : 
+/**
+ * @brief  A SignalIcon class that displays the signal strength of the active
+ *         Wifi connection.
+ */
+class Info::ConnectionIcon :
     public SignalIcon,
-    public Wifi::AP::StrengthListener, 
+    public Wifi::AP::StrengthListener,
     public Wifi::Connection::Record::Listener,
     public Wifi::Device::Listener
 {
@@ -31,7 +35,7 @@ private:
      *
      * @param updatedAP  The active connection's AccessPoint.
      */
-    virtual void signalStrengthUpdate(const Wifi::AccessPoint updatedAP) 
+    virtual void signalStrengthUpdate(const Wifi::AccessPoint updatedAP)
         final override;
 
     /**
@@ -40,7 +44,7 @@ private:
      *
      * @param connectedAP  The new connection's access point object.
      */
-    virtual void connected(const Wifi::AccessPoint connectedAP) final override; 
+    virtual void connected(const Wifi::AccessPoint connectedAP) final override;
 
     /**
      * @brief  Stops tracking signal strength changes and updates the status
@@ -48,7 +52,7 @@ private:
      *
      * @param disconnectedAP  The disconnected access point object.
      */
-    virtual void disconnected(const Wifi::AccessPoint disconnectedAP) 
+    virtual void disconnected(const Wifi::AccessPoint disconnectedAP)
         final override;
 
     /**
@@ -57,8 +61,8 @@ private:
     virtual void wirelessEnabled() final override;
 
     /**
-     * @brief  Updates the selected icon and stops tracking signal strength when
-     *         Wifi is turned off.
+     * @brief  Updates the selected icon and stops tracking signal strength
+     *         when Wifi is turned off.
      */
     virtual void wirelessDisabled() final override;
 };

@@ -11,10 +11,10 @@ Related Pages:
 - Generate UML diagrams.
 
 ## Testing priorities
-Ideally, all non-trivial classes should have their own test classes, but most tests are still unimplemented. The following untested classes are particularly complex, or are the most likely to have hidden bugs.  These should be prioritized when implementing missing test classes.
-- [Config::FileResource](../../Source/Config/Config_FileResource.h) 
-- [Config::Listener](../../Source/Config/Config_Listener.h) 
-- [DesktopEntry::EntryFile](../../Source/DesktopEntry/DesktopEntry_EntryFile.h) 
+Ideally, all non-trivial classes should have their own test classes, but most tests are still unimplemented. The following untested classes are particularly complex, or are the most likely to have hidden bugs. These should be prioritized when implementing missing test classes.
+- [Config::FileResource](../../Source/Config/Config_FileResource.h)
+- [Config::Listener](../../Source/Config/Config_Listener.h)
+- [DesktopEntry::EntryFile](../../Source/DesktopEntry/DesktopEntry_EntryFile.h)
 - [GLib::DBus::Proxy](../../Source/GLib/DBus/GLib_DBus_Proxy.h)
 - [Icon::ThreadResource](../../Source/Icon/Icon_ThreadResource.h)
 - [Icon::ThemeIndex](../../Source/Icon/Icon_ThemeIndex.h)
