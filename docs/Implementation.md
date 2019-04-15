@@ -11,7 +11,7 @@ How to add new classes to application modules.
 How to extend Page::Component to create and use a new UI page.
 
 [Declaring Component ColourId values](TODO!)
-How to add configurable colors to component classes.
+How to add configurable colours to component classes.
 
 [Creating Classes with Localized Text](TODO!)
 How to extend Locale::TextUser to use localized display text.
