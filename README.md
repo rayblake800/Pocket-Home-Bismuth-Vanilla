@@ -1,4 +1,4 @@
-# Pocket-Home Bismuth Edition ![Bismuth project image](./assets/login/chipVector.png?raw=true "Bismuth project image")
+# ![Bismuth project image](./assets/login/chipVector.png?raw=true "Bismuth project image") Pocket-Home Bismuth Edition
 
 Pocket-Home Bismuth is a complete rewrite of the Pocket-Home launcher. It introduces a full-featured, configurable application menu, improved Wifi control and performance, and initial support for devices other than the PocketC.H.I.P. The project's biggest focus, however, is on creating extensively documented, reusable code, to make it as easy as possible to update, extend, and adapt.
 
