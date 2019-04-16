@@ -1,6 +1,7 @@
 # Pocket-Home Bismuth Edition
+![Bismuth project image](./assets/login/chipVector.svg?raw=true "Bismuth project image")
 
-Pocket-Home Bismuth is an application launcher for PocketCHIP and other portable Linux devices. It provides a configurable application menu, power controls, and a basic WiFi manager. 
+Pocket-Home Bismuth is a complete rewrite of the Pocket-Home launcher. It introduces a full-featured, configurable application menu, improved Wifi control and performance, and initial support for devices other than the PocketC.H.I.P. The project's biggest focus, however, is on creating extensively documented, reusable code, to make it as easy as possible to update, extend, and adapt.
 
 Bismuth is (mostly) compliant with FreeDesktop application menu standards, automatically detecting installed applications. The menu interface and contents are fully customizable, either within the application or by editing the application's JSON configuration files.
 
