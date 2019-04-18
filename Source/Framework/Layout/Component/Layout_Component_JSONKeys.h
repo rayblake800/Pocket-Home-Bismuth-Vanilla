@@ -27,23 +27,23 @@ static const juce::Identifier scrollingAppMenu
 static const juce::Identifier pagedAppMenu
         ("paged app menu");
 static const juce::Identifier menuFrame
-        ("menu frame");
+        ("app menu frame");
 static const juce::Identifier batteryIcon
-        ("battery");
+        ("home page battery icon");
 static const juce::Identifier batteryPercent
         ("battery percent text");
 static const juce::Identifier clockLabel
-        ("time");
+        ("home page clock label");
 static const juce::Identifier homeIPLabel
-        ("HomePage IPLabel");
+        ("home page IP label");
 static const juce::Identifier wifiIcon
-        ("wifi");
+        ("home page Wifi icon");
 static const juce::Identifier powerButton
-        ("power button");
+        ("power page button");
 static const juce::Identifier settingsButton
-        ("settings button");
+        ("settings list page button");
 static const juce::Identifier popupMenu
-        ("popup menu");
+        ("popup editor menu");
 static const juce::Identifier pageLeft
         ("left arrow button");
 static const juce::Identifier pageRight
@@ -53,7 +53,7 @@ static const juce::Identifier pageUp
 static const juce::Identifier pageDown
         ("down arrow button");
 static const juce::Identifier settingsListBtn
-        ("settings list button");
+        ("settings list page button");
 static const juce::Identifier spinner
         ("loading spinner");
 

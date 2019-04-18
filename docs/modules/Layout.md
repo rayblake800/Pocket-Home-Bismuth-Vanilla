@@ -11,7 +11,7 @@ Layout\::Group\::RelativeLayout objects hold layout values for a group of UI com
 Layout\::Group\::Manager applies a RelativeLayout object's layout to the components it contains. It uses a stored layout to calculate and set the bounds of each layout component within a rectangular area, optionally adding each layout component to a provided parent component.
 
 ## Configurable Component Layout
-The Configurable Component layout submodule defines the positions of individual UI components within the application window. Component layout values may be absolute measurements defined in pixels, or relative measurements defined as fractions of the window width or height. Component layouts are defined within a JSON configuration file the user may edit. This configuration file also provides the preferred font sizes used within the application.
+The Configurable Component layout submodule defines the positions of individual UI components within the application window. Component layout values are defined as fractions of the window width or height, saved within a JSON configuration file. This configuration file also provides the preferred font sizes used within the application.
 
 #### [Layout\::Component\::ConfigLayout](../../Source/Framework/Layout/Component/Layout_Component_ConfigLayout.h)
 ConfigLayout holds the position and size of a single UI component. Positions and sizes are relative to the dimensions of the application window. Width and x-coordinate are stored as fractions of the window's width, and height and y-coordinate are stored as fractions of the window's height.
@@ -20,7 +20,7 @@ ConfigLayout holds the position and size of a single UI component. Positions and
 Manager objects store a juce\::Component pointer and a ConfigLayout object loaded from the config file. The Manager will apply the layout to the Component on request, or allow the layout to be viewed directly.
 
 #### [Layout\::Component\::ConfigFile](../../Source/Framework/Layout/Component/Layout_Component_ConfigFile.h)
-ConfigFile objects share access to the component layout JSON file resource. They are used to load specific component layout objects, and to calculate ideal font heights using  the configurable font heights saved in the JSON file.
+ConfigFile objects share access to the component layout JSON file resource. They are used to load specific component layout objects, and to calculate ideal font heights using the configurable font heights saved in the JSON file.
 
 #### [Layout\::Component\::TextSize](../../Source/Framework/Layout/Component/Layout_Component_TextSize.h)
 TextSize lists the configurable text height values defined in the component layout JSON file. These sizes may be floating point values representing a height relative to the window height, or integer values representing fixed pixel heights.

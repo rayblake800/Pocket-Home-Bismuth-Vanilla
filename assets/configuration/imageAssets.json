@@ -5,6 +5,38 @@
     "login image"             : "login/chipVector.svg",
     "ControlWidget wifi icon" : "component assets/WifiIcon/wifiIcon.svg",
 
+    "power button": {
+        "colours": [
+            "0xffeb008b"
+        ],
+        "image files": [
+            "component assets/PowerButton/powerIcon.svg"
+        ]
+    },
+    "settings button": {
+        "colours": [
+            "0xffeb008b"
+        ],
+        "image files": [
+            "component assets/SettingsButton/settingsIcon.svg"
+        ]
+    },
+    "settings list button": {
+        "colours": [
+            "0xffeb008b"
+        ],
+        "image files": [
+            "component assets/SettingsListButton/settingsListIcon.svg"
+        ]
+    },
+    "lock icon": {
+        "colours": [
+            "0xffffffff"
+        ],
+        "image files": [
+            "component assets/WifiIcon/lock.svg"
+        ]
+    },
     "menu frame": {
         "colours": [
             "0xffb88e47",
@@ -44,22 +76,6 @@
             "component assets/WifiIcon/wifiStrength3.svg"
         ]
     },
-    "power button": {
-        "colours": [
-            "0xffeb008b"
-        ],
-        "image files": [
-            "component assets/PowerButton/powerIcon.svg"
-        ]
-    },
-    "settings button": {
-        "colours": [
-            "0xffeb008b"
-        ],
-        "image files": [
-            "component assets/SettingsButton/settingsIcon.svg"
-        ]
-    },
     "popup menu": {
         "colours": [
             "0xffb88e47",
@@ -80,14 +96,6 @@
             "component assets/NavButton/rightIcon.svg"
         ]
     },
-    "settings list button": {
-        "colours": [
-            "0xffeb008b"
-        ],
-        "image files": [
-            "component assets/SettingsListButton/settingsListIcon.svg"
-        ]
-    },
     "loading spinner": {
         "colours": [
             "0xffeb008b"
@@ -101,14 +109,6 @@
             "component assets/Spinner/spinner5.svg",
             "component assets/Spinner/spinner6.svg",
             "component assets/Spinner/spinner7.svg"
-        ]
-    },
-    "lock icon": {
-        "colours": [
-            "0xffffffff"
-        ],
-        "image files": [
-            "component assets/WifiIcon/lock.svg"
         ]
     },
     "volume slider" : {
