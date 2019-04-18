@@ -230,10 +230,11 @@ sub getMarkdownIDTable
     foreach my $key (@keys)
     {
         my $element = $cache->findElement($key);
+        $key = "\"$key\"";
         push(@categories, $element->getCategory()->getKey());
     }
 
-    my $keyHeader = "Colour Value";
+    my $keyHeader = "Colour Value Key";
     my $keyLength = maxLength($keyHeader, @keys);
     my $categoryHeader = "Colour Category";
     my $categoryLength = maxLength($categoryHeader, @categories);

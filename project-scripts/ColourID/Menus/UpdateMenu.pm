@@ -37,6 +37,7 @@ sub openMenu
                 updateIDHeader($cache);
                 updateKeyFile($cache);
                 updateDefaultConfig($cache);
+                updateConfigDoc($cache);
             });
     $menu->addOption("Update ColourId header file",
             \&updateIDHeader);
@@ -44,6 +45,8 @@ sub openMenu
             \&updateKeyFile);
     $menu->addOption("Update default colours.json file",
             \&updateDefaultConfig);
+    $menu->addOption("Update colour key documentation table",
+            \&updateConfigDoc);
     $menu->openMenu();
 }
 
@@ -218,7 +221,7 @@ sub updateKeyFile
 
 
 #==============================================================================#
-#--- updateKeyFile: ---
+#--- updateDefaultConfig: ---
 # Writes changes to the list of ColourId keys and default colour values to the
 # default colour configuration file.
 #--- Parameters: ---
@@ -235,6 +238,97 @@ sub updateDefaultConfig
     else
     {
         print("Failed to write to default json file.\n");
+    }
+}
+
+#==============================================================================#
+#--- updateConfigDoc: ---
+# Adds new key values to the ones documented in the colour configuration file,
+# and marks removed keys.
+#--- Parameters: ---
+# $cache: The IDCache object that provides all updated key and colour data.
+#==============================================================================#
+sub updateConfigDoc
+{
+    my $cache = shift;
+    my $docPath = Paths::DOC_DIR."/configuration/colours.md";
+    my $docText = read_file($docPath);
+
+    my ($mainDoc, $colourTable) 
+            = ($docText =~ /^(.*\n)Colour Value Key[^"]+(.*)$/s);
+    if(! $mainDoc || ! $colourTable)
+    {
+        print("Failed to find colour key table.\n");
+        return;
+    }
+
+    my $updatedTable = IOUtils::getMarkdownIDTable($cache);
+
+    my @oldLines = split("\n", $colourTable);
+    my @newLines = split("\n", $updatedTable);
+
+    # Remove table header from newlines:
+    my $header = "$newLines[0]\n$newLines[1]\n";
+    splice(@newLines, 0, 2);
+
+    # Finds a key in the list of old table lines:
+    my $findLine = sub
+    {
+        my $key = shift;
+        for (my $i = 0; $i < (scalar @oldLines); $i++)
+        {
+            if (substr($oldLines[$i], 0, length($key)) eq $key)
+            {
+                return $i;
+            }
+        }
+        return undef;
+    };
+
+    foreach my $line (@newLines)
+    {
+        my ($key) = ($line =~ /^(\".+?\")/s);
+        if (! $key)
+        {
+            print("Warning: failed to find valid key in new table line.\n"
+                    ."failed line: ".$line."\n");
+            next;
+        }
+        my $oldIndex = $findLine->($key);
+        if (defined($oldIndex))
+        {
+            my ($oldDescription) = ($oldLines[$oldIndex] =~ /\|\s*([^|]*?)$/s);
+            splice(@oldLines, $oldIndex, 1);
+            if (defined($oldDescription))
+            {
+                $line = $line.$oldDescription;
+                next;
+            }
+            else
+            {
+                print("Key $key is not new, but is missing a description.\n");
+            }
+        }
+        print("Enter description for $key, or press enter to skip:");
+        chomp(my $description = <STDIN>);
+        $line = $line.$description;
+    }
+    # Mark removed lines for removal, but don't actually remove them or else
+    # it'll throw away the old description for any colour that just had its key
+    # changed.
+    foreach my $removed (@oldLines)
+    {
+        push(@newLines, "REMOVED:".$removed);
+
+    }
+
+    if (write_file($docPath, $mainDoc.$header.join("\n", @newLines)))
+    {
+        print("Updated colour key documentation file.\n");
+    }
+    else
+    {
+        print("Failed to write to key documentation file.\n");
     }
 }
 1;

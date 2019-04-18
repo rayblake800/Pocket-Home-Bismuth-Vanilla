@@ -24,6 +24,9 @@ use constant SOURCE_DIR
 use constant TEST_DIR
         => PROJECT_DIR."/Tests";
 
+# Documentation directory:
+use constant DOC_DIR
+        => PROJECT_DIR."/docs";
 
 # Theme::Colour directory:
 use constant COLOUR_DIR
