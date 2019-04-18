@@ -5,15 +5,16 @@
 /**
  * @file  AppMenu_Controller.h
  *
- * @brief  Implements core menu functionality. This includes opening and
- *         closing folders, creating menu editors, handling popup context
- *         menus, and launching application shortcuts.
+ * @brief  Implements core menu functionality. This includes opening and closing
+ *         folders, creating menu editors, handling popup context menus, and
+ *         launching application shortcuts.
  */
 
 #include "Locale_TextUser.h"
 #include "AppMenu_MenuComponent.h"
 #include "AppMenu_EntryLoader.h"
 #include "Widgets_OverlaySpinner.h"
+#include "Windows_FocusedTimer.h"
 #include "Process_Launcher.h"
 #include "JuceHeader.h"
 
@@ -29,8 +30,8 @@ namespace AppMenu
  *         input handling.
  *
  *  The controller defines the behavior of activated menu items, launches
- * applications, opens or closes menu folders, creates and handles popup
- * context menus, and creates appropriate popup editors when necessary.
+ * applications, opens or closes menu folders, creates and handles popup context
+ * menus, and creates appropriate popup editors when necessary.
  */
 class AppMenu::Controller : public Locale::TextUser
 {
@@ -193,6 +194,33 @@ private:
      */
     void copyMenuItem(const MenuItem toCopy, MenuItem copyFolder,
             const int insertIndex);
+
+    /**
+     * @brief  Takes the Controller out of the loading state if an application
+     *         fails to launch before a timeout is reached.
+     */
+    class LaunchTimer : public Windows::FocusedTimer
+    {
+    public:
+        /**
+         * @brief  Connects the timer to its Controller on construction.
+         *
+         * @param menuController  The controller object that owns this timer.
+         */
+        LaunchTimer(Controller& menuController);
+
+        virtual ~LaunchTimer() { }
+
+    private:
+        /**
+         * @brief  Exits the loading state if the timeout period ends before an
+         *         application launches.
+         */
+        void timerCallback() override;
+
+        Controller& menuController;
+    };
+    LaunchTimer launchTimer;
 
     // Holds a reference to the loading spinner
     Widgets::OverlaySpinner& loadingSpinner;

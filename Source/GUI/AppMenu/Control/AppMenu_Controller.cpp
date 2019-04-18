@@ -4,6 +4,7 @@
 #include "AppMenu_NewConfigItemEditor.h"
 #include "AppMenu_NewDesktopAppEditor.h"
 #include "AppMenu_MenuFile.h"
+#include "AppMenu_ConfigFile.h"
 #include "Config_MainFile.h"
 #include "Windows_Alert.h"
 
@@ -33,6 +34,7 @@ namespace TextKey
 // Creates a new menu controller.
 AppMenu::Controller::Controller
 (MenuComponent* menuComponent, Widgets::OverlaySpinner& loadingSpinner) :
+launchTimer(*this),
 menuComponent(menuComponent),
 loadingSpinner(loadingSpinner),
 Locale::TextUser(localeClassKey) { }
@@ -140,9 +142,6 @@ void AppMenu::Controller::activateMenuItem(const MenuItem clickedItem)
     }
     else
     {
-        const juce::String loadingText = localeText(TextKey::launchingAPP)
-            + " " + clickedItem.getTitle();
-        setLoadingState(true, loadingText);
         launchOrFocusApplication(clickedItem);
     }
 }
@@ -154,6 +153,19 @@ void AppMenu::Controller::setLoadingState
 {
     loadingSpinner.setLoadingText(loadingText);
     loadingSpinner.setVisible(isLoading);
+    if (isLoading)
+    {
+        if (! launchTimer.isTimerRunning())
+        {
+            ConfigFile menuConfig;
+            int timeoutPeriod = menuConfig.getLaunchTimeoutPeriod();
+            launchTimer.startTimer(timeoutPeriod);
+        }
+    }
+    else
+    {
+        launchTimer.stopTimer();
+    }
 }
 
 
@@ -244,7 +256,9 @@ void AppMenu::Controller::launchOrFocusApplication(MenuItem toLaunch)
         String termPrefix = mainConfig.getTermLaunchPrefix();
         command = termPrefix + " " + command;
     }
-    setLoadingState(true);
+    const juce::String loadingText = localeText(TextKey::launchingAPP)
+            + " " + toLaunch.getTitle();
+    setLoadingState(true, loadingText);
     appLauncher.startOrFocusApp(command);
 }
 
@@ -350,4 +364,20 @@ void AppMenu::Controller::copyMenuItem
             toCopy.getCategories(),
             copyFolder,
             insertIndex);
+}
+
+// Connects the timer to its Controller on construction.
+AppMenu::Controller::LaunchTimer::LaunchTimer(Controller& menuController) :
+menuController(menuController) { }
+
+// Exits the loading state if the timeout period ends before an application
+// launches.
+void AppMenu::Controller::LaunchTimer::timerCallback()
+{
+    if (menuController.loadingSpinner.isVisible())
+    {
+        DBG(dbgPrefix << __func__ 
+                << ": Reached timeout period, exiting loading state.");
+        menuController.setLoadingState(false);
+    }
 }
