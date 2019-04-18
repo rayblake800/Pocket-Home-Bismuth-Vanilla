@@ -17,10 +17,10 @@ namespace Assets { class JSONFile; }
  * value. This file should either not yet exist, or be a .json text file,
  * containing a single JSON object. On construction, the JSONFile object copies
  * all data from its JSON file, or creates the file if it does not yet exist.
- * Property values can then be read from the file with the getProperty method
- * or written to the file with the setProperty method.
+ * Property values can then be read from the file with the getProperty function
+ * or written to the file with the setProperty function.
  *
- *  All getProperty and setProperty calls perform type checking. Both methods
+ *  All getProperty and setProperty calls perform type checking. Both functions
  * take a JSON key and an expected type template parameter, and throw
  * exceptions of type JSONFile::TypeException if data is stored in the file at
  * that key that does not match the expected type. If it is absolutely
@@ -339,7 +339,7 @@ private:
      *
      * @tparam T  The type name to get.
      *
-     * @return    The name of type T as a Juce String.
+     * @return    The type's descriptive name string.
      */
     template<typename T >juce::String getTypeName() const;
 

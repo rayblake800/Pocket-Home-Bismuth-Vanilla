@@ -2,8 +2,8 @@
 /**
  * @file  AppMenu_ConfigFile.h
  *
- * @brief  Reads and edits the selected AppMenu format and menu layout
- *         preferences.
+ * @brief  Reads and edits the selected AppMenu format, menu layout preferences,
+ *         and configurable menu behavior.
  */
 
 #include "Config_FileHandler.h"
@@ -14,11 +14,8 @@ namespace AppMenu { class ConfigJSON; }
 namespace AppMenu { enum class Format; }
 
 /**
- * @brief  Provides convenient methods to read and write values defined in the
- *         menuOptions.json file.
- *
- *  This file holds the selected AppMenu::Format along with other menu format
- * options as defined in AppMenu::ConfigKeys.
+ * @brief  Connects to the menuOptions.json file configuration resource to read
+ *         and write AppMenu format and behavior settings.
  */
 class AppMenu::ConfigFile : private Config::FileHandler<AppMenu::ConfigJSON>
 {

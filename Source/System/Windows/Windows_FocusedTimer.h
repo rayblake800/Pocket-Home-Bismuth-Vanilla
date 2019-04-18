@@ -12,7 +12,7 @@
 namespace Windows { class FocusedTimer; }
 
 /**
- * @brief  A juce::Timer class that only executes its timer callback method
+ * @brief  A juce::Timer class that only executes its timer callback function
  *         when the main application window is focused.
  *
  *  In order to reduce the resources used when inactive, running FocusedTimer
@@ -38,7 +38,7 @@ public:
 
     /**
      * @brief  Starts the timer, setting the amount of time until the timer's
-     *         callback method will run.
+     *         callback function will run.
      *
      *  If the window is currently unfocused, the timer will immediately be
      * suspended.
@@ -52,7 +52,7 @@ private:
     /**
      * @brief  Called whenever the timer is suspended, but takes no action.
      *
-     *  Override this method in timer classes that need to act whenever the
+     *  Override this function in timer classes that need to act whenever the
      * window loses focus and the timer is suspended.
      */
     virtual void onSuspend() {}

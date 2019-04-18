@@ -2,7 +2,7 @@
 /**
  * @file  Debug_Component.h
  *
- * @brief  Provides tools for debugging JUCE component objects.
+ * @brief  Provides tools for debugging juce::Component objects.
  */
 
 #include "JuceHeader.h"

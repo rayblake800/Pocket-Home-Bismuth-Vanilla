@@ -34,9 +34,9 @@ namespace Util
  * will be lost.
  *
  *  The distinction between TextCommands and IntCommands only exists because
- * JUCE ChildProcess objects cannot return their text output if they finish with
- * a nonzero exit code. These types should be merged into a single type after
- * adding a way to get text output from processes that exit irregularly.
+ * juce::ChildProcess objects cannot return their text output if they finish
+ * with a nonzero exit code. These types should be merged into a single type
+ * after adding a way to get text output from processes that exit irregularly.
  *
  *  Command definitions should include a single executable name plus an
  * optional object list. If more complex shell commands are needed, they should

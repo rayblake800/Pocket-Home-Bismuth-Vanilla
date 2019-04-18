@@ -19,7 +19,7 @@ namespace GLib { namespace Borrowed { class SharedContainer; } }
  * that holds it by calling clearData() on a single SharedContainer.
  *
  *  SharedContainer holds a single GObject* provided to it on construction. That
- * value may be replaced with nullptr using the clearData() method, but it may
+ * value may be replaced with nullptr using the clearData() function, but it may
  * not be changed in any other way.
  */
 class GLib::Borrowed::SharedContainer : public Util::Nullable<GObject*>,

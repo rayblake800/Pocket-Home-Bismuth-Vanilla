@@ -71,7 +71,7 @@ protected:
      *         height.
      *
      *  All list items have vertical weight 1 by default. Subclasses should
-     * override this method if they need to have rows of varying heights.
+     * override this function if they need to have rows of varying heights.
      *
      * @param index  A list index. This may be an index greater than the list
      *               bounds, if determining the weight of an empty list row
@@ -161,7 +161,7 @@ private:
      * @brief  Performs some action whenever the selected page index changes.
      *
      *  By default, this takes no action. PagedList subclasses should override
-     * this method if they need to do something whenever the page selection
+     * this function if they need to do something whenever the page selection
      * changes.
      */
     virtual void pageSelectionChanged() { }

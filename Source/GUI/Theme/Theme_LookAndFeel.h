@@ -191,7 +191,7 @@ private:
      * @brief  Updates Component colours when they're changed in the component
      *         layout configuration file.
      *
-     * @param colourId   The Juce ColourId of the updated Component element.
+     * @param colourId   The JUCE ColourId of the updated Component element.
      *
      * @param colourKey  The key string of the value updated in the config file.
      *
@@ -201,7 +201,7 @@ private:
             const juce::Identifier& colourKey,
             const juce::Colour newColour) override;
 
-    // All colours are tracked by colourId, this method should do nothing.
+    // All colours are tracked by colourId, so this function should do nothing.
     virtual void configValueChanged(const juce::Identifier& key) override { }
 
     // Defines the maximum number of characters that will fit on a text button.

@@ -21,10 +21,10 @@ namespace GLib { class SharedThread; }
  *  On creation, this starts up a GLib event thread to handle events associated
  * with a GMainContext provided on creation. This GMainContext will be set as
  * the thread default context. This context will be available through the
- * getContext method, so that it can be used to add signal sources and signal
+ * getContext function, so that it can be used to add signal sources and signal
  * handlers to this thread.
  *
- *  GLib::SharedThread also provides methods for synchronously or
+ *  GLib::SharedThread also provides functions for synchronously or
  * asynchronously executing code within the thread. These should be used to
  * handle all interactions with GLib objects tied to the thread context, unless
  * those objects are explicitly guaranteed to be thread-safe.
@@ -90,13 +90,13 @@ public:
      * @brief  Runs an asynchronous callback function on the thread after
      *         safely acquiring the thread's resource lock.
      *
-     *  Only call this method from within an asynchronous callback function
+     *  Only call this function from within an asynchronous callback function
      * that is already running within the thread's event loop.
      *
      *  If an asynchronous callback function attempts to acquire the thread's
      * resource lock normally, the thread will remain inactive until the lock
-     * is acquired. This will cause a deadlock will occur if another thread is
-     * trying to use the SharedThread::call method while it holds the resource
+     * is acquired. This will cause a deadlock to occur if another thread is
+     * trying to use the SharedThread::call function while it holds the resource
      * lock.
      *
      *  If lockForAsyncCallback fails to immediately acquire the lock, instead
@@ -125,7 +125,7 @@ public:
      * @brief  Exits the GLib event loop before stopping the thread normally.
      *
      *  The caller must acquire the thread resource's lock for writing before
-     * calling this method. The lock will be unlocked and then relocked as the
+     * calling this function. The lock will be unlocked and then relocked as the
      * thread exits.
      */
     virtual void stopResourceThread() override;

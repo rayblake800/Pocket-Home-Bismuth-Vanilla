@@ -74,7 +74,7 @@ void NMSignal::DeviceHandler::propertyChanged(const DeviceWifi source,
 }
 
 
-// The GCallback method called directly by LibNM code when sending
+// The GCallback function called directly by LibNM code when sending
 // state-changed signals.
 void NMSignal::DeviceHandler::stateChangeCallback(
         NMDevice* device,
@@ -96,7 +96,7 @@ void NMSignal::DeviceHandler::stateChangeCallback(
 }
 
 
-// The GCallback method called directly by LibNM code when sending
+// The GCallback function called directly by LibNM code when sending
 // access-point-added signals.
 void NMSignal::DeviceHandler::apAddedCallback(
         NMDeviceWifi* device,
@@ -127,7 +127,7 @@ void NMSignal::DeviceHandler::apAddedCallback(
 }
 
 
-// The GCallback method called directly by LibNM code when sending
+// The GCallback function called directly by LibNM code when sending
 // access-point-removed signals.
 void NMSignal::DeviceHandler::apRemovedCallback(
         NMDeviceWifi* device,

@@ -25,7 +25,7 @@ public:
             "AppMenu") {}
 
     /**
-     * @brief  Call within the runTest method to test changes to the menu
+     * @brief  Call within the runTest function to test changes to the menu
      *         format.
      */
     void formatChangeTest()
@@ -56,7 +56,7 @@ public:
     }
 
     /**
-     * @brief  Call within the runTest method to test changes to other menu
+     * @brief  Call within the runTest function to test changes to other menu
      *         settings.
      */
     void otherSettingsTest()

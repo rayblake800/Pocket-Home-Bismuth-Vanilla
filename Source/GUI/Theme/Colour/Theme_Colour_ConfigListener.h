@@ -74,11 +74,11 @@ private:
     /**
      * @brief  Notifies the Listener when a colour value it tracks is updated.
      *
-     *  When generic UICategory colours are updated, this method will run for
+     *  When generic UICategory colours are updated, this function will run for
      * each ColourId in that category that doesn't have an explicit colour
      * definition.
      *
-     * @param colourId    The Juce ColourId value being updated.
+     * @param colourId    The JUCE ColourId value being updated.
      *
      * @param updatedKey  The key string of the updated config value.
      *

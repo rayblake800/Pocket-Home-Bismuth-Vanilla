@@ -134,7 +134,7 @@ protected:
      *
      * This creates the minimum number of threads, and allows them to perform
      * random actions for <testDuration> seconds. This should be called once in
-     * the runTest() method of StressTest unit tests.
+     * the runTest() function of StressTest unit tests.
      */
     void runThreads();
 

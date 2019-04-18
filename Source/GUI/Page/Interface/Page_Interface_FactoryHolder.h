@@ -39,7 +39,7 @@ private:
     /**
      * @brief  Sets the factory holder's factory interface pointer.
      *
-     *  The Page::Factory must use this method to pass itself to each
+     *  The Page::Factory must use this function to pass itself to each
      * FactoryHolder it creates that needs to access the factory.
      *
      * @param pageFactory  The factory interface pointer to set.

@@ -2,7 +2,7 @@
 /**
  * @file  Wifi_Connection_Control_Handler.h
  *
- * @brief  Provides methods for starting new Wifi connections or closing the
+ * @brief  Provides functions for starting new Wifi connections or closing the
  *         existing Wifi connection.
  */
 

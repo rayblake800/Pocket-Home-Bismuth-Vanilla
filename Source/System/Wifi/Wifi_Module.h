@@ -50,7 +50,7 @@ protected:
             std::function<void()> action);
 
     /**
-     * @brief  Runs a callback function on the Juce message thread for each of
+     * @brief  Runs a callback function on the JUCE message thread for each of
      *         this module's handler objects that share a specific class.
      *
      * @tparam HandlerType   The type of handler that should be acted on.

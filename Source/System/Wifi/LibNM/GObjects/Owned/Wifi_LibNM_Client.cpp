@@ -234,7 +234,7 @@ Wifi::LibNM::Client::getConnectionLender() const
 
 
 // Stores access to the Client object and a ConnectionHandler pointer so that
-// they can be passed to LibNM connection callback methods.
+// they can be passed to LibNM connection callback functions.
 struct Wifi::LibNM::Client::CallbackData
 {
     Client client;

@@ -27,7 +27,7 @@ void Util::ShutdownBroadcaster::broadcastShutdown()
     const juce::ScopedLock listLock(listeners.getLock());
 
     // Ensure all shutdown listeners are notified exactly once, even if they
-    // create new shutdown listeners within the onShutdown method.
+    // create new shutdown listeners within the onShutdown function.
     juce::Array<ShutdownListener*> gotNotification;
     int shutdownCalls;
     do

@@ -25,7 +25,7 @@ namespace GLib
  *
  *  This object connects to a remote DBus object on construction. Once
  * connected, it can get and set the object's properties, and call the object's
- * methods. Proxy functions as a wrapper for the GIO library's GDBusProxy
+ * functions. Proxy functions as a wrapper for the GIO library's GDBusProxy
  * objects, and new Proxy objects can be created around existing GDBusProxy*
  * values.
  *
@@ -129,34 +129,36 @@ protected:
     }
 
     /**
-     * @brief  Calls one of the methods provided by this DBus interface.
+     * @brief  Calls one of the functions provided by this DBus interface.
      *
-     *  Any non-null value returned by this method should eventually be freed
+     *  Any non-null value returned by this function should eventually be freed
      * with g_variant_unref.
      *
-     * @param methodName  The ID of a method to call on the DBus object.
+     * @param functionName  The ID of a function to call on the DBus object.
      *
-     * @param params      GVariant parameters to pass in with the method call,
-     *                    or nullptr if the method takes no parameters.
-     *                    If passing multiple parameters, they should be bound
-     *                    together in a GVariant tuple object. If the method
-     *                    only takes a single parameter, the DBusProxy will
-     *                    handle packaging it in a tuple if necessary.
+     * @param params        GVariant parameters to pass in with the function
+     *                      call, or nullptr if the function takes no
+     *                      parameters. If passing multiple parameters, they
+     *                      should be bound together in a GVariant tuple object.
+     *                      If the function only takes a single parameter, the
+     *                      DBusProxy will handle packaging it in a tuple if
+     *                      necessary.
      *
-     * @param error       The address of a null GError*, or nullptr. If this
-     *                    parameter is not null and an error occurs, the GError*
-     *                    will be set to the address of a new GError object. If
-     *                    this happens, the caller should free the error with
-     *                    g_clear_error(GError**) when it's no longer needed.
+     * @param error         The address of a null GError*, or nullptr. If this
+     *                      parameter is not null and an error occurs, the
+     *                      GError* will be set to the address of a new GError
+     *                      object. If this happens, the caller should free the
+     *                      error with g_clear_error(GError**) when it's no
+     *                      longer needed.
      *
-     * @return            The return value of the method. Returns nullptr
-     *                    instead if the method call failed, the method
-     *                    returned nothing, or the method returned an empty
-     *                    container object. If the method returned a single
-     *                    GVariant inside of a tuple, that variant will be
-     *                    extracted from its container and returned alone.
+     * @return              The return value of the function. Returns nullptr
+     *                      instead if the function call failed, the function
+     *                      returned nothing, or the function returned an empty
+     *                      container object. If the function returned a single
+     *                      GVariant inside of a tuple, that variant will be
+     *                      extracted from its container and returned alone.
      */
-    GVariant* callMethod(const char* methodName, GVariant* params = nullptr,
+    GVariant* callFunction(const char* functionName, GVariant* params = nullptr,
             GError** error = nullptr) const;
 
     JUCE_LEAK_DETECTOR(GLib::DBus::Proxy);

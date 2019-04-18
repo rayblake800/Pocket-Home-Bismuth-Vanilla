@@ -2,7 +2,7 @@
 
 ### Icon selection:
 - Create a component for selecting icon files from the list of all icons.
-    1. Add methods to the Icon module for getting all icon file names that meet a set of criteria.
+    1. Add functions to the Icon module for getting all icon file names that meet a set of criteria.
     2. Create a list component for browsing through the resulting list and selecting icons.
     3. Replace the existing icon selection components with the new component.
 - Add UI controls for selecting icon themes.
@@ -40,7 +40,7 @@
 
 ### Better testing for UI components:
 - Create a TestPage Component class that displays a single UI component along with controls for triggering various component tests.
-- Provide a method for automatically triggering and evaluating component tests when possible.
+- Provide a function for automatically triggering and evaluating component tests when possible.
 - Create a TestList Window class that finds and lists buttons to launch every TestPage type.
 - Add a command line option to create the TestList window instead of the PocketHomeWindow on launch.
 

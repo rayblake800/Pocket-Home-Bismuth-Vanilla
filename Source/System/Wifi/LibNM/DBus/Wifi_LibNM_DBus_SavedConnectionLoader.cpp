@@ -9,8 +9,8 @@ const constexpr char* interface = "org.freedesktop.NetworkManager.Settings";
 // SavedConnectionLoader's DBus interface path:
 const constexpr char* path = "/org/freedesktop/NetworkManager/Settings";
 
-// DBus listConnections method key:
-const constexpr char* listConnectionMethod = "ListConnections";
+// DBus listConnections function key:
+const constexpr char* listConnectionFunction = "ListConnections";
 
 namespace NMDBus = Wifi::LibNM::DBus;
 
@@ -105,7 +105,7 @@ NMDBus::SavedConnectionLoader::getConnectionPaths() const
 {
     using namespace GLib::VariantConverter;
     using juce::StringArray;
-    GVariant* conArrayVar = callMethod(listConnectionMethod);
+    GVariant* conArrayVar = callFunction(listConnectionFunction);
     if (conArrayVar != nullptr)
     {
         StringArray paths = getValue<StringArray>(conArrayVar);

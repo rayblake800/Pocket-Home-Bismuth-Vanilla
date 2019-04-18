@@ -1,6 +1,6 @@
 #include "GLib_TypeHelper.h"
 
-// Use macros to define simple TypeHelper specialization methods and avoid
+// Use macros to define simple TypeHelper specialization functions and avoid
 // excess repetition:
 
 #define TYPE_DEFINITION(VarType, GVarType)                 \
@@ -9,11 +9,10 @@ const GVariantType* TypeHelper<VarType>::getGVariantType() \
 {                                                          \
     return GVarType;                                       \
 }                                                          \
-                                                            \
 template<>                                                 \
 bool TypeHelper<VarType>::isType(GVariant* variant)        \
 {                                                          \
-    return g_variant_is_of_type(variant,                  \
+    return g_variant_is_of_type(variant,                   \
             TypeHelper<VarType>::getGVariantType());       \
 }
 
@@ -33,9 +32,9 @@ juce::String TypeHelper<VarType>::getFormatString()     \
 
 #define TYPE_CHECK_DEFINITION(VarType, checkFunction)  \
 template<>                                             \
-bool TypeHelper<VarType>::isType(GVariant* variant)   \
+bool TypeHelper<VarType>::isType(GVariant* variant)    \
 {                                                      \
-    return checkFunction(variant);                    \
+    return checkFunction(variant);                     \
 }
 
 #define GET_VALUE_DEFINITION(VarType, getFunction)       \
@@ -44,26 +43,26 @@ VarType TypeHelper<VarType>::getValue                    \
 (GVariant* variant, VarType defaultValue)                \
 {                                                        \
     if (variant == nullptr                               \
-            || !TypeHelper<VarType>::isType(variant))   \
+            || !TypeHelper<VarType>::isType(variant))    \
     {                                                    \
         return defaultValue;                             \
     }                                                    \
-    return VarType(getFunction(variant));              \
+    return VarType(getFunction(variant));                \
 }
 
 #define GET_VARIANT_DEFINITION(VarType, varFunction)      \
 template<>                                                \
-GVariant* TypeHelper<VarType>::getVariant(VarType value) \
+GVariant* TypeHelper<VarType>::getVariant(VarType value)  \
 {                                                         \
-    return varFunction(value);                           \
+    return varFunction(value);                            \
 }
 
 #define BASIC_TYPE_DEFINITION(type, G_TYPE, name, formatStr, getter, setter)  \
-TYPE_DEFINITION(type, G_TYPE);                                               \
-TYPE_NAME_DEFINITION(type, name);                                            \
-FORMAT_STRING_DEFINITION(type, formatStr);                                   \
-GET_VALUE_DEFINITION(type, getter);                                          \
-GET_VARIANT_DEFINITION(type, setter);                                        \
+TYPE_DEFINITION(type, G_TYPE);                                                \
+TYPE_NAME_DEFINITION(type, name);                                             \
+FORMAT_STRING_DEFINITION(type, formatStr);                                    \
+GET_VALUE_DEFINITION(type, getter);                                           \
+GET_VARIANT_DEFINITION(type, setter);                                         \
 
 namespace GLib
 {

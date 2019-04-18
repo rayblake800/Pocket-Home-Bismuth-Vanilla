@@ -74,7 +74,7 @@ public:
 
 protected:
     /**
-     * @brief  Accesses the resource Instance's methods or data.
+     * @brief  Accesses the resource Instance's functions or data.
      *
      * @return  The address of the resource Instance, or nullptr if the
      *          resource is unlocked.

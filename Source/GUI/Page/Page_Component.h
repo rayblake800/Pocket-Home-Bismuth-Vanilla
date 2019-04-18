@@ -47,7 +47,7 @@ class Page::Component : public Interface::Component,
 {
 public:
     /**
-     * @brief  Juce Component ColourId values, used by juce::LookAndFeel.
+     * @brief  juce::Component ColourId values, used by juce::LookAndFeel.
      */
     enum ColourIds
     {
@@ -152,11 +152,11 @@ private:
      * @brief  Potentially overrides the usual behavior of the page's back
      *         button.
      *
-     *  Inheriting classes can override this method to change the behavior of
-     * the back button. It will be called every time the back button is
-     * clicked. * By default, the back button removes the page from the page
-     * stack and destroys it. If this method returns true, that default action
-     * will be skipped.
+     *  Inheriting classes can override this function to change the behavior of
+     * the back button. It will be called every time the back button is clicked.
+     * By default, the back button removes the page from the page stack and
+     * destroys it. If this function returns true, that default action will be
+     * skipped.
      *
      * @return  True if the back button's action was replaced, false to allow
      *          the back button to remove the page as usual.

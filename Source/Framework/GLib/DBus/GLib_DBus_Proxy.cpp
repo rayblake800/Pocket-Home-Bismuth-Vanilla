@@ -49,9 +49,9 @@ GLib::DBus::Proxy::Proxy(GDBusProxy * proxy) :
 GLib::Owned::Object(G_OBJECT(proxy), G_TYPE_DBUS_PROXY) { }
 
 
-// Calls one of the methods provided by this DBus interface.
-GVariant* GLib::DBus::Proxy::callMethod
-(const char* methodName, GVariant* params, GError ** error) const
+// Calls one of the functions provided by this DBus interface.
+GVariant* GLib::DBus::Proxy::callFunction
+(const char* functionName, GVariant* params, GError ** error) const
 {
     GVariant* result = nullptr;
     // DBus parameters must be packaged in a tuple, even if there's only
@@ -76,16 +76,16 @@ GVariant* GLib::DBus::Proxy::callMethod
         return nullptr;
     }
 
-    ErrorPtr defaultError([methodName] (GError* error)
+    ErrorPtr defaultError([functionName] (GError* error)
     {
-        DBG(dbgPrefix << __func__ << ": calling DBus adapter proxy method "
-                << methodName << " failed!");
+        DBG(dbgPrefix << __func__ << ": calling DBus adapter proxy function "
+                << functionName << " failed!");
         DBG(dbgPrefix << __func__ << ": Error: " << (char*) error->message);
     });
 
     result = g_dbus_proxy_call_sync(
             G_DBUS_PROXY( (GObject*) proxy),
-            methodName,
+            functionName,
             params,
             G_DBUS_CALL_FLAGS_NONE,
             -1,
@@ -93,8 +93,8 @@ GVariant* GLib::DBus::Proxy::callMethod
             (error==nullptr ? defaultError.getAddress() : error));
     if (result != nullptr && g_variant_is_container(result))
     {
-        // DBus methods may return an empty container if there's no
-        // values to return. Detect and unreference these.
+        // DBus functions may return an empty container if there's no values to
+        // return. Detect and unreference these.
         gsize resultSize = g_variant_n_children(result);
         if (resultSize == 0)
         {

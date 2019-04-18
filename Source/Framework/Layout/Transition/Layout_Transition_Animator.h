@@ -48,7 +48,7 @@ bool isAnimating(juce::Component* possiblyAnimating);
  *                               also in the transitionIn list, a proxy
  *                               component will be created to slide off-window.
  *                               Any changes made to the component after calling
- *                               this method will not affect the proxy
+ *                               this function will not affect the proxy
  *                               component.
  *
  * @param movingIn               An array of all components that will move onto

@@ -31,7 +31,7 @@ public:
     virtual ~ConfigFile() { }
 
     /**
-     * @brief  Looks up the Colour value saved for a specific Juce ColourId.
+     * @brief  Looks up the Colour value saved for a specific JUCE ColourId.
      *
      * @param colourId  The ID value representing the colour of a specific UI
      *                  element.
@@ -69,7 +69,7 @@ public:
     /**
      * @brief  Sets the saved colour value for a single UI element.
      *
-     * @param colourId   A Juce ColourId value tracked by the colour config
+     * @param colourId   A JUCE ColourId value tracked by the colour config
      *                   file.
      *
      * @param newColour  The colour value to assign to the ColourId.

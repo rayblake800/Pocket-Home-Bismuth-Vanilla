@@ -82,7 +82,7 @@ public:
      * @brief  Continues the connection attempt if a pending connection is
      *         currently in progress.
      *
-     *  This method should only be called within the LibNM::Thread::Module's
+     *  This function should only be called within the LibNM::Thread::Module's
      * thread.
      */
     void continueConnectionAttempt();

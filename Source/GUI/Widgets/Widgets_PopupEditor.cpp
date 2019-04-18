@@ -109,7 +109,7 @@ void Widgets::PopupEditor::setPadding(int xPadding, int yPadding)
 
 
 // Manages click events from the cancel and confirm buttons, passing all other
-// button events to editorButtonClicked method.
+// button events to editorButtonClicked function.
 void Widgets::PopupEditor::buttonClicked(juce::Button* buttonClicked)
 {
     if (buttonClicked == &cancelButton)

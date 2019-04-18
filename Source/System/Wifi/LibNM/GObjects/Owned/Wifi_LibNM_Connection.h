@@ -40,7 +40,7 @@ namespace Wifi
  * may not be used afterwards. This makes Connection objects safe to create and
  * initialize outside of the LibNM thread.
  *
- *  The connection interface provides methods to read, edit, and verify
+ *  The connection interface provides functions to read, edit, and verify
  * connection properties. To actually activate a Connection, use the
  * LibNM::Client object held by the Thread::Module.
  */

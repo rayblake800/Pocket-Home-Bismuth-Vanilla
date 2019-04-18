@@ -25,18 +25,18 @@ namespace AppMenu
  *         FolderComponent and MenuButton child components.
  *
  *  These events are sorted based on their type and target, and used to call
- * various virtual methods that InputHandler subclasses may override.
+ * various virtual functions that InputHandler subclasses may override.
  *
  *  A default implementation for handling mouse clicks is provided. This
  * activates selected menu items, selects un-selected menu items, sets clicked
  * folders as active, and calls for context menus to be created when menu items
  * or folders are right-clicked. InputHandler implementations can override these
- * methods to change how the menu behaves when folders or menu items are
+ * functions to change how the menu behaves when folders or menu items are
  * clicked.
  *
  *  The InputHandler listens for key events created while the menu is visible,
  * identifies if the key events are relevant to the menu, categorizes them as a
- * specific KeyType, and passes them to the virtual keyPressed method. All key
+ * specific KeyType, and passes them to the virtual keyPressed function. All key
  * event handling from this point must be implemented by an InputHandler
  * subclass defined by the active AppMenu::Format.
  *
@@ -139,8 +139,8 @@ protected:
 
 private:
     /**
-     * @brief  Convert generic mouse events into calls to InputHandler clicked
-     *         methods.
+     * @brief  Convert generic mouse events into calls to the
+     *         InputHandler::clicked function.
      *
      * @param event  A mouse click event over some child component of the
      *               MenuComponent.
@@ -149,7 +149,7 @@ private:
 
     /**
      * @brief  Convert generic key events into calls to the InputHandler's
-     *         protected keyPress method.
+     *         protected keyPress function.
      *
      * @param keyPress         The key or keys that were pressed.
      *

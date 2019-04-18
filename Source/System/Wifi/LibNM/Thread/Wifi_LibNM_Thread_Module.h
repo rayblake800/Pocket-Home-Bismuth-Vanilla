@@ -27,7 +27,7 @@ namespace Wifi
  *         device objects.
  *
  *  All interaction with LibNM::Object subclasses should occur within the
- * LibNM::ThreadResource thread, using its call and callAsync methods. The
+ * LibNM::ThreadResource thread, using its call and callAsync functions. The
  * Client and DeviceWifi objects provided by the thread should be requested as
  * needed, and not saved for future use.
  */
@@ -68,7 +68,7 @@ public:
      *         device.
      *
      *  Only the ThreadResource and the DeviceWifi's private ThreadHandler
-     * should access this method.
+     * should access this function.
      *
      * @return  The ObjectLender used to manage all NMAccessPoint* data.
      */
@@ -79,7 +79,7 @@ public:
      *         Wifi device.
      *
      *  Only the ThreadResource and the DeviceWifi's private ThreadHandler
-     * should access this method.
+     * should access this function.
      *
      * @return  The ObjectLender used to manage the Wifi device's
      *          NMActiveConnection* data.

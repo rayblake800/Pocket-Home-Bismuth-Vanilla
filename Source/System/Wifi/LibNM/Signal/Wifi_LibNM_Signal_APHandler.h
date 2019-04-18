@@ -51,7 +51,7 @@ private:
      * @brief  Notifies the signal handler of a change in access point signal
      *         strength.
      *
-     *  This method does nothing by default. APHandler classes should override
+     *  This function does nothing by default. APHandler classes should override
      * it to handle signal strength change events.
      *
      * @param updatedAP    The LibNM::AccessPoint that had its signal strength

@@ -131,7 +131,7 @@ private:
      *
      * @return  An appropriate title bounds area for the current button size
      *          and the needs of the MenuButton subclass implementing this
-     *          method.
+     *          function.
      */
     virtual juce::Rectangle<float> findTitleBounds() const = 0;
 
@@ -140,7 +140,7 @@ private:
      *         icon should be drawn.
      *
      * @return  An appropriate icon bounds area for the current button size and
-     *          the needs of the MenuButton subclass implementing this method.
+     *          the needs of the MenuButton subclass implementing this function.
      */
     virtual juce::Rectangle<float> findIconBounds() const = 0;
 
@@ -202,7 +202,7 @@ private:
      * @brief  Runs whenever the menu button is resized, just before
      *         recalculating icon bounds, text bounds, and font size.
      *
-     * MenuButton subclasses should override this method instead of resized().
+     * MenuButton subclasses should override this function instead of resized().
      */
     virtual void menuButtonResized() { }
 

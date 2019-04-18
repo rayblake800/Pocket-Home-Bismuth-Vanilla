@@ -16,7 +16,7 @@ FocusListener objects connect to the FocusTracker resource to check if the MainW
 FocusInterface is an abstract interface inherited by FocusListener, used by the FocusTracker to send out window focus updates.
 
 #### [Windows::FocusedTimer](../../Source/System/Windows/Windows_FocusedTimer.h)
- FocusedTimer is a juce::Timer class that only executes its timer callback method when the main application window is focused.
+ FocusedTimer is a juce::Timer class that only executes its timer callback function when the main application window is focused.
 
 #### [Windows::Info](../../Source/System/Windows/Windows_Info.h)
 The Windows\::Info namespace provides functions for getting information about the main applicationwindow.

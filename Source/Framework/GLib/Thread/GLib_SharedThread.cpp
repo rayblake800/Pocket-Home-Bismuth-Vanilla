@@ -71,8 +71,8 @@ void GLib::SharedThread::lockForAsyncCallback(
         const std::function<void()> lockedAction)
 {
     SharedResource::Thread::Lock* threadLock = getThreadLock();
-    // If this assertion fails, the method is being called outside the event
-    // loop.
+    // If this assertion fails, the function is being called outside of the
+    // event loop.
     jassert(threadLock != nullptr);
     const bool acquiredLock = (lockType == SharedResource::LockType::read) ?
             threadLock->tryEnterRead() : threadLock->tryEnterWrite();

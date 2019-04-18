@@ -26,7 +26,7 @@ namespace Wifi { class Resource; }
  *
  *  Listener objects are automatically connected to the APList::Module object
  * on construction. Listener subclasses should override Listener's abstract
- * signal methods to handle APList change updates.
+ * signal functions to handle APList change updates.
  */
 class Wifi::APList::Listener : public UpdateInterface,
     public SharedResource::Modular::Handler<Resource, Module>

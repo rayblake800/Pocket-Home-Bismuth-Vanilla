@@ -40,7 +40,7 @@ SharedContainer objects are internal data containers used by Borrowed\::Object i
 All GObjects may create and send class-specific signals to registered signal handlers. The GLib module provides classes to simplify the process of creating signal handlers and handling signals.
 
 #### [GLib\::Signal\::Handler](../../Source/Framework/GLib/Signal/GLib_Signal_Handler.h)
-Signal\::Handler is an abstract basis for classes that handle GLib signals from a single GObject type. Handler subclasses handle the process of connecting to all relevant signals emitted by their GObject signal sources, and provide virtual methods to handle received signals.
+Signal\::Handler is an abstract basis for classes that handle GLib signals from a single GObject type. Handler subclasses handle the process of connecting to all relevant signals emitted by their GObject signal sources, and provide virtual functions to handle received signals.
 
 ### Signal Handler Implementation Classes
 #### [GLib\::Signal\::Connection](../../Source/Framework/GLib/Signal/GLib_Signal_Connection.h)
@@ -65,10 +65,10 @@ SharedThread is an abstract juce\::Thread class that runs an EventLoop and provi
 ThreadHandler is an abstract basis for a class that manages a GLib\::SharedThread subclass instance. Every object of a given ThreadHandler subclass safely shares access to a single SharedThread subclass instance.
 
 ## D-Bus Communication
-D-Bus is a system providing inter-process communication and remote method calling in GNU/Linux. The GLib library provides an interface programs may use to communicate through D-Bus. The GLib module provides tools for using and managing this interface.
+D-Bus is a system providing inter-process communication and remote function calling in GNU/Linux. The GLib library provides an interface programs may use to communicate through D-Bus. The GLib module provides tools for using and managing this interface.
 
 #### [GLib\::DBus\::Proxy](../../Source/Framework/GLib/DBus/GLib_DBus_Proxy.h)
-Proxy is an Owned\::Object subclass that represents a remote object within another process, accessed over D-Bus. It is able to read and change the remote object's properties, and call methods that the remote object provides. Each unique D-Bus object type should be accessed through its own DBus\::Proxy subclass.
+Proxy is an Owned\::Object subclass that represents a remote object within another process, accessed over D-Bus. It is able to read and change the remote object's properties, and call functions that the remote object provides. Each unique D-Bus object type should be accessed through its own DBus\::Proxy subclass.
 
 #### [GLib\::DBus\::SignalHandler](../../Source/Framework/GLib/DBus/GLib_DBus_SignalHandler.h)
 DBus\::SignalHandler is a subclass of GLib\::Signal\::Handler that handles signals emitted over D-Bus through a DBus\::Proxy object. Each Proxy subclass that requires signal handling should provide a SignalHandler subclass to handle the specific signals that object will create.
@@ -101,7 +101,7 @@ ScopedGPointer is a template class used to construct other smart pointer classes
 VariantPtr holds a GVariant data value. If its held value is non-null, it will dereference its held GVariant pointer on destruction.
 
 #### [GLib\::ErrorPtr](../../Source/Framework/GLib/SmartPointers/GLib_ErrorPtr.h)
-ErrorPtr may be used with GLib error handling in place of GError data pointers. If a GLib function assigns error data to an ErrorPtr object, it can handle that error, either with a custom error handling function, or by printing the error's message if no custom function is provided. ErrorPtr will free the GError data assigned to it immediately after handling the error. Errors are handled either when the ErrorPtr is destroyed, or whenever the ErrorPtr object's handleError method is called.
+ErrorPtr may be used with GLib error handling in place of GError data pointers. If a GLib function assigns error data to an ErrorPtr object, it can handle that error, either with a custom error handling function, or by printing the error's message if no custom function is provided. ErrorPtr will free the GError data assigned to it immediately after handling the error. Errors are handled either when the ErrorPtr is destroyed, or whenever the ErrorPtr object's handleError function is called.
 
 #### [GLib\::SharedContextPtr](../../Source/Framework/GLib/SmartPointers/GLib_SharedContextPtr.h)
 SharedContextPtr manages a GMainContext data pointer. SharedContextPtr automatically increases its GMainContext's reference count when copied, and decreases it on destruction.

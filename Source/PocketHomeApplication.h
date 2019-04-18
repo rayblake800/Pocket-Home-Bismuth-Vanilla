@@ -2,7 +2,7 @@
 /**
  * @file  PocketHomeApplication.h
  *
- * @brief  Initializes and shuts down the Juce application.
+ * @brief  Initializes and shuts down the JUCE application.
  */
 
 #include "JuceHeader.h"
@@ -14,7 +14,7 @@
 #include "Util_ConditionChecker.h"
 
 /**
- * @brief  Controls how the Juce library initializes and shuts down the
+ * @brief  Controls how the JUCE library initializes and shuts down the
  *         application.
  */
 class PocketHomeApplication : public juce::JUCEApplication
@@ -29,7 +29,7 @@ private:
      * @brief  Performs all required initialization when the application is
      *         first launched.
      *
-     *  This will be called by the Juce library immediately when the application
+     *  This will be called by the JUCE library immediately when the application
      * starts.
      *
      * @param commandLine   The full command used to launch the application.
@@ -40,7 +40,7 @@ private:
      * @brief  Performs all necessary cleanup steps before the application can
      *         be safely closed.
      *
-     *  This will be called by the Juce framework shortly before the application
+     *  This will be called by the JUCE framework shortly before the application
      * exits.
      */
     void shutdown() override;
@@ -48,14 +48,14 @@ private:
     /**
      * @brief  Gets the name of this application.
      *
-     * @return  The name the Juce library uses to identify this application.
+     * @return  The name the JUCE library uses to identify this application.
      */
     const juce::String getApplicationName() override;
 
     /**
      * @brief  Gets the application's version string.
      *
-     * @return  The application version string tracked by the Juce Library.
+     * @return  The application version string tracked by the JUCE Library.
      */
     const juce::String getApplicationVersion() override;
 

@@ -9,7 +9,7 @@
 namespace Theme { namespace Colour { enum class UICategory; } }
 
 /**
- * @brief  All Juce ColourId values used by this program are assigned to one of
+ * @brief  All JUCE ColourId values used by this program are assigned to one of
  *         these categories.
  */
 enum class Theme::Colour::UICategory

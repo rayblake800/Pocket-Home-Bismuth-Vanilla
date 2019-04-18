@@ -20,10 +20,10 @@ namespace Widgets { class DelayedIconSlider; }
  * combines the slider and the listener to provide a basis for simple, single
  * purpose slider classes.
  *
- *  DelayedIconSlider has a single virtual valueChanged method to handle all
+ *  DelayedIconSlider has a single virtual valueChanged function to handle all
  * updates. Whenever it is being dragged, or whenever it is released, the
- * valueChanged method will be called regularly. The frequency that the update
- * method is called is set on construction.
+ * valueChanged function will be called regularly. The frequency that the update
+ * function is called is set on construction.
  */
 class Widgets::DelayedIconSlider : public IconSlider,
         public Windows::FocusedTimer, private juce::Slider::Listener
@@ -36,7 +36,7 @@ public:
      *                         image asset configuration file.
      *
      * @param updateFrequency  Frequency in milliseconds to call the
-     *                         valueChanged method while the slider is being
+     *                         valueChanged function while the slider is being
      *                         dragged.
      */
     DelayedIconSlider(const juce::Identifier& imageKey,
@@ -65,8 +65,8 @@ private:
     virtual void timerCallback() final override;
 
     /**
-     * @brief  Slider::Listener requires this method to be implemented, but its
-     *         not actually used.
+     * @brief  Slider::Listener requires this function to be implemented, but
+     *         it's not actually used.
      *
      *  The timerCallback function replaces this function, so the frequency of
      * update actions can more easily be controlled.

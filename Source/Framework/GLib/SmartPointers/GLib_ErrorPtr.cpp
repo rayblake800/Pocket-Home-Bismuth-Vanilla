@@ -1,6 +1,7 @@
 #include "GLib_ErrorPtr.h"
 
-// Creates an error pointer, optionally setting a custom error handling method.
+// Creates an error pointer, optionally setting a custom error handling
+// function.
 GLib::ErrorPtr::ErrorPtr(std::function<void(GError*)> errorHandler) :
     errorHandler(errorHandler) { }
 

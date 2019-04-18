@@ -47,7 +47,7 @@ static std::unique_ptr<Wifi::Signal::DeviceModule> deviceSignalHandler;
 // Handles all signals from the LibNM thread resource's Client object.
 static std::unique_ptr<Wifi::Signal::ClientModule> clientSignalHandler;
 
-//######################  Resource method definitions:  #######################
+//#####################  Resource function definitions:  #######################
 // Initializes all Wifi resource modules.
 Wifi::Resource::Resource() : SharedResource::Modular::Resource<>(resourceKey)
 {
@@ -102,7 +102,7 @@ std::function<void()> Wifi::Resource::buildAsyncFunction
 }
 
 
-//###############  Module access method specializations:  ####################
+//###############  Module access function specializations:  ####################
 
 // Older compiler versions will not allow template specializations outside of
 // the original namespace.

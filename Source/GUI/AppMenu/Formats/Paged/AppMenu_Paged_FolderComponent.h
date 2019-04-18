@@ -25,10 +25,10 @@ namespace AppMenu { namespace Paged { class FolderComponent; } }
  *
  *  Menu items within each folder page are arranged in a grid. The dimensions
  * of this grid are defined in the apps.json file, accessible through
- * AppMenu::Settings. Paged::FolderComponent provides several methods for
- * finding a menu item's position in its page grid, and of finding the index of
+ * AppMenu::Settings. Paged::FolderComponent provides several functions for
+ * finding a menu item's position in its page grid, and for finding the index of
  * a menu item at a specific position on the page. These are supplied so that
- * the Paged::InputHandler can more easily provide navigational controls.
+ * the Paged::InputHandler can more easily provide navigation controls.
  */
 class AppMenu::Paged::FolderComponent : public AppMenu::FolderComponent
 {

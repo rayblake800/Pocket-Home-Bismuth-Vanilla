@@ -10,8 +10,8 @@
 namespace Testing { class DelayUtils; }
 
 /**
- * @brief  Provides the static idleUntil method used to run the JUCE event loop
- *         until some condition is met or times out.
+ * @brief  Provides the static idleUntil function used to run the JUCE event
+ *         loop until some condition is met or times out.
  */
 class Testing::DelayUtils
 {

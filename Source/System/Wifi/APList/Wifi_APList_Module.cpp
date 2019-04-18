@@ -40,7 +40,7 @@ void printAPList()
 #endif
 
 // Creates the APList module. The constructed list module will be empty, and
-// should be initialized with the updateAllAccessPoints method from within the
+// should be initialized with the updateAllAccessPoints function from within the
 // LibNM thread.
 Wifi::APList::Module::Module(Resource& wifiResource) :
     Wifi::Module(wifiResource)

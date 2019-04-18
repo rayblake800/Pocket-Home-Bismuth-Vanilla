@@ -8,7 +8,7 @@ static const constexpr char* dbgPrefix = "Assets::XPMLoader::";
 #endif
 
 
-// Loads a juce Image object from an xpm image file.
+// Loads a juce Image object from a xpm image file.
 juce::Image Assets::XPMLoader::loadXPMImage(const juce::File xpmFile)
 {
     using juce::Image;
@@ -69,7 +69,7 @@ juce::Image Assets::XPMLoader::loadXPMImage(const juce::File xpmFile)
         return juceImage;
     }
 
-    // Copy image data into JUCE image:
+    // Copy image data into juce::Image:
     for (int y = 0; y < imageData.height; y++)
     {
         for (int x = 0; x < imageData.width; x++)

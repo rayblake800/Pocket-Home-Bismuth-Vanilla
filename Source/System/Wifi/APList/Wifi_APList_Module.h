@@ -58,7 +58,7 @@ public:
     /**
      * @brief  Creates the APList module. The constructed list module will be
      *         empty, and should be initialized with the updateAllAccessPoints
-     *         method from within the LibNM thread.
+     *         function from within the LibNM thread.
      *
      * @param parentResource  The Wifi::Resource object instance.
      */
@@ -90,7 +90,7 @@ public:
      * @brief  Gets the strongest visible LibNM::AccessPoint represented by an
      *         AccessPoint object.
      *
-     *  This method should only be called on the thread created by the
+     *  This function should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
      *
      * @param accessPoint  A non-null AccessPoint object provided by the APList
@@ -109,7 +109,7 @@ public:
      * @brief  Gets the list of all LibNM::AccessPoint objects provided by
      *         LibNM.
      *
-     *  This method should only be called on the thread created by the
+     *  This function should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
      *
      * @return  All distinct, non-null LibNM::AccessPoint objects.
@@ -120,7 +120,7 @@ public:
      * @brief  Gets all LibNM::AccessPoint objects that are represented by an
      *         AccessPoint object.
      *
-     *  This method should only be called on the thread created by the
+     *  This function should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
      *
      * @param accessPoint  An AccessPoint representing one or more
@@ -136,7 +136,7 @@ public:
      * @brief  Adds a new LibNM::AccessPoint to the list, creating an
      *         AccessPoint object to represent it if necessary.
      *
-     *  This method should only be called on the thread created by the
+     *  This function should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
      *
      * @param addedAP  A new LibNM::AccessPoint provided by LibNM.
@@ -146,7 +146,7 @@ public:
     /**
      * @brief  Removes a LibNM::AccessPoint from the list.
      *
-     *  This method should only be called on the thread created by the
+     *  This function should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
      *
      *  If this was the only remaining LibNM::AccessPoint represented by an
@@ -191,7 +191,7 @@ private:
      *         all LibNM::AccessPoint objects represented by the access point
      *         have been removed.
      *
-     *  This method should only be called on the thread created by the
+     *  This function should only be called on the thread created by the
      * Wifi::LibNM::Thread::Module object.
      *
      * @param toCheck  The AccessPoint object to check and potentially update.

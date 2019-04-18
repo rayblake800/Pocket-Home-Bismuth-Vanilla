@@ -49,7 +49,7 @@ private:
 };
 
 /**
- * @brief  Provides the static method that the application class uses to send
+ * @brief  Provides the static function that the application class uses to send
  *         the shutdown message.
  */
 class Util::ShutdownBroadcaster

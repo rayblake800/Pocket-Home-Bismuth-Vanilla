@@ -13,8 +13,8 @@ namespace Util { template<class PtrType> class Nullable; }
  *
  *  Each Nullable class has a specific data pointer type. Nullable classes
  * should copy the interface of their data object, forwarding all function calls
- * to their object data pointer. For each copied interface method, the nullable
- * class must check if its data pointer is null, and handle the problem
+ * to their object data pointer. For each copied interface function, the
+ * nullable class must check if its data pointer is null, and handle the problem
  * appropriately if it is.
  *
  *  This pattern provides all of the convenience of polymorphic data pointers,

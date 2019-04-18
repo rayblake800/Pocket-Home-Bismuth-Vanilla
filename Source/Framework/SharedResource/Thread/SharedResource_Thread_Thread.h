@@ -85,7 +85,7 @@ private:
     /**
      * @brief  Runs once each time the thread starts running.
      *
-     *  Override this method to define custom initialization routines for a
+     *  Override this function to define custom initialization routines for a
      * Thread subclass.
      *
      * @param lock  The Thread's resource lock object.

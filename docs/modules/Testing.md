@@ -8,5 +8,5 @@ Window quickly creates and shows a window containing a single test component.
 StressTest objects test execution of many simultaneous random tests running on different threads.
 
 #### [Testing\::DelayUtils](../../Source/Development/Testing/Testing_DelayUtils.h)
-DelayUtils provides a method that allows tests to run the JUCE event loop until some condition is met.
+DelayUtils provides a function that allows tests to run the JUCE event loop until some condition is met.
 

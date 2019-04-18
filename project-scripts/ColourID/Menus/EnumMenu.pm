@@ -33,10 +33,8 @@ sub openMenu
             "Return to main menu",
             \&loadEnums,
             $cache);
-    $menu->addOption("Scan project Source directory",
-            "$projectDir/Source");
-    $menu->addOption("Scan JUCE library files",
-            "$projectDir/deps/JUCE");
+    $menu->addOption("Scan project Source directory", "$projectDir/Source");
+    $menu->addOption("Scan JUCE library files", "$projectDir/deps/JUCE");
     $menu->openMenu();
 }
 

@@ -26,8 +26,8 @@ namespace Widgets { class NavButton; }
  * assigned to them on construction, pointing towards the assigned edge.
  *
  *  Because NavButtons are meant to be placed on the margins of the window,
- * convenience methods are provided to find the margin fractions needed to keep
- * other window content from overlapping with the arrow buttons.
+ * convenience functions are provided to find the margin fractions needed to
+ * keep other window content from overlapping with the arrow buttons.
  */
 class Widgets::NavButton : public Theme::Image::Component<DrawableImageButton>
 {

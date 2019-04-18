@@ -13,15 +13,15 @@ static const constexpr char * busName = "org.freedesktop.NetworkManager";
 static const constexpr char * interfaceName
         = "org.freedesktop.NetworkManager.Settings.Connection";
 
-// DBus getSettings method key:
-static const constexpr char * getSettingsMethod = "GetSettings";
-// DBus getSecrets method key:
-static const constexpr char * getSecretsMethod = "GetSecrets";
+// DBus getSettings function key:
+static const constexpr char * getSettingsFunction = "GetSettings";
+// DBus getSecrets function key:
+static const constexpr char * getSecretsFunction = "GetSecrets";
 
-// DBus delete method key:
-static const constexpr char * deleteConnectionMethod = "Delete";
-// DBus update method key:
-static const constexpr char * updateMethod = "Update";
+// DBus delete function key:
+static const constexpr char * deleteConnectionFunction = "Delete";
+// DBus update function key:
+static const constexpr char * updateFunction = "Update";
 
 namespace NMDBus = Wifi::LibNM::DBus;
 
@@ -71,7 +71,7 @@ Wifi::LibNM::Connection NMDBus::SavedConnection::getNMConnection()
     using namespace GLib::VariantConverter;
     nmConnection = nm_connection_new();
     nmConnection.setPath(path.toRawUTF8());
-    GVariant* settings = callMethod(getSettingsMethod);
+    GVariant* settings = callFunction(getSettingsFunction);
     if (settings == nullptr)
     {
         return nmConnection;
@@ -173,8 +173,8 @@ bool NMDBus::SavedConnection::hasSavedKey() const
     using juce::String;
     using namespace GLib::VariantConverter;
     GError * secretsError = nullptr;
-    GVariant* secrets = callMethod(
-            getSecretsMethod,
+    GVariant* secrets = callFunction(
+            getSecretsFunction,
             g_variant_new_string(NM_SETTING_WIRELESS_SECURITY_SETTING_NAME),
             &secretsError);
     bool keyFound = false;
@@ -228,7 +228,7 @@ void NMDBus::SavedConnection::deleteConnection()
 {
     if (!isNull())
     {
-        callMethod(deleteConnectionMethod);
+        callFunction(deleteConnectionFunction);
         clearGObject();
         path = "";
     }
@@ -257,7 +257,7 @@ GVariant* NMDBus::SavedConnection::getSetting(const char* name) const
     {
         return nullptr;
     }
-    GVariant* allSettings = callMethod(getSettingsMethod);
+    GVariant* allSettings = callFunction(getSettingsFunction);
     GVariant* setting = nullptr;
     if (allSettings != nullptr)
     {

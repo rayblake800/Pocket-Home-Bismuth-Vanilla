@@ -7,7 +7,7 @@ namespace ColourTheme = Theme::Colour;
 ColourTheme::ConfigListener::ConfigListener() { }
 
 
-// Sets this listener to receive updates when a specific Juce ColourId value
+// Sets this listener to receive updates when a specific JUCE ColourId value
 // changes.
 void ColourTheme::ConfigListener::addTrackedColourId(const int colourId)
 {
@@ -16,7 +16,7 @@ void ColourTheme::ConfigListener::addTrackedColourId(const int colourId)
 }
 
 
-// Stops this listener from receiving updates when a specific Juce ColourId
+// Stops this listener from receiving updates when a specific JUCE ColourId
 // value changes.
 void ColourTheme::ConfigListener::removeTrackedColourId(const int colourId)
 {
@@ -83,6 +83,6 @@ void ColourTheme::ConfigListener::colourChanged(
         const juce::Colour newColour)
 {
     DBG("Theme::Colour::ConfigListener::" << __func__
-            << ": Listener class didn't override notification method!");
+            << ": Listener class didn't override notification function!");
     jassertfalse;
 }

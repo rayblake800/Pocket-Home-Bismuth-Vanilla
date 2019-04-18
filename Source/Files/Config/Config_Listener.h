@@ -112,11 +112,11 @@ public:
 
 private:
     /**
-     * @brief  This method will be called whenever a key tracked by this
+     * @brief  This function will be called whenever a key tracked by this
      *         listener changes in the config file.
      *
-     *  By default, this takes no action. Override this method to handle config
-     * value update events.
+     *  By default, this takes no action. Override this function to handle
+     * config value update events.
      *
      * @param propertyKey   Passes in the updated value's key.
      */

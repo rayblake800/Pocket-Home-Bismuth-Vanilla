@@ -51,7 +51,7 @@ public:
      * @brief  Ensures all future window focus changes will be sent to the
      *         FocusTracker resource.
      *
-     *  Until this method is called, focus events will never be sent to the
+     *  Until this function is called, focus events will never be sent to the
      * FocusTracker resource.
      */
     void startFocusTracking();

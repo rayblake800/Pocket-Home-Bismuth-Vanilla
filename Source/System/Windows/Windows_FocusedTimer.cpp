@@ -9,7 +9,7 @@ void Windows::FocusedTimer::stopTimer()
 
 
 // Starts the timer, setting the amount of time until the timer's callback
-// method will run.
+// function will run.
 void Windows::FocusedTimer::startTimer(const int timerMilliseconds)
 {
     if (getFocusState())

@@ -42,7 +42,7 @@ public:
     virtual ~LockedPtr() { }
 
     /**
-     * @brief  Accesses the locked resource's methods or data.
+     * @brief  Accesses the locked resource's functions or data.
      *
      * @return  The address of the locked resource object instance.
      */

@@ -4,7 +4,7 @@
  *
  * @brief  Defines a SharedResource::Modular::Resource, three resource Module
  *         classes, and corresponding module Handler classes with a few basic
- *         methods useful for testing.
+ *         function useful for testing.
  */
 
 #include "SharedResource_Modular_Resource.h"

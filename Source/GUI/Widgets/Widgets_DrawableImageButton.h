@@ -127,7 +127,7 @@ private:
     /**
      * @brief  Changes the button opacity when it is held down.
      *
-     * @param graphics           The Juce graphics context used to draw the
+     * @param graphics           The JUCE graphics context used to draw the
      *                           button.
      *
      * @param isMouseOverButton  Whether the mouse cursor is currently over the

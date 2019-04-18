@@ -94,7 +94,7 @@ void Settings::ConnectionComponent::buttonClicked(juce::Button* button)
 }
 
 
-// Calls the refresh method when the component regains visibility.
+// Calls the refresh function when the component regains visibility.
 void Settings::ConnectionComponent::visibilityChanged()
 {
     if (isVisible())

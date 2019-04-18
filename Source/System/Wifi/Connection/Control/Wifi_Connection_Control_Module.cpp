@@ -229,8 +229,8 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
 {
     ASSERT_NM_CONTEXT;
 
-    // Make sure a clear error is visible if this method somehow gets called in
-    // the wrong circumstances:
+    // Make sure a clear error is visible if this function somehow gets called
+    // in the wrong circumstances:
     Record::Module* connectionRecord = getSiblingModule<Record::Module>();
     jassert(connectionStarted);
     jassert(!connectionActivating);

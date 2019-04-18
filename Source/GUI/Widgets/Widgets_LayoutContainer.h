@@ -21,9 +21,7 @@ public:
 
     virtual ~LayoutContainer() { }
 
-    /**
-     * @brief  Juce Component ColourId values, used by juce::LookAndFeel.
-     */
+    // JUCE ColourId values:
     enum ColourIds
     {
         // Colour used to fill in the background if no image is set:

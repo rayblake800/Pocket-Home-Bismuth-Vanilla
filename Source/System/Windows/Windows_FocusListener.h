@@ -48,7 +48,7 @@ private:
      * @brief  Signals that the main application window just gained focus.
      *
      *  This takes no action by default. FocusListener subclasses should
-     * override this method if they need to act when the window gains focus.
+     * override this function if they need to act when the window gains focus.
      */
     virtual void windowFocusGained() override;
 
@@ -56,7 +56,7 @@ private:
      * @brief  Signals that the main application window just lost focus.
      *
      *  This takes no action by default. FocusListener subclasses should
-     * override this method if they need to act when the window loses focus.
+     * override this function if they need to act when the window loses focus.
      */
     virtual void windowFocusLost() override;
 };

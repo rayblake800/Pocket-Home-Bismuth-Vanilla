@@ -19,7 +19,7 @@ namespace Widgets { class OverlaySpinner; }
 class Widgets::OverlaySpinner : public juce::Component
 {
 public:
-    // @brief  Juce Component ColourId values.
+    // JUCE Component ColourId values:
     enum ColourIds
     {
         backgroundColourId = 0x1900400,
@@ -49,7 +49,7 @@ private:
     /**
      * @brief  Paints the overlay background.
      *
-     * @param graphics  The Juce graphics context used to draw the object.
+     * @param graphics  The JUCE graphics context used to draw the object.
      */
     void paint(juce::Graphics & g) override;
 

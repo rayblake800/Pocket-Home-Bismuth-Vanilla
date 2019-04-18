@@ -28,7 +28,7 @@
  * callback function provided by the signal handler every time it emits the
  * connected signal type. Using a CallbackData object provided by the signal
  * handler on connection, that static callback function accesses the connected
- * signal handler, and calls an appropriate method to handle the signal event.
+ * signal handler, and calls an appropriate function to handle the signal event.
  */
 template <class SourceType>
 class GLib::Signal::Handler
@@ -241,7 +241,7 @@ private:
     /**
      * @brief  A callback function used to handle property change signals. This
      *         passes all received signals to the signal handler's
-     *         propertyChanged method.
+     *         propertyChanged function.
      *
      * @param signalSource   The GObject notifying that one of its properties
      *                       has changed.
@@ -261,7 +261,7 @@ private:
 /**
  * @brief  A callback function used to handle property change signals. This
  *         passes all received signals to the signal handler's propertyChanged
- *         method.
+ *         function.
  *
  * @param signalSource   The GObject notifying that one of its properties has
  *                       changed.

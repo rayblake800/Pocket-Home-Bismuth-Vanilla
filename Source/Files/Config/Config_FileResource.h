@@ -323,7 +323,7 @@ private:
      * @brief  Writes any custom object or array data back to the JSON file.
      *
      *  FileResource subclasses with custom object or array data must override
-     * this method to write that data back to the file.
+     * this function to write that data back to the file.
      */
     virtual void writeDataToJSON() { }
 

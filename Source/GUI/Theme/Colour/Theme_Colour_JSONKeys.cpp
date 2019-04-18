@@ -13,7 +13,7 @@ namespace ColourKeys = Theme::Colour::JSONKeys;
 /**
  * @brief  Keys for colour values assigned to UI element colour categories.
  *
- *  All Juce ColourId values are grouped under one of these categories. When
+ *  All JUCE ColourId values are grouped under one of these categories. When
  * looking up colour values, if no value is explicitly assigned to a given
  * ColourId, the value assigned to the associated UICategory will be used.
  */
@@ -36,7 +36,7 @@ namespace Theme { namespace Colour { namespace ColourIds {
 
 /**
  * @brief  For each JSON colour key tracked in colours.json, keyMap maps that
- *         key to its Juce ColourId value and UI element category.
+ *         key to its JUCE ColourId value and UI element category.
  */
 static const std::map<juce::Identifier, const Element*> keyMap
 {
@@ -137,7 +137,7 @@ static const std::map<juce::Identifier, const Element*> keyMap
 }}}
 
 
-// Gets all Juce ColourId values defined by the colour config file.
+// Gets all JUCE ColourId values defined by the colour config file.
 juce::Array<int> ColourKeys::getColourIds()
 {
     juce::Array<int> idList;
@@ -172,17 +172,9 @@ juce::Array<const juce::Identifier*> ColourKeys::getColourKeys()
 }
 
 
-// Gets the UICategory assigned to a Juce ColourId value.
+// Gets the UICategory assigned to a JUCE ColourId value.
 Theme::Colour::UICategory ColourKeys::getUICategory(const int colourId)
 {
-    // for (int i = 0; i < ColourIds::allElements.size(); i++)
-    // {
-    // if (ColourIds::allElements[i]->getColourId() == colourId)
-    // {
-    // return ColourIds::allElements[i]->getColourCategory();
-    // }
-    // }
-    // return UICategory::none;
     int index = -1;
     int min = 0, max = ColourIds::allElements.size() - 1;
     while (min < max)
@@ -212,8 +204,6 @@ Theme::Colour::UICategory ColourKeys::getUICategory(const int colourId)
     }
     if (index < 0)
     {
-        DBG("Failed to find Element for ID "
-                << juce::String::toHexString(colourId));
         jassertfalse;
         return UICategory::none;
     }
@@ -222,7 +212,7 @@ Theme::Colour::UICategory ColourKeys::getUICategory(const int colourId)
 
 
 //=================== Lookup values using keys: ============================
-// Finds the Juce ColourId value of a UI element from its key.
+// Finds the JUCE ColourId value of a UI element from its key.
 int ColourKeys::getColourId(const juce::Identifier& colourKey)
 {
     auto searchIter = ColourIds::keyMap.find(colourKey);
@@ -253,7 +243,7 @@ Theme::Colour::UICategory ColourKeys::getCategoryType
 
 
 //====================== Lookup keys by value: ============================
-// Gets the key used to store a specific Juce ColourId in the colour config
+// Gets the key used to store a specific JUCE ColourId in the colour config
 // file.
 const juce::Identifier& ColourKeys::getColourKey(const int colourId)
 {

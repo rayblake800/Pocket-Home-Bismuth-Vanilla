@@ -112,7 +112,7 @@ Process::Data::Data(const juce::File statFile)
         processId = statItems[idIndex].getIntValue();
         executableName = statItems[nameIndex].removeCharacters("()");
         parentId = statItems[parentIdIndex].getIntValue();
-        // juce::String has no getUInt64 method, so time has to be parsed one
+        // juce::String has no getUInt64 function, so time has to be parsed one
         // character at a time:
         startTime = 0;
         for (int i = 0; i < statItems[startTimeIndex].length(); i++)

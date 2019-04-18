@@ -26,7 +26,7 @@ class Widgets::FilePathEditor : public juce::Component,
     public juce::Button::Listener
 {
 public:
-    // Juce Component ColourId values:
+    // JUCE Component ColourId values:
     enum ColourIds
     {
         fileWindowColourId = 0x1900300,

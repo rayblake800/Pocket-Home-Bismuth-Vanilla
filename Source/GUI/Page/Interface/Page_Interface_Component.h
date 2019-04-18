@@ -50,13 +50,13 @@ private:
 
     /**
      * @brief  Whenever this page is added to a page stack, the StackComponent
-     *         will call this method.
+     *         will call this function.
      */
     virtual void pageAddedToStack() { }
 
     /**
      * @brief  Whenever this page becomes the top page on the page stack, the
-     *         StackComponent will call this method.
+     *         StackComponent will call this function.
      */
     virtual void pageRevealedOnStack() { }
 

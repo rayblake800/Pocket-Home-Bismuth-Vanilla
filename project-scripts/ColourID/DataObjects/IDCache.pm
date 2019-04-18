@@ -24,8 +24,8 @@
 #--- removeElement: ---
 # Removes an element from the cache.
 #--- Parameters: ---
-# $element: The Element to remove, or a search value the findElement method can
-#           use to locate the cached Element.
+# $element: The Element to remove, or a search value the findElement function
+#           can use to locate the cached Element.
 #==============================================================================#
 
 #==============================================================================#

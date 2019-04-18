@@ -108,8 +108,8 @@ private:
      *         Object that contains that data.
      *
      *  The ObjectLender that initially wrapped the GObject* in a
-     * Borrowed::Object is responsible for calling this method when the GObject*
-     * data is destroyed by the library that owns it.
+     * Borrowed::Object is responsible for calling this function when the
+     * GObject* data is destroyed by the library that owns it.
      */
     void invalidateObject();
 

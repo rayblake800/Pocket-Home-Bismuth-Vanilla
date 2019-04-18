@@ -130,7 +130,7 @@ SecurityType is an enum class representing the main types of Wifi connection sec
 ConnectionHandler is an interface provided for objects that handle LibNM connection opening callbacks. The Connection\::Control\::Module object implements this interface in order to handle new connection attempts that it starts.
 
 #### [Wifi\::LibNM\::SSID](../../Source/System/Wifi/LibNM/Wifi_LibNM_SSID.h)
-SSID objects store the name used to identify an access point. SSID values may contain unprintable characters, so SSID objects provide a method to access their data as a printable string.
+SSID objects store the name used to identify an access point. SSID values may contain unprintable characters, so SSID objects provide a function to access their data as a printable string.
 
 #### [Wifi\::LibNM\::ContextTest](../../Source/System/Wifi/LibNM/Wifi_LibNM_ContextTest.h)
 ContextTest provides a debug macro for asserting that code is running within the LibNM thread's GLib event loop.

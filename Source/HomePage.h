@@ -44,7 +44,7 @@ public:
 
     virtual ~HomePage() { }
 
-    // Juce ColourId values:
+    // JUCE ColourId values:
     enum ColourIds
     {
         textColourId = 0x1900800
@@ -54,8 +54,8 @@ protected:
     /**
      * @brief  Tracks page background changes.
      *
-     *  Only the MainConfigFile should be call this method. This will update the
-     * page background.
+     *  Only the MainConfigFile should be call this function. This will update
+     * the page background.
      *
      * @param key  The page background key.
      */

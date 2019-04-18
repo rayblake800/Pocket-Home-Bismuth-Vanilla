@@ -57,7 +57,7 @@ bool SharedResource::LockedInstancePtr::isLocked() const
 }
 
 
-// Accesses the resource Instance's methods or data.
+// Accesses the resource Instance's functions or data.
 SharedResource::Instance*
 SharedResource::LockedInstancePtr::getInstance() const
 {

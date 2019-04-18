@@ -34,7 +34,7 @@ public:
 
     virtual ~ColourPicker() { }
 
-    // Juce ColourId values:
+    // JUCE ColourId values:
     enum ColourIds
     {
         // Light area of the checkerboard pattern drawn behind colour previews.
@@ -166,7 +166,7 @@ private:
         /**
          * @brief  Draws the component with its current colour value.
          *
-         * @param graphics  The Juce graphics context used to draw the
+         * @param graphics  The JUCE graphics context used to draw the
          *                  component.
          */
         void paint(juce::Graphics& graphics) override;
@@ -213,7 +213,7 @@ private:
          * @brief  Draws the button, changing the outline colour when the
          *         button is down.
          *
-         * @param graphics           The Juce graphics context used to draw the
+         * @param graphics           The JUCE graphics context used to draw the
          *                           button.
          *
          * @param isMouseOverButton  Whether the mouse cursor is currently over
@@ -290,7 +290,7 @@ private:
          *  Given the current selected colour, this shows what the selected
          * colour would become for each slider value.
          *
-         * @param graphics  The Juce graphics context used to draw the
+         * @param graphics  The JUCE graphics context used to draw the
          *                  component.
          */
         void paint(juce::Graphics& graphics) override;

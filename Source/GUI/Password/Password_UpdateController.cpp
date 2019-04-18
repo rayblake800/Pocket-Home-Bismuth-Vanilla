@@ -62,7 +62,7 @@ passwordChangeCallback(onUpdate)
 // Attempts to set a new password when the update button is clicked.
 void Password::UpdateController::buttonClicked(juce::Button* button)
 {
-    // Only the updateButton should trigger this method
+    // Only the updateButton should trigger this function.
     jassert(button == &updateButton);
     if (newPasswordField.getText() != confirmPasswordField.getText())
     {

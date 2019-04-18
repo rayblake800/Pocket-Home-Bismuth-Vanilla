@@ -45,7 +45,7 @@ private:
      * @brief  Notifies the ClientHandler when wireless networking is enabled
      *         or disabled.
      *
-     *  This method does nothing by default, ClientHandler subclasses should
+     *  This function does nothing by default, ClientHandler subclasses should
      * override it to define how to handle wireless state changes.
      *
      * @param wifiEnabled  True if Wifi was just enabled, false if Wifi was

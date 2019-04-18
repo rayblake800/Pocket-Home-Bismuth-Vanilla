@@ -11,11 +11,11 @@
 namespace GLib { class Object; }
 
 /**
- * @brief  Holds a GObject*, providing methods for accessing object data,
+ * @brief  Holds a GObject*, providing functions for accessing object data,
  *         and setting and getting object properties.
  *
  *  GLib::Object subclasses should each handle a single type of GObject,
- * providing methods to interact with that object type.
+ * providing functions to interact with that object type.
  */
 class GLib::Object
 {

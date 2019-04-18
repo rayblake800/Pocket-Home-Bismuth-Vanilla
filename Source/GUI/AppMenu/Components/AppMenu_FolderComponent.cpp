@@ -111,7 +111,7 @@ void AppMenu::FolderComponent::childAdded(const int childIndex)
     {
         selectedIndex++;
     }
-    // Trigger the parent's resized() method to force a layout update
+    // Trigger the parent's resized() function to force a layout update
     juce::Component* parent = getParentComponent();
     if (parent != nullptr)
     {
@@ -137,7 +137,7 @@ void AppMenu::FolderComponent::childRemoved(const int removedIndex)
     {
         selectedIndex--;
     }
-    // Trigger the parent's resized() method to force a layout update
+    // Trigger the parent's resized() function to force a layout update
     juce::Component* parent = getParentComponent();
     if (parent != nullptr)
     {

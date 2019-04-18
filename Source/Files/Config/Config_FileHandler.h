@@ -18,7 +18,7 @@ namespace Config { template<class ResourceType> class FileHandler; }
  *
  *  FileHandlers can safely read and write values with basic data types within
  * their ThreadResource. Accessing array and object data types requires a
- * FileHandler subclass with new methods for handling the JSON file's custom
+ * FileHandler subclass with new functions for handling the JSON file's custom
  * data types.
  *
  * @tparam ResourceType  The FileResource subclass this FileHandler will access.

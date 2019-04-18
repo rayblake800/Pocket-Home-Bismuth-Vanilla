@@ -20,7 +20,7 @@ namespace AppMenu { class ItemData; }
  *
  *  Menu item data is stored through shared, referenced-counted objects. Like
  * other UI elements, menu item data is absolutely not threadsafe, and should
- * not be handled outside of the Juce message thread.
+ * not be handled outside of the JUCE message thread.
  *
  */
 class AppMenu::ItemData : public juce::ReferenceCountedObject
@@ -214,8 +214,8 @@ public:
      * @brief  Swaps the positions of two menu items, saving the change to this
      *         menu item's data source if both items may be moved by the user.
      *
-     * This method may be used to change the order of non-movable items, but
-     * the changes will not be saved if this is the case.
+     *  This function may be used to change the order of non-movable items, but
+     * the changes will not be saved in that case.
      *
      * @param childIdx1  The index of the first child item to move.
      *
@@ -279,7 +279,7 @@ public:
     /**
      * @brief  Receives updates when tracked menu items change.
      *
-     *  Listeners connected to a menu item through its addListener method are
+     *  Listeners connected to a menu item using its addListener function are
      * notified whenever the menu item's data changes, whenever the menu item is
      * removed from the menu, and whenever the menu item's child folder items
      * are added, removed, or swapped. Each Listener may only connect to one
@@ -307,7 +307,7 @@ public:
 
     private:
         /**
-         * @brief  This method will be called once any time a new child folder
+         * @brief  This function will be called once any time a new child folder
          *         item is added to the tracked ItemData object.
          *
          * @param childIndex  The index where the new child item was inserted.
@@ -315,8 +315,8 @@ public:
         virtual void childAdded(const int childIndex) { }
 
         /**
-         * @brief  This method will be called once any time a child folder item
-         *         is removed from the tracked ItemData object.
+         * @brief  This function will be called once any time a child folder
+         *         item is removed from the tracked ItemData object.
          *
          * @param removedIndex  The former index of the tracked item's removed
          *                      child item.
@@ -324,7 +324,7 @@ public:
         virtual void childRemoved( const int removedIndex) { }
 
         /**
-         * @brief  This method will be called once any time two child folder
+         * @brief  This function will be called once any time two child folder
          *         items of the tracked ItemData object are swapped.
          *
          * @param swapIndex1  The index of the first swapped child item.
@@ -335,7 +335,7 @@ public:
         (const int swapIndex1, const int swapIndex2) { }
 
         /**
-         * @brief  This method will be called once whenever any other element
+         * @brief  This function will be called once whenever any other element
          *         of the tracked ItemData object's data changes.
          *
          * @param changedField  Indicates what part of the menu item's data

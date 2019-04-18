@@ -25,7 +25,7 @@ class Settings::WifiControl : public ConnectionComponent,
 {
 public:
     /**
-     * @brief  Sets the method used to open the Wifi settings page on
+     * @brief  Sets the function used to open the Wifi settings page on
      *         construction.
      *
      * @param openWifiPage   A callback function that opens the Wifi page.

@@ -86,7 +86,7 @@ private:
      *         changes before the list's layout is updated.
      *
      *  By default, this takes no action. Subclasses should override this
-     * method if they need to act when the selected list item changes.
+     * function if they need to act when the selected list item changes.
      */
     virtual void selectionChanged() { }
 

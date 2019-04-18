@@ -20,15 +20,15 @@ namespace AppMenu { class MenuItem; }
  * interchangeably no matter what type of ItemData they contain.
  *
  *  MenuItem also takes care of memory management issues with ItemData objects.
- * All MenuItem methods check if their ItemData is null before dereferencing it,
- * returning an appropriate default value instead if it does turn out to be
+ * All MenuItem functions check if their ItemData is null before dereferencing
+ * it, returning an appropriate default value instead if it does turn out to be
  * null. ItemData objects are automatically deleted when the
  * AppMenu::JSONResource object and every MenuItem referencing them have been
  * destroyed.
  *
  *  Multiple MenuItem objects may hold the same ItemData object, but there are
  * no controls used to prevent concurrent access errors. All AppMenu classes
- * are not threadsafe, and should only be used within the Juce message thread.
+ * are not threadsafe, and should only be used within the JUCE message thread.
  */
 class AppMenu::MenuItem : public Util::Nullable<AppMenu::ItemData::Ptr>
 {

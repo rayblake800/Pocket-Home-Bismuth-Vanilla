@@ -34,7 +34,7 @@ public:
     virtual ~ListEditor() { }
 
     /**
-     * @brief  Custom Juce ColourId values.
+     * @brief  Custom JUCE ColourId values.
      */
     enum ColourIds
     {
@@ -199,7 +199,7 @@ private:
     virtual void buttonClicked(juce::Button* buttonClicked) override;
 
     /**
-     * @brief  A required list item painting method, implemented as an empty
+     * @brief  A required list item painting function, implemented as an empty
      *         function as ListItemComponent will paint itself already.
      */
     virtual void paintListBoxItem(int rowNumber, juce::Graphics&g, int width,

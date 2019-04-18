@@ -114,7 +114,7 @@ private:
     /**
      * @brief  Manages click events from the cancel and confirm buttons,
      *         passing all other button events to the editorButtonClicked
-     *         method.
+     *         function.
      *
      * @param buttonClicked  The button that triggered the click event. If this
      *                       is the cancel or confirm button, the editor will
@@ -134,7 +134,7 @@ private:
      * @param key  A keyPress event that was not handled by the editor's child
      *             components.
      *
-     * @return     True, to keep the Juce library key handling system from
+     * @return     True, to keep the JUCE library key handling system from
      *             passing the key event to another component.
      */
     virtual bool keyPressed(const juce::KeyPress& key) final override;

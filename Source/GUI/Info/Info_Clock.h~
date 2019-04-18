@@ -25,7 +25,7 @@ public:
 
     virtual ~Clock() { }
 
-    // Juce ColourId values:
+    // JUCE ColourId values:
     enum ColourIds
     {
         textColourId = 0x1900700

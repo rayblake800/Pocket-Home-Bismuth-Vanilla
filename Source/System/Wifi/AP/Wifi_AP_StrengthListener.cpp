@@ -44,7 +44,7 @@ void Wifi::AP::StrengthListener::ignoreAllUpdates()
 
 
 // Receives all signal strength notifications, passing them on to the
-// signalStrengthUpdate method if the changed access point is tracked by the
+// signalStrengthUpdate function if the changed access point is tracked by the
 // Listener.
 void Wifi::AP::StrengthListener::signalStrengthChanged
 (const AccessPoint updatedAP)

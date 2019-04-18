@@ -7,8 +7,8 @@
  */
 
 #include "GLib_SharedContextPtr.h"
-// Since the main UI/message thread isn't a Juce thread, standard C++ thread
-// libraries need to be used to wait/notify.
+// Since the main UI/message thread isn't run by a juce::Thread object, standard
+// C++ thread libraries need to be used to wait/notify.
 #include <mutex>
 #include <condition_variable>
 #include "JuceHeader.h"

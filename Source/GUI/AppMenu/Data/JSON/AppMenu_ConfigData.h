@@ -23,7 +23,7 @@ namespace AppMenu { class ConfigData; }
  * shortcut. Changes to ConfigData objects are written directly back to the
  * source JSON file.
  *
- *  To prevent circular dependencies, the methods for writing changes back to
+ *  To prevent circular dependencies, the functions for writing changes back to
  * the JSON file are left abstract, and should be implemented in a ConfigData
  * subclass by the Config::FileResource subclass responsible for managing the
  * JSON menu data.
@@ -180,7 +180,7 @@ private:
     /**
      * @brief  Creates an empty child menu item.
      *
-     * This method is used so that ConfigData can define how to recursively
+     *  This function is used so that ConfigData can define how to recursively
      * create its child menu items despite being an abstract class. This should
      * only be called by initMenuData when recursively initializing the menu
      * item.

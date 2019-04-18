@@ -35,12 +35,12 @@ bool Bluetooth::BluezAdapter::isPairable()
 
 void Bluetooth::BluezAdapter::startDiscovery()
 {
-    callMethod("startDiscovery");
+    callFunction("startDiscovery");
 }
 
 void Bluetooth::BluezAdapter::stopDiscovery()
 {
-    callMethod("stopDiscovery");
+    callFunction("stopDiscovery");
 }
 
 void Bluetooth::BluezAdapter::setPowered(bool powered)

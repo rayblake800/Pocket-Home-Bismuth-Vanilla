@@ -115,7 +115,7 @@ public:
      * @brief  Gets all saved connections compatible with a particular
      *         AccessPoint object.
      *
-     * This method must be called within the LibNM::ThreadResource.
+     * This function must be called within the LibNM::ThreadResource.
      *
      * @param toMatch  The access point to search for.
      *
@@ -129,7 +129,7 @@ public:
      * @brief  Gets all saved connections compatible with a particular
      *         LibNM::AccessPoint object.
      *
-     * This method must be called within the LibNM::ThreadResource.
+     * This function must be called within the LibNM::ThreadResource.
      *
      * @param toMatch  The access point to search for.
      *

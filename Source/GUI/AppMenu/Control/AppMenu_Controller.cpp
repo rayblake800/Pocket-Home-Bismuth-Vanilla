@@ -366,9 +366,11 @@ void AppMenu::Controller::copyMenuItem
             insertIndex);
 }
 
+
 // Connects the timer to its Controller on construction.
 AppMenu::Controller::LaunchTimer::LaunchTimer(Controller& menuController) :
 menuController(menuController) { }
+
 
 // Exits the loading state if the timeout period ends before an application
 // launches.
@@ -376,7 +378,7 @@ void AppMenu::Controller::LaunchTimer::timerCallback()
 {
     if (menuController.loadingSpinner.isVisible())
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Reached timeout period, exiting loading state.");
         menuController.setLoadingState(false);
     }

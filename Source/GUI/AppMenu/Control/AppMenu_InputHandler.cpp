@@ -78,7 +78,8 @@ AppMenu::Controller* AppMenu::InputHandler::getController()
 }
 
 
-// Converts generic mouse events into calls to InputHandler clicked methods.
+// Converts generic mouse events into calls to the InputHandler::clicked
+// function.
 void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
 {
     // TODO: Don't just assume ctrl+click is equivalent to right click, define
@@ -132,7 +133,7 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
 
 
 // Converts generic key events into calls to the InputHandler's protected
-// keyPress method.
+// keyPress function.
 bool AppMenu::InputHandler::keyPressed(const juce::KeyPress& keyPress,
         juce::Component* sourceComponent)
 {

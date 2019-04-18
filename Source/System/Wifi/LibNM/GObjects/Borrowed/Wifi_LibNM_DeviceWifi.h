@@ -86,7 +86,7 @@ private:
  * AccessPoint objects representing access points visible to the device, and
  * provides limited methods for controlling the Wifi device.
  *
- *  DeviceWifi provides methods to close any connection active on the device,
+ *  DeviceWifi provides functions to close any connection active on the device,
  * and to make the device re-scan visible access points. Enabling or disabling
  * the device, and creating new connections using the device is handled by the
  * LibNM::Client class instead.

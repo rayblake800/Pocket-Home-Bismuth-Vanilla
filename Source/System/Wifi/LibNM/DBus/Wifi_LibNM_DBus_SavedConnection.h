@@ -92,7 +92,7 @@ public:
     /**
      * @brief  Deletes this connection from the list of saved connections.
      *
-     * This object will be null after this method is called.
+     * This object will be null after this function is called.
      */
     void deleteConnection();
 

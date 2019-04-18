@@ -66,7 +66,7 @@ bool Process::Launched::isRunning()
                 || processData.getLastState() == State::dead)
         {
             DBG(dbgPrefix << __func__
-                    << ": Launched process is dead/missing, but JUCE process "
+                    << ": Launched process is dead/missing, but juce::Process "
                     << "object reports that it is still running.");
             DBG(dbgPrefix << __func__
                     << ": Attempting to kill invalid process:");

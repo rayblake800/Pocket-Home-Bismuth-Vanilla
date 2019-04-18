@@ -13,11 +13,11 @@
  *         loop.
  *
  *  LibNM::Object classes controlled by the LibNM library should call this at
- * the beginning of most methods. These assertions will only run within debug
+ * the beginning of most functions. These assertions will only run within debug
  * builds.
  */
 #define ASSERT_NM_CONTEXT                                           \
-if (!g_main_context_is_owner(g_main_context_default()))              \
+if (!g_main_context_is_owner(g_main_context_default()))             \
 {                                                                   \
     DBG("LibNM: Accessed LibNM data outside of the LibNM thread!"); \
     jassertfalse;                                                   \

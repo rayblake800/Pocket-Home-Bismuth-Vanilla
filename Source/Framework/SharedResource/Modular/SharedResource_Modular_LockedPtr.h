@@ -50,7 +50,7 @@ public:
     virtual ~LockedPtr() { }
 
     /**
-     * @brief  Accesses the locked resource module's methods or data.
+     * @brief  Accesses the locked resource module's functions or data.
      *
      * @return  The address of the locked resource object instance.
      */

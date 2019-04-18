@@ -17,7 +17,7 @@ class Widgets::Switch : public juce::ToggleButton, private juce::Timer
 {
 public:
 
-    // Juce ColourId values:
+    // JUCE ColourId values:
     enum ColourIds
     {
         backgroundColourId = 0x1900700,
@@ -55,7 +55,7 @@ private:
     /**
      * @brief  Draws the switch background as a rounded rectangle.
      *
-     * @param graphics           The Juce graphics context used to draw the
+     * @param graphics           The JUCE graphics context used to draw the
      *                           switch background.
      *
      * @param isMouseOverButton  Whether the mouse cursor is currently above
@@ -100,7 +100,7 @@ private:
         /**
          * @brief  Draws the switch handle as a filled circle.
          *
-         * @param graphics  The Juce graphics context used to draw the
+         * @param graphics  The JUCE graphics context used to draw the
          *                  component.
          */
         void paint(juce::Graphics& graphics) override;

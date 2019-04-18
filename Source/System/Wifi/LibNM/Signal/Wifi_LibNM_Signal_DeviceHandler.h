@@ -48,8 +48,8 @@ protected:
     /**
      * @brief  Handles Wifi device state changes.
      *
-     *  This takes no action by default. Subclasses should override this method
-     * to define how Wifi device state changes should be handled.
+     *  This takes no action by default. Subclasses should override this
+     * function to define how Wifi device state changes should be handled.
      *
      * @param newState  The new device state value.
      *
@@ -64,8 +64,8 @@ protected:
     /**
      * @brief  Handles newly detected Wifi access points.
      *
-     *  This takes no action by default. Subclasses should override this method
-     * to define how new access points should be handled.
+     *  This takes no action by default. Subclasses should override this
+     * function to define how new access points should be handled.
      *
      * @param addedAP  The new access point's LibNM object.
      */
@@ -74,16 +74,16 @@ protected:
     /**
      * @brief  Signals that a saved access point is no longer visible.
      *
-     *  This takes no action by default. Subclasses should override this method
-     * to define how removed access points should be handled.
+     *  This takes no action by default. Subclasses should override this
+     * function to define how removed access points should be handled.
      */
     virtual void accessPointRemoved();
 
     /**
      * @brief  Handles changes to the active network connection.
      *
-     *  This takes no action by default. Subclasses should override this method
-     * to define how new active connections should be handled.
+     *  This takes no action by default. Subclasses should override this
+     * function to define how new active connections should be handled.
      *
      * @param activeConnection   The new active Wifi connection. If the device
      *                           has disconnected, this will be a null object.
@@ -105,11 +105,11 @@ protected:
 
 private:
     /**
-     * @brief  The GCallback method called directly by LibNM code when sending
+     * @brief  The GCallback function called directly by LibNM code when sending
      *         state-changed signals.
      *
-     * This will use the signal data to call the listener object's stateChanged
-     * method.
+     *  This will use the signal data to call the listener object's stateChanged
+     * function.
      *
      * @param device    The GObject sending the state change signal.
      *
@@ -129,11 +129,11 @@ private:
             GLib::Signal::CallbackData<DeviceWifi>* data);
 
     /**
-     * @brief  The GCallback method called directly by LibNM code when sending
+     * @brief  The GCallback function called directly by LibNM code when sending
      *         access-point-added signals.
      *
      *  This will use the signal data to call the listener object's
-     * accessPointAdded method
+     * accessPointAdded function.
      *
      * @param device    The GObject sending the signal.
      *
@@ -146,11 +146,11 @@ private:
             GLib::Signal::CallbackData<DeviceWifi>* data);
 
     /**
-     * @brief  The GCallback method called directly by LibNM code when sending
+     * @brief  The GCallback function called directly by LibNM code when sending
      *         access-point-removed signals.
      *
-     * This will use the signal data to call the listener object's
-     * accessPointRemoved method.
+     *  This will use the signal data to call the listener object's
+     * accessPointRemoved function.
      *
      * @param device    The GObject sending the signal.
      *

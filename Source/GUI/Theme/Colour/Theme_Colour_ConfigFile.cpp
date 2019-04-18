@@ -8,7 +8,7 @@ namespace ColourTheme = Theme::Colour;
 ColourTheme::ConfigFile::ConfigFile() { }
 
 
-// Look up the Colour value saved for a specific Juce ColourId.
+// Look up the Colour value saved for a specific JUCE ColourId.
 juce::Colour ColourTheme::ConfigFile::getColour(const int colourId)
 {
     using namespace JSONKeys;

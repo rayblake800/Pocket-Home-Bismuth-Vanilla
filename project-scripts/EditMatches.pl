@@ -1,6 +1,5 @@
 #!/usr/bin/perl
-#
-#  Finds all matches for a regular expression in each project file, and offers
+# Finds all matches for a regular expression in each project file, and offers
 # to open vim at each match for editing.
 use strict;
 use warnings;
@@ -77,7 +76,7 @@ foreach my $lineMatch (@matchLines)
     {
         print("$lineCount lines remaining.\n");
         print("Next file:$file\n");
-        print("Line merge: $matchText\n Edit? "
+        print("Line match: $matchText\n Edit? "
                 ."([y]es, [n]o, [s]kip file, [q]uit):\n");
         chomp($input = <STDIN>);
         if ($input =~ /[^ynsq]/)

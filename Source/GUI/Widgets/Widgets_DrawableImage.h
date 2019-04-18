@@ -11,10 +11,10 @@
 namespace Widgets { class DrawableImage; }
 
 /**
- * @brief  A Juce component that draws a scaled image.
+ * @brief  A juce::Component that draws a scaled image.
  *
- *  Unlike Juce DrawableImage objects, this component's image will resize
- * itself whenever the component bounds change.
+ *  Unlike juce::DrawableImage objects, this component's image will resize
+ * itself whenever the component's bounds change.
  */
 class Widgets::DrawableImage: public juce::Component
 {

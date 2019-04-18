@@ -5,7 +5,7 @@
 /**
  * @file  AppMenu_Initializer.h
  *
- * @brief  Provides methods needed for initializing an AppMenu with a specific
+ * @brief  Provides functions needed for initializing an AppMenu with a specific
  *         menu format.
  */
 

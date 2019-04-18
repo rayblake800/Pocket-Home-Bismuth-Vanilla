@@ -121,7 +121,7 @@ private:
     void buttonClicked(juce::Button* button) override;
 
     /**
-     * @brief  Calls the refresh method when the component regains visibility.
+     * @brief  Calls the refresh function when the component regains visibility.
      */
     void visibilityChanged() override;
 

@@ -78,7 +78,7 @@ private:
 
     /**
      * @brief  Receives all signal strength notifications, passing them on to
-     *         the signalStrengthUpdate method if the changed access point is
+     *         the signalStrengthUpdate function if the changed access point is
      *         tracked by the Listener.
      *
      * @param updatedAP  The AccessPoint with a new signal strength value.

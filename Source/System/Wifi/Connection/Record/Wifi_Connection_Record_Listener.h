@@ -33,10 +33,10 @@ namespace Wifi
 /**
  * @brief  Receives updates whenever new Wifi connection events are recorded.
  *
- *  Listener object methods will be called by the Connection::Record::Module to
- * notify the Listener of new connection events. All of its notification
- * methods do nothing by default. Listener subclasses should override these
- * methods to handle the connection events as necessary.
+ *  Listener object functions will be called by the Connection::Record::Module
+ * to notify the Listener of new connection events. All of its notification
+ * functions do nothing by default. Listener subclasses should override these
+ * functions to handle the connection events as necessary.
  */
 class Wifi::Connection::Record::Listener : public UpdateInterface,
     public SharedResource::Modular::Handler<Resource, Module>

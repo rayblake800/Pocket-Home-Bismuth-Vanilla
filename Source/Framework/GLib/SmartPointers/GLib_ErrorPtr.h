@@ -18,19 +18,19 @@ namespace GLib { class ErrorPtr; }
  * which may or may not create a GError and store it in the GError*. After the
  * function call, any assigned GError* needs to be checked, handled, and freed.
  *
- *  ErrorPtr's getAddress() method may be passed in to any method that takes a
- * GError**. When the ErrorPtr goes out of scope or its handleError() method is
- * called, if its error value is non-null, it will handle and clear the error.
- * Error handling uses either a custom error handling method passed in on the
- * ErrorPtr's construction, or a default handler that simply prints the error's
- * message as debug output.
+ *  ErrorPtr's getAddress() function may be passed in to any function that takes
+ * a GError**. When the ErrorPtr goes out of scope or its handleError() function
+ * is called, if its error value is non-null, it will handle and clear the
+ * error. Error handling uses either a custom error handling function passed in
+ * on the ErrorPtr's construction, or a default handler that simply prints the
+ * error's message as debug output.
  */
 class GLib::ErrorPtr
 {
 public:
     /**
      * @brief  Creates an error pointer, optionally setting a custom error
-     *         handling method.
+     *         handling function.
      *
      * @param errorHandler  A function to run if the errorHandler's error
      *                      object is set. If omitted, errors will just be

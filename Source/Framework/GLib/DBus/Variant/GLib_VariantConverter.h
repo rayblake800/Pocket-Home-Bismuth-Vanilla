@@ -2,14 +2,14 @@
 /**
  * @file  GLib_VariantConverter.h
  *
- * @brief  Provides convenience methods for working with GIO GVariant data.
+ * @brief  Provides convenience functions for working with GIO GVariant data.
  */
 
 #include "JuceHeader.h"
 #include <gio/gio.h>
 
 /**
- * @brief  Contains methods to convert different data types to and from the
+ * @brief  Contains functions to convert different data types to and from the
  *         GVariant type.
  *
  *  GVariant is a flexible data container object used to interact with DBus

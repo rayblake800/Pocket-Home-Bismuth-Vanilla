@@ -143,10 +143,8 @@ sub formatComments
     }
     if ($lineStart < length($commentBlock))
     {
-        $formattedComment = $formattedComment
-            ."\n * ".substr($commentBlock, $lineStart);
+        return $formattedComment."\n// ".substr($commentBlock, $lineStart);
     }
-    $formattedComment = $formattedComment."\n */";
     return $formattedComment;
 }
 

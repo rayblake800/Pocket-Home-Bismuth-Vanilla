@@ -29,7 +29,7 @@ namespace GLib { template <typename GPointerType, typename Unreferencer>
  * ensure it is properly unreferenced when it goes out of scope. The specific
  * unreferencing function needed by the pointer is set by its Unreferencer
  * template parameter, which should call the correct GLib unreference or free
- * function within a static unref method.
+ * function within a static unref function.
  *
  *   When GLib GObject data needs to be copied, shared, replaced, or connected
  * to signal handlers, define a GLib::Object subclass instead of using a
@@ -39,8 +39,8 @@ namespace GLib { template <typename GPointerType, typename Unreferencer>
  * @tparam GPointerType  The specific data pointer type being held.
  *
  * @tparam Unreferencer  A struct defining the static
- *                       unref(GPointerType dataPtr) method used to unreference
- *                       or free the data pointer on destruction.
+ *                       unref(GPointerType dataPtr) function used to
+ *                       unreference or free the data pointer on destruction.
  */
 template <typename GPointerType, typename Unreferencer>
 class GLib::ScopedGPointer
