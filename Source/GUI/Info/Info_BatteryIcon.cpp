@@ -125,8 +125,8 @@ void Info::BatteryIcon::timerCallback()
         {
             batteryPercents.remove(0);
         }
-        int status = round( ( (float) batteryPercent) / 100.0f *
-                (percentageLevels - 1));
+        int status = std::min<int>(percentageLevels - 1,
+                batteryPercent / (100 / percentageLevels));
         jassert(status >= 0 && status < percentageLevels);
         if (batteryStatus.isCharging)
         {
