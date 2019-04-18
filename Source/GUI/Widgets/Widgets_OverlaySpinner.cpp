@@ -27,8 +27,7 @@ spinner(secondsToTimeout)
 // Sets text to display below the spinner
 void Widgets::OverlaySpinner::setLoadingText(const juce::String newText)
 {
-    loadingText.setText(newText,
-            juce::NotificationType::dontSendNotification);
+    loadingText.setText(newText, juce::NotificationType::dontSendNotification);
 }
 
 
@@ -44,9 +43,8 @@ void Widgets::OverlaySpinner::resized()
 {
     juce::Rectangle<int> bounds = getLocalBounds();
     const int spinnerSize = bounds.getHeight() * spinnerHeightFraction;
-    const juce::Rectangle<int> textBounds(getWidth(), spinnerSize, 0,
-            bounds.getHeight() * textTopFraction);
-    spinner.setBounds(bounds.withSizeKeepingCentre(
-                spinnerSize, spinnerSize));
+    const juce::Rectangle<int> textBounds(0,
+            bounds.getHeight() * textTopFraction, getWidth(), spinnerSize);
+    spinner.setBounds(bounds.withSizeKeepingCentre(spinnerSize, spinnerSize));
     loadingText.setBounds(textBounds);
 }
