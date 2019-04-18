@@ -15,8 +15,9 @@
 namespace AppMenu { class ConfigJSON; }
 
 /**
- * @brief  Reads from and writes to the JSON file that sets the AppMenu's format
- *         and the number of items the menu shows on screen at once.
+ * @brief  Reads from and writes to the JSON file that sets the AppMenu's
+ *         format, the number of items the menu shows on screen at once, and the
+ *         application launch timeout period.
  *
  *  ConfigJSON is a SharedResource class, used to create the single object
  * instance that accesses the menuOptions.json file. ConfigJSON should only be

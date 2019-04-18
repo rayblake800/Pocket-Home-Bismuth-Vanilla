@@ -93,3 +93,9 @@ void AppMenu::ConfigFile::setScrollingMenuRows(const int numRows)
 {
     setConfigValue<int>(ConfigKeys::scrollingMenuRows, numRows);
 }
+
+// Gets the timeout period to use when waiting for applications to launch.
+int AppMenu::ConfigFile::getLaunchTimeoutPeriod()
+{
+    return std::max(1, getConfigValue<int>(ConfigKeys::timeoutPeriod));
+}

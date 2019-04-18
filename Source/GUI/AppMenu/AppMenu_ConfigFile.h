@@ -67,7 +67,7 @@ public:
      *         Paged AppMenu format.
      *
      * @return   The maximum number of menu columns the Paged menu will show at
-     *           once. This value will never be less than one.
+     *           once. This value will always be greater than zero.
      */
     int getPagedMenuColumns();
 
@@ -85,7 +85,7 @@ public:
      *         Paged AppMenu format.
      *
      * @return   The maximum number of menu rows the Paged menu will show at
-     *           once. This value will never be less than one.
+     *           once. This value will always be greater than zero.
      */
     int getPagedMenuRows();
 
@@ -104,7 +104,7 @@ public:
      *         Scrolling AppMenu format.
      *
      * @return   The maximum number of menu rows the Scrolling menu will show at
-     *           once. This value will never be less than one.
+     *           once. This value will always be greater than zero.
      */
     int getScrollingMenuRows();
 
@@ -115,6 +115,16 @@ public:
      * @param numRows  The new row count to save to the configuration file.
      */
     void setScrollingMenuRows(const int numRows);
+
+    /**
+     * @brief  Gets the timeout period to use when waiting for applications to
+     *         launch.
+     *
+     * @return  The duration in milliseconds to wait before assuming an
+     *          application launch has either failed or will not open a new
+     *          window. This value will always be greater than zero.
+     */
+    int getLaunchTimeoutPeriod();
 
     // Listens for changes to AppMenu::MenuFile's basic data values
     class Listener : public Config::Listener<ConfigJSON>

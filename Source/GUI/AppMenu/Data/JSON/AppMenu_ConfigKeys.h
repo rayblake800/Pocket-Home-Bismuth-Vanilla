@@ -33,6 +33,11 @@ namespace AppMenu
         static const Config::DataKey pagedMenuRows
             ("paged AppMenu max rows", Config::DataKey::intType);
 
+        // Sets the amount of time in milliseconds to wait before assuming an
+        // application isn't going to open and focus a new window.
+        static const Config::DataKey timeoutPeriod
+            ("application launch timeout", Config::DataKey::intType);
+
         //####################### String value keys: ###########################
         // Sets the AppMenuComponent type to use on the home page.
         static const Config::DataKey menuFormat
@@ -52,6 +57,7 @@ namespace AppMenu
             scrollingMenuRows,
             pagedMenuColumns,
             pagedMenuRows,
+            timeoutPeriod,
             menuFormat,
         };
     }

@@ -2,5 +2,6 @@
     "AppMenu format": "Paged",
     "scrolling AppMenu max rows" : 8,
     "paged AppMenu max columns"  : 3,
-    "paged AppMenu max rows"     : 2
+    "paged AppMenu max rows"     : 2,
+    "application launch timeout" : 18000
 }
