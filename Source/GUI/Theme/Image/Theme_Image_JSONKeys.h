@@ -41,30 +41,30 @@ static const std::vector<Config::DataKey> imageKeys
 
 //######################### UI Component Data ##############################
 //Defines all component types managed in the config file
-static const juce::Identifier menuFrame
-        ("menu frame");
-static const juce::Identifier batteryIcon
-        ("battery");
-static const juce::Identifier signalIcon
-        ("signal strength");
-static const juce::Identifier powerButton
-        ("power button");
-static const juce::Identifier settingsButton
-        ("settings button");
-static const juce::Identifier popupMenu
-        ("popup menu");
-static const juce::Identifier navButton
-        ("navigation buttons");
-static const juce::Identifier settingsListBtn
-        ("settings list button");
-static const juce::Identifier spinner
-        ("loading spinner");
-static const juce::Identifier lockIcon
-        ("lock icon");
-static const juce::Identifier volumeSlider
-        ("volume slider");
-static const juce::Identifier brightnessSlider
-        ("brightness slider");
+static const juce::Identifier menuFrame(
+        "menu frame");
+static const juce::Identifier batteryIcon(
+        "battery");
+static const juce::Identifier signalIcon(
+        "signal strength");
+static const juce::Identifier powerButton(
+        "power button");
+static const juce::Identifier settingsButton(
+        "settings button");
+static const juce::Identifier popupMenu(
+        "popup menu");
+static const juce::Identifier navButton(
+        "navigation buttons");
+static const juce::Identifier settingsListBtn(
+        "settings list button");
+static const juce::Identifier spinner(
+        "loading spinner");
+static const juce::Identifier lockIcon(
+        "lock icon");
+static const juce::Identifier volumeSlider(
+        "volume slider");
+static const juce::Identifier brightnessSlider(
+        "brightness slider");
 
 static const juce::Array<juce::Identifier> components =
 {
