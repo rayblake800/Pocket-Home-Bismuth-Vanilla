@@ -85,7 +85,13 @@ sub assignCategories
 {
     my $cache = shift;
     my @elements = @_;
-    print("Sort by 1:ID, 2:full name, or 3:element name?:");
+    my $numElements = @elements;
+    if ($numElements == 0)
+    {
+        print("No elements to sort.\n");
+        return;
+    }
+    print("Sort $numElements elements by 1:ID, 2:full name, or 3:element name?:");
     my $sortOrder = UserInput::checkInput('1', '2', '3');
     if ($sortOrder == 2)
     {

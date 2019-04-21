@@ -20,28 +20,29 @@ use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 use ElementMenu;
 
+my $activeNamespace = "";
+
 # Displays the namespace menu, repeatedly accepting input and running the menu
 # action with the selected option parameter until the user enters 'q'.
 sub openMenu
 {
-    my $namespaceName = shift;
-    my $cache = shift;
-    my $menu = new InputMenu(
-            "Edit Namespace $namespaceName:",
-            "Return to namespace list menu");
+    my ($namespaceName, $cache) = @_;
+    $activeNamespace = $namespaceName;
+    my $menu = new InputMenu("", "Return to namespace list menu");
     my $refreshAction = sub
     {
         my $menu = shift;
+        $menu->setTitle("Edit Namespace $activeNamespace:");
         $menu->clearOptions();
         $menu->addOption("Rename namespace", sub
         {
-            renameNamespace($menu, $cache, $namespaceName);
+            renameNamespace($menu, $cache);
         });
         $menu->addOption("Delete namespace", sub
         {
-            deleteNamespace($menu, $cache, $namespaceName);
+            deleteNamespace($menu, $cache);
         });
-        my $namespace = $cache->findNamespace($namespaceName);
+        my $namespace = $cache->findNamespace($activeNamespace);
         if (defined($namespace))
         {
             my @elements = $namespace->getElements();
@@ -73,17 +74,16 @@ sub renameNamespace
 {
     my $menu = shift;
     my $cache = shift;
-    my $namespaceName = shift;
     my $newName = UserInput::inputText(
             '[a-zA-Z_][a-zA-Z_0-9]*',
-            "Enter the new name for Namespace $namespaceName:",
+            "Enter the new name for Namespace $activeNamespace:",
             undef,
-            "Save new name for $namespaceName?");
-    if (!$newName || $newName eq $namespaceName)
+            "Save new name for $activeNamespace?");
+    if (!$newName || $newName eq $activeNamespace)
     {
         return;
     }
-    my $namespace = $cache->findNamespace($namespaceName);
+    my $namespace = $cache->findNamespace($activeNamespace);
     my @elements = $namespace->getElements();
     foreach my $element (@elements)
     {
@@ -91,7 +91,7 @@ sub renameNamespace
         $cache->removeElement($element);
         $cache->addElement($replacement);
     }
-    $menu->closeMenu();
+    $activeNamespace = $newName;
 }
 
 
@@ -110,13 +110,12 @@ sub deleteNamespace
 {
     my $menu = shift;
     my $cache = shift;
-    my $namespaceName = shift;
-    print("Delete namespace $namespaceName?");
+    print("Delete namespace $activeNamespace?");
     if (!UserInput::confirm())
     {
         return;
     }
-    my $namespace = $cache->findNamespace($namespaceName);
+    my $namespace = $cache->findNamespace($activeNamespace);
     my @elements = $namespace->getElements();
     foreach my $element (@elements)
     {
@@ -127,13 +126,12 @@ sub deleteNamespace
 
 
 #==============================================================================#
-#--- openMenu: ---
-# Displays the namespace menu, repeatedly accepting input and running the menu
-# action with the selected option parameter until the user enters 'q'.
+#--- openElementMenu: ---
+# Opens a menu to edit an individual namespace Element.
 #--- Parameters: ---
-# $namespace:  The name of the Namespace object this menu should edit.
+# $element:  The ColourId Element to edit.
 #
-# $cache:      An IDCache object used to store Namespace updates.
+# $cache:    The IDCache object where any Element updates will be saved.
 #==============================================================================#
 sub openElementMenu
 {

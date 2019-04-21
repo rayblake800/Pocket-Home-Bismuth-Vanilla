@@ -46,6 +46,13 @@
 #==============================================================================#
 
 #==============================================================================#
+#--- setTitle: ---
+# Changes the menu title printed before listing menu options.
+#-- Parameters: --
+# $title: A new title string to print.
+#==============================================================================#
+
+#==============================================================================#
 #--- openMenu: ---
 # Displays the menu, repeatedly accepting input and running the menu action
 # with the selected option parameter until the user enters 'q'.
@@ -66,11 +73,7 @@ package InputMenu;
 # Initializes a new InputMenu.
 sub new
 {
-    my $class    = shift;
-    my $title    = shift;
-    my $exitText = shift;
-    my $action   = shift;
-    my @args     = @_;
+    my ($class, $title, $exitText, $action, @args) = @_;
     if (!$title)
     {
         $title = "Select a menu option:";
@@ -104,9 +107,7 @@ sub new
 # Adds a new option to the menu.
 sub addOption
 {
-    my $self = shift;
-    my $description = shift;
-    my $optionData = shift;
+    my ($self, $description, $optionData) = @_;
     push(@{$self->{_options}}, [$description, $optionData]);
 }
 
@@ -125,6 +126,15 @@ sub setRefreshAction
     my $refreshAction = shift;
     $self->{_refresh} = $refreshAction;
 }
+
+
+# Changes the menu title printed before listing menu options.
+sub setTitle
+{
+    my ($self, $newTitle) = @_;
+    $self->{_title} = $newTitle;
+}
+
 
 # Displays the menu, accepting input until the user enters 'q'
 sub openMenu

@@ -24,35 +24,44 @@ use Category;
 use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 
+my $activeElement;
+
 # Displays the element menu, repeatedly accepting input and running the menu
 # action with the selected option parameter until the user enters 'q'.
 sub openMenu
 {
-    my $element = shift;
-    my $cache = shift;
-    my $title = "Element ".$element->getFullName()
-            ."\nID: ".$element->getID()
-            ."\nCategory: ".$element->getCategory()->getTypeName();
-    if ($element->getKey())
+    my ($element, $cache) = @_;
+    $activeElement = $element;
+    my $menu = new InputMenu("", "Return to namespace menu:");
+    my $refreshAction = sub
     {
-        $title = $title."\nKey: ".$element->getKey();
-    }
-    if (length($element->getDefaultColour()) > 0)
-    {
-        $title = $title."\nDefault colour: ".$element->getDefaultColour();
-    }
-    my $menu = new InputMenu($title."\nEdit Element:",
-            "Return to namespace menu:");
-    $menu->addOption("Rename Element", sub
-            { renameElement($menu, $element, $cache); });
-    $menu->addOption("Remove Element", sub
-            { removeElement($menu, $element, $cache); });
-    $menu->addOption("Set category", sub
-            { setCategory($menu, $element, $cache); });
-    $menu->addOption("Set key", sub
-            { setKey($menu, $element, $cache); });
-    $menu->addOption("Set default color", sub
-            { setDefaultColour($menu, $element, $cache); });
+        my $menu = shift;
+        $menu->clearOptions();
+        my $title = "Element ".$activeElement->getFullName()
+                ."\nID: ".$activeElement->getID()
+                ."\nCategory: ".$activeElement->getCategory()->getTypeName();
+        if ($activeElement->getKey())
+        {
+            $title = $title."\nKey: ".$activeElement->getKey();
+        }
+        if (length($activeElement->getDefaultColour()) > 0)
+        {
+            $title = $title."\nDefault colour: "
+                    .$activeElement->getDefaultColour();
+        }
+        $menu->setTitle($title."\nEdit colour Element:");
+        $menu->addOption("Rename Element", sub
+                { renameElement($menu, $activeElement, $cache); });
+        $menu->addOption("Remove Element", sub
+                { removeElement($menu, $activeElement, $cache); });
+        $menu->addOption("Set category", sub
+                { setCategory($menu, $activeElement, $cache); });
+        $menu->addOption("Set key", sub
+                { setKey($menu, $activeElement, $cache); });
+        $menu->addOption("Set default color", sub
+                { setDefaultColour($menu, $activeElement, $cache); });
+    };
+    $menu->setRefreshAction($refreshAction);
     $menu->openMenu();
 }
 
@@ -79,7 +88,7 @@ sub renameElement
         my $replacement = $element->withName($newName);
         $cache->removeElement($element);
         $cache->addElement($replacement);
-        $menu->closeMenu();
+        $activeElement = $replacement;
     }
 }
 
@@ -133,7 +142,7 @@ sub setCategory
         my $replacement = $element->withCategory($selectedCategory);
         $cache->removeElement($element);
         $cache->addElement($replacement);
-        $menu->closeMenu();
+        $activeElement = $replacement;
     }
 }
 
@@ -157,7 +166,7 @@ sub setKey
     if ($newKey)
     {
         $cache->assignKey($element->getID(), $newKey);
-        $menu->closeMenu();
+        $activeElement = $element->withKey($newKey);
     }
 }
 
@@ -182,6 +191,6 @@ sub setDefaultColour
     my $replacement = $element->withDefaultColour($newColour);
     $cache->removeElement($element);
     $cache->addElement($replacement);
-    $menu->closeMenu();
+    $activeElement = $replacement;
 }
 1;
