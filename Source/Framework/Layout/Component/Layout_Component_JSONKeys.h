@@ -41,7 +41,7 @@ static const juce::Identifier wifiIcon
 static const juce::Identifier powerButton
         ("power page button");
 static const juce::Identifier settingsButton
-        ("settings list page button");
+        ("settings page button");
 static const juce::Identifier popupMenu
         ("popup editor menu");
 static const juce::Identifier pageLeft
