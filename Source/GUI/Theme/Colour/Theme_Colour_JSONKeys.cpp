@@ -131,7 +131,9 @@ static const std::map<juce::Identifier, const Element*> keyMap
     {"Switch handle(off)",
             &Switch::handleOff},
     {"HomePage widget text",
-            &HomePage::text}
+            &HomePage::text},
+    {"Power page background",
+            &PowerPage::background}
 };
 
 }}}

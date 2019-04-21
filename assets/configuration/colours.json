@@ -2,7 +2,7 @@
     "Window background"                       : "0xffe9e9e9",
     "Widget background"                       : "0xffb8b8b8",
     "Widget"                                  : "0xffbc3662",
-    "Widget(off)"                             : "0xff393939",
+    "Widget (off)"                            : "",
     "Menu background"                         : "0xffe9e9e9",
     "Outline"                                 : "0xffb8b8b8",
     "Focused outline"                         : "0xffb88e47",
@@ -62,14 +62,16 @@
 
     "Page background"                         : "0xffffffff",
 
-    "Colour picker checkerboard(light)"        : "0xffaaaaaa",
-    "Colour picker checkerboard(dark)"         : "0xffe0e0e0",
-    "Colour picker colour outline"              : "",
-    "Colour picker focused colour outline"      : "",
+    "Colour picker checkerboard(light)"       : "0xffaaaaaa",
+    "Colour picker checkerboard(dark)"        : "0xffe0e0e0",
+    "Colour picker colour outline"            : "",
+    "Colour picker focused colour outline"    : "",
 
     "Switch background"                       : "",
     "Switch handle"                           : "0xffbc3662",
     "Switch handle(off)"                      : "0xff393939",
 
-    "HomePage widget text"                    : "0xffffffff"
+    "HomePage widget text"                    : "0xffffffff",
+
+    "Power page background"                   : ""
 }

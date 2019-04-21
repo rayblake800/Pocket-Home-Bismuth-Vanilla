@@ -15,7 +15,7 @@ namespace Page { class Power; }
  * @brief  A UI menu page that shows buttons that perform actions related to
  *         system power state.
  *
- * From this page, the user can shut down the system, reboot the system, turn
+ *  From this page, the user can shut down the system, reboot the system, turn
  * off the display, or enter PocketCHIP flashing mode.
  */
 class Page::Power : public Component, private Locale::TextUser
@@ -25,6 +25,12 @@ public:
     Power();
 
     virtual ~Power() { }
+
+    // JUCE ColourId values:
+    enum ColourIds
+    {
+        background = 0x1900900
+    };
 
 private:
     /**

@@ -308,7 +308,11 @@ namespace HomePage
     static const Element text(
             0x1900800, UICategory::text);
 }
-
+namespace PowerPage
+{
+    static const Element background(
+            0x1900900, UICategory::windowBackground);
+}
 
 // The list of all Colour Element objects, sorted by ID:
 const juce::Array<const Element*> allElements =
@@ -411,7 +415,8 @@ const juce::Array<const Element*> allElements =
     &Switch::background,
     &Switch::handle,
     &Switch::handleOff,
-    &HomePage::text
+    &HomePage::text,
+    &PowerPage::background
 };
 
 } } }

@@ -77,6 +77,8 @@ versionLabel(localeText(TextKey::version)
     setBackButton(BackButtonType::right);
     setLayout(layout);
 
+    setColour(Component::backgroundColourId, findColour(background));
+
     versionLabel.setJustificationType(juce::Justification::centred);
     versionLabel.setText(localeText(TextKey::version)
             + juce::JUCEApplication::getInstance()->getApplicationVersion(),
