@@ -64,7 +64,7 @@ juce::Image Assets::loadImageAsset
             juce::Rectangle<float> bounds(0, 0, image.getWidth(),
                     image.getHeight());
             svgDrawable->drawWithin(g, bounds,
-                    juce::RectanglePlacement::fillDestination, 1.0f);
+                    juce::RectanglePlacement::centred, 1.0f);
 
         }
         return image;
