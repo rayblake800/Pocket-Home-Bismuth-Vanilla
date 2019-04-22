@@ -257,7 +257,14 @@ void Icon::ThreadResource::runLoop(SharedResource::Thread::Lock& lock)
         // thread to be locked.
         Image iconImg;
         {
-            const juce::MessageManagerLock mmLock;
+            const juce::MessageManagerLock mmLock((juce::Thread*) this);
+            if (!mmLock.lockWasGained())
+            {
+                DBG(dbgPrefix << __func__ 
+                        << ":: Exiting, stop instead of loading icon \""
+                        << icon << "\"");
+                return;
+            }
             iconImg = Assets::loadImageAsset(iconPath);
             if (iconImg.isNull())
             {
@@ -272,7 +279,15 @@ void Icon::ThreadResource::runLoop(SharedResource::Thread::Lock& lock)
 
         // If callback wasn't removed, lock the message thread, check again
         // that it's still there, run the callback, and remove it from the map.
-        const juce::MessageManagerLock mmLock;
+        const juce::MessageManagerLock mmLock((juce::Thread*) this);
+        if (!mmLock.lockWasGained())
+        {
+            DBG(dbgPrefix << __func__ 
+                    << ":: Exiting, skipping callback for icon \"" << icon 
+                    << "\"");
+            return;
+        }
+
         lock.enterRead();
         const bool requestPresent = (requestMap.count(requestID) != 0);
         if (requestPresent)
