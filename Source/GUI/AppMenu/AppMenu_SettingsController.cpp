@@ -9,14 +9,103 @@ static const constexpr char* dbgPrefix = "AppMenu::SettingsController::";
 // Localized object class key
 static const juce::Identifier localeClassKey = "AppMenu::SettingsController";
 
+/**
+ * @brief  Creates an association between an AppMenu::Format value, its
+ *         localized name text key, and its index in the menuFormatPicker
+ *         ComboBox.  FormatKey objects are immutable.
+ */
+struct FormatKey
+{
+public:
+    /**
+     * @brief  Stores a menu format with its localized name key, setting its
+     *         ComboBox ID to the next unused integer ID greater than zero.
+     *
+     * @param formatType  One of the AppMenu format options.
+     *
+     * @param localeKey   The key used to load the format's localized name.
+     */
+    FormatKey(const AppMenu::Format formatType, const juce::String& localeKey);
+
+    // The AppMenu format type:
+    const AppMenu::Format formatType;
+    // The localized format name key: 
+    const juce::Identifier localeKey;
+    // The format's menuFormatPicker ComboBox ID:
+    const int menuID;
+
+    /**
+     * @brief  Gets the number of available menu formats.
+     *
+     * @return  The number of menu formats that have been declared as FormatKey
+     *          data. This assumes that each AppMenu::Format is only ever
+     *          assigned to a single FormatKey.
+     */
+    static int getFormatCount();
+
+private:
+    // Stores the number of FormatKeys that have been constructed.
+    static int idCount;
+};
+int FormatKey::idCount = 0;
+
+
+//  Stores a menu format with its localized name key, setting its ComboBox ID to
+//  the next unused integer ID greater than zero.
+FormatKey::FormatKey
+(const AppMenu::Format formatType, const juce::String& localeKey) :
+formatType(formatType),
+localeKey(localeKey),
+menuID(idCount + 1)
+{
+    idCount++;
+}
+
+
+// Gets the number of available menu formats.
+int FormatKey::getFormatCount()
+{
+    return idCount;
+}
+
+
 // Localized text value keys:
 namespace TextKey
 {
+    // Menu format keys:
+    const FormatKey formats[] =
+    {
+        FormatKey(AppMenu::Format::Scrolling, "scrollingMenu"),
+        FormatKey(AppMenu::Format::Paged, "pagedMenu")
+    };
+
     static const juce::Identifier menuType      = "menuType";
-    static const juce::Identifier scrollingMenu = "scrollingMenu";
-    static const juce::Identifier pagedMenu     = "pagedMenu";
     static const juce::Identifier menuColumns   = "menuColumns";
     static const juce::Identifier menuRows      = "menuRows";
+}
+
+// A function that returns whether a given FormatKey matches some criteria.
+typedef std::function<bool(const FormatKey&)> FormatKeyCheck;
+
+/**
+ * @brief  Finds the first menu FormatKey that is validated by a match function.
+ *
+ * @param checkAction  A function that returns true if its FormatKey parameter
+ *                     meets its criteria.
+ *
+ * @return             The first FormatKey in the list that checkAction marks
+ *                     as a match, or a null value if no match is found.
+ */
+static const FormatKey* findMatchingKey(const FormatKeyCheck checkAction)
+{
+    for (int i = 0; i < FormatKey::getFormatCount(); i++)
+    {
+        if (checkAction(TextKey::formats[i]))
+        {
+            return &TextKey::formats[i];
+        }
+    }
+    return nullptr;
 }
 
 
@@ -30,9 +119,9 @@ static const constexpr int minRows = 1;
 // Largest number of menu rows to allow:
 static const constexpr int maxRows = 15;
 
-// AppMenu format selection ComboBox selection IDs:
-static const constexpr int pagedMenuID     = 1;
-static const constexpr int scrollingMenuID = 2;
+// AppMenu format ComboBox selection IDs:
+// static const constexpr int pagedMenuID     = 1;
+// static const constexpr int scrollingMenuID = 2;
 
 // Initializes all components to match the current AppMenu settings.
 AppMenu::SettingsController::SettingsController(
@@ -58,10 +147,13 @@ void AppMenu::SettingsController::updateForCurrentSettings()
     {
         menuFormatLabel.setText(localeText(TextKey::menuType),
                 juce::NotificationType::dontSendNotification);
-        menuFormatPicker.addItem(localeText(TextKey::scrollingMenu),
-                scrollingMenuID);
-        menuFormatPicker.addItem(localeText(TextKey::pagedMenu),
-                pagedMenuID);
+        // Add format options:
+        for (int i = 0; i < FormatKey::getFormatCount(); i++)
+        {
+            menuFormatPicker.addItem(localeText(TextKey::formats[i].localeKey),
+                    TextKey::formats[i].menuID);
+        }
+
         columnCountLabel.setText(localeText(TextKey::menuColumns),
                 juce::NotificationType::dontSendNotification);
         columnCounter.setMinimum(minColumns);
@@ -74,19 +166,17 @@ void AppMenu::SettingsController::updateForCurrentSettings()
         initialized = true;
     }
     Format menuFormat = formatConfig.getMenuFormat();
-    switch(menuFormat)
+    const FormatKey* activeKey;
+    if ((activeKey = findMatchingKey([menuFormat](const FormatKey& key)
+            { return key.formatType == menuFormat; })))
     {
-        case Format::Scrolling:
-            menuFormatPicker.setSelectedId(scrollingMenuID,
-                    juce::NotificationType::dontSendNotification);
-            break;
-        case Format::Paged:
-            menuFormatPicker.setSelectedId(pagedMenuID,
-                    juce::NotificationType::dontSendNotification);
-            break;
-        case Format::Invalid:
-            DBG(dbgPrefix << __func__ << ": Found invalid saved menu format.");
-            jassertfalse;
+        menuFormatPicker.setSelectedId(activeKey->menuID,
+                juce::NotificationType::dontSendNotification);
+    }
+    else
+    {
+        DBG(dbgPrefix << __func__ 
+                << ": Failed to find format key for current menu format.");
     }
     updateCountersForSelectedFormat();
 }
@@ -97,21 +187,31 @@ void AppMenu::SettingsController::updateForCurrentSettings()
 void AppMenu::SettingsController::applySettingsChanges()
 {
     const int selectedId = menuFormatPicker.getSelectedId();
-    switch(selectedId)
+    const FormatKey* selectedKey;
+    if ((selectedKey = findMatchingKey([selectedId](const FormatKey& key)
+            { return key.menuID == selectedId; })))
     {
-        case scrollingMenuID:
-            formatConfig.setMenuFormat(Format::Scrolling);
+        formatConfig.setMenuFormat(selectedKey->formatType);
+        if (selectedKey->formatType == AppMenu::Format::Scrolling)
+        {
             formatConfig.setScrollingMenuRows(rowCounter.getCount());
-            break;
-        case pagedMenuID:
-            formatConfig.setMenuFormat(Format::Paged);
+        }
+        else if (selectedKey->formatType == AppMenu::Format::Paged)
+        {
             formatConfig.setPagedMenuColumns(columnCounter.getCount());
             formatConfig.setPagedMenuRows(rowCounter.getCount());
-            break;
-        default:
-            DBG(dbgPrefix << __func__ << ": Found invalid format selection ID "
-                    << selectedId);
-            jassertfalse;
+        }
+        else
+        {
+            DBG(dbgPrefix << __func__ << ": Warning: unhandled menu format "
+                    << selectedKey->localeKey.toString());
+        }
+    }
+    else
+    {
+        DBG(dbgPrefix << __func__ << ": Found invalid format selection ID "
+                << selectedId);
+        jassertfalse;
     }
 }
 
@@ -128,20 +228,35 @@ void AppMenu::SettingsController::comboBoxChanged(juce::ComboBox* box)
 void AppMenu::SettingsController::updateCountersForSelectedFormat()
 {
     const int selectedId = menuFormatPicker.getSelectedId();
-    switch(selectedId)
+    const FormatKey* selectedKey;
+    if ((selectedKey = findMatchingKey([selectedId](const FormatKey& key)
+            { return key.menuID == selectedId; })))
     {
-        case scrollingMenuID:
+        if (selectedKey->formatType == Format::Scrolling)
+        {
             rowCounter.setCount(formatConfig.getScrollingMenuRows());
             columnCountLabel.setVisible(false);
             columnCounter.setVisible(false);
-            break;
-        case pagedMenuID:
+        }
+        else if (selectedKey->formatType == Format::Paged)
+        {
             rowCounter.setCount(formatConfig.getPagedMenuRows());
             columnCounter.setCount(formatConfig.getPagedMenuColumns());
             columnCountLabel.setVisible(true);
             columnCounter.setVisible(true);
-            break;
-        default:
+        }
+        else
+        {
+            rowCountLabel.setVisible(false);
+            rowCounter.setVisible(false);
+            columnCountLabel.setVisible(false);
+            columnCounter.setVisible(false);
+            DBG(dbgPrefix << __func__ << ": Warning: unhandled menu format "
+                    << selectedKey->localeKey.toString());
+        }
+    }
+    else
+    {
             DBG(dbgPrefix << __func__ << ": Found invalid format selection ID "
                     << selectedId);
             jassertfalse;
