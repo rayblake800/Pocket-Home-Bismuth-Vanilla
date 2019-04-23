@@ -1,8 +1,5 @@
 ## Known Issues
 
-### Icon Module
-- Juce .svg rendering fails to correctly render some .svg files.
-
 ### DesktopEntry Module
 - Poorly formatted .desktop files may cause unexpected behavior.
 

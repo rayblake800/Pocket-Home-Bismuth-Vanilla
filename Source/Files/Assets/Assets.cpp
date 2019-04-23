@@ -61,10 +61,20 @@ juce::Image Assets::loadImageAsset
         {
             image = Image(Image::ARGB, 128, 128, true);
             juce::Graphics g(image);
-            juce::Rectangle<float> bounds(0, 0, image.getWidth(),
+            juce::Rectangle<float> imgBounds(0, 0, image.getWidth(),
                     image.getHeight());
+            juce::Rectangle<float> svgBounds = ((juce::DrawableComposite*)
+                    svgDrawable.get())->getContentArea();
+            juce::RectanglePlacement svgPlacement(
+                    juce::RectanglePlacement::centred);
+            juce::AffineTransform svgTransform = svgPlacement.getTransformToFit(
+                    svgBounds, imgBounds);
+            svgDrawable->draw(g, 1.f, svgTransform);
+            /*
             svgDrawable->drawWithin(g, bounds,
                     juce::RectanglePlacement::centred, 1.0f);
+            */
+
 
         }
         return image;

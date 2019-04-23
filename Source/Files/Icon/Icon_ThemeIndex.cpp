@@ -264,13 +264,6 @@ juce::String Icon::ThemeIndex::lookupIcon
     DirectoryComparator comp(size, scale);
     searchDirs.sort(comp);
 
-    // TODO: remove this temporary hack after fixing svg rendering.
-    // Svg files have occasional rendering problems, but they work more often
-    // than not. Instead of searching normally, for now png and xpm files will
-    // always be prioritized, and svg files will only be used if no valid
-    // alternate file exists.
-    String backupSvgPath;
-
     for (const IconDirectory& dir : searchDirs)
     {
         String filePath = path + "/" + dir.path + "/" + icon;
@@ -292,9 +285,7 @@ juce::String Icon::ThemeIndex::lookupIcon
             // File extensions not found, continue on to check all possible
             // extensions:
         }
-        //TODO: fix svg render issues
-        //static const juce::StringArray extensions = {".png", ".svg", ".xpm"};
-        static const juce::StringArray extensions = {".png", ".xpm"};
+        static const juce::StringArray extensions = {".png", ".svg", ".xpm"};
         for (const String& ext : extensions)
         {
             juce::File iconFile(filePath + ext);
@@ -303,17 +294,8 @@ juce::String Icon::ThemeIndex::lookupIcon
                 return iconFile.getFullPathName();
             }
         }
-        // Temporary svg hack:
-        if (backupSvgPath.isEmpty())
-        {
-            juce::File iconFile(filePath + ".svg");
-            if (iconFile.existsAsFile())
-            {
-                backupSvgPath = iconFile.getFullPathName();
-            }
-        }
     }
-    return backupSvgPath;
+    return String();
 }
 
 

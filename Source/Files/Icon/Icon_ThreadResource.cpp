@@ -327,22 +327,6 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
     using juce::String;
     using juce::File;
 
-    // TODO: remove this temporary hack after fixing svg rendering
-    // Only use SVG files as a last resort
-    String svgBackup;
-    const auto backupSvgFile = [this, &svgBackup] (const String& path)->bool
-    {
-        if (path.endsWith("svg"))
-        {
-            if (svgBackup.isEmpty())
-            {
-                svgBackup = path;
-            }
-            return true;
-        }
-        return false;
-    };
-
     // Don't waste time searching for icons that weren't found before:
     if (missingIcons.contains(request.icon))
     {
@@ -354,7 +338,7 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
     {
         String iconPath = themeIndex->lookupIcon(request.icon, request.size,
                 request.context, request.scale);
-        if (iconPath.isNotEmpty() && !backupSvgFile(iconPath))
+        if (iconPath.isNotEmpty())
         {
             return iconPath;
         }
@@ -369,18 +353,18 @@ juce::String Icon::ThreadResource::getIconPath(const IconRequest& request)
         subRequest.icon = subRequest.icon.upToLastOccurrenceOf("-", false,
                 false);
         String iconPath = getIconPath(subRequest);
-        if (iconPath.isNotEmpty() && !backupSvgFile(iconPath))
+        if (iconPath.isNotEmpty())
         {
             return iconPath;
         }
     }
     // If that didn't find anything, search for matching unthemed icon files:
     String unindexedPath = getUnindexedIconPath(request);
-    if (unindexedPath.isNotEmpty() && !backupSvgFile(unindexedPath))
+    if (unindexedPath.isNotEmpty())
     {
         return unindexedPath;
     }
-    return svgBackup;
+    return String();
 }
 
 
@@ -448,21 +432,6 @@ juce::String Icon::ThreadResource::getUnindexedIconPath
         }
     }
 
-    // TODO: remove this temporary hack after fixing svg rendering
-    // Only use SVG files as a last resort
-    String svgBackup;
-    const auto backupSvgFile = [this, &svgBackup] (const String& path)->bool
-    {
-        if (path.endsWith("svg"))
-        {
-            if (svgBackup.isEmpty())
-            {
-                svgBackup = path;
-            }
-            return true;
-        }
-        return false;
-    };
     for (const String& iconDir : searchPaths)
     {
         static const juce::StringArray iconExtensions
@@ -470,11 +439,11 @@ juce::String Icon::ThreadResource::getUnindexedIconPath
         for (const String& ext : iconExtensions)
         {
             String iconPath = iconDir + String("/") + request.icon + ext;
-            if (File(iconPath).existsAsFile() && !backupSvgFile(iconPath))
+            if (File(iconPath).existsAsFile())
             {
                 return iconPath;
             }
         }
     }
-    return svgBackup;
+    return String();
 }
