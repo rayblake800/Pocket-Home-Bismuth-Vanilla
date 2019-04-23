@@ -179,7 +179,7 @@ Theme::Colour::UICategory ColourKeys::getUICategory(const int colourId)
 {
     int index = -1;
     int min = 0, max = ColourIds::allElements.size() - 1;
-    while (min < max)
+    while (min <= max)
     {
         int testIndex = min + (max - min) / 2;
         int testId = ColourIds::allElements[testIndex]->getColourId();
@@ -191,7 +191,7 @@ Theme::Colour::UICategory ColourKeys::getUICategory(const int colourId)
         {
             if (testIndex == min)
             {
-                ++testIndex;
+                ++min;
             }
             else
             {
