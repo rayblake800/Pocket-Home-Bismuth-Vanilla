@@ -1,5 +1,5 @@
 ########################### Layout Module ######################################
-LAYOUT_DIR = Source/Framework/Layout
+LAYOUT_DIR = Source/GUI/Layout
 LAYOUT_COMPONENT_DIR := $(LAYOUT_DIR)/Component
 LAYOUT_GROUP_DIR := $(LAYOUT_DIR)/Group
 LAYOUT_TRANSITION_DIR := $(LAYOUT_DIR)/Transition
@@ -37,7 +37,7 @@ ifeq ($(BUILD_TESTS), 1)
     OBJECTS_LAYOUT := $(OBJECTS_LAYOUT) $(OBJECTS_LAYOUT_TEST)
 endif
 
-FRAMEWORK_MODULES := $(FRAMEWORK_MODULES) layout
+GUI_MODULES := $(GUI_MODULES) layout
 
 OBJECTS_APP := $(OBJECTS_APP) $(OBJECTS_LAYOUT)
 
