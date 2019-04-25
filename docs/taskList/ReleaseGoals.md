@@ -1,22 +1,14 @@
 # Task list for release 0.10
 
+- Search the project for TODO: and FIXME: tags to ensure no significant ones were overlooked.
+- Build and upload a precompiled debian package for PocketCHIP.
+- On PocketCHIP and desktop, completely uninstall and remove the project and all project files, and test that it installs correctly.
+
 ## Documentation
     1. Provide basic application use instructions, including controls.
-    2. Document configuration files.
-
-## FreeDesktop Standards/ DesktopEntry Improvements
-    1. Fix problems with recreating hidden entries.
-
-## Configuration Improvements
-    1. Add config. option for enabling/disabling that PocketCHIP audio hack.
-    2. Recreate config test class.
-
-## Settings Page Improvements
-
-### Home Settings Page
-    1. Add options to show/hide the battery icon and wifi icon.
+    2. Write class, page, resource, and test implementation guides, and add incomplete guides to all other empty implementation files.
+    3. Add more information to the documentation style guide.
+    4. Finish polishing the main project readme.
 
 ### Password Pages
     1. Test for authentication issues on PocketCHIP.
-    2. Test that all expected issues are cleanly handled.
-

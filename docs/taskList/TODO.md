@@ -5,15 +5,8 @@ Related Pages:
 - [Design Changes](DesignChanges.md): Planned improvements to project design.
 - [Feature Wishlist](FeatureWishlist.md): New features to implement.
 
-### Documentation
-- Finish creating pages documenting each module.
-- Document all config files and options.
-- Generate UML diagrams.
-
 ## Testing priorities
 Ideally, all non-trivial classes should have their own test classes, but most tests are still unimplemented. The following untested classes are particularly complex, or are the most likely to have hidden bugs. These should be prioritized when implementing missing test classes.
-- [Config::FileResource](../../Source/Config/Config_FileResource.h)
-- [Config::Listener](../../Source/Config/Config_Listener.h)
 - [DesktopEntry::EntryFile](../../Source/DesktopEntry/DesktopEntry_EntryFile.h)
 - [GLib::DBus::Proxy](../../Source/GLib/DBus/GLib_DBus_Proxy.h)
 - [Icon::ThreadResource](../../Source/Icon/Icon_ThreadResource.h)
@@ -31,4 +24,4 @@ Ideally, all non-trivial classes should have their own test classes, but most te
 ## Misc. fixes and improvements
     - Provide a way to override the system locale.
     - Finish implementing Config::AlertWindow to provide useful error messages when configuration errors occur.
-    - Remove unnecessary use of component names.
+    - Remove or improve unnecessary use of component names.
