@@ -203,7 +203,6 @@ protected:
      */
     virtual const std::vector<DataKey>& getConfigKeys() const = 0;
 
-
     /**
      * @brief  Checks for an expected property value in the JSON config data.
      *
@@ -216,10 +215,6 @@ protected:
      * @tparam T                        The expected type of the JSON property.
      *
      * @return                          The initialized property value.
-     *
-     * @throws JSONFile::TypeException  If any data value is missing or has an
-     *                                  incorrect type in both the config file
-     *                                  and the default config file.
      */
     template<typename T> T initProperty(const juce::Identifier& key)
     {

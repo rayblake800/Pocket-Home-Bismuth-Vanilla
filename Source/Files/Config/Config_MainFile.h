@@ -10,7 +10,6 @@
 
 namespace Config { class MainFile; }
 namespace Config { class MainResource; }
-namespace Config { class MainListener; }
 
 /**
  * @brief  Accesses the main configuration file resource to get and set

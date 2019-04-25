@@ -19,7 +19,13 @@ OBJECTS_CONFIG := \
 
 CONFIG_TEST_PREFIX := $(CONFIG_PREFIX)Test_
 CONFIG_TEST_OBJ := $(CONFIG_OBJ)Test_
-OBJECTS_CONFIG_TEST :=
+OBJECTS_CONFIG_TEST := \
+  $(CONFIG_TEST_OBJ)Resource.o \
+  $(CONFIG_TEST_OBJ)FileHandler.o \
+  $(CONFIG_TEST_OBJ)Listener.o \
+  $(CONFIG_TEST_OBJ)ObjectData.o \
+  $(CONFIG_TEST_OBJ)FileTest.o \
+
 
 ifeq ($(BUILD_TESTS), 1)
     OBJECTS_CONFIG := $(OBJECTS_CONFIG) $(OBJECTS_CONFIG_TEST)
@@ -44,3 +50,14 @@ $(CONFIG_OBJ)MainFile.o: \
     $(CONFIG_DIR)/$(CONFIG_PREFIX)MainFile.cpp
 $(CONFIG_OBJ)MainListener.o: \
     $(CONFIG_DIR)/$(CONFIG_PREFIX)MainListener.cpp
+
+$(CONFIG_TEST_OBJ)Resource.o: \
+    $(CONFIG_TEST_DIR)/$(CONFIG_TEST_PREFIX)Resource.cpp
+$(CONFIG_TEST_OBJ)FileHandler.o: \
+    $(CONFIG_TEST_DIR)/$(CONFIG_TEST_PREFIX)FileHandler.cpp
+$(CONFIG_TEST_OBJ)Listener.o: \
+    $(CONFIG_TEST_DIR)/$(CONFIG_TEST_PREFIX)Listener.cpp
+$(CONFIG_TEST_OBJ)ObjectData.o: \
+    $(CONFIG_TEST_DIR)/$(CONFIG_TEST_PREFIX)ObjectData.cpp
+$(CONFIG_TEST_OBJ)FileTest.o: \
+    $(CONFIG_TEST_DIR)/$(CONFIG_TEST_PREFIX)FileTest.cpp

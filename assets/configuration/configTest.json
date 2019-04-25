@@ -1,0 +1,15 @@
+{
+  "test object": {
+    "test object num": 5,
+    "test object bool": false
+  },
+  "test array": [
+    1,
+    2,
+    3
+  ],
+  "test integer": 10,
+  "test string": "This file is used to test config file management.",
+  "test boolean": true,
+  "test double": 0.01000
+}
