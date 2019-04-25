@@ -69,6 +69,7 @@ void AppMenu::MenuComponent::saveAndShowEditor(PopupEditor* newEditor)
     addAndMakeVisible(newEditor);
     menuEditor->applyConfigBounds();
     //Center the menu editor within the menu
+    menuEditor->setAlwaysOnTop(true);
     menuEditor->centreWithSize(menuEditor->getWidth(),
             menuEditor->getHeight());
 }

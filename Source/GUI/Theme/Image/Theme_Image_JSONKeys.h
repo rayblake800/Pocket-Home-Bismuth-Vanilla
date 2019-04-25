@@ -18,7 +18,7 @@ static const Config::DataKey homeBackground
 static const Config::DataKey loginBackground
     ("login page background", Config::DataKey::stringType);
 
-// Default AppMenu icon image:
+// Default AppMenu icon imagen
 static const Config::DataKey defaultIcon
     ("default icon", Config::DataKey::stringType);
 
@@ -65,6 +65,10 @@ static const juce::Identifier volumeSlider(
         "volume slider");
 static const juce::Identifier brightnessSlider(
         "brightness slider");
+static const juce::Identifier cancelButton(
+        "cancel button");
+static const juce::Identifier confirmButton(
+        "confirm button");
 
 static const juce::Array<juce::Identifier> components =
 {
@@ -80,5 +84,7 @@ static const juce::Array<juce::Identifier> components =
     lockIcon,
     volumeSlider,
     brightnessSlider,
+    cancelButton,
+    confirmButton
 };
 }}}

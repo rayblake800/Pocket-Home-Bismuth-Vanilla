@@ -29,6 +29,8 @@ Key                    | Image Count | Description
 "loading spinner"      | 8           | The animated loading spinner.
 "volume slider"        | 2           | Low and high volume symbols to draw around the volume slider.
 "brightness slider"    | 2           | Low and high brightness symbols to draw around the display brightness slider.
+"cancel button"        | 1           | The small button used to cancel changes and remove items in editor components.
+"confirm button"       | 1           | The small button used to confirm changes in editor components.
 
 ### Alternate image descriptions
 Image keys with multiple image assets use each image for a specific purpose, documented here.

@@ -5,6 +5,11 @@
 #include "Layout_Transition_Animator.h"
 #include "Widgets_NavButton.h"
 
+#ifdef JUCE_DEBUG
+// Print the full class name before all debug output:
+static const constexpr char* dbgPrefix = "AppMenu::Paged::InputHandler::";
+#endif
+
 // Initializes the InputHandler, setting it to handle the menu component's
 // input events.
 AppMenu::Paged::InputHandler::InputHandler
@@ -156,6 +161,12 @@ bool AppMenu::Paged::InputHandler::keyPressed
 // Handles button click events from the folder navigation buttons.
 void AppMenu::Paged::InputHandler::buttonClicked(juce::Button* button)
 {
+    if (getController()->ignoringInput())
+    {
+        DBG(dbgPrefix << __func__ 
+                << ": Loading or editing menu, ignoring NavButton click.");
+        return;
+    }
     using Widgets::NavButton;
     NavButton* navButton = static_cast<NavButton*> (button);
     int activeFolderIndex = getMenuComponent()->openFolderCount() - 1;

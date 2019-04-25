@@ -1,58 +1,76 @@
 {
-    "home page background"    : "wallpaper/chipBackground.png",
+    "home page background"    : "wallpaper/chipDark.png",
     "login page background"   : "login/background.png",
     "default icon"            : "icons/chip.png",
     "login image"             : "login/chipVector.svg",
     "ControlWidget wifi icon" : "component assets/WifiIcon/wifiIcon.svg",
 
-    "power button": {
-        "colours": [
+    "power button" :
+    {
+        "colours" :
+        [
             "0xffeb008b"
         ],
-        "image files": [
+        "image files" :
+        [
             "component assets/PowerButton/powerIcon.svg"
         ]
     },
-    "settings button": {
-        "colours": [
+    "settings button" :
+    {
+        "colours" :
+        [
             "0xffeb008b"
         ],
-        "image files": [
+        "image files" :
+        [
             "component assets/SettingsButton/settingsIcon.svg"
         ]
     },
-    "settings list button": {
-        "colours": [
+    "settings list button" :
+    {
+        "colours" :
+        [
             "0xffeb008b"
         ],
-        "image files": [
+        "image files" : 
+        [
             "component assets/SettingsListButton/settingsListIcon.svg"
         ]
     },
-    "lock icon": {
-        "colours": [
+    "lock icon" :
+    {
+        "colours" :
+        [
             "0xffffffff"
         ],
-        "image files": [
+        "image files" :
+        [
             "component assets/WifiIcon/lock.svg"
         ]
     },
-    "menu frame": {
-        "colours": [
+    "menu frame" : 
+    {
+        "colours" :
+        [
             "0xffb88e47",
             "0xffb8b8b8"
         ],
-        "image files": [
+        "image files" :
+        [
             "component assets/MenuFrame/frame.svg"
         ]
     },
-    "battery": {
-        "colours": [
+    "battery" :
+    {
+        "colours" :
+        [
             "0xffeb008b",
             "fffa9622",
             "ffff0000"
         ],
-        "image files": [
+        "image files" :
+        [
             "component assets/BatteryIcon/battery_0.svg",
             "component assets/BatteryIcon/battery_1.svg",
             "component assets/BatteryIcon/battery_2.svg",
@@ -64,11 +82,14 @@
             "component assets/BatteryIcon/noBattery.svg"
         ]
     },
-    "signal strength": {
-        "colours": [
+    "signal strength" :
+    {
+        "colours" :
+        [
             "0xffeb008b"
         ],
-        "image files": [
+        "image files" :
+        [
             "component assets/WifiIcon/wifiOff.svg",
             "component assets/WifiIcon/wifiStrength0.svg",
             "component assets/WifiIcon/wifiStrength1.svg",
@@ -76,31 +97,40 @@
             "component assets/WifiIcon/wifiStrength3.svg"
         ]
     },
-    "popup menu": {
-        "colours": [
+    "popup menu" :
+    {
+        "colours" :
+        [
             "0xffb88e47",
             "0xffe9e9e9"
         ],
-        "image files": [
+        "image files" :
+        [
             "component assets/PopupEditor/popupFrame.svg"
         ]
     },
-    "navigation buttons": {
-        "colours": [
+    "navigation buttons" :
+    {
+        "colours" :
+        [
             "0xffeb008b"
         ],
-        "image files": [
+        "image files" :
+        [
             "component assets/NavButton/upIcon.svg",
             "component assets/NavButton/downIcon.svg",
             "component assets/NavButton/leftIcon.svg",
             "component assets/NavButton/rightIcon.svg"
         ]
     },
-    "loading spinner": {
-        "colours": [
+    "loading spinner" :
+    {
+        "colours" :
+        [
             "0xffeb008b"
         ],
-        "image files": [
+        "image files" : 
+        [
             "component assets/Spinner/spinner0.svg",
             "component assets/Spinner/spinner1.svg",
             "component assets/Spinner/spinner2.svg",
@@ -111,22 +141,50 @@
             "component assets/Spinner/spinner7.svg"
         ]
     },
-    "volume slider" : {
-        "colours": [
+    "volume slider" :
+    {
+        "colours" :
+        [
             "0xffbc3662"
         ],
-        "image files" : [
+        "image files" :
+        [
             "component assets/VolumeSlider/volumeIconLo.svg",
             "component assets/VolumeSlider/volumeIconHi.svg"
         ]
     },
-    "brightness slider" : {
-        "colours" : [
+    "brightness slider" :
+    {
+        "colours" :
+        [
             "0xffbc3662"
         ],
-        "image files" : [
+        "image files" :
+        [
             "component assets/BrightnessSlider/brightnessIconLo.svg",
             "component assets/BrightnessSlider/brightnessIconHi.svg"
+        ]
+    },
+    "cancel button" : 
+    {
+        "colours" :
+        [
+            "0xffbc3662"
+        ],
+        "image files" :
+        [
+            "component assets/PopupEditor/cancel.svg"
+        ]
+    },
+    "confirm button" : 
+    {
+        "colours" :
+        [
+            "0xffbc3662"
+        ],
+        "image files" :
+        [
+            "component assets/PopupEditor/confirm.svg"
         ]
     }
 }

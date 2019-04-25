@@ -4,6 +4,11 @@
 #include "DesktopEntry_Loader.h"
 #include <map>
 
+#ifdef JUCE_DEBUG
+// Print the full class name before all debug output:
+static const constexpr char* dbgPrefix = "AppMenu::InputHandler::";
+#endif
+
 // Initializes the InputHandler, setting it to handle the menu component's
 // input events.
 AppMenu::InputHandler::InputHandler
@@ -82,6 +87,13 @@ AppMenu::Controller* AppMenu::InputHandler::getController()
 // function.
 void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
 {
+    if (controller->ignoringInput())
+    {
+        DBG(dbgPrefix << __func__ 
+                << ": Loading spinner or editor is open, ignoring input.");
+        return;
+    }
+
     // TODO: Don't just assume ctrl+click is equivalent to right click, define
     //       it in the input settings.
     const bool rightClicked = event.mods.isRightButtonDown()
@@ -137,6 +149,13 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
 bool AppMenu::InputHandler::keyPressed(const juce::KeyPress& keyPress,
         juce::Component* sourceComponent)
 {
+    if (controller->ignoringInput())
+    {
+        DBG(dbgPrefix << __func__ 
+                << ": Loading spinner or editor is open, ignoring input.");
+        return true;
+    }
+
     // TODO: don't hardcode in key bindings, read them from input settings.
     using juce::KeyPress;
     static const std::map<juce::String, KeyType> keyMap =

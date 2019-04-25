@@ -7,6 +7,7 @@
 
 #include "Widgets_DrawableImageButton.h"
 #include "Layout_Group_Manager.h"
+#include "Theme_Image_Component.h"
 #include "JuceHeader.h"
 
 namespace Widgets { class ListEditor; }
@@ -38,10 +39,10 @@ public:
      */
     enum ColourIds
     {
-        backgroundColourId = 0x1900100,
-        listItemColourId = 0x1900101,
+        backgroundColourId       = 0x1900100,
+        listItemColourId         = 0x1900101,
         selectedListItemColourId = 0x1900102,
-        textColourId = 0x1900103
+        textColourId             = 0x1900103
     };
 
     /**
@@ -155,13 +156,6 @@ private:
         void setDeleteButtonID(const juce::String id);
 
         /**
-         * @brief  Sets the colour of the list item's delete button.
-         *
-         * @param colour  The new colour to use when drawing the delete button.
-         */
-        void setDeleteButtonColour(const juce::Colour colour);
-
-        /**
          * @brief  Update the font and delete button to match when the list
          *         item's bounds change.
          */
@@ -169,7 +163,7 @@ private:
 
     private:
         // The list item's delete button:
-        DrawableImageButton deleteButton;
+        Theme::Image::Component<DrawableImageButton> deleteButton;
     };
 
     /**

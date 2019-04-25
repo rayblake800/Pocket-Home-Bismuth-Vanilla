@@ -1,5 +1,6 @@
 #include "Widgets_ListEditor.h"
 #include "Layout_Component_ConfigFile.h"
+#include "Theme_Image_JSONKeys.h"
 
 #ifdef JUCE_DEBUG
 // Print the full class name before all debug output:
@@ -180,12 +181,11 @@ void Widgets::ListEditor::removeRow(const int rowNumber)
 
 // Sets the list item's text and connects it to its ListEditor on construction.
 Widgets::ListEditor::ListItemComponent::ListItemComponent
-(const juce::String text, ListEditor* owner) : juce::Label(text),
-// TODO: Load delete button image from Theme::Image::ConfigFile.
-deleteButton("cancel.svg")
+(const juce::String text, ListEditor* owner) :
+juce::Label(text),
+deleteButton(Theme::Image::JSONKeys::cancelButton)
 {
     setJustificationType(juce::Justification::left);
-    setDeleteButtonColour(owner->findColour(textColourId));
     addAndMakeVisible(deleteButton);
     deleteButton.addListener(owner);
     deleteButton.setWantsKeyboardFocus(false);
@@ -199,16 +199,6 @@ void Widgets::ListEditor::ListItemComponent::setDeleteButtonID
 {
     deleteButton.setComponentID(id);
 }
-
-
-// Sets the colour of the list item's delete button.
-void Widgets::ListEditor::ListItemComponent::setDeleteButtonColour
-(const juce::Colour colour)
-{
-    deleteButton.setColour(DrawableImage::imageColour0Id,
-            findColour(textColourId));
-}
-
 
 // List item font margins:
 static const constexpr double listTextMarginFraction = 0.03;
@@ -261,7 +251,6 @@ juce::Component * Widgets::ListEditor::refreshComponentForRow
             juce::NotificationType::dontSendNotification);
     rowLabel->setColour(Label::textColourId, findColour(textColourId));
     rowLabel->setDeleteButtonID(String(rowNumber));
-    rowLabel->setDeleteButtonColour(findColour(textColourId));
     rowLabel->setComponentID(String(rowNumber));
     rowLabel->setColour(Label::backgroundColourId,
             findColour(isRowSelected ? selectedListItemColourId :

@@ -154,10 +154,10 @@ private:
     Widgets::BoundedLabel titleLabel;
 
     // Closes the editor without saving changes:
-    DrawableImageButton cancelButton;
+    Theme::Image::Component<DrawableImageButton> cancelButton;
 
     // Closes the editor, saving all changes:
-    DrawableImageButton confirmButton;
+    Theme::Image::Component<DrawableImageButton> confirmButton;
 
     // Manages the editor's bounds:
     Layout::Component::Manager boundsManager;

@@ -12,7 +12,6 @@ static const constexpr int defaultMarginPixels = 6;
 static const constexpr int defaultXPaddingPixels = 3;
 static const constexpr int defaultYPaddingPixels = 4;
 
-// TODO: load button images from imageAssets.json
 Widgets::PopupEditor::PopupEditor
 (const std::function<void(PopupEditor*)> onConfirm) :
 Theme::Image::Component<>(Theme::Image::JSONKeys::popupMenu, 0,
@@ -20,22 +19,17 @@ Theme::Image::Component<>(Theme::Image::JSONKeys::popupMenu, 0,
 boundsManager(this, Layout::Component::JSONKeys::popupMenu),
 onConfirm(onConfirm),
 titleLabel("EditorTitle", "", 2),
-cancelButton("component assets/PopupEditor/cancel.svg"),
-confirmButton("component assets/PopupEditor/confirm.svg"),
+cancelButton(Theme::Image::JSONKeys::cancelButton),
+confirmButton(Theme::Image::JSONKeys::confirmButton),
 marginPixels(defaultMarginPixels),
 xPaddingPixels(defaultXPaddingPixels),
 yPaddingPixels(defaultYPaddingPixels)
 {
     setWantsKeyboardFocus(true);
-#if JUCE_DEBUG
+    #if JUCE_DEBUG
     setName(juce::String("Widgets::PopupEditor"));
-#endif
+    #endif
     titleLabel.setJustificationType(juce::Justification::centred);
-
-    // TODO: use custom component ColourId values
-    juce::Colour btnColour = findColour(juce::Label::textColourId);
-    cancelButton.setColour(DrawableImage::imageColour0Id, btnColour);
-    confirmButton.setColour(DrawableImage::imageColour0Id, btnColour);
 
     cancelButton.setWantsKeyboardFocus(false);
     cancelButton.addListener(this);
