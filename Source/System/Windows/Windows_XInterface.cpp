@@ -308,7 +308,7 @@ juce::Array<Window> Windows::XInterface::getWindowChildren
             &childWindows, &numChildren);
     if (success && numChildren > 0)
     {
-        for (int i = numChildren - 1; i >= 0; i--)
+        for (int i = 0; i < numChildren; i++)
         {
             children.add(childWindows[i]);
         }
@@ -347,7 +347,7 @@ juce::Array<Window> Windows::XInterface::getWindowAncestry
 }
 
 
-// Gets all siblings of a window and returns the list sorted from front to back.
+// Gets all siblings of a window and returns the list sorted from bottom to top.
 juce::Array<Window> Windows::XInterface::getWindowSiblings
 (const Window window) const
 {
@@ -619,8 +619,8 @@ void Windows::XInterface::printWindowInfo(const Window window) const
 }
 
 
-// Recursively prints the entire window tree under some root window, from front
-// to back.
+// Recursively prints the entire window tree under some root window, from back
+// to front.
 void Windows::XInterface::printWindowTree(Window root, const int depth) const
 {
     using juce::String;
@@ -658,9 +658,9 @@ void Windows::XInterface::printWindowTree(Window root, const int depth) const
     }
     std::cout << output << std::endl;
     juce::Array<Window> children = getWindowChildren(root);
-    for (int i = children.size() - 1; i >= 0; i--)
+    for (int i = 0; i < children.size(); i++)
     {
-        printWindowTree(children[i], depth+1);
+        printWindowTree(children[i], depth + 1);
     }
 }
 #endif

@@ -140,7 +140,7 @@ public:
 
     /**
      * @brief  Gets all siblings of a window and returns the list sorted from
-     *         front to back.
+     *         bottom to top.
      *
      * @param window  A valid XLib window identifier.
      *
@@ -221,7 +221,7 @@ public:
 
     /**
      * @brief  Recursively prints the entire window tree under some root
-     *         window, from front to back.
+     *         window, from back to front.
      *
      * @param root   The root window to start searching under. If root is 0 and
      *               depth is 0, this will be replaced with the default root
