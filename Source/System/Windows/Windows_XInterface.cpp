@@ -419,15 +419,15 @@ bool Windows::XInterface::isActiveWindow(const Window window) const
     Window parentWindow = ancestors[ancestors.size() - 2];
     Array<Window> siblings = getWindowChildren(parentWindow);
     int windowIndex = siblings.indexOf(window);
-    #ifdef JUCE_DEBUG
     if (windowIndex == -1)
     {
+        #ifdef JUCE_DEBUG
         DBG(dbgPrefix << __func__ << ": Error: window " << (int) window
                 << " not found in child windows of " << (int) parentWindow);
         printWindowTree();
         jassertfalse;
+        #endif
     }
-    #endif
     else
     {
         const int lastIndex = siblings.size() - 1;
