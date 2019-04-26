@@ -229,7 +229,7 @@ public:
      *
      * @param depth  The current tree depth.
      */
-    void printWindowTree(const Window root = 0, const int depth = 0);
+    void printWindowTree(const Window root = 0, const int depth = 0) const;
 #endif
 
 private:

@@ -416,8 +416,28 @@ bool Windows::XInterface::isActiveWindow(const Window window) const
     }
 
     Array<Window> ancestors = getWindowAncestry(window);
-    Array<Window> siblings
-            = getWindowChildren(ancestors[ancestors.size() - 2]);
+    Window parentWindow = ancestors[ancestors.size() - 2];
+    Array<Window> siblings = getWindowChildren(parentWindow);
+    int windowIndex = siblings.indexOf(window);
+    #ifdef JUCE_DEBUG
+    if (windowIndex == -1)
+    {
+        DBG(dbgPrefix << __func__ << ": Error: window " << (int) window
+                << " not found in child windows of " << (int) parentWindow);
+        printWindowTree();
+        jassertfalse;
+    }
+    #endif
+    else
+    {
+        const int lastIndex = siblings.size() - 1;
+        if (windowIndex != lastIndex)
+        {
+            DBG(dbgPrefix << __func__ << ": No, "  << (lastIndex - windowIndex)
+                    << " window(s) are above this window");
+            return false;
+        }
+    }
     int higherWindows = (siblings.size() - 1) - siblings.indexOf(window);
     if (higherWindows != 0)
     {
@@ -601,7 +621,7 @@ void Windows::XInterface::printWindowInfo(const Window window) const
 
 // Recursively prints the entire window tree under some root window, from front
 // to back.
-void Windows::XInterface::printWindowTree(Window root, const int depth)
+void Windows::XInterface::printWindowTree(Window root, const int depth) const
 {
     using juce::String;
     if (root == 0 && depth == 0)
