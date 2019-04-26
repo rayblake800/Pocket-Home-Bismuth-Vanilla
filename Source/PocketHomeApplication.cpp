@@ -115,18 +115,34 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         }
         #endif
     };
-    #if defined(JUCE_DEBUG) && defined(INCLUDE_TESTING)
     focusChecker.startCheck([this]() { return focusAppWindow(); },
             onFocus, focusTimeout,
-            []()
-            {
-                DBG(dbgPrefix << __func__
-                        << ": Window focus attempts timed out!");
-            });
-    #else
-    focusChecker.startCheck([this]() { return focusAppWindow(); },
-            onFocus, focusTimeout);
-    #endif
+    [this]()
+    {
+        DBG(dbgPrefix << "initialise"
+                << ": Window focus attempts timed out.");
+        #if defined(JUCE_DEBUG)
+        Windows::XInterface xWindows;
+        Window appWindow = xWindows.getMainAppWindow();
+        if (appWindow == BadWindow)
+        {
+            DBG(dbgPrefix << "initialise"
+                    << ": Failed because main window ID was bad.");
+        }
+        else
+        {
+            DBG(dbgPrefix << "initialise"
+                    << ": window active: "
+                    << (xWindows.isActiveWindow(appWindow) ? "true" : "false")
+                    << ", keyboard focused: "
+                    << (homeWindow->hasKeyboardFocus(true) ? "true" : "false"));
+        }
+        xWindows.printWindowTree();
+        #endif
+
+        static_cast<Windows::MainWindow*> (homeWindow.get())
+                ->startFocusTracking();
+    });
 }
 
 
@@ -203,8 +219,17 @@ bool PocketHomeApplication::focusAppWindow()
     {
         return false;
     }
-    xWindows.activateWindow(appWindow);
-    homeWindow->grabKeyboardFocus();
-    return xWindows.isActiveWindow(appWindow)
-            && homeWindow->hasKeyboardFocus(true);
+    bool isActive = xWindows.isActiveWindow(appWindow);
+    if (! isActive)
+    {
+        xWindows.activateWindow(appWindow);
+        isActive = xWindows.isActiveWindow(appWindow);
+    }
+    bool hasKeyboardFocus = homeWindow->hasKeyboardFocus(true);
+    if (! hasKeyboardFocus)
+    {
+        homeWindow->grabKeyboardFocus();
+        hasKeyboardFocus = homeWindow->hasKeyboardFocus(true);
+    }
+    return isActive && hasKeyboardFocus;
 }

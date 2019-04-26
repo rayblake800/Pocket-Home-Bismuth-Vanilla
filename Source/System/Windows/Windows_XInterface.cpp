@@ -110,8 +110,8 @@ struct Windows::XInterface::WindowProperty
      *
      * @tparam DataType  The type of data value being extracted from the array.
      *
-     * @return  The extracted data value, or DataType() if the type or index
-     *          given were invalid.
+     * @return           The extracted data value, or DataType() if the type or
+     *                   index given were invalid.
      */
     template<typename DataType>
     DataType getDataValue(const int dataIndex = 0)
@@ -128,7 +128,7 @@ struct Windows::XInterface::WindowProperty
         }
         else
         {
-            DataType* typedData = reinterpret_cast<DataType*> (data);
+            DataType* typedData = reinterpret_cast<DataType*>(data);
             return typedData[dataIndex];
         }
         return DataType();
@@ -159,7 +159,7 @@ Window Windows::XInterface::getMainAppWindow() const
     Window windowHandle;
     if (rootComponent == nullptr)
     {
-        //window does not exist!
+        // window does not exist!
         return BadWindow;
     }
     else
@@ -607,6 +607,8 @@ void Windows::XInterface::printWindowTree(Window root, const int depth)
     if (root == 0 && depth == 0)
     {
         root = XDefaultRootWindow(display);
+        std::cout << "\nPocket-home window ID: " << (int) getMainAppWindow()
+                << "\nFull window tree:\n";
     }
     String output;
     for (int i = 0; i < depth; i++)
