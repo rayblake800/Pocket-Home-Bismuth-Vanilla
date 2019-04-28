@@ -33,20 +33,17 @@
         "willHideEntry" : "This application will be hidden from pocket-home.",
         "editApp"       : "Edit Menu Item"
     },
-    "AppMenu::NewConfigItemEditor":
-    {
-        "newAppTitleKey"    : "New application shortcut",
-        "newFolderTitleKey" : "New application folder"
-    },
     "AppMenu::PopupEditor":
     {
-        "name"             : "Name:",
-        "icon"             : "Icon path:",
-        "selectIcon"       : "Select Icon",
-        "editCategory"     : "Edit categories",
-        "command"          : "Command:",
-        "runInTerm"        : "Run in terminal:",
-        "newEntryTitleKey" : "New desktop entry file"
+        "name"              : "Name:",
+        "icon"              : "Icon path:",
+        "selectIcon"        : "Select Icon",
+        "editCategory"      : "Edit categories",
+        "command"           : "Command:",
+        "runInTerm"         : "Run in terminal:",
+        "newEntryTitleKey"  : "New desktop entry file",
+        "newAppTitleKey"    : "New application shortcut",
+        "newFolderTitleKey" : "New application folder"
     },
     "AppMenu::SettingsController":
     {

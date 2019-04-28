@@ -23,7 +23,8 @@ namespace AppMenu { class NewDesktopAppEditor; }
  * .local/share/applications. This allows the user to create menu items that are
  * visible to other applications that read desktop entry files.
  */
-class AppMenu::NewDesktopAppEditor : public PopupEditor {
+class AppMenu::NewDesktopAppEditor : public PopupEditor
+{
 public:
     /**
      * @brief  Creates a new editor, setting any additional actions for the
