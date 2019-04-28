@@ -51,11 +51,11 @@ void AppMenu::Controller::showContextMenu
     }
     juce::PopupMenu contextMenu;
     jassert(!folderItem.isNull());
-    contextMenu.addItem(int(OptionCode::NewShortcut),
+    contextMenu.addItem((int) OptionCode::NewShortcut,
             localeText(TextKey::newShortcut));
-    contextMenu.addItem(int(OptionCode::NewFolder),
+    contextMenu.addItem((int) OptionCode::NewFolder,
             localeText(TextKey::newFolder));
-    contextMenu.addItem(int(OptionCode::NewDesktopEntry),
+    contextMenu.addItem((int) OptionCode::NewDesktopEntry,
             localeText(TextKey::newEntry));
     handleContextMenuAction(OptionCode(contextMenu.show()), folderItem,
             insertIndex);
@@ -73,8 +73,8 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     juce::PopupMenu contextMenu;
     jassert(!menuItem.isNull());
 
-    contextMenu.addItem(int(OptionCode::Edit), localeText(TextKey::edit));
-    contextMenu.addItem(int(OptionCode::Delete),
+    contextMenu.addItem((int) OptionCode::Edit, localeText(TextKey::edit));
+    contextMenu.addItem((int) OptionCode::Delete,
             localeText(TextKey::deleteItem));
 
     MenuFile appConfig;
@@ -82,13 +82,13 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     const MenuItem parent = menuItem.getParentFolder();
     if (parent != rootFolder)
     {
-        contextMenu.addItem(int(OptionCode::PinToRoot),
+        contextMenu.addItem((int) OptionCode::PinToRoot,
                 localeText(TextKey::pinItem));
     }
 
     if (menuItem.isFolder())
     {
-        contextMenu.addItem(int(OptionCode::NewShortcut),
+        contextMenu.addItem((int) OptionCode::NewShortcut,
                 localeText(TextKey::newShortcut));
     }
 
@@ -100,12 +100,12 @@ void AppMenu::Controller::showContextMenu(const MenuItem menuItem)
     {
         if (menuItem.getIndex() != 0)
         {
-            contextMenu.addItem(int(OptionCode::MoveBack),
+            contextMenu.addItem((int) OptionCode::MoveBack,
                     localeText(TextKey::moveBack));
         }
         if (menuItem.getIndex() != lastMovableIndex)
         {
-            contextMenu.addItem(int(OptionCode::MoveForward),
+            contextMenu.addItem((int) OptionCode::MoveForward,
                     localeText(TextKey::moveForward));
         }
     }
@@ -192,11 +192,10 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
         case OptionCode::Delete:
             jassert(!editedItem.isNull());
             Windows::Alert::confirmAction(editedItem.getConfirmDeleteTitle(),
-                    editedItem.getConfirmDeleteMessage(),
-                    [editedItem]()
-                    {
-                        MenuItem(editedItem).remove(true);
-                    });
+                    editedItem.getConfirmDeleteMessage(), [editedItem]()
+            {
+                MenuItem(editedItem).remove(true);
+            });
             break;
         case OptionCode::PinToRoot:
         {
@@ -275,8 +274,15 @@ void AppMenu::Controller::openFolder(const MenuItem folderItem)
 void AppMenu::Controller::createNewShortcutEditor
 (const MenuItem folder, const int insertIndex)
 {
+    // If creating a new shortcut for a folder menu item, use index 0 instead
+    // of the folder's index in its parent.
+    int adjustedIndex = insertIndex;
+    if (folder != menuComponent->getActiveFolder())
+    {
+        adjustedIndex = 0;
+    }
     PopupEditor* newEditor = new NewConfigItemEditor(
-            folder, false, insertIndex, [this]()
+            folder, false, adjustedIndex, [this]()
     {
         menuComponent->removeEditor();
     });
