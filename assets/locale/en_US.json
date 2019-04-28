@@ -208,7 +208,8 @@
         "connectionFailed" : "Connection failed.",
         "lostAP"           : "Access point lost.",
         "lastConnected"    : "Last connected: ",
-        "deleteSaved"      : "Delete saved connection"
+        "deleteSaved"      : "Delete saved connection",
+        "confirmDelete"    : "This will remove all saved connection data."
     },
     "Widgets::ColourPicker" :
     {
