@@ -105,11 +105,11 @@ public:
 
 private:
     /**
-     * @brief  Gets the list of all available connection paths
+     * @brief  Reads the list of all available connection paths.
      *
      * @return  The list of paths, freshly updated over the DBus interface.
      */
-    inline juce::StringArray getConnectionPaths() const;
+    inline juce::StringArray loadConnectionPaths() const;
 
     // All loaded saved connections
     juce::Array<SavedConnection> connectionList;

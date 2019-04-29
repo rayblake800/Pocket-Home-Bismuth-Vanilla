@@ -18,8 +18,8 @@ namespace NMDBus = Wifi::LibNM::DBus;
 NMDBus::SavedConnectionLoader::SavedConnectionLoader() :
 GLib::DBus::Proxy(busName, path, interface)
 {
-    juce::StringArray paths = getConnectionPaths();
-    for (const juce::String& path : paths)
+    connectionPaths = loadConnectionPaths();
+    for (const juce::String& path : connectionPaths)
     {
         connectionList.add(SavedConnection(path.toRawUTF8()));
     }
@@ -99,18 +99,18 @@ NMDBus::SavedConnectionLoader::findConnectionsForAP
 }
 
 
-// Get the list of all available connection paths
+// Reads the list of all available connection paths.
 inline juce::StringArray
-NMDBus::SavedConnectionLoader::getConnectionPaths() const
+NMDBus::SavedConnectionLoader::loadConnectionPaths() const
 {
     using namespace GLib::VariantConverter;
     using juce::StringArray;
-    GVariant* conArrayVar = callFunction(listConnectionFunction);
-    if (conArrayVar != nullptr)
+    GVariant* pathVar = callFunction(listConnectionFunction);
+    if (pathVar != nullptr)
     {
-        StringArray paths = getValue<StringArray>(conArrayVar);
-        g_variant_unref(conArrayVar);
-        conArrayVar = nullptr;
+        StringArray paths = getValue<StringArray>(pathVar);
+        g_variant_unref(pathVar);
+        pathVar = nullptr;
         return paths;
     }
     return StringArray();
@@ -140,25 +140,28 @@ bool NMDBus::SavedConnectionLoader::matchingConnectionExists
 // list, adding any new connections and removing any deleted connections.
 void NMDBus::SavedConnectionLoader::updateSavedConnections()
 {
-    connectionPaths = getConnectionPaths();
-    juce::Array<SavedConnection> toRemove;
-    for (const SavedConnection& saved : connectionList)
+    connectionPaths = loadConnectionPaths();
+    for (int i = 0; i < connectionList.size(); i++)
     {
-        if (!connectionPaths.contains(saved.getPath()))
+        const SavedConnection& saved = connectionList[i];
+        const juce::String savedPath = saved.getPath();
+        if (savedPath.isEmpty() || saved.isNull() 
+                || ! connectionPaths.contains(savedPath))
         {
-            toRemove.add(saved);
+            connectionList.remove(i);
+            i--;
         }
         else
         {
-            connectionPaths.removeString(saved.getPath());
+            connectionPaths.removeString(savedPath);
         }
-    }
-    for (const SavedConnection& removing : toRemove)
-    {
-        connectionList.removeAllInstancesOf(removing);
     }
     for (const juce::String& path : connectionPaths)
     {
-        connectionList.add(SavedConnection(path.toRawUTF8()));
+        SavedConnection newSaved(path.toRawUTF8());
+        if (! newSaved.isNull())
+        {
+            connectionList.add(newSaved);
+        }
     }
 }

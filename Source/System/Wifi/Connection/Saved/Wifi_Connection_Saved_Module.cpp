@@ -93,7 +93,7 @@ void Wifi::Connection::Saved::Module::removeSavedConnection
         LibNM::AccessPoint nmAP = apList->getStrongestNMAccessPoint(toRemove);
 
         const juce::Array<SavedConnection> matchingConnections
-                = savedConnections.findConnectionsForAP(nmAP);
+                = std::move(savedConnections.findConnectionsForAP(nmAP));
         for (SavedConnection savedConn : matchingConnections)
         {
             savedConn.deleteConnection();
