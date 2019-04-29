@@ -102,7 +102,8 @@
     },
     "Page::PasswordEditor":
     {
-        "changePassword"  : "Change your password",
+        "setPassword"     : "Set Pocket-Home password",
+        "changePassword"  : "Change Pocket-Home password",
         "currentPassword" : "Current password",
         "newPassword"     : "New password",
         "retypePassword"  : "Retype password",

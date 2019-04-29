@@ -43,10 +43,10 @@ public:
     virtual ~LoginScreen() { }
 
     /**
-     * @brief  Grants keyboard focus to the password field, so it doesn't need
-     *         to be clicked before the user can start typing their password.
+     * @brief  Updates whether the login screen needs to request a password,
+     *         grabbing keyboard focus if the password is needed.
      */
-    void getKeyboardFocus();
+    void reloadAndFocus();
 
 private:
     /**

@@ -80,6 +80,11 @@ void Password::UpdateController::buttonClicked(juce::Button* button)
         switch(changeResult)
         {
             case Password::passwordRemoveSuccess:
+                DBG(dbgPrefix << __func__ 
+                        << ": passwordRemoveSuccess returned, but password was"
+                        << " being edited.");
+                jassertfalse;
+                return;
             case Password::fileDeleteFailed:
                 DBG(dbgPrefix << __func__ << ": fileDeleteFailed");
                 jassertfalse;

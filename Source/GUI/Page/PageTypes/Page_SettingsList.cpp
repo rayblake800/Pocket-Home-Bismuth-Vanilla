@@ -14,7 +14,7 @@ static const juce::Identifier localeClassKey = "Page::SettingsList";
 namespace TextKey
 {
     static const juce::Identifier homeSettings   = "homeSettings";
-    static const juce::Identifier colourSettings  = "colourSettings";
+    static const juce::Identifier colourSettings = "colourSettings";
     static const juce::Identifier setPassword    = "setPassword";
     static const juce::Identifier changePassword = "changePassword";
     static const juce::Identifier removePassword = "removePassword";

@@ -1,4 +1,5 @@
 #include "Page_PasswordEditor.h"
+#include "Password.h"
 #include "Layout_Component_ConfigFile.h"
 
 // Localized object class key:
@@ -7,7 +8,8 @@ static const juce::Identifier localeClassKey = "Page::PasswordEditor";
 // Localized text value keys:
 namespace TextKey
 {
-    static const juce::Identifier title           = "changePassword";
+    static const juce::Identifier setTitle        = "setPassword";
+    static const juce::Identifier changeTitle     = "changePassword";
     static const juce::Identifier currentPassword = "currentPassword";
     static const juce::Identifier newPassword     = "newPassword";
     static const juce::Identifier retypePassword  = "retypePassword";
@@ -67,9 +69,6 @@ updateController(currentPasswordField, newPasswordField, confirmPasswordField,
     layout.setYPaddingWeight(paddingWeight);
     setLayout(layout);
 
-    titleLabel.setJustificationType(juce::Justification::centred);
-    titleLabel.setText(localeText(TextKey::title),
-            juce::NotificationType::dontSendNotification);
 
     Layout::Component::ConfigFile config;
     const auto initLabel = [this, &config]
@@ -85,7 +84,11 @@ updateController(currentPasswordField, newPasswordField, confirmPasswordField,
     updateButton.setButtonText(localeText(TextKey::update));
     addAndShowLayoutComponents();
 
-    const bool checkCurrentPassword = currentPasswordField.isEnabled();
-    currentPasswordLabel.setVisible(checkCurrentPassword);
-    currentPasswordField.setVisible(checkCurrentPassword);
+    const bool passwordIsSet = currentPasswordField.isEnabled();
+    currentPasswordLabel.setVisible(passwordIsSet);
+    currentPasswordField.setVisible(passwordIsSet);
+
+    titleLabel.setJustificationType(juce::Justification::centred);
+    titleLabel.setText(localeText(passwordIsSet ? TextKey::changeTitle 
+            : TextKey::setTitle), juce::NotificationType::dontSendNotification);
 }

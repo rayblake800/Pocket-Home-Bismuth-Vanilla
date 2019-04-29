@@ -202,7 +202,7 @@ static Password::ChangeResult runPasswordScript
 (const juce::String currentPass, const juce::String newPass)
 {
     using namespace Password;
-    if (isPasswordSet() && !checkPassword(currentPass))
+    if (isPasswordSet() && ! checkPassword(currentPass))
     {
         return wrongPasswordError;
     }

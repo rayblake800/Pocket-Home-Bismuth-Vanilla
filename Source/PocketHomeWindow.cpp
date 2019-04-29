@@ -58,7 +58,7 @@ PocketHomeWindow* PocketHomeWindow::getOpenWindow()
 void PocketHomeWindow::showLoginScreen()
 {
     setContentNonOwned(&loginScreen, true);
-    loginScreen.getKeyboardFocus();
+    loginScreen.reloadAndFocus();
 }
 
 
