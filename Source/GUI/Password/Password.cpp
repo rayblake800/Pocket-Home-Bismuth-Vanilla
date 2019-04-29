@@ -25,6 +25,9 @@ static const constexpr char* passwordFile = ".passwd/passwd";
 // Password salt length in bytes:
 static const constexpr int saltLength = 16;
 
+// Maximum username length, including null terminator:
+static const constexpr int maxNameLength = 32;
+
 /**
  * @brief  Gets the application password file.
  *
@@ -206,7 +209,27 @@ static Password::ChangeResult runPasswordScript
     {
         return wrongPasswordError;
     }
-    juce::String args(getlogin());
+    
+    // Read and check username argument:
+    char loginBuffer [maxNameLength];
+    int resultCode = getlogin_r(loginBuffer, maxNameLength);
+    if (resultCode != 0)
+    {
+        DBG(dbgPrefix << __func__ << ": Failed to get username. Error code:"
+                << resultCode);
+        jassertfalse;
+        return ChangeResult::noPasswordScript;
+    }
+
+    juce::String args(loginBuffer);
+    if (args.isEmpty())
+    {
+        DBG(dbgPrefix << __func__ << ": Found empty username!");
+        jassertfalse;
+        return ChangeResult::noPasswordScript;
+    }
+
+    // If setting a password, generate hash and salt arguments:
     if (newPass.isNotEmpty())
     {
         juce::Array<juce::uint8> salt = generateSalt();
@@ -216,9 +239,11 @@ static Password::ChangeResult runPasswordScript
         args += juce::String(" \"" + hashedPassword + "\"");
         args += juce::String(" \"" + saltString + "\"");
     }
+
+    // Have Util::Commands locate and run the script:
     Util::Commands sysCommands;
-    int result = sysCommands.runIntCommand
-            (Util::CommandTypes::Int::setPassword, args);
+    int result = sysCommands.runIntCommand(Util::CommandTypes::Int::setPassword,
+            args);
     if (result == -1)
     {
         DBG(dbgPrefix << __func__ << ": password update command is missing!");

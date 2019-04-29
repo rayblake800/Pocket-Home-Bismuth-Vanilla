@@ -38,10 +38,11 @@ if ! [[ ${targetUser} =~ [a-z_][a-z0-9_-]*$ ]] \
     exit $INVALID_USER
 fi
 
+
 # Ensure the pocket-home data directory exists:
 dataDir="/home/$targetUser/.local/share"
 if [ ! -d "$dataDir" ]; then
-    echo "missing pocket home directory $dataDir"
+    echo "missing directory $dataDir"
     exit $MISSING_APP_DIR
 fi
 appDir="$dataDir/pocket-home"
