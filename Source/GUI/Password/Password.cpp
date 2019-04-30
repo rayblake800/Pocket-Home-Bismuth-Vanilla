@@ -4,6 +4,7 @@
 #include <openssl/sha.h>
 #include <openssl/rand.h>
 #include <unistd.h>
+#include <pwd.h>
 
 #ifdef JUCE_DEBUG
 // Print the full namespace name before all debug output:
@@ -211,17 +212,27 @@ static Password::ChangeResult runPasswordScript
     }
     
     // Read and check username argument:
-    char loginBuffer [maxNameLength];
-    int resultCode = getlogin_r(loginBuffer, maxNameLength);
-    if (resultCode != 0)
+    char* username = getlogin();
+    if (username == nullptr)
     {
-        DBG(dbgPrefix << __func__ << ": Failed to get username. Error code:"
-                << resultCode);
+        struct passwd* pwEntry = getpwuid(getuid());
+        if (pwEntry != nullptr)
+        {
+            username = pwEntry->pw_name;
+        }
+        if (username == nullptr)
+        {
+            username = getenv("LOGNAME");
+        }
+    }
+    if (username == nullptr)
+    {
+        DBG(dbgPrefix << __func__ << ": Failed to get username.");
         jassertfalse;
         return ChangeResult::noPasswordScript;
     }
 
-    juce::String args(loginBuffer);
+    juce::String args(username);
     if (args.isEmpty())
     {
         DBG(dbgPrefix << __func__ << ": Found empty username!");
