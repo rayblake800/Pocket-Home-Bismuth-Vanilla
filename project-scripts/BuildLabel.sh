@@ -19,14 +19,15 @@ readReleaseFile()
     buildName=`grep -oP '(?<=^PRETTY_NAME=).+' $filePath`
     if [ -z "$buildName" ]; then
         buildName=`grep -oP '(?<=^NAME=).+' $filePath`
+        buildName=`unquote "$buildName"`
+        version=`grep -oP '(?<=^VERSION=").+' $filePath`
+        if [ -n "$version" ]; then
+            version=`unquote "$version"`
+            buildName="$buildName $version"
+        fi
     fi
     buildName=`unquote "$buildName"`
 
-    version=`grep -oP '(?<=^VERSION=").+' $filePath`
-    if [ -n "$version" ]; then
-        version=`unquote "$version"`
-        buildName="$buildName $version"
-    fi
     if [ -z "$buildName" ]; then
         echo "Unknown"
     else
