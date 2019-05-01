@@ -259,6 +259,13 @@ void Wifi::Signal::DeviceModule::activeConnectionChanged
             const LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
             const LibNM::AccessPoint nmAP = wifiDevice.getAccessPoint(
                     activeConnection.getAccessPointPath());
+            if (nmAP.isNull())
+            {
+                DBG(dbgPrefix << __func__ << ": Failed to access NMAP at path "
+                        << activeConnection.getAccessPointPath());
+                return;
+
+            }
             const APList::Module* apList
                     = getConstSiblingModule<APList::Module>();
             connectionAP = apList->getAccessPoint(nmAP.generateHash());
