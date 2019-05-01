@@ -108,16 +108,22 @@ versionLabel(localeText(TextKey::version)
 void Page::Power::startSleepMode()
 {
     Util::Commands systemCommands;
-    if (systemCommands.runIntCommand(Util::CommandTypes::Int::sleepCheck) == 0)
-    {
-        systemCommands.runActionCommand(Util::CommandTypes::Action::wake);
-    }
-    else
+    if (systemCommands.runIntCommand(Util::CommandTypes::Int::sleepCheck) != 0)
     {
         PocketHomeWindow* window = PocketHomeWindow::getOpenWindow();
         jassert(window != nullptr);
         window->showLoginScreen();
+        // Make sure power page buttons can't be accidentally clicked from
+        // sleep mode:
+        setEnabled(false);
         systemCommands.runActionCommand(Util::CommandTypes::Action::sleep);
+    }
+    else
+    {
+        systemCommands.runActionCommand(Util::CommandTypes::Action::wake);
+        // Enable the page again after waking. This shouldn't happen before the
+        // login page is shown.
+        setEnabled(true);
     }
 }
 
