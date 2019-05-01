@@ -46,9 +46,11 @@ void Layout::Group::Manager::setLayout
                 }
                 rowWeightSum += rowItem.getWeight();
             }
-            if (parentToInit != nullptr)
+            juce::Component* rowComponent = rowItem.getComponent();
+            if (parentToInit != nullptr && rowComponent != nullptr
+                    && (rowComponent->getParentComponent() != parentToInit))
             {
-                parentToInit->addAndMakeVisible(rowItem.getComponent());
+                parentToInit->addAndMakeVisible(rowComponent);
             }
         }
     }
