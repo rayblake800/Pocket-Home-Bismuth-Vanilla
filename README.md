@@ -1,6 +1,8 @@
 # ![Bismuth project image](./assets/login/chipVector.png?raw=true "Bismuth project image") Pocket-Home Bismuth Edition
 An application launcher and system manager for portable Linux devices.
 
+![Paged Menu](./docs/images/paged.gif?raw=true "Paged Menu") ![Scrolling Menu](./docs/images/scrolling.gif?raw=true "Scrolling Menu")
+
 Pocket-Home Bismuth is a complete rewrite of the Pocket-Home launcher. It introduces a full-featured, configurable application menu, improved Wifi control and performance, and initial support for devices other than the PocketC.H.I.P. The project's biggest focus is on creating extensively documented, reusable code, to make it as easy as possible to update, extend, and adapt.
 
 - [Building and Installation](./docs/BuildAndInstall.md)
