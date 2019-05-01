@@ -88,8 +88,8 @@ public:
     void continueConnectionAttempt();
 
     /**
-     * @brief  Disconnects the active Wifi connection. If there is no active
-     *         wifi connection, no action is taken.
+     * @brief  Asynchronously closes the active Wifi connection. If there is no
+     *         active wifi connection, no action is taken.
      */
     void disconnect();
 
@@ -134,10 +134,16 @@ private:
     void cancelPendingConnection();
 
     /**
+     * @brief  Closes the active Wifi connection. Only call this within the
+     *         LibNM thread.
+     */
+    void internalDisconnect();
+
+    /**
      * @brief  Cancels a pending connection event if it doesn't finish within a
      *         timeout period.
      */
-    virtual void timerCallback() override;
+    void timerCallback() override;
 
     /**
      * @brief  Signals that a connection is being opened.
@@ -146,8 +152,7 @@ private:
      *                    connection. This connection object might not be
      *                    completely connected yet.
      */
-    virtual void openingConnection
-    (LibNM::ActiveConnection connection) override;
+    void openingConnection(LibNM::ActiveConnection connection) override;
 
     /**
      * @brief  Signals that an attempt to open a connection failed.

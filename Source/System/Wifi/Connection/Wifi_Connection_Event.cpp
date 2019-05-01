@@ -106,7 +106,7 @@ bool WifiConnect::Event::operator< (const Event& rhs) const
 bool WifiConnect::Event::isNull() const
 {
     return eventType == WifiConnect::EventType::invalid
-        || eventAP.isNull() || eventTime.toMilliseconds() == 0;
+            || eventTime.toMilliseconds() == 0;
 }
 
 

@@ -314,7 +314,7 @@ public:
         expectEvent(EventType::connectionFailed, invalidAP);
         connectionController.connectToAccessPoint(invalidAP,
                 thirdAP.invalidPSK);
-        waitForAllExpected(15000);
+        waitForAllExpected(25000);
 
         if (!initialAPHash.isNull())
         {

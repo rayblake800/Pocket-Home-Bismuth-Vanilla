@@ -80,11 +80,15 @@ void Wifi::Signal::DeviceModule::stateChanged
         {
             lastActiveAP = apList->getAccessPoint(activeNMAP.generateHash());
         }
+        Connection::Record::Module* connectionRecord
+                = getSiblingModule<Connection::Record::Module>();
+        if (lastActiveAP.isNull())
+        {
+            lastActiveAP = connectionRecord->getActiveAP();
+        }
 
         // Notify the Connection::Record::Module if the state change is from a
         // notable connection event:
-        Connection::Record::Module* connectionRecord
-                = getSiblingModule<Connection::Record::Module>();
 
         using Wifi::Connection::EventType;
         using Wifi::Connection::Event;
@@ -110,13 +114,14 @@ void Wifi::Signal::DeviceModule::stateChanged
                 {
                     eventType = EventType::connectionAuthFailed;
                 }
-                else if (oldState == NM_DEVICE_STATE_DEACTIVATING)
+                else if (connectionRecord->isConnecting()
+                        && reason != NM_DEVICE_STATE_REASON_USER_REQUESTED)
                 {
-                    eventType = EventType::disconnected;
+                    eventType = EventType::connectionFailed;
                 }
                 else
                 {
-                    eventType = EventType::connectionFailed;
+                    eventType = EventType::disconnected;
                 }
                 break;
             case NM_DEVICE_STATE_DEACTIVATING:
