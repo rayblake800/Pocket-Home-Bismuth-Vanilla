@@ -157,7 +157,14 @@ void GroupLayout::RelativeLayout::insertRow
 void GroupLayout::RelativeLayout::setRow
 (const unsigned int index, const GroupLayout::Row row)
 {
-    rows.at(index) = row;
+    if (index == rows.size())
+    {
+        addRow(row);
+    }
+    else
+    {
+        rows.at(index) = row;
+    }
 }
 
 
