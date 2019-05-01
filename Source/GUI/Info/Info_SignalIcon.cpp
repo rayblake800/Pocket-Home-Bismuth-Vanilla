@@ -29,15 +29,12 @@ void Info::SignalIcon::setSignalStrengthImage
     const int numStrengthImages = 1 + maxStrengthIdx - minStrengthIdx;
     const int strengthIndex = std::min<int>(maxStrengthIdx,
             minStrengthIdx + signalStrength / (100 / numStrengthImages));
-    juce::MessageManager::getInstance()->callAsync([this, strengthIndex]()
-    {
-        setImageAssetIndex(strengthIndex);
-    });
+    setImageAssetIndex(strengthIndex);
 }
 
 
 // Updates the Wifi signal icon to show that Wifi is disabled.
 void Info::SignalIcon::setDisabledImage()
 {
-    setImageAssetIndex( (int) ImageAsset::off);
+    setImageAssetIndex((int) ImageAsset::off);
 }

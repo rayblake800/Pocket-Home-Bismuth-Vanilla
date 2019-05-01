@@ -78,7 +78,7 @@ void Widgets::DrawableImage::setImage(const juce::String assetFilename)
 // Changes the image drawn by this component.
 void Widgets::DrawableImage::setImage(const juce::File imageFile)
 {
-    jassert(juce::MessageManager::getInstance()->isThisTheMessageThread());
+    const juce::MessageManagerLock mmLock;
     if (imageFile.existsAsFile())
     {
         if (imageDrawable != nullptr)

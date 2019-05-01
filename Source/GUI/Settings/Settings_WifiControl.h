@@ -131,6 +131,12 @@ private:
     virtual void connectionAuthFailed(const Wifi::AccessPoint connectingAP)
         override;
 
+    /**
+     * @brief  Asynchronously refresh the WifiControl component on the JUCE
+     *         message thread.
+     */
+    void asyncRefresh();
+
     // If true, show the loading spinner and disable controls.
     bool wifiBusy = false;
 

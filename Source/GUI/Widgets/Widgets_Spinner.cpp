@@ -39,19 +39,16 @@ void Widgets::Spinner::visibilityChanged()
 // runtime exceeds the timeout period.
 void Widgets::Spinner::timerCallback()
 {
-    juce::MessageManager::getInstance()->callAsync([this]()
+    runtime += getTimerInterval();
+    if (runtime > timeout && timeout > 0)
     {
-        runtime += getTimerInterval();
-        if (runtime > timeout && timeout > 0)
-        {
-            runtime = 0;
-            setVisible(false);
-        }
-        else if (numImages > 0)
-        {
-            imageIndex = (imageIndex + 1) % numImages;
-            setImageAssetIndex(imageIndex);
-            startTimer(timerInterval);
-        }
-    });
+        runtime = 0;
+        setVisible(false);
+    }
+    else if (numImages > 0)
+    {
+        imageIndex = (imageIndex + 1) % numImages;
+        setImageAssetIndex(imageIndex);
+        startTimer(timerInterval);
+    }
 }

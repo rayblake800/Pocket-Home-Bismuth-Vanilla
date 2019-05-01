@@ -212,6 +212,10 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
             errorText = localeText(TextKey::wrongPassword);
         }
     }
+    else
+    {
+        errorText = "";
+    }
     errorLabel.setText(errorText, juce::NotificationType::dontSendNotification);
     if (errorText.isNotEmpty())
     {

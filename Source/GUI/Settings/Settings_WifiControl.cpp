@@ -25,7 +25,7 @@ Settings::WifiControl::WifiControl(std::function<void()> openWifiPage) :
 Settings::ConnectionComponent(openWifiPage),
 Locale::TextUser(localeClassKey)
 {
-    juce::MessageManager::callAsync([this]() { refresh(); });
+    asyncRefresh();
 }
 
 
@@ -121,14 +121,14 @@ juce::String Settings::WifiControl::updateButtonText()
 // Updates the widget whenever wireless networking is enabled.
 void Settings::WifiControl::wirelessEnabled()
 {
-    juce::MessageManager::callAsync([this]() { refresh(); });
+    asyncRefresh();
 }
 
 
 // Updates the widget whenever wireless networking is disabled.
 void Settings::WifiControl::wirelessDisabled()
 {
-    juce::MessageManager::callAsync([this]() { refresh(); });
+    asyncRefresh();
 }
 
 
@@ -137,14 +137,14 @@ void Settings::WifiControl::wirelessDisabled()
 void Settings::WifiControl::startedConnecting
 (const Wifi::AccessPoint connectingAP)
 {
-    juce::MessageManager::callAsync([this]() { refresh(); });
+    asyncRefresh();
 }
 
 
 // Signals that a new Wifi connection was opened successfully.
 void Settings::WifiControl::connected(const Wifi::AccessPoint connectedAP)
 {
-    juce::MessageManager::callAsync([this]() { refresh(); });
+    asyncRefresh();
 }
 
 
@@ -153,7 +153,7 @@ void Settings::WifiControl::connected(const Wifi::AccessPoint connectedAP)
 void Settings::WifiControl::disconnected
 (const Wifi::AccessPoint disconnectedAP)
 {
-    juce::MessageManager::callAsync([this]() { refresh(); });
+    asyncRefresh();
 }
 
 
@@ -162,5 +162,18 @@ void Settings::WifiControl::disconnected
 void Settings::WifiControl::connectionAuthFailed
 (const Wifi::AccessPoint connectingAP)
 {
-    juce::MessageManager::callAsync([this]() { refresh(); });
+    asyncRefresh();
+}
+
+// Asynchronously refresh the WifiControl component on the JUCE message thread.
+void Settings::WifiControl::asyncRefresh()
+{
+    juce::Component::SafePointer<WifiControl> safePtr(this);
+    juce::MessageManager::callAsync([safePtr]()
+    {
+        if (WifiControl* wifiControl = safePtr.getComponent())
+        {
+            wifiControl->refresh();
+        }
+    });
 }

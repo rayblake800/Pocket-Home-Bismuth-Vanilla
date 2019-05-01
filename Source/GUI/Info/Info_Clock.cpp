@@ -88,16 +88,20 @@ void Info::Clock::configValueChanged(const juce::Identifier& key)
     if (key == Config::MainKeys::showClock)
     {
         showClock = config.getShowClock();
-        juce::MessageManager::callAsync([this]
+        juce::Component::SafePointer<Clock> safePtr(this);
+        juce::MessageManager::callAsync([safePtr]
         {
-            setAlpha(showClock ? 1 : 0);
-            if (showClock && !isTimerRunning())
+            if (Clock* clock = safePtr.getComponent())
             {
-                startTimer(1);
-            }
-            else if (!showClock && isTimerRunning())
-            {
-                stopTimer();
+                clock->setAlpha(clock->showClock ? 1 : 0);
+                if (clock->showClock && !clock->isTimerRunning())
+                {
+                    clock->startTimer(1);
+                }
+                else if (!clock->showClock && clock->isTimerRunning())
+                {
+                    clock->stopTimer();
+                }
             }
         });
     }

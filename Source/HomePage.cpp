@@ -122,11 +122,13 @@ void HomePage::visibilityChanged()
 {
     if (isShowing())
     {
-        juce::MessageManager::callAsync([this]()
+        juce::Component::SafePointer<HomePage> safePtr(this);
+        juce::MessageManager::callAsync([safePtr]()
         {
-            if (appMenu != nullptr)
+            HomePage* page = safePtr.getComponent();
+            if (page != nullptr && page->appMenu != nullptr)
             {
-                appMenu->grabKeyboardFocus();
+                page->appMenu->grabKeyboardFocus();
             }
         });
     }

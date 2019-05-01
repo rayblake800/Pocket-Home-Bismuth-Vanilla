@@ -147,9 +147,13 @@ void Widgets::Switch::SwitchHandle::paint(juce::Graphics& graphics)
 // Handles switch transitions delayed by waiting for animation.
 void Widgets::Switch::timerCallback()
 {
-    juce::MessageManager::callAsync([this]()
+    juce::Component::SafePointer<Switch> safePtr(this);
+    juce::MessageManager::callAsync([safePtr]()
     {
-        stopTimer();
-        clicked();
+        if (Switch* switchPtr = safePtr.getComponent())
+        {
+            switchPtr->stopTimer();
+            switchPtr->clicked();
+        }
     });
 }

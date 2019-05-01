@@ -132,12 +132,8 @@ void Info::BatteryIcon::timerCallback()
         {
             status += (int) charging0;
         }
-        juce::MessageManager::getInstance()->callAsync(
-        [this, status, batteryPercent]()
-        {
-            setStatus((BatteryIconImage) status,
-                    juce::String(batteryPercent) + juce::String("%"));
-        });
+        setStatus((BatteryIconImage) status,
+                juce::String(batteryPercent) + juce::String("%"));
     }
     if (getTimerInterval() != timerFrequency)
     {
