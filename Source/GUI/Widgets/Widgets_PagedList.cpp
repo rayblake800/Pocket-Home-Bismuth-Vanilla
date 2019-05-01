@@ -125,31 +125,52 @@ void Widgets::PagedList::refreshListContent
 (const Layout::Transition::Type transition, const unsigned int duration,
         const bool animateUnmoved)
 {
-    Layout::Group::RelativeLayout layout;
     unsigned int listSize = getListSize();
     pageIndex = std::min(pageIndex, getPageCount() - 1);
     int componentsSaved = listComponents.size();
-    // Update the list layout:
+
+    // Update the list layout if necessary:
+    using namespace Layout::Group;
+    RelativeLayout layout(layoutManager.getLayout());
+    bool changesFound = false;
+    
     for (int i = 0; i < itemsPerPage; i++)
     {
         int itemIndex = i + pageIndex * itemsPerPage;
-        Layout::Group::Row row(getListItemWeight(itemIndex));
+        const int rowWeight = getListItemWeight(itemIndex);
+        juce::Component* rowComponent = nullptr;
         if (itemIndex < listSize)
         {
             if (componentsSaved < i || listComponents[i] == nullptr)
             {
                 listComponents.set(i, updateListItem(nullptr, itemIndex));
             }
-            row.addRowItem(Layout::Group::RowItem(listComponents[i], 1));
+            rowComponent = listComponents[i];
         }
-        layout.addRow(row);
+        if (itemIndex < layout.rowCount())
+        {
+            const Layout::Group::Row& oldRow = layout.getRow(i);
+            if (oldRow.getRowItem(0).getComponent() == rowComponent
+                    && oldRow.getWeight() == rowWeight)
+            {
+                continue;
+            }
+        }
+        layout.setRow(i, Row(rowWeight, { RowItem(rowComponent) }));
+        changesFound = true;
     }
-    layout.setYPaddingFraction(yPaddingFraction);
-    layout.setYMarginFraction(std::max(
-            NavButton::yMarginFractionNeeded(NavButton::WindowEdge::up),
-            NavButton::yMarginFractionNeeded(NavButton::WindowEdge::down)));
-    layoutManager.transitionLayout(layout, this, transition, duration,
-            animateUnmoved);
+
+    if (changesFound || (animateUnmoved 
+                && (transition != Layout::Transition::Type::none)
+                && (duration > 0)))
+    {
+        layout.setYPaddingFraction(yPaddingFraction);
+        layout.setYMarginFraction(std::max(
+                NavButton::yMarginFractionNeeded(NavButton::WindowEdge::up),
+                NavButton::yMarginFractionNeeded(NavButton::WindowEdge::down)));
+        layoutManager.transitionLayout(layout, this, transition, duration,
+                animateUnmoved);
+    }
     // Update individual list components:
     for (int i = 0; i < itemsPerPage; i++)
     {
