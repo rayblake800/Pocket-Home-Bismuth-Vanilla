@@ -17,7 +17,7 @@ FileResource(resourceKey, configFilename)
     using juce::var;
 
     // Load object value data:
-    DynamicObject::Ptr objectData 
+    DynamicObject::Ptr objectData
             = initProperty<DynamicObject*>(JSONKeys::testObject);
 
     // In this test, object data members are silently assigned default values
@@ -49,14 +49,12 @@ FileResource(resourceKey, configFilename)
             {
                 testArray.add((int) arrayItem);
             }
-            /*
-            else
-            {
-                // In this test, invalid array values are simply ignored.
-                // Depending on the circumstances, you may want to show an error
-                // message or push a default value to the array instead.
-            }
-            */
+            // else
+            // {
+            // // In this test, invalid array values are simply ignored.
+            // // Depending on the circumstances, you may want to show an error
+            // // message or push a default value to the array instead.
+            // }
         }
     }
     // Finish loading JSON data. Always call this method exactly once, at the

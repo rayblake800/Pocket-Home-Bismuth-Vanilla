@@ -78,7 +78,7 @@ void GLib::ContextCaller::addAndInitCall(std::function<void()> toCall,
         std::function<void()> onFailure,
         std::mutex* callerMutex, std::condition_variable* callPending)
 {
-    jassert( (callerMutex == nullptr && callPending == nullptr)
+    jassert((callerMutex == nullptr && callPending == nullptr)
             || (callerMutex != nullptr && callPending != nullptr));
     CallData* callData = new CallData;
     callData->caller = this;

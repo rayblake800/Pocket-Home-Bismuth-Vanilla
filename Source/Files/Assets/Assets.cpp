@@ -70,12 +70,6 @@ juce::Image Assets::loadImageAsset
             juce::AffineTransform svgTransform = svgPlacement.getTransformToFit(
                     svgBounds, imgBounds);
             svgDrawable->draw(g, 1.f, svgTransform);
-            /*
-            svgDrawable->drawWithin(g, bounds,
-                    juce::RectanglePlacement::centred, 1.0f);
-            */
-
-
         }
         return image;
 

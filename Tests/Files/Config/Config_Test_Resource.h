@@ -49,7 +49,7 @@ public:
      *
      * @return  The testObject value.
      */
-    ObjectData getTestObject() const; 
+    ObjectData getTestObject() const;
 
     /**
      * @brief  Sets the single object data value stored in this configuration
@@ -69,7 +69,7 @@ private:
     const std::vector<Config::DataKey>& getConfigKeys() const final override;
 
     /**
-     * @brief  Checks if a key string is valid for this FileResource. This 
+     * @brief  Checks if a key string is valid for this FileResource. This
      *         function only needs to be overridden if your config file stores
      *         array or object data values.
      *
@@ -91,5 +91,5 @@ private:
     juce::Array<int> testArray;
 
     // Cached data from the test object value:
-    std::unique_ptr<ObjectData> testObject; 
+    std::unique_ptr<ObjectData> testObject;
 };

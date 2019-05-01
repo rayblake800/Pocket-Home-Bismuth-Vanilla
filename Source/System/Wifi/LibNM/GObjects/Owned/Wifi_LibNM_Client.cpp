@@ -45,7 +45,7 @@ connectionLender(connectionLender)
  */
 static NMClient* toClientPtr(GLib::ObjectPtr& clientPtr)
 {
-    return NM_CLIENT( (GObject*) clientPtr);
+    return NM_CLIENT((GObject*) clientPtr);
 }
 
 
@@ -274,7 +274,7 @@ void Wifi::LibNM::Client::activateConnection(
                 DBG(dbgPrefix << __func__ << ": adding new connection.");
                 nm_client_add_and_activate_connection(
                         toClientPtr(clientDataPtr),
-                        NM_CONNECTION( (GObject*) connectionDataPtr),
+                        NM_CONNECTION((GObject*) connectionDataPtr),
                         NM_DEVICE(wifiDevice.getGObject()),
                         apPath,
                         (NMClientAddActivateFn)
@@ -286,7 +286,7 @@ void Wifi::LibNM::Client::activateConnection(
                 DBG(dbgPrefix << __func__ << ": activating saved connection.");
                 nm_client_activate_connection(
                         toClientPtr(clientDataPtr),
-                        NM_CONNECTION( (GObject*) connectionDataPtr),
+                        NM_CONNECTION((GObject*) connectionDataPtr),
                         NM_DEVICE(wifiDevice.getGObject()),
                         apPath,
                         (NMClientActivateFn)

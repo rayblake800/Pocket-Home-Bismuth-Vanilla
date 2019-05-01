@@ -227,7 +227,7 @@ void GLib::DBus::SignalHandler<class ProxyType>::dBusPropertiesChanged(
         using namespace VariantConverter;
         using juce::String;
         iterateDict(changedProperties,
-        [&sourceProxy, handler] (GVariant* key, GVariant* property)
+        [&sourceProxy, handler](GVariant* key, GVariant* property)
         {
             String propName = getValue<String>(key);
             handler->dBusPropertyChanged(sourceProxy, propName, property);

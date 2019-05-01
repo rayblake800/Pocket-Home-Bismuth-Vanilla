@@ -138,7 +138,7 @@ juce::String Wifi::AP::Data::toString() const
     juce::String dataString = " (";
     dataString += ssid.toString();
     dataString += ", strength ";
-    dataString += juce::String( (int) signalStrength.get());
+    dataString += juce::String((int) signalStrength.get());
     dataString += ", ";
     switch(securityType)
     {

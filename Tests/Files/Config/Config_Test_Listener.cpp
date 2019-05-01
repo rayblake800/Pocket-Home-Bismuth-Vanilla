@@ -4,6 +4,7 @@
 
 Config::Test::Listener::Listener() { }
 
+
 // Gets the last updated key this listener received.
 juce::String Config::Test::Listener::getLastUpdated() const
 {

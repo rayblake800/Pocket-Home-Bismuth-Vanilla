@@ -200,7 +200,7 @@ void Layout::Transition::Animator::transitionOut(
                     animationMilliseconds);
             proxy->setBounds(component->getBounds());
             component->setBounds(destination);
-            component = static_cast<Component*> (proxy);
+            component = static_cast<Component*>(proxy);
         }
         transformBounds(component, destination, animationMilliseconds);
     }
@@ -287,7 +287,7 @@ void Layout::Transition::Animator::transformBounds(
             AnimationProxy* proxy = AnimationProxy::getNewProxy(*toAnimate,
                     animationMilliseconds);
             toAnimate->setBounds(destination);
-            toAnimate = static_cast<Component*> (proxy);
+            toAnimate = static_cast<Component*>(proxy);
         }
         juce::Desktop::getInstance().getAnimator().animateComponent(toAnimate,
                 destination, 1.0, animationMilliseconds, false, 0.2, 1.0);

@@ -21,7 +21,7 @@ GLib::Owned::Object(G_TYPE_DBUS_PROXY)
         return;
     }
 
-    ErrorPtr error([name] (GError* error)
+    ErrorPtr error([name](GError* error)
     {
         DBG(dbgPrefix << __func__ << ": Opening DBus adapter proxy "
                 << name << " failed!");
@@ -76,7 +76,7 @@ GVariant* GLib::DBus::Proxy::callFunction
         return nullptr;
     }
 
-    ErrorPtr defaultError([functionName] (GError* error)
+    ErrorPtr defaultError([functionName](GError* error)
     {
         DBG(dbgPrefix << __func__ << ": calling DBus adapter proxy function "
                 << functionName << " failed!");
@@ -84,7 +84,7 @@ GVariant* GLib::DBus::Proxy::callFunction
     });
 
     result = g_dbus_proxy_call_sync(
-            G_DBUS_PROXY( (GObject*) proxy),
+            G_DBUS_PROXY((GObject*) proxy),
             functionName,
             params,
             G_DBUS_CALL_FLAGS_NONE,
@@ -122,7 +122,7 @@ bool GLib::DBus::Proxy::hasProperty(const char *  propertyName) const
     if (proxy != nullptr)
     {
         VariantPtr property(g_dbus_proxy_get_cached_property
-                (G_DBUS_PROXY( (GObject*) proxy), propertyName));
+                (G_DBUS_PROXY((GObject*) proxy), propertyName));
         return (property != nullptr);
     }
     return false;

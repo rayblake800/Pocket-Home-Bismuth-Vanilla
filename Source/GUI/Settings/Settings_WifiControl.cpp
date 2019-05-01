@@ -166,6 +166,7 @@ void Settings::WifiControl::connectionAuthFailed
     asyncRefresh();
 }
 
+
 // Asynchronously refresh the WifiControl component on the JUCE message thread.
 void Settings::WifiControl::asyncRefresh()
 {

@@ -65,7 +65,7 @@ void Info::BatteryIcon::setStatus
 {
     if (batteryMonitor.isBatteryAvailable())
     {
-        batteryImage.setImageAssetIndex( (int) imageSelection);
+        batteryImage.setImageAssetIndex((int) imageSelection);
         batteryPercent.setText(percent,
                 juce::NotificationType::dontSendNotification);
     }

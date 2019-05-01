@@ -28,7 +28,7 @@ Object(NM_SETTING(nm_setting_wireless_new()), NM_TYPE_SETTING_WIRELESS) { }
  */
 static NMSettingWireless* toNMWireless(GLib::ObjectPtr& settingPtr)
 {
-    return NM_SETTING_WIRELESS( (GObject*) settingPtr);
+    return NM_SETTING_WIRELESS((GObject*) settingPtr);
 }
 
 

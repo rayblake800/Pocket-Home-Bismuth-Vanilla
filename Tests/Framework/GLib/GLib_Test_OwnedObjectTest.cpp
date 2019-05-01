@@ -213,7 +213,7 @@ public:
             RefTest refTest(tempObject, *this);
             tempObject.addListener(*listener);
             listeners.add(listener);
-            return refTest.check( (tempObject.isNull() ? 0 : 2));
+            return refTest.check((tempObject.isNull() ? 0 : 2));
         }));
 
         // Add a random listener to a random test object.
@@ -228,7 +228,7 @@ public:
             {
                 RefTest refTest(tempObject, *this);
                 tempObject.addListener(*listener);
-                return refTest.check( (tempObject.isNull() ? 0 : 2));
+                return refTest.check((tempObject.isNull() ? 0 : 2));
             }
             return true;
         }));
@@ -332,14 +332,14 @@ public:
 
              *testObjects[obj1] = *testObjects[obj2];
             juce::String assignmentText = juce::String::toHexString
-                    ( (unsigned long) testObjects[obj1]);
+                    ((unsigned long) testObjects[obj1]);
             if (testObjects[obj1]->isNull())
             {
                 assignmentText += " (null)";
             }
             assignmentText += " = ";
             assignmentText += juce::String::toHexString
-                    ( (unsigned long) testObjects[obj2]);
+                    ((unsigned long) testObjects[obj2]);
             if (testObjects[obj2]->isNull())
             {
                 assignmentText += " (null)";

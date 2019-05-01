@@ -248,7 +248,7 @@ void Wifi::Signal::DeviceModule::activeConnectionChanged
         if (activeConnection.isNull())
         {
             updateType = EventType::disconnected;
-            static_cast<APInterface::SavedConnection*> (&connectionAP)
+            static_cast<APInterface::SavedConnection*>(&connectionAP)
                     ->setLastConnectionTime
                     (juce::Time::getCurrentTime().toMilliseconds());
         }
@@ -281,7 +281,7 @@ void Wifi::Signal::DeviceModule::activeConnectionChanged
             {
                 updateType = EventType::connected;
                 APInterface::SavedConnection* apUpdateInterface
-                        = static_cast<APInterface::SavedConnection*> (
+                        = static_cast<APInterface::SavedConnection*>(
                                 &connectionAP);
                 apUpdateInterface->setLastConnectionTime
                         (juce::Time::getCurrentTime().toMilliseconds());

@@ -41,7 +41,7 @@ void AppMenu::EntryUpdater::entriesAdded(const juce::StringArray entryFileIDs)
         = loadEntryFiles(entryFileIDs);
     MenuFile appConfig;
     EntryActions::recursiveFolderAction(appConfig.getRootFolderItem(),
-    [this, &newEntries] (MenuItem folder)
+    [this, &newEntries](MenuItem folder)
     {
         EntryActions::addEntryItems(folder, newEntries);
     });
@@ -56,7 +56,7 @@ void AppMenu::EntryUpdater::entriesRemoved(const juce::StringArray entryFileIDs)
             << entryFileIDs.size() << " removed entry files.");
     MenuFile appConfig;
     EntryActions::recursiveFolderAction(appConfig.getRootFolderItem(),
-    [this, &entryFileIDs] (MenuItem folder)
+    [this, &entryFileIDs](MenuItem folder)
     {
         int firstEntryIndex = folder.getMovableChildCount() - 1;
         for (int i = firstEntryIndex; i < folder.getFolderSize(); i++)
@@ -80,12 +80,12 @@ void AppMenu::EntryUpdater::entriesUpdated(const juce::StringArray entryFileIDs)
         = loadEntryFiles(entryFileIDs);
     MenuFile appConfig;
     EntryActions::recursiveFolderAction(appConfig.getRootFolderItem(),
-    [this, &newEntries] (MenuItem folder)
+    [this, &newEntries](MenuItem folder)
     {
         // Find and remove any entries that no longer have matching categories.
         juce::Array<DesktopEntry::EntryFile> toRemove = newEntries;
         EntryActions::foreachMatchingEntry(folder, newEntries,
-        [&toRemove] (const DesktopEntry::EntryFile& matchingEntry)
+        [&toRemove](const DesktopEntry::EntryFile& matchingEntry)
         {
             toRemove.removeAllInstancesOf(matchingEntry);
         });

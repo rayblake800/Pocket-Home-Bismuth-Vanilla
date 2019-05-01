@@ -25,7 +25,7 @@ juce::String GLib::Test::OwnedObject::getTestString() const
     juce::String value;
     if (!isNull())
     {
-        gchar* property = getProperty<char*> (GTEST_OBJECT_TEST_STRING);
+        gchar* property = getProperty<char*>(GTEST_OBJECT_TEST_STRING);
         if (property != nullptr)
         {
             value = juce::CharPointer_UTF8(property);

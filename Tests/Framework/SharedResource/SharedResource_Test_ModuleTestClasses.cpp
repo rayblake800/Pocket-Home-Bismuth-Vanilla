@@ -90,14 +90,14 @@ namespace SharedResource { namespace Modular {
 template<> template<> TestModuleA*
 SharedResource::Modular::Resource<>::getModule<TestModuleA>()
 {
-    TestResource* thisResource = static_cast<TestResource*> (this);
+    TestResource* thisResource = static_cast<TestResource*>(this);
     return thisResource->moduleA;
 }
 
 template<> template<> TestModuleB*
 SharedResource::Modular::Resource<>::getModule<TestModuleB>()
 {
-    TestResource* thisResource = static_cast<TestResource*> (this);
+    TestResource* thisResource = static_cast<TestResource*>(this);
     return thisResource->moduleB;
 }
 
@@ -105,28 +105,28 @@ SharedResource::Modular::Resource<>::getModule<TestModuleB>()
 template<> template<> TestModuleC*
 SharedResource::Modular::Resource<>::getModule<TestModuleC>()
 {
-    TestResource* thisResource = static_cast<TestResource*> (this);
+    TestResource* thisResource = static_cast<TestResource*>(this);
     return thisResource->moduleC;
 }
 
 template<> template<> const TestModuleA*
 SharedResource::Modular::Resource<>::getModule<const TestModuleA>()
 {
-    TestResource* thisResource = static_cast<TestResource*> (this);
+    TestResource* thisResource = static_cast<TestResource*>(this);
     return thisResource->moduleA;
 }
 
 template<> template<> const TestModuleB*
 SharedResource::Modular::Resource<>::getModule<const TestModuleB>()
 {
-    TestResource* thisResource = static_cast<TestResource*> (this);
+    TestResource* thisResource = static_cast<TestResource*>(this);
     return thisResource->moduleB;
 }
 
 template<> template<> const TestModuleC*
 SharedResource::Modular::Resource<>::getModule<const TestModuleC>()
 {
-    TestResource* thisResource = static_cast<TestResource*> (this);
+    TestResource* thisResource = static_cast<TestResource*>(this);
     return thisResource->moduleC;
 }
 

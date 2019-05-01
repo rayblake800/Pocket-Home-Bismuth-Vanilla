@@ -19,7 +19,7 @@ Config::FileResource(resourceKey, configFilename)
     const juce::Array<Identifier> keys = ComponentKeys::components;
     for (const Identifier& key : keys)
     {
-        DynamicObject::Ptr componentData = initProperty<DynamicObject*> (key);
+        DynamicObject::Ptr componentData = initProperty<DynamicObject*>(key);
         componentLayouts[key] = ConfigLayout(componentData);
     }
     loadJSONData();
@@ -44,7 +44,7 @@ void ComponentLayout::JSONResource::writeDataToJSON()
     {
         if (componentLayouts.count(key) != 0)
         {
-            updateProperty<DynamicObject*> (key,
+            updateProperty<DynamicObject*>(key,
                     componentLayouts[key].getDynamicObject());
         }
     }

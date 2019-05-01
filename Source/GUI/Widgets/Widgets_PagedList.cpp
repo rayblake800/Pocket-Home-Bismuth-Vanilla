@@ -41,7 +41,7 @@ void Widgets::PagedList::setPageIndex
         return;
     }
     const Transition animationType = animate ?
-        ( (newIndex > pageIndex) ? Transition::moveUp : Transition::moveDown)
+        ((newIndex > pageIndex) ? Transition::moveUp : Transition::moveDown)
         : Transition::none;
     const unsigned int animationDuration = animate ? duration : 0;
     pageIndex = newIndex;
@@ -100,7 +100,7 @@ unsigned int Widgets::PagedList::getPageCount() const
 {
     const unsigned int listSize = getListSize();
     unsigned int pageCount = listSize / itemsPerPage;
-    if ( (listSize % itemsPerPage) > 0)
+    if ((listSize % itemsPerPage) > 0)
     {
         pageCount++;
     }
@@ -133,7 +133,7 @@ void Widgets::PagedList::refreshListContent
     using namespace Layout::Group;
     RelativeLayout layout(layoutManager.getLayout());
     bool changesFound = false;
-    
+
     for (int i = 0; i < itemsPerPage; i++)
     {
         int itemIndex = i + pageIndex * itemsPerPage;
@@ -160,7 +160,7 @@ void Widgets::PagedList::refreshListContent
         changesFound = true;
     }
 
-    if (changesFound || (animateUnmoved 
+    if (changesFound || (animateUnmoved
                 && (transition != Layout::Transition::Type::none)
                 && (duration > 0)))
     {

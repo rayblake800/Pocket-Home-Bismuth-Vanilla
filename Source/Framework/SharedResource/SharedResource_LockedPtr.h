@@ -48,7 +48,7 @@ public:
      */
     ResourceType* operator->() const
     {
-        return static_cast<ResourceType*> (getInstance());
+        return static_cast<ResourceType*>(getInstance());
     }
 };
 

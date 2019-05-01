@@ -106,7 +106,7 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     {
         DBG(dbgPrefix << __func__
                 << ": Main window focused, enabling focus tracking:");
-        static_cast<Windows::MainWindow*> (homeWindow.get())
+        static_cast<Windows::MainWindow*>(homeWindow.get())
                 ->startFocusTracking();
         #ifdef INCLUDE_TESTING
         if (runTests)
@@ -140,7 +140,7 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
         xWindows.printWindowTree();
         #endif
 
-        static_cast<Windows::MainWindow*> (homeWindow.get())
+        static_cast<Windows::MainWindow*>(homeWindow.get())
                 ->startFocusTracking();
     });
 }

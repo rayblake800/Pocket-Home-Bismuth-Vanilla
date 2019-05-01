@@ -79,7 +79,7 @@ void Widgets::Switch::resized()
     if (ratio > widthToHeightRatio) // too wide, reduce width
     {
         width = height * widthToHeightRatio;
-        backgroundShape.reduce( (backgroundShape.getWidth() - width) / 2, 0);
+        backgroundShape.reduce((backgroundShape.getWidth() - width) / 2, 0);
     }
     else if (ratio < widthToHeightRatio) // too tall, reduce height
     {

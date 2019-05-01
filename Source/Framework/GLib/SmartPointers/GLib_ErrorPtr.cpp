@@ -8,7 +8,7 @@ GLib::ErrorPtr::ErrorPtr(std::function<void(GError*)> errorHandler) :
 
 // Creates an error pointer to manage an existing error value.
 GLib::ErrorPtr::ErrorPtr(GError* error) : error(error),
-errorHandler([] (GError* error)
+errorHandler([](GError* error)
 {
     DBG("Error: " << juce::String(error->message));
 }) { }

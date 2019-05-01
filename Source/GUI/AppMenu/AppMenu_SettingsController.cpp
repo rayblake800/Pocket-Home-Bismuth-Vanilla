@@ -29,7 +29,7 @@ public:
 
     // The AppMenu format type:
     const AppMenu::Format formatType;
-    // The localized format name key: 
+    // The localized format name key:
     const juce::Identifier localeKey;
     // The format's menuFormatPicker ComboBox ID:
     const int menuID;
@@ -83,6 +83,7 @@ namespace TextKey
     static const juce::Identifier menuColumns   = "menuColumns";
     static const juce::Identifier menuRows      = "menuRows";
 }
+
 
 // A function that returns whether a given FormatKey matches some criteria.
 typedef std::function<bool(const FormatKey&)> FormatKeyCheck;
@@ -175,7 +176,7 @@ void AppMenu::SettingsController::updateForCurrentSettings()
     }
     else
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Failed to find format key for current menu format.");
     }
     updateCountersForSelectedFormat();

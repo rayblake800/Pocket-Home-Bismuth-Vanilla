@@ -35,7 +35,7 @@ int Widgets::FocusingPagedList::getSelectedIndex() const
 // Sets the selected list index.
 void Widgets::FocusingPagedList::setSelectedIndex(const int index)
 {
-    if ( (index >= -1) && (index < (int) getListSize())
+    if ((index >= -1) && (index < (int) getListSize())
             && (index != selectedIndex))
     {
         selectedIndex = index;
@@ -60,7 +60,7 @@ void Widgets::FocusingPagedList::deselect()
 juce::Component* Widgets::FocusingPagedList::updateListItem
 (juce::Component* listItem, const unsigned int index)
 {
-    juce::Button* listButton = static_cast<juce::Button*> (listItem);
+    juce::Button* listButton = static_cast<juce::Button*>(listItem);
 
     if (selectedIndex == index)
     {
@@ -74,7 +74,7 @@ juce::Component* Widgets::FocusingPagedList::updateListItem
     {
         listButton->addListener(&listButtonHandler);
     }
-    return static_cast<juce::Component*> (listButton);
+    return static_cast<juce::Component*>(listButton);
 }
 
 
@@ -95,7 +95,7 @@ void Widgets::FocusingPagedList::ListButtonHandler::buttonClicked
 (juce::Button* button)
 {
     const int buttonIndex
-            = list.getListItemIndex(static_cast<juce::Component*> (button));
+            = list.getListItemIndex(static_cast<juce::Component*>(button));
     // The button must be a valid list item.
     jassert(buttonIndex >= 0);
 

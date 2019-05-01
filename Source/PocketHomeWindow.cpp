@@ -40,7 +40,7 @@ loginScreen([this](){ setContentNonOwned(&pageStack, true); })
     {
         setContentNonOwned(&pageStack, true);
     }
-    pageStack.setRootPage( (Page::Interface::Component*)
+    pageStack.setRootPage((Page::Interface::Component*)
             pageFactory.createHomePage());
 }
 
@@ -50,7 +50,7 @@ PocketHomeWindow* PocketHomeWindow::getOpenWindow()
 {
     juce::Component* rootComponent
             = juce::Desktop::getInstance().getComponent(0);
-    return dynamic_cast<PocketHomeWindow*> (rootComponent);
+    return dynamic_cast<PocketHomeWindow*>(rootComponent);
 }
 
 

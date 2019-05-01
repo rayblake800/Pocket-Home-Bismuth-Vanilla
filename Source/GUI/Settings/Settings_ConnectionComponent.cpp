@@ -125,7 +125,7 @@ void Settings::ConnectionComponent::ConnectionButton::paintButton
             juce::Justification::centred);
 
     g.setColour(findColour(juce::TextButton::textColourOnId));
-    setAlpha( (isButtonDown ? buttonDownAlpha : buttonUpAlpha));
+    setAlpha((isButtonDown ? buttonDownAlpha : buttonUpAlpha));
 
     if (isEnabled())
     {

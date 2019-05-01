@@ -31,7 +31,7 @@ Wifi::LibNM::Connection::Connection() :
  */
 static NMConnection* toNMConnection(GLib::ObjectPtr& connectionPtr)
 {
-    return NM_CONNECTION( (GObject*) connectionPtr);
+    return NM_CONNECTION((GObject*) connectionPtr);
 }
 
 
@@ -68,7 +68,7 @@ bool Wifi::LibNM::Connection::isCompatibleAccessPoint
         return false;
     }
     return nm_access_point_connection_valid(
-            NM_ACCESS_POINT( (GObject*) accessPointPtr),
+            NM_ACCESS_POINT((GObject*) accessPointPtr),
             toNMConnection(connectionPtr));
 }
 

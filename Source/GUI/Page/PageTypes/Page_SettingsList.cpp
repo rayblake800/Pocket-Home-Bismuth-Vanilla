@@ -102,7 +102,7 @@ void Page::SettingsList::pageRevealedOnStack()
 void Page::SettingsList::PageListener::buttonClicked(juce::Button * button)
 {
     using juce::TextButton;
-    TextButton * textButton = dynamic_cast<TextButton*> (button);
+    TextButton * textButton = dynamic_cast<TextButton*>(button);
     if (textButton == nullptr)
     {
         DBG(dbgPrefix << "PageListener::" << __func__ << ": invalid button!");
@@ -154,7 +154,7 @@ juce::Component* Page::SettingsList::PageList::updateListItem
     }
     else
     {
-        textButton = static_cast<juce::TextButton*> (listItem);
+        textButton = static_cast<juce::TextButton*>(listItem);
     }
     textButton->setButtonText(title);
     textButton->setName(title);

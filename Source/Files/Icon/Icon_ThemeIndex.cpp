@@ -47,14 +47,14 @@ cacheFile(themeDir.getFullPathName())
     {
         {
             "Name",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->name = val;
             }
         },
         {
             "Directories",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 StringArray dirNames = StringArray::fromTokens(val, ",", "");
                 for (const String& dir : dirNames)
@@ -65,70 +65,70 @@ cacheFile(themeDir.getFullPathName())
         },
         {
             "Comment",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->comment = val;
             }
         },
         {
             "Inherits",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->inheritedThemes = StringArray::fromTokens(val, ",", "");
             }
         },
         {
             "Hidden",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->hidden = (val == "true");
             }
         },
         {
             "Example",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->example = val;
             }
         },
         {
             "Size",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].size = val.getIntValue();
             }
         },
         {
             "Scale",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].scale = val.getIntValue();
             }
         },
         {
             "MaxSize",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].maxSize = val.getIntValue();
             }
         },
         {
             "MinSize",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].minSize = val.getIntValue();
             }
         },
         {
             "Threshold",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 self->directories[sectionName].threshold = val.getIntValue();
             }
         },
         {
             "Context",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 static const std::map<String, Context> contexts =
                 {
@@ -154,7 +154,7 @@ cacheFile(themeDir.getFullPathName())
         },
         {
             "Type",
-            [] (ThemeIndex* self, String& val, String& sectionName)
+            [](ThemeIndex* self, String& val, String& sectionName)
             {
                 static const std::map<String, SizeType> types =
                 {

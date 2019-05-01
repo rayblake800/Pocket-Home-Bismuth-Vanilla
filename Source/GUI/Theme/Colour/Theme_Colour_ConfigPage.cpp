@@ -24,7 +24,7 @@ colourList("colourList", &listModel)
     setBackButton(BackButtonType::left);
     setLayout(layout);
     colourList.setOutlineThickness(2);
-    colourPicker.setSelectionCallback([this] (juce::Colour newColour)
+    colourPicker.setSelectionCallback([this](juce::Colour newColour)
     {
         juce::SparseSet<int> selected = colourList.getSelectedRows();
         if (!selected.isEmpty())
@@ -114,14 +114,14 @@ void ColourTheme::ConfigPage::ColourListModel::paintListBoxItem(
     graphics.setColour(colours[rowNumber]);
     graphics.fillRect(fillArea);
     fillArea.reduce(height / 5, height / 5);
-    graphics.setColour( (colours[rowNumber].getAlpha() < 0x88) ?
+    graphics.setColour((colours[rowNumber].getAlpha() < 0x88) ?
             config.getColour(Widgets::ColourPicker::checkerboardLight)
                     .contrasting()
             : colours[rowNumber].contrasting());
     if (rowIsSelected)
     {
         graphics.fillRoundedRectangle(fillArea.toFloat(), textHeight / 5);
-        graphics.setColour( (colours[rowNumber].getAlpha() < 0x88) ?
+        graphics.setColour((colours[rowNumber].getAlpha() < 0x88) ?
                 config.getColour(Widgets::ColourPicker::checkerboardLight)
                 : colours[rowNumber]);
     }

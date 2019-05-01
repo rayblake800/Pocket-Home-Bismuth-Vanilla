@@ -61,7 +61,7 @@ bool WifiNMSettings::WirelessSecurity::addWPASettings(const juce::String psk)
 static NMSettingWirelessSecurity* toNMSecuritySettings
 (GLib::ObjectPtr& settingPtr)
 {
-    return NM_SETTING_WIRELESS_SECURITY( (GObject*) settingPtr);
+    return NM_SETTING_WIRELESS_SECURITY((GObject*) settingPtr);
 }
 
 

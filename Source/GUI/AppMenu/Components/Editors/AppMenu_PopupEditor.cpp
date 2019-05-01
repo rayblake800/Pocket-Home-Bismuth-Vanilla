@@ -26,7 +26,7 @@ AppMenu::PopupEditor::PopupEditor(
         std::function<void() > onConfirm,
         bool showCategoryList,
         bool showCommandField) :
-Widgets::PopupEditor([this, onConfirm] (Widgets::PopupEditor* e)
+Widgets::PopupEditor([this, onConfirm](Widgets::PopupEditor* e)
 {
     commitEdits();
     onConfirm();
@@ -195,7 +195,7 @@ void AppMenu::PopupEditor::loadIconPreview()
         iconLoader.cancelImageRequest(iconRequestID);
     }
     iconRequestID = iconLoader.loadIcon(iconName, iconPreview.getWidth(),
-        [this] (Image iconImg)
+        [this](Image iconImg)
     {
         iconRequestID = 0;
         iconPreview.setImage(iconImg);
@@ -217,7 +217,7 @@ void AppMenu::PopupEditor::editorButtonClicked(juce::Button* button)
     if (button == &categoryEditButton)
     {
         categoryEditor.reset(new CategoryEditor(categories,
-                [this] (StringArray newCategories)
+                [this](StringArray newCategories)
         {
             categories = newCategories;
         }));

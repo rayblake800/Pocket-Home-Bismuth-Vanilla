@@ -25,7 +25,7 @@ Object(NM_TYPE_SETTING_CONNECTION) { }
  */
 static NMSettingConnection* toNMSettingConnection(GLib::ObjectPtr& settingPtr)
 {
-    return NM_SETTING_CONNECTION( (GObject *) settingPtr);
+    return NM_SETTING_CONNECTION((GObject *) settingPtr);
 }
 
 

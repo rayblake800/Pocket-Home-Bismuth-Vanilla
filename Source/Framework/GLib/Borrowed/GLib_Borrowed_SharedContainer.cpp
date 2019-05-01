@@ -2,7 +2,7 @@
 
 // Creates a SharedContainer holding GObject* data.
 GLib::Borrowed::SharedContainer::SharedContainer(GObject* object) :
-Nullable<GObject*> (object) { }
+Nullable<GObject*>(object) { }
 
 
 // Casts the SharedContainer directly to its stored GObject* value.

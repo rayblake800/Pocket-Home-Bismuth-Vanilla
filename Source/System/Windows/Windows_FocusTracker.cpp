@@ -26,7 +26,7 @@ void Windows::FocusTracker::setFocusState
         if (notifyListeners)
         {
             foreachHandler<FocusInterface>(
-            [this] (FocusInterface* focusListener)
+            [this](FocusInterface* focusListener)
             {
                 if (isFocused)
                 {

@@ -36,7 +36,7 @@ public:
      *                      object is set. If omitted, errors will just be
      *                      printed as debug output.
      */
-    ErrorPtr(std::function<void(GError*)> errorHandler = [] (GError* error)
+    ErrorPtr(std::function<void(GError*)> errorHandler = [](GError* error)
             {
                 DBG("Error: " << juce::String(error->message));
             });

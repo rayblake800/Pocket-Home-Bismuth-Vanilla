@@ -70,7 +70,7 @@ void Password::RemovalController::buttonClicked(juce::Button* button)
                     localeText(TextKey::passwordRemoved),
                     "",
                     nullptr,
-                    juce::ModalCallbackFunction::create([this] (int i)
+                    juce::ModalCallbackFunction::create([this](int i)
                     {
                         if (onRemoveCallback)
                         {

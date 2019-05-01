@@ -23,7 +23,7 @@ juce::Rectangle<float> AppMenu::Paged::MenuButton::findTitleBounds() const
     const int paddingSize = paddingFraction * getHeight();
     const int width = std::min(getWidth() - paddingSize * 2,
             getTitleWidth());
-    return juce::Rectangle<float>( (getWidth() - width) / 2,
+    return juce::Rectangle<float>((getWidth() - width) / 2,
             getHeight() - textHeight - paddingSize, width, textHeight);
 }
 
@@ -40,7 +40,7 @@ juce::Rectangle<float> AppMenu::Paged::MenuButton::findIconBounds() const
             - paddingSize * 2;
 
 
-    return juce::Rectangle<float>( (getWidth() - iconSize) / 2, paddingSize,
+    return juce::Rectangle<float>((getWidth() - iconSize) / 2, paddingSize,
             iconSize, iconSize);
 }
 

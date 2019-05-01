@@ -156,15 +156,15 @@ std::map<juce::String, juce::String> Icon::Cache::lookupIcon
             {
                 juce::uint16 iconFlags = read16(img + 2);
                 String extension;
-                if ( (iconFlags & pngExtensionFlag) == pngExtensionFlag)
+                if ((iconFlags & pngExtensionFlag) == pngExtensionFlag)
                 {
                     extension = ".png";
                 }
-                else if ( (iconFlags & xpmExtensionFlag) == xpmExtensionFlag)
+                else if ((iconFlags & xpmExtensionFlag) == xpmExtensionFlag)
                 {
                     extension = ".xpm";
                 }
-                else if ( (iconFlags & svgExtensionFlag) == svgExtensionFlag)
+                else if ((iconFlags & svgExtensionFlag) == svgExtensionFlag)
                 {
                     extension = ".svg";
                 }
@@ -210,7 +210,7 @@ juce::uint16 Icon::Cache::read16(juce::uint32 offset) const
         return 0;
     }
     uint16 value = * reinterpret_cast<uint16*>
-            (reinterpret_cast<char*> (fileMap) + offset);
+            (reinterpret_cast<char*>(fileMap) + offset);
     return bigEndian ? value : htons(value);
 }
 
@@ -228,7 +228,7 @@ juce::uint32 Icon::Cache::read32(juce::uint32 offset) const
         return 0;
     }
     uint32 value = * reinterpret_cast<uint32*>
-            (reinterpret_cast<char*> (fileMap) + offset);
+            (reinterpret_cast<char*>(fileMap) + offset);
     return bigEndian ? value : htonl(value);
 }
 
@@ -246,14 +246,14 @@ juce::String Icon::Cache::readString(juce::uint32 offset) const
         return String();
     }
     int length = 0;
-    while (* (reinterpret_cast<char*> (fileMap) + offset + length) != '\0')
+    while (* (reinterpret_cast<char*>(fileMap) + offset + length) != '\0')
     {
         length++;
-        if ( (length + offset) >= fileLen)
+        if ((length + offset) >= fileLen)
         {
             jassertfalse;
             return String();
         }
     }
-    return String(CharPointer_UTF8( (char*) fileMap + offset));
+    return String(CharPointer_UTF8((char*) fileMap + offset));
 }

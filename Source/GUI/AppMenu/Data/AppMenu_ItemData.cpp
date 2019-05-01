@@ -56,7 +56,7 @@ bool AppMenu::ItemData::insertChild
     {
         children[i]->index++;
     }
-    foreachListener([&childIndex] (Listener* listener)
+    foreachListener([&childIndex](Listener* listener)
     {
         listener->childAdded(childIndex);
     });
@@ -77,7 +77,7 @@ bool AppMenu::ItemData::remove(const bool updateSource)
     {
         parent->children[i]->index--;
     }
-    parent->foreachListener([this] (Listener* listener)
+    parent->foreachListener([this](Listener* listener)
     {
         listener->childRemoved(index);
     });
@@ -97,7 +97,7 @@ bool AppMenu::ItemData::swapChildren(const int childIdx1, const int childIdx2)
 {
     const int maxIndex = getFolderSize() - 1;
     const int maxMovable = getMovableChildCount() - 1;
-    if ( (childIdx1 < 0 && childIdx2 < 0)
+    if ((childIdx1 < 0 && childIdx2 < 0)
             || (childIdx1 > maxIndex || childIdx2 > maxIndex))
     {
         return false;
@@ -105,7 +105,7 @@ bool AppMenu::ItemData::swapChildren(const int childIdx1, const int childIdx2)
     children.swap(childIdx1, childIdx2);
     children[childIdx1]->index = childIdx1;
     children[childIdx2]->index = childIdx2;
-    foreachListener([&childIdx1, &childIdx2] (Listener* listener)
+    foreachListener([&childIdx1, &childIdx2](Listener* listener)
     {
         listener->childrenSwapped(childIdx1, childIdx2);
     });
@@ -171,7 +171,7 @@ void AppMenu::ItemData::removeListener(Listener* toRemove)
 // Signal to all listeners tracking this ItemData that the item has changed.
 void AppMenu::ItemData::signalDataChanged(const DataField changedField)
 {
-    foreachListener([changedField] (Listener* listener)
+    foreachListener([changedField](Listener* listener)
     {
         listener->dataChanged(changedField);
     });

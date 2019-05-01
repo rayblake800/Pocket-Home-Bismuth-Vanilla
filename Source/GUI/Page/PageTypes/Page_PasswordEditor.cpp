@@ -89,6 +89,6 @@ updateController(currentPasswordField, newPasswordField, confirmPasswordField,
     currentPasswordField.setVisible(passwordIsSet);
 
     titleLabel.setJustificationType(juce::Justification::centred);
-    titleLabel.setText(localeText(passwordIsSet ? TextKey::changeTitle 
+    titleLabel.setText(localeText(passwordIsSet ? TextKey::changeTitle
             : TextKey::setTitle), juce::NotificationType::dontSendNotification);
 }

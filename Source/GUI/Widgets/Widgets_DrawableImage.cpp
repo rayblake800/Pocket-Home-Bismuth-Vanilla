@@ -59,11 +59,11 @@ placement(placement)
     if (defaultColours.isEmpty())
     {
         Theme::Colour::ConfigFile colourConfig;
-        defaultColours.add(colourConfig.getColour( (int) imageColour0Id));
-        defaultColours.add(colourConfig.getColour( (int) imageColour1Id));
-        defaultColours.add(colourConfig.getColour( (int) imageColour2Id));
-        defaultColours.add(colourConfig.getColour( (int) imageColour3Id));
-        defaultColours.add(colourConfig.getColour( (int) imageColour4Id));
+        defaultColours.add(colourConfig.getColour((int) imageColour0Id));
+        defaultColours.add(colourConfig.getColour((int) imageColour1Id));
+        defaultColours.add(colourConfig.getColour((int) imageColour2Id));
+        defaultColours.add(colourConfig.getColour((int) imageColour3Id));
+        defaultColours.add(colourConfig.getColour((int) imageColour4Id));
     }
 }
 

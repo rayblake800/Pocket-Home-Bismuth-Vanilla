@@ -39,7 +39,7 @@ protected:
             = [](){ return new ResourceType(); }) :
     Reference(ResourceType::resourceKey, [createResource]()->Instance*
     {
-        return static_cast<Instance*> (createResource());
+        return static_cast<Instance*>(createResource());
     }),
     resourceKey(ResourceType::resourceKey) { }
 
@@ -62,7 +62,7 @@ protected:
                 = [](){ return new ResourceType(); }) :
     Reference(resourceKey, [createResource]()->Instance*
     {
-        return static_cast<Instance*> (createResource());
+        return static_cast<Instance*>(createResource());
     }),
     resourceKey(resourceKey) { }
 

@@ -18,7 +18,7 @@ Config::FileResource(resourceKey, configFilename)
     const juce::Array<Identifier> keys = JSONKeys::components;
     for (const Identifier& key : keys)
     {
-        DynamicObject::Ptr listData = initProperty<DynamicObject*> (key);
+        DynamicObject::Ptr listData = initProperty<DynamicObject*>(key);
         assetLists[key] = AssetList(listData);
     }
     loadJSONData();
@@ -43,7 +43,7 @@ void ThemeImages::JSONResource::writeDataToJSON()
     {
         if (assetLists.count(key) != 0)
         {
-            updateProperty<DynamicObject*> (key,
+            updateProperty<DynamicObject*>(key,
                     assetLists[key].getDynamicObject());
         }
     }

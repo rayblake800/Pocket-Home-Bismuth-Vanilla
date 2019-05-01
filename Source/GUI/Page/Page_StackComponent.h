@@ -105,7 +105,7 @@ private:
             const Layout::Transition::Type transition,
             const int duration,
             const std::function<void(Interface::Component*) > postAnimation
-                    = [] (Interface::Component* page) { },
+                    = [](Interface::Component* page) { },
             const bool addingPage = true);
 
 

@@ -178,7 +178,7 @@ void Process::Launched::activateWindow()
 
     Windows::XInterface xWindows;
     juce::Array<Window> appWindows = xWindows.getMatchingWindows(
-            [this, &xWindows] (Window window)
+            [this, &xWindows](Window window)
     {
         return xWindows.getWindowPID(window) == processId
                 && xWindows.getWindowName(window).isNotEmpty()

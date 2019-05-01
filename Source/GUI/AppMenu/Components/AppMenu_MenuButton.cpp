@@ -132,7 +132,7 @@ void AppMenu::MenuButton::loadIcon()
         iconCallbackID = iconLoader.loadIcon(
                 getMenuItem().getIconName(),
                 iconBounds.toNearestInt().getWidth(),
-                [this] (Image iconImg)
+                [this](Image iconImg)
                 {
                     iconCallbackID = 0;
                     icon = iconImg;
@@ -164,7 +164,7 @@ void AppMenu::MenuButton::paintButton
     using juce::Rectangle;
     using juce::RectanglePlacement;
     Rectangle<int> border = getLocalBounds();
-    if ( (iconBounds.isEmpty() || titleBounds.isEmpty()) &&
+    if ((iconBounds.isEmpty() || titleBounds.isEmpty()) &&
             !border.isEmpty())
     {
         resized();

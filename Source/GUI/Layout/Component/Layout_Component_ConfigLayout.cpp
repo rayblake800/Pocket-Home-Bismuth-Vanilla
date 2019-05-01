@@ -132,7 +132,7 @@ juce::DynamicObject* Layout::Component::ConfigLayout::getDynamicObject() const
 float Layout::Component::ConfigLayout::getRelativeValue
 (const ValueType type, const float defaultValue) const
 {
-    const LayoutValue& v = layoutValues[ (int) type];
+    const LayoutValue& v = layoutValues[(int) type];
     return v.defined ? v.value : defaultValue;
 }
 
@@ -141,7 +141,7 @@ float Layout::Component::ConfigLayout::getRelativeValue
 int Layout::Component::ConfigLayout::getAbsoluteValue
 (const ValueType type, const int defaultValue) const
 {
-    const LayoutValue& v = layoutValues[ (int) type];
+    const LayoutValue& v = layoutValues[(int) type];
     return v.defined ? (v.value * getWindowDimension(type)) : defaultValue;
 }
 

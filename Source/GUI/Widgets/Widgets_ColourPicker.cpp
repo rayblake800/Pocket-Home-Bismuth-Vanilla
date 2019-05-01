@@ -38,7 +38,7 @@ Widgets::ColourPicker::ColourPicker
 (const int numSavedColours, const juce::Colour colour):
 Locale::TextUser(localeClassKey),
 numSavedColours(numSavedColours),
-selectionCallback([] (juce::Colour c){}),
+selectionCallback([](juce::Colour c){}),
 selectedColour(colour)
 {
     using namespace Layout::Group;
@@ -181,7 +181,7 @@ void Widgets::ColourPicker::sliderValueChanged(juce::Slider* slider)
     uint32 colourValue = 0;
     for (int i = 0; i < 4; i++)
     {
-        colourValue += ( (uint32) colourSliders[i].getValue()
+        colourValue += ((uint32) colourSliders[i].getValue()
                  * (sliderColourMasks[i] & 0x01010101));
     }
     selectedColour = Colour(colourValue);

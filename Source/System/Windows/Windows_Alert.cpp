@@ -9,7 +9,7 @@ void Windows::Alert::confirmAction(
 {
     juce::NativeMessageBox::showOkCancelBox(juce::AlertWindow::QuestionIcon,
             title, message, nullptr,
-            juce::ModalCallbackFunction::create([onConfirm] (int response)
+            juce::ModalCallbackFunction::create([onConfirm](int response)
             {
                 if (response == 1)
                 {

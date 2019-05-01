@@ -22,7 +22,7 @@ public:
     ObjectData(const int testNum, const bool testBool);
 
     virtual ~ObjectData() { }
-    
+
     /**
      * @brief  Gets the custom object's stored integer value.
      *
@@ -44,7 +44,7 @@ public:
      *
      * @return     Whether both objects have the same stored number and bool.
      */
-    bool operator==(const ObjectData& rhs) const;
+    bool operator== (const ObjectData& rhs) const;
 
 private:
     const int testNum;

@@ -73,7 +73,7 @@ GLib::WeakRef& GLib::WeakRef::operator= (const GObject* rhs)
     }
     else
     {
-        g_weak_ref_set(&weakRef, const_cast<GObject*> (rhs));
+        g_weak_ref_set(&weakRef, const_cast<GObject*>(rhs));
     }
     return *this;
 }
@@ -115,7 +115,7 @@ GObject* GLib::WeakRef::getObject() const
     }
     else
     {
-        gpointer object = g_weak_ref_get(const_cast<GWeakRef*> (&weakRef));
+        gpointer object = g_weak_ref_get(const_cast<GWeakRef*>(&weakRef));
         return (object == NULL || !G_IS_OBJECT(object))
             ? nullptr : G_OBJECT(object);
     }
@@ -129,7 +129,7 @@ void GLib::WeakRef::initRef(const GObject* initialValue)
     const juce::ScopedWriteLock initLock(referenceLock);
     if (!refInitialized && !refCleared)
     {
-        g_weak_ref_init(&weakRef, const_cast<GObject*> (initialValue));
+        g_weak_ref_init(&weakRef, const_cast<GObject*>(initialValue));
         refInitialized = true;
     }
 }

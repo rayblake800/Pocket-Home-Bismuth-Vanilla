@@ -112,7 +112,7 @@ Wifi::LibNM::AccessPoint Wifi::APList::Module::getStrongestNMAccessPoint
     ASSERT_NM_CONTEXT;
     juce::Array<LibNM::AccessPoint>& apList
             = nmAccessPoints[accessPoint.getHashValue()];
-    apList.removeIf([] (LibNM::AccessPoint ap)
+    apList.removeIf([](LibNM::AccessPoint ap)
     {
         return ap.isNull();
     });
@@ -154,7 +154,7 @@ juce::Array<Wifi::LibNM::AccessPoint> Wifi::APList::Module::getNMAccessPoints
     ASSERT_NM_CONTEXT;
     juce::Array<LibNM::AccessPoint>& matchingAPs
             = nmAccessPoints[accessPoint.getHashValue()];
-    matchingAPs.removeIf([] (LibNM::AccessPoint ap)
+    matchingAPs.removeIf([](LibNM::AccessPoint ap)
     {
         return ap.isNull();
     });
@@ -197,7 +197,7 @@ void Wifi::APList::Module::addAccessPoint(const LibNM::AccessPoint addedAP)
             = (newSignalStrength > wifiAP.getSignalStrength());
     if (newSignalStrength > wifiAP.getSignalStrength())
     {
-        static_cast<APInterface::SignalStrength*> (&wifiAP)->setSignalStrength
+        static_cast<APInterface::SignalStrength*>(&wifiAP)->setSignalStrength
                 (newSignalStrength);
     }
 
@@ -300,7 +300,7 @@ void Wifi::APList::Module::removeInvalidatedAccessPoints()
     ASSERT_NM_CONTEXT;
     for (auto& iter : nmAccessPoints)
     {
-        iter.second.removeIf([] (LibNM::AccessPoint& nmAP)->bool
+        iter.second.removeIf([](LibNM::AccessPoint& nmAP)->bool
         {
             return nmAP.isNull();
         });
@@ -320,7 +320,7 @@ void Wifi::APList::Module::updateAPIfLost(AccessPoint toCheck)
     LibNM::APHash apHash = toCheck.getHashValue();
     if (nmAccessPoints[apHash].isEmpty())
     {
-        static_cast<APInterface::SignalStrength*> (&toCheck)
+        static_cast<APInterface::SignalStrength*>(&toCheck)
                 ->setSignalStrength(0);
         foreachModuleHandler<UpdateInterface>([toCheck]
                 (UpdateInterface* updateHandler)

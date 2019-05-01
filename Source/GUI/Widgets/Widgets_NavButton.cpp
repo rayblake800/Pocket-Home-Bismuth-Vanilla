@@ -18,7 +18,7 @@ Theme::Image::Component<DrawableImageButton>(
 boundsManager(this, getEdgeComponentKey(edge)),
 edge(edge)
 {
-    setImageAssetIndex( (int) edge);
+    setImageAssetIndex((int) edge);
     setWantsKeyboardFocus(false);
 }
 

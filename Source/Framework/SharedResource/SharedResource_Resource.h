@@ -80,7 +80,7 @@ protected:
         foreachReference([&handlerAction, &alreadyActedOn]
                 (ReferenceInterface* reference)
         {
-            HandlerType* handler = dynamic_cast<HandlerType*> (reference);
+            HandlerType* handler = dynamic_cast<HandlerType*>(reference);
             if (handler != nullptr && !alreadyActedOn.contains(handler))
             {
                 handlerAction(handler);

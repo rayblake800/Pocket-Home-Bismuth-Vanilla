@@ -109,7 +109,7 @@ void AppMenu::Scrolling::InputHandler::menuItemClicked
 {
     if (!clickedButton->isSelected())
     {
-        FolderComponent* parentFolder = static_cast<FolderComponent*> (
+        FolderComponent* parentFolder = static_cast<FolderComponent*>(
                 clickedButton->getParentComponent());
         parentFolder->setSelectedIndex(
                 clickedButton->getMenuItem().getIndex());

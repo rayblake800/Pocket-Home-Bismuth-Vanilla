@@ -110,7 +110,7 @@ static Settings::WifiList::ListButton* getOrCreateListButton
     }
     else
     {
-        return static_cast<ListButton*> (button);
+        return static_cast<ListButton*>(button);
     }
 }
 
@@ -202,7 +202,7 @@ void Settings::WifiList::ListComponent::updateList()
         visibleAPs.remove(invalidSelectionIndex);
         invalidSelectionIndex = -1;
     }
-    visibleAPs.removeIf([this] (Wifi::AccessPoint listAP)
+    visibleAPs.removeIf([this](Wifi::AccessPoint listAP)
     {
         return listAP.isNull();
     });

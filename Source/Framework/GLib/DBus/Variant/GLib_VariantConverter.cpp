@@ -16,7 +16,7 @@ GVariant* GLib::VariantConverter::unpack(GVariant* container)
         GVariantIter arrayIter;
         g_variant_iter_init(&arrayIter, container);
         GVariant * child = nullptr;
-        if ( (child = g_variant_iter_next_value(&arrayIter)))
+        if ((child = g_variant_iter_next_value(&arrayIter)))
         {
             return child;
         }
@@ -339,7 +339,7 @@ GValue GLib::VariantConverter::getGValue(GVariant* variant)
         }
         case arrayType:
         {
-            GArray* array = getValue<GArray*> (variant);
+            GArray* array = getValue<GArray*>(variant);
             if (array != nullptr)
             {
                 g_value_take_boxed(&value, array);
@@ -470,7 +470,7 @@ juce::String GLib::VariantConverter::toString(GVariant* variant)
         case dictType:
         {
             String dictStr = "";
-            iterateDict(variant, [&dictStr] (GVariant * key, GVariant * val)
+            iterateDict(variant, [&dictStr](GVariant * key, GVariant * val)
             {
                 if (dictStr.isEmpty())
                 {
@@ -536,7 +536,7 @@ void GLib::VariantConverter::iterateArray(GVariant* array,
     GVariantIter arrayIter;
     g_variant_iter_init(&arrayIter, array);
     GVariant * child = nullptr;
-    while ( (child = g_variant_iter_next_value(&arrayIter)))
+    while ((child = g_variant_iter_next_value(&arrayIter)))
     {
         arrayCall(child);
         g_variant_unref(child);

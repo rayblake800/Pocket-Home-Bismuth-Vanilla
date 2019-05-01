@@ -52,7 +52,7 @@ void Page::StackComponent::popPage(const Layout::Transition::Type transition)
     {
         Interface::Component* page = stack.getLast();
         transitionPage(page, transition, transitionDurationMS,
-        [this] (Interface::Component * page)
+        [this](Interface::Component * page)
         {
             removeChildComponent(page);
             stack.removeObject(page);

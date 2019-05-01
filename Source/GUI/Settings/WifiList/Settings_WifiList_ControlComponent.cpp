@@ -104,7 +104,7 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
     }
     if (lastConnectionTime > 0)
     {
-        Locale::Time localizedTime( (juce::Time(lastConnectionTime)));
+        Locale::Time localizedTime((juce::Time(lastConnectionTime)));
 
         String lastConnectionText(localeText(TextKey::lastConnected)
                 + localizedTime.approxTimePassed());
@@ -144,7 +144,7 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
     const int emptyRowIndex = updatedLayout.rowCount();
 
     // Update password label, entry field, and password visibility switch:
-    if (! isConnected && ! isConnecting && requiresAuth && (! hasSavedConnection 
+    if (! isConnected && ! isConnecting && requiresAuth && (! hasSavedConnection
                 || lastEventType == EventType::connectionAuthFailed))
     {
         updatedLayout.addRow(

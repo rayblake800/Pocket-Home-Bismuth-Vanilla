@@ -107,7 +107,7 @@ private:
             {
                 Event expectedEvent = controlTest.expectedEventQueue.getLast();
                 controlTest.expectedEventQueue.removeLast();
-                controlTest.expect( (expectedEvent.getEventType()
+                controlTest.expect((expectedEvent.getEventType()
                             == newEvent.getEventType())
                         && (expectedEvent.getEventAP()
                             == newEvent.getEventAP()),

@@ -219,7 +219,7 @@ void AppMenu::Controller::handleContextMenuAction(OptionCode selectedOption,
             MenuItem parent = editedItem.getParentFolder();
             int itemIndex = editedItem.getIndex();
             int swapIndex = itemIndex +
-                ( (selectedOption == OptionCode::MoveBack) ? -1 : 1);
+                ((selectedOption == OptionCode::MoveBack) ? -1 : 1);
             if (!parent.swapChildren(itemIndex, swapIndex))
             {
                 DBG(dbgPrefix << __func__ << ": Couldn't swap indices "

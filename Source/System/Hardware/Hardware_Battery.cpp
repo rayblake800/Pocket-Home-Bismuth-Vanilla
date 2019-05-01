@@ -50,7 +50,7 @@ Hardware::Battery::Battery()
     // Checks if a battery file was modified recently enough for it to qualify
     // as a valid data source.
     const std::function<bool(const char*)> validFile =
-    [] (const char* filename)
+    [](const char* filename)
     {
         const juce::File testFile(filename);
         const juce::Time oldestValidTime = juce::Time::getCurrentTime()

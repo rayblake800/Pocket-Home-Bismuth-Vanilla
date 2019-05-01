@@ -88,6 +88,7 @@ void Config::Test::FileHandler::setTestArray(const juce::Array<int> newArray)
     resource->setTestArray(newArray);
 }
 
+
 // Sets the file's test object value.
 void Config::Test::FileHandler::setTestObject(const ObjectData newObject)
 {

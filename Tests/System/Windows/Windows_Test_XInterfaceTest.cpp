@@ -80,9 +80,9 @@ public:
         DBG("Process ID = " << windowProcess);
 
         std::function<bool(const Window)> validWindow =
-            [&xwin, windowProcess] (const Window win)
+            [&xwin, windowProcess](const Window win)
             {
-                return ( (xwin.getWindowName(win).isNotEmpty()
+                return ((xwin.getWindowName(win).isNotEmpty()
                     || xwin.getWindowClass(win).isNotEmpty()
                     || xwin.getWindowClassName(win).isNotEmpty())
                         && xwin.getWindowPID(win) == windowProcess);

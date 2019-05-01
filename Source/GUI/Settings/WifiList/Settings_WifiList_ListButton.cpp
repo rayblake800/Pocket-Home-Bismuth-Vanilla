@@ -71,7 +71,7 @@ void Settings::WifiList::ListButton::addControlComponent
     }
     if (oldParent != nullptr)
     {
-        static_cast<ListButton*> (oldParent)->removeControlComponent();
+        static_cast<ListButton*>(oldParent)->removeControlComponent();
     }
 
     RelativeLayout layout = layoutManager.getLayout();

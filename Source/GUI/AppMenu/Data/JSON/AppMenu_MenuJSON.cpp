@@ -16,7 +16,7 @@ Config::FileResource(resourceKey, jsonFilename)
     rootFolderItem = MenuItem(rootItem);
     loadJSONData();
     juce::var rootFolder = initProperty<juce::var>(MenuKeys::folderItemKey);
-    ( (ConfigData*) rootItem.get())->initMenuData(rootFolder);
+    ((ConfigData*) rootItem.get())->initMenuData(rootFolder);
     entryLoader.initialEntryLoad();
 }
 

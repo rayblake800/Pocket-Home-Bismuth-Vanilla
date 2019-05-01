@@ -314,6 +314,7 @@ namespace PowerPage
             0x1900900, UICategory::windowBackground);
 }
 
+
 // The list of all Colour Element objects, sorted by ID:
 const juce::Array<const Element*> allElements =
 {

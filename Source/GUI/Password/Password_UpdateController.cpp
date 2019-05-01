@@ -80,7 +80,7 @@ void Password::UpdateController::buttonClicked(juce::Button* button)
         switch(changeResult)
         {
             case Password::passwordRemoveSuccess:
-                DBG(dbgPrefix << __func__ 
+                DBG(dbgPrefix << __func__
                         << ": passwordRemoveSuccess returned, but password was"
                         << " being edited.");
                 jassertfalse;
@@ -97,7 +97,7 @@ void Password::UpdateController::buttonClicked(juce::Button* button)
                         localeText(TextKey::passwordUpdated),
                         "",
                         nullptr,
-                        juce::ModalCallbackFunction::create([this] (int i)
+                        juce::ModalCallbackFunction::create([this](int i)
                         {
                             if (passwordChangeCallback)
                             {

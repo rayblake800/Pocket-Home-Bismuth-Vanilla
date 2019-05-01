@@ -15,7 +15,7 @@ void Debug::Component::trace()
     highlightFocus.setStrokeFill(FillType(Colour(0xff00ff00)));
     highlightFocus.setStrokeType(PathStrokeType(4));
     std::function<void(juce::Component*, int) > recursiveInfo;
-    recursiveInfo = [&recursiveInfo] (juce::Component* component, int depth)
+    recursiveInfo = [&recursiveInfo](juce::Component* component, int depth)
     {
         String indent = ":";
         for (int i = 0; i < depth; i++)

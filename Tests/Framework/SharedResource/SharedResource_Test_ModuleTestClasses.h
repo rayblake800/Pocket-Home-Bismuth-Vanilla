@@ -85,7 +85,7 @@ public:
     {
         int count = 0;
         juce::String handlerName;
-        foreachHandler<Interface>([&count, &handlerName] (Interface* handler)
+        foreachHandler<Interface>([&count, &handlerName](Interface* handler)
         {
             count++;
             if (!handlerName.isEmpty())

@@ -89,7 +89,7 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
 {
     if (controller->ignoringInput())
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Loading spinner or editor is open, ignoring input.");
         return;
     }
@@ -100,7 +100,7 @@ void AppMenu::InputHandler::mouseDown(const juce::MouseEvent& event)
         || event.mods.isPopupMenu()
         || event.mods.isCtrlDown();
     AppMenu::FolderComponent* clickedFolder = nullptr;
-    if ( (MenuComponent*) event.eventComponent == menuComponent)
+    if ((MenuComponent*) event.eventComponent == menuComponent)
     {
         const int activeFolderIndex = menuComponent->openFolderCount() - 1;
         if (activeFolderIndex >= 0)
@@ -151,7 +151,7 @@ bool AppMenu::InputHandler::keyPressed(const juce::KeyPress& keyPress,
 {
     if (controller->ignoringInput())
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Loading spinner or editor is open, ignoring input.");
         return true;
     }

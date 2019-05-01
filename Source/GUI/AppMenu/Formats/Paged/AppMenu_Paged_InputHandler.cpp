@@ -163,12 +163,12 @@ void AppMenu::Paged::InputHandler::buttonClicked(juce::Button* button)
 {
     if (getController()->ignoringInput())
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Loading or editing menu, ignoring NavButton click.");
         return;
     }
     using Widgets::NavButton;
-    NavButton* navButton = static_cast<NavButton*> (button);
+    NavButton* navButton = static_cast<NavButton*>(button);
     int activeFolderIndex = getMenuComponent()->openFolderCount() - 1;
     switch(navButton->getEdge())
     {
@@ -184,7 +184,7 @@ void AppMenu::Paged::InputHandler::buttonClicked(juce::Button* button)
             FolderComponent* activeFolder = getActivePagedFolderComponent();
             const int numFolderPages = activeFolder->getNumFolderPages();
             const int targetFolderPage = activeFolder->getCurrentFolderPage()
-                + ( (navButton->getEdge() == NavButton::WindowEdge::left)
+                + ((navButton->getEdge() == NavButton::WindowEdge::left)
                     ? -1 : 1);
             if (targetFolderPage >= 0 && targetFolderPage < numFolderPages)
             {
@@ -204,7 +204,7 @@ void AppMenu::Paged::InputHandler::buttonClicked(juce::Button* button)
 AppMenu::Paged::MenuComponent*
 AppMenu::Paged::InputHandler::getPagedMenuComponent()
 {
-    return static_cast<Paged::MenuComponent*> (getMenuComponent());
+    return static_cast<Paged::MenuComponent*>(getMenuComponent());
 }
 
 

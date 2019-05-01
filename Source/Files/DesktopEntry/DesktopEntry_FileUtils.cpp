@@ -214,7 +214,7 @@ bool DesktopEntry::FileUtils::isValidString(const juce::String& string,
     {
         // TODO: Check if non-ascii characters are printable in the current
         //       locale.
-        if ( (string[i] < 32 || string[i] > 126)
+        if ((string[i] < 32 || string[i] > 126)
             && ! (isLocaleString && string[i] > 127))
         {
             DBG("DesktopEntry::FileUtils::" << __func__

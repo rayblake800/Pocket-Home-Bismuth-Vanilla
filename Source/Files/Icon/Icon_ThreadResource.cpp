@@ -260,7 +260,7 @@ void Icon::ThreadResource::runLoop(SharedResource::Thread::Lock& lock)
             const juce::MessageManagerLock mmLock((juce::Thread*) this);
             if (!mmLock.lockWasGained())
             {
-                DBG(dbgPrefix << __func__ 
+                DBG(dbgPrefix << __func__
                         << ":: Exiting, stop instead of loading icon \""
                         << icon << "\"");
                 return;
@@ -282,8 +282,8 @@ void Icon::ThreadResource::runLoop(SharedResource::Thread::Lock& lock)
         const juce::MessageManagerLock mmLock((juce::Thread*) this);
         if (!mmLock.lockWasGained())
         {
-            DBG(dbgPrefix << __func__ 
-                    << ":: Exiting, skipping callback for icon \"" << icon 
+            DBG(dbgPrefix << __func__
+                    << ":: Exiting, skipping callback for icon \"" << icon
                     << "\"");
             return;
         }

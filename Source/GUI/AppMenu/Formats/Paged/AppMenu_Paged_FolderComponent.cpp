@@ -38,7 +38,7 @@ int AppMenu::Paged::FolderComponent::closestIndex
     const int pageColumn = pageX / columnSize;
     const int pageRow    = yPos / rowSize;
     int index = positionIndex(pageIndex, pageColumn, pageRow);
-    if ( (pageX % columnSize) > (columnSize / 2))
+    if ((pageX % columnSize) > (columnSize / 2))
     {
         index++;
     }
@@ -102,7 +102,7 @@ int AppMenu::Paged::FolderComponent::getNumFolderPages() const
     const int folderSize = getFolderSize();
     const int pageSize   = maxPageItemCount();
     int numPages = folderSize / pageSize;
-    if ( (folderSize % pageSize) > 0 || numPages == 0)
+    if ((folderSize % pageSize) > 0 || numPages == 0)
     {
         numPages++;
     }

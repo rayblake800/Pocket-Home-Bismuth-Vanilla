@@ -122,7 +122,7 @@ void Widgets::ListEditor::updateColours()
 // Receives notifications when ListItemComponent text is changed.
 void Widgets::ListEditor::labelTextChanged(juce::Label* source)
 {
-    ListItemComponent * listItem = dynamic_cast<ListItemComponent*> (source);
+    ListItemComponent * listItem = dynamic_cast<ListItemComponent*>(source);
     if (listItem != nullptr)
     {
         int rowNum = listItem->getComponentID().getIntValue();
@@ -199,6 +199,7 @@ void Widgets::ListEditor::ListItemComponent::setDeleteButtonID
 {
     deleteButton.setComponentID(id);
 }
+
 
 // List item font margins:
 static const constexpr double listTextMarginFraction = 0.03;

@@ -207,7 +207,7 @@ static Password::ChangeResult runPasswordScript
     {
         return wrongPasswordError;
     }
-    
+
     // Read and check username argument:
     char* username = getlogin();
     if (username == nullptr)

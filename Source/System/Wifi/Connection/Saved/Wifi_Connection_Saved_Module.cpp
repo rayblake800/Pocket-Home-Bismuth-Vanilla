@@ -94,7 +94,7 @@ void Wifi::Connection::Saved::Module::removeSavedConnection
         }
     });
     APInterface::SavedConnection* updateInterface
-            = static_cast<APInterface::SavedConnection*> (&toRemove);
+            = static_cast<APInterface::SavedConnection*>(&toRemove);
     updateInterface->setHasSavedConnection(false);
     updateInterface->setLastConnectionTime(0);
 }
@@ -139,7 +139,7 @@ void Wifi::Connection::Saved::Module::updateSavedAPData(AccessPoint toUpdate)
                 savedConnection.lastConnectionTime().toMilliseconds());
     }
     APInterface::SavedConnection* updateInterface
-            = static_cast<APInterface::SavedConnection*> (&toUpdate);
+            = static_cast<APInterface::SavedConnection*>(&toUpdate);
     updateInterface->setHasSavedConnection(!matchingConnections.isEmpty());
     updateInterface->setLastConnectionTime(lastConnectionTime);
 }

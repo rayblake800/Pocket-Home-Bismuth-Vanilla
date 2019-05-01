@@ -80,7 +80,7 @@ Wifi::LibNM::Connection NMDBus::SavedConnection::getNMConnection()
 
     // Iterates through all properties of a settings object:
     std::function<void(GVariant*, GVariant*) > copyDict
-            = [this, &nmSetting] (GVariant* key, GVariant * val)
+            = [this, &nmSetting](GVariant* key, GVariant * val)
     {
         String keyStr = getValue<String>(key);
         if (keyStr.isNotEmpty())
@@ -90,7 +90,7 @@ Wifi::LibNM::Connection NMDBus::SavedConnection::getNMConnection()
             // extracted from the GValue as a GByteArray.
             if (getGType(val) == G_TYPE_BYTE_ARRAY)
             {
-                GByteArray* byteArray = getValue<GByteArray*> (val);
+                GByteArray* byteArray = getValue<GByteArray*>(val);
                 g_object_set(G_OBJECT(nmSetting),
                         keyStr.toRawUTF8(),
                         byteArray,

@@ -52,7 +52,7 @@ static int savedConnectionIdx = -1;
 static juce::Array<Wifi::LibNM::AccessPoint> potentialNMAPs;
 // Index of the LibNM::AccessPoint object to try next:
 static int nmAPIdx = -1;
-// List of access point MAC addresses tried, used to prevent a NMAP from being 
+// List of access point MAC addresses tried, used to prevent a NMAP from being
 // continually reused if LibNM recreates access point objects:
 static juce::StringArray attemptedBSSIDs;
 
@@ -234,7 +234,7 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
     // Only continue if Wifi is still connecting and is not currently activating
     // a connection:
     Record::Module* connectionRecord = getSiblingModule<Record::Module>();
-    if (! connectionStarted || connectionActivating 
+    if (! connectionStarted || connectionActivating
             || connectionRecord->isConnected())
     {
         DBG(dbgPrefix << __func__ << ": No action needed, exiting function.");
@@ -294,7 +294,7 @@ void Wifi::Connection::Control::Module::continueConnectionAttempt()
             }
             else
             {
-                juce::Array<LibNM::DBus::SavedConnection> updatedSavedList 
+                juce::Array<LibNM::DBus::SavedConnection> updatedSavedList
                         = std::move(savedConnectionModule
                         ->getMatchingConnections(connectingAP));
                 for (LibNM::DBus::SavedConnection& saved : updatedSavedList)
@@ -408,7 +408,7 @@ void WifiConnect::Control::Module::signalAPAdded(LibNM::AccessPoint newAP)
 {
     ASSERT_NM_CONTEXT;
     juce::String apBSSID(newAP.getBSSID());
-    if (connectionStarted && connectingAP == newAP 
+    if (connectionStarted && connectingAP == newAP
             && ! attemptedBSSIDs.contains(apBSSID))
     {
         potentialNMAPs.add(newAP);
@@ -457,7 +457,7 @@ void WifiConnect::Control::Module::wifiEventRecorded(const Event newEvent)
             DBG(dbgPrefix << __func__ << ": Connection activated.");
             if (potentialSavedConnections.isEmpty())
             {
-                DBG(dbgPrefix << __func__ 
+                DBG(dbgPrefix << __func__
                         << ": Updating AP saved connections.");
                 WifiConnect::Saved::Module* savedConnectionModule
                         = getSiblingModule<WifiConnect::Saved::Module>();

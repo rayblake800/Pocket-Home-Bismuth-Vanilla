@@ -45,7 +45,7 @@ void AppMenu::Scrolling::MenuComponent::layoutUpdateStarting
     int widthSum = 0;
     for (int i = 0; i < openFolders; i++)
     {
-        int width = static_cast<FolderComponent*> (getOpenFolder(i))
+        int width = static_cast<FolderComponent*>(getOpenFolder(i))
             ->getMinimumWidth();
         folderWidths.set(i, width);
         if (!closingFolder || i < lastIndex)

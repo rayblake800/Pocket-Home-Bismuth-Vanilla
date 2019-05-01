@@ -81,7 +81,7 @@ void AppMenu::ConfigData::initMenuData(juce::var& menuData)
         for (var& folderItem : *folderItems.getArray())
         {
             ItemData::Ptr child = createChildItem();
-            ( (ConfigData*)child.get())->initMenuData(folderItem);
+            ((ConfigData*)child.get())->initMenuData(folderItem);
             insertChild(child, getFolderSize());
         }
     }

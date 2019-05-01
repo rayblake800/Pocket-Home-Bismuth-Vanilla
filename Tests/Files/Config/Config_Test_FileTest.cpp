@@ -23,7 +23,7 @@ public:
         using juce::int64;
 
 
-        const String defaultPath 
+        const String defaultPath
                 = "/usr/share/pocket-home/configuration/configTest.json";
         const String filePath
                 = "~/.config/pocket-home/configTest.json";
@@ -107,7 +107,7 @@ public:
                 "Failed to update test object value.");
         expectEquals(testListener.getLastUpdated(),
                 ((juce::Identifier&) JSONKeys::testBool).toString(),
-                "TestListener should have only registered the boolean update."); 
+                "TestListener should have only registered the boolean update.");
 
         beginTest("Restoring default values");
         testListener.removeTrackedKey(JSONKeys::testBool);
@@ -115,7 +115,7 @@ public:
         handler->restoreToDefault();
         expectEquals(testListener.getLastUpdated(),
                 ((juce::Identifier&) JSONKeys::testString).toString(),
-                "TestListener should have only registered the string update."); 
+                "TestListener should have only registered the string update.");
         expectEquals(testFile.getSize(), defaultSize,
                 "Config file should have returned to default size.");
         expectEquals(handler->getTestInt(), defaultInt,

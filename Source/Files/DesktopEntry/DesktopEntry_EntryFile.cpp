@@ -29,13 +29,13 @@ static const juce::String entryDirectory = "/applications/";
  */
 #define STRING_CONVERTER(stringParam, isLocaleString)                        \
 {                                                                            \
-    .readValue = [] (DesktopEntry::EntryFile* thisEntry,                     \
+    .readValue = [](DesktopEntry::EntryFile* thisEntry,                     \
         const juce::String& value)                                           \
     {                                                                        \
         thisEntry->stringParam = DesktopEntry::FileUtils::processStringValue \
             (value, thisEntry->file, isLocaleString);                        \
     },                                                                       \
-    .getValue = [] (DesktopEntry::EntryFile* thisEntry)->juce::String        \
+    .getValue = [](DesktopEntry::EntryFile* thisEntry)->juce::String        \
     {                                                                        \
         return DesktopEntry::FileUtils::addEscapeSequences                   \
             (thisEntry->stringParam);                                        \
@@ -55,13 +55,13 @@ static const juce::String entryDirectory = "/applications/";
  */
 #define LIST_CONVERTER(listParam, isLocaleString)                             \
 {                                                                             \
-    .readValue = [] (DesktopEntry::EntryFile* thisEntry,                      \
+    .readValue = [](DesktopEntry::EntryFile* thisEntry,                      \
         const juce::String& value)                                            \
     {                                                                         \
         thisEntry->listParam = DesktopEntry::FileUtils::parseList             \
             (value, thisEntry->file, isLocaleString);                         \
     },                                                                        \
-    .getValue = [] (DesktopEntry::EntryFile* thisEntry)->juce::String         \
+    .getValue = [](DesktopEntry::EntryFile* thisEntry)->juce::String         \
     {                                                                         \
         return DesktopEntry::FileUtils::listString(thisEntry->listParam,      \
             isLocaleString);                                                  \
@@ -78,13 +78,13 @@ static const juce::String entryDirectory = "/applications/";
  */
 #define BOOL_CONVERTER(boolParam)                                             \
 {                                                                             \
-    .readValue = [] (DesktopEntry::EntryFile* thisEntry,                      \
+    .readValue = [](DesktopEntry::EntryFile* thisEntry,                      \
             const juce::String& value)                                        \
     {                                                                         \
         thisEntry->boolParam = DesktopEntry::FileUtils::parseBool             \
                 (value, thisEntry->file);                                     \
     },                                                                        \
-    .getValue = [] (DesktopEntry::EntryFile* thisEntry)->juce::String         \
+    .getValue = [](DesktopEntry::EntryFile* thisEntry)->juce::String         \
     {                                                                         \
         return DesktopEntry::FileUtils::boolString(thisEntry->boolParam);     \
     }                                                                         \
@@ -243,7 +243,7 @@ desktopFileID(desktopFileID)
                     << testChar << " in file name " << filename);
             throw FormatError(filename);
         }
-        if (! ( (testChar >= 'A' && testChar <= 'Z')
+        if (! ((testChar >= 'A' && testChar <= 'Z')
                     || (testChar >= 'a' && testChar <= 'z')
                     || (testChar >= '0' && testChar <= '9')
                     || (testChar == '-')

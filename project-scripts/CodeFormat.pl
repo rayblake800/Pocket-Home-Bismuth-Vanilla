@@ -76,9 +76,9 @@ foreach my $arg (@ARGV)
     if ($arg =~ /^-?-?h(elp)?/i)
     {
         print("Usage: !./project-scripts/codeFormat.pl [OPTIONS] [PATH]\n");
-        print("\t-t/-test:    Log changes without updating files.\n");
-        print("\t-d/-default: Use default project directories, in addition to"
-                ."any provided path .\n");
+        print("\t-t/-test:     Log changes without updating files.\n");
+        print("\t-d/-default:  Use default project directories in addition to"
+                ." any provided path .\n");
         print("\t-h/--help:    Print this help text.\n");
         exit(0);
     }
@@ -228,14 +228,16 @@ my @formatRules =
             # Don't put spaces before empty parentheses:
             if ( ($post =~ /^\s*\)/)
             # Don't put spaces before template class/function call blocks:
-                || ($pre =~ /<(?:$varChar|:)*>\s*$/))
+                || ($pre =~ /<(?:$varChar|:)*\*?>\s*$/)
+            # Don't put spaces after other bracket types:
+                || ($pre =~ /[()\[\]\{\}]\s*$/))
             {
                 $parenSpace = '';
             }
 
             # Put spaces before parentheses that follow control blocks or other
             # keywords:
-            elsif (($pre =~ /(?<!$varChar)(if|while|for|do|return)$/x)
+            elsif (($pre =~ /(?<!$varChar)(if|while|for|do|return|case)$/x)
             # Put spaces before parentheses that follow some special character
             # and couldn't be a call operator:
                     || ($pre =~ /(?<!$varChar)$/))

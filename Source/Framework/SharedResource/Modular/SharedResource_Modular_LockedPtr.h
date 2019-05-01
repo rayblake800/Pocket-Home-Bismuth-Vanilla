@@ -56,7 +56,7 @@ public:
      */
     ModuleType* operator->() const
     {
-        return static_cast<ResourceType*> (getInstance())->
+        return static_cast<ResourceType*>(getInstance())->
                 template getModule<ModuleType>();
     }
 };

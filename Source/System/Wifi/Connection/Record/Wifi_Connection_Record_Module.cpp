@@ -36,7 +36,7 @@ public:
         {
             return 0;
         }
-        return ( (timeDifference < 0) ? 1 : -1);
+        return ((timeDifference < 0) ? 1 : -1);
     }
 } eventSorter;
 
@@ -124,7 +124,7 @@ void WifiRecord::Module::addEventIfNotDuplicate(const Event newEvent)
         // Get an event's type, treating EventType::connectionFailed and
         // EventType::connectionAuthFailed as equivalent to
         // EventType::disconnected.
-        const auto getCompEventType = [] (const Event& event)
+        const auto getCompEventType = [](const Event& event)
         {
             EventType type = event.getEventType();
             if (type == EventType::connectionFailed

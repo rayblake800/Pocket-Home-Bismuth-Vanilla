@@ -277,5 +277,5 @@ const juce::Identifier& ColourKeys::getCategoryKey(const UICategory category)
         DBG(dbgPrefix << __func__ << ": No key, category == none");
         return invalidKey;
     }
-    return uiCategoryKeys.getReference( (int) category);
+    return uiCategoryKeys.getReference((int) category);
 }

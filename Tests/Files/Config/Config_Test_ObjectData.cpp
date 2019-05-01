@@ -19,8 +19,9 @@ bool Config::Test::ObjectData::getTestBool() const
     return testBool;
 }
 
+
 // Compares this object with another.
-bool Config::Test::ObjectData::operator==(const ObjectData& rhs) const
+bool Config::Test::ObjectData::operator== (const ObjectData& rhs) const
 {
     return (testNum == rhs.testNum) && (testBool == rhs.testBool);
 }

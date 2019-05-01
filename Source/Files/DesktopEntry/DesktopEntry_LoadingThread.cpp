@@ -211,7 +211,7 @@ void DesktopEntry::LoadingThread::findUpdatedFiles()
             << " unique desktop entry files in " << dirs.size()
             << " data directories.");
     DBG(dbgPrefix << __func__ << ": Reloading "
-            << ( (int) pendingFiles.size()) << " entry files.");
+            << ((int) pendingFiles.size()) << " entry files.");
 }
 
 
@@ -316,7 +316,7 @@ void DesktopEntry::LoadingThread::cleanup
         onFinish.clear();
 
         foreachHandler<UpdateInterface>(
-        [this] (UpdateInterface* updateListener)
+        [this](UpdateInterface* updateListener)
         {
             if (!lastAddedIDs.isEmpty())
             {

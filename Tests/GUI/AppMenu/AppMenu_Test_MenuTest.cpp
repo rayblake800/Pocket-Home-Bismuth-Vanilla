@@ -37,21 +37,21 @@ public:
         logMessage(String("Initial menu format:")
                 + config.formatToString(initial));
 
-        expectNotEquals( (int) initial, (int) Format::Invalid,
+        expectNotEquals((int) initial, (int) Format::Invalid,
                 "Initial format was invalid!");
 
         config.setMenuFormat(Format::Invalid);
-        expectEquals( (int) initial, (int) config.getMenuFormat(),
+        expectEquals((int) initial, (int) config.getMenuFormat(),
                 "Trying to set an invalid format should be ignored");
 
         for (int i = 0; i < (int) Format::Invalid; i++)
         {
-            config.setMenuFormat( (Format) i);
+            config.setMenuFormat((Format) i);
             expectEquals(i, (int) config.getMenuFormat(),
                     "Failed to change menu format!");
         }
         config.setMenuFormat(initial);
-        expectEquals( (int) config.getMenuFormat(), (int) initial,
+        expectEquals((int) config.getMenuFormat(), (int) initial,
                 "Failed to restore initial menu format!");
     }
 
@@ -80,9 +80,9 @@ public:
         };
         juce::Array<std::function<void(int)>> setSettings =
         {
-            [&config] (int val){ config.setPagedMenuColumns(val); },
-            [&config] (int val){ config.setPagedMenuRows(val); },
-            [&config] (int val){ config.setScrollingMenuRows(val); }
+            [&config](int val){ config.setPagedMenuColumns(val); },
+            [&config](int val){ config.setPagedMenuRows(val); },
+            [&config](int val){ config.setScrollingMenuRows(val); }
         };
         juce::Array<int> testValues = { -999, -1, 0, 1, 5, 999};
         for (int settingNum = 0; settingNum < numSettings; settingNum++)
@@ -92,7 +92,7 @@ public:
                     + settingNames[settingNum]);
             for (int tVal : testValues)
             {
-                setSettings[settingNum] (tVal);
+                setSettings[settingNum](tVal);
                 if (tVal < 1)
                 {
                     expectEquals(getSettings[settingNum](), 1,
@@ -107,7 +107,7 @@ public:
                             + settingNames[settingNum]);
                 }
             }
-            setSettings[settingNum] (initial);
+            setSettings[settingNum](initial);
             expectEquals(getSettings[settingNum](), initial,
                     String("Failed to restore initial setting for ")
                     + settingNames[settingNum]);
@@ -129,7 +129,7 @@ public:
         juce::StringArray formatStrings;
         for (int i = 0; i < numFormats; i++)
         {
-            String formatString = config.formatToString( (Format) i);
+            String formatString = config.formatToString((Format) i);
             expect(formatString.isNotEmpty(),
                     String("Missing string for format number ") + String(i));
             if (i != (int) Format::Invalid)
@@ -143,7 +143,7 @@ public:
         juce::StringArray invalidFormats = { "", "paged", " Scrolling", "lsk" };
         for (const String& invalidStr : invalidFormats)
         {
-            expectEquals( (int) config.stringToFormat(invalidStr),
+            expectEquals((int) config.stringToFormat(invalidStr),
                     (int) Format::Invalid,
                     "Invalid format not handled correctly");
         }

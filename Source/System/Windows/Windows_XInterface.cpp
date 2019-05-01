@@ -594,7 +594,7 @@ int Windows::XInterface::getWindowDesktop(const Window window) const
 void Windows::XInterface::printWindowInfo(const Window window) const
 {
     using juce::String;
-    String id( (unsigned long) window);
+    String id((unsigned long) window);
     String name = getWindowName(window);
     String claz = getWindowClass(window);
     String className = getWindowClassName(window);
@@ -635,7 +635,7 @@ void Windows::XInterface::printWindowTree(Window root, const int depth) const
     {
         output += "\t";
     }
-    output += String( (unsigned long) root);
+    output += String((unsigned long) root);
 
     String title = getWindowName(root);
     if (title.isNotEmpty())
@@ -704,7 +704,7 @@ Windows::XInterface::WindowProperty Windows::XInterface::getWindowProperty
         if (status == BadWindow)
         {
             DBG(dbgPrefix << __func__ << ": Window "
-                    << juce::String( (unsigned long) window)
+                    << juce::String((unsigned long) window)
                     << "does not exist!");
         }
         DBG(dbgPrefix << __func__ << ": XGetWindowProperty failed "
@@ -727,7 +727,7 @@ bool Windows::XInterface::xPropertySupported(const char* property) const
     {
         return false;
     }
-    Atom* propertyList = reinterpret_cast<Atom*> (supportedPropertyList.data);
+    Atom* propertyList = reinterpret_cast<Atom*>(supportedPropertyList.data);
     Atom neededProp = XInternAtom(display, property, false);
     for (long i = 0; i < supportedPropertyList.numItems; i++)
     {
