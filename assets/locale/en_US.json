@@ -201,6 +201,7 @@
     },
     "Settings::WifiList":
     {
+        "showPassword"     : "Show Password",
         "password"         : "Password:",
         "connect"          : "Connect",
         "disconnect"       : "Disconnect",

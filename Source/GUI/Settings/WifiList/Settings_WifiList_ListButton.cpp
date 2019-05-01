@@ -65,7 +65,11 @@ void Settings::WifiList::ListButton::addControlComponent
 {
     using namespace Layout::Group;
     Component* oldParent = controlComponent.getParentComponent();
-    if (oldParent != nullptr && oldParent != this)
+    if (oldParent == this)
+    {
+        return;
+    }
+    if (oldParent != nullptr)
     {
         static_cast<ListButton*> (oldParent)->removeControlComponent();
     }

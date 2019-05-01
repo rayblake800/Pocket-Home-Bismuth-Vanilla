@@ -157,7 +157,7 @@ void Settings::WifiList::ListComponent::loadAccessPoints()
 // Refreshes all visible list items without changing their order in the list.
 void Settings::WifiList::ListComponent::updateListItems(const bool animate)
 {
-    // Ensure list items are finished animating before updating the list:
+    // Ensure list items are done animating before updating the list:
     animationCheck.startCheck([this]()
     {
         for (juce::Component* child : getChildren())
@@ -171,6 +171,7 @@ void Settings::WifiList::ListComponent::updateListItems(const bool animate)
     },
     [this, animate]()
     {
+        DBG(dbgPrefix << __func__ << ": Refreshing list content");
         if (animate)
         {
             refreshListContent(Layout::Transition::Type::moveLeft,
@@ -193,7 +194,15 @@ void Settings::WifiList::ListComponent::updateListItems(const bool animate)
 void Settings::WifiList::ListComponent::updateList()
 {
     DBG(dbgPrefix << __func__ << ": Sorting and pruning AP list.");
-    visibleAPs.removeIf([] (Wifi::AccessPoint listAP)
+    if (invalidSelectionIndex >= 0)
+    {
+        DBG(dbgPrefix << __func__ << ": Former selected AP \""
+                << visibleAPs[invalidSelectionIndex].getSSID().toString()
+                << "\" was lost and will now be removed.");
+        visibleAPs.remove(invalidSelectionIndex);
+        invalidSelectionIndex = -1;
+    }
+    visibleAPs.removeIf([this] (Wifi::AccessPoint listAP)
     {
         return listAP.isNull();
     });
@@ -245,6 +254,16 @@ void Settings::WifiList::ListComponent::accessPointAdded
 (const Wifi::AccessPoint addedAP)
 {
     visibleAPs.addIfNotAlreadyThere(addedAP);
+    if (invalidSelectionIndex >= 0)
+    {
+        if (addedAP == visibleAPs[invalidSelectionIndex])
+        {
+            DBG(dbgPrefix << __func__ << ": Selected AP \""
+                    << addedAP.getSSID().toString()
+                    << "\" found again, cancel pending removal.");
+            invalidSelectionIndex = -1;
+        }
+    }
     scheduleListUpdate();
 }
 
@@ -259,8 +278,14 @@ void Settings::WifiList::ListComponent::accessPointRemoved
     {
         if (removedIndex == getSelectedIndex())
         {
-            updateList();
-            deselect();
+            if (invalidSelectionIndex != removedIndex)
+            {
+                DBG(dbgPrefix << __func__ << ": Selected AP \""
+                        << removedAP.getSSID().toString()
+                        << "\" was lost and will be removed once deselected");
+                invalidSelectionIndex = removedIndex;
+                fullUpdateNeeded = true;
+            }
         }
         else
         {

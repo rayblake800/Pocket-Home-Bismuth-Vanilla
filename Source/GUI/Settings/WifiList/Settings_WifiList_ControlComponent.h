@@ -11,6 +11,7 @@
 #include "Layout_Group_Manager.h"
 #include "Widgets_BoundedLabel.h"
 #include "Widgets_Spinner.h"
+#include "Widgets_Switch.h"
 #include "Wifi_Connection_Control_Handler.h"
 #include "JuceHeader.h"
 
@@ -25,7 +26,7 @@ class Settings::WifiList::ControlComponent : public juce::Component,
 {
 public:
     /**
-     * @brief  Initializes all child components.
+     * @brief  Starts listening for input from child components.
      */
     ControlComponent();
 
@@ -86,7 +87,8 @@ private:
     };
 
     /**
-     * @brief  Listens for input from the password field and connection button.
+     * @brief  Listens for input from the password field, connection button, and
+     *         show password switch.
      */
     class ControlListener : public juce::Button::Listener,
             public juce::TextEditor::Listener
@@ -104,10 +106,12 @@ private:
 
     private:
         /**
-         * @brief  Attempts to connect or disconnect from the current selected
-         *         access point when the connection button is clicked.
+         * @brief  Either deletes a saved connection, attempts to open or close
+         *         a connection, or toggles password visibility, depending on
+         *         which button is clicked.
          *
-         * @param button  This should always be the connection button.
+         * @param button  Whichever one of the three ControlComponent buttons
+         *                was just clicked.
          */
         virtual void buttonClicked(juce::Button* button) final override;
 
@@ -143,6 +147,10 @@ private:
     // Used for entering a password for a secured access point.
     Widgets::BoundedLabel passwordLabel;
     juce::TextEditor passwordEditor;
+
+    // Sets whether the password should be shown.
+    Widgets::BoundedLabel showPasswordLabel;
+    Widgets::Switch showPasswordSwitch;
 
     // Clicked to connect or disconnect.
     ConnectionButton connectionButton;

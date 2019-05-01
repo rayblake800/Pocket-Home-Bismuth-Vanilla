@@ -20,6 +20,7 @@ static const juce::Identifier localeClassKey = "Settings::WifiList";
 // Localized text value keys:
 namespace TextKey
 {
+    static const juce::Identifier showPassword     = "showPassword";
     static const juce::Identifier password         = "password";
     static const juce::Identifier connect          = "connect";
     static const juce::Identifier disconnect       = "disconnect";
@@ -32,18 +33,23 @@ namespace TextKey
     static const juce::Identifier confirmDelete    = "confirmDelete";
 }
 
+static const constexpr juce::juce_wchar passwordChar = 0x2022;
 
 //===================== List item Layout values ===============================
 // Vertical weight values:
-static const constexpr unsigned int baseRowWeight = 3;
-static const constexpr unsigned int errorMsgRowWeight = 2;
+static const constexpr unsigned int baseRowWeight = 4;
+static const constexpr unsigned int showPasswordRowWeight = 3;
+static const constexpr unsigned int labelRowWeight = 3;
+// If necessary, empty rows will be added to make sure the vertical weight sum
+// reaches this value:
+static const constexpr unsigned int rowWeightSum = 21;
 // Margin and Padding fractions:
 static const constexpr float xMarginFraction = 0.03;
 static const constexpr float yMarginFraction = 0.05;
 static const constexpr float xPaddingFraction = 0.04;
 static const constexpr float yPaddingFraction = 0.02;
 
-// Initializes all child components.
+// Starts listening for input from child components.
 Settings::WifiList::ControlComponent::ControlComponent() :
     Locale::TextUser(localeClassKey),
     controlListener(*this)
@@ -52,44 +58,15 @@ Settings::WifiList::ControlComponent::ControlComponent() :
             localeText(TextKey::deleteSaved));
     passwordLabel.setText(localeText(TextKey::password),
             juce::NotificationType::dontSendNotification);
+    showPasswordLabel.setText(localeText(TextKey::showPassword),
+            juce::NotificationType::dontSendNotification);
+    passwordEditor.setPasswordCharacter(passwordChar);
+    errorLabel.setJustificationType(juce::Justification::centred);
 
     savedConnectionDeleteButton.addListener(&controlListener);
     connectionButton.addListener(&controlListener);
     passwordEditor.addListener(&controlListener);
-
-    using namespace Layout::Group;
-    RelativeLayout newLayout(
-    {
-        Row(baseRowWeight,
-        {
-            RowItem(),
-            RowItem(&lastConnectionLabel, 4),
-            RowItem()
-        }),
-        Row(baseRowWeight,
-        {
-            RowItem(),
-            RowItem(&savedConnectionDeleteButton, 4),
-            RowItem()
-        }),
-        Row(baseRowWeight,
-        {
-            RowItem(&passwordLabel, 1),
-            RowItem(&passwordEditor, 2)
-        }),
-        Row(errorMsgRowWeight, {RowItem(&errorLabel)}),
-        Row(baseRowWeight,
-        {
-            RowItem(),
-            RowItem(&connectionButton),
-            RowItem()
-        })
-    });
-    newLayout.setXPaddingFraction(xPaddingFraction);
-    newLayout.setYPaddingFraction(yPaddingFraction);
-    newLayout.setXMarginFraction(xMarginFraction);
-    newLayout.setYMarginFraction(yMarginFraction);
-    layoutControl.setLayout(newLayout, this);
+    showPasswordSwitch.addListener(&controlListener);
 }
 
 
@@ -97,7 +74,6 @@ Settings::WifiList::ControlComponent::ControlComponent() :
 void Settings::WifiList::ControlComponent::updateComponentsForAP
 (Wifi::AccessPoint newAP)
 {
-
     using juce::String;
     using Wifi::Connection::EventType;
 
@@ -113,8 +89,10 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
     const EventType lastEventType
             = connectionRecord.getLatestEvent(newAP).getEventType();
 
+    using namespace Layout::Group;
+    RelativeLayout updatedLayout;
+
     // Update last connection time label:
-    String lastConnectionText;
     juce::int64 lastConnectionTime = 0;
     if (isConnected)
     {
@@ -128,51 +106,73 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
     {
         Locale::Time localizedTime( (juce::Time(lastConnectionTime)));
 
-        lastConnectionText = localeText(TextKey::lastConnected)
-                + localizedTime.approxTimePassed();
+        String lastConnectionText(localeText(TextKey::lastConnected)
+                + localizedTime.approxTimePassed());
+        updatedLayout.addRow(
+                Row(labelRowWeight,
+                {
+                    RowItem(),
+                    RowItem(&lastConnectionLabel, 4),
+                    RowItem()
+                }));
+        lastConnectionLabel.setText(lastConnectionText,
+                juce::NotificationType::dontSendNotification);
     }
-    lastConnectionLabel.setText(lastConnectionText,
-            juce::NotificationType::dontSendNotification);
+    else if (lastConnectionLabel.getParentComponent() == this)
+    {
+        removeChildComponent(&lastConnectionLabel);
+    }
 
     // Update saved connection delete button:
-    const bool showDeleteButton = !isConnected && !isConnecting
-            && hasSavedConnection;
-    savedConnectionDeleteButton.setVisible(showDeleteButton);
-    savedConnectionDeleteButton.setEnabled(showDeleteButton);
-
-    // Update password label and entry field:
-    const bool showPasswordEntry
-            = !isConnected && !isConnecting && requiresAuth
-            && (!hasSavedConnection || lastEventType
-                == EventType::connectionAuthFailed);
-    passwordLabel.setVisible(showPasswordEntry);
-    passwordEditor.setVisible(showPasswordEntry);
-    passwordEditor.setEnabled(showPasswordEntry);
-    if (selectedAP != newAP)
+    if (! isConnected && ! isConnecting && hasSavedConnection)
     {
-        passwordEditor.clear();
+        updatedLayout.addRow(
+                Row(baseRowWeight,
+                {
+                    RowItem(),
+                    RowItem(&savedConnectionDeleteButton, 4),
+                    RowItem()
+                }));
+    }
+    else if (savedConnectionDeleteButton.getParentComponent() == this)
+    {
+        removeChildComponent(&savedConnectionDeleteButton);
     }
 
-    // Update error label:
-    String errorText;
-    if (selectedAP == newAP)
+    // Save the index where an empty row may need to be inserted to keep layout
+    // rows correctly sized:
+    const int emptyRowIndex = updatedLayout.rowCount();
+
+    // Update password label, entry field, and password visibility switch:
+    if (! isConnected && ! isConnecting && requiresAuth && (! hasSavedConnection 
+                || lastEventType == EventType::connectionAuthFailed))
     {
-        errorText = errorLabel.getText();
+        updatedLayout.addRow(
+                Row(baseRowWeight,
+                {
+                    RowItem(&passwordLabel, 1),
+                    RowItem(&passwordEditor, 2)
+                }));
+        updatedLayout.addRow(
+                Row(showPasswordRowWeight,
+                {
+                    RowItem(&showPasswordLabel, 8),
+                    RowItem(&showPasswordSwitch, 1)
+                }));
+        if (selectedAP != newAP)
+        {
+            passwordEditor.clear();
+            passwordEditor.setPasswordCharacter(passwordChar);
+            showPasswordSwitch.setToggleState(false);
+        }
     }
-    if (!isConnected && !isConnecting)
+    else if (passwordEditor.getParentComponent() == this)
     {
-        if (lastEventType == Wifi::Connection::EventType::connectionFailed)
-        {
-            errorText = localeText(TextKey::connectionFailed);
-        }
-        else if (lastEventType
-                == Wifi::Connection::EventType::connectionAuthFailed)
-        {
-            errorText = localeText(TextKey::wrongPassword);
-        }
+        removeChildComponent(&passwordLabel);
+        removeChildComponent(&passwordEditor);
+        removeChildComponent(&showPasswordLabel);
+        removeChildComponent(&showPasswordSwitch);
     }
-    errorLabel.setText(errorText,
-            juce::NotificationType::dontSendNotification);
 
     // Update connection button:
     connectionButton.setSpinnerVisible(isConnecting);
@@ -186,6 +186,60 @@ void Settings::WifiList::ControlComponent::updateComponentsForAP
         connectionBtnText = localeText(TextKey::connect);
     }
     connectionButton.setButtonText(connectionBtnText);
+    updatedLayout.addRow(
+            Row(baseRowWeight,
+            {
+                RowItem(),
+                RowItem(&connectionButton, 4),
+                RowItem()
+            }));
+
+    // Update error label:
+    String errorText;
+    if (selectedAP == newAP)
+    {
+        errorText = errorLabel.getText();
+    }
+    if (! isConnected && ! isConnecting)
+    {
+        if (lastEventType == Wifi::Connection::EventType::connectionFailed)
+        {
+            errorText = localeText(TextKey::connectionFailed);
+        }
+        else if (lastEventType
+                == Wifi::Connection::EventType::connectionAuthFailed)
+        {
+            errorText = localeText(TextKey::wrongPassword);
+        }
+    }
+    errorLabel.setText(errorText, juce::NotificationType::dontSendNotification);
+    if (errorText.isNotEmpty())
+    {
+        updatedLayout.addRow(Row(labelRowWeight, { RowItem(&errorLabel) }));
+    }
+    else if (errorLabel.getParentComponent() == this)
+    {
+        removeChildComponent(&errorLabel);
+    }
+
+    // Add an empty row if necessary:
+    int currentWeightSum = 0;
+    for (const Row& layoutRow : updatedLayout)
+    {
+        currentWeightSum += layoutRow.getWeight();
+    }
+    const int weightNeeded = rowWeightSum - currentWeightSum;
+    if (weightNeeded > 0)
+    {
+        updatedLayout.insertRow(emptyRowIndex, Row(weightNeeded));
+    }
+
+    updatedLayout.setXPaddingFraction(xPaddingFraction);
+    updatedLayout.setYPaddingFraction(yPaddingFraction);
+    updatedLayout.setXMarginFraction(xMarginFraction);
+    updatedLayout.setYMarginFraction(yMarginFraction);
+    layoutControl.setLayout(updatedLayout, this);
+    layoutControl.layoutComponents(getLocalBounds());
 
     selectedAP = newAP;
 }
@@ -214,6 +268,7 @@ void Settings::WifiList::ControlComponent::connect()
         errorLabel.setText(localeText(TextKey::invalidFormat),
                 juce::NotificationType::dontSendNotification);
         passwordEditor.clear();
+        updateComponentsForAP(selectedAP);
         return;
     }
 
@@ -277,8 +332,8 @@ Control::ControlListener::ControlListener
 (ControlComponent& controlComponent) : controlComponent(controlComponent) { }
 
 
-// Attempts to connect or disconnect from the current selected access point
-// when the connection button is clicked.
+// Either deletes a saved connection, attempts to open or close a connection, or
+// toggles password visibility, depending on which button is clicked.
 void Control::ControlListener::buttonClicked(juce::Button* button)
 {
     Wifi::AccessPoint selectedAP = controlComponent.selectedAP;
@@ -327,6 +382,11 @@ void Control::ControlListener::buttonClicked(juce::Button* button)
             connectionDeleter.removeSavedConnection(selectedAP);
             controlComponent.updateComponentsForAP(selectedAP);
         });
+    }
+    else if (button == &controlComponent.showPasswordSwitch)
+    {
+        controlComponent.passwordEditor.setPasswordCharacter(
+                (button->getToggleState() ? 0 : passwordChar));
     }
 }
 

@@ -170,6 +170,10 @@ private:
     // Tracks whether the access point list needs to be sorted:
     bool fullUpdateNeeded = false;
 
+    // If the selected AP is lost, save its index so it will be removed once it
+    // is deselected.
+    int invalidSelectionIndex = -1;
+
     // Selected connection control component to reuse:
     ControlComponent controlComponent;
 
