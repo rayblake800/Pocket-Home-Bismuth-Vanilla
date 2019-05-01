@@ -26,9 +26,6 @@ static const constexpr char* passwordFile = ".passwd/passwd";
 // Password salt length in bytes:
 static const constexpr int saltLength = 16;
 
-// Maximum username length, including null terminator:
-static const constexpr int maxNameLength = 32;
-
 /**
  * @brief  Gets the application password file.
  *
