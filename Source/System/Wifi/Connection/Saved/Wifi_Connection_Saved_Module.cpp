@@ -11,10 +11,7 @@
 
 // Loads all connections saved by NetworkManager.
 Wifi::Connection::Saved::Module::Module(Resource& parentResource) :
-Wifi::Module(parentResource)
-{
-    savedConnections.updateSavedConnections();
-}
+Wifi::Module(parentResource) { }
 
 
 // Checks if NetworkManager has a saved connection that is compatible with an
@@ -22,8 +19,7 @@ Wifi::Module(parentResource)
 bool Wifi::Connection::Saved::Module::hasSavedConnection
 (const AccessPoint toCheck)
 {
-    savedConnections.updateSavedConnections();
-    return !getMatchingConnections(toCheck).isEmpty();
+    return ! getMatchingConnections(toCheck).isEmpty();
 }
 
 
@@ -41,7 +37,6 @@ bool Wifi::Connection::Saved::Module::hasSavedConnection
 Wifi::LibNM::Connection Wifi::Connection::Saved::Module::getSavedConnection
 (const AccessPoint connectionAP)
 {
-    savedConnections.updateSavedConnections();
     juce::Array<LibNM::DBus::SavedConnection> matchingConnections
             = getMatchingConnections(connectionAP);
     LibNM::Connection nmConnection;
@@ -64,7 +59,6 @@ juce::Time Wifi::Connection::Saved::Module::lastConnectionTime
 (const AccessPoint connectionAP)
 {
     ASSERT_NM_CONTEXT;
-    savedConnections.updateSavedConnections();
     juce::Time connectionTime;
     using LibNM::DBus::SavedConnection;
     juce::Array<SavedConnection> matchingConnections
@@ -98,7 +92,6 @@ void Wifi::Connection::Saved::Module::removeSavedConnection
         {
             savedConn.deleteConnection();
         }
-        savedConnections.updateSavedConnections();
     });
     APInterface::SavedConnection* updateInterface
             = static_cast<APInterface::SavedConnection*> (&toRemove);
@@ -127,7 +120,6 @@ juce::Array<Wifi::LibNM::DBus::SavedConnection>
 Wifi::Connection::Saved::Module::getMatchingConnections
 (const LibNM::AccessPoint toMatch)
 {
-    savedConnections.updateSavedConnections();
     return savedConnections.findConnectionsForAP(toMatch);
 }
 

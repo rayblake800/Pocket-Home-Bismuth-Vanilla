@@ -20,9 +20,8 @@ namespace Wifi { namespace LibNM
  *         data.
  *
  *  SavedConnectionLoader reads all saved network connections from
- * NetworkManager over DBus, creating SavedConnection objects for each Wifi
- * connection it finds. It then caches the SavedConnections, updating and
- * sharing them on request.
+ * NetworkManager over DBus, creating and sharing SavedConnection objects for
+ * each Wifi connection it finds.
  *
  *  SavedConnectionLoader may be used to request all saved Wifi connections, or
  * a single saved connection specified by DBus path. It can also check the
@@ -33,8 +32,7 @@ class Wifi::LibNM::DBus::SavedConnectionLoader : public GLib::DBus::Proxy
 {
 public:
     /**
-     * @brief  Connects to NetworkManager over DBus to initialize the saved
-     *         connection list.
+     * @brief  Connects to NetworkManager over DBus.
      */
     SavedConnectionLoader();
 
@@ -42,7 +40,7 @@ public:
 
     /**
      * @brief  Reads all connection paths from NetworkManager, and returns all
-     *         the wifi connections as SavedConnection objects.
+     *         the Wifi connections as SavedConnection objects.
      *
      * @return  All saved wifi connections.
      */
@@ -76,7 +74,7 @@ public:
      * @brief  Finds all saved connections that are compatible with a given
      *         Wifi access point.
      *
-     * @param accessPoint  A wifi access point to check against the list of
+     * @param accessPoint  A Wifi access point to check against the list of
      *                     saved connections.
      *
      * @return             The list of all saved connections that could be
@@ -89,19 +87,12 @@ public:
      * @brief  Checks if a saved connection exists that is compatible with a
      *         particular access point.
      *
-     * @param accessPoint  A wifi access point to check against the list of
+     * @param accessPoint  A Wifi access point to check against the list of
      *                     saved connections.
      *
      * @return             Whether a compatible SavedConnection object exists.
      */
     bool matchingConnectionExists(const AccessPoint& accessPoint) const;
-
-    /**
-     * @brief  Checks the list of saved connections against an updated
-     *         connection path list, adding any new connections and removing
-     *         any deleted connections.
-     */
-    void updateSavedConnections();
 
 private:
     /**
@@ -110,10 +101,4 @@ private:
      * @return  The list of paths, freshly updated over the DBus interface.
      */
     inline juce::StringArray loadConnectionPaths() const;
-
-    // All loaded saved connections
-    juce::Array<SavedConnection> connectionList;
-
-    // Paths to all saved connections, in the same order as connectionList
-    juce::StringArray connectionPaths;
 };

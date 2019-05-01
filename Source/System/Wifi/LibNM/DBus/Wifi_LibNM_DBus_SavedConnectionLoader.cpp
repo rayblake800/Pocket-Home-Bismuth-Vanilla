@@ -14,18 +14,9 @@ const constexpr char* listConnectionFunction = "ListConnections";
 
 namespace NMDBus = Wifi::LibNM::DBus;
 
-// Connects to NetworkManager over DBus to initialize the saved connection list.
+// Connects to NetworkManager over DBus.
 NMDBus::SavedConnectionLoader::SavedConnectionLoader() :
-GLib::DBus::Proxy(busName, path, interface)
-{
-    connectionPaths = loadConnectionPaths();
-    for (const juce::String& path : connectionPaths)
-    {
-        connectionList.add(SavedConnection(path.toRawUTF8()));
-    }
-    DBG("SavedConnectionLoader::" << __func__  << ": Found "
-            << connectionList.size() << " connections.");
-}
+GLib::DBus::Proxy(busName, path, interface) { }
 
 
 // Reads all connection paths from NetworkManager, and returns all the wifi
@@ -34,11 +25,13 @@ juce::Array<NMDBus::SavedConnection>
 NMDBus::SavedConnectionLoader::getWifiConnections() const
 {
     juce::Array<SavedConnection> connections;
-    for (const SavedConnection& con : connectionList)
+    juce::StringArray connectionPaths(std::move(loadConnectionPaths()));
+    for (const juce::String& path : connectionPaths)
     {
-        if (con.isWifiConnection())
+        SavedConnection connection(path.toRawUTF8());
+        if (connection.isWifiConnection())
         {
-            connections.add(con);
+            connections.add(connection);
         }
     }
     return connections;
@@ -49,7 +42,8 @@ NMDBus::SavedConnectionLoader::getWifiConnections() const
 bool NMDBus::SavedConnectionLoader::connectionExists
 (const juce::String& connectionPath) const
 {
-    return connectionPaths.contains(connectionPath);
+    SavedConnection testConnection(connectionPath.toRawUTF8());
+    return ! testConnection.isNull();
 }
 
 
@@ -57,22 +51,7 @@ bool NMDBus::SavedConnectionLoader::connectionExists
 NMDBus::SavedConnection NMDBus::SavedConnectionLoader::getConnection
 (const juce::String& connectionPath)
 {
-    if (!connectionExists(connectionPath))
-    {
-        updateSavedConnections();
-    }
-    if (connectionExists(connectionPath))
-    {
-        for (const SavedConnection& connection : connectionList)
-        {
-            if (connection.getPath() == connectionPath)
-            {
-                return connection;
-            }
-        }
-    }
-    SavedConnection emptyConnection;
-    return emptyConnection;
+    return SavedConnection(connectionPath.toRawUTF8());
 }
 
 
@@ -133,35 +112,4 @@ bool NMDBus::SavedConnectionLoader::matchingConnectionExists
         }
     }
     return false;
-}
-
-
-// Checks the list of saved connections against an updated connection path
-// list, adding any new connections and removing any deleted connections.
-void NMDBus::SavedConnectionLoader::updateSavedConnections()
-{
-    connectionPaths = loadConnectionPaths();
-    for (int i = 0; i < connectionList.size(); i++)
-    {
-        const SavedConnection& saved = connectionList[i];
-        const juce::String savedPath = saved.getPath();
-        if (savedPath.isEmpty() || saved.isNull() 
-                || ! connectionPaths.contains(savedPath))
-        {
-            connectionList.remove(i);
-            i--;
-        }
-        else
-        {
-            connectionPaths.removeString(savedPath);
-        }
-    }
-    for (const juce::String& path : connectionPaths)
-    {
-        SavedConnection newSaved(path.toRawUTF8());
-        if (! newSaved.isNull())
-        {
-            connectionList.add(newSaved);
-        }
-    }
 }
