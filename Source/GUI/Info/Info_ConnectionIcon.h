@@ -65,4 +65,13 @@ private:
      *         when Wifi is turned off.
      */
     virtual void wirelessDisabled() final override;
+
+    /**
+     * @brief  Safely updates the connection icon asynchronously on the message
+     *         thread.
+     *
+     * @param signalStrength  The new signal strength used to select the new
+     *                        icon image.
+     */
+    void asyncSetSignalImage(const unsigned int signalStrength);
 };

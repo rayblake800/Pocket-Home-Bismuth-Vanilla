@@ -6,6 +6,7 @@
 #include "AppMenu_ConfigFile.h"
 #include "Page_Type.h"
 #include "Config_MainFile.h"
+#include "Util_SafeCall.h"
 
 
 // Initializes all page components and creates the AppMenu.
@@ -122,14 +123,9 @@ void HomePage::visibilityChanged()
 {
     if (isShowing())
     {
-        juce::Component::SafePointer<HomePage> safePtr(this);
-        juce::MessageManager::callAsync([safePtr]()
+        Util::SafeCall::callAsync<HomePage>(this, [](HomePage* page)
         {
-            HomePage* page = safePtr.getComponent();
-            if (page != nullptr && page->appMenu != nullptr)
-            {
-                page->appMenu->grabKeyboardFocus();
-            }
+            page->appMenu->grabKeyboardFocus();
         });
     }
 }

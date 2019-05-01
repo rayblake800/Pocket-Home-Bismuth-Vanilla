@@ -2,6 +2,7 @@
 #include "Wifi_AccessPoint.h"
 #include "Wifi_Device_Reader.h"
 #include "Wifi_Connection_Record_Handler.h"
+#include "Util_SafeCall.h"
 
 #ifdef JUCE_DEBUG
 // Print the full class name before all debug output:
@@ -95,5 +96,20 @@ void Info::ConnectionIcon::wirelessDisabled()
 {
     DBG(dbgPrefix << __func__ << ": Wifi disabled, setting disabled image");
     ignoreAllUpdates();
-    setDisabledImage();
+    Util::SafeCall::callAsync<ConnectionIcon>(this,[](ConnectionIcon* icon)
+    {
+        icon->setDisabledImage();
+    });
+}
+
+
+// Safely updates the connection icon asynchronously on the message thread.
+void Info::ConnectionIcon::asyncSetSignalImage
+(const unsigned int signalStrength)
+{
+    Util::SafeCall::callAsync<ConnectionIcon>(this,
+    [signalStrength](ConnectionIcon* icon)
+    {
+        icon->setSignalStrengthImage(signalStrength);
+    });
 }

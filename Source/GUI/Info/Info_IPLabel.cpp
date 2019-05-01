@@ -2,6 +2,7 @@
 #include "Config_MainFile.h"
 #include "Wifi_AccessPoint.h"
 #include "Util_Commands.h"
+#include "Util_SafeCall.h"
 
 #ifdef JUCE_DEBUG
 // Print the full class name before all debug output:
@@ -28,39 +29,35 @@ Locale::TextUser(localeClassKey)
 void Info::IPLabel::updateLabelText() noexcept
 {
     // Load in another thread to reduce lag when waiting for network data.
-    juce::Component::SafePointer<IPLabel> safePtr(this);
-    juce::MessageManager::callAsync([safePtr]()
+    Util::SafeCall::callAsync<IPLabel>(this, [](IPLabel* ipLabel)
     {
-        if (IPLabel* ipLabel = safePtr.getComponent())
+        Config::MainFile mainConfig;
+        using juce::String;
+        String newText;
+        if (mainConfig.getIPLabelPrintsLocal())
         {
-            Config::MainFile mainConfig;
-            using juce::String;
-            String newText;
-            if (mainConfig.getIPLabelPrintsLocal())
+            String localIP = ipLabel->commandLoader.runTextCommand(
+                    Util::CommandTypes::Text::getLocalIP);
+            if (localIP.isNotEmpty())
             {
-                String localIP = ipLabel->commandLoader.runTextCommand(
-                        Util::CommandTypes::Text::getLocalIP);
-                if (localIP.isNotEmpty())
-                {
-                    newText = ipLabel->localeText(localIPKey) + localIP;
+                newText = ipLabel->localeText(localIPKey) + localIP;
 
-                }
             }
-            if (mainConfig.getIPLabelPrintsPublic())
-            {
-                String publicIP = ipLabel->commandLoader.runTextCommand(
-                        Util::CommandTypes::Text::getPublicIP);
-                if (publicIP.isNotEmpty())
-                {
-                    if (newText.isNotEmpty())
-                    {
-                        newText += "\t";
-                    }
-                    newText += ipLabel->localeText(publicIPKey) + publicIP;
-                }
-            }
-            ipLabel->setText(newText, juce::NotificationType::sendNotification);
         }
+        if (mainConfig.getIPLabelPrintsPublic())
+        {
+            String publicIP = ipLabel->commandLoader.runTextCommand(
+                    Util::CommandTypes::Text::getPublicIP);
+            if (publicIP.isNotEmpty())
+            {
+                if (newText.isNotEmpty())
+                {
+                    newText += "\t";
+                }
+                newText += ipLabel->localeText(publicIPKey) + publicIP;
+            }
+        }
+        ipLabel->setText(newText, juce::NotificationType::sendNotification);
     });
 }
 

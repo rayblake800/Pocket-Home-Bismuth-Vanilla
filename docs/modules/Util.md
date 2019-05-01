@@ -13,6 +13,9 @@ Nullable is an abstract container class, defining objects that hold a single val
 #### [Util\::Math](../../Source/Framework/Util/Util_Math.h)
 The Util\::Math namespace is meant to provide miscellaneous mathematical functions. This currently only contains a template function for finding the median of three values.
 
+#### [Util\::SafeCall](../../Source/Framework/Util/Util_SafeCall.h)
+Util\::SafeCall provides a template function for safely running asynchronous calls on juce::Component objects within the JUCE message thread.
+
 #### [Util\::TempTimer](../../Source/Framework/Util/Util_TempTimer.h)
 TempTimer creates single-use timer objects that execute a function after a specific number of milliseconds.
 

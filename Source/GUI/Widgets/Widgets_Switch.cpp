@@ -1,4 +1,5 @@
 #include "Widgets_Switch.h"
+#include "Util_SafeCall.h"
 
 // Switch layout constants:
 
@@ -147,13 +148,9 @@ void Widgets::Switch::SwitchHandle::paint(juce::Graphics& graphics)
 // Handles switch transitions delayed by waiting for animation.
 void Widgets::Switch::timerCallback()
 {
-    juce::Component::SafePointer<Switch> safePtr(this);
-    juce::MessageManager::callAsync([safePtr]()
+    Util::SafeCall::callAsync<Switch>(this, [](Switch* switchPtr)
     {
-        if (Switch* switchPtr = safePtr.getComponent())
-        {
-            switchPtr->stopTimer();
-            switchPtr->clicked();
-        }
+        switchPtr->stopTimer();
+        switchPtr->clicked();
     });
 }

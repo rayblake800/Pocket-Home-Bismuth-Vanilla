@@ -3,6 +3,7 @@
 #include "Config_MainKeys.h"
 #include "Layout_Component_ConfigFile.h"
 #include "Layout_Component_JSONKeys.h"
+#include "Util_SafeCall.h"
 
 
 // Loads clock settings from Config::MainFile.
@@ -88,20 +89,16 @@ void Info::Clock::configValueChanged(const juce::Identifier& key)
     if (key == Config::MainKeys::showClock)
     {
         showClock = config.getShowClock();
-        juce::Component::SafePointer<Clock> safePtr(this);
-        juce::MessageManager::callAsync([safePtr]
+        Util::SafeCall::callAsync<Clock>(this, [](Clock* clock)
         {
-            if (Clock* clock = safePtr.getComponent())
+            clock->setAlpha(clock->showClock ? 1 : 0);
+            if (clock->showClock && !clock->isTimerRunning())
             {
-                clock->setAlpha(clock->showClock ? 1 : 0);
-                if (clock->showClock && !clock->isTimerRunning())
-                {
-                    clock->startTimer(1);
-                }
-                else if (!clock->showClock && clock->isTimerRunning())
-                {
-                    clock->stopTimer();
-                }
+                clock->startTimer(1);
+            }
+            else if (!clock->showClock && clock->isTimerRunning())
+            {
+                clock->stopTimer();
             }
         });
     }

@@ -6,6 +6,7 @@
 #include "Wifi_Connection_Event.h"
 #include "Theme_Image_ConfigFile.h"
 #include "Theme_Image_AssetList.h"
+#include "Util_SafeCall.h"
 
 // Localized object class key:
 static const juce::Identifier localeClassKey = "Settings::WifiControl";
@@ -168,12 +169,8 @@ void Settings::WifiControl::connectionAuthFailed
 // Asynchronously refresh the WifiControl component on the JUCE message thread.
 void Settings::WifiControl::asyncRefresh()
 {
-    juce::Component::SafePointer<WifiControl> safePtr(this);
-    juce::MessageManager::callAsync([safePtr]()
+    Util::SafeCall::callAsync<WifiControl>(this, [](WifiControl* wifiControl)
     {
-        if (WifiControl* wifiControl = safePtr.getComponent())
-        {
-            wifiControl->refresh();
-        }
+        wifiControl->refresh();
     });
 }
