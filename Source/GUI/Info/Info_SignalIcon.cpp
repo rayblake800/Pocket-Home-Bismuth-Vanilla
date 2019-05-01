@@ -29,7 +29,10 @@ void Info::SignalIcon::setSignalStrengthImage
     const int numStrengthImages = 1 + maxStrengthIdx - minStrengthIdx;
     const int strengthIndex = std::min<int>(maxStrengthIdx,
             minStrengthIdx + signalStrength / (100 / numStrengthImages));
-    setImageAssetIndex(strengthIndex);
+    juce::MessageManager::getInstance()->callAsync([this, strengthIndex]()
+    {
+        setImageAssetIndex(strengthIndex);
+    });
 }
 
 
