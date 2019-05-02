@@ -1,6 +1,6 @@
 {
     "Wifi AP scan frequency": 30000,
-    "Wifi interface" : "",
+    "Wifi interface" : "wlan0",
     "Terminal launch command": "vala-terminal -e",
     "Show cursor": true,
     "Show clock": true,
