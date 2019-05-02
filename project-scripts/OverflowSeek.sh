@@ -1,5 +1,5 @@
 #!/bin/bash
-### OverflowSeek.sh ############################################################
+### DeadLinkF.sh ############################################################
 # Opens Vim editing the first detected line in the project that exceeds the 80
 # character line length limit.
 #--- Usage: ---

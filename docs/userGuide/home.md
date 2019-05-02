@@ -37,14 +37,14 @@ open context menu | Ctrl+E
 In all menu formats, right clicking or control-clicking menu items or empty space in the menu will open a context menu.
 
 #### Paged Menu Format:
-![Paged Menu](../images/paged.gif?raw=true "Paged Menu Format")
+![Paged Menu](../images/screenshots/paged.gif?raw=true "Paged Menu Format")
 
 Click on menu items to launch applications and open folders. Click the navigation arrow buttons on the left and right side of the page to scroll through the open folder. If not within the base folder, the navigation arrow button on the top of the page closes the current folder.
 
 Use the arrow keys or the tab key to select menu items, and use the enter key to open them. The active folder page will automatically move to follow the current selection. When a menu item is selected, the escape key deselects it. When no item is selected and the folder is not on its first page, the escape key scrolls to the first page of the folder. When on the first page of a menu folder with no items selected, the escape key closes the folder.
 
 #### Scrolling Menu Format:
-![Scrolling Menu](../images/scrolling.gif?raw=true "Scrolling Menu Format")
+![Scrolling Menu](../images/screenshots/scrolling.gif?raw=true "Scrolling Menu Format")
 
 Clicking on unselected menu items selects them, clicking on selected menu items opens them. When multiple folders are open, clicking on menu items in an inactive folder closes all folders above that folder.
 

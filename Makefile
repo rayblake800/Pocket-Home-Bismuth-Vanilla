@@ -13,7 +13,7 @@ define HELPTEXT
    check-pkg-config:  Verify all pkg-config libraries.
    clean:             Remove all compiled binaries.
    strip:             Remove symbols from compiled binaries.
-   uninstall:          Uninstall the application.
+   uninstall:         Uninstall the application.
    help:              Print this help information.
 
 # Main build Options:
