@@ -59,7 +59,7 @@ EventLoop creates, runs, and destroys a GLib event loop, and provides access to 
 ContextCaller objects use a GLib context to call functions within a GLib event loop that shares its context. ContextCaller can block the calling thread until the requested function call is complete, or schedule them to run asynchronously.
 
 #### [GLib\::SharedThread](../../Source/Framework/GLib/Thread/GLib_SharedThread.h)
-SharedThread is an abstract juce\::Thread class that runs an EventLoop and provides access to the loop through a ContextCaller. SharedThread is meant to be implemented as a [shared resource](./SharedResource.md) class, either inheriting from [SharedResource\::Resource](../../Source/Util/SharedResource/SharedResource_Resource.h), or [SharedResource\::Modular\::Module](../../Source/Util/SharedResource/Modular/SharedResource_Modular_Module.h).
+SharedThread is an abstract juce\::Thread class that runs an EventLoop and provides access to the loop through a ContextCaller. SharedThread is meant to be implemented as a [shared resource](./SharedResource.md) class, either inheriting from [SharedResource\::Resource](../../Source/Framework/SharedResource/SharedResource_Resource.h), or [SharedResource\::Modular\::Module](../../Source/Framework/SharedResource/Modular/SharedResource_Modular_Module.h).
 
 #### [GLib\::ThreadHandler](../../Source/Framework/GLib/Thread/GLib_ThreadHandler.h)
 ThreadHandler is an abstract basis for a class that manages a GLib\::SharedThread subclass instance. Every object of a given ThreadHandler subclass safely shares access to a single SharedThread subclass instance.

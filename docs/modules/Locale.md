@@ -4,9 +4,8 @@ The Locale module attempts to provide localized display text for the system's cu
 #### [Locale](../../Source/Framework/Locale/Locale.h)
 Locale provides functions for selecting an appropriate localization file.
 
-#### [Locale\::TextUser](../../Source/Framework/Locale/TextUser.h)
+#### [Locale\::TextUser](../../Source/Framework/Locale/Locale_TextUser.h)
 TextUser objects load a set of localized display text strings from the selected locale file.
 
-#### [Locale\::Time](../../Source/Framework/Locale/Time.h)
+#### [Locale\::Time](../../Source/Framework/Locale/Locale_Time.h)
 Time is a TextUser subclass that generates localized text representing an amount of time that has passed.
-

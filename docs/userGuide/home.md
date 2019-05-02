@@ -6,15 +6,15 @@
     * [Image Asset Configuration](../configuration/imageAssets.md): All battery level icons and colors are stored under the **"battery"** key.
     * [Layout Configuration](../configuration/layout.md): The relative bounds of the icon are stored under the **"home page battery icon"** key, and the relative bounds of the percentage label are stored under the **"battery percent text"** key.
 2. The clock label displays the current time.
-   * [General Configuration](../configuration/config.md): Whether the clock uses twelve hour or twenty four hour mode is stored under the **"Use 24h mode"** key, and whether the clock is shown at all is stored under the **"Show Clock"** key. These options may also be changed on the [home settings page](./HomeSettings.md).
+   * [General Configuration](../configuration/config.md): Whether the clock uses twelve hour or twenty four hour mode is stored under the **"Use 24h mode"** key, and whether the clock is shown at all is stored under the **"Show Clock"** key. These options may also be changed on the [home settings page](./homeSettings.md).
     * [Layout Configuration](../configuration/layout.md): The relative bounds of the clock are stored under the **"home page clock label"** key.
 3. The signal icon shows the strength of the current network connection.
     * [Image Asset Configuration](../configuration/imageAssets.md): All signal strength icons and colors are stored under the **"signal strength"** key.
     * [Layout Configuration](../configuration/layout.md): The relative bounds of the icon are stored under the **"home page Wifi icon"** key.
-4. The power button opens the [power page](./PowerPage.md).
+4. The power button opens the [power page](./power.md).
     * [Image Asset Configuration](../configuration/imageAssets.md): The button icon and colors are stored under the **"power button"** key.
     * [Layout Configuration](../configuration/layout.md): The relative bounds of the button are stored under the **"power page button"** key.
-5. The settings button opens the [quick settings page](./QuickSettings.md).
+5. The settings button opens the [quick settings page](./quickSettings.md).
     * [Image Asset Configuration](../configuration/imageAssets.md): The button icon and colors are stored under the **"settings button"** key.
     * [Layout Configuration](../configuration/layout.md): The relative bounds of the button are stored under the **"settings page button"** key.
 

@@ -50,4 +50,4 @@ ConfigFile objects connect to the JSONResource to load AssetList objects for spe
 ConfigListener objects track any number of individual image keys defined in JSONKeys. These objects are notified by the JSONResource whenever an image path they track is updated.
 
 #### [Theme\::Image\::Component](../../Source/GUI/Theme/Image/Theme_Image_Component.h)
-Component is a template class used to create subclasses of [Widgets\::DrawableImage](../../Source/Framework/Widgets/Widgets_DrawableImage.h) that use image assets and colours provided by an Image\::AssetList.
+Component is a template class used to create subclasses of [Widgets\::DrawableImage](../../Source/GUI/Widgets/Widgets_DrawableImage.h) that use image assets and colours provided by an Image\::AssetList.
