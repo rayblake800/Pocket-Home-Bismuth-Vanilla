@@ -121,10 +121,10 @@ void Page::Power::startSleepMode()
     else
     {
         systemCommands.runActionCommand(Util::CommandTypes::Action::wake);
-        // Enable the page again after waking. This shouldn't happen before the
-        // login page is shown.
-        setEnabled(true);
     }
+    // Enable the page again after waking. This shouldn't happen before the
+    // login page is shown.
+    setEnabled(true);
 }
 
 
