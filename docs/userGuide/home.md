@@ -54,7 +54,7 @@ Use the up and down keys or the tab key to scroll through the menu. Left and esc
 Context menus allow you to edit the menu structure from within the application. The menu structure can also be edited directly in the [application menu configuration file](../configuration/appMenu.md).
 
 #### Main Context Menu:
-![Main Context Menu](../images/screenshots/menu/main.png?raw=true "Main context menu")
+![Main Context Menu](../images/screenshots/menus/main.png?raw=true "Main context menu")
 
 This context menu appears when you right-click or control-click an empty spot in the menu, or press Ctrl+E when no menu items are selected.
 1. Open an editor to create a new application shortcut to use only in this application.
@@ -62,7 +62,7 @@ This context menu appears when you right-click or control-click an empty spot in
 3. Open an editor to create a new desktop entry application shortcut which may be used by other applications.
 
 #### Shortcut Menu:
-![Shortcut Menu](../images/screenshots/menu/shortcut.png?raw=true "Shortcut menu")
+![Shortcut Menu](../images/screenshots/menus/shortcut.png?raw=true "Shortcut menu")
 
 This context menu appears when you right-click or control-click an application shortcut in the menu, or press Ctrl+E when a shortcut is selected.
 1. Open an editor to update the shortcut.
@@ -71,7 +71,7 @@ This context menu appears when you right-click or control-click an application s
 4. Swap the shortcut with the menu item after it.
 
 #### Folder Menu:
-![Folder Menu](../images/screenshots/menu/folder.png?raw=true "Folder menu")
+![Folder Menu](../images/screenshots/menus/folder.png?raw=true "Folder menu")
 
 This context menu appears when you right-click or control-click a folder menu item, or press Ctrl+E when a folder is selected.
 1. Open an editor to update the folder.
@@ -81,7 +81,7 @@ This context menu appears when you right-click or control-click a folder menu it
 5. Swap the shortcut with the menu item after it.
 
 #### Desktop Entry Menu:
-![Desktop Entry Menu](../images/screenshots/menu/desktopEntry.png?raw=true "Desktop entry menu")
+![Desktop Entry Menu](../images/screenshots/menus/desktopEntry.png?raw=true "Desktop entry menu")
 
 This context menu appears when you right-click or control-click a desktop entry menu item, or press Ctrl+E when a desktop entry item is selected.
 1. Open an editor to update the desktop entry.
