@@ -9,7 +9,7 @@ If building on PocketC.H.I.P, you will need to create and use a swapfile on an e
     sudo chmod 600 [path to USB drive]/swapfile
     sudo mkswap [path to USB drive]/swapfile
     sudo swapon [path to USB drive]/swapfile
-Make sure to disable the swapfile with `sudo swapoff [path to USB drive]/swapfile` if you want to remove the USB drive before you reboot the system.
+Make sure to disable the swapfile with `sudo swapoff [path to USB drive]/swapfile` if you want to remove the USB drive before you shut down the system.
     
 
 #### 1. Required Packages
@@ -31,6 +31,7 @@ Make sure to disable the swapfile with `sudo swapoff [path to USB drive]/swapfil
      libglib2.0-dev
 ####  2. Cloning and building
       git clone --recursive https://github.com/centuryglass/PocketCHIP-pocket-home.git
+      cd PocketCHIP-pocket-home
       make
       make install
 #### 3. Updating

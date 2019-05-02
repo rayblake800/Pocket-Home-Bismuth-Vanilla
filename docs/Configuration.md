@@ -1,5 +1,5 @@
 # Configuration Guide
-This page links to guides to all configuration files used by this application.
+This page links to guides to all configuration files used by this application. These files store all configurable options as JSON data. Other than the system command file, these files are all storedin the `~/XDG_CONFIG_HOME/pocket-home` directory, or `~/.config/pocket-home` if the XDG_CONFIG_HOME environment variable is not defined. 
 
 #### [General Application Configuration](./configuration/config.md):
 Setting general application options defined in config.json.

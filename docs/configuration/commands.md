@@ -1,5 +1,5 @@
 # System Command File
-The commands.json system command file stores system commands used by the application that may vary between different systems. Because system commands usually shouldn't be changed, and because of the potential security risks involved, the command file is stored in the pocket-home assets directory instead of with other configuration files.
+The [commands.json](../../assets/commands.json) system command file stores system commands used by the application that may vary between different systems. Because system commands usually shouldn't be changed, and because of the potential security risks involved, the command file is stored in the pocket-home assets directory instead of with other configuration files.
 
 Changes to commands.json will be overwritten whenever Pocket-Home Bismuth is updated. To make changes to system commands that don't get undone by updates, create a file called overrideCommands.json within the same directory as the commands.json file. Commands defined in this file will override commands defined in the default command file.
 

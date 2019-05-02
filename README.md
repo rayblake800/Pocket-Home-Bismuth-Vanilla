@@ -1,10 +1,9 @@
 # ![Bismuth project image](./assets/login/chipVector.png?raw=true "Bismuth project image") Pocket-Home Bismuth Edition
 An application launcher and system manager for portable Linux devices.
 
-![Paged Menu](./docs/images/paged.gif?raw=true "Paged Menu") ![Scrolling Menu](./docs/images/scrolling.gif?raw=true "Scrolling Menu")
-
 Pocket-Home Bismuth is a complete rewrite of the Pocket-Home launcher. It introduces a full-featured, configurable application menu, improved Wifi control and performance, and initial support for devices other than the PocketC.H.I.P. The project's biggest focus is on creating extensively documented, reusable code, to make it as easy as possible to update, extend, and adapt.
 
+- [User Guide](./docs/UserGuide.md)
 - [Building and Installation](./docs/BuildAndInstall.md)
 - [Documentation](./docs/Main.md)
 - [Configuration File Guide](./docs/Configuration.md)
@@ -20,4 +19,4 @@ Support for devices other than the PocketC.H.I.P. is available, but incomplete. 
   Now that NTC is gone and the PocketCHIP has ceased production, the primary goal of this project is to make Pocket-Home as easy as possible to adapt to similar handheld GNU/Linux devices. Future updates will focus on support for a greater variety of hardware options, input controls, and system configurations. See the [project tasklist](./docs/TODO.txt) for more information on future project goals.
 
 
-  Pocket-Home Bismuth is inspired by my experiences with the GP2X, the Tapwave Zodiac, and of course, the PocketCHIP itself. Now that niche handheld devices like these are relatively affordable and easy to design, I want to make Bismuth into my ideal interface for using these devices.
+  This project is inspired by my experiences with the GP2X, the Tapwave Zodiac, and of course, the PocketCHIP itself. Now that niche handheld devices like these are relatively affordable and easy to design, I want to make Pocket-Home Bismuth into my ideal interface for using these devices.

@@ -1,5 +1,5 @@
 # Custom Application Colour Configuration
-The colours.json file is used to store custom UI colour values. Colour values should be provided as ARGB hexadecimal colour value strings.
+The [colours.json](../../assets/configuration/colours.json) file is used to store custom UI colour values. Colour values should be provided as ARGB hexadecimal colour value strings.
 
 ## UI Element Category Colours
 Each UI component colour is categorized using one of eleven different general UI element categories. The colours.json value contains colour values for each of these categories. If a UI element does not have a specific colour value assigned to it in the colours.json file, it takes the colour assigned to its category instead.

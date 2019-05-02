@@ -1,5 +1,5 @@
 # General Application Configuration
-The config.json file is used to store general application settings. This page explains how settings defined in this file are used, and the values they are allowed to hold.
+The [config.json](../../assets/configuration/config.json) file is used to store general application settings. This page explains how settings defined in this file are used, and the values they are allowed to hold.
 
 Key                           | Permitted Values | Description
 ----------------------------- | ---------------- | ---

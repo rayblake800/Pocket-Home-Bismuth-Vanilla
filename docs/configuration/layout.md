@@ -1,5 +1,5 @@
 # Layout Configuration File
-The layout.json configuration file sets the positions and sizes of UI components that shouldn't be managed using a relative group layout. Application font sizes are also defined here.
+The [layout.json](../../assets/configuration/layout.json) configuration file sets the positions and sizes of UI components that shouldn't be managed using a relative group layout. Application font sizes are also defined here.
 
 ## Font sizes
 Pocket-Home Bismuth uses three font size keys, "small text", "medium text", and "large text". Font sizes may be defined as either a fraction of the application window height, or as a fixed size in pixels. In most circumstances, text components will use the largest of these font sizes that would still allow their text to fit within the component bounds. If none of the configurable sizes would fit, these values are ignored and an even smaller font size is selected automatically.

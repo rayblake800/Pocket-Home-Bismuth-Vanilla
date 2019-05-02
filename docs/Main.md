@@ -19,3 +19,7 @@ An overview of the preferred coding and documentation conventions used by this p
 ### [Library References](./Libraries.md)
 
 Lists and explains the libraries directly required by this project.
+
+### [User Guide](./UserGuide.md)
+
+Guides for using and configuring Pocket-Home Bismuth.

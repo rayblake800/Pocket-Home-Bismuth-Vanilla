@@ -1,5 +1,5 @@
 # Image Asset Configuration
-The imageAssets.json configuration file defines all image assets used in the application. Image assets may be provided as absolute paths, or as paths relative to the pocket-home assets directory.
+The [imageAssets.json](../../assets/configuration/imageAssets.json) configuration file defines all image assets used in the application. Image assets may be provided as absolute paths, or as paths relative to the pocket-home assets directory.
 
 ## Basic image keys
 Basic image keys refer to a single image file with fixed colors.

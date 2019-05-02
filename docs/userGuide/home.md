@@ -1,8 +1,8 @@
 # Home Page and Application Menu
 
-# ![HomePage Guide](../images/screenshots/pages/home.png?raw=true "HomePage Guide")
+![HomePage Guide](../images/screenshots/pages/home.png?raw=true "HomePage Guide")
 1. The battery icon shows the system's remaining battery percentage, and whether the system is charging.
-    * [System Command Options](../configuration/commands.md): The command used by the system to read the current battery percentage is stored under the **"get battery percent"** key.
+    * [System Command Options](../configuration/commands.md): The command used to read the current battery percentage is stored under the **"get battery percent"** key.
     * [Image Asset Configuration](../configuration/imageAssets.md): All battery level icons and colors are stored under the **"battery"** key.
     * [Layout Configuration](../configuration/layout.md): The relative bounds of the icon are stored under the **"home page battery icon"** key, and the relative bounds of the percentage label are stored under the **"battery percent text"** key.
 2. The clock label displays the current time.

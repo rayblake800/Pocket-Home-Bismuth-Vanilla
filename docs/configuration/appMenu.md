@@ -1,5 +1,5 @@
 # Application Menu Structure Configuration
-The appMenu.json configuration file stores the structure of the Pocket-Home application menu. It defines the order, names, and properties of menu folders and pinned application shortcuts.
+The [appMenu.json](../../assets/configuration/appMenu.json) configuration file stores the structure of the Pocket-Home application menu. It defines the order, names, and properties of menu folders and pinned application shortcuts.
 
 The menu file stores all menu items in the form of nested JSON objects. The values defined within each menu item control how it will appear and behave. Menu items can either be application shortcuts used to run a launch command, or folders that contain other menu items.
 
