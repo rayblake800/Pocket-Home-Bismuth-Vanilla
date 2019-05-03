@@ -21,7 +21,7 @@ fi
 
 # Check for battery devices through acpi:
 if [ ! -z `command -v acpi` ]; then
-    batteryDevice=`acpi -b`
+    batteryDevice=`acpi -b 2> /dev/null`
     if [ ! -z "$batteryDevice" ]; then
         echo "$batteryDevice"
         exit 0
