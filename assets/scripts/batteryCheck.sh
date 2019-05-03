@@ -30,7 +30,7 @@ fi
 
 # Check for battery directories in /sys/class/power_supply:
 if [ -d /sys/class/power_supply ]; then
-    batteryDir=`ls /sys/class/power_supply`
+    batteryDir=`ls -t /sys/class/power_supply | head -n 1`
     if [ ! -z "$batteryDir" ]; then
         echo "/sys/class/power_supply/$batteryDir"
         exit 0
@@ -39,7 +39,7 @@ fi
 
 # Check for battery directories in /proc/acpi/battery (deprecated):
 if [ -d /proc/apci/battery ]; then
-    batteryDir=`ls /proc/acpi/battery`
+    batteryDir=`ls -t /proc/acpi/battery | head -n 1`
     if [ ! -z "$batteryDir" ]; then
         echo "/proc/acpi/battery/$batteryDir"
         exit 0
