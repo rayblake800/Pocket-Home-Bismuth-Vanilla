@@ -20,7 +20,7 @@ fi
 
 # If UPower device was found:
 if [[ $batterySource == *"UPower"* ]]; then
-    echo `upower -i $batterySource | grep -oE "[0-9]+"`
+    echo `upower -i $batterySource | grep "percentage:" | sed "s/[^0-9]//g"`
     exit 0
 fi
 

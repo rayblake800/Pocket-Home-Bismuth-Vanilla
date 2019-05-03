@@ -16,7 +16,7 @@ fi
 
 # If UPower device was found:
 if [[ $batterySource == *"UPower"* ]]; then
-    if `upower -i $batterySource | grep "state*charging"`; then
+    if `upower -i $batterySource | grep "state:.*charging"`; then
         echo "1"
     else
         echo "0"
