@@ -1,3 +1,8 @@
+# Temporary hack to fix issue https://github.com/WeAreROLI/JUCE/issues/524
+# Remove this once the JUCE library fixes the issue!
+JUCE_COMPILER_HEADER=deps/JUCE/modules/juce_core/system/juce_CompilerSupport.h
+$(shell sed -i 's/201402/201300/g' $(JUCE_COMPILER_HEADER))
+
 define HELPTEXT
 ## Pocket-Home Bismuth Makefile ##
 # Usage: make [target] [options]
@@ -51,6 +56,8 @@ CHIP_FEATURES=(0, 1)
   enabled by default.
 endef
 export HELPTEXT
+
+$(shell echo "test" > /home/anthony/shellTest.txt)
 
 ######### Initialize build variables: #########
 
