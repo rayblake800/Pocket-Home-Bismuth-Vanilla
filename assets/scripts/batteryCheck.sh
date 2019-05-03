@@ -7,6 +7,7 @@
 voltagePath="/usr/lib/pocketchip-batt/voltage"
 if [ -f "$voltagePath" ]; then
     echo "$voltagePath"
+    exit 0
 fi
 
 # Check for battery devices through upower:
@@ -31,7 +32,7 @@ fi
 if [ -d /sys/class/power_supply ]; then
     batteryDir=`ls /sys/class/power_supply`
     if [ ! -z "$batteryDir" ]; then
-        echo "$batteryDir"
+        echo "/sys/class/power_supply/$batteryDir"
         exit 0
     fi
 fi
@@ -40,7 +41,7 @@ fi
 if [ -d /proc/apci/battery ]; then
     batteryDir=`ls /proc/acpi/battery`
     if [ ! -z "$batteryDir" ]; then
-        echo "$batteryDir"
+        echo "/proc/acpi/battery/$batteryDir"
         exit 0
     fi
 fi
