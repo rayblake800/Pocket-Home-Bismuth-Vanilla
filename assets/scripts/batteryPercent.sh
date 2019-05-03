@@ -13,7 +13,7 @@ if [[ $batterySource == $voltagePath ]]; then
     currentVoltage=`cat "$voltagePath"`
     let range=maxVoltage-minVoltage
     let currentLevel=currentVoltage-minVoltage
-    let percent=range*100/currentLevel
+    let percent=currentLevel*100/range
     echo "$percent"
     exit 0
 fi

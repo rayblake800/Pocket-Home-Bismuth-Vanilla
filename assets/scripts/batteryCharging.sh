@@ -8,7 +8,7 @@ scriptDir=`dirname $0`
 batterySource=`$scriptDir/batteryCheck.sh`
 
 # If PocketCHIP battery file was found:
-if [[ $batterySource == "/usr/lib/pocketchipp-batt/voltage" ]]; then
+if [[ $batterySource == "/usr/lib/pocketchip-batt/voltage" ]]; then
     cat /usr/lib/pocketchip-batt/charging
     exit 0
 fi
