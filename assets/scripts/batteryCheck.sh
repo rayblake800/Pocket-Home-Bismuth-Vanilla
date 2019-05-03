@@ -10,7 +10,7 @@ if [ -f "$voltagePath" ]; then
 fi
 
 # Check for battery devices through upower:
-if [ ! -z `command -v upower`]; then
+if [ ! -z `command -v upower` ]; then
     batteryDevice=`upower -e | grep -i -m 1 'BAT'`
     if [ ! -z "$batteryDevice" ]; then
         echo "$batteryDevice"
@@ -28,15 +28,19 @@ if [ ! -z `command -v acpi` ]; then
 fi
 
 # Check for battery directories in /sys/class/power_supply:
-batteryDir=`ls /sys/class/power_supply`
-if [ ! -z "$batteryDir" ]
-    echo "$batteryDir"
-    exit 0
+if [ -d /sys/class/power_supply ]; then
+    batteryDir=`ls /sys/class/power_supply`
+    if [ ! -z "$batteryDir" ]; then
+        echo "$batteryDir"
+        exit 0
+    fi
 fi
 
 # Check for battery directories in /proc/acpi/battery (deprecated):
-batteryDir=`ls /proc/acpi/battery`
-if [ ! -z "$batteryDir" ]
-    echo "$batteryDir"
-    exit 0
+if [ -d /proc/apci/battery ]; then
+    batteryDir=`ls /proc/acpi/battery`
+    if [ ! -z "$batteryDir" ]; then
+        echo "$batteryDir"
+        exit 0
+    fi
 fi
