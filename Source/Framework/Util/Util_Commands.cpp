@@ -149,16 +149,36 @@ static const juce::Identifier& textCommandKey
             static const juce::Identifier getBrightnessKey("get brightness");
             return getBrightnessKey;
         }
+        // Gets the system's IP address on the local network
         case TextCommand::getLocalIP:
         {
             static const juce::Identifier localIPKey("get local IP");
             return localIPKey;
         }
+        // Gets the system's global IP address
         case TextCommand::getPublicIP:
         {
             static const juce::Identifier publicIPKey("get public IP");
             return publicIPKey;
-        }
+        },
+        // Checks if the system has a battery
+        case TextCommand::hasBattery:
+        {
+            static const juce::Identifier findBatteryKey("find battery");
+            return findBatteryKey;
+        },
+        // Gets the battery percentage
+        case TextCommand::getBatteryPercent:
+        {
+            static const juce::Identifier percentKey("get battery percent");
+            return percentKey;
+        },
+        // Gets whether the battery is charging
+        case TextCommand::getBatteryCharging:
+        {
+            static const juce::Identifier chargingKey("is battery charging");
+            return chargingKey;
+        },
     }
     DBG(dbgPrefix << __func__ << ": Error, unhandled command type!");
     jassertfalse;

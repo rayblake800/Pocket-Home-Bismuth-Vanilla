@@ -18,5 +18,9 @@
     "get brightness"      : "cat /sys/class/backlight/backlight/brightness",
 
     "get local IP"        : "POCKET_HOME_SCRIPTS/printLocalIP.sh",
-    "get public IP"       : "POCKET_HOME_SCRIPTS/printPublicIP.sh"
+    "get public IP"       : "POCKET_HOME_SCRIPTS/printPublicIP.sh",
+
+    "find battery"        : "POCKET_HOME_SCRIPTS/batteryCheck.sh",
+    "get battery percent" : "POCKET_HOME_SCRIPTS/batteryPercent.sh",
+    "is battery charging" : "POCKET_HOME_SCRIPTS/batteryCharging.sh"
 }

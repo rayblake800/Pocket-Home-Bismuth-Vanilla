@@ -54,8 +54,12 @@ namespace Util
         {
             // Prints the system volume percentage
             getVolume,
+            // Checks if the system has a battery that pocket-home can access
+            hasBattery,
             // Gets the battery percentage
             getBatteryPercent,
+            // Gets whether the battery is charging
+            getBatteryCharging,
             // Gets the display brightness percentage
             getBrightness,
             // Prints the system's local IP address

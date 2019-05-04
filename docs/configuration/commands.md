@@ -20,7 +20,9 @@ sleep check         |                   | 0 if the display is off, 1 if it is on
 command check       | The name of a system command. |       | The full path to the command, or the empty string if the command is invalid.
 set password        | The user name and the new password hash to save, or just the user name if removing the password. | One of the result codes at the top of [passwordManager.sh](../../assets/scripts/passwordManager.sh) |      | If successful, the application password was changed or removed.
 get volume          |                   |                   | Volume percentage, or an error message if the command failed.
-get battery percent |                   |                   | Remaining battery percentage, or an error message if the command failed.
+has battery         |                   |                   | A battery file path, DBus path, or other relevant battery source if a system battery is visible, nothing otherwise.
+get battery percent |                   |                   | The remaining battery percentage.
+get battery charging|                   |                   | '1' if the battery is charging, '0' if it isn't charging, or nothing if no battery is found.
 get brightness      |                   |                   | Display brightness between one and ten, or an error message if the command failed.
 get local IP        |                   |                   | The system's IP on the local network.
 get public IP       |                   |                   | The system's current global IP.
