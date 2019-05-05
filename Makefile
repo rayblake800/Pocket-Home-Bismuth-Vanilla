@@ -59,8 +59,6 @@ CHIP_FEATURES=(0, 1)
 endef
 export HELPTEXT
 
-$(shell echo "test" > /home/anthony/shellTest.txt)
-
 ######### Initialize build variables: #########
 
 # Default Options:
