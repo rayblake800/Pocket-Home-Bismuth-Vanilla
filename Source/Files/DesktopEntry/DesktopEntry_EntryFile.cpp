@@ -328,7 +328,9 @@ juce::String DesktopEntry::EntryFile::getGenericName() const
 // Checks if this desktop entry should appear in application menus.
 bool DesktopEntry::EntryFile::shouldBeDisplayed() const
 {
-    return !noDisplay && onlyShowIn.isEmpty();
+    return !noDisplay 
+        && (onlyShowIn.isEmpty() || onlyShowIn.contains("pocket-home"))
+        && ! notShowIn.contains("pocket-home");
 }
 
 
