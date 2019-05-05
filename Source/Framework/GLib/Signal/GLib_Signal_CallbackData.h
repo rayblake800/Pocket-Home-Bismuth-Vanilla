@@ -24,7 +24,7 @@ namespace GLib
  *
  *  Whenever a GObject emits a signal, if a Signal::Handler is connected for
  * that signal type and signal source, a CallbackData object is passed in as an
- * argument to a static callback function provided by the signal hander class.
+ * argument to a static callback function provided by the signal handler class.
  * The CallbackData object contains the address of the signal handler, and a
  * copy of the GLib::Object containing the GObject signal source. The static
  * callback function should use the CallbackData to call an appropriate signal

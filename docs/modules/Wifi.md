@@ -148,7 +148,7 @@ Thread\::Handler objects connect to the Thread\::Module to access the shared cli
 Wifi\::LibNM uses the [GLib module](./GLib.md) to provide container objects for managing LibNM GObject data pointers.
 
 #### [Wifi\::LibNM\::Client](../../Source/System/Wifi/LibNM/GObjects/Owned/Wifi_LibNM_Client.h)
-Client objects manage NMClient* values, which represent a connection to NetworkManager. Client objects load LibNM\::DeviceWifi objects for system wifi devices, and LibNM\::ActiveConnection objects for active or activating network connections. Client objects are also used to enable or disable wireless networing, and to create or close network connections.
+Client objects manage NMClient* values, which represent a connection to NetworkManager. Client objects load LibNM\::DeviceWifi objects for system wifi devices, and LibNM\::ActiveConnection objects for active or activating network connections. Client objects are also used to enable or disable wireless networking, and to create or close network connections.
 
 #### [Wifi\::LibNM\::AccessPoint](../../Source/System/Wifi/LibNM/GObjects/Borrowed/Wifi_LibNM_AccessPoint.h)
 AccessPoint objects manage NMAccessPoint* values, used by the NetworkManager to represent nearby visible access points. They may be used to access all relevant data NetworkManager stores regarding the access point they represent. A valid AccessPoint object is required by the Client in order to open a Wifi connection.
@@ -181,7 +181,7 @@ LibNM uses GObject signals to send out updates when networking data is updated. 
 ClientHandler is a basis for classes that receive signals from the LibNM\::Client object. When connected to the Client, these objects receive a ClientHandler::wirelessStateChange call whenever wireless networking is enabled or disabled. Wifi\::Signal\::ClientModule serves as the only necessary Signal\::ClientHandler subclass.
 
 #### [Wifi\::LibNM\::Signal\::DeviceHandler](../../Source/System/Wifi/LibNM/Signal/Wifi_LibNM_Signal_DeviceHandler.h)
-DeviceHandler is a basis for classes that receive signals from the LibNM\::DeviceWifi object. When connected to the DeviceWifi, these classes recieve signals when the device state changes, when visible access points are added or removed, and when the device's active connection changes. Wifi\::Signal\::DeviceModule serves as the only necessary Signal\::DeviceHandler class.
+DeviceHandler is a basis for classes that receive signals from the LibNM\::DeviceWifi object. When connected to the DeviceWifi, these classes receive signals when the device state changes, when visible access points are added or removed, and when the device's active connection changes. Wifi\::Signal\::DeviceModule serves as the only necessary Signal\::DeviceHandler class.
 
 #### [Wifi\::LibNM\::Signal\::APHandler](../../Source/System/Wifi/LibNM/Signal/Wifi_LibNM_Signal_APHandler.h)
 APHandler is a basis for classes that receive signals from LibNM\::AccessPoint objects. When connected to an AccessPoint, these objects receive an APHandler::signalStrengthChanged call whenever the signal strength changes for a connected access point. Wifi\::Signal\::APModule serves as the only necessary Signal\::APHandler class.

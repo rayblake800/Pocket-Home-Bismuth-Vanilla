@@ -24,7 +24,7 @@
 - Add a JSON configuration file defining all keybindings.
 - Create a UI component that captures and saves keybindings.
 - Add a settings page for editing keybindings.
-- Replace all hardcoded bindings with config bindings.
+- Replace all hard-coded bindings with config bindings.
 
 ### Compatibility with a broader set of input schemes:
 - The program currently requires a full keyboard and a touch screen or mouse.
@@ -63,7 +63,7 @@
     - Saving calibration data.
     - Changing the date and time.
 - Create custom PolKit policies for interacting with the setuid program.
-- Implement a PolKit authentication agent within the application to eliminate the dependancy on the GNOME authentication agent.
+- Implement a PolKit authentication agent within the application to eliminate the dependency on the GNOME authentication agent.
 
 ### Date/Time control page:
 - Re-implement with built in controls for system time and date.

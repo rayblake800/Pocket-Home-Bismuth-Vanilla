@@ -6,3 +6,6 @@ Classes that have similar tasks or that work together to accomplish some larger 
 
 ### Spacing, Indentation, and Line Breaks
 To keep code consistent and legible, this project provides an extensive set of rules for how whitespace, indentation, and line breaks should be used. Although these rules are very specific about exactly how to format documentation and code, treat them as more of a guideline than a strict requirement. A functional, relatively organized class that ignores some of these rules is better than an incomplete class that follows them exactly. If breaking these rules would produce more readable code, always choose readable code over strict adherence to the rules. The project's [CodeFormat script](../project-scripts/CodeFormat.pl) will attempt to automate the process of applying these rules as much as is possible. See the [spacing style guide](./style/Spacing.md) for the complete list of these rules.
+
+### Documentation:
+See the [C++ file documentation guide](./style/Documentation.md) for information on documentation within source and header files.

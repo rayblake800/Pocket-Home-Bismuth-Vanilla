@@ -16,7 +16,7 @@ namespace GLib { class ObjectPtr; }
  *         stored in a GLib::Object, automatically unreferencing it on
  *         destruction if necessary.
  *
- * ObjectPtr instancess are only intended for temporary use and should not be
+ *  ObjectPtr instances are only intended for temporary use and should not be
  * created outside of function scope.
  */
 class GLib::ObjectPtr

@@ -3,6 +3,10 @@ This document tracks all changes to the way this project is designed and structu
 
 ## Module Changes
 
+### Page
+- Pick a more descriptive name for Page::Component.
+- Have Page::Component inherit functionality from Widgets::LayoutContainer.
+
 ### GLib Module
 - Rename to something that suggests the library name rather than using the same name for the module.
 
@@ -11,9 +15,6 @@ This document tracks all changes to the way this project is designed and structu
 
 ### Theme
 - Divide the LookAndFeel class into more manageable pieces.
-- Find a more organized approach to managing Theme::Colour ID values.
-- Reduce the number of redundant places ColourId values must be added.
-- Make it simpler to manage ColourId values by Component type.
 
 ### Wifi
 - Get rid of distinct Owned and Borrowed subdirectories for GLib::Object classes.

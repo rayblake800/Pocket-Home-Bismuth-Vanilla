@@ -39,7 +39,7 @@ public:
      *         component.
      *
      *  This replaces the usual window contents with a login screen. All other
-     * application content will remain inaccessable until the user uses the
+     * application content will remain inaccessible until the user uses the
      * login screen controls to log in.
      */
     void showLoginScreen();

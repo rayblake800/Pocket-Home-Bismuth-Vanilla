@@ -13,10 +13,9 @@ namespace Hardware { class Battery; }
  * @brief  Finds and shares the current charge percentage and charging state of
  *         the system's battery.
  *
- *  Battery objects will try several methods to determine the state of the
- * system's battery. These methods are currently specialized for the PocketCHIP,
- * and new methods for finding battery and power state on more diverse systems
- * should be added.
+ *  Battery objects uses Util::Commands to get the status of the system's
+ * battery. Hardware::I2CBus is used as a fallback battery information source
+ * if system commands fail.
  */
 class Hardware::Battery
 {

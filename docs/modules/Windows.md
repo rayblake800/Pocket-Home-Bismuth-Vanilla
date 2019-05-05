@@ -19,7 +19,7 @@ FocusInterface is an abstract interface inherited by FocusListener, used by the 
  FocusedTimer is a juce::Timer class that only executes its timer callback function when the main application window is focused.
 
 #### [Windows::Info](../../Source/System/Windows/Windows_Info.h)
-The Windows\::Info namespace provides functions for getting information about the main applicationwindow.
+The Windows\::Info namespace provides functions for getting information about the main application window.
 
 #### [Windows::Alert](../../Source/System/Windows/Windows_Alert.h)
 The Windows\::Alert namespace provides convenience functions for creating simple popup alert windows.

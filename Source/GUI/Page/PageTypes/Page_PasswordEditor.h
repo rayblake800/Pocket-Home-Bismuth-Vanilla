@@ -20,7 +20,7 @@ class Page::PasswordEditor : public Page::Component, public Locale::TextUser
 {
 public:
     /**
-     * @brief  Sets the page layout and initializes password editing compoents
+     * @brief  Sets the page layout and initializes password editing components
      *         on construction.
      */
     PasswordEditor();

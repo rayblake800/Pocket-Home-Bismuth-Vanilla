@@ -5,7 +5,7 @@ Page::Component represents a single screen within the application window. Each p
 New Page::Component class types should be added to include new content that doesn't fit well within existing pages. Use Page::Component for content that should be represented as a distinct section of the application that may be visited. Don't use Page::Component if Widgets::PopupEditor, juce::AlertWindow, or anything similar would make more sense. Don't use a Page::Component for component sets if you need to control them from within a lower level page.
 
 ## Creating a new Page::Component subclass
-1. Create a new class in `[ProjectDir]/Source/GUI/PageTypes` that publically inherits [Page::Component](../../Source/GUI/Page/Page_Component.h).
+1. Create a new class in `[ProjectDir]/Source/GUI/PageTypes` that publicly inherits [Page::Component](../../Source/GUI/Page/Page_Component.h).
 2. Initialize the page layout in its constructor.
     * Use the Page::Component::setBackButton function to select whether your page should include a back button, and which side it should be on.
     * Create a [Layout::Group::RelativeLayout](../../Source/GUI/Layout/Group/Layout_Group_RelativeLayout.h) object defining how page components should be arranged, and apply it with the Page::Component::setLayout function.

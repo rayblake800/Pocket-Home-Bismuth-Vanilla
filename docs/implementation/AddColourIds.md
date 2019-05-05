@@ -37,7 +37,7 @@ The *ColourIdElementManager.pl* script can be used to automatically connect new 
 5. Save all changes to the project's ColourId namespace file, JSON colour key file, default colour configuration file, and colour key documentation table.
     * Enter '7' to select *"Update project files"*.
     * Enter '1' to select *"Update all colour files"*.
-    * For each new colour key, enter a brief sentence describing its purpose whenprompted.
+    * For each new colour key, enter a brief sentence describing its purpose when prompted.
 
 ### Integrating ColourIds Manually
 If you prefer not to update IDs with the perl update script, you can instead manually change all relevant files.

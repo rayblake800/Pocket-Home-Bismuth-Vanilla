@@ -32,7 +32,7 @@ This document describes the preferred project style rules that govern how to use
   * --
   * * (only as the dereference operator)
   * & (only as the reference operator)
-- In most circumstances, tokens should only be seperated by one space character at most, if on the same line. In order to make code more legible, sequences of similar lines can break this rule, inserting extra whitespace to align relevant tokens.
+- In most circumstances, tokens should only be separated by one space character at most, if on the same line. In order to make code more legible, sequences of similar lines can break this rule, inserting extra whitespace to align relevant tokens.
 
 ## Line Breaks
 - Curly brackets should always be placed on their own lines, unless the enclosed block is small enough to fit on one line.

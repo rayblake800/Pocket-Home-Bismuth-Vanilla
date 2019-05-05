@@ -24,12 +24,12 @@ How to implement new application display menu options.
 #### [Adding Configuration Files](./implementation/NewConfig.md):
 How to add shared application configuration files using the Config module.
 
-#### [Creating SharedResource Classes](./implementation/NewResource.md):
+#### [Creating SharedResource Classes (Incomplete)](./implementation/NewResource.md):
 How to use the SharedResource module to create and use access-controlled, reference counted singleton classes.
 
-#### [Creating GLib Wrapper Classes](./implementation/NewGLib.md):
+#### [Creating GLib Wrapper Classes (Incomplete)](./implementation/NewGLib.md):
 How to use the GLib module to create convenient interfaces for GLib object data.
 
-#### [Creating D-Bus Proxy Classes](./implementation/NewDBus.md):
+#### [Creating D-Bus Proxy Classes (Incomplete)](./implementation/NewDBus.md):
 How to extend GLib::DBus::Proxy to communicate with other processes through D-Bus objects.
 

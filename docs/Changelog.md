@@ -1,3 +1,22 @@
+#### May 2 2019
+   - Added user guides.
+   - Updated JUCE library submodule.
+   - Improved Wifi connection handling, added option to show/hide Wifi passwords.
+#### Apr 23 2019
+   - Documented all configuration files.
+   - Documenting coding style and formatting.
+   - Adding and using scripts to automatically format code.
+   - Adding implementation guides.
+   - Fixed .svg rendering errors.
+#### Apr 15 2019
+   - Improved ColourId management.
+   - Added scripts to handle the process of editing ColourIds.
+#### Mar 28 2019
+   - Added build options to disable Wifi and PocketCHIP-specific features.
+   - Added IP address label.
+#### Mar 26 2019
+   - Finished refactoring and documenting modules.
+   - Improved application password security.
 #### Mar 7 2019
    - Added support for .xpm image files.
    - Improved icon file finding.
@@ -7,27 +26,27 @@
    - Fixed Page module design issues, and started to remove functionality unrelated to component layout and page transitions from page classes.
 #### Feb 21 2019
    - Completely redesigned Wifi module for improved stability and connection management.
-   - Continued improvements and bugfixes for the SharedResource module.
+   - Continued improvements and bug fixes for the SharedResource module.
 #### Dec 2 2018
    - Continuing to restructure the application into more clearly defined modules.
    - Improvements to GLib thread management and event handling.
    - Improvements to LibNM integration.
 #### Nov 17 2018
    - Completely redesigned the AppMenu to improve performance, modularity, and maintainability.
-   - Testing and bugfixes for DesktopEntry loading.
+   - Testing and bug fixes for DesktopEntry loading.
    - Organized Locale and Config modules.
 #### Oct 9 2018
    - Eliminated the project's dependency on the Projucer application.
    - Replaced the auto-generated makefile created by the Projucer with one that's easier to maintain.
 #### Oct 3 2018
-   - Testing, bugfixes, and design improvements for DesktopEntry file management.
+   - Testing, bug fixes, and design improvements for DesktopEntry file management.
    - Created SharedResource::Thread class for handling shared thread resources.
 #### Sep 21 2018
    - Organized various system commands into the SystemCommands module.
 #### Sep 15 2018
-   - Testing, bugfixes, and design improvements for SharedResource application resource management.
+   - Testing, bug fixes, and design improvements for SharedResource application resource management.
 #### Sep 1 2018
-   - Testing, bugfixes, and design improvements for GLib/LibNM integration.
+   - Testing, bug fixes, and design improvements for GLib/LibNM integration.
 #### Aug 17 2018
    - Reimplemented ConfigFile classes with better type security and an improved interface.
    - Created ConfigFile and window management test classes.

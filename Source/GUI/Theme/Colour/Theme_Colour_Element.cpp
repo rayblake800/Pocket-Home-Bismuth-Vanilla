@@ -1,6 +1,6 @@
 #include "Theme_Colour_Element.h"
 
-// Contructs a colour element object for a JUCE ColourID value.
+// Constructs a colour element object for a JUCE ColourID value.
 Theme::Colour::Element::Element
 (const int colourId, const UICategory category) :
     colourId(colourId), category(category) { }

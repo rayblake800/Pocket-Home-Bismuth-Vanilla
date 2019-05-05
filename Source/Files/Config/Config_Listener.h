@@ -13,7 +13,7 @@ namespace Config { template <class ResourceClass> class Listener; }
 
 /**
  * @brief  Connects to a specific configuration file resource on construction,
- *         receiving notifications whenever relevent values in the resource are
+ *         receiving notifications whenever relevant values in the resource are
  *         updated.
  *
  * @tparam ResourceClass  The Config::FileResource subclass that should be

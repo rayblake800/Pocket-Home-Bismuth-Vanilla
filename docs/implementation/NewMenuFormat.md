@@ -2,7 +2,7 @@
 The application menu is designed to support multiple display formats, each with a unique appearance and control scheme. Follow this guide to implement a new menu format:
 
 ### Planning
-1. The menu format controls where menu items draw their icon and title, how menu items are arranged in their folders, how menu folders are arraged on the screen, and how user input is applied to the menu. Decide exactly how your format is going to manage these tasks.
+1. The menu format controls where menu items draw their icon and title, how menu items are arranged in their folders, how menu folders are arranged on the screen, and how user input is applied to the menu. Decide exactly how your format is going to manage these tasks.
 2. Choose a single word name for the new format that describes its design. This document will use `NewFormat` as an example new menu format type.
 
 ### Initial Format Declaration
@@ -33,7 +33,7 @@ The application menu is designed to support multiple display formats, each with 
 5. Add a class to the new format directory named **AppMenu::NewFormat::InputHandler**, implementing [AppMenu::InputHandler](../../Source/GUI/AppMenu/Control/AppMenu_InputHandler.h).
     * Implement `AppMenu::NewFormat::InputHandler::keyPressed(const KeyType keyType)` to define what the menu should do when any menu control key is pressed.
     * Optionally override `AppMenu::InputHandler::menuItemClicked(const MenuButton* clickedButton, const bool rightClicked)` to change what the menu does when a menu button is clicked.
-    * Optionally override `AppMenu::InputHandler::folderClicked(const FolderComponent* clickedfolder, const int closestIndex, const bool rightClicked)` to change what the menu does when a menu folder is clicked in a spot that does not contain a menu button.
+    * Optionally override `AppMenu::InputHandler::folderClicked(const FolderComponent* clickedFolder, const int closestIndex, const bool rightClicked)` to change what the menu does when a menu folder is clicked in a spot that does not contain a menu button.
 5. Add a class to the new format directory named **AppMenu::NewFormat::Initializer**, implementing [AppMenu::Initializer](../../Source/GUI/AppMenu/Control/AppMenu_Initializer.h).
     * Implement `AppMenu::NewFormat::Initializer::getMenuFormat() const` to return your menu's AppMenu::Format value.
     * Implement `AppMenu::NewFormat::Initializer::createMenuComponent() const` to return a new AppMenu::NewFormat::MenuComponent.

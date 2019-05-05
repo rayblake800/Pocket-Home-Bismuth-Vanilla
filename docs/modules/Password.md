@@ -5,7 +5,7 @@ The password module allows the user to set, change or remove an application pass
 The Password namespace provides functions for setting or checking the current application password.
 
 #### [Password\::UpdateController](../../Source/GUI/Password/Password_UpdateController.h)
-The UpdateConroller controls a set of UI components that allow the user to attempt to set or change the application password.
+The UpdateController controls a set of UI components that allow the user to attempt to set or change the application password.
 
 #### [Password\::RemovalController](../../Source/GUI/Password/Password_RemovalController.h)
 The RemovalController controls a set of UI components that allow the user to remove the application password.

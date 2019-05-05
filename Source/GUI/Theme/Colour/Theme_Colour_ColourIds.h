@@ -13,7 +13,7 @@
  * theme to be centrally managed and easily configured.
  *
  *  In order to more easily manage ColourId values, the ColourIds namespace
- * lists all ColourIds relevent to this application. Each Component's IDs are
+ * lists all ColourIds relevant to this application. Each Component's IDs are
  * grouped into a separate inner namespace, and each ID is assigned a generic
  * Colour category used to determine its default value.
  */

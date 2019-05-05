@@ -18,7 +18,7 @@ class Theme::Colour::Element
 {
 public:
     /**
-     * @brief  Contructs a colour element object for a JUCE ColourID value.
+     * @brief  Constructs a colour element object for a JUCE ColourID value.
      *
      * @param colourId   The element's JUCE ColourID value.
      *

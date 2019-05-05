@@ -18,7 +18,7 @@ static const Config::DataKey homeBackground
 static const Config::DataKey loginBackground
     ("login page background", Config::DataKey::stringType);
 
-// Default AppMenu icon imagen
+// Default AppMenu icon image:
 static const Config::DataKey defaultIcon
     ("default icon", Config::DataKey::stringType);
 

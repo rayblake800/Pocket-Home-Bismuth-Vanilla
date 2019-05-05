@@ -202,7 +202,7 @@ public:
     /**
      * @brief  Gets the index of the desktop that contains a specific window.
      *
-     * @param window   The XLib window idenfifier to check.
+     * @param window   The XLib window identifier to check.
      *
      * @return         The index of the desktop containing the window, or -1 if
      *                 the window is invalid or the system does not support

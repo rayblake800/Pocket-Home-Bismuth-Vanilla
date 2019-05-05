@@ -8,7 +8,7 @@ Component object represent a single visible UI page. They create the layout used
 The StackComponent object holds all open Page\::Component objects. It adds new pages to the application window, and removes and destroys old pages as they are closed. It also notifies page component objects whenever they're being added or revealed on the stack.
 
 #### [Page\::Factory](../../Source/GUI/Page/Page_Factory.h)
-The Factory object provides an interface that allows page Component objects to create and add other pages without being dependant on those other page classes.
+The Factory object provides an interface that allows page Component objects to create and add other pages without being dependent on those other page classes.
 
 ## Page Types
 

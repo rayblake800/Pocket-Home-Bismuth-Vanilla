@@ -17,7 +17,7 @@ The GLib library uses a reference counting system to control when objects are de
 Owned\::Object is an abstract basis for owned GObject wrapper classes. Wrapper classes for most GObject types should be written as GLib\::Owned\::Object subclasses.
 
 ### Borrowed Objects
-Although a GObject won't be destroyed automatically while it still has remaining references, there's nothing to prevent it from being manually destoyed. When the GLib module refers to a GObject wrapper class as borrowed, it means that its GObject data may be destroyed at any time by the library that provides it, regardless of reference count. GLib\::WeakRef cannot be safely used with borrowed object data.
+Although a GObject won't be destroyed automatically while it still has remaining references, there's nothing to prevent it from being manually destroyed. When the GLib module refers to a GObject wrapper class as borrowed, it means that its GObject data may be destroyed at any time by the library that provides it, regardless of reference count. GLib\::WeakRef cannot be safely used with borrowed object data.
 
 #### [GLib\::Borrowed\::Object](../../Source/Framework/GLib/Borrowed/GLib_Borrowed_Object.h)
 Borrowed\::Object is an abstract basis for borrowed GObject wrapper classes. Wrapper classes should be written as GLib\::Borrowed\::Object subclasses if their object data may be suddenly destroyed by the library that provides it.

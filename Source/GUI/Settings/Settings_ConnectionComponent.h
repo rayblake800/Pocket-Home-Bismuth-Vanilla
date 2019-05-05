@@ -150,10 +150,10 @@ private:
          *
          * @param g                  The juce Graphics object.
          *
-         * @param isMouseOverButton  True iff the mouse is over the connection
+         * @param isMouseOverButton  Whether the mouse is over the connection
          *                           button.
          *
-         * @param isButtonDown       True iff the connection button is held
+         * @param isButtonDown       Whether the connection button is held
          *                           down.
          */
         void paintButton(juce::Graphics &g, bool isMouseOverButton,

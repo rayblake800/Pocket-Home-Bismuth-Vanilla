@@ -10,8 +10,5 @@
 - The file label gets cut off in file selection windows.
 
 ### Wifi Module
-- Detecting when connections fail because of an invalid key/passphrase fails on desktop tests with modern versions of NetworkManager.
-- Invalid new saved connections aren't being properly deleted.
+- Segmentation faults with no clear cause occasionally arise from gio or gdbus.
 
-### Windows Module
-- Checking if the pocket-home main window is focused using XWindows doesn't seem to be working properly on PocketCHIP.

@@ -4,14 +4,14 @@ An application launcher and system manager for portable Linux devices.
 ![Bismuth Home Screen](./docs/images/screenshots/mainHome.png?raw=true "Bismuth home screen")
 
 
-Pocket-Home Bismuth is a complete rewrite of the Pocket-Home launcher. It introduces a full-featured, configurable application menu, improved Wifi control and performance, and initial support for devices other than the PocketC.H.I.P. The project's biggest focus is on creating extensively documented, reusable code, to make it as easy as possible to update, extend, and adapt.
+Pocket-Home Bismuth is a rewrite of the Pocket-Home launcher. It introduces a full-featured, configurable application menu, improved Wifi control and performance, and initial support for devices other than the PocketC.H.I.P. The project's biggest focus is on creating extensively documented, reusable code, to make it as easy as possible to update, extend, and adapt.
 
 - [User Guide](./docs/UserGuide.md)
 - [Building and Installation](./docs/BuildAndInstall.md)
-- [Documentation](./docs/Main.md)
 - [Configuration File Guide](./docs/Configuration.md)
 - [Change Log](./docs/Changelog.md)
 - [Project Task List](./docs/taskList/TODO.md)
+- [Additional Documentation](./docs/Main.md)
 
 Bismuth is (mostly) compliant with FreeDesktop application menu standards, automatically detecting installed applications. The menu interface and contents are fully customizable, either within the application, or by editing the application's JSON configuration files.
 
