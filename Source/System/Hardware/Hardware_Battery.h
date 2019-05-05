@@ -65,15 +65,11 @@ private:
      */
     enum DataSource
     {
-        // Execute a command from the command file and read the output:
-        customCommand,
-        // Read battery percentage from the gauge file:
-        gaugeFile,
-        // Calculate battery percentage from the voltage file:
-        voltageFile,
-        // Directly query the I2C bus to read the battery percentage:
+        // Use battery commands provided by Util::Commands.
+        systemCommand,
+        // Directly query the I2C bus to read the battery percentage.
         i2cBus,
-        // Unable to find battery percentage, return no data:
+        // Unable to find battery percentage, return no data.
         noBattery
     };
     DataSource dataSource;

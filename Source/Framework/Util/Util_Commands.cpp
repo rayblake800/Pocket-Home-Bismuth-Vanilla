@@ -137,12 +137,6 @@ static const juce::Identifier& textCommandKey
             static const juce::Identifier getVolumeKey("get volume");
             return getVolumeKey;
         }
-        // Gets the battery percentage
-        case TextCommand::getBatteryPercent:
-        {
-            static const juce::Identifier getBatteryKey("get battery percent");
-            return getBatteryKey;
-        }
         // Gets the display brightness percentage
         case TextCommand::getBrightness:
         {
@@ -160,25 +154,25 @@ static const juce::Identifier& textCommandKey
         {
             static const juce::Identifier publicIPKey("get public IP");
             return publicIPKey;
-        },
+        }
         // Checks if the system has a battery
         case TextCommand::hasBattery:
         {
             static const juce::Identifier findBatteryKey("find battery");
             return findBatteryKey;
-        },
+        }
         // Gets the battery percentage
         case TextCommand::getBatteryPercent:
         {
             static const juce::Identifier percentKey("get battery percent");
             return percentKey;
-        },
+        }
         // Gets whether the battery is charging
         case TextCommand::getBatteryCharging:
         {
             static const juce::Identifier chargingKey("is battery charging");
             return chargingKey;
-        },
+        }
     }
     DBG(dbgPrefix << __func__ << ": Error, unhandled command type!");
     jassertfalse;
