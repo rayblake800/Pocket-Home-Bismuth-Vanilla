@@ -40,7 +40,8 @@ static juce::StringArray testCategories;
 // Performs all required initialization when the application is first launched.
 void PocketHomeApplication::initialise(const juce::String &commandLine)
 {
-    juce::StringArray args;
+    using juce::StringArray;
+    StringArray args;
     args.addTokens(commandLine, true);
 
     if (args.contains("--help"))
@@ -74,12 +75,10 @@ void PocketHomeApplication::initialise(const juce::String &commandLine)
     {
         verboseTesting = args.contains("-v");
         int categoryIndex = args.indexOf("-categories");
-        if (categoryIndex != -1)
+        if (categoryIndex != -1 && (args.size() > (categoryIndex + 1)))
         {
-            for (int i = categoryIndex + 1; i < args.size(); i++)
-            {
-                testCategories.add(args[i]);
-            }
+            testCategories.addArray(StringArray::fromTokens(
+                        args[categoryIndex + 1].unquoted(), false));
         }
 
         // Use an empty window when testing.
