@@ -10,7 +10,8 @@ pocket-home (0.1.0) unstable; urgency=low
   * Innumerable other less significant changes.
 
  -- Anthony Brown <anthony0857@gmail.com>  Sun, 5 May 2019 18:30:00 +0000
- pocket-home (0.0.5) unstable; urgency=low
+
+pocket-home (0.0.5) unstable; urgency=low
 
   * Battery fix
 

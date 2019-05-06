@@ -10,4 +10,4 @@ Package: pocket-home
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libnm-glib4, network-manager
 Description: Home screen for portable devices
-An application launcher and system manager for portable Linux devices.
+ An application launcher and system manager for portable Linux devices.
