@@ -1,6 +1,8 @@
 # Building and Installing Pocket-Home Bismuth
 
-TODO: add precompiled Debian package binaries
+## Installing on PocketC.H.I.P.
+1. Run `wget https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.0_armhf.deb` or just [download the package from this page](https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.0_armhf.deb).
+2. Run `sudo dpkg -i pocket-home_0.1.0_armhf.deb` to install the package.
 
 ## Building from sources
 If building on PocketC.H.I.P, you will need to create and use a swapfile on an external USB drive in order to compile this project without running out of memory. To create and use a 2GB swapfile, run these commands:
@@ -31,7 +33,7 @@ Make sure to disable the swapfile with `sudo swapoff [path to USB drive]/swapfil
      libglib2.0-dev
 ####  2. Cloning and building
       git clone --recursive https://github.com/centuryglass/Pocket-Home-Bismuth.git
-      cd PocketCHIP-pocket-home
+      cd Pocket-Home-Bismuth
       make
       make install
 #### 3. Updating
@@ -39,8 +41,3 @@ Make sure to disable the swapfile with `sudo swapoff [path to USB drive]/swapfil
       git submodule update
       make
       make install
-
-# Optional Dependencies
- - *network-manager*: Version 0.9.10.0-7 or greater. Required for WiFi controls.
- - *polkit-gnome*: Required for setting and changing the application password. Any other polkit package containing pkexec and a graphical authentication agent should work, but others are currently untested.
- - *gtk-update-icon-cache*: Required for quickly loading application icons. The system should be configured to run this automatically when new icon directories or files are added.
