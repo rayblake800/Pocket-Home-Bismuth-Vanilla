@@ -3,5 +3,6 @@ Encoding=UTF-8
 Name=pocket-home
 Comment=PocketCHIP home screen
 Exec=pocket-home
-Icon=
+Icon=pocketHome
+NotShowIn=pocket-home
 Type=Application

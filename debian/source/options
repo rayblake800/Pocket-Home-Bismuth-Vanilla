@@ -1,3 +1,2 @@
 diff-ignore
 tar-ignore
-tar-ignore = "Builds/MacOSX"

@@ -1,11 +1,11 @@
 Source: pocket-home
-Version: 0.0.8.9
+Version: 0.0.9
 Section: x11
 Priority: optional
-Maintainer: Andrew Hay Kurtz <software@nextthing.co>
-Homepage: http://opensource.nextthing.co
+Maintainer: Anthony Brown <anthony0857@gmail.com>
+Homepage: https://github.com/centuryglass
 Package: pocket-home
 Architecture: armhf
-Depends: xinput-calibrator
-Description: Home screen for PocketCHIP.
- Home screen allowing to launch different kind of applications.
+Depends: ${shlibs:Depends}, ${misc:Depends}, libnm-glib4, network-manager
+Description: Home screen for portable devices
+An application launcher and system manager for portable Linux devices.

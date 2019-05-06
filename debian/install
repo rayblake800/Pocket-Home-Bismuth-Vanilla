@@ -1,3 +1,4 @@
 build/Release/pocket-home /usr/bin
 debian/desktop/* /usr/share/applications
 assets/* /usr/share/pocket-home
+icon/* /usr/share/icons/hicolor

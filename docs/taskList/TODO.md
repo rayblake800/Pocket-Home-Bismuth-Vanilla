@@ -1,7 +1,6 @@
 # Pocket-home: Bismuth Edition Task List
 Related Pages:
 - [Bug Tracking](KnownBugs.md): Known bugs to fix.
-- [Release Goals](ReleaseGoals.md): Steps to take before the next release.
 - [Design Changes](DesignChanges.md): Planned improvements to project design.
 - [Feature Wishlist](FeatureWishlist.md): New features to implement.
 

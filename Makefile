@@ -76,9 +76,9 @@ CHECK_DEPS ?= 0
 # Executable name:
 JUCE_TARGET_APP = pocket-home
 # Version number:
-APP_VERSION = 0.0.8.10
+APP_VERSION = 0.1.0
 # Version hex.
-APP_VERSION_HEX = 0x80a
+APP_VERSION_HEX = 0x80b
 
 # Build directories:
 JUCE_BINDIR := build

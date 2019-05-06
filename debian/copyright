@@ -1,16 +1,22 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: pocket-home
-Source: <https://github.com/o-marshmallow/PocketCHIP-pocket-home>
+Source: <https://github.com/centuryglass/PocketCHIP-pocket-home>
 
 Files: *
-Copyright: 2016 Andrew Hay Kurtz <andrew.hay.kurtz@gmail.com>
+Copyright: 2019 Anthony Brown <anthony0857@gmail.com>
+           2016 Andrew Hay Kurtz <andrew.hay.kurtz@gmail.com>
            2016 Andrew Langley
            2015 Ryan Alexander
            2015 Gabriel Dunne
 License: GPL-3.0+
 
 Files: debian/*
-Copyright: 2016 Andrew Hay Kurtz <andrew.hay.kurtz@gmail.com>
+Copyright: 2019 Anthony Brown <anthony0857@gmail.com>
+           2016 Andrew Hay Kurtz <andrew.hay.kurtz@gmail.com>
+License: GPL-3.0+
+
+Files: docs/*, makefiles/*, project-scripts/* Tests/*
+Copyright: 2019 Anthony Brown <anthony0857@gmail.com>
 License: GPL-3.0+
 
 License: GPL-3.0+

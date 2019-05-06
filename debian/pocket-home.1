@@ -4,7 +4,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH POCKET-HOME 1 "August 17, 2017"
+.TH POCKET-HOME 1 "May 5, 2019"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -18,7 +18,7 @@
 .\" .sp <n>    insert n+1 empty lines
 .\" for manpage-specific macros, see man(7)
 .SH NAME
-pocket-home \- home screen for PocketCHIP
+pocket-home \- Home screen for portable devices
 .SH SYNOPSIS
 .B pocket-home
 .RI [ options ]
@@ -30,12 +30,18 @@ command.
 .\" TeX users may be more comfortable with the \fB<whatever>\fP and
 .\" \fI<whatever>\fP escape sequences to invode bold face and italics,
 .\" respectively.
-\fBpocket-home\fP provides a lightweight menu, status indicators, and
+\fBpocket-home\fP provides a configurable application menu, status indicators, and
 settings for mobile devices.
 .SH OPTIONS
 .TP
 .B \-\-help
 Show summary of options.
 .TP
-.B \-\-fakewifi
-Use fake WiFi status.
+.B \-\-test
+Run application tests, if built with testing enabled.
+.TP
+.B \-v
+Print verbose output when running tests.
+.TP
+.B \-categories [category names]
+Only run tests within the listed categories.
