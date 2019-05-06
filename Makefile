@@ -1,9 +1,8 @@
 # Temporary hack to fix issue https://github.com/WeAreROLI/JUCE/issues/524
 # Remove this once the JUCE library fixes the issue!
 JUCE_COMPILER_HEADER=deps/JUCE/modules/juce_core/system/juce_CompilerSupport.h
-$(shell if `grep 201402 $(JUCE_COMPILER_HEADER)`; then \
-            sed -i 's/201402/201300/g' $(JUCE_COMPILER_HEADER); \
-        fi)
+$(shell grep 201402 $(JUCE_COMPILER_HEADER) && \
+            sed -i 's/201402/201300/g' $(JUCE_COMPILER_HEADER))
 
 define HELPTEXT
 ## Pocket-Home Bismuth Makefile ##
