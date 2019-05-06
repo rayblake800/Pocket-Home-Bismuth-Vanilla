@@ -30,7 +30,7 @@ Make sure to disable the swapfile with `sudo swapoff [path to USB drive]/swapfil
      libnm-gtk-dev \
      libglib2.0-dev
 ####  2. Cloning and building
-      git clone --recursive https://github.com/centuryglass/PocketCHIP-pocket-home.git
+      git clone --recursive https://github.com/centuryglass/Pocket-Home-Bismuth.git
       cd PocketCHIP-pocket-home
       make
       make install
