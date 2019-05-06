@@ -23,10 +23,22 @@ sub findMatches
                     /gx);
             foreach my $link (@links)
             {
-                if (! -f $link)
+                if ($link =~ /^http/)
                 {
-                    push(@badLinks, { _link => $link, _line => $i });
+                    if (system("curl --head $link > /dev/null 2>&1") == 0)
+                    {
+                        next;
+                    }
+                    else 
+                    {
+                        die ("\"$link\" was not a valid webpage.\n");
+                    }
                 }
+                elsif (-f $link)
+                {
+                    next;
+                }
+                push(@badLinks, { _link => $link, _line => $i });
             }
         }
 

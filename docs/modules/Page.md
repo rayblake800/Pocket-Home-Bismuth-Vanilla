@@ -34,7 +34,7 @@ The PasswordEditor page provides controls for setting or changing the applicatio
 The PasswordEditor page provides controls for removing the application Password.
 
 #### [Page\::WifiConnection](../../Source/GUI/Page/PageTypes/Page_WifiConnection.h)
-The WifiConnection page holds the [Wifi\::ConnectionList\::ListComponent](../../Source/System/Wifi/Component/ConnectionList/Wifi_ConnectionList_ListComponent.h) object.
+The WifiConnection page holds the [Settings\::WifiList\::ListComponent](../../Source/GUI/Settings/WifiList/Settings_WifiList_ListComponent.h) object.
 
 
 ## Internal Interface Classes

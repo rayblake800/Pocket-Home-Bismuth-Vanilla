@@ -95,7 +95,7 @@ public:
                 << ": Failed to load key \"" << e.getPropertyKey().toString()
                 << "\" in file \"" << filename << "\", expected type: "
                 << e.getExpectedType() <<", actual type: " << e.getFoundType()
-                << ", exception = " << e.what();
+                << ", exception = " << e.what() << "\n";
         }
         catch(Assets::JSONFile::FileException e)
         {

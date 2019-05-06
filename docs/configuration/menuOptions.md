@@ -1,5 +1,5 @@
 # Application Menu Configuration
-The menuOptions.json configuration file holds options that control the format and behavior of the application launch menu.
+The [menuOptions.json](../../assets/configuration/menuOptions.json) configuration file holds options that control the format and behavior of the application launch menu.
 
 Key                          | Permitted Values      | Description
 ---------------------------- | --------------------- | ---
