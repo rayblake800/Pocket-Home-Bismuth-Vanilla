@@ -11,9 +11,21 @@
 ### Improving system compatibility:
 - Allow all hardware and system specific features to be enabled or disabled when building.
 - Create a configure file for greater build customization.
-    - Automatically detect supported hardware features.
-    - Detect and adjust appropriate system commands for SystemCommands.json.
-    - Provide finer levels of control for optimization, debugging and testing features.
+    * Automatically detect supported hardware features.
+    * Detect and adjust appropriate system commands for SystemCommands.json.
+- Add temporary override option for configuration files
+    * Allow replacing config options with command line arguments on launch
+    * Do not save overrides to the configuration file
+- Allow disabling UI animations:
+    * Add a build flag to compile without animation support
+    * Allow disabling animations in configuration
+    * Add a command line option to override the config option
+- Allow building without configurable UI elements/colors/images
+    * Create a system to automatically read and inject default configuration values at build time
+- Improve ability to disable Wifi
+    * Remove all wifi UI elements if no Wifi device is detected on launch.
+    * Add command line option to explicitly disable Wifi
+    * Add configuration option to explicitly disable Wifi
 
 ### Improved application launching and process management:
 - Add support for launching applications through d-bus.

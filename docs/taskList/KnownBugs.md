@@ -11,4 +11,5 @@
 
 ### Wifi Module
 - Segmentation faults with no clear cause occasionally arise from gio or gdbus.
-
+- Immediate segmentation fault on load in x86 Debian virtual machine with no
+  Wifi after detecting that there is no Wifi device.
