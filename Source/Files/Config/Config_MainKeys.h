@@ -38,9 +38,9 @@ namespace Config
             ("Use 24h mode", DataKey::boolType);
         // Sets if the IPLabel should be shown on the HomePage
         static const DataKey showIPOnHome
-            ("use IP label on home page", DataKey::boolType);
+            ("Use IP label on home page", DataKey::boolType);
         static const DataKey showIPOnSettings
-            ("use IP label on settings page", DataKey::boolType);
+            ("Use IP label on settings page", DataKey::boolType);
         static const DataKey printLocalIP
             ("IP label prints local IP", DataKey::boolType);
         static const DataKey printPublicIP
