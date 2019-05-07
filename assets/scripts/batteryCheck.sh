@@ -31,7 +31,7 @@ fi
 # Check for battery directories in /sys/class/power_supply:
 if [ -d /sys/class/power_supply ]; then
     for subDir in /sys/class/power_supply/*; do
-        if grep POWER_SUPPLY_CAPACITY "$subDir/uevent"; then
+        if grep POWER_SUPPLY_CAPACITY "$subDir/uevent" 2> /dev/null; then
             batteryDir="$subdir"
         fi
     done
