@@ -96,9 +96,9 @@ Wifi::AccessPoint Wifi::APList::Module::getAccessPoint
         DBG(dbgPrefix << __func__ << ": Failed to find hash value \""
                 << apHash.toString() << "\"");
         DBG(dbgPrefix << __func__ << ": Full access point list:");
-#ifdef JUCE_DEBUG
+        #ifdef JUCE_DEBUG
         printAPList();
-#endif
+        #endif
     }
     return AccessPoint();
 }
@@ -282,10 +282,14 @@ void Wifi::APList::Module::updateAllAccessPoints()
     {
         removeInvalidatedAccessPoints();
         LibNM::DeviceWifi wifiDevice = nmThread->getWifiDevice();
-        juce::Array<LibNM::AccessPoint> nmAPs = wifiDevice.getAccessPoints();
-        for (LibNM::AccessPoint& nmAccessPoint : nmAPs)
+        if (!wifiDevice.isNull())
         {
-            addAccessPoint(nmAccessPoint);
+            juce::Array<LibNM::AccessPoint> nmAPs
+                    = wifiDevice.getAccessPoints();
+            for (LibNM::AccessPoint& nmAccessPoint : nmAPs)
+            {
+                addAccessPoint(nmAccessPoint);
+            }
         }
     });
     DBG(dbgPrefix << __func__ << ": List contains "

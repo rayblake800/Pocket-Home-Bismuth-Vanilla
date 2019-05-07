@@ -21,7 +21,6 @@ Wifi::LibNM::ObjectLenderInterface::ConnectionLender*
 Wifi::LibNM::ObjectLenderInterface::getConnectionLender() const
 {
     ASSERT_NM_CONTEXT;
-    jassert(connectionLender != nullptr);
     return connectionLender;
 }
 
@@ -32,7 +31,6 @@ Wifi::LibNM::ObjectLenderInterface::APLender*
 Wifi::LibNM::ObjectLenderInterface::getAPLender() const
 {
     ASSERT_NM_CONTEXT;
-    jassert(apLender != nullptr);
     return apLender;
 }
 
@@ -132,11 +130,13 @@ Wifi::LibNM::DeviceWifi::getActiveConnection() const
     ASSERT_NM_CONTEXT;
     if (!isNull())
     {
-        NMActiveConnection* nmConnection
-            = nm_device_get_active_connection(getDevicePtr());
-        if (nmConnection != nullptr)
+        if (NMActiveConnection* nmConnection
+                = nm_device_get_active_connection(getDevicePtr()))
         {
-            return getConnectionLender()->borrowObject(G_OBJECT(nmConnection));
+            if (ConnectionLender* lender = getConnectionLender())
+            {
+                return lender->borrowObject(G_OBJECT(nmConnection));
+            }
         }
     }
     return ActiveConnection();
@@ -150,11 +150,16 @@ Wifi::LibNM::AccessPoint Wifi::LibNM::DeviceWifi::getAccessPoint
     ASSERT_NM_CONTEXT;
     if (!isNull() && path != nullptr)
     {
-        NMAccessPoint* nmAP = nm_device_wifi_get_access_point_by_path
-                (NM_DEVICE_WIFI(getGObject()), path);
-        if (nmAP != nullptr && NM_IS_ACCESS_POINT(nmAP))
+        if (NMAccessPoint* nmAP = nm_device_wifi_get_access_point_by_path(
+                    NM_DEVICE_WIFI(getGObject()), path))
         {
-            return getAPLender()->borrowObject(G_OBJECT(nmAP));
+            if (NM_IS_ACCESS_POINT(nmAP))
+            {
+                if (APLender* lender = getAPLender())
+                {
+                    return lender->borrowObject(G_OBJECT(nmAP));
+                }
+            }
         }
     }
     return AccessPoint();
@@ -167,11 +172,16 @@ Wifi::LibNM::AccessPoint Wifi::LibNM::DeviceWifi::getActiveAccessPoint() const
     ASSERT_NM_CONTEXT;
     if (!isNull())
     {
-        NMAccessPoint* nmAP = nm_device_wifi_get_active_access_point(
-                NM_DEVICE_WIFI(getGObject()));
-        if (nmAP != nullptr && NM_IS_ACCESS_POINT(nmAP))
+        if (NMAccessPoint* nmAP = nm_device_wifi_get_active_access_point(
+                NM_DEVICE_WIFI(getGObject())))
         {
-            return getAPLender()->borrowObject(G_OBJECT(nmAP));
+            if (NM_IS_ACCESS_POINT(nmAP))
+            {
+                if (APLender* lender = getAPLender())
+                {
+                    return lender->borrowObject(G_OBJECT(nmAP));
+                }
+            }
         }
     }
     return AccessPoint();
@@ -184,19 +194,31 @@ Wifi::LibNM::DeviceWifi::getAccessPoints() const
 {
     ASSERT_NM_CONTEXT;
     juce::Array<AccessPoint> currentAccessPoints;
-    juce::Array<AccessPoint> removedAccessPoints
-            = getAPLender()->getAllBorrowed();
-
-    if (!isNull())
+    if (isNull())
     {
-        const GPtrArray* aps = nm_device_wifi_get_access_points(
-                getWifiDevicePtr());
-        for (int i = 0; aps && i < aps->len; i++)
+        DBG(dbgPrefix << __func__ 
+                << ": Can't get access points, wifi device is null.");
+        return currentAccessPoints;
+    }
+    APLender* apLender = getAPLender();
+    if (apLender == nullptr)
+    {
+        DBG(dbgPrefix << __func__ << ": Error, failed to get APLender.");
+        jassertfalse;
+        return currentAccessPoints;
+    }
+
+    juce::Array<AccessPoint> removedAccessPoints;
+    removedAccessPoints.addArray(apLender->getAllBorrowed());
+    if (const GPtrArray* nmAccessPoints
+            = nm_device_wifi_get_access_points(getWifiDevicePtr()))
+    {
+        for (int i = 0; i < nmAccessPoints->len; i++)
         {
-            GObject* nmAccessPoint = G_OBJECT(aps->pdata[i]);
+            GObject* nmAccessPoint = G_OBJECT(nmAccessPoints->pdata[i]);
             jassert(nmAccessPoint != nullptr);
-            AccessPoint foundAccessPoint
-                    = getAPLender()->borrowObject(nmAccessPoint);
+            AccessPoint foundAccessPoint 
+                    = apLender->borrowObject(nmAccessPoint);
             if (!foundAccessPoint.isNull()
                     && foundAccessPoint.getSSID() != nullptr)
             {
@@ -206,19 +228,19 @@ Wifi::LibNM::DeviceWifi::getAccessPoints() const
         }
     }
 
-    // Invalidate any objects in the AccessPointSet not found in the updated
+    // Invalidate any objects in the AccessPoint list not found in the updated
     // list.
-#ifdef JUCE_DEBUG
+    #ifdef JUCE_DEBUG
     if (!removedAccessPoints.isEmpty())
     {
         DBG(dbgPrefix << __func__ << ": Found " << currentAccessPoints.size()
                 << " APs, and removing " << removedAccessPoints.size()
                 << " APs that are no longer visible");
     }
-#endif
+    #endif
     for (AccessPoint& invalidAP : removedAccessPoints)
     {
-        getAPLender()->invalidateObject(invalidAP.getGObject());
+        apLender->invalidateObject(invalidAP.getGObject());
     }
     return currentAccessPoints;
 }
