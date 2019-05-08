@@ -1,7 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=pocket-home
-Comment=PocketCHIP home screen
+Comment=Home screen for mobile devices
+Categories=System;
 Exec=pocket-home
 Icon=pocketHome
 NotShowIn=pocket-home

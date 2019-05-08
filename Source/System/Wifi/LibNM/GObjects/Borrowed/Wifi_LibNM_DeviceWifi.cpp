@@ -196,7 +196,7 @@ Wifi::LibNM::DeviceWifi::getAccessPoints() const
     juce::Array<AccessPoint> currentAccessPoints;
     if (isNull())
     {
-        DBG(dbgPrefix << __func__ 
+        DBG(dbgPrefix << __func__
                 << ": Can't get access points, wifi device is null.");
         return currentAccessPoints;
     }
@@ -217,7 +217,7 @@ Wifi::LibNM::DeviceWifi::getAccessPoints() const
         {
             GObject* nmAccessPoint = G_OBJECT(nmAccessPoints->pdata[i]);
             jassert(nmAccessPoint != nullptr);
-            AccessPoint foundAccessPoint 
+            AccessPoint foundAccessPoint
                     = apLender->borrowObject(nmAccessPoint);
             if (!foundAccessPoint.isNull()
                     && foundAccessPoint.getSSID() != nullptr)

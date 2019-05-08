@@ -1,3 +1,13 @@
+## Release 0.1.1
+#### May 7 2019
+   - Fixed a crash that could occur when no managed Wifi device is found.
+   - UI layouts adapt better to displays in portrait mode.
+   - Minor bugfixes.
+## Release 0.1.0
+#### May 6 2019
+   - Updated project name.
+   - Updated debian package files.
+   - Built and uploaded the initial release.
 #### May 2 2019
    - Added user guides.
    - Updated JUCE library submodule.

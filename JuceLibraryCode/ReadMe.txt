@@ -1,4 +1,8 @@
+May 7 2019:
+This project no longer uses the Projucer, so the rest of this file no longer
+applies.
 
+####
  Important Note!!
  ================
 
