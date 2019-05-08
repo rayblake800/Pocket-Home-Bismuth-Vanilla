@@ -1,6 +1,7 @@
 #include "Info_IPLabel.h"
 #include "Util_Commands.h"
 #include "Config_MainFile.h"
+#include "Testing_DelayUtils.h"
 #include "JuceHeader.h"
 
 namespace Info
@@ -38,8 +39,18 @@ private:
         Config::MainFile mainConfig;
         mainConfig.setIPLabelPrintsLocal(showLocalIP);
         mainConfig.setIPLabelPrintsPublic(showPublicIP);
-        label.updateLabelText();
-        return label.getText();
+        juce::String labelText = label.getText();
+        Testing::DelayUtils::idleUntil([&label, &labelText]()
+        {
+            juce::String updatedText = label.getText();
+            if (updatedText != labelText)
+            {
+                labelText = updatedText;
+                return true;
+            }
+            return false;
+        }, 400, 10000);
+        return labelText;
     }
 
 public:

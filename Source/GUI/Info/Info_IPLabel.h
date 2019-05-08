@@ -8,6 +8,7 @@
 #include "Widgets_BoundedLabel.h"
 #include "Locale_TextUser.h"
 #include "Util_Commands.h"
+#include "Config_MainListener.h"
 #ifdef WIFI_SUPPORTED
 #include "Wifi_Connection_Record_Listener.h"
 #endif
@@ -29,7 +30,8 @@ class Info::IPLabel : public Locale::TextUser,
 #ifdef WIFI_SUPPORTED
     public Wifi::Connection::Record::Listener,
 #endif
-    public Widgets::BoundedLabel
+    public Widgets::BoundedLabel,
+    public Config::MainListener
 {
 public:
     /**
@@ -50,6 +52,14 @@ private:
      * @brief  Updates the label text when the IPLabel gains visibility.
      */
     virtual void visibilityChanged() override;
+
+    /**
+     * @brief  Updates label text whenever the type of shown IP address
+     *         changes.
+     *
+     * @param propertyKey  The updated IPLabel key.
+     */
+    void configValueChanged(const juce::Identifier& propertyKey) override;
 
 #ifdef WIFI_SUPPORTED
     /**

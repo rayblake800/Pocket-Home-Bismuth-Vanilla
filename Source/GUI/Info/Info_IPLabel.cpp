@@ -1,5 +1,6 @@
 #include "Info_IPLabel.h"
 #include "Config_MainFile.h"
+#include "Config_MainKeys.h"
 #include "Wifi_AccessPoint.h"
 #include "Util_Commands.h"
 #include "Util_SafeCall.h"
@@ -20,6 +21,8 @@ static const juce::Identifier publicIPKey = "publicIP";
 Info::IPLabel::IPLabel() noexcept :
 Locale::TextUser(localeClassKey)
 {
+    addTrackedKey(Config::MainKeys::printLocalIP);
+    addTrackedKey(Config::MainKeys::printPublicIP);
     updateLabelText();
 }
 
@@ -41,7 +44,6 @@ void Info::IPLabel::updateLabelText() noexcept
             if (localIP.isNotEmpty())
             {
                 newText = ipLabel->localeText(localIPKey) + localIP;
-
             }
         }
         if (mainConfig.getIPLabelPrintsPublic())
@@ -69,6 +71,13 @@ void Info::IPLabel::visibilityChanged()
     {
         updateLabelText();
     }
+}
+
+
+// Updates label text whenever the type of shown IP address changes.
+void Info::IPLabel::configValueChanged(const juce::Identifier& propertyKey)
+{
+    updateLabelText();
 }
 
 #ifdef WIFI_SUPPORTED
