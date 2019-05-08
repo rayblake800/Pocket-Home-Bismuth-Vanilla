@@ -32,5 +32,12 @@ namespace Windows
          * @return   The application window height, measured in pixels.
          */
         int getHeight();
+
+        /**
+         * @brief  Checks if the window is in portrait mode.
+         *
+         * @return  Whether the window's width is less than its height.
+         */
+        bool inPortraitMode();
     }
 }

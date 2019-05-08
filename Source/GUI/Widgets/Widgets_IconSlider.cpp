@@ -1,9 +1,15 @@
 #include "Widgets_IconSlider.h"
+#include "Util_Math.h"
+
+// Icon width will not exceed totalWidth / maxIconWidthFraction
+static const constexpr int maxIconWidthFraction = 6;
+// Icon width won't go under this minimum size:
+static const constexpr int minIconWidth = 4;
 
 // Creates a slider with a default range of 0-100.
 Widgets::IconSlider::IconSlider(const juce::Identifier& imageKey) :
-lowIcon(imageKey, 0, juce::RectanglePlacement::stretchToFit),
-highIcon(imageKey, 1, juce::RectanglePlacement::stretchToFit)
+lowIcon(imageKey, 0, juce::RectanglePlacement::centred),
+highIcon(imageKey, 1, juce::RectanglePlacement::centred)
 {
 #if JUCE_DEBUG
     setName("Widgets::IconSlider");
@@ -59,8 +65,11 @@ void Widgets::IconSlider::setRange(double newMinimum, double newMaximum,
 void Widgets::IconSlider::resized()
 {
     juce::Rectangle<int> bounds = getLocalBounds();
-    lowIcon.setBounds(bounds.withWidth(bounds.getHeight()));
-    highIcon.setBounds(bounds.withLeft(bounds.getRight()
-            - bounds.getHeight()));
-    slider.setBounds(bounds.reduced(bounds.getHeight(), 0));
+    const int iconSize = Util::Math::median<int>(
+            minIconWidth,
+            bounds.getHeight(),
+            bounds.getWidth() / maxIconWidthFraction);
+    lowIcon.setBounds(bounds.withWidth(iconSize));
+    highIcon.setBounds(bounds.withLeft(bounds.getRight() - iconSize));
+    slider.setBounds(bounds.reduced(iconSize, 0));
 }

@@ -1,22 +1,73 @@
 #include "Settings_ConnectionComponent.h"
 #include "Layout_Component_ConfigFile.h"
+#include "Util_Math.h"
+#include "Windows_Info.h"
 
 // Component layout constants:
 
-// Padding space between child components, as a fraction of component height:
-static const constexpr float childPaddingFraction = 0.1;
+// Landscape mode layout values:
+namespace Settings { namespace LandscapeMode
+{
+    // Padding space between child components, as a fraction of width:
+    static const constexpr float childPaddingFraction = 0.1;
 
-// Connection button border size, as a fraction of the button's height:
-static const constexpr float borderFraction = 0.08;
-// Connection button text padding, as a fraction of the button's height:
-static const constexpr float textPaddingFraction = 0.1;
+    // Connection button border size, as a fraction of the button's height:
+    static const constexpr float borderFraction = 0.08;
+    //Minimum border size in pixels:
+    static const constexpr int minBorderSize = 2;
 
-// Toggle button width, as a multiple of the toggle's height:
-static const constexpr float toggleWidthMultiplier = 1.1;
+    // Connection button text padding, as a fraction of the button's height:
+    static const constexpr float textPaddingFraction = 0.1;
+
+    // Minimum icon width in pixels:
+    static const constexpr int minIconWidth = 6;
+    // Ideal icon width, as a multiple of the component height:
+    static const constexpr float iconSizeMultiplier = 1.0;
+    // Maximum icon width, as a fraction of the component width:
+    static const constexpr float maxIconWidthFraction = 0.2;
+
+    // Minimum toggle button width in pixels:
+    static const constexpr int minToggleWidth = 6;
+    // Ideal toggle button width, as a multiple of the component height:
+    static const constexpr float toggleSizeMultiplier = 1.1;
+    // Maximum toggle button width, as a fraction of the component width:
+    static const constexpr float maxToggleWidthFraction = 0.2;
+} }
+
+
+// Portrait mode layout values:
+namespace Settings { namespace PortraitMode
+{
+    // Padding space between child components, as a fraction of width:
+    static const constexpr float childPaddingFraction = 0.06;
+
+    // Connection button border size, as a fraction of the button's height:
+    static const constexpr float borderFraction = 0.08;
+    //Minimum border size in pixels:
+    static const constexpr int minBorderSize = 2;
+
+    // Connection button text padding, as a fraction of the button's height:
+    static const constexpr float textPaddingFraction = 0.05;
+
+    // Minimum icon width in pixels:
+    static const constexpr int minIconWidth = 6;
+    // Ideal icon width, as a multiple of the component height:
+    static const constexpr float iconSizeMultiplier = 1.1;
+    // Maximum icon width, as a fraction of the component width:
+    static const constexpr float maxIconWidthFraction = 0.4;
+
+    // Minimum toggle button width in pixels:
+    static const constexpr int minToggleWidth = 6;
+    // Ideal toggle button width, as a multiple of the component height:
+    static const constexpr float toggleSizeMultiplier = 1.5;
+    // Maximum toggle button width, as a fraction of the component width:
+    static const constexpr float maxToggleWidthFraction = 0.6;
+} }
+
 
 // Button alpha used when the connection button is being clicked:
 static const constexpr float buttonDownAlpha = 0.5;
-// Button alpha used when the connection button is not being clicked:
+// Button alpha used when the connection button is not being clicked
 static const constexpr float buttonUpAlpha = 1.0;
 
 Settings::ConnectionComponent::ConnectionComponent
@@ -59,14 +110,55 @@ void Settings::ConnectionComponent::refresh()
 // Arranges child components to fit within the component bounds.
 void Settings::ConnectionComponent::resized()
 {
-    int padding = getHeight() * childPaddingFraction;
-    const int iconSize = getHeight() - 2 * padding;
-    icon.setBounds(padding, padding, iconSize, iconSize);
-    spinner.setBounds(padding, padding, iconSize, iconSize);
-    toggle.setBounds(icon.getRight() + padding, padding,
-            iconSize * toggleWidthMultiplier, iconSize);
-    pageButton.setBounds(toggle.getRight() + padding, padding,
-            getWidth() - toggle.getRight() - padding, iconSize);
+    int padding, height, iconMin, toggleMin;
+    float iconMult, iconMaxMult, toggleMult, toggleMaxMult;
+    const bool portraitMode = Windows::Info::inPortraitMode();
+    if (portraitMode)
+    {
+        using namespace PortraitMode;
+        padding       = getHeight() * childPaddingFraction;
+        height        = (getHeight() - padding * 2) / 2;
+        iconMin       = minIconWidth;
+        iconMult      = iconSizeMultiplier;
+        iconMaxMult   = maxIconWidthFraction;
+        toggleMin     = minToggleWidth;
+        toggleMult    = toggleSizeMultiplier;
+        toggleMaxMult = maxToggleWidthFraction;
+    }
+    else // landscape mode
+    {
+        using namespace LandscapeMode;
+        padding       = getHeight() * childPaddingFraction;
+        height        = getHeight() - padding * 2;
+        iconMin       = minIconWidth;
+        iconMult      = iconSizeMultiplier;
+        iconMaxMult   = maxIconWidthFraction;
+        toggleMin     = minToggleWidth;
+        toggleMult    = toggleSizeMultiplier;
+        toggleMaxMult = maxToggleWidthFraction;
+    }
+    int iconWidth = Util::Math::median<int>(iconMin, height * iconMult,
+            getWidth() * iconMaxMult);
+    int toggleWidth = Util::Math::median<int>(toggleMin, height * toggleMult,
+            getWidth() * toggleMaxMult);
+    icon.setBounds(padding, padding, iconWidth, height);
+    spinner.setBounds(padding, padding, iconWidth, height);
+
+    // In portrait mode, place the page button below the icon and toggle switch.
+    if (portraitMode)
+    {
+        toggle.setBounds(getWidth() - toggleWidth - padding, padding,
+                toggleWidth, height);
+        pageButton.setBounds(padding, height + padding * 2,
+                getWidth() - padding * 2, height);
+    }
+    else
+    {
+        toggle.setBounds(icon.getRight() + padding, padding, toggleWidth,
+                height);
+        pageButton.setBounds(toggle.getRight() + padding, padding,
+                getWidth() - toggle.getRight() - padding, height);
+    }
 }
 
 
@@ -119,9 +211,10 @@ void Settings::ConnectionComponent::ConnectionButton::paintButton
 {
     g.setFont(textHeight);
     g.setColour(findColour(juce::Label::textColourId));
-    const int textPadding = getHeight() * textPaddingFraction;
+    const int textPadding = (getHeight() - textHeight - borderSize) / 2;
     g.drawText(displayText, textPadding, textPadding,
-            getWidth() - 2 * textPadding, getHeight() - 2 * textPadding,
+            std::max(0, getWidth() - 2 * textPadding),
+            std::max(0, getHeight() - 2 * textPadding),
             juce::Justification::centred);
 
     g.setColour(findColour(juce::TextButton::textColourOnId));
@@ -139,9 +232,20 @@ void Settings::ConnectionComponent::ConnectionButton::paintButton
 // Calculates button text height based on button size.
 void Settings::ConnectionComponent::ConnectionButton::resized()
 {
-    const int textPadding = getHeight() * textPaddingFraction;
-    borderSize = getHeight() * borderFraction;
+    const bool portraitMode = Windows::Info::inPortraitMode();
+    const float& textMultiplier = (portraitMode
+            ? PortraitMode::textPaddingFraction
+            : LandscapeMode::textPaddingFraction);
+    const float& borderMultiplier = (portraitMode
+            ? PortraitMode::borderFraction
+            : LandscapeMode::borderFraction);
+    const int& borderMin = (portraitMode
+            ? PortraitMode::minBorderSize
+            : LandscapeMode::minBorderSize);
+
+    const int textPadding = getHeight() * textMultiplier;
+    borderSize = std::max<int>(getHeight() * borderMultiplier, borderMin);
     Layout::Component::ConfigFile config;
-    textHeight = config.getFontHeight(
-            getLocalBounds().reduced(textPadding * 2), displayText);
+    textHeight = config.getFontHeight(getLocalBounds().reduced(textPadding * 2),
+            displayText);
 }

@@ -23,7 +23,7 @@ Manager objects store a juce\::Component pointer and a ConfigLayout object loade
 ConfigFile objects share access to the component layout JSON file resource. They are used to load specific component layout objects, and to calculate ideal font heights using the configurable font heights saved in the JSON file.
 
 #### [Layout\::Component\::TextSize](../../Source/GUI/Layout/Component/Layout_Component_TextSize.h)
-TextSize lists the configurable text height values defined in the component layout JSON file. These sizes may be floating point values representing a height relative to the window height, or integer values representing fixed pixel heights.
+TextSize lists the configurable text height values defined in the component layout JSON file. These sizes may be floating point values representing a height relative to the smallest window dimension, or integer values representing fixed pixel heights.
 
 #### [Layout\::Component\::JSONKeys](../../Source/GUI/Layout/Component/Layout_Component_JSONKeys.h)
 JSONKeys defines the key strings used to store component layouts and text heights in the JSON file.

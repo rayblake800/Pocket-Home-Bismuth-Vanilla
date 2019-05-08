@@ -76,7 +76,9 @@ int ComponentLayout::ConfigFile::getFontHeight(TextSize sizeType)
     var size = getReadLockedResource()->getConfigValue<var>(key);
     if (size.isDouble())
     {
-        return (int)((double) size * Windows::Info::getHeight());
+        const int height = Windows::Info::getHeight();
+        const int width = Windows::Info::getWidth();
+        return (int)((double) size * (height < width ? height : width));
     }
     else if (size.isInt())
     {

@@ -26,3 +26,10 @@ int Windows::Info::getHeight()
 {
     return getBounds().getHeight();
 }
+
+
+// Checks if the window is in portrait mode.
+bool Windows::Info::inPortraitMode()
+{
+    return getHeight() > getWidth();
+}

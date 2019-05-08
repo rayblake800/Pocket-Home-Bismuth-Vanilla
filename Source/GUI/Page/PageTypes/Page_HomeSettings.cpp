@@ -3,6 +3,7 @@
 #include "Config_MainKeys.h"
 #include "AppMenu_ConfigFile.h"
 #include "AppMenu_Format.h"
+#include "Windows_Info.h"
 
 // Localized object class key
 static const juce::Identifier localeClassKey = "Page::HomeSettings";
@@ -19,6 +20,7 @@ namespace TextKey
 // Page layout constants:
 static const constexpr int titleRowWeight   = 30;
 static const constexpr int contentRowWeight = 20;
+static const constexpr int dividedRowWeight = 10;
 static const constexpr int rowPaddingWeight = 3;
 
 static const constexpr int labelWeight    = 10;
@@ -43,16 +45,38 @@ menuController(menuFormatLabel, menuFormatPicker, columnCountLabel,
     setName("HomeSettingsPage");
 #endif
     setBackButton(BackButtonType::left);
+    if (Windows::Info::inPortraitMode())
+    {
+        setLayout(getPortraitLayout());
+    }
+    else
+    {
+        setLayout(getLandscapeLayout());
+    }
+
+    title.setJustificationType(juce::Justification::centred);
+    addAndShowLayoutComponents();
+    menuController.updateForCurrentSettings();
+}
+
+
+// Updates AppMenu settings when the page closes.
+Page::HomeSettings::~HomeSettings()
+{
+    menuController.applySettingsChanges();
+}
+
+
+// Gets the base page layout used to construct both the landscape and portrait
+// mode page layouts.
+Layout::Group::RelativeLayout Page::HomeSettings::getBaseLayout()
+{
     using namespace Layout::Group;
-    RelativeLayout layout({
+    RelativeLayout layout(
+    {
         Row(titleRowWeight,
         {
             RowItem(&title)
-        }),
-        Row(contentRowWeight,
-        {
-            RowItem(&bgLabel, labelWeight),
-            RowItem(&homeBGPicker, comboBoxWeight)
         }),
         Row(contentRowWeight,
         {
@@ -78,16 +102,30 @@ menuController(menuFormatLabel, menuFormatPicker, columnCountLabel,
     layout.setYMarginFraction(yMarginFraction);
     layout.setXPaddingWeight(xPaddingWeight);
     layout.setYPaddingWeight(rowPaddingWeight);
-    setLayout(layout);
-
-    title.setJustificationType(juce::Justification::centred);
-    addAndShowLayoutComponents();
-    menuController.updateForCurrentSettings();
+    return layout;
 }
 
 
-// Updates AppMenu settings when the page closes.
-Page::HomeSettings::~HomeSettings()
+// Gets the landscape mode page layout.
+Layout::Group::RelativeLayout Page::HomeSettings::getLandscapeLayout()
 {
-    menuController.applySettingsChanges();
+    using namespace Layout::Group;
+    RelativeLayout layout = getBaseLayout();
+    layout.insertRow(1, Row(contentRowWeight,
+            {
+                RowItem(&bgLabel, labelWeight),
+                RowItem(&homeBGPicker, comboBoxWeight)
+            }));
+    return layout;
+}
+
+
+// Gets the portrait mode page layout.
+Layout::Group::RelativeLayout Page::HomeSettings::getPortraitLayout()
+{
+    using namespace Layout::Group;
+    RelativeLayout layout = getBaseLayout();
+    layout.insertRow(1, Row(dividedRowWeight, { RowItem(&bgLabel) }));
+    layout.insertRow(2, Row(dividedRowWeight, { RowItem(&homeBGPicker) }));
+    return layout;
 }

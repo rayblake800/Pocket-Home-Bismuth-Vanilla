@@ -35,6 +35,28 @@ public:
     virtual ~HomeSettings();
 
 private:
+    /**
+     * @brief  Gets the base page layout used to construct both the landscape
+     *         and portrait mode page layouts.
+     *
+     * @return  The incomplete base page layout.
+     */
+    Layout::Group::RelativeLayout getBaseLayout();
+
+    /**
+     * @brief  Gets the landscape mode page layout.
+     *
+     * @return  The layout to use when the window is wider than it is tall.
+     */
+    Layout::Group::RelativeLayout getLandscapeLayout();
+
+    /**
+     * @brief  Gets the portrait mode page layout.
+     *
+     * @return  The layout to use when the window is taller than it is wide.
+     */
+    Layout::Group::RelativeLayout getPortraitLayout();
+
     // Page title label:
     Widgets::BoundedLabel title;
 

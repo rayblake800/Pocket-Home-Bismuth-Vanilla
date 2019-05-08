@@ -2,6 +2,7 @@
 #include "Theme_Colour_ConfigFile.h"
 #include "Theme_Colour_JSONKeys.h"
 #include "Layout_Component_ConfigFile.h"
+#include "Windows_Info.h"
 
 namespace ColourTheme = Theme::Colour;
 
@@ -11,13 +12,26 @@ listModel(colourPicker),
 colourList("colourList", &listModel)
 {
     using namespace Layout::Group;
-    RelativeLayout layout({
-        Row(40,
+    RelativeLayout layout;
+    if (Windows::Info::inPortraitMode())
+    {
+        layout = RelativeLayout(
         {
-            RowItem(&colourList, 60),
-            RowItem(&colourPicker, 40)
-        })
-    });
+            Row(60, { RowItem(&colourPicker) }),
+            Row(40, { RowItem(&colourList) })
+        });
+    }
+    else
+    {
+        layout = RelativeLayout(
+        {
+            Row(40,
+            {
+                RowItem(&colourList, 60),
+                RowItem(&colourPicker, 40)
+            })
+        });
+    }
     layout.setYMarginFraction(0.1);
     layout.setYPaddingWeight(3);
     layout.setXPaddingWeight(3);
