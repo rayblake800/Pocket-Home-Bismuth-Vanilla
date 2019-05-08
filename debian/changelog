@@ -1,10 +1,11 @@
 pocket-home (0.1.1) unstable; urgency=low
 
-  * Fixed a crash that could occur when no managed Wifi device is found.
   * UI layouts adapt better to displays in portrait mode.
+  * Fixed a crash that could occur when no managed Wifi device is found.
+  * Fixed a bug where the application would freeze if the color page was opened while a color category key was undefined.
   * Minor bugfixes.
 
- -- Anthony Brown <anthony0857@gmail.com>  Tue, 7 May 2019 19:30:00 +0000
+ -- Anthony Brown <anthony0857@gmail.com>  Tue, 7 May 2019 22:30:00 +0000
 
 pocket-home (0.1.0) unstable; urgency=low
 

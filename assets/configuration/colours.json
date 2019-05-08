@@ -2,7 +2,7 @@
     "Window background"                       : "0xffe9e9e9",
     "Widget background"                       : "0xffb8b8b8",
     "Widget"                                  : "0xffbc3662",
-    "Widget(off)"                             : "",
+    "Widget(off)"                             : "0xff393939",
     "Menu background"                         : "0xffe9e9e9",
     "Outline"                                 : "0xffb8b8b8",
     "Focused outline"                         : "0xffb88e47",

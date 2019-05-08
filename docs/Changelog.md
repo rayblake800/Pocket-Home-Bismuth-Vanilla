@@ -1,6 +1,7 @@
 ## Release 0.1.1
 #### May 7 2019
    - Fixed a crash that could occur when no managed Wifi device is found.
+   - Fixed a bug where the application would freeze if the color page was opened while a color category key was undefined.
    - UI layouts adapt better to displays in portrait mode.
    - Minor bugfixes.
 ## Release 0.1.0

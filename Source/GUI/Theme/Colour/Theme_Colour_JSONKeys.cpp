@@ -177,6 +177,12 @@ juce::Array<const juce::Identifier*> ColourKeys::getColourKeys()
 // Gets the UICategory assigned to a JUCE ColourId value.
 Theme::Colour::UICategory ColourKeys::getUICategory(const int colourId)
 {
+    if (colourId < 0)
+    {
+        DBG(dbgPrefix << __func__ << ": Invalid colourId value " << colourId);
+        jassertfalse;
+        return UICategory::none;
+    }
     int index = -1;
     int min = 0, max = ColourIds::allElements.size() - 1;
     while (min <= max)

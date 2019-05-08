@@ -43,9 +43,13 @@ juce::Colour ColourTheme::ConfigFile::getColour
     {
         // No specific value set, look up the UICategory value.
         const int colourId = JSONKeys::getColourId(colourKey);
+        if (colourId == -1)
+        {
+            return juce::Colour();
+        }
         return getColour(JSONKeys::getUICategory(colourId));
     }
-    return juce::Colour(getColourString(colourKey).getHexValue32());
+    return juce::Colour(colourStr.getHexValue32());
 }
 
 
