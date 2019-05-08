@@ -1,7 +1,7 @@
 # Building and Installing Pocket-Home Bismuth
 
 ## Installing on PocketC.H.I.P.
-1. Run `wget https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.0_armhf.deb` or just [download the package from this page](https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.0_armhf.deb).
+1. Run `wget https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.1_armhf.deb` or just [download the package from this page](https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.1/pocket-home_0.1.1_armhf.deb).
 2. Run `sudo dpkg -i pocket-home_0.1.0_armhf.deb` to install the package.
 
 ## Building from sources
