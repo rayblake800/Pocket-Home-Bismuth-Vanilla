@@ -2,7 +2,7 @@
 
 ## Installing on PocketC.H.I.P.
 1. Run `wget https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.1/pocket-home_0.1.1_armhf.deb` or just [download the package from this page](https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.1/pocket-home_0.1.1_armhf.deb).
-2. Run `sudo dpkg -i pocket-home_0.1.0_armhf.deb` to install the package.
+2. Run `sudo dpkg -i pocket-home_0.1.1_armhf.deb` to install the package.
 
 ## Building from sources
 If building on PocketC.H.I.P, you will need to create and use a swapfile on an external USB drive in order to compile this project without running out of memory. To create and use a 2GB swapfile, run these commands:
