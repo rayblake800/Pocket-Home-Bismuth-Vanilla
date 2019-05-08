@@ -17,7 +17,7 @@ Hardware::Battery::Battery()
     Util::Commands commandReader;
     // Check if Util::Commands can detect a battery:
     if (commandReader.runTextCommand(Util::CommandTypes::Text::hasBattery)
-            .isNotEmpty()) 
+            .isNotEmpty())
     {
         DBG(dbgPrefix << __func__ << ": data source set to Util::Commands.");
         dataSource = systemCommand;

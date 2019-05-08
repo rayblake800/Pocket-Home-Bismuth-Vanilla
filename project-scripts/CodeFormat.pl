@@ -452,4 +452,4 @@ sub findAndFormat
 # Ensure the script is running in the project's main directory: 
 chdir("$FindBin::Bin/..");
 # Run recursive formatting search:
-find(\&findAndFormat, Paths::PROJECT_DIR);
+find(\&findAndFormat, $sourcePath);

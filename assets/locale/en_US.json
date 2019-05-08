@@ -98,7 +98,7 @@
     "Page::InputSettings":
     {
         "inputSettings" : "Input settings",
-        "showCursor"    : "Mouse cursor mode:"
+        "showCursor"    : "Show mouse cursor:"
     },
     "Page::PasswordEditor":
     {
@@ -183,11 +183,6 @@
         "hideClock"     : "Hide clock",
         "mode12Hour"    : "AM/PM mode",
         "mode24Hour"    : "24 hour mode"
-    },
-    "Settings::CursorModePicker":
-    {
-        "visible"       : "Visible",
-        "notVisible"    : "Not visible"
     },
     "Settings::WifiControl":
     {
