@@ -1,8 +1,8 @@
 # Building and Installing Pocket-Home Bismuth
 
 ## Installing on PocketC.H.I.P.
-1. Run `wget https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.0_armhf.deb` or just [download the package from this page](https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.0_armhf.deb).
-2. Run `sudo gdebi pocket-home_0.1.0_armhf.deb` to install the package and all required dependencies.
+1. Run `wget https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.1/pocket-home_0.1.1_armhf.deb` or just [download the package from this page](https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.1/pocket-home_0.1.1_armhf.deb).
+2. Run `sudo dpkg -i pocket-home_0.1.1_armhf.deb` to install the package.
 
 ## Installing on Raspberry Pi (and other ARM devices using Debian 9)
 The instructions for PocketC.H.I.P. installation will also work on Debian 9, with one additional step:
