@@ -2,7 +2,14 @@
 
 ## Installing on PocketC.H.I.P.
 1. Run `wget https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.0_armhf.deb` or just [download the package from this page](https://github.com/centuryglass/Pocket-Home-Bismuth/releases/download/v0.1.0/pocket-home_0.1.0_armhf.deb).
-2. Run `sudo dpkg -i pocket-home_0.1.0_armhf.deb` to install the package.
+2. Run `sudo gdebi pocket-home_0.1.0_armhf.deb` to install the package and all required dependencies.
+
+## Installing on Raspberry Pi (and other ARM devices using Debian 9)
+The instructions for PocketC.H.I.P. installation will also work on Debian 9, with one additional step:
+
+- Download and install the Debian 8 [libssl1.0.0](https://packages.debian.org/jessie/armhf/libssl1.0.0/download) package before installing Pocket-Home.
+
+Debian 8 only provides libssl1.0.0, while Debian 9 provides no version earlier than 1.0.2. Packages compiled for libssl1.0.0 cannot be used with version 1.0.2. Fortunately, the libssl1.0.0 package can be manually installed, and will not conflict with or replace the 1.0.2 package. If you'd rather not do this, recompiling from source on your Debian 9 device will also solve this problem.
 
 ## Building from sources
 If building on PocketC.H.I.P, you will need to create and use a swapfile on an external USB drive in order to compile this project without running out of memory. To create and use a 2GB swapfile, run these commands:

@@ -7,7 +7,8 @@
  */
 
 namespace juce { class String; }
-namespace std { template<typename T> class function; }
+
+#include <functional>
 
 namespace Windows
 {
