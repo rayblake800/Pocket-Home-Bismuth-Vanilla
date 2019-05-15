@@ -1,6 +1,4 @@
 #include "Assets.h"
-#include "Config_MainFile.h"
-#include "Config_MainKeys.h"
 #include "Locale_TextUser.h"
 
 #ifdef JUCE_DEBUG
@@ -32,7 +30,6 @@ className(className)
     }
     using juce::String;
     using juce::NamedValueSet;
-    Config::MainFile config;
     const juce::StringArray filesToTry =
     {
         getLocaleName(),
