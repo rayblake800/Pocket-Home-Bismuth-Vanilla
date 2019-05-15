@@ -1,5 +1,5 @@
 # Adding Shared Application Resources (WIP)
-Brief description of the SharedResource module her.
+Brief description of the SharedResource module here.
 
 1. Consider if it's appropriate to implement a feature using the SharedResource module.
 2. Decide what kind of resource class to create.

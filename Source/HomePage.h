@@ -54,8 +54,8 @@ protected:
     /**
      * @brief  Tracks page background changes.
      *
-     *  Only the MainConfigFile should be call this function. This will update
-     * the page background.
+     *  Only the Theme::Image::ConfigFile should be calling this function. This
+     * will update the page background.
      *
      * @param key  The page background key.
      */

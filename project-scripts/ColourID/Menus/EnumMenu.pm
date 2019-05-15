@@ -18,10 +18,11 @@ package EnumMenu;
 use lib './project-scripts/ColourID';
 use EnumSearch;
 use UserInput;
+use Paths;
 use lib './project-scripts/ColourID/Menus';
 use InputMenu;
 
-my $projectDir = $ENV{'HOME'}.'/Workspace/C++/PocketCHIP-pocket-home';
+my $projectDir = Paths::PROJECT_DIR;
 
 # Displays the main menu, repeatedly accepting input and running the menu action
 # with the selected option parameter until the user enters 'q'.

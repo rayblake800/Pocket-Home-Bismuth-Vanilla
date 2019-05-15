@@ -7,8 +7,10 @@ use strict;
 use warnings;
 use File::Find;
 use File::Slurp;
+use lib './project-scripts';
+use Paths;
 
-my $projectDir = "/home/anthony/Workspace/C++/PocketCHIP-pocket-home";
+my $projectDir = Paths::PROJECT_DIR;
 my $sourceDir = "$projectDir/Source";
 my $testDir = "$projectDir/project-scripts/cppTest";
 

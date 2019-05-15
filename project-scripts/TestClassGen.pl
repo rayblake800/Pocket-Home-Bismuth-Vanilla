@@ -7,8 +7,10 @@
 use strict;
 use warnings;
 use File::Slurp;
+use lib './project-scripts';
+use Paths;
 
-my $projectRoot = $ENV{'HOME'}."/Workspace/C++/PocketCHIP-pocket-home";
+my $projectRoot = Paths::PROJECT_DIR;
 
 my $path = $ARGV[0] or die "Missing source file path!\n";
 my $category = $ARGV[1] or die "Missing test category!\n";

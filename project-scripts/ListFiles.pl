@@ -7,11 +7,15 @@ use strict;
 use warnings;
 use File::Find;
 use File::Slurp;
+use lib './project-scripts';
+use Paths;
 
-my $projectDir = "/home/anthony/Workspace/C++/PocketCHIP-pocket-home";
+my $projectDir = Paths::PROJECT_DIR;
 my $sourceDir = "$projectDir/Source";
 my $testDir = "$projectDir/Tests";
 my %names;
+
+my ($dirName) = ($projectDir =~ /.*\/(.*?$)/s);
 
 sub findModules
 {
@@ -19,7 +23,7 @@ sub findModules
     if ($name =~ /^.+\.(h|cpp)$/)
     {
         $name =~ s/\..*//;
-        $name =~ s/.*PocketCHIP-pocket-home//g;
+        $name =~ s/.*$dirName//g;
 
         $names{$name} = 1;;
     }
