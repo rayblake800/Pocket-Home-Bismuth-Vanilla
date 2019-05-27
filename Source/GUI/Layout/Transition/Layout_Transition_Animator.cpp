@@ -62,8 +62,8 @@ private:
         {
             jassertfalse; //component is not visible!
         }
-        float scale = (float) juce::Desktop::getInstance().getDisplays()
-                .getDisplayContaining(getScreenBounds().getCentre()).scale;
+        float scale = (float) juce::Desktop::getInstance()
+                .getDisplays().findDisplayForRect(getScreenBounds()).scale;
         image = source.createComponentSnapshot(source.getLocalBounds(),
                 false, scale);
         setVisible(true);
