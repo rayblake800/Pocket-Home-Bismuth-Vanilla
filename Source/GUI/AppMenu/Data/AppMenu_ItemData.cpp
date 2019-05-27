@@ -148,7 +148,7 @@ void AppMenu::ItemData::removeListener(Listener* toRemove)
 {
     if (toRemove != nullptr)
     {
-        if (toRemove->trackedItemData == this)
+        if (toRemove->trackedItemData.get() == this)
         {
             toRemove->trackedItemData = nullptr;
             listeners.removeAllInstancesOf(toRemove);
