@@ -196,6 +196,7 @@ ifeq ($(WIFI_SUPPORT), 1)
 endif
 ifeq ($(CHIP_FEATURES), 1)
     FEATURE_DEFS := $(FEATURE_DEFS) -DCHIP_FEATURES
+    CONFIG_LDFLAGS += -li2c
 endif
 
 JUCE_CPPFLAGS := $(DEPFLAGS) \
