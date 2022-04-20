@@ -90,7 +90,7 @@ JUCE_OUTDIR := build
 DATA_PATH := /usr/share/$(JUCE_TARGET_APP)
 
 # Pkg-config libraries:
-PKG_CONFIG_LIBS = NetworkManager libnm-glib alsa freetype2 libssl gio-2.0 \
+PKG_CONFIG_LIBS = libnm alsa freetype2 libssl gio-2.0 \
                   x11 xext xinerama xpm
 
 # Additional library flags:
