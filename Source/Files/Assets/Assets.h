@@ -58,7 +58,7 @@ namespace Assets
      * @return                   A new drawable if the file was valid, nullptr
      *                           otherwise.
      */
-    juce::Drawable * loadSVGDrawable(const juce::String& assetName,
+    std::unique_ptr<juce::Drawable> loadSVGDrawable(const juce::String& assetName,
             bool lookOutsideAssets = true);
 
     /**

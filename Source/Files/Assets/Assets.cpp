@@ -85,7 +85,7 @@ juce::Image Assets::loadImageAsset
 
 
 // Creates a Drawable object from an svg asset file.
-juce::Drawable * Assets::loadSVGDrawable
+std::unique_ptr<juce::Drawable> Assets::loadSVGDrawable
 (const juce::String& assetName, bool lookOutsideAssets)
 {
     juce::File svgFile = findAssetFile(assetName, lookOutsideAssets);

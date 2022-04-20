@@ -85,7 +85,7 @@ void Widgets::DrawableImage::setImage(const juce::File imageFile)
         {
             removeChildComponent(imageDrawable.get());
         }
-        imageDrawable.reset(juce::Drawable::createFromImageFile(imageFile));
+        imageDrawable = juce::Drawable::createFromImageFile(imageFile);
         if (imageDrawable != nullptr)
         {
             imageSource = imageFile;
