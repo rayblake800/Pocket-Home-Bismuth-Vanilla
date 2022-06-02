@@ -2,7 +2,12 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#include <linux/i2c-dev.h>
+
+extern "C" {
+	#include <linux/i2c.h>
+	#include <linux/i2c-dev.h>
+	#include <i2c/smbus.h>
+}
 
 // Path to the I2C bus device file:
 static constexpr const char* i2cPath = "/dev/i2c-0";

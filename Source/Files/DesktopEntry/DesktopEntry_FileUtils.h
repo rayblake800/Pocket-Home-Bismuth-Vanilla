@@ -275,7 +275,7 @@ namespace DesktopEntry
          *
          * @return                The list's string representation.
          */
-        juce::String listString(const juce::StringArray& list,
+        juce::String listString(juce::StringArray& list,
                 const bool isLocaleString);
     }
 }

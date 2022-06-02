@@ -378,7 +378,7 @@ juce::String DesktopEntry::FileUtils::boolString(const bool booleanValue)
 
 // Converts a list to a single string that can be written to a desktop entry
 // file.
-juce::String DesktopEntry::FileUtils::listString(const juce::StringArray& list,
+juce::String DesktopEntry::FileUtils::listString(juce::StringArray& list,
         const bool isLocaleString)
 {
     for (juce::String& listItem : list)
