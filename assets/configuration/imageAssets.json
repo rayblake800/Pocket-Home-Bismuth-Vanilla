@@ -1,5 +1,5 @@
 {
-    "home page background"    : "wallpaper/chipDark.png",
+    "home page background"    : "wallpaper/mainBackground.png",
     "login page background"   : "login/background.png",
     "default icon"            : "icons/chip.png",
     "login image"             : "login/chipVector.svg",
