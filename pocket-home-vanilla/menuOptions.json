@@ -1,0 +1,7 @@
+{
+  "scrolling AppMenu max rows": 8,
+  "paged AppMenu max columns": 3,
+  "paged AppMenu max rows": 2,
+  "application launch timeout": 18000,
+  "AppMenu format": "Paged"
+}

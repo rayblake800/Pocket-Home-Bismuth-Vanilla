@@ -1,0 +1,57 @@
+{
+    "folder items":
+    [
+        {
+            "name": "Terminal",
+            "icon": "terminal",
+            "command": "xterm",
+            "launch in terminal": false
+        },
+        {
+            "name": "Play PICO-8",
+            "icon": "pico8",
+            "command": "pico8",
+            "launch in terminal": false
+        },
+        {
+            "name": "Make Music",
+            "icon": "musicsequencer",
+            "command": "sunvox",
+            "launch in terminal": false
+        },
+        {
+            "name": "Write",
+            "icon": "texteditor",
+            "command": "leafpad",
+            "launch in terminal": false
+        },
+        {
+            "name": "Browse Files",
+            "icon": "filebrowser",
+            "command": "pcmanfm",
+            "launch in terminal": false
+        },
+        {
+            "name": "All",
+            "icon": "default",
+            "categories":
+            [
+                "All"
+            ]
+        },
+        {
+            "name": "Other",
+            "icon": "applications-other",
+            "categories":
+            [
+                "Other"
+            ]
+        },
+        {
+            "name": "Get Help",
+            "icon": "help",
+            "command": "surf /usr/share/pocketchip-localdoc/index.html",
+            "launch in terminal": false
+        }
+    ]
+}

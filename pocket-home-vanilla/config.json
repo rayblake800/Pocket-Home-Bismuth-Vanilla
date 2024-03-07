@@ -1,0 +1,12 @@
+{
+  "Wifi AP scan frequency": 30000,
+  "Wifi interface": "wlan0",
+  "Terminal launch command": "vala-terminal -e",
+  "Show cursor": true,
+  "Show clock": true,
+  "Use 24h mode": true,
+  "Use IP label on home page": false,
+  "Use IP label on settings page": true,
+  "IP label prints local IP": true,
+  "IP label prints public IP": false
+}

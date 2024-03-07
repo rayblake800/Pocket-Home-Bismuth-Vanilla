@@ -1,0 +1,147 @@
+{
+  "menu frame": {
+    "image files": [
+      "component assets/MenuFrame/frame.svg"
+    ],
+    "colours": [
+      "ffffff",
+      "ffffff"
+    ]
+  },
+  "battery": {
+    "image files": [
+      "component assets/BatteryIcon/battery_0.svg",
+      "component assets/BatteryIcon/battery_1.svg",
+      "component assets/BatteryIcon/battery_2.svg",
+      "component assets/BatteryIcon/battery_3.svg",
+      "component assets/BatteryIcon/batteryCharging_0.svg",
+      "component assets/BatteryIcon/batteryCharging_1.svg",
+      "component assets/BatteryIcon/batteryCharging_2.svg",
+      "component assets/BatteryIcon/batteryCharging_3.svg",
+      "component assets/BatteryIcon/noBattery.svg"
+    ],
+    "colours": [
+      "ffffffff",
+      "fffa9622",
+      "ffff0000"
+    ]
+  },
+  "signal strength": {
+    "image files": [
+      "component assets/WifiIcon/wifiOff.svg",
+      "component assets/WifiIcon/wifiStrength0.svg",
+      "component assets/WifiIcon/wifiStrength1.svg",
+      "component assets/WifiIcon/wifiStrength2.svg",
+      "component assets/WifiIcon/wifiStrength3.svg"
+    ],
+    "colours": [
+      "ffffffff"
+    ]
+  },
+  "power button": {
+    "image files": [
+      "component assets/PowerButton/powerIcon.svg"
+    ],
+    "colours": [
+      "ffffffff"
+    ]
+  },
+  "settings button": {
+    "image files": [
+      "component assets/SettingsButton/settingsIcon.svg"
+    ],
+    "colours": [
+      "ffffffff"
+    ]
+  },
+  "popup menu": {
+    "image files": [
+      "component assets/PopupEditor/popupFrame.svg"
+    ],
+    "colours": [
+      "ffb88e47",
+      "ffe9e9e9"
+    ]
+  },
+  "navigation buttons": {
+    "image files": [
+      "component assets/NavButton/upIcon.svg",
+      "component assets/NavButton/downIcon.svg",
+      "component assets/NavButton/leftIcon.svg",
+      "component assets/NavButton/rightIcon.svg"
+    ],
+    "colours": [
+      "ffffffff"
+    ]
+  },
+  "settings list button": {
+    "image files": [
+      "component assets/SettingsListButton/settingsListIcon.svg"
+    ],
+    "colours": [
+      "ffffffff"
+    ]
+  },
+  "loading spinner": {
+    "image files": [
+      "component assets/Spinner/spinner0.svg",
+      "component assets/Spinner/spinner1.svg",
+      "component assets/Spinner/spinner2.svg",
+      "component assets/Spinner/spinner3.svg",
+      "component assets/Spinner/spinner4.svg",
+      "component assets/Spinner/spinner5.svg",
+      "component assets/Spinner/spinner6.svg",
+      "component assets/Spinner/spinner7.svg"
+    ],
+    "colours": [
+      "ffffffff"
+    ]
+  },
+  "lock icon": {
+    "image files": [
+      "component assets/WifiIcon/lock.svg"
+    ],
+    "colours": [
+      "ffffffff"
+    ]
+  },
+  "volume slider": {
+    "image files": [
+      "component assets/VolumeSlider/volumeIconLo.svg",
+      "component assets/VolumeSlider/volumeIconHi.svg"
+    ],
+    "colours": [
+      "ffbc3662"
+    ]
+  },
+  "brightness slider": {
+    "image files": [
+      "component assets/BrightnessSlider/brightnessIconLo.svg",
+      "component assets/BrightnessSlider/brightnessIconHi.svg"
+    ],
+    "colours": [
+      "ffbc3662"
+    ]
+  },
+  "cancel button": {
+    "image files": [
+      "component assets/PopupEditor/cancel.svg"
+    ],
+    "colours": [
+      "ffbc3662"
+    ]
+  },
+  "confirm button": {
+    "image files": [
+      "component assets/PopupEditor/confirm.svg"
+    ],
+    "colours": [
+      "ffbc3662"
+    ]
+  },
+  "home page background": "wallpaper/ogchip.png",
+  "login page background": "login/background.png",
+  "default icon": "icons/chip.png",
+  "login image": "login/chipVector.svg",
+  "ControlWidget wifi icon": "component assets/WifiIcon/wifiIcon.svg"
+}
